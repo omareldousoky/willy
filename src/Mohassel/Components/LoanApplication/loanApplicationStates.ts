@@ -270,21 +270,21 @@ export const SMELoanApplicationValidation = Yup.object().shape({
     })
 });
 export const SMELoanApplicationStep2Validation = Yup.object().shape({
-    viceCustomers: Yup.array().of(
-        Yup.object().shape({
-            name: Yup.string().required(local.required),
-            phoneNumber: Yup.string().min(10,local.minLength10).max(11,local.maxLength11).required(local.required),
-            nationalId: Yup.string().test('nationalIDFormat', local.wrongNationalId, 
-            (value: any) => {
-                if(getBirthdateFromNationalId(value) === '1800-01-01') return false
-                return true
-            }).test('nationalIDLength', local.nationalIdLengthShouldBe14,
-            (value: any) => { return value.length === 14 }).required(local.required),
-            nationalIdIssueDate: Yup.string().required(local.required),
-            address: Yup.string().required(local.required),
-            jobTitle: Yup.string().required(local.required)
-        })
-    ).min(1, local.mustBeOneOrMore)
+    // viceCustomers: Yup.array().of(
+    //     Yup.object().shape({
+    //         name: Yup.string().required(local.required),
+    //         phoneNumber: Yup.string().min(10,local.minLength10).max(11,local.maxLength11).required(local.required),
+    //         nationalId: Yup.string().test('nationalIDFormat', local.wrongNationalId, 
+    //         (value: any) => {
+    //             if(getBirthdateFromNationalId(value) === '1800-01-01') return false
+    //             return true
+    //         }).test('nationalIDLength', local.nationalIdLengthShouldBe14,
+    //         (value: any) => { return value.length === 14 }).required(local.required),
+    //         nationalIdIssueDate: Yup.string().required(local.required),
+    //         address: Yup.string().required(local.required),
+    //         jobTitle: Yup.string().required(local.required)
+    //     })
+    // ).min(1, local.mustBeOneOrMore)
 })
 export const ReviewLoanValidation = Yup.object().shape({
     reviewStatus: Yup.string().required(local.required),

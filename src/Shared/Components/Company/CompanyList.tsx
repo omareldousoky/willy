@@ -55,9 +55,14 @@ const List = ({
   const history = useHistory();
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const getCompanies = async () => {
+    const { customerShortenedCode, key } = currentSearchFilters;
     dispatch(
       search({
+        ...currentSearchFilters,
+        key: !!customerShortenedCode
+          ? getFullCustomerKey(customerShortenedCode)
+          : key || undefined,
         size,
         from,
         url: "customer",
@@ -66,11 +71,15 @@ const List = ({
       })
     );
     if (error) Swal.fire("error", getErrorMessage(error), "error");
-    const tabs = manageCustomersArray();
-    setManageCompaniesTab(tabs);
-  }, [branchId, dispatch, error, from, size]);
+  };
 
   useEffect(() => {
+    getCompanies()
+  }, [branchId, from, size]);
+  
+  useEffect(() => {
+    const tabs = manageCustomersArray();
+    setManageCompaniesTab(tabs);
     return () => {
       dispatch(searchFilters({}));
     };
@@ -137,24 +146,6 @@ const List = ({
     },
   ];
 
-  const getCompanies = async () => {
-    const { customerShortenedCode, key } = currentSearchFilters;
-    dispatch(
-      search({
-        ...currentSearchFilters,
-        key: !!customerShortenedCode
-          ? getFullCustomerKey(customerShortenedCode)
-          : key || undefined,
-        size,
-        from,
-        url: "customer",
-        branchId,
-        customerType: 'company'
-      })
-    );
-    if (error) Swal.fire("error", getErrorMessage(error), "error");
-  };
-
   return (
     <>
       {/* <HeaderWithCards
@@ -191,15 +182,15 @@ const List = ({
           <Search
             searchKeys={["keyword", "dateFromTo"]}
             dropDownKeys={[
-              "name",
-              // "TaxCardNumber",
-              'CommercialRegisterNumber',
+              'businessName',
+              'taxCardNumber',
+              'commercialRegisterNumber',
               "key",
               "code",
               "customerShortenedCode",
             ]}
             searchPlaceholder={searchCompanyList}
-            url="company"
+            url="customer"
             from={from}
             size={size}
             setFrom={(from) => setFrom(from)}
@@ -212,10 +203,10 @@ const List = ({
             mappers={tableMapper}
             pagination={true}
             data={data}
-            url="company"
+            url="customer"
             changeNumber={(key: string, number: number) => {
               if (key === 'size') setSize(number)
-              if (key === 'from') {setFrom(number); getCompanies()}
+              if (key === 'from') setFrom(number)
             }}
           />
         </Card.Body>

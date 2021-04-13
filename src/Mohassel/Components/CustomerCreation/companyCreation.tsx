@@ -35,13 +35,15 @@ interface State {
     businessName: string;
     businessAddress: string;
     businessCharacteristic: string;
+    businessSector: string;
+    businessActivityDetails: string;
     legalStructure: string;
     businessLicenseNumber: string;
-    businessLicenseIssuePlace: string;
+    // businessLicenseIssuePlace: string;
     businessLicenseIssueDate: any;
     commercialRegisterNumber: string;
     commercialRegisterExpiryDate: string | number;
-    industryRegisterNumber: string;
+    // industryRegisterNumber: string;
     taxCardNumber: string;
     customerType: string;
   };
@@ -119,13 +121,15 @@ class CompanyCreation extends Component<Props, State>{
         businessName: res.body.businessName,
         businessAddress: res.body.businessAddress,
         businessCharacteristic: res.body.businessCharacteristic,
+        businessSector: res.body.businessSector,
+        businessActivityDetails: res.body.businessActivityDetails,
         legalStructure: res.body.legalStructure,
         businessLicenseNumber: res.body.businessLicenseNumber,
-        businessLicenseIssuePlace: res.body.businessLicenseIssuePlace,
+        // businessLicenseIssuePlace: res.body.businessLicenseIssuePlace,
         businessLicenseIssueDate: timeToDateyyymmdd(res.body.businessLicenseIssueDate),
         commercialRegisterExpiryDate: timeToDateyyymmdd(res.body.commercialRegisterExpiryDate),
         commercialRegisterNumber: res.body.commercialRegisterNumber,
-        industryRegisterNumber: res.body.industryRegisterNumber,
+        // industryRegisterNumber: res.body.industryRegisterNumber,
         taxCardNumber: res.body.taxCardNumber,
       };
       const customerExtraDetails = {

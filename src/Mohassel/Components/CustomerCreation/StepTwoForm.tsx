@@ -303,8 +303,9 @@ export const StepTwoForm = (props: any) => {
                     </Form.Group>
                 </Col>
             </Row>
+            </>}
             <Row>
-                <Col sm={12}>
+                <Col sm={isCompany ? 6 : 12}>
                     <Form.Group controlId="businessSector">
                         <Form.Label className="customer-form-label">{`${local.businessSector}*`}</Form.Label>
                         <Can I="updateCustomerHasLoan" a="customer" passThrough>
@@ -330,8 +331,26 @@ export const StepTwoForm = (props: any) => {
                             </Can>
                     </Form.Group>
                 </Col>
+                {isCompany && <Col sm={6}>
+                    <Form.Group controlId="businessActivityDetails">
+                        <Form.Label className="customer-form-label">{local.businessActivityDetails}</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="businessActivityDetails"
+                            data-qc="businessActivityDetails"
+                            value={values.businessActivityDetails}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            // maxLength={5}
+                            isInvalid={errors.businessActivityDetails && touched.businessActivityDetails}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.businessActivityDetails}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>}
             </Row>
-            <Row>
+            {!isCompany && <Row>
                 <Col sm={6}>
                     <Form.Group controlId="businessActivity">
                         <Form.Label className="customer-form-label">{`${local.businessActivity}*`}</Form.Label>
@@ -384,8 +403,7 @@ export const StepTwoForm = (props: any) => {
                             </Can>
                     </Form.Group>
                 </Col>
-            </Row>
-            </>}
+            </Row>}
             <Row>
                 <Col sm={6}>
                         <Form.Group controlId="businessLicenseNumber">
@@ -472,7 +490,7 @@ export const StepTwoForm = (props: any) => {
                 </Col>
             </Row>}
             <Row>
-                <Col sm={6}>
+                <Col sm={isCompany ? 12 : 6}>
                     <Form.Group controlId="businessLicenseIssueDate">
                         <Form.Label className="customer-form-label">{local.businessLicenseIssueDate + (isCompany ? '*' : '')}</Form.Label>
                         <Form.Control
@@ -489,7 +507,7 @@ export const StepTwoForm = (props: any) => {
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
-                <Col sm={6}>
+                {!isCompany && <Col sm={6}>
                     <Form.Group controlId="businessLicenseIssuePlace">
                         <Form.Label className="customer-form-label">{local.businessLicenseIssuePlace}</Form.Label>
                             <Form.Control
@@ -506,10 +524,10 @@ export const StepTwoForm = (props: any) => {
                             {errors.businessLicenseIssuePlace}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Col>
+                </Col>}
             </Row>
             <Row>
-                <Col sm={6}>
+                {!isCompany && <Col sm={6}>
                     <Form.Group controlId="industryRegisterNumber">
                         <Form.Label className="customer-form-label">{local.industryRegisterNumber + (isCompany ? '*' : '')}</Form.Label>
                             <Form.Control
@@ -531,8 +549,8 @@ export const StepTwoForm = (props: any) => {
                             {errors.industryRegisterNumber}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Col>
-                <Col sm={6}>
+                </Col>}
+                <Col sm={isCompany ? 12 : 6}>
                     <Form.Group controlId="taxCardNumber">
                         <Form.Label className="customer-form-label">{local.taxCardNumber + (isCompany ? '*' : '')}</Form.Label>
                             <Form.Control

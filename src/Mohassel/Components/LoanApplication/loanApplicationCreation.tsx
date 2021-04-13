@@ -711,11 +711,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 principalToSend = obj.principal
             }
             const viceCustomers = obj.viceCustomers.filter(item => item !== undefined);
-            if(this.state.customerType === 'sme') {
-            viceCustomers.forEach(vice => { 
-                    vice.nationalIdIssueDate = new Date(vice.nationalIdIssueDate).valueOf();
-                })
-            }
             const objToSubmit = {
                 customerId: obj.customerID,
                 guarantorIds: obj.guarantorIds,
@@ -745,6 +740,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 viceCustomers: viceCustomers,
                 branchManagerId: values.branchManagerId,
                 managerVisitDate: values.managerVisitDate ? new Date(values.managerVisitDate).valueOf() : 0,
+                entitledToSignIds: [],
             }
             if (this.state.application.guarantorIds.length < this.state.application.noOfGuarantors && this.state.customerType === 'individual') {
                 Swal.fire("error", local.selectTwoGuarantors, 'error')

@@ -73,12 +73,12 @@ class Search extends Component<Props, State> {
     super(props);
     this.state = {
       governorates: [],
-      dropDownValue: this.props.url === "actionLogs" ? "authorName" : "name",
+      dropDownValue: this.props.url === "actionLogs" ? "authorName" : this.props.dropDownKeys?.includes('businessName') ? 'businessName' : "name",
       actionsList: [],
     };
   }
   componentDidMount() {
-    if (this.props.url === "customer") {
+    if (this.props.url === "customer" && !this.props.dropDownKeys?.includes('businessName')) {
       this.getGov();
     } else if (this.props.url === "actionLogs") {
       this.getActionsList();
@@ -252,6 +252,9 @@ class Search extends Component<Props, State> {
       userName: local.username,
       hrCode: local.hrCode,
       customerShortenedCode: local.customerShortenedCode,
+      businessName: local.companyName,
+      taxCardNumber: local.taxCardNumber,
+      commercialRegisterNumber: local.commercialRegisterNumber,
       default: "",
     };
     return arDropDownValue[key];

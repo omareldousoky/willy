@@ -970,5 +970,6 @@
     "SMEviceCustomersInfo": "بيانات من لهم حق التوقيع",
     "businessCharacteristic": "السمة التجارية",
     "maxLength500": "لا يمكن ان يكون اكثر من 500",
-    "documentForCustomerOfType": "مستند خاص بعميل من نوع"
+    "documentForCustomerOfType": "مستند خاص بعميل من نوع",
+    "businessActivityDetails": "تفاصيل النشاط"
 }
