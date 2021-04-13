@@ -16,7 +16,7 @@ import {
 import { searchUsers } from '../../Services/APIs/Users/searchUsers'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import { Group, SupervisionLevelsCreationProps } from './types'
-import { SupervisionGroup } from './SupervisionGroup'
+import { SupervisionGroup } from './supervisionGroup'
 
 export const SupervisionLevelsCreation: FunctionComponent<SupervisionLevelsCreationProps> = ({
   branchId,
