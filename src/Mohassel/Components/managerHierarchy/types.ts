@@ -70,8 +70,7 @@ export interface SupervisionGroupProps {
 
 export interface SupervisionLevelsActionsProps {
   branchId: string
-  // TODO: get values
-  mode: string
+  mode: 'delete' | 'approve' | 'unapprove'
 }
 
 export interface SupervisionLevelsActionsState {
