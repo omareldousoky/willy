@@ -1,4 +1,4 @@
-import { Col, Row, InputGroup, DropdownButton, Dropdown } from 'react-bootstrap'
+import { Col, InputGroup, DropdownButton, Dropdown } from 'react-bootstrap'
 import React, { Component, useEffect } from 'react'
 import * as local from '../../../../Shared/Assets/ar.json'
 import Select, { ValueType } from 'react-select'
@@ -20,6 +20,7 @@ interface Props {
     error: string;
     searchFilters: (data) => void;
     setLoading: (data) => void;
+    onSubmit: () => void;
 }
 interface Option {
     label: string;
@@ -35,15 +36,14 @@ export interface BlockingObj {
     blockDateFilter: string;
 }
 interface State {
-    dropDownValue: string;
-    blockDate: string;
+  dropDownValue: string;
 }
 const ValueChangeListener = () => {
     const { submitForm, values } = useFormikContext<FormikValues>()
 
     useEffect(() => {
         if (values) {
-            submitForm()
+            submitForm()        
         }
     }, [values, submitForm])
 
@@ -68,7 +68,6 @@ class SearchBlocking extends Component<Props, State> {
     super(props)
     this.state = {
       dropDownValue: 'branchName',
-      blockDate: '',
     }
   }
   getArValue(key: string) {
@@ -97,11 +96,11 @@ class SearchBlocking extends Component<Props, State> {
     }).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+      else this.props.onSubmit()
     }
     );
    }  
   }
-
   render() {
     return (
       <Formik
@@ -137,7 +136,7 @@ class SearchBlocking extends Component<Props, State> {
                         const { value } = event as Option
                         formikProps.setFieldValue('status', value)
                         formikProps.setFieldValue('blockDateFilter', '')
-                        formikProps.setFieldValue('blockDate',0)
+                        formikProps.setFieldValue('blockDate','')
                       } else {
                         formikProps.setFieldValue('status', '')
                       }
@@ -197,6 +196,7 @@ class SearchBlocking extends Component<Props, State> {
                   className="m-0 full-width"
                   label={local.blockDate}
                   isClearable
+                  onClear={()=>{formikProps.setFieldValue('blockDate','')}}
                   id="blockDate"
 
                 />
@@ -210,7 +210,7 @@ class SearchBlocking extends Component<Props, State> {
                     theme={theme.selectTheme}
                     className="full-width"
                     placeholder={local.blockDateFilter}
-                    isDisabled={!!formikProps.values.blockDate }
+                    isDisabled={!formikProps.values.blockDate}
                     onChange={(event: ValueType<Option> | Option) => {
                       if (event) {
                         const { value } = event as Option
@@ -227,7 +227,7 @@ class SearchBlocking extends Component<Props, State> {
                     ]}
                   />
                 </div>
-                {formikProps.errors.blockDateFilter && <div className="errorMsg">{formikProps.errors.blockDateFilter}</div>}
+                {(formikProps.errors.blockDateFilter && !!formikProps.values.blockDate) && <div className="errorMsg">{formikProps.errors.blockDateFilter}</div>}
               </Col>
             </div>
             <ValueChangeListener />

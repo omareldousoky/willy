@@ -10,6 +10,13 @@ export const financialClosingArray = (): Tab[] => {
       path: '/financial-closing/lts-blocking',
     })
   }
+  if(ability.can('summarizeTransactions','oracleIntegration')){
+    financialClosingArr.push({
+      icon: 'bulkLoanApplicationsReview',
+      header: local.oracleReports,
+      path: '/financial-closing/lts-review-oracle'
+    })
+  }
   if (ability.can('financialClosing', 'application')) {
     financialClosingArr.push({
       icon: 'assignProductToBranch',

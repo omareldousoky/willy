@@ -227,7 +227,8 @@ class LtsBlocking extends Component<Props, State> {
              this.props.searchFilters.blockDateFilter) 
              &&(ability.can('financialBlocking', 'application') ||
              ability.can('financialUnBlocking', 'application')) && <Button
-              disabled={!this.state.selectedBranches}
+              className="mx-2"
+              disabled={!this.state.selectedBranches.length}
               onClick={this.handleBlockClick}
             >
               {this.props.searchFilters.status === 'blocked' || this.props.searchFilters.blockDateFilter ==='after'
@@ -244,7 +245,7 @@ class LtsBlocking extends Component<Props, State> {
         </Card.Header>
         <Card.Body className="mx-2 my-0">
           <div className="my-5">
-            <SearchBlocking from={0} size={this.state.size} />
+            <SearchBlocking from={0} size={this.state.size} onSubmit={()=>{this.setState({checkAll: false , selectedBranches:[]})}} />
           </div>
           {this.props.data && (
             <>

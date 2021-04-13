@@ -12,6 +12,7 @@ interface DateFieldProps {
   fieldClassName?: string;
   label?: string;
   isClearable?: boolean;
+  onClear?: () => void;
 }
 const DateField = (props: DateFieldProps & FieldProps<string>) => {
   const {
@@ -26,15 +27,12 @@ const DateField = (props: DateFieldProps & FieldProps<string>) => {
     onlyField = false,
     label,
     isClearable,
+    onClear,
     ...restProps
   } = props;
   const { touched, errors } = form;
   const inputRef = useRef<HTMLInputElement>(null);
- const onClear =() =>{
-   if(null !== inputRef?.current && inputRef.current.value){
-        inputRef.current.value='';
-   }
-  }
+
   return (
     <>
       {!onlyField && (
@@ -59,7 +57,15 @@ const DateField = (props: DateFieldProps & FieldProps<string>) => {
             {isClearable &&
             <InputGroup.Append>
             <InputGroup.Text
-               onClick={onClear}><img className="w-75 h-75" src={require('../../../Assets/clear.svg')}/>
+               onClick={
+                 ()=>{
+                  if(null !== inputRef?.current && inputRef.current.value){
+                    inputRef.current.value='';
+                 }
+                 if(onClear)
+                    onClear();
+                 }
+               }><img className="w-75 h-75" src={require('../../../Assets/clear.svg')}/>
                </InputGroup.Text></InputGroup.Append>
             }
           </InputGroup>
