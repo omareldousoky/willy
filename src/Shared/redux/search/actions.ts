@@ -9,169 +9,262 @@ import {searchClearance} from '../../../Mohassel/Services/APIs/clearance/searchC
 import { searchGroups } from '../../../Mohassel/Services/APIs/ManagerHierarchy/searchGroups';
 import { searchTerrorists, searchUnTerrorists } from '../../../Mohassel/Services/APIs/Terrorism/terrorism';
 import { searchLoanOfficer } from '../../../Mohassel/Services/APIs/LoanOfficers/searchLoanOfficer';
+import { searchDefaultingCustomers } from '../../../Mohassel/Services/APIs/LegalAffairs/defaultingCustomers';
 export const search = (obj) => {
     switch (obj.url) {
-        case ('customer'):
-            return async (dispatch) => {
-                delete obj.url;
-                dispatch({ type: 'SET_LOADING', payload: true })
-                const res = await searchCustomer(obj);
-                if (res.status === "success") {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
-                } else {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
-                }
-            }
-        case ('branch'):
-            return async (dispatch) => {
-                delete obj.url;
-                dispatch({ type: 'SET_LOADING', payload: true })
-                const res = await searchBranches(obj);
-                if (res.status === "success") {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
-                } else {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
-                }
-            }
-        case ('user'):
-            return async (dispatch) => {
-                delete obj.url;
-                dispatch({ type: 'SET_LOADING', payload: true })
-                const res = await searchUsers(obj);
-                if (res.status === "success") {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
-                } else {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
-                }
-            }
-        case ('loan'):
-            return async (dispatch) => {
-                delete obj.url;
-                dispatch({ type: 'SET_LOADING', payload: true })
-                const res = await searchLoan(obj);
-                if (res.status === "success") {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
-                } else {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
-                }
-            }
-        case ('application'):
-            return async (dispatch) => {
-                delete obj.url;
-                dispatch({ type: 'SET_LOADING', payload: true })
-                const res = await searchApplication(obj);
-                if (res.status === "success") {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
-                } else {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
-                }
-            }
-        case ('actionLogs'):
-            return async (dispatch) => {
-                delete obj.url;
-                dispatch({ type: 'SET_LOADING', payload: true })
-                const res = await searchActionLogs(obj);
-                if (res.status === "success") {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
-                } else {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
-                }
-            }
-        case ('lead'):
-            return async (dispatch) => {
-                delete obj.url;
-                dispatch({ type: 'SET_LOADING', payload: true })
-                const res = await searchLeads(obj);
-                if (res.status === "success") {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
-                } else {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
-                }
-            }
-         case('clearance'):
-            return async (dispatch) => {
-                delete obj.url;
-                dispatch({ type: 'SET_LOADING', payload: true })
-                const res = await searchClearance(obj);
-                if (res.status === 'success') {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: { ...res.body, status: res.status, error: undefined } })
-                } else {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: { ...res.error, status: res.status } })
-                }
-            }
-         case ('supervisionsGroups'):
-             return async (dispatch)=>{
-                    delete obj.url;
-                    dispatch({ type: 'SET_LOADING', payload: true })
-                    const res = await searchGroups(obj);
-                    if (res.status === 'success') {
-                        dispatch({ type: 'SET_LOADING', payload: false })
-                        dispatch({ type: 'SEARCH', payload: { ...res.body, status: res.status, error: undefined } })
-                    } else {
-                        dispatch({ type: 'SET_LOADING', payload: false })
-                        dispatch({ type: 'SEARCH', payload: { ...res.error, status: res.status } })
-                    }  
-             }     
-        case ('terrorist'):
-            return async (dispatch)=>{
-                delete obj.url
-                dispatch({type: "SET_LOADING", payload: true})
-                const res = await searchTerrorists(obj)
-                if(res.status === "success") {
-                        dispatch({type: "SET_LOADING", payload: false})
-                        dispatch({ type: 'SEARCH', payload: { ...res.body, status: res.status, error: undefined } })
-                } else {
-                    dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: {...(res.error as Record<string, string>)}})
-                }
-            }
-        case('loanOfficer'):
+      case 'customer':
         return async (dispatch) => {
-            delete obj.url;
-            dispatch({ type: 'SET_LOADING', payload: true })
-            const res = await searchLoanOfficer(obj);
-            if (res.status === "success") {
-                dispatch({ type: 'SET_LOADING', payload: false })
-                dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
-            } else {
-                dispatch({ type: 'SET_LOADING', payload: false })
-                dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
-            }
+          delete obj.url
+          dispatch({ type: 'SET_LOADING', payload: true })
+          const res = await searchCustomer(obj)
+          if (res.status === 'success') {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.body, status: res.status, error: undefined },
+            })
+          } else {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.error, status: res.status },
+            })
+          }
         }
-        case('terroristUn'):
-        return async (dispatch)=>{
-            delete obj.url
-            dispatch({type: "SET_LOADING", payload: true})
-            const res = await searchUnTerrorists(obj)
-            if(res.status === "success") {
-                    dispatch({type: "SET_LOADING", payload: false})
-                    dispatch({ type: 'SEARCH', payload: { ...res.body, status: res.status, error: undefined } })
-            } else {
-                dispatch({ type: 'SET_LOADING', payload: false })
-                dispatch({ type: 'SEARCH', payload: {...(res.error as Record<string, string>)}})
-            }
-        }        
-        case ('clearData'):
-            return (dispatch) => {
-                dispatch({ type: 'CLEAR_DATA', payload: {} })
-            }
-        default: return null;
+      case 'branch':
+        return async (dispatch) => {
+          delete obj.url
+          dispatch({ type: 'SET_LOADING', payload: true })
+          const res = await searchBranches(obj)
+          if (res.status === 'success') {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.body, status: res.status, error: undefined },
+            })
+          } else {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.error, status: res.status },
+            })
+          }
+        }
+      case 'user':
+        return async (dispatch) => {
+          delete obj.url
+          dispatch({ type: 'SET_LOADING', payload: true })
+          const res = await searchUsers(obj)
+          if (res.status === 'success') {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.body, status: res.status, error: undefined },
+            })
+          } else {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.error, status: res.status },
+            })
+          }
+        }
+      case 'loan':
+        return async (dispatch) => {
+          delete obj.url
+          dispatch({ type: 'SET_LOADING', payload: true })
+          const res = await searchLoan(obj)
+          if (res.status === 'success') {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.body, status: res.status, error: undefined },
+            })
+          } else {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.error, status: res.status },
+            })
+          }
+        }
+      case 'application':
+        return async (dispatch) => {
+          delete obj.url
+          dispatch({ type: 'SET_LOADING', payload: true })
+          const res = await searchApplication(obj)
+          if (res.status === 'success') {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.body, status: res.status, error: undefined },
+            })
+          } else {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.error, status: res.status },
+            })
+          }
+        }
+      case 'actionLogs':
+        return async (dispatch) => {
+          delete obj.url
+          dispatch({ type: 'SET_LOADING', payload: true })
+          const res = await searchActionLogs(obj)
+          if (res.status === 'success') {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.body, status: res.status, error: undefined },
+            })
+          } else {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.error, status: res.status },
+            })
+          }
+        }
+      case 'lead':
+        return async (dispatch) => {
+          delete obj.url
+          dispatch({ type: 'SET_LOADING', payload: true })
+          const res = await searchLeads(obj)
+          if (res.status === 'success') {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.body, status: res.status, error: undefined },
+            })
+          } else {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.error, status: res.status },
+            })
+          }
+        }
+      case 'clearance':
+        return async (dispatch) => {
+          delete obj.url
+          dispatch({ type: 'SET_LOADING', payload: true })
+          const res = await searchClearance(obj)
+          if (res.status === 'success') {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.body, status: res.status, error: undefined },
+            })
+          } else {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.error, status: res.status },
+            })
+          }
+        }
+      case 'supervisionsGroups':
+        return async (dispatch) => {
+          delete obj.url
+          dispatch({ type: 'SET_LOADING', payload: true })
+          const res = await searchGroups(obj)
+          if (res.status === 'success') {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.body, status: res.status, error: undefined },
+            })
+          } else {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.error, status: res.status },
+            })
+          }
+        }
+      case 'terrorist':
+        return async (dispatch) => {
+          delete obj.url
+          dispatch({ type: 'SET_LOADING', payload: true })
+          const res = await searchTerrorists(obj)
+          if (res.status === 'success') {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.body, status: res.status, error: undefined },
+            })
+          } else {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...(res.error as Record<string, string>) },
+            })
+          }
+        }
+      case 'loanOfficer':
+        return async (dispatch) => {
+          delete obj.url
+          dispatch({ type: 'SET_LOADING', payload: true })
+          const res = await searchLoanOfficer(obj)
+          if (res.status === 'success') {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.body, status: res.status, error: undefined },
+            })
+          } else {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.error, status: res.status },
+            })
+          }
+        }
+      case 'terroristUn':
+        return async (dispatch) => {
+          delete obj.url
+          dispatch({ type: 'SET_LOADING', payload: true })
+          const res = await searchUnTerrorists(obj)
+          if (res.status === 'success') {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.body, status: res.status, error: undefined },
+            })
+          } else {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...(res.error as Record<string, string>) },
+            })
+          }
+        }
+      case 'defaultingCustomers':
+        return async (dispatch) => {
+          delete obj.url
+          dispatch({ type: 'SET_LOADING', payload: true })
+          const res = await searchDefaultingCustomers(obj)
+          if (res.status === 'success') {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.body, status: res.status, error: undefined },
+            })
+          } else {
+            dispatch({ type: 'SET_LOADING', payload: false })
+            dispatch({
+              type: 'SEARCH',
+              payload: { ...res.error, status: res.status },
+            })
+          }
+        }
+      case 'clearData':
+        return (dispatch) => {
+          dispatch({ type: 'CLEAR_DATA', payload: {} })
+        }
+      default:
+        return null
     }
 }
 

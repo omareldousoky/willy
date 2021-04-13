@@ -60,6 +60,7 @@ import FinancialClosing from '../Components/FinancialClosing/financialClosing';
 import TerrorismList from '../Components/terrorismMoneyLaundering/terrorismList';
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
 import TerrorismUnList from '../Components/terrorismMoneyLaundering/terrorismUnList'
+import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList';
 
 const appRoutes = [
   {
@@ -488,7 +489,19 @@ const appRoutes = [
           render: (props) => <Can I="getTerrorist" a="customer"><TerrorismUnList {...props} /></Can>
         },
 				]
-			}
+			},
+      {
+        path: '/legal-affairs',
+        label: local.legalAffairs,
+        render: (props) => <Can I='getDefaultingCustomer' a='legal'><DefaultingCustomersList {...props} /></Can>,
+        routes: [
+          {
+            path: '/late-list',
+            label: local.lateList,
+            render: (props) => <Can I='getDefaultingCustomer' a='legal'><DefaultingCustomersList {...props} /></Can>
+          }
+        ]
+      }
     ]
   },
 ];
