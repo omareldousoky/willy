@@ -648,8 +648,8 @@ const LoanContract = (props) => {
                   <tbody>
                     <div>
                       <div className="title_last">
-                        <Barcode value={props.data.applicationKey} />
-                        <div>{props.data.applicationKey}</div>
+                        <Barcode value={props.data.loanApplicationKey} />
+                        <div>{props.data.loanApplicationKey}</div>
                         <div>
                           {timeToArabicDate(props.data.creationDate, false)}
                         </div>
@@ -857,8 +857,8 @@ const LoanContract = (props) => {
                 <div className="main">
                   <div className="last">
                     <div className="title_last">
-                      <Barcode value={props.data.applicationKey} />
-                      <div>{props.data.applicationKey}</div>
+                      <Barcode value={props.data.loanApplicationKey} />
+                      <div>{props.data.loanApplicationKey}</div>
                       <div>
                         {timeToArabicDate(props.data.creationDate, false)}
                       </div>
@@ -867,8 +867,8 @@ const LoanContract = (props) => {
                       <div
                         style={{ margin: '2em', borderTop: '2px solid black' }}
                       />
-                      <Barcode value={props.data.applicationKey} />
-                      <div>{props.data.applicationKey}</div>
+                      <Barcode value={props.data.loanApplicationKey} />
+                      <div>{props.data.loanApplicationKey}</div>
                       <div>
                         {timeToArabicDate(props.data.creationDate, false)}
                       </div>

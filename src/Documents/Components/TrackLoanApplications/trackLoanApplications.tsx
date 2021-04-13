@@ -166,7 +166,7 @@ class TrackLoanApplications extends Component<Props, State> {
         size: this.state.size,
         from: this.state.from,
         url: 'application',
-        branchId: this.props.branchId,
+        branchId: this.props.branchId || this.props.searchFilters.branchId,
       })
       .then(() => {
         if (this.props.error)

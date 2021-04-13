@@ -201,10 +201,10 @@ class LoanList extends Component<Props, State> {
     const query = {
       ...modifiedSearchFilters,
       ...issuedLoansSearchFilters,
+      branchId: fromBranch ? branchId : this.props.searchFilters.branchId,
       size,
       from,
       url: 'loan',
-      branchId: fromBranch ? branchId : undefined,
       sort: 'issueDate',
     }
     this.props.search(query).then(() => {
