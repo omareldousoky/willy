@@ -67,7 +67,7 @@ const ManagersCreation: FunctionComponent<ManagersCreationProps> = ({
     return {
       operationsManager: values?.operationsManager?.id || undefined,
       areaManager: values?.areaManager?.id || undefined,
-      areaSupervisor: values?.centerManager?.id || undefined,
+      areaSupervisor: values?.areaSupervisor?.id || undefined,
       centerManager: values?.centerManager?.id || undefined,
       branchManager: values?.branchManager?.id || undefined,
     }
@@ -101,7 +101,6 @@ const ManagersCreation: FunctionComponent<ManagersCreationProps> = ({
             <UsersSearch
               usersInitial={users}
               objectKey="operationsManager"
-              // TODO: get single item or all `values`
               item={values.operationsManager}
               updateItem={(newOperationsManager?: ManagerHierarchyUser) =>
                 setValues({
