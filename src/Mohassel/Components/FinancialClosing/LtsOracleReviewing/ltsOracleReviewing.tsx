@@ -87,12 +87,14 @@ class LtsOracleReviewing extends Component<{}, State> {
               )
             })
           ) : (
-            <div className="mr-4 text-align-center">
+            <div className="d-flex justify-content-center align-items-center mr-5 text-align-center">
+              <div>
               <img
                 alt="no-data-found"
                 src={require('../../../../Shared/Assets/no-results-found.svg')}
               />
               <h4>{local.noResultsFound}</h4>
+              </div>
             </div>
           )}
         </Card.Body>

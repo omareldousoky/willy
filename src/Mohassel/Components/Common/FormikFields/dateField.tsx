@@ -65,7 +65,7 @@ const DateField = (props: DateFieldProps & FieldProps<string>) => {
                  if(onClear)
                     onClear();
                  }
-               }><img className="w-75 h-75" src={require('../../../Assets/clear.svg')}/>
+               }><img  alt= "clear" className="w-75 h-75" src={require('../../../Assets/clear.svg')}/>
                </InputGroup.Text></InputGroup.Append>
             }
           </InputGroup>
