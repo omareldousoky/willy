@@ -60,6 +60,7 @@ import FinancialClosing from '../Components/FinancialClosing/financialClosing';
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
 import FinancialBlocking from '../Components/FinancialClosing/financialBlocking'
 import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList';
+import FinancialReviewing from '../Components/FinancialClosing/FinancialReviewing'
 
 const appRoutes = [
   {
@@ -473,7 +474,7 @@ const appRoutes = [
       },{
         path: '/financial-closing',
         label: local.manageFinancialTransaction,
-        render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} withHeader /></Can>,
+        render:(props) => <Can I= "financialBlocking" a="application"><FinancialBlocking {...props} withHeader /> </Can>,
          routes:[{
           path: '/lts-closing',
           label: local.ltsClosing,
@@ -482,6 +483,10 @@ const appRoutes = [
             path: '/lts-blocking',
             label: local.financialBlocking,
             render:(props) => <Can I= "financialBlocking" a="application"><FinancialBlocking {...props} withHeader /> </Can>
+         },{
+            path: '/lts-review-oracle',
+            label: local.oracleReports,
+            render:(props) => <Can I="summarizeTransactions" a="oracleIntegration"><FinancialReviewing {...props} withHeader /> </Can>
          }
       ]
       },{

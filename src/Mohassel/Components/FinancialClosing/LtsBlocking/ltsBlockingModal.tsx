@@ -6,7 +6,7 @@ import * as Yup from 'yup'
 import DateField from '../../Common/FormikFields/dateField'
 import Swal from 'sweetalert2'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
-import { financialBlocking,FinancialBlockingObj } from '../../../Services/APIs/loanApplication/financialClosing'
+import { financialBlocking,FinancialClosingRequest } from '../../../Services/APIs/loanApplication/financialClosing'
 interface Props {
     showModal: boolean;
     selectedBranches: string[];
@@ -51,7 +51,7 @@ class LtsBlockingModal extends Component<Props, State> {
       }
     })
   }
-  async Block(data: FinancialBlockingObj) {
+  async Block(data: FinancialClosingRequest) {
     this.setState({ loading: true })
     const res = await financialBlocking(data)
     if (res.status === 'success') {
