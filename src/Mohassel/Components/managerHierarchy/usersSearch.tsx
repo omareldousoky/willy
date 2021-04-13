@@ -1,8 +1,5 @@
 import React, { FunctionComponent, useState } from 'react'
-import DropdownButton from 'react-bootstrap/DropdownButton'
-import Dropdown from 'react-bootstrap/Dropdown'
-import Form from 'react-bootstrap/Form'
-import InputGroup from 'react-bootstrap/InputGroup'
+import { InputGroup, DropdownButton, Dropdown } from 'react-bootstrap'
 import Select from 'react-select'
 import { theme } from '../../../Shared/theme'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -18,7 +15,6 @@ export const UsersSearch: FunctionComponent<UsersSearchProps> = ({
   isClearable,
 }) => {
   const [dropDownValue, setDropDownValue] = useState('name')
-  // const [showError, setShowError] = useState(false)
 
   const dropDownArValue = {
     name: local.name,
@@ -69,7 +65,6 @@ export const UsersSearch: FunctionComponent<UsersSearchProps> = ({
           cacheOptions
           defaultOptions
           key={objectKey}
-          // onBlur={checkError}
           name="users"
           data-qc="users"
           styles={theme.selectStyleWithBorder}
