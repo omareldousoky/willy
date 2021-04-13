@@ -8,7 +8,6 @@ import * as local from '../../../Shared/Assets/ar.json'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
 import { theme } from '../../../Shared/theme'
-import useIsMounted from '../Common/Hooks/useIsMounted'
 
 export interface DropDownOption {
   name: string
@@ -81,10 +80,7 @@ export const AsyncLoanOfficersDropDown = ({
   const [value, setValue] = useState<ValueType<DropDownOption> | null>()
   const [searchKeyword, setSearchKeyword] = useState<string>('')
 
-  const isMounted = useIsMounted()
-
   const handleLoadOptions = async () => {
-    if (!isMounted.current) return
     const newOptions: DropDownOption[] = []
     const res = await searchLoanOfficer({
       name: searchKeyword,
@@ -93,24 +89,22 @@ export const AsyncLoanOfficersDropDown = ({
       branchId,
     })
 
-    if (isMounted.current) {
-      if (res.status === 'success') {
-        const { data } = res.body
-        if (Array.isArray(data) && data.length)
-          res.body.data.map((loanOfficer: DropDownOption) =>
-            newOptions.push({
-              _id: loanOfficer._id,
-              name: loanOfficer.name,
-            })
-          )
-        setOptions({
-          options: newOptions,
-          isLoading: false,
-          optionsLoaded: true,
-        })
-      } else {
-        setOptions({ options: [], isLoading: false, optionsLoaded: true })
-      }
+    if (res.status === 'success') {
+      const { data } = res.body
+      if (Array.isArray(data) && data.length)
+        res.body.data.map((loanOfficer: DropDownOption) =>
+          newOptions.push({
+            _id: loanOfficer._id,
+            name: loanOfficer.name,
+          })
+        )
+      setOptions({
+        options: newOptions,
+        isLoading: false,
+        optionsLoaded: true,
+      })
+    } else {
+      setOptions({ options: [], isLoading: false, optionsLoaded: true })
     }
   }
 
