@@ -32,7 +32,7 @@ interface Review {
     notes: string;
     userName: string;
 }
-interface DefaultedCustomer {
+export interface DefaultedCustomer {
     _id: string;
     updated: { at: number; by: string };
     created: { at: number; by: string };
@@ -49,6 +49,14 @@ interface DefaultedCustomer {
     areaSupervisorReview?: Review;
     financialManagerReview?: Review;
 }
+export interface IDefaultingCustomerReport extends DefaultedCustomer {
+    loanIssueDate: string
+    customerAddress: string
+    installmentAmount: number
+    overdueInstallmentCount: number
+    unpaidInstallmentCount: number
+    unpaidInstallmentAmount: number
+  }
 interface Props {
     history: any;
     data: DefaultedCustomer[];
@@ -74,6 +82,7 @@ interface State {
     selectedEntries: DefaultedCustomer[];
     customerSearchResults: { results: Array<Customer>; empty: boolean };
     loanSearchResults: { application: Application; id: string }[];
+    defaultingCustomersReport: IDefaultingCustomerReport[];
     selectedCustomer: Customer;
     modalLoader: boolean;
     loading: boolean;
@@ -116,6 +125,7 @@ class DefaultingCustomersList extends Component<Props, State> {
             selectedEntries: [],
             customerSearchResults: { results: [], empty: false },
             loanSearchResults: [],
+            defaultingCustomersReport: [],
             selectedCustomer: {},
             modalLoader: false,
             loading: false,
@@ -387,14 +397,18 @@ class DefaultingCustomersList extends Component<Props, State> {
        }
      }
      handlePrintReport(values: any) {
-        const {defaultingCustomerStatus, branches} = values
-        // TODO: call API with values
-        // then save it in the state to send it to reports template
-        this.setState({ showReportsModal: false }, () => { window.print() })
+        const { defaultingCustomerStatus, branches } = values
+        const printReportReq = {
+            status: defaultingCustomerStatus,
+            branches: branches.map(branch => branch._id)
+        }
+        // TODO: call API with printReportReq then remove data and use reponse
+        const defaultingCustomersReport = [...this.props.data] as IDefaultingCustomerReport[]
+        this.setState({ defaultingCustomersReport, showReportsModal: false }, () => { window.print() })
      }
     render() {
         return (
-            <>
+        <>
             <div className="print-none">
                 <HeaderWithCards
                     header={local.legalAffairs}
@@ -506,8 +520,8 @@ class DefaultingCustomersList extends Component<Props, State> {
                         />)
                 }
             </div>
-            <DefaultingCustomersPdfTemplate />
-            </>
+            <DefaultingCustomersPdfTemplate customers={this.state.defaultingCustomersReport} />
+        </>
         )
     }
 }
