@@ -1,8 +1,9 @@
-import React, { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react';
+import React, { useEffect, useState, BaseSyntheticEvent } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import { checkIssueDate, getErrorMessage } from "../../../Shared/Services/utils";
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
@@ -10,7 +11,6 @@ import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
 import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
 import Can from '../../config/Can';
-import Swal from 'sweetalert2';
 import ability from '../../config/ability';
 import { getGovernorates } from '../../Services/APIs/configApis/config';
 import { Governorate, District } from './StepTwoForm';
@@ -52,9 +52,9 @@ export const StepOneForm = (props: any) => {
     fetchGovernorates()
   }, [])
 
-  const handleGovernorateChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  const handleGovernorateChange = (event: BaseSyntheticEvent) => {
     setFieldValue('policeStation', '')
-    handleChange(e)
+    handleChange(event)
   }
 
   return (
@@ -240,7 +240,7 @@ export const StepOneForm = (props: any) => {
               data-qc="currHomeAddressGov"
               defaultValue=""
               value={values.currHomeAddressGov}
-              onChange={(e: ChangeEvent<HTMLSelectElement>) => handleGovernorateChange(e)}
+              onChange={handleGovernorateChange}
             >
               <option value="" disabled />
               {governorates.map(({ governorateName }) => (
