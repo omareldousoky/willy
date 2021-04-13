@@ -53,7 +53,7 @@ import BulkApplicationReview from '../Components/BulkApplicarionReview/bulkAppli
 import CreateClearance from '../Components/Clearance/create-clearance'
 import ClearancesList from '../Components/Clearance/clearancesList'
 import ClearanceProfile from '../Components/Clearance/clearanceProfile'
-import SupervisionsList from '../Components/ManagerHierarchy/supervisionsList'
+import SupervisionsList from '../Components/ManagerHierarchy/SupervisionsList'
 import BusinessActivities from '../Components/ManageLoanDetails/businessActivities'
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities'
 import FinancialClosing from '../Components/FinancialClosing/financialClosing'

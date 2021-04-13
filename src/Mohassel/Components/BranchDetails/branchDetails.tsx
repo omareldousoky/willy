@@ -21,8 +21,8 @@ import {
   getErrorMessage,
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
-import ManagerProfile from '../ManagerHierarchy/managersProfile'
-import SupervisionsProfile from '../ManagerHierarchy/supervisionsProfile'
+import ManagerProfile from '../ManagerHierarchy/ManagersProfile'
+import SupervisionsProfile from '../ManagerHierarchy/SupervisionsProfile'
 
 interface Props extends RouteComponentProps<{}, {}, { details: string }> {
   getBranchById: typeof getBranchById

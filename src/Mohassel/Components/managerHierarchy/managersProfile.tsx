@@ -12,9 +12,9 @@ import { getErrorMessage } from '../../../Shared/Services/utils'
 import { getManagerHierarchy } from '../../Services/APIs/ManagerHierarchy/getManagerHierarchy'
 
 import ability from '../../config/ability'
-import ManagersCreation from './managersCreation'
+import ManagersCreation from './ManagersCreation'
 import { ManagerProfileProps, ManagerProfileState } from './types'
-import { BranchBasicsCard } from './branchBasicsCard'
+import { BranchBasicsCard } from './BranchBasicsCard'
 
 const header: CSSProperties = {
   textAlign: 'right',

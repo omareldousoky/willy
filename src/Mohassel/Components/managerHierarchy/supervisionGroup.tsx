@@ -4,7 +4,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 import { ManagerHierarchyUser } from '../../../Shared/Services/interfaces'
 import './managerHierarchy.scss'
 import { SupervisionGroupProps } from './types'
-import { UsersSearch } from './usersSearch'
+import { UsersSearch } from './UsersSearch'
 
 export const SupervisionGroup: FunctionComponent<SupervisionGroupProps> = ({
   seqNo,
