@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEventHandler, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -52,7 +52,7 @@ export const StepOneForm = (props: any) => {
     fetchGovernorates()
   }, [])
 
-  const handleGovernorateChange = (e: any) => {
+  const handleGovernorateChange = (e: ChangeEventHandler<HTMLSelectElement> | undefined) => {
     setFieldValue('policeStation', '')
     handleChange(e)
   }
