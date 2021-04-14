@@ -1,5 +1,5 @@
 import React from 'react'
-import { CommonOfficersProductivity } from '../../../../Services/interfaces'
+import { CommonOfficersProductivity } from '../../../../Models/OfficersProductivityReport'
 import { formatPercent } from '../officersPercentPayment'
 import '../officersPercentPayment.scss'
 

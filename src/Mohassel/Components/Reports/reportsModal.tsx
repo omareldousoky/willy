@@ -21,7 +21,7 @@ import { DateFromToField } from "./Fields/dateFromTo";
 import TextField from "../Common/FormikFields/textField";
 import { Dropdown, DropdownButton, InputGroup } from "react-bootstrap";
 import { getFullCustomerKey } from "../../../Shared/Services/utils";
-import { CurrentHierarchiesSingleResponse } from "../../Services/interfaces";
+import { CurrentHierarchiesSingleResponse } from "../../Models/OfficersProductivityReport";
 
 interface InitialFormikState {
   fromDate?: string;
