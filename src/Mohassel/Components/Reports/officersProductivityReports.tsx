@@ -40,11 +40,9 @@ class OfficersProductivityReports extends Component<{}, State>{
         } else {
             this.setState({ loading: false });
             Swal.fire("error", local.searchError, 'error')
-            console.log(res)
         }
     }
     async handleSubmit(values) {
-        console.log(values);
         const obj: OfficersProductivityRequest = {
             startDate: new Date(values.fromDate).setUTCHours(
                 0,
@@ -72,7 +70,6 @@ class OfficersProductivityReports extends Component<{}, State>{
         } else {
             this.setState({ loading: false });
             Swal.fire("error", local.fileQueuedError, 'error')
-            console.log(res)
         }
     }
     async getFile(fileRequest){
@@ -85,7 +82,6 @@ class OfficersProductivityReports extends Component<{}, State>{
         } else {
             this.setState({ loading: false });
             Swal.fire("error", local.searchError, 'error')
-            console.log(res)
         }
     }
     render() {
