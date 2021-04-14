@@ -949,5 +949,6 @@
     "detailedAddress": "العنوان الخاص بالشئون القانونيه",
     "rejectionDetails": "تفاصيل الإبلاغ عن العميل",
     "done": "تم",
-    "viewRejectionReason": "عرض سبب الرفض"
+    "viewRejectionReason": "عرض سبب الرفض",
+    "officersProductivityReport": "نسبة سداد المندوبين"
 }

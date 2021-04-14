@@ -44,7 +44,6 @@ import MonthComparison from "../pdfTemplates/monthComparison/monthComparison";
 import ActiveWalletIndividual from "../pdfTemplates/activeWalletIndividual/activeWalletIndividual";
 import { ActiveWalletRequest, fetchActiveWalletGroupReport, fetchActiveWalletIndividualReport } from "../../Services/APIs/Reports/activeWallet";
 import ActiveWalletGroup from "../pdfTemplates/activeWalletGroup/activeWalletGroup";
-import OfficersProductivity from "../pdfTemplates/officersPercentPayment/officersProductivity/officersProductivity";
 
 export interface PDF {
   key?: string;
@@ -79,7 +78,6 @@ enum Reports {
   MonthComparison = "monthComparison",
   ActiveWalletIndividual = "activeWalletIndividual",
   ActiveWalletGroup = "activeWalletGroup",
-  OfficersProductivity = "officersProductivity",
 }
 
 class OperationsReports extends Component<{}, OperationsReportsState> {
@@ -181,12 +179,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           local: "المحفظة النشطه للمندوبين - جماعى",
           inputs: ["date", "branches", "representatives"],
           permission: "groupActiveLoans",
-        },
-				{
-          key: Reports.OfficersProductivity,
-          local: "نسبة سداد المندوبين 2",
-          inputs: ["dateFromTo", "managers", "userBranches", "gracePeriod"],
-          permission: "officersProductivityReport",
         },
       ],
       selectedPdf: { permission: "" },

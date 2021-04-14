@@ -15,11 +15,34 @@ const fetchCurrentHierarchiesUrl = `${REACT_APP_BASE_URL}/branch/current-hierarc
 export const fetchOfficersProductivityReport = async (
   request: OfficersProductivityRequest
 ): Promise<ApiResponse<OfficersProductivityResponse>> => {
-  console.log(request)
   try {
     const res: AxiosResponse<OfficersProductivityResponse> = await axios.post(
       fetchOfficersProductivityUrl,
       request
+    )
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
+}
+
+export const getOfficersProductivityReportById = async (
+  id: string
+): Promise<ApiResponse<OfficersProductivityResponse>> => {
+  try {
+    const res: AxiosResponse<OfficersProductivityResponse> = await axios.get(
+      fetchOfficersProductivityUrl + `/${id}`
+      )
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
+}
+
+export const getOfficersProductivityReports = async () => {
+  try {
+    const res: AxiosResponse = await axios.get(
+      fetchOfficersProductivityUrl
     )
     return { status: 'success', body: res.data }
   } catch (error) {
