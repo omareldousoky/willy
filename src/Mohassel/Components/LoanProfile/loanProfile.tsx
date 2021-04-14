@@ -6,7 +6,7 @@ import { BranchDetails, getBranch } from '../../Services/APIs/Branch/getBranch';
 import InfoBox from '../userInfoBox';
 import Payment from '../Payment/payment';
 import { englishToArabic } from '../../Services/statusLanguage';
-import * as local from '../../../Shared/Assets/ar.json';
+import local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Container from 'react-bootstrap/Container';
 import Swal from 'sweetalert2';
@@ -54,6 +54,7 @@ import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares';
 import { Customer } from '../LoanApplication/loanApplicationCreation';
 import { Installment } from '../Payment/payInstallment';
+import { getWriteOffReasons } from '../../Services/APIs/configApis/config';
 interface EarlyPayment {
     remainingPrincipal?: number;
     requiredAmount?: number;
@@ -61,19 +62,18 @@ interface EarlyPayment {
 }
 
 export interface IndividualWithInstallments {
-    individualInGroup: {
+    installmentTable: {
+        id: number;
+        installmentResponse: number;
+        dateOfPayment: number;
+    }[];
+    customerTable?: {
         amount: number;
+        installmentAmount: number;
         customer: Customer;
         type: string;
-    };
-    installmentsObject: {
-        output: Installment[];
-        sum: {
-            feesSum: number;
-            installmentSum: number;
-            principal: number;
-        };
-    };
+    }[];
+    rescheduled?: boolean;
 }
 interface State {
     prevId: string;
@@ -92,7 +92,7 @@ interface State {
     randomPendingActions: Array<any>;
     geoAreas: Array<any>;
     remainingTotal: number;
-    individualsWithInstallments: Array<IndividualWithInstallments>;
+    individualsWithInstallments: IndividualWithInstallments;
 }
 
 interface Props {
@@ -120,7 +120,9 @@ class LoanProfile extends Component<Props, State>{
             randomPendingActions: [],
             geoAreas: [],
             remainingTotal: 0,
-            individualsWithInstallments: []
+            individualsWithInstallments: {
+                installmentTable: []
+            }
         };
     }
     componentDidMount() {
@@ -128,7 +130,7 @@ class LoanProfile extends Component<Props, State>{
         this.getAppByID(appId)
     }
     async getManualOtherPayments(appId) {
-        if(ability.can("pendingAction", "application")){
+        if (ability.can("pendingAction", "application")) {
             this.setState({ loading: true })
             const res = await getManualOtherPayments(appId);
             if (res.status === "success") {
@@ -143,6 +145,7 @@ class LoanProfile extends Component<Props, State>{
     }
 
     async getAppByID(id) {
+        await this.getMembersShare(id);
         this.setState({ loading: true, activeTab: 'loanDetails', manualPaymentEditId: '' });
         const application = await getApplication(id);
         this.getBranchData(application.body.branchId);
@@ -154,7 +157,6 @@ class LoanProfile extends Component<Props, State>{
                 })
             } else this.setTabsToRender(application)
             if (ability.can('viewIscore', 'customer')) this.getCachediScores(application.body)
-             this.getMembersShare();
         } else {
             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(application.error.error), 'error'))
         }
@@ -264,9 +266,11 @@ class LoanProfile extends Component<Props, State>{
         if (application.body.status === "paid") tabsToRender.push(customerCardTab)
         if (application.body.status === "issued" || application.body.status === "pending") {
             tabsToRender.push(customerCardTab)
-            tabsToRender.push(followUpStatementTab)
             tabsToRender.push(reschedulingTab)
             tabsToRender.push(paymentTab)
+        }
+        if ((application.body.status === "issued" || application.body.status === "pending") && !this.state.individualsWithInstallments.rescheduled) {
+            tabsToRender.push(followUpStatementTab)
         }
         if (application.body.status === "issued" || application.body.status === "paid" || application.body.status === "pending") {
             tabsToRender.push(financialTransactionsTab)
@@ -345,7 +349,7 @@ class LoanProfile extends Component<Props, State>{
                     manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)}
                     paymentType={"normal"} randomPendingActions={this.state.randomPendingActions} />
             case 'customerCard':
-                return <CustomerCardView application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} print={() => this.setState({ print: 'customerCard' }, () => window.print())} />
+                return <CustomerCardView application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} print={() => this.setState({ print: 'customerCard' }, () => window.print())} rescheduled={this.state.individualsWithInstallments.rescheduled || false} />
             case 'followUpStatement':
                 return <FollowUpStatementView application={this.state.application} print={() => this.setState({ print: 'followUpStatement' }, () => window.print())} members={this.state.individualsWithInstallments} />
             case 'loanRescheduling':
@@ -498,10 +502,29 @@ class LoanProfile extends Component<Props, State>{
             }
         })
     }
+    async getWriteOffReasons() {
+        this.setState({ loading: true });
+        const res = await getWriteOffReasons();
+        if (res.status === "success") {
+            this.setState({ loading: false })
+            const options = {}
+            if (this.state.application.group.individualsInGroup !== null && this.state.application.group.individualsInGroup.length > 1) {
+                res.body.reasons.filter(reason => reason.name !== 'Deceased').map(option => options[option.name] = local[option.name.replace(/\s/g, '')])
+            } else {
+                res.body.reasons.map(option => options[option.name] = local[option.name.replace(/\s/g, '')])
+            }
+            return options
+        } else {
+            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
+            return {}
+        }
+    }
     async writeOffApplication() {
+        const options = await this.getWriteOffReasons()
         const { value: text } = await Swal.fire({
             title: local.writeOffReason,
-            input: 'text',
+            input: 'select',
+            inputOptions: options,
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
@@ -585,11 +608,11 @@ class LoanProfile extends Component<Props, State>{
         })
         return numTo2Decimal(sum);
     }
-    async getMembersShare() {
+    async getMembersShare(id: string) {
         this.setState({ loading: true })
-        const res = await getGroupMemberShares(this.props.history.location.state.id);
+        const res = await getGroupMemberShares(id);
         if (res.status === "success") {
-            this.setState({ loading: false, individualsWithInstallments: res.body.individualsWithInstallments })
+            this.setState({ loading: false, individualsWithInstallments: res.body })
         }
         else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
     }
@@ -606,7 +629,7 @@ class LoanProfile extends Component<Props, State>{
                                     <p style={{ margin: 0, color: `${englishToArabic(this.state.application.status).color}` }}>{englishToArabic(this.state.application.status).text}</p>
                                 </span>
                                 {this.state.application.writeOff && <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid red` }}>
-                                    <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.writtenOffLoan}</p>
+                                    <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.writtenOffLoan}{this.state.application.writeOffReason ? `- ${local[this.state.application.writeOffReason.replace(/\s/g, '')]}` : null}</p>
                                 </span>}
                                 {this.state.application.isDoubtful && !this.state.application.writeOff && <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid red` }}>
                                     <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.doubtedLoan}</p>
@@ -690,7 +713,7 @@ class LoanProfile extends Component<Props, State>{
                 }
                 {this.state.print === 'all' &&
                     <>
-                        <CashReceiptPDF data={this.state.application}  remainingTotal = {this.state.remainingTotal}/>
+                        <CashReceiptPDF data={this.state.application} remainingTotal={this.state.remainingTotal} />
                         <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} remainingTotal={this.state.remainingTotal} members={this.state.individualsWithInstallments} />
                         <CustomerCardAttachments data={this.state.application} branchDetails={this.state.branchDetails} />
                         <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} members={this.state.individualsWithInstallments} />

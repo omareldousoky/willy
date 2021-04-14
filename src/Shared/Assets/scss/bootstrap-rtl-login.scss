@@ -1,0 +1,14 @@
+@import "bootstrap_variables";
+
+// import only needed styles from BS (order is important)
+@import "~bootstrap-v4-rtl/scss/functions";
+@import "~bootstrap-v4-rtl/scss/variables";
+@import "~bootstrap-v4-rtl/scss/mixins";
+@import "~bootstrap-v4-rtl/scss/root";
+@import "~bootstrap-v4-rtl/scss/reboot";
+@import "~bootstrap-v4-rtl/scss/type";
+@import "~bootstrap-v4-rtl/scss/grid";
+@import "~bootstrap-v4-rtl/scss/forms";
+@import "~bootstrap-v4-rtl/scss/buttons";
+@import "~bootstrap-v4-rtl/scss/utilities";
+@import "~bootstrap-v4-rtl/scss/rtl";

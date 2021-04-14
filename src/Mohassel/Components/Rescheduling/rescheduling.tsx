@@ -4,7 +4,7 @@ import PostponeInstallments from './postponeInstallments';
 import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import TraditionalLoanRescheduling from './traditionalLoanRescheduling';
 import FreeRescheduling from './freeRescheduling';
-import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import Can from '../../config/Can';
 import PostponeHalfInstallment from './postponeHalfInstallment';
 
@@ -15,38 +15,42 @@ interface Props {
 interface State {
     id: string;
     activeTab: string;
-    tabsArray: Array<Tab>;
 }
+
+interface Mapper {
+     title: string; key: string; render: (data: any) => any; 
+}
+
+const tabsArray = [{
+    header: local.postponeInstallments,
+    stringKey: 'postponeInstallment',
+    permission: 'pushInstallment',
+    permissionKey: 'application'
+},{
+    header: local.postponeHalfInstallment,
+    stringKey: 'postponeHalfInstallment',
+    permission: 'pushInstallment',
+    permissionKey: 'application'
+},
+{
+    header: local.traditionalRescheduling,
+    stringKey: 'traditionalRescheduling',
+    permission: 'traditionRescheduling',
+    permissionKey: 'application'
+},
+{
+    header: local.freeRescheduling,
+    stringKey: 'freeRescheduling',
+    permission: 'freeRescheduling',
+    permissionKey: 'application'
+}]
 class Rescheduling extends Component<Props, State>{
-    mappers: { title: string; key: string; render: (data: any) => any }[]
+    mappers: Mapper[]    
     constructor(props: Props) {
         super(props);
         this.state = {
             id: '',
-            activeTab: '',
-            tabsArray: [{
-                header: local.postponeInstallments,
-                stringKey: 'postponeInstallment',
-                permission: 'pushInstallment',
-                permissionKey: 'application'
-            },{
-                header: local.postponeHalfInstallment,
-                stringKey: 'postponeHalfInstallment',
-                permission: 'pushInstallment',
-                permissionKey: 'application'
-            },
-            {
-                header: local.traditionalRescheduling,
-                stringKey: 'traditionalRescheduling',
-                permission: 'traditionRescheduling',
-                permissionKey: 'application'
-            },
-            {
-                header: local.freeRescheduling,
-                stringKey: 'freeRescheduling',
-                permission: 'freeRescheduling',
-                permissionKey: 'application'
-            }]
+            activeTab: tabsArray[0].stringKey,
         }
         this.mappers = [
             {
@@ -81,10 +85,12 @@ class Rescheduling extends Component<Props, State>{
             },
         ]
     }
-    handleOptionChange = (changeEvent) => {
-        this.setState({
-            activeTab: changeEvent.target.value
-        });
+    calculateActiveTabIndex() {
+        const activeTabIndex = tabsArray.findIndex(
+          ({ stringKey }) => stringKey === this.state.activeTab
+        )
+
+        return activeTabIndex > -1 ? activeTabIndex : 0
     }
     renderContent() {
         switch (this.state.activeTab) {
@@ -103,12 +109,13 @@ class Rescheduling extends Component<Props, State>{
     render() {
         return (
             <>
-                 <CardNavBar
-                                header={'here'}
-                                array={this.state.tabsArray}
-                                active={this.state.activeTab}
-                                selectTab={(index: string) => this.setState({ activeTab: index })}
+                 <HeaderWithCards
+                                header=''
+                                array={tabsArray}
+                                active={this.calculateActiveTabIndex()}
+                                selectTab={(activeTab: string) => this.setState({ activeTab })}
                             />
+                            
                             <div style={{ padding: 20, marginTop: 15 }}>
                                 {this.renderContent()}
                             </div>

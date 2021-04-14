@@ -148,7 +148,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.LeakedCustomers,
           local: "تقرير العملاء المتسربون",
-          inputs: ["dateFromTo", "branches", "loanOfficers"],
+          inputs: ["dateFromTo", "branches", "representatives"],
           permission: "churnedCustomers",
         },
         {
@@ -173,13 +173,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.ActiveWalletIndividual,
           local: "المحفظة النشطه للمندوبين - فردى",
-          inputs: ["date", "branches", "loanOfficers"],
+          inputs: ["date", "branches", "representatives"],
           permission: "individualActiveWallet",
         },
         {
           key: Reports.ActiveWalletGroup,
           local: "المحفظة النشطه للمندوبين - جماعى",
-          inputs: ["date", "branches", "loanOfficers"],
+          inputs: ["date", "branches", "representatives"],
           permission: "groupActiveLoans",
         },
 				{
