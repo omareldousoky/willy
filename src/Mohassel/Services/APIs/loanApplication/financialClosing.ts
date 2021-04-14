@@ -29,6 +29,9 @@ export interface ReviewFileResponse {
   key: string;
   toDate: number;
 }
+export interface ReviewFilesResponse {
+  reviewFiles?: ReviewFileResponse[];
+}
 export const financialClosing = async (data: FinancialClosingData) => {
   const url = process.env.REACT_APP_BASE_URL + '/application/financial-close'
   try {
@@ -69,10 +72,10 @@ export const searchFinancialBlocking = async (data: BlockingSearchRequest) => {
   }
 }
 export const getOracleReviewFiles = async (): Promise<
-  ApiResponse<ReviewFileResponse[]>> => {
+  ApiResponse<ReviewFilesResponse>> => {
   const url = process.env.REACT_APP_BASE_URL + '/oracle/review-files' 
   try {
-    const res: AxiosResponse<ReviewFileResponse[]> = await axios.get(url)
+    const res: AxiosResponse<ReviewFilesResponse> = await axios.get(url)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }

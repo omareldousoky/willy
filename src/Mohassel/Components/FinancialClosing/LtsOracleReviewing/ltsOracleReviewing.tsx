@@ -2,19 +2,19 @@ import React, { Component } from 'react'
 import { Card } from 'react-bootstrap'
 import { Loader } from '../../../../Shared/Components/Loader'
 import local from '../../../../Shared/Assets/ar.json'
-import { downloadOracleReviewFile, getOracleReviewFiles, ReviewFileResponse } from '../../../Services/APIs/loanApplication/financialClosing'
+import { downloadOracleReviewFile, getOracleReviewFiles, ReviewFilesResponse } from '../../../Services/APIs/loanApplication/financialClosing'
 import { downloadFile, getErrorMessage, timeToArabicDate } from '../../../../Shared/Services/utils'
 import Swal from 'sweetalert2'
 interface State {
   loading: boolean;
-  data: ReviewFileResponse[];
+  data: ReviewFilesResponse;
 }
 class LtsOracleReviewing extends Component<{}, State> {
   constructor(props) {
     super(props)
     this.state = {
       loading: false,
-      data: [],
+      data: {},
     }
   }
   componentDidMount(){
@@ -51,8 +51,8 @@ class LtsOracleReviewing extends Component<{}, State> {
           </div>
         </Card.Header>
         <Card.Body>
-          {this.state.data.length > 0 ? (
-            this.state.data.map((file, index) => {
+          {this.state.data?.reviewFiles?.length ? (
+            this.state.data.reviewFiles?.map((file, index) => {
               return (
                 <Card key={index}>
                   <Card.Body>
@@ -60,15 +60,15 @@ class LtsOracleReviewing extends Component<{}, State> {
                       <div className="d-flex align-items-center">
                         <span className="mx-3">#{index + 1}</span>
                         <span className="file-date-container mx-5">
-                          <span>{local.loanAppCreationDate}</span>
-                          {timeToArabicDate(file.fileGeneratedAt, true)}
+                          <span>{local.closeDate}</span>
+                          {file.toDate? timeToArabicDate(file.toDate, true):''}
                         </span>
                         <span className="mx-5">{file.fileName}</span>
                         <span className="mx-5">{local[file.status]}</span>
                         {file.status === 'created' && (
                           <span className="file-date-container mx-5">
                             <span>{local.creationDate}</span>
-                            {timeToArabicDate(file.fileGeneratedAt, true)}
+                            {file.fileGeneratedAt? timeToArabicDate(file.fileGeneratedAt, true):''}
                           </span>
                         )}
                       </div>

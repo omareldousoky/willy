@@ -474,7 +474,7 @@ const appRoutes = [
       },{
         path: '/financial-closing',
         label: local.manageFinancialTransaction,
-        render:(props) => <Can I= "financialBlocking" a="application"><FinancialBlocking {...props} withHeader /> </Can>,
+        render:(props) => <Can I= "getFinancialBlocking" a="application"><FinancialBlocking {...props} withHeader /> </Can>,
          routes:[{
           path: '/lts-closing',
           label: local.ltsClosing,
@@ -482,7 +482,7 @@ const appRoutes = [
         },{
             path: '/lts-blocking',
             label: local.financialBlocking,
-            render:(props) => <Can I= "financialBlocking" a="application"><FinancialBlocking {...props} withHeader /> </Can>
+            render:(props) => <Can I= "getFinancialBlocking" a="application"><FinancialBlocking {...props} withHeader /> </Can>
          },{
             path: '/lts-review-oracle',
             label: local.oracleReports,
