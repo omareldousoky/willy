@@ -136,7 +136,7 @@ class CustomerSearch extends Component<Props, State>{
                 {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source !== 'loanApplication' && <div style={{ textAlign: 'right', width: '100%' }}>
                     <div className="d-flex flex-row justify-content-between">
                         <h5>{this.props.source}</h5>
-                        <Button onClick={() => this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>×</Button>
+                        <Button variant="danger" onClick={() => this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>×</Button>
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.name}</p>

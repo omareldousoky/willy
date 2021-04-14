@@ -67,8 +67,6 @@ interface State {
     selectedGroupLeader: string;
     selectedLoanOfficer: LoanOfficer;
     searchResults: Results;
-    guarantor1Res: Results;
-    guarantor2Res: Results;
     formulas: Array<Formula>;
     products: Array<any>;
     loanUsage: Array<object>;
@@ -76,8 +74,6 @@ interface State {
     branchCustomers: Array<object>;
     selectedCustomers: Array<Customer>;
     businessSectors: Array<BusinessSector>;
-    guarantor1: any;
-    guarantor2: any;
     prevId: string;
     searchGroupCustomerKey: string;
     showModal: boolean;
@@ -176,7 +172,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 customerMaxPrincipal: 0,
                 branchManagerAndDate: false,
                 branchManagerId: '',
-                managerVisitDate: ''
+                managerVisitDate: '',
+                entitledToSignIds: [],
+                entitledToSign: []
             },
             customerType: '',
             loading: false,
@@ -199,16 +197,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             businessSectors: [],
             selectedCustomers: [],
             searchGroupCustomerKey: '',
-            guarantor1Res: {
-                results: [],
-                empty: false
-            },
-            guarantor2Res: {
-                results: [],
-                empty: false
-            },
-            guarantor1: {},
-            guarantor2: {},
             prevId: '',
             showModal: false,
             customerToView: {}
@@ -472,6 +460,34 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
+    handleSearchEntitledToSign = async (key, query, index) => {
+        const obj = {
+            [key]: query,
+            from: 0,
+            size: 1000,
+            excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds],
+            customerType: 'individual'
+        }
+        this.setState({ loading: true });
+        const results = await searchCustomer(obj)
+        if (results.status === 'success') {
+            const defaultApp = { ...this.state.application };
+            const defaultEntitledToSign = { ...defaultApp.entitledToSign };
+            const defaultCustomer = { ...defaultEntitledToSign[index] };
+            if (results.body.data.length > 0) {
+                defaultCustomer.searchResults = { results: results.body.data, empty: false };
+            } else {
+                defaultCustomer.searchResults = { results: results.body.data, empty: true };
+            }
+            defaultApp.entitledToSign[index] = defaultCustomer
+            this.setState({
+                application: defaultApp
+            }, () => { this.setState({ loading: false }) });
+        } else {
+            Swal.fire("Error !",getErrorMessage(results.error.error), 'error')
+            this.setState({ loading: false });
+        }
+    }
     getDateString(date) {
         return (
             new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
@@ -581,6 +597,22 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         }
         this.setState({ loading: false });
     }
+    selectEntitledToSign = async (obj, index, values) => {
+        this.setState({ loading: true })
+        const selectedGuarantor = await getCustomerByID(obj._id)
+        if (selectedGuarantor.status === 'success') {
+            const defaultApplication = { ...values }
+            const defaultentitledToSign = { ...defaultApplication.entitledToSign };
+            const defaultCustomer = { ...defaultentitledToSign[index] };
+            defaultCustomer.entitledToSign = { ...selectedGuarantor.body, id: obj._id };
+            defaultApplication.entitledToSignIds.push(obj._id)
+            defaultApplication.entitledToSign[index] = defaultCustomer;
+            this.setState({ application: defaultApplication, loading: false });
+        } else {
+            Swal.fire('Error !', getErrorMessage(selectedGuarantor.error.error), 'error');
+        }
+        this.setState({ loading: false });
+    }
     removeGuarantor = (obj, index, values) => {
         this.setState({ loading: true });
         const defaultApplication = { ...values }
@@ -593,11 +625,30 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         defaultApplication.guarantors[index] = defaultGuar;
         this.setState({ application: defaultApplication, loading: false });
     }
+    removeEntitledToSign = (obj, index, values) => {
+        this.setState({ loading: true });
+        const defaultApplication = { ...values }
+        const defaultEntitledToSign = { ...defaultApplication.entitledToSign };
+        const defaultCustomer = { ...defaultEntitledToSign[index] };
+        defaultApplication.entitledToSignIds = defaultApplication.entitledToSignIds.filter(id => obj._id !== id)
+        defaultCustomer.entitledToSign = {};
+        defaultCustomer.searchResults.results = [];
+        defaultCustomer.searchResults.empty = false;
+        defaultApplication.entitledToSign[index] = defaultCustomer;
+        this.setState({ application: defaultApplication, loading: false });
+    }
     removeOptionalGuar(obj, index, values) {
         this.setState({ loading: true });
         const defaultApplication = { ...values }
         defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(id => obj.guarantor._id !== id)
         defaultApplication.guarantors.splice(index, 1);
+        this.setState({ application: defaultApplication, loading: false });
+    }
+    removeEntitledToSignRow(obj, index, values) {
+        this.setState({ loading: true });
+        const defaultApplication = { ...values }
+        defaultApplication.entitledToSignIds = defaultApplication.entitledToSignIds.filter(id => obj.guarantor._id !== id)
+        defaultApplication.entitledToSign.splice(index, 1);
         this.setState({ application: defaultApplication, loading: false });
     }
     populateLoanProduct(selectedProductDetails) {
@@ -665,16 +716,35 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
-    addOptionalGuarantor() {
-        const element = {
+    addOptionalGuarantor(stringKey?: string) {
+        const element: {
+            searchResults: Results;
+            guarantor: Customer;
+            isCompany?: boolean;
+        } = {
             searchResults: {
                 results: [],
                 empty: false
             },
             guarantor: {},
         };
+        if (stringKey === 'company') element.isCompany = true
         const defaultApplication = { ...this.state.application };
         defaultApplication.guarantors.push(element)
+        this.setState({
+            application: defaultApplication
+        })
+    }
+    addEntitledToSignRow() {
+        const element = {
+            searchResults: {
+                results: [],
+                empty: false
+            },
+            entitledToSign: {},
+        }
+        const defaultApplication = { ...this.state.application };
+        defaultApplication.entitledToSign.push(element)
         this.setState({
             application: defaultApplication
         })
@@ -696,6 +766,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.step('forward');
         } else {
             const obj = { ...values }
+            console.log(obj)
             const individualsToSend: { id?: string; amount: number; type: string }[] = []
             let principalToSend = 0;
             obj.individualDetails && obj.individualDetails.forEach(customer => {
@@ -740,7 +811,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 viceCustomers: viceCustomers,
                 branchManagerId: values.branchManagerId,
                 managerVisitDate: values.managerVisitDate ? new Date(values.managerVisitDate).valueOf() : 0,
-                entitledToSignIds: [],
+                entitledToSignIds: obj.entitledToSignIds,
             }
             if (this.state.application.guarantorIds.length < this.state.application.noOfGuarantors && this.state.customerType === 'individual') {
                 Swal.fire("error", local.selectTwoGuarantors, 'error')
@@ -1125,11 +1196,16 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 {(formikProps) =>
                     <LoanApplicationCreationGuarantorForm {...formikProps}
                         step={(key) => this.step(key)}
-                        addGuar={() => this.addOptionalGuarantor()}
+                        addGuar={(stringKey?: string) => this.addOptionalGuarantor(stringKey)}
                         removeGuar={(guarantor, i, values) => this.removeOptionalGuar(guarantor, i, values)}
-                        handleSearch={(key, query, guarantor) => { this.handleSearchGuarantors(key, query, guarantor) }}
+                        handleSearch={(key, query, guarantor, companySearch) => { this.handleSearchGuarantors(key, query, guarantor, companySearch) }}
                         selectGuarantor={(query, guarantor, values) => { this.selectGuarantor(query, guarantor, values) }}
                         removeGuarantor={(query, guarantor, values) => { this.removeGuarantor(query, guarantor, values) }}
+                        addEntitledToSignRow={(stringKey?: string) => this.addEntitledToSignRow()}
+                        removeEntitledToSignRow={(guarantor, i, values) => this.removeEntitledToSignRow(guarantor, i, values)}
+                        handleSearchEntitledToSign={(key, query, guarantor, companySearch) => { this.handleSearchEntitledToSign(key, query, guarantor) }}
+                        selectEntitledToSign={(query, guarantor, values) => { this.selectEntitledToSign(query, guarantor, values) }}
+                        removeEntitledToSign={(query, guarantor, values) => { this.removeEntitledToSign(query, guarantor, values) }}
                         customer={(this.state.customerType === 'group') ? this.state.selectedCustomers : this.state.selectedCustomer}
                     />
                 }

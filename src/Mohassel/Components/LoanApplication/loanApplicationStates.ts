@@ -14,6 +14,10 @@ interface Guarantor {
     searchResults: Results;
     guarantor: Customer;
 }
+interface EntitledToSign {
+    searchResults: Results;
+    entitledToSign: Customer;
+}
 interface GroupMember {
     customer: Customer;
     amount: number;
@@ -97,6 +101,8 @@ export interface Application {
     managerVisitDate: string;
     status?: string;
     customer?: Customer;
+    entitledToSignIds: Array<string>;
+    entitledToSign: Array<EntitledToSign>;
 }
 export const LoanApplicationValidation = Yup.object().shape({
     productID: Yup.string().required(local.required),
@@ -285,6 +291,11 @@ export const SMELoanApplicationStep2Validation = Yup.object().shape({
     //         jobTitle: Yup.string().required(local.required)
     //     })
     // ).min(1, local.mustBeOneOrMore)
+    // entitledToSign: Yup.array().of(
+    //     Yup.object().shape({
+    //         _id: Yup.string().required(local.required)
+    //     })
+    // ).min(1)
 })
 export const ReviewLoanValidation = Yup.object().shape({
     reviewStatus: Yup.string().required(local.required),

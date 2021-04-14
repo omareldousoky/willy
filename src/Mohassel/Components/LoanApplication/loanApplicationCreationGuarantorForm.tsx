@@ -12,6 +12,7 @@ import { guarantorOrderLocal } from '../../../Shared/Services/utils';
 
 export const LoanApplicationCreationGuarantorForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
+    const companyCheck = props.customer.customerType === 'company'
     return (
         <>
             <Form style={{ width: '90%', padding: 20 }} onSubmit={handleSubmit}>
@@ -26,31 +27,65 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                 const text = guarantorOrderLocal[i && i > 10 ? "default" : i]
                                 return (
                                     <Row key={i} className="col-12 text-nowrap">
+                                        {(i > values.noOfGuarantors - 1) && (
+                                            <div className="d-flex col-1 p-0">
+                                                <Button variant="danger" className="m-auto" onClick={() => props.removeGuar(guarantor, i, values)}>-</Button>
+                                            </div>
+                                        )}
                                         <CustomerSearch
                                             source={text}
                                             key={i}
                                             className="col-11 p-0"
-                                            handleSearch={(key, query) => props.handleSearch(key, query, i)}
+                                            handleSearch={(key, query) => props.handleSearch(key, query, i, guarantor.isCompany ?? false)}
                                             searchResults={guarantor.searchResults}
                                             selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, i, values) }}
                                             selectedCustomer={guarantor.guarantor}
                                             removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, i, values) }}
                                             header={text}
+                                            sme={guarantor.isCompany}
                                         />
-                                        {(i > values.noOfGuarantors - 1) && (
-																				<div className="d-flex col-1 p-0">
-																					<Button variant="primary" className="m-auto" onClick={() => props.removeGuar(guarantor, i, values)}>-</Button>
-																				</div>
-																				)}
                                     </Row>
                                 )
                             }
                             )}
-                            <Button onClick={() => props.addGuar()}>+</Button>
+                            <Button onClick={() => props.addGuar()}>+{companyCheck && ' ' + local.individual}</Button>
+                            {companyCheck && <Button className="ml-5" onClick={() => props.addGuar('company')}>+ {local.company}</Button>}
                         </Col>
                     </div>
+                    {companyCheck ? 
                     <div style={{ width: '100%', margin: '20px 0' }}>
-                        <h5>{props.customer.customerType === 'company' ? local.SMEviceCustomersInfo : local.viceCustomersInfo}</h5>
+                        <h5>{local.SMEviceCustomersInfo}</h5>
+                        <Col style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+                            {values.entitledToSign.map((guarantor, i) => {
+                                console.log(guarantor, values)
+                                const text = guarantorOrderLocal[i && i > 10 ? "default" : i]
+                                return (
+                                    <Row key={i} className="col-12 text-nowrap">
+                                        {(i > values.noOfGuarantors - 1) && (
+                                            <div className="d-flex col-1 p-0">
+                                                <Button variant="danger" className="m-auto" onClick={() => props.removeEntitledToSignRow(guarantor, i, values)}>-</Button>
+                                            </div>
+                                        )}
+                                        <CustomerSearch
+                                            source={text}
+                                            key={i}
+                                            className="col-11 p-0"
+                                            handleSearch={(key, query) => props.handleSearchEntitledToSign(key, query, i)}
+                                            searchResults={guarantor.searchResults}
+                                            selectCustomer={(guarantor) => { props.selectEntitledToSign(guarantor, i, values) }}
+                                            selectedCustomer={guarantor.entitledToSign}
+                                            removeCustomer={(guarantor) => { props.removeEntitledToSign(guarantor, i, values) }}
+                                            header={text}
+                                        />
+                                    </Row>
+                                )
+                            }
+                            )}
+                            <Button onClick={() => props.addEntitledToSignRow()}>+</Button>
+                        </Col>
+                    </div>
+                    : <div style={{ width: '100%', margin: '20px 0' }}>
+                        <h5>{local.viceCustomersInfo}</h5>
                         <FieldArray
                             name="viceCustomers"
                             render={arrayHelpers => (
@@ -98,7 +133,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                 </div>
                             )}
                         />
-                    </div>
+                    </div>}
                 </fieldset>
 								<div className="d-flex justify-content-between py-4">
                     <Button
