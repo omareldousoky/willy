@@ -545,9 +545,9 @@ class DefaultingCustomersList extends Component<Props, State> {
               }}
             />
             <img
-              alt="delete"
               style={{ cursor: 'pointer', marginLeft: 20 }}
               title={local.delete}
+              alt={local.delete}
               src={require('../../../Shared/Assets/deleteIcon.svg')}
               onClick={() => {
                 this.deleteDefaultedLoanEntry([data._id])
@@ -569,9 +569,9 @@ class DefaultingCustomersList extends Component<Props, State> {
                 }}
               />
               <img
-                alt="delete"
                 style={{ cursor: 'pointer', marginLeft: 20 }}
                 title={local.delete}
+                alt={local.delete}
                 src={require('../../../Shared/Assets/deleteIcon.svg')}
                 onClick={() => {
                   this.deleteDefaultedLoanEntry([data._id])
@@ -595,9 +595,9 @@ class DefaultingCustomersList extends Component<Props, State> {
                 }}
               />
               <img
-                alt="delete"
                 style={{ cursor: 'pointer', marginLeft: 20 }}
                 title={local.delete}
+                alt={local.delete}
                 src={require('../../../Shared/Assets/deleteIcon.svg')}
                 onClick={() => {
                   this.deleteDefaultedLoanEntry([data._id])
@@ -622,8 +622,8 @@ class DefaultingCustomersList extends Component<Props, State> {
                 }}
               />
               <img
-                alt="delete"
                 style={{ cursor: 'pointer', marginLeft: 20 }}
+                alt={local.delete}
                 title={local.delete}
                 src={require('../../../Shared/Assets/deleteIcon.svg')}
                 onClick={() => {
@@ -632,7 +632,7 @@ class DefaultingCustomersList extends Component<Props, State> {
               />
             </Can>
           )}
-        {daysSince >= 15 && (
+        {daysSince >= 15 && data.status !== 'financialManagerReview' && (
           <Can I="deleteDefaultingCustomer" a="legal">
             <img
               style={{ cursor: 'pointer', marginLeft: 20 }}
