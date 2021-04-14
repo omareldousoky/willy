@@ -8,8 +8,8 @@ import * as local from "../../../Shared/Assets/ar.json";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
 import { getGeoAreasByBranch } from "../../Services/APIs/GeoAreas/getGeoAreas";
 import { theme } from "../../../theme";
-import { fetchCurrentHierarchies } from "../../Services/APIs/Reports/officersPercentPayment";
-import { CurrentHierarchiesSingleResponse } from "../../Services/interfaces";
+import { CurrentHierarchiesSingleResponse } from "../../Models/OfficersProductivityReport";
+import { fetchCurrentHierarchies } from "../../Services/APIs/Reports/officersProductivity";
 
 export interface DropDownOption {
   name: string;
@@ -84,16 +84,7 @@ export const AsyncLoanOfficersDropDown = ({
   const [value, setValue] = useState<ValueType<DropDownOption> | null>();
   const [searchKeyword, setSearchKeyword] = useState<string>("");
 
-	// to avoid memory leak for in progress api call
-	let stillMounted = true
-	useEffect(() => {
-		return () => {
-			stillMounted = false;
-		}
-	},[])
-
   const handleLoadOptions = async () => {
-		if(!stillMounted) return
     const newOptions: DropDownOption[] = [];
     const res = await searchLoanOfficer({
       name: searchKeyword,
@@ -102,9 +93,9 @@ export const AsyncLoanOfficersDropDown = ({
       branchId,
     });
 
-    if (stillMounted && res.status === "success") {
+    if (res.status === "success") {
       const data = res.body.data;
-      Array.isArray(data) && data.length && stillMounted
+      Array.isArray(data) && data.length
         ? res.body.data.map((loanOfficer: DropDownOption) => {
             newOptions.push({
               _id: loanOfficer._id,
@@ -325,13 +316,11 @@ export const AsyncManagersDropDown = ({
   const [options, setOptions] = useState(initialState);
   const [value, setValue] = useState<ValueType<CurrentHierarchiesSingleResponse> | null>();
 
-	const mounted = useRef(false);
 
 	const handleLoadOptions = async () => {
-		if (!mounted.current) return
     const res = await fetchCurrentHierarchies();
     const newOptions: CurrentHierarchiesSingleResponse[] = [];
-    if (res.status === "success" && mounted.current) {
+    if (res.status === "success") {
       const data = res.body?.response;
       if (Array.isArray(data) && data.length)
         res.body?.response.map(({id, name}) => 
@@ -342,24 +331,21 @@ export const AsyncManagersDropDown = ({
 				isLoading: false,
 				optionsLoaded: true,
 			});
-    } else if (mounted.current) {
+    } else {
       setOptions({ options: [], isLoading: false, optionsLoaded: true });
     }
   };
 
   const maybeLoadOptions = useCallback(() => {
-    if (!options.optionsLoaded && mounted.current) {
+    if (!options.optionsLoaded) {
       setOptions({ ...options, isLoading: true });
       handleLoadOptions();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-	// to avoid memory leak for in progress api call
 	useEffect(() => {
 		maybeLoadOptions()
-		mounted.current = true;
-		return () => { mounted.current = false; }
 	},[maybeLoadOptions])
 
   return (
