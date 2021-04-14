@@ -23,12 +23,10 @@ import {
   OperationsReportRequest,
   PaidArrearsRequest,
   UnpaidInstallmentsByOfficerRequest,
-	OfficersProductivityRequest,
 } from "../../Services/interfaces";
 import {
   fetchOfficersBranchPercentPaymentReport,
   fetchOfficersPercentPaymentReport,
-	fetchOfficersProductivityReport,
 } from "../../Services/APIs/Reports/officersPercentPayment";
 import OfficersPercentPayment from "../pdfTemplates/officersPercentPayment/officersPercentPayment";
 import OfficerBranchPercentPayment from "../pdfTemplates/officersPercentPayment/officersBranchPercentPayment";
@@ -242,8 +240,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         return this.fetchActiveWalletIndividual(values)
       case Reports.ActiveWalletGroup:
         return this.fetchActiveWalletGroup(values);
-			case Reports.OfficersProductivity:
-        return this.fetchOfficersProductivity(values);
       default:
         return null;
     }
@@ -421,19 +417,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     this.handleFetchReport(res, Reports.ActiveWalletGroup)
   }
 
-	async fetchOfficersProductivity(values) {
-    const { managers, gracePeriod, fromDate, toDate } = values;
-    const res = await fetchOfficersProductivityReport({
-			startDate: new Date(new Date(fromDate).toUTCString())
-				.setUTCHours(0,0,0,0),
-      endDate: new Date(new Date(toDate).toUTCString())
-        .setUTCHours(23, 59, 59, 999),
-      managers,
-			gracePeriod
-    } as OfficersProductivityRequest)
-    this.handleFetchReport(res, Reports.OfficersProductivity)
-  }
-
   render() {
     return (
       <>
@@ -595,14 +578,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             />
           )
         }
-				{this.state.print === Reports.OfficersProductivity &&
-          this.state.data && (
-            <OfficersProductivity
-              data={this.state.data}
-              fromDate={this.state.fromDate}
-              toDate={this.state.toDate}
-            />
-          )}
       </>
     );
   }
