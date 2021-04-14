@@ -62,7 +62,7 @@ const OfficersProductivity = (props: OfficersProductivityProps) => {
 								<tr>
 									<td colSpan={2}>
 										<p className="mb-0 operations">
-											{operationsManager.operationsManager}
+											{operationsManager.operationsManager || 'لا يوجد'}
 										</p>
 									</td>
 								</tr>
@@ -71,7 +71,7 @@ const OfficersProductivity = (props: OfficersProductivityProps) => {
 										<tr>
 											<td colSpan={2}>
 												<p className="mb-0 area-manager">
-													{areaManager.areaManager}
+													{areaManager.areaManager || 'لا يوجد'}
 												</p>
 											</td>
 										</tr>
@@ -79,8 +79,8 @@ const OfficersProductivity = (props: OfficersProductivityProps) => {
 											<Fragment key={supervisorIndex}>
 												<tr>
 													<td colSpan={2}>
-														<p className="mb-0 manager">
-															{supervisor.areaSupervisor}
+														<p className="mb-0 area-supervisor">
+															{supervisor.areaSupervisor || 'لا يوجد'}
 														</p>
 													</td>
 												</tr>
@@ -120,7 +120,7 @@ const OfficersProductivity = (props: OfficersProductivityProps) => {
 												)}
 												<ManagerTotalRow
 													{...supervisor}
-													managerClassName="manager"
+													managerClassName="area-supervisor"
 													managerName={supervisor.areaSupervisor}
 												/>
 											</Fragment>
@@ -148,7 +148,8 @@ const OfficersProductivity = (props: OfficersProductivityProps) => {
 							</Fragment>
 						))}
 						<tr className="total">
-							<td colSpan={3}>عدد الفروع</td>
+							<td colSpan={2} />
+							<td>عدد الفروع</td>
 							<td>{data.totalBranches || '0'}</td>
 							<td>{data.totalIssuedCount || '0'}</td>
 							<td>{data.totalIssuedAmount || '0.00'}</td>

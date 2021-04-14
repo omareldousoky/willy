@@ -4,7 +4,7 @@ import { formatPercent } from '../officersPercentPayment'
 import '../officersPercentPayment.scss'
 
 interface ManagerTotalRowProps extends CommonOfficersProductivity {
-  managerClassName: 'manager' | 'operations' | 'area-manager';
+  managerClassName: 'manager' | 'operations' | 'area-manager' | 'area-supervisor';
   managerName?: string;
 }
 

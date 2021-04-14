@@ -96,7 +96,10 @@ print {
 			border: 1px solid #ccc;
 			min-width: 3cm;
 		}
-
+		.area-supervisor {
+			@extend .manager;
+			background-color: #cccccc;
+		}
 		.operations {
 			@extend .manager;
 			background-color: #e4e464;
