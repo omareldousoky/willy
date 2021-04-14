@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 
-import { Card } from 'react-bootstrap'
-import { connect, useDispatch } from 'react-redux'
+import { Button, Card, Modal } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
@@ -9,7 +9,6 @@ import { Loader } from '../../../Shared/Components/Loader'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import {
   getErrorMessage,
-  getFullCustomerKey,
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
 import ability from '../../config/ability'
@@ -19,73 +18,72 @@ import local from '../../../Shared/Assets/ar.json'
 import Search from '../../../Shared/Components/Search/search'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from './manageLegalAffairsInitials'
-import { CustomerListProps, IPrintAction, TableMapperItem } from './types'
+import { IPrintAction, TableMapperItem } from './types'
 import { DefaultedCustomer } from './defaultingCustomersList'
 import LegalPrintActionsCell from './LegalPrintActionsCell'
-import LegalSettlement from '../pdfTemplates/LegalSettlement'
+import LegalSettlementPdfTemp from '../pdfTemplates/LegalSettlement'
 import LegalSettlementForm from './LegalSettlementForm'
+import { getSettlementFees } from '../../Services/APIs/LegalAffairs/defaultingCustomers'
 
-const LegalCustomersList: FunctionComponent<CustomerListProps> = ({
-  currentSearchFilters,
-  data,
-  error,
-  loading,
-  totalCount,
-}) => {
+interface ISettlementFees {
+  penaltyFees: number
+  courtFees: number
+}
+
+const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
   const [size, setSize] = useState<number>(10)
+
   const [
-    showActionsCustomer,
-    setShowActionsCustomer,
+    settlementCustomer,
+    setSettlementCustomer,
   ] = useState<DefaultedCustomer | null>(null)
 
-  const [slectedPrintAction, setSlectedPrintAction] = useState<
-    IPrintAction | undefined
-  >(undefined)
+  const [settlementFees, setSettlementFees] = useState<ISettlementFees | null>(
+    null
+  )
+  const [isSettlementLoading, setIsSettlementLoading] = useState(false)
 
-  const toggleShowActions = (customer: DefaultedCustomer) => {
-    setShowActionsCustomer((previousValue) =>
-      previousValue?._id === customer._id ? null : customer
-    )
-  }
+  const data = useSelector((state: any) => state.search.data)
+  const error = useSelector((state: any) => state.search.error)
+  const loading = useSelector((state: any) => state.search.loading)
+  const totalCount = useSelector((state: any) => state.search.totalCount)
 
   const history = useHistory()
   const dispatch = useDispatch()
 
-  const {
-    noOfUsers,
-    legalAffairs,
-    searchByBranchNameOrNationalIdOrCode,
-    lateCustomers,
-  } = local
-
   const tabs = manageLegalAffairsArray()
   const url = 'legal-affairs'
-
-  const printActions: IPrintAction[] = [
-    {
-      name: 'settleByCompanyLawyer',
-      label: local.settleByCompanyLawyer,
-    },
-    {
-      name: 'settleByCustomerLawyer',
-      label: local.settleByCustomerLawyer,
-    },
-    {
-      name: 'settleByGeneralLawyer',
-      label: local.settleByGeneralLawyer,
-    },
-    {
-      name: 'stopLegalAffairs',
-      label: local.stopLegalAffairs,
-    },
-  ]
 
   useEffect(() => {
     return () => {
       dispatch(searchFilters({}))
     }
   }, [])
+
+  const getFees = async () => {
+    if (!settlementCustomer) {
+      return
+    }
+
+    setIsSettlementLoading(true)
+
+    const settlementFeesRes = await getSettlementFees(settlementCustomer.loanId)
+    if (settlementFeesRes.status === 'success') {
+      setSettlementFees({
+        penaltyFees: settlementFeesRes.body?.penaltyFees ?? 0,
+        courtFees: settlementFeesRes.body?.courtFees ?? 0,
+      })
+    } else {
+      Swal.fire('error', getErrorMessage(error), 'error')
+    }
+
+    setIsSettlementLoading(false)
+  }
+
+  useEffect(() => {
+    getFees()
+  }, [settlementCustomer])
 
   useEffect(() => {
     dispatch(
@@ -99,12 +97,6 @@ const LegalCustomersList: FunctionComponent<CustomerListProps> = ({
     if (error) Swal.fire('error', getErrorMessage(error), 'error')
   }, [dispatch, error, from, size])
 
-  useEffect(() => {
-    if (slectedPrintAction) {
-      window.print()
-    }
-  }, [slectedPrintAction])
-
   const hasCourtSession = (data: DefaultedCustomer) =>
     data.status !== 'financialManagerReview' && data[data.status]
 
@@ -116,12 +108,15 @@ const LegalCustomersList: FunctionComponent<CustomerListProps> = ({
     return customer[customer.status][name]
   }
 
-  const handleActionClick = (actionName: string) => {
-    const action = printActions.find(
-      (printAction) => printAction.name === actionName
+  const toggleShowActions = (customer: DefaultedCustomer) => {
+    setSettlementCustomer((previousValue) =>
+      previousValue?._id === customer._id ? null : customer
     )
+  }
 
-    setSlectedPrintAction(action)
+  const hideSettlementModal = () => {
+    setSettlementCustomer(null)
+    setSettlementFees(null)
   }
 
   const tableMapper: TableMapperItem[] = [
@@ -189,14 +184,11 @@ const LegalCustomersList: FunctionComponent<CustomerListProps> = ({
     },
     {
       title: '',
-      key: 'printActions',
+      key: 'legalSettlement',
       render: (data) => (
-        <LegalPrintActionsCell
-          isOpen={showActionsCustomer?._id === data._id}
-          onClick={() => toggleShowActions(data)}
-          actions={printActions}
-          onActionClick={handleActionClick}
-        />
+        <Button variant="secondary" onClick={() => toggleShowActions(data)}>
+          Settlement
+        </Button>
       ),
     },
     {
@@ -220,43 +212,24 @@ const LegalCustomersList: FunctionComponent<CustomerListProps> = ({
     },
   ]
 
-  const getCustomers = () => {
-    const { customerShortenedCode, key } = currentSearchFilters
-
-    dispatch(
-      search({
-        ...currentSearchFilters,
-        key: customerShortenedCode
-          ? getFullCustomerKey(customerShortenedCode)
-          : key || undefined,
-        size,
-        from,
-        url,
-      })
-    )
-
-    if (error) Swal.fire('error', getErrorMessage(error), 'error')
-  }
-
   return (
     <>
       <div className="print-none">
         <HeaderWithCards
-          header={legalAffairs}
+          header={local.legalAffairs}
           array={tabs}
           active={tabs.map((item) => item.icon).indexOf('legal-actions')}
         />
-        <LegalSettlementForm />
         <Card className="main-card">
-          <Loader type="fullsection" open={loading} />
+          <Loader type="fullsection" open={loading || isSettlementLoading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                  {lateCustomers}
+                  {local.lateCustomers}
                 </Card.Title>
                 <span className="text-muted">
-                  {noOfUsers + ` (${totalCount || 0})`}
+                  {local.noOfUsers + ` (${totalCount || 0})`}
                 </span>
               </div>
             </div>
@@ -269,7 +242,7 @@ const LegalCustomersList: FunctionComponent<CustomerListProps> = ({
                 'customerKey',
                 'customerShortenedCode',
               ]}
-              searchPlaceholder={searchByBranchNameOrNationalIdOrCode}
+              searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               url={url}
               from={from}
               size={size}
@@ -295,22 +268,35 @@ const LegalCustomersList: FunctionComponent<CustomerListProps> = ({
         </Card>
       </div>
 
-      {slectedPrintAction && showActionsCustomer && (
-        <LegalSettlement
-          action={slectedPrintAction}
-          customer={showActionsCustomer}
-        />
+      {/* {
+        <LegalSettlementPdfTemp/>
+      } */}
+
+      {settlementCustomer && settlementFees && (
+        <Modal
+          show={!!settlementCustomer && !!settlementFees}
+          onHide={hideSettlementModal}
+          size="lg"
+        >
+          <Modal.Header>
+            <Modal.Title>{local.legalSettlement}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <LegalSettlementForm
+              settlementFees={settlementFees}
+              customerId={settlementCustomer._id}
+              onSubmit={hideSettlementModal}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={hideSettlementModal}>
+              {local.cancel}
+            </Button>
+          </Modal.Footer>
+        </Modal>
       )}
     </>
   )
 }
 
-const mapStateToProps = (state) => ({
-  data: state.search.data,
-  error: state.search.error,
-  totalCount: state.search.totalCount,
-  loading: state.loading,
-  currentSearchFilters: state.searchFilters,
-})
-
-export default connect(mapStateToProps)(LegalCustomersList)
+export default LegalCustomersList

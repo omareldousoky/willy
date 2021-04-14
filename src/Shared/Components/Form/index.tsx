@@ -17,8 +17,7 @@ const AppForm: FunctionComponent<AppFormProps> = ({
   formFields,
   onSubmit,
   defaultValues,
-  disabled = false,
-  renderPairs = false,
+  options: { disabled = false, renderPairs = false },
 }) => {
   const initialValues = createFormFieldsInitValue(formFields, defaultValues)
   const validationSchema = createValidationSchema(formFields)

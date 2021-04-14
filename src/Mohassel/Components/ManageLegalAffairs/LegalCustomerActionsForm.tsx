@@ -67,8 +67,10 @@ const LegalActionsForm: FunctionComponent = () => {
             formFields={customerActionsFields}
             onSubmit={handleSubmit}
             defaultValues={customer}
-            disabled={!customer._id || isSubmiting}
-            renderPairs
+            options={{
+              disabled: !customer._id || isSubmiting,
+              renderPairs: true
+            }}
           />
         </Card.Body>
       </Card>

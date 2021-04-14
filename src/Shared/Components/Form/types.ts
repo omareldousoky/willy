@@ -4,6 +4,7 @@ import { FormikHelpers, FormikProps } from 'formik'
 export interface IFieldDefaultProps {
   name: string
   type: string
+  readOnly?: boolean
 }
 export interface IField extends IFieldDefaultProps {
   type: 'text' | 'date' | 'checkbox' | 'number'
@@ -47,6 +48,8 @@ export type AppFormProps = {
   formFields: IFormField[]
   onSubmit: (values: any, formikHelpers: FormikHelpers<any>) => void
   defaultValues?: any
-  disabled?: boolean
-  renderPairs?: boolean
+  options: {
+    disabled?: boolean
+    renderPairs?: boolean
+  }
 }

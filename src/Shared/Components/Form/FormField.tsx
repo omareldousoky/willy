@@ -25,22 +25,26 @@ const FormField: FunctionComponent<FormFieldProps> = ({
 
   const label = `${field.label}${isRequired(field.validation) ? ' *' : ''}`
 
+  const inputFieldProps = {
+    name: field.name,
+    value: fieldValue,
+    readOnly: field.readOnly ?? false,
+    'data-qc': field.name,
+    isInvalid: !!fieldErrors && isToucehd,
+    onChange: handleChange,
+    onBlur: handleBlur,
+  }
 
   const renderFormField = () => {
     switch (field.type) {
       case 'checkbox':
-        return <Form.Check type="checkbox" label={label} />
+        return <Form.Check {...inputFieldProps} type="checkbox" label={label} />
 
       case 'select':
         return (
           <Form.Control
+            {...inputFieldProps}
             as="select"
-            name={field.name}
-            value={fieldValue}
-            data-qc={field.name}
-            isInvalid={!!fieldErrors && isToucehd}
-            onChange={handleChange}
-            onBlur={handleBlur}
             className="dropdown-select"
             defaultValue=""
           >
@@ -54,17 +58,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
         )
 
       default:
-        return (
-          <Form.Control
-            type={field.type}
-            name={field.name}
-            value={fieldValue}
-            data-qc={field.name}
-            isInvalid={!!fieldErrors && isToucehd}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-        )
+        return <Form.Control {...inputFieldProps} type={field.type} />
     }
   }
 

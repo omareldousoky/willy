@@ -23,10 +23,15 @@ const GroupField: FunctionComponent<GroupFieldProps> = ({
     name: `${groupField.name}.${field.name}`,
   }))
 
+  const fieldProps = {
+    formFields: fields,
+    formikProps,
+  }
+
   return pairs ? (
-    <FormFieldPairs formFields={fields} formikProps={formikProps} />
+    <FormFieldPairs {...fieldProps} />
   ) : (
-    <FormFields formFields={fields} formikProps={formikProps} />
+    <FormFields {...fieldProps} />
   )
 }
 

@@ -1,4 +1,5 @@
 import axios from '../axios-instance';
+import { ISettlementReqBody } from '../../../Components/ManageLegalAffairs/LegalSettlementForm';
 
 export const searchDefaultingCustomers = async (data: object) => {
     const url = process.env.REACT_APP_BASE_URL + '/search/defaulting-customer';
@@ -57,6 +58,30 @@ export const deleteCustomerDefaultedLoan =  async (data: {ids: string[]}) => {
     const url = process.env.REACT_APP_BASE_URL + '/legal/delete-customer';
     try {
         const res = await axios.post(url, data);
+        return { status: "success", body: res.data }
+    }
+    catch (error) {
+        return { status: "error", error: error.response.data }
+    }
+}
+
+export const settleLegalCustomer = async (reqBody: ISettlementReqBody, id: string) => {
+    const url = process.env.REACT_APP_BASE_URL + `/legal/update-settlement/${id}`;
+    
+    try {
+        const res = await axios.put(url, reqBody);
+        return { status: "success", body: res.data }
+    }
+    catch (error) {
+        return { status: "error", error: error.response.data }
+    }
+}
+
+export const getSettlementFees = async (id: string) => {
+    const url = process.env.REACT_APP_BASE_URL + `/legal/get-settlement-fees/${id}`;
+    
+    try {
+        const res = await axios.get(url);
         return { status: "success", body: res.data }
     }
     catch (error) {
