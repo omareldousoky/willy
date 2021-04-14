@@ -1,20 +1,19 @@
 import React from 'react'
 
 import './style.scss'
-import { IDefaultingCustomerReport } from '../../ManageLegalAffairs/defaultingCustomersList'
+import { IReviewedDefaultingCustomer } from '../../ManageLegalAffairs/defaultingCustomersList'
 import { timeToArabicDate, timeToDate } from '../../../../Shared/Services/utils'
 import local from '../../../../Shared/Assets/ar.json'
 
 interface IDefaultingCustomersTempProps {
-  customers: IDefaultingCustomerReport[]
+  customers: IReviewedDefaultingCustomer[]
 }
 
 const DefaultingCustomers = ({ customers }: IDefaultingCustomersTempProps) => {
   const nowTimestamp = new Date().valueOf()
   const nowDate = timeToArabicDate(nowTimestamp, false)
 
-  // TODO: change 'customerName' to 'branchName' after integrating with backend
-  const groupByKey = 'customerName'
+  const groupByKey = 'branchName'
   const customerGroups = customers.reduce(
     (hash, { [groupByKey]: value, ...rest }) => ({
       ...hash,
@@ -62,7 +61,7 @@ const DefaultingCustomers = ({ customers }: IDefaultingCustomersTempProps) => {
 
           <tbody>
             {customerGroups[groupKey].map(
-              (customer: IDefaultingCustomerReport, index: number) => (
+              (customer: IReviewedDefaultingCustomer, index: number) => (
                 <>
                   <tr>
                     <td>{index + 1}</td>

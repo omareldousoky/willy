@@ -20,11 +20,16 @@ import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCust
 import { Customer } from '../../../Shared/Services/interfaces';
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan';
 import { Application } from '../LoanApplication/loanApplicationStates';
-import { addCustomerToDefaultingList, deleteCustomerDefaultedLoan, reviewCustomerDefaultedLoan } from '../../Services/APIs/LegalAffairs/defaultingCustomers';
+import {
+  addCustomerToDefaultingList,
+  deleteCustomerDefaultedLoan,
+  fetchReviewedDefaultingCustomers,
+  reviewCustomerDefaultedLoan,
+} from '../../Services/APIs/LegalAffairs/defaultingCustomers'
 import ability from '../../config/ability';
 import ReportsModal from '../Reports/reportsModal';
 import { PDF } from '../Reports/reports';
-import DefaultingCustomersPdfTemplate from '../pdfTemplates/DefaultingCustomers/DefaultingCustomers';
+import DefaultingCustomersPdfTemplate from '../pdfTemplates/defaultingCustomers/DefaultingCustomers';
 
 interface Review {
     at: number;
@@ -49,14 +54,26 @@ export interface DefaultedCustomer {
     areaSupervisorReview?: Review;
     financialManagerReview?: Review;
 }
-export interface IDefaultingCustomerReport extends DefaultedCustomer {
-    loanIssueDate: string
-    customerAddress: string
-    installmentAmount: number
-    overdueInstallmentCount: number
-    unpaidInstallmentCount: number
-    unpaidInstallmentAmount: number
-  }
+export interface IReviewedDefaultingCustomer {
+  customerKey: string
+  customerName: string
+  customerType: string
+  loanKey: string
+  loanIssueDate: string
+  customerAddress: string
+  installmentAmount: number
+  overdueInstallmentCount: number
+  unpaidInstallmentCount: number
+  unpaidInstallmentAmount: number
+  branchName: string
+  branchId: string
+}
+
+export interface IReviewedDefaultingCustomersReq {
+    status: string
+    branches: string
+}
+
 interface Props {
     history: any;
     data: DefaultedCustomer[];
@@ -82,7 +99,7 @@ interface State {
     selectedEntries: DefaultedCustomer[];
     customerSearchResults: { results: Array<Customer>; empty: boolean };
     loanSearchResults: { application: Application; id: string }[];
-    defaultingCustomersReport: IDefaultingCustomerReport[];
+    defaultingCustomersReport: IReviewedDefaultingCustomer[];
     selectedCustomer: Customer;
     modalLoader: boolean;
     loading: boolean;
@@ -396,15 +413,38 @@ class DefaultingCustomersList extends Component<Props, State> {
           end = new Date().getTime();
        }
      }
-     handlePrintReport(values: any) {
+     async handlePrintReport(values: any) {
         const { defaultingCustomerStatus, branches } = values
-        const printReportReq = {
-            status: defaultingCustomerStatus,
-            branches: branches.map(branch => branch._id)
+        const printReportReq: IReviewedDefaultingCustomersReq = {
+          status: defaultingCustomerStatus ?? '',
+          branches: branches.length ? branches.map((branch) => branch._id) : [],
         }
-        // TODO: call API with printReportReq then remove data and use reponse
-        const defaultingCustomersReport = [...this.props.data] as IDefaultingCustomerReport[]
-        this.setState({ defaultingCustomersReport, showReportsModal: false }, () => { window.print() })
+
+        console.log({ printReportReq })
+
+        const printReportRes: {
+          status: string
+          body?: {result: IReviewedDefaultingCustomer[]},
+          error?: any
+        } = await fetchReviewedDefaultingCustomers(printReportReq)
+
+        console.log({ printReportRes })
+
+        const defaultingCustomersReport = printReportRes.body?.result ?? []
+
+        if (printReportRes.status === 'success') {
+            this.setState(
+              { defaultingCustomersReport, showReportsModal: false },
+              () => {
+                window.print()
+              }
+            )
+        } else {
+            this.setState({ showReportsModal: false })
+            Swal.fire('Error !', getErrorMessage(printReportRes.error.error), 'error')
+        }
+
+
      }
     render() {
         return (

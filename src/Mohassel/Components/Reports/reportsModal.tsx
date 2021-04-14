@@ -53,7 +53,6 @@ const ReportsModal = (props: Props) => {
     props.pdf.inputs?.includes("customerKey") ? "customerKey" : undefined
   );
   const defaultingCustomerStatuses = [
-    { value: "", text: local.all },
     { value: "branchManagerReview", text: local.branchManagerReview, permission: 'branchManagerReview', key: 'legal' },
     { value: "areaSupervisorReview", text: local.areaSupervisorReview, permission: 'areaSupervisorReview', key: 'legal' },
     { value: "areaManagerReview", text: local.areaManagerReview, permission: 'areaManagerReview', key: 'legal' },
@@ -108,6 +107,8 @@ const ReportsModal = (props: Props) => {
           initValues.creationDateTo = "";
         case "applicationKey":
           initValues.loanApplicationKey = "";
+        case "defaultingCustomerStatus":
+          initValues.defaultingCustomerStatus = defaultingCustomerStatuses[0].value;
       }
     });
     return initValues;
@@ -615,7 +616,7 @@ const ReportsModal = (props: Props) => {
                         </Col>
                       );
                     }
-                    if(input === "defaultingCustomerStatus"){
+                    if (input === 'defaultingCustomerStatus') {
                       return (
                         <Col key={input} sm={12}>
                           <div className="dropdown-container">
@@ -625,15 +626,20 @@ const ReportsModal = (props: Props) => {
                               className="dropdown-select"
                               data-qc="status"
                               name="defaultingCustomerStatus"
-                              value={formikProps.values.defaultingCustomerStatus}
+                              value={
+                                formikProps.values.defaultingCustomerStatus
+                              }
                               onChange={formikProps.handleChange}
                             >
-                              {defaultingCustomerStatuses.map(option => (
-                                  <option key={option.value} value={option.value} data-qc={option.text}>
-                                    {option.text}
-                                  </option>
-                                )
-                              )}
+                              {defaultingCustomerStatuses.map((option) => (
+                                <option
+                                  key={option.value}
+                                  value={option.value}
+                                  data-qc={option.text}
+                                >
+                                  {option.text}
+                                </option>
+                              ))}
                             </Form.Control>
                           </div>
                         </Col>
