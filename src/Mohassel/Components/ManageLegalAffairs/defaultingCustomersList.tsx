@@ -418,20 +418,16 @@ class DefaultingCustomersList extends Component<Props, State> {
         const printReportReq: IReviewedDefaultingCustomersReq = {
           status: defaultingCustomerStatus ?? '',
           branches:
-            branches.length === 1 && branches[0] === ''
+            branches.length === 1 && branches[0]._id === ''
               ? []
               : branches.map((branch) => branch._id),
         }
-
-        console.log({ printReportReq })
 
         const printReportRes: {
           status: string
           body?: {result: IReviewedDefaultingCustomer[]},
           error?: any
         } = await fetchReviewedDefaultingCustomers(printReportReq)
-
-        console.log({ printReportRes })
 
         const defaultingCustomersReport = printReportRes.body?.result ?? []
 
