@@ -266,7 +266,12 @@ class LoanProfile extends Component<Props, State>{
             permission: 'viewActionLogs',
             permissionKey: 'user'
         }
+        const entitledToSignTab = {
+            header: local.SMEviceCustomersInfo,
+            stringKey: 'entitledToSign'
+        }
         if (application.body.product.beneficiaryType === 'individual') tabsToRender.push(guarantorsTab)
+        if (application.body.product.type === 'sme') tabsToRender.push(entitledToSignTab)
         if (application.body.status === "paid") tabsToRender.push(customerCardTab)
         if (application.body.status === "issued" || application.body.status === "pending") {
             tabsToRender.push(customerCardTab)
@@ -378,6 +383,8 @@ class LoanProfile extends Component<Props, State>{
                     currency={this.state.application.product.currency} applicationId={this.state.application._id} pendingActions={this.state.pendingActions}
                     manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)}
                     paymentType={"penalties"} randomPendingActions={this.state.randomPendingActions} />
+            case 'entitledToSign':
+                return <GuarantorTableView guarantors={this.state.application.guarantors} customerId={this.state.application.customer._id} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} />
             default:
                 return null
         }
@@ -796,6 +803,7 @@ class LoanProfile extends Component<Props, State>{
                             <InfoBox info={this.getInfo()} title={this.state.application.product.beneficiaryType === 'individual' ?local.mainInfo : local.mainGroupInfo} />
                         </div>
                         <Card style={{ marginTop: 15 }}>
+                            {console.log(this.state.tabsArray)}
                             <CardNavBar
                                 array={this.state.tabsArray}
                                 active={this.state.activeTab}

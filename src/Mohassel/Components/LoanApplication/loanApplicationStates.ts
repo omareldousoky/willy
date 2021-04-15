@@ -14,7 +14,7 @@ interface Guarantor {
     searchResults: Results;
     guarantor: Customer;
 }
-interface EntitledToSign {
+export interface EntitledToSign {
     searchResults: Results;
     entitledToSign: Customer;
 }

@@ -15,9 +15,10 @@ import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCust
 import ModalFooter from 'react-bootstrap/ModalFooter';
 import { editGuarantors } from '../../Services/APIs/loanApplication/editGuarantors';
 import ability from '../../config/ability';
+import { Customer } from '../../../Shared/Services/interfaces';
 
 interface Props {
-    guarantors: any;
+    guarantors: Array<Customer>;
     iScores?: any;
     getIscore?: Function;
     status?: string;
@@ -26,55 +27,13 @@ interface Props {
     application: any;
 }
 
-export const GuarantorView = (props: Props) => {
-    return (
-        <div className="d-flex flex-wrap">
-            {(props.guarantors.length > 0) ? props.guarantors.map((guar, i) =>
-                <div key={i} style={{ margin: 'auto' }}>
-                    <div className="d-flex flex-row">
-                        <p>{local.name}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{guar.customerName}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.guarantorCode}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{guar.key}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.nationalId}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{guar.nationalId}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.birthDate}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{getRenderDate(guar.birthDate)}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.nationalIdIssueDate}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{getRenderDate(guar.nationalIdIssueDate)}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.customerHomeAddress}</p>
-                        <p style={{ width: '50%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{guar.customerHomeAddress}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.homePhoneNumber}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{guar.homePhoneNumber}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.mobilePhoneNumber}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{guar.mobilePhoneNumber}</p>
-                    </div>
-                </div>
-            )
-                : <p>{local.noGuarantors}</p>}
-        </div>
-    )
-}
 export const GuarantorTableView = (props: Props) => {
     const [modalView, changeModal] = useState(false);
     const [loading, changeLoading] = useState(false);
     const [searchResults, changeResults] = useState({ results: [], empty: false });
     const [selectedGuarantor, changeSelected] = useState({});
     const [selectedGuarantorId, changeSelectedId] = useState('');
+    const [companyGuarantor, addGuarantorCompany] = useState(false);
     function getIscore(data) {
         if (props.getIscore) {
             props.getIscore(data)
@@ -188,11 +147,12 @@ export const GuarantorTableView = (props: Props) => {
             Swal.fire('Error !', getErrorMessage(selectedGuarantor.error.error), 'error');
         }
         changeLoading(false);
+        addGuarantorCompany(false)
     }
     async function removeGuarantor(guarantor) {
         Swal.fire({
             title: local.areYouSure,
-            text: `${guarantor.customerName} ${local.willNotBeAGuarantor}`,
+            text: `${guarantor.customerName || guarantor.businessName} ${local.willNotBeAGuarantor}`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -223,11 +183,18 @@ export const GuarantorTableView = (props: Props) => {
         changeModal(false);
     }
     const pass = props.status && ['reviewed', 'created', 'approved', 'secondReview', 'thirdReview'].includes(props.status)
+    const individualGuarantors = props.guarantors.filter(guarantor => guarantor.customerType === 'individual')
+    const companyGuarantors = props.guarantors.filter(guarantor => guarantor.customerType === 'company')
     return (
         <>
-            <div className="d-flex flex-column align-items-start justify-content-center ">
-                {((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <Button variant='primary' style={{ marginBottom: 10 }} onClick={() => changeModal(true)}>{local.addGuarantor}</Button>}
-                {(props.guarantors.length > 0) ? <Table style={{ textAlign: 'right' }}>
+            <div className="d-flex flex-column align-items-start justify-content-center">
+                {((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && 
+                    <div className="mt-5 mb-5">
+                        <Button variant='primary' onClick={() => changeModal(true)}>{local.addGuarantor}</Button>
+                        {props.application.customer?.customerType === 'company' && <Button variant='primary' style={{ marginRight: 10 }} onClick={() => {changeModal(true); addGuarantorCompany(true)}}>{local.addCompanyAsGuarantor}</Button>}
+                    </div>
+                }
+                {(individualGuarantors.length > 0) ? <Table style={{ textAlign: 'right' }}>
                     <thead>
                         <tr>
                             <th></th>
@@ -246,24 +213,24 @@ export const GuarantorTableView = (props: Props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {props.guarantors.length > 0 && props.guarantors.map((guar, i) => {
-                            // const iScore = props.iScores && props.iScores.length > 0 ? props.iScores.filter(score => score.nationalId === guar.nationalId)[0] : {};
-                            // const area = props.getGeoArea(guar.geoAreaId);
+                        {individualGuarantors.length > 0 && individualGuarantors.map((guar, i) => {
+                            const iScore = props.iScores && props.iScores.length > 0 ? props.iScores.filter(score => score.nationalId === guar.nationalId)[0] : {};
+                            const area = props.getGeoArea(guar.geoAreaId);
                             return (<tr key={i}>
                                 <td>{guarantorOrderLocal[i && i > 10 ? "default" : i]}</td>
                                 <td>{guar.key}</td>
                                 <td>{guar.customerName || ''}</td>
                                 <td>{guar.nationalId || ''}</td>
-                                {/* <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name || ''}</td> */}
+                                <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name || ''}</td>
                                 <td>{guar.customerHomeAddress || ''}</td>
                                 <td>{guar.mobilePhoneNumber || ''}</td>
-                                {/* {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td style={{ color: iscoreStatusColor(iScore.iscore).color }}>{iScore.iscore}</td>}
+                                {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td style={{ color: iscoreStatusColor(iScore.iscore).color }}>{iScore.iscore}</td>}
                                 {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td>{iscoreStatusColor(iScore.iscore).status}</td>}
                                 {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td>{iScore.bankCodes && iScore.bankCodes.map(code => `${iscoreBank(code)} `)}</td>}
                                 {props.iScores && props.iScores.length > 0 && iScore.url && <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iScore.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span></td>}
                                 {props.iScores && props.iScores.length > 0 && props.getIscore && props.status && !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(props.status) && <Can I='getIscore' a='customer'>
                                     <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => getIscore(guar)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span></td>
-                                </Can>} */}
+                                </Can>}
                                 {(props.guarantors.length > props.application.product.noOfGuarantors) && ((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td>}
                             </tr>)
                         }
@@ -271,6 +238,55 @@ export const GuarantorTableView = (props: Props) => {
                     </tbody>
                 </Table>
                     : <p>{local.noGuarantors}</p>}
+                    {console.log(props.guarantors, props.application.customer.customerType, companyGuarantors)}
+                    {props.application.customer.customerType === 'company' && <div className="mt-5 w-100">
+                        <h3>{local.companies}</h3>
+                        {companyGuarantors.length > 0 ? <Table style={{ textAlign: 'right' }}>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>{local.guarantorCode}</th>
+                                    <th>{local.companyName}</th>
+                                    <th>{local.taxCardNumber}</th>
+                                    <th>{local.commercialRegisterNumber}</th>
+                                    <th>{local.companyAddress}</th>
+                                    {/* <th>{local.telephone}</th> */}
+                                    {/* {props.iScores && props.iScores.length > 0 && <th>iScore</th>}
+                                    {props.iScores && props.iScores.length > 0 && <th></th>}
+                                    {props.iScores && props.iScores.length > 0 && <th></th>}
+                                    {props.iScores && props.iScores.length > 0 && <th></th>}
+                                    {props.iScores && props.iScores.length > 0 && <th></th>} */}
+                                    {((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <th></th>}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {companyGuarantors.length > 0 && companyGuarantors.map((guar, i) => {
+                                    // const iScore = props.iScores && props.iScores.length > 0 ? props.iScores.filter(score => score.nationalId === guar.nationalId)[0] : {};
+                                    // const area = props.getGeoArea(guar.geoAreaId);
+                                    return (<tr key={i}>
+                                        <td>{guarantorOrderLocal[i && i > 10 ? "default" : i]}</td>
+                                        <td>{guar.key}</td>
+                                        <td>{guar.businessName || ''}</td>
+                                        <td>{guar.taxCardNumber|| ''}</td>
+                                        {/* <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name || ''}</td> */}
+                                        <td>{guar.commercialRegisterNumber || ''}</td>
+                                        <td>{guar.businessAddress || ''}</td>
+                                        {/* {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td style={{ color: iscoreStatusColor(iScore.iscore).color }}>{iScore.iscore}</td>}
+                                        {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td>{iscoreStatusColor(iScore.iscore).status}</td>}
+                                        {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td>{iScore.bankCodes && iScore.bankCodes.map(code => `${iscoreBank(code)} `)}</td>}
+                                        {props.iScores && props.iScores.length > 0 && iScore.url && <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iScore.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span></td>}
+                                        {props.iScores && props.iScores.length > 0 && props.getIscore && props.status && !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(props.status) && <Can I='getIscore' a='customer'>
+                                            <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => getIscore(guar)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span></td>
+                                        </Can>} */}
+                                        {(props.guarantors.length > props.application.product.noOfGuarantors) && ((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td>}
+                                    </tr>)
+                                }
+                                )}
+                            </tbody>
+                        </Table>
+                    : <p>{local.noCompanyGuarantor}</p>}
+                    </div>
+                    }
             </div>
             {modalView && <Modal size='lg' show={modalView} onHide={() => changeModal(false)}>
                 <Loader type='fullsection' open={loading} />
@@ -281,15 +297,16 @@ export const GuarantorTableView = (props: Props) => {
                     <CustomerSearch
                         source={'loanApplication'}
                         style={{ width: '98%' }}
-                        handleSearch={(key, query) => handleSearch(key, query)}
+                        handleSearch={(key, query) => handleSearch(key, query, companyGuarantor)}
                         searchResults={searchResults}
                         selectCustomer={(guarantor) => { selectGuarantor(guarantor) }}
                         selectedCustomer={selectedGuarantor}
                         header={guarantorOrderLocal[props.guarantors.length > 10 ? "default" : props.guarantors.length ]}
+                        sme={companyGuarantor}
                     />
                 </Modal.Body>
                 <ModalFooter>
-                    <Button variant="secondary" onClick={() => cancelModal()}>{local.cancel}</Button>
+                    <Button variant="secondary" onClick={() => {cancelModal(); addGuarantorCompany(false)}}>{local.cancel}</Button>
                     <Button variant="primary" onClick={() => addGuarantor()} disabled={selectedGuarantorId.length === 0}>{local.submit}</Button>
                 </ModalFooter>
             </Modal>}

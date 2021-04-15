@@ -971,5 +971,7 @@
     "businessCharacteristic": "السمة التجارية",
     "maxLength500": "لا يمكن ان يكون اكثر من 500",
     "documentForCustomerOfType": "مستند خاص بعميل من نوع",
-    "businessActivityDetails": "تفاصيل النشاط"
+    "businessActivityDetails": "تفاصيل النشاط",
+    "addCompanyAsGuarantor": "إضافة شركة كضامن",
+    "noCompanyGuarantor":"لا يوجد شركة كضامن"
 }

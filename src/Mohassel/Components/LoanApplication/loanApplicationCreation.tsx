@@ -9,7 +9,7 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import * as local from '../../../Shared/Assets/ar.json';
-import { Application, Vice, LoanApplicationValidation, SMELoanApplicationValidation, SMELoanApplicationStep2Validation } from './loanApplicationStates';
+import { Application, Vice, LoanApplicationValidation, SMELoanApplicationValidation, SMELoanApplicationStep2Validation, EntitledToSign } from './loanApplicationStates';
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
@@ -289,6 +289,22 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         guarantor: {},
                     })
                 }
+            }
+            if(application.body.entitledToSign.length > 0){
+                const entitledArr: Array<EntitledToSign> = []
+                application.body.entitledToSign.forEach(customer =>
+                    {
+                    console.log(customer);
+                    entitledArr.push({
+                        searchResults: {
+                            results: [],
+                            empty: false
+                        },
+                        entitledToSign: customer,
+                    })
+                    formData.entitledToSignIds.push(customer._id)
+                })
+                formData.entitledToSign = entitledArr
             }
             formData.entryDate = (application.body.entryDate) ? this.getDateString(application.body.entryDate) : '';
             formData.visitationDate = (application.body.visitationDate) ? this.getDateString(application.body.visitationDate) : '';
