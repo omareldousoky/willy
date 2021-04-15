@@ -46,7 +46,7 @@ const DefaultingCustomers = ({ customers }: IDefaultingCustomersTempProps) => {
       {Object.keys(customerGroups).map((groupKey) => (
         <table className="report-container mt-3">
           <thead className="report-header">
-            <tr>{groupKey}</tr>
+            <tr>فرع: {groupKey}</tr>
             <tr className="header">
               <th>رقم مسلسل</th>
               <th>كود العميل</th>
