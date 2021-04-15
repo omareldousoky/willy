@@ -235,7 +235,7 @@ class CompanyCreation extends Component<Props, State>{
     this.setState({
       step: step - 1,
       [`step${step}`]: values,
-    } as State, ()=>{console.log(this.state)});
+    } as State);
   }
   renderStepOne(): any {
     return (

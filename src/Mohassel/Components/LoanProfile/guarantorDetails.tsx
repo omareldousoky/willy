@@ -238,7 +238,6 @@ export const GuarantorTableView = (props: Props) => {
                     </tbody>
                 </Table>
                     : <p>{local.noGuarantors}</p>}
-                    {console.log(props.guarantors, props.application.customer.customerType, companyGuarantors)}
                     {props.application.customer.customerType === 'company' && <div className="mt-5 w-100">
                         <h3>{local.companies}</h3>
                         {companyGuarantors.length > 0 ? <Table style={{ textAlign: 'right' }}>

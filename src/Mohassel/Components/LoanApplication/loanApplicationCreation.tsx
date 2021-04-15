@@ -294,7 +294,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 const entitledArr: Array<EntitledToSign> = []
                 application.body.entitledToSign.forEach(customer =>
                     {
-                    console.log(customer);
                     entitledArr.push({
                         searchResults: {
                             results: [],
@@ -782,7 +781,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.step('forward');
         } else {
             const obj = { ...values }
-            console.log(obj)
             const individualsToSend: { id?: string; amount: number; type: string }[] = []
             let principalToSend = 0;
             obj.individualDetails && obj.individualDetails.forEach(customer => {

@@ -57,7 +57,6 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                         <h5>{local.SMEviceCustomersInfo}</h5>
                         <Col style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
                             {values.entitledToSign.map((guarantor, i) => {
-                                console.log(guarantor, values)
                                 const text = guarantorOrderLocal[i && i > 10 ? "default" : i]
                                 return (
                                     <Row key={i} className="col-12 text-nowrap">

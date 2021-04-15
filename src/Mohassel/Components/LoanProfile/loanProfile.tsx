@@ -803,7 +803,6 @@ class LoanProfile extends Component<Props, State>{
                             <InfoBox info={this.getInfo()} title={this.state.application.product.beneficiaryType === 'individual' ?local.mainInfo : local.mainGroupInfo} />
                         </div>
                         <Card style={{ marginTop: 15 }}>
-                            {console.log(this.state.tabsArray)}
                             <CardNavBar
                                 array={this.state.tabsArray}
                                 active={this.state.activeTab}
