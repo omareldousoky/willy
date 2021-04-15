@@ -1,25 +1,25 @@
 import ability from "../../config/ability"
 import * as local from "../../../Shared/Assets/ar.json"
 import { Tab } from "../HeaderWithCards/headerWithCards";
-export const antiTerrorismMoneyLaunderingArray = (): Tab[] => {
-  const antiTerrorismMoneyLaunderingArr: Tab[] = [];
+export const antiTerrorismArray = (): Tab[] => {
+  const antiTerrorismArr: Tab[] = [];
   if (ability.can("getTerrorist", "customer")) {
-    	antiTerrorismMoneyLaunderingArr.push({
+    	antiTerrorismArr.push({
       header: local.terroristsList,
       icon: 'terrorists',
       desc: local.terroristsList,
 			stringKey: "antiTerrorism",
-      path: "/anti-terrorism-money-laundering/anti-terrorism",
+      path: "/manage-anti-terrorism/anti-terrorism",
     },{
       header: local.terroristsListUn,
       icon: 'terrorists',
       desc: local.terroristsListUn,
 			stringKey: "antiTerrorismUn",
-      path: "/anti-terrorism-money-laundering/anti-union-terrorism",
+      path: "/manage-anti-terrorism/anti-union-terrorism",
     }
     )
   }
-  return antiTerrorismMoneyLaunderingArr;
+  return antiTerrorismArr;
 }
 export const fullEnglishDate = (timeStamp: number) => {
   return new Date(timeStamp).toLocaleDateString('en-US', {

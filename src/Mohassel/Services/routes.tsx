@@ -476,7 +476,7 @@ const appRoutes = [
         label: local.financialClosing,
         render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} /></Can>
       },{
-				path: "/anti-terrorism-money-laundering",
+				path: "/manage-anti-terrorism",
 				label: local.antiTerrorismMoneyLaundering,
         render: (props) => <Can I="getTerrorist" a="customer"><TerrorismList {...props} /></Can>,
 				routes: [{

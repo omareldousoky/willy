@@ -10,7 +10,7 @@ import { search, searchFilters } from "../../../Shared/redux/search/actions"
 import Search from "../../../Shared/Components/Search/search"
 import { loading } from "../../../Shared/redux/loading/actions"
 import HeaderWithCards, { Tab } from "../HeaderWithCards/headerWithCards"
-import { antiTerrorismMoneyLaunderingArray, fullEnglishDate } from "./terrorismMoneyLaunderingInitials"
+import { antiTerrorismArray, fullEnglishDate } from "./terrorismInitials"
 import { Button, Card, Form, Row } from "react-bootstrap"
 import { getErrorMessage } from "../../../Shared/Services/utils"
 import { Formik } from "formik"
@@ -93,7 +93,7 @@ class TerrorismList extends Component<Props, State> {
 	componentDidMount() {
 		this.props.search({size: this.state.size, from: this.state.from, url:'terrorist'});
 		this.setState({
-			tabsToRender: antiTerrorismMoneyLaunderingArray()
+			tabsToRender: antiTerrorismArray()
 		})
 	}
 	async getTerrorists() {
