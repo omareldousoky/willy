@@ -184,15 +184,6 @@ const LegalCustomersList: FunctionComponent = () => {
     },
     {
       title: '',
-      key: 'legalSettlement',
-      render: (data) => (
-        <Button variant="secondary" onClick={() => toggleShowActions(data)}>
-          Settlement
-        </Button>
-      ),
-    },
-    {
-      title: '',
       key: 'actions',
       render: (data) => (
         <Can I="updateDefaultingCustomer" a="legal">
@@ -208,6 +199,18 @@ const LegalCustomersList: FunctionComponent = () => {
             }}
           />
         </Can>
+      ),
+    },
+    {
+      title: '',
+      key: 'legalSettlement',
+      render: (data) => (
+        <button
+          className="btn clickable-action rounded-0 border-right"
+          onClick={() => toggleShowActions(data)}
+        >
+          {local.registerSettlement}
+        </button>
       ),
     },
   ]

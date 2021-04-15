@@ -38,7 +38,13 @@ const FormField: FunctionComponent<FormFieldProps> = ({
   const renderFormField = () => {
     switch (field.type) {
       case 'checkbox':
-        return <Form.Check {...inputFieldProps} type="checkbox" label={label} />
+        return (
+          <Form.Check
+            {...inputFieldProps}
+            type="checkbox"
+            label={field.checkboxLabel}
+          />
+        )
 
       case 'select':
         return (

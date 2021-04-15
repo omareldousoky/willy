@@ -978,5 +978,7 @@
     "theName": "اسم",
     "reconciliationType": "نوع التصالح",
     "privateReconciliation": "توكيل تصالح خاص",
-    "waiver":"تنازل"
+    "waiver":"تنازل",
+    "registerSettlement": "تسجيل طلب تصالح",
+    "legalCaseNumber": "رقم القضية"
 }

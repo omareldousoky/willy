@@ -2,7 +2,6 @@ import React, { FunctionComponent } from 'react'
 
 import { Card } from 'react-bootstrap'
 import Swal from 'sweetalert2'
-import { boolean } from 'yup'
 
 import local from '../../../Shared/Assets/ar.json'
 import AppForm from '../../../Shared/Components/Form'
@@ -60,8 +59,9 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
     {
       name: 'penaltiesPaid',
       type: 'checkbox',
-      label: `${local.isPaid} ${local.thePenalty}`,
+      label: local.thePenalty,
       validation: defaultValidationSchema.required(local.required),
+      checkboxLabel: `${local.isPaid} ${local.thePenalty}`
     },
     {
       name: 'penaltyFees',
@@ -73,8 +73,9 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
     {
       name: 'courtFeesPaid',
       type: 'checkbox',
-      label: `${local.isPaid} ${local.courtFees}`,
+      label: local.courtFees,
       validation: defaultValidationSchema.required(local.required),
+      checkboxLabel: `${local.isPaid} ${local.thePenalty}`
     },
     {
       name: 'courtFees',
@@ -86,7 +87,7 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
     {
       name: 'caseNumber',
       type: 'text',
-      label: local.caseNumber,
+      label: local.legalCaseNumber,
       validation: defaultValidationSchema.required(local.required),
     },
     {

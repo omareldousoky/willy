@@ -7,8 +7,15 @@ export interface IFieldDefaultProps {
   readOnly?: boolean
 }
 export interface IField extends IFieldDefaultProps {
-  type: 'text' | 'date' | 'checkbox' | 'number'
+  type: 'text' | 'date' | 'number'
   label: string
+  validation: Yup.Schema<any>
+}
+
+export interface ICheckboxField extends IFieldDefaultProps {
+  type: 'checkbox'
+  label: string
+  checkboxLabel: string
   validation: Yup.Schema<any>
 }
 export interface IGroupField extends IFieldDefaultProps {
@@ -26,7 +33,7 @@ export interface ISelectField extends IFieldDefaultProps {
   }[]
 }
 
-export type IFormField = IGroupField | ISelectField | IField
+export type IFormField = IGroupField | ISelectField | IField | ICheckboxField
 
 export type GroupFieldProps = {
   field: IGroupField
@@ -35,7 +42,7 @@ export type GroupFieldProps = {
 }
 
 export type FormFieldProps = {
-  field: IField | ISelectField
+  field: IField | ISelectField | ICheckboxField
   formikProps: FormikProps<any>
 }
 
