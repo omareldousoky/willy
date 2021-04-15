@@ -960,5 +960,6 @@
     "done": "تم",
     "viewRejectionReason": "عرض سبب الرفض",
     "terroristsListUn": "قوائم الإرهابين الدولية",
-    "na":"لا يوجد"
+    "na":"لا يوجد",
+    "downloadSuspected":"تنزيل العملاء المشتبه بهم"
 }

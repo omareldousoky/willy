@@ -17,6 +17,7 @@ import { Formik } from "formik"
 import { uploadTerroristUnDocument } from "../../Services/APIs/Terrorism/terrorism"
 import * as Yup from "yup"
 import { TerroristResponse } from "../../../Shared/Services/interfaces"
+import { TerroristsCustomers } from "./terroristsCustomers"
 interface Props {
 	data: TerroristResponse[];
 	error: string;
@@ -133,92 +134,131 @@ class TerrorismUnList extends Component<Props, State> {
 	}
 	render() {
 		return (
-			<>
-				<HeaderWithCards
-					header={local.antiTerrorism}
-					array={this.state.tabsToRender}
-					active={this.state.tabsToRender.map(item => { return item.stringKey }).indexOf('antiTerrorismUn')}
-				/>
-				<Card className="main-card">
-					<Loader type="fullscreen" open={this.props.loading} />
-					<div className="custom-card-header">
-						<div style={{ display: 'flex', alignItems: 'center' }}>
-							<Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.terroristsListUn}</Card.Title>
-							<span className="text-muted">{local.noOfTerrorists + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
-						</div>
-						<Can I="createTerrorist" a="customer">
-							<Button
-								className="big-button"
-								onClick={() => { this.setState({ showModal: true }) }}
-							>{local.uploadTerroristsList}
-							</Button></Can>
-					</div>
-					<hr className="dashed-line" />
-					<Card.Body>
-						<Search
-							searchKeys={[
-								"keyword",
-								"dateFromTo",
-							]}
-							dropDownKeys={[
-								"name",
-							]}
-							url="terroristUn"
-							from={this.state.from}
-							size={this.state.size}
-						/>
-						<DynamicTable
-							from={this.state.from}
-							size={this.state.size}
-							url="terroristUn"
-							totalCount={this.props.totalCount}
-							pagination={true}
-							data={this.props.data}
-							mappers={this.mappers}
-							changeNumber={(key: string, number: number) => {
-								this.setState({ [key]: number } as unknown as Pick<State, keyof State>, () => this.getTerrorists());
-							}}
-						/>
-					</Card.Body>
-				</Card>
-				{this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
-					<Formik
-						initialValues={{ terrorismLListFile: new File([''], '') }}
-						onSubmit={this.handleSubmit}
-						validationSchema={uploadTerroristDocumentValidation}
-						validateOnBlur
-						validateOnChange
-
-					>
-						{(formikProps) =>
-							<Form onSubmit={formikProps.handleSubmit}>
-								<Modal.Header>
-									<Modal.Title className={"m-auto"}>{local.uploadTerroristsList}</Modal.Title>
-								</Modal.Header>
-								<Modal.Body>
-									<Form.Group className="d-flex justify-content-center" as={Row} controlId="terrorismUnListFile">
-										<Form.File
-											name="terrorismUnListFile"
-											type="file"
-											onChange={(e) => formikProps.setFieldValue('terrorismLListFile', e.target.files[0])}
-											isInvalid={Boolean(formikProps.errors.terrorismLListFile) && Boolean(formikProps.touched.terrorismLListFile)}
-											accept={".xlsx,.xls,.xlsm,.csv"}
-										/>
-										<Form.Control.Feedback type="invalid">
-											{formikProps.errors.terrorismLListFile}</Form.Control.Feedback>
-									</Form.Group>
-								</Modal.Body>
-								<Modal.Footer>
-									<Button variant="secondary" onClick={() => this.setState({ showModal: false })}>{local.cancel}</Button>
-									<Button type="submit" variant="primary">{local.submit}</Button>
-								</Modal.Footer>
-							</Form>
-						}
-					</Formik>
-				</Modal>
-				}
-			</>
-		)
+      <>
+        <HeaderWithCards
+          header={local.antiTerrorism}
+          array={this.state.tabsToRender}
+          active={this.state.tabsToRender
+            .map((item) => {
+              return item.stringKey
+            })
+            .indexOf('antiTerrorismUn')}
+        />
+        <Card className="main-card">
+          <Loader type="fullscreen" open={this.props.loading} />
+          <div className="custom-card-header">
+            <div className="d-flex align-items-center p-0">
+              <Card.Title className="ml-2 mb-0">
+                {local.terroristsListUn}
+              </Card.Title>
+              <span className="text-muted">
+                {local.noOfTerrorists +
+                  ` (${this.props.totalCount ? this.props.totalCount : 0})`}
+              </span>
+            </div>
+            <div>
+              <TerroristsCustomers />
+              <Can I="createTerrorist" a="customer">
+                <Button
+                  className="big-button mx-2"
+                  onClick={() => {
+                    this.setState({ showModal: true })
+                  }}
+                >
+                  {local.uploadTerroristsList}
+                </Button>
+              </Can>
+            </div>
+          </div>
+          <hr className="dashed-line" />
+          <Card.Body>
+            <Search
+              searchKeys={['keyword', 'dateFromTo']}
+              dropDownKeys={['name']}
+              url="terroristUn"
+              from={this.state.from}
+              size={this.state.size}
+            />
+            <DynamicTable
+              from={this.state.from}
+              size={this.state.size}
+              url="terroristUn"
+              totalCount={this.props.totalCount}
+              pagination={true}
+              data={this.props.data}
+              mappers={this.mappers}
+              changeNumber={(key: string, number: number) => {
+                this.setState(
+                  ({ [key]: number } as unknown) as Pick<State, keyof State>,
+                  () => this.getTerrorists()
+                )
+              }}
+            />
+          </Card.Body>
+        </Card>
+        {this.state.showModal && (
+          <Modal
+            show={this.state.showModal}
+            onHide={() => this.setState({ showModal: false })}
+          >
+            <Formik
+              initialValues={{ terrorismLListFile: new File([''], '') }}
+              onSubmit={this.handleSubmit}
+              validationSchema={uploadTerroristDocumentValidation}
+              validateOnBlur
+              validateOnChange
+            >
+              {(formikProps) => (
+                <Form onSubmit={formikProps.handleSubmit}>
+                  <Modal.Header>
+                    <Modal.Title className={'m-auto'}>
+                      {local.uploadTerroristsList}
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <Form.Group
+                      className="d-flex justify-content-center"
+                      as={Row}
+                      controlId="terrorismUnListFile"
+                    >
+                      <Form.File
+                        name="terrorismUnListFile"
+                        type="file"
+                        onChange={(e) =>
+                          formikProps.setFieldValue(
+                            'terrorismLListFile',
+                            e.target.files[0]
+                          )
+                        }
+                        isInvalid={
+                          Boolean(formikProps.errors.terrorismLListFile) &&
+                          Boolean(formikProps.touched.terrorismLListFile)
+                        }
+                        accept={'.xlsx,.xls,.xlsm,.csv'}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {formikProps.errors.terrorismLListFile}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button
+                      variant="secondary"
+                      onClick={() => this.setState({ showModal: false })}
+                    >
+                      {local.cancel}
+                    </Button>
+                    <Button type="submit" variant="primary">
+                      {local.submit}
+                    </Button>
+                  </Modal.Footer>
+                </Form>
+              )}
+            </Formik>
+          </Modal>
+        )}
+      </>
+    )
 	}
 	componentWillUnmount() {
 		this.props.setSearchFilters({})
