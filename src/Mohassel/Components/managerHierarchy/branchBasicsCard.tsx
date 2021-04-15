@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { Col, Row } from 'react-bootstrap'
+import { Col } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import * as local from '../../../Shared/Assets/ar.json'
 import './managerHierarchy.scss'
@@ -15,50 +15,38 @@ export const BranchBasicsCard: FunctionComponent<BranchBasicsCardProps> = ({
     <div className="branch-basics-card">
       <div className="row-nowrap">
         <span className="basic-info">
-          <img alt="basic-info" src={require('../../Assets/basicInfo.svg')} />
+          <img
+            className="pr-3"
+            alt="basic-info"
+            src={require('../../Assets/basicInfo.svg')}
+          />
           <Form.Label>{local.basicInfo}</Form.Label>
         </span>
       </div>
       <div className="branch-basics-container">
-        <Col>
-          <Row>
-            <Form.Label className="basic-info-label">
-              {local.oneBranch}
-            </Form.Label>
-          </Row>
-          <Row>
-            <Form.Label className="basic-info-data">{name}</Form.Label>
-          </Row>
+        <Col className="d-flex flex-column">
+          <Form.Label className="basic-info-label">
+            {local.oneBranch}
+          </Form.Label>
+          <Form.Label className="basic-info-data">{name}</Form.Label>
         </Col>
-        <Col>
-          <Row>
-            <Form.Label className="basic-info-label">
-              {local.branchCode}
-            </Form.Label>
-          </Row>
-          <Row>
-            <Form.Label className="basic-info-data">{branchCode}</Form.Label>
-          </Row>
+        <Col className="d-flex flex-column">
+          <Form.Label className="basic-info-label">
+            {local.branchCode}
+          </Form.Label>
+          <Form.Label className="basic-info-data">{branchCode}</Form.Label>
         </Col>
-        <Col>
-          <Row>
-            <Form.Label className="basic-info-label">
-              {local.creationDate}
-            </Form.Label>
-          </Row>
-          <Row>
-            <Form.Label className="basic-info-data">{createdAt}</Form.Label>
-          </Row>
+        <Col className="d-flex flex-column">
+          <Form.Label className="basic-info-label">
+            {local.creationDate}
+          </Form.Label>
+          <Form.Label className="basic-info-data">{createdAt}</Form.Label>
         </Col>
-        <Col>
-          <Row>
-            <Form.Label className="basic-info-label">{local.status}</Form.Label>
-          </Row>
-          <Row>
-            <Form.Label className="basic-info-data">
-              {status === 'active' ? local.activeBranch : local.inActiveBranch}
-            </Form.Label>
-          </Row>
+        <Col className="d-flex flex-column">
+          <Form.Label className="basic-info-label">{local.status}</Form.Label>
+          <Form.Label className="basic-info-data">
+            {status === 'active' ? local.activeBranch : local.inActiveBranch}
+          </Form.Label>
         </Col>
       </div>
     </div>

@@ -8,7 +8,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
+	margin: 0 12px;
+	padding-bottom: 10px;
 }
 
 .basic-info {
@@ -48,13 +49,11 @@
 }
 
 .supervision-group-container {
-  margin: 41px 45px 41px 44px;
-  padding: 20px 22px 16px 20px;
+	margin: 20px 40px;
+	padding: 20px;
   border-radius: 4px;
   border: solid 1px #e5e5e5;
   background-color: #fafafa;
-  text-align: right;
-  width: 90%;
 }
 
 .group-supervisor-row {
@@ -75,17 +74,6 @@
 .add-supervisor-container {
   margin: 41px 25px 41px 44px;
   padding: 20px 22px 16px 20px;
-}
-
-.add-member-container {
-  margin: 21px 15px 21px 24px;
-  padding: 20px 22px 16px 20px;
-}
-
-.add-member {
-  color: #7dc356;
-  font-size: 14px;
-  font-weight: bold;
 }
 
 .officers-container {

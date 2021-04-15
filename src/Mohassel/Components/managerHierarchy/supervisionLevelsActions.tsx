@@ -219,6 +219,7 @@ class SupervisionLevelsActions extends Component<
                           (currGroup) => currGroup.id === group.id
                         )
                       )}
+                      className="pl-1"
                       onChange={() => this.addRemoveItemFromChecked(group)}
                     />
                   </Row>

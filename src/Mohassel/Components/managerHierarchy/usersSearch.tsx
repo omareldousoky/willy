@@ -98,7 +98,7 @@ export const UsersSearch: FunctionComponent<UsersSearchProps> = ({
         </DropdownButton>
       ) : null}
       <InputGroup.Append>
-        <InputGroup.Text style={{ background: '#fff' }}>
+        <InputGroup.Text className="bg-white rounded-0">
           <span className="fa fa-search fa-rotate-90" />
         </InputGroup.Text>
       </InputGroup.Append>
@@ -109,7 +109,7 @@ export const UsersSearch: FunctionComponent<UsersSearchProps> = ({
           key={objectKey}
           name="users"
           data-qc="users"
-          styles={theme.selectStyleWithBorder}
+          styles={theme.selectStyleWithBorderWithSearchDropDown}
           theme={theme.selectTheme}
           getOptionValue={(option) => option[dropDownValue]}
           getOptionLabel={(option) => option.name}
@@ -121,7 +121,7 @@ export const UsersSearch: FunctionComponent<UsersSearchProps> = ({
           value={item}
           isClearable={isClearable}
           onInputChange={(keyword) => {
-            if (keyword) getUsers(keyword)
+            getUsers(keyword)
           }}
         />
       </div>

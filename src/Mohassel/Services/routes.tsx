@@ -53,7 +53,7 @@ import BulkApplicationReview from '../Components/BulkApplicarionReview/bulkAppli
 import CreateClearance from '../Components/Clearance/create-clearance'
 import ClearancesList from '../Components/Clearance/clearancesList'
 import ClearanceProfile from '../Components/Clearance/clearanceProfile'
-import SupervisionsList from '../Components/managerHierarchy/supervisionsList'
+import SupervisionGroupsList from '../Components/managerHierarchy/supervisionGroupsList'
 import BusinessActivities from '../Components/ManageLoanDetails/businessActivities'
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities'
 import FinancialClosing from '../Components/FinancialClosing/financialClosing'
@@ -652,8 +652,7 @@ const appRoutes = [
         label: local.levelsOfSupervision,
         render: (props) => (
           <Can I="getOfficersGroups" a="branch">
-            {' '}
-            <SupervisionsList {...props} />{' '}
+            <SupervisionGroupsList {...props} />{' '}
           </Can>
         ),
       },

@@ -233,14 +233,13 @@ class SupervisionsProfile extends Component<
               this.setState({ activeTab: stringKey })
             }}
           />
-          <Card.Title>
-            <BranchBasicsCard
-              name={this.props.name}
-              branchCode={this.props.branchCode}
-              createdAt={this.props.createdAt}
-              status={this.props.status}
-            />
-          </Card.Title>
+          <BranchBasicsCard
+            name={this.props.name}
+            branchCode={this.props.branchCode}
+            createdAt={this.props.createdAt}
+            status={this.props.status}
+          />
+
           <Card.Body>
             <Loader open={this.state.loading} type="fullscreen" />
             {this.renderContent()}

@@ -34,22 +34,17 @@ export const SupervisionGroup: FunctionComponent<SupervisionGroupProps> = ({
             className="supervision-label"
             as={Col}
           >{`${local.groupManager} ( ${seqNo} )`}</Form.Label>
-          <Row>
-            <UsersSearch
-              usersInitial={users}
-              objectKey="leader"
-              item={group.leader}
-              updateItem={updateGroupLeader}
-            />
-          </Row>
+          <UsersSearch
+            usersInitial={users}
+            objectKey="leader"
+            item={group.leader}
+            updateItem={updateGroupLeader}
+          />
         </Col>
         {mode === 'create' && (
-          <div onClick={deleteGroup}>
-            <img
-              alt="delete"
-              src={require('../../../Shared/Assets/deleteIcon.svg')}
-            />
-          </div>
+          <Button type="button" variant="default" onClick={deleteGroup}>
+            <span className="trash-icon" aria-hidden="true" />
+          </Button>
         )}
       </div>
       <Row className="officers-container">
@@ -57,59 +52,52 @@ export const SupervisionGroup: FunctionComponent<SupervisionGroupProps> = ({
           return (
             <Col key={index} sm={6}>
               <Form.Label className="supervision-label">
-                <img
+                <Button
+                  type="button"
+                  variant="default"
                   onClick={() => {
-                    setOfficers(
-                      officers.filter((item) => item.id !== officer.id)
-                    )
+                    setOfficers(officers.filter((_, i) => index !== i))
                   }}
-                  alt="remove"
-                  src={require('../../Assets/removeIcon.svg')}
-                />
+                >
+                  <span className="remove-red-icon" aria-hidden="true" />
+                </Button>
                 {local.loanOfficerOrCoordinator}
               </Form.Label>
-              <Row className="row-nowrap">
-                <UsersSearch
-                  isLoanOfficer
-                  usersInitial={loanOfficers}
-                  objectKey={index}
-                  item={officer}
-                  updateItem={(newOfficer) =>
-                    setOfficers(
-                      officers
-                        .map((officerItem, i) =>
-                          i === index ? newOfficer : officerItem
-                        )
-                        .filter((v) => !!v) as ManagerHierarchyUser[]
-                    )
-                  }
-                  branchId={branchId}
-                />
-              </Row>
+              <UsersSearch
+                isLoanOfficer
+                usersInitial={loanOfficers}
+                objectKey={index}
+                item={officer}
+                updateItem={(newOfficer) =>
+                  setOfficers(
+                    officers
+                      .map((officerItem, i) =>
+                        i === index ? newOfficer : officerItem
+                      )
+                      .filter((v) => !!v) as ManagerHierarchyUser[]
+                  )
+                }
+                branchId={branchId}
+              />
             </Col>
           )
         })}
       </Row>
       {(mode === 'create' || mode === 'edit') && (
-        <Row className="add-member-container">
-          <Button
-            className="add-member"
-            type="button"
-            variant="link"
-            disabled={!!officers.filter((officer) => !officer.id).length}
-            onClick={() => {
-              if (officers.filter((officer) => !officer.id).length) return
-              setOfficers(officers.concat({ id: '', name: '' }))
-            }}
-          >
-            <img
-              className="green-add-icon"
-              alt="add"
-              src={require('../../Assets/greenAdd.svg')}
-            />
+        <Button
+          type="button"
+          variant="link"
+          disabled={!!officers.filter((officer) => !officer.id).length}
+          onClick={() => {
+            if (officers.filter((officer) => !officer.id).length) return
+            setOfficers(officers.concat({ id: '', name: '' }))
+          }}
+        >
+          <span className="plus-green-icon align-middle" aria-hidden="true" />
+          <span className="text-success pl-2 font-weight-bold">
             {local.addLoanOfficer}
-          </Button>
-        </Row>
+          </span>
+        </Button>
       )}
     </div>
   )

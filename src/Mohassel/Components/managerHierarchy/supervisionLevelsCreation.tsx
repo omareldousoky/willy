@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { Button, Form, Row } from 'react-bootstrap'
+import { Button, Col, Form } from 'react-bootstrap'
 import Swal from 'sweetalert2'
 import * as local from '../../../Shared/Assets/ar.json'
 import { updateOfficersGroups } from '../../Services/APIs/ManagerHierarchy/updateOfficersGroups'
@@ -156,75 +156,75 @@ export const SupervisionLevelsCreation: FunctionComponent<SupervisionLevelsCreat
     }
   }
 
+  const isCreate = mode === 'create'
+
   return (
-    <div>
+    <>
       <Loader open={loading} type="fullscreen" />
-      {(mode === 'create' && users.length) || groups.length ? (
+      {(isCreate && users.length) || groups.length ? (
         <>
-          <Row>
-            {groups.map((item, index) => {
-              return (
-                <SupervisionGroup
-                  branchId={branchId}
-                  mode={mode}
-                  key={item.id}
-                  seqNo={index + 1}
-                  deleteGroup={() => removeGroup(index)}
-                  group={item}
-                  updateGroupOfficers={(newGroup: ManagerHierarchyUser[]) =>
+          {groups.map((item, index) => {
+            return (
+              <SupervisionGroup
+                branchId={branchId}
+                mode={mode}
+                key={item.id}
+                seqNo={index + 1}
+                deleteGroup={() => removeGroup(index)}
+                group={item}
+                updateGroupOfficers={(newGroup: ManagerHierarchyUser[]) =>
+                  setGroups(
+                    groups.map((groupItem, i) =>
+                      index === i
+                        ? { ...groupItem, officers: newGroup }
+                        : groupItem
+                    )
+                  )
+                }
+                updateGroupLeader={(newLeader?: ManagerHierarchyUser) => {
+                  if (newLeader)
                     setGroups(
                       groups.map((groupItem, i) =>
                         index === i
-                          ? { ...groupItem, officers: newGroup }
+                          ? { ...groupItem, leader: newLeader }
                           : groupItem
                       )
                     )
-                  }
-                  updateGroupLeader={(newLeader?: ManagerHierarchyUser) => {
-                    if (newLeader)
-                      setGroups(
-                        groups.map((groupItem, i) =>
-                          index === i
-                            ? { ...groupItem, leader: newLeader }
-                            : groupItem
-                        )
-                      )
-                  }}
-                  users={users}
-                  loanOfficers={loanOfficers}
-                />
-              )
-            })}
-            {mode === 'create' && users.length && (
-              <Row className="add-supervisor-container">
+                }}
+                users={users}
+                loanOfficers={loanOfficers}
+              />
+            )
+          })}
+          {isCreate && users.length && (
+            <Col className="pl-4">
+              <Button
+                type="button"
+                variant="link"
+                className="mr-auto my-5"
+                onClick={() => setGroups(groups.concat(emptyGroup))}
+              >
                 <span
-                  className="add-member"
-                  onClick={() => {
-                    setGroups(groups.concat(emptyGroup))
-                  }}
-                >
-                  <img
-                    className="green-add-icon"
-                    alt="add"
-                    src={require('../../Assets/greenAdd.svg')}
-                  />
+                  className="plus-green-icon align-middle"
+                  aria-hidden="true"
+                />
+                <span className="text-success pl-2 font-weight-bold">
                   {local.addGroupManager}
                 </span>
-              </Row>
-            )}
-          </Row>
+              </Button>
+            </Col>
+          )}
           {(ability.can('createOfficersGroup', 'branch') ||
             ability.can('updateOfficersGroup', 'branch')) && (
-            <Form.Group>
+            <Form.Group className="ml-4">
               <Button
                 disabled={!groups.length}
-                style={{ width: '300px' }}
                 onClick={async () => {
                   await submit()
                 }}
-                className="save-button"
+                className="px-5"
               >
-                {mode === 'create'
+                {isCreate
                   ? local.createSuperVisionGroups
                   : local.editSuperVisionGroups}
               </Button>
@@ -237,11 +237,9 @@ export const SupervisionLevelsCreation: FunctionComponent<SupervisionLevelsCreat
             alt="no-data-found"
             src={require('../../../Shared/Assets/no-results-found.svg')}
           />
-          <h4>
-            {mode === 'create' ? local.noUsersInBranch : local.noResultsFound}
-          </h4>
+          <h4>{isCreate ? local.noUsersInBranch : local.noResultsFound}</h4>
         </div>
       )}
-    </div>
+    </>
   )
 }

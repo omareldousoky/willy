@@ -87,30 +87,11 @@ class SupervisionGroupsList extends Component<
         key: 'officers',
         render: (data) =>
           data.officers && (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                flexFlow: 'wrap',
-                height: '80px',
-                overflowY: 'auto',
-              }}
-            >
+            <div className="d-flex flex-row">
               {data.officers?.map((officer, i) => {
                 return (
                   officer?.name && (
-                    <div
-                      key={i}
-                      className="labelBtn"
-                      style={{
-                        flex: '1 0 21%',
-                        flexGrow: 1,
-                        maxWidth: '16rem',
-                        height: '40px',
-                        textAlign: 'center',
-                      }}
-                    >
+                    <div key={i} className="labelBtn">
                       {officer.name}
                     </div>
                   )
@@ -200,28 +181,33 @@ class SupervisionGroupsList extends Component<
   }
 
   selectState = (event) => {
-    this.setState({
-      chosenStatus: event.value,
-    })
+    this.setState(
+      {
+        chosenStatus: event.value,
+        from: 0,
+      },
+      () => {
+        if (this.state.branchId !== 'hq') {
+          this.props.search({
+            ...this.props.searchFilters,
+            size: this.state.size,
+            from: this.state.from,
+            url: 'supervisionsGroups',
+            status: this.state.chosenStatus,
+            branchId: this.state.branchId,
+          })
+        } else {
+          this.props.search({
+            ...this.props.searchFilters,
+            size: this.state.size,
+            from: this.state.from,
+            url: 'supervisionsGroups',
+            status: this.state.chosenStatus,
+          })
+        }
+      }
+    )
     // const branch = this.state.branchId !== 'hq' ? this.state.branchId : ''
-    if (this.state.branchId !== 'hq')
-      this.props.search({
-        ...this.props.searchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'supervisionsGroups',
-        status: event.value,
-        branchId: this.state.branchId,
-      })
-    else {
-      this.props.search({
-        ...this.props.searchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'supervisionsGroups',
-        status: event.value,
-      })
-    }
   }
 
   submit = () => {
@@ -332,7 +318,6 @@ class SupervisionGroupsList extends Component<
                     className="big-button"
                     style={{ marginLeft: 20, height: 70 }}
                   >
-                    {' '}
                     {this.state.chosenStatus === 'pending'
                       ? local.approveSuperVisionGroups
                       : local.unApproveSuperVisionGroups}
@@ -346,7 +331,6 @@ class SupervisionGroupsList extends Component<
                     as={Row}
                     style={{
                       fontWeight: 'bolder',
-                      textAlign: 'right',
                       margin: '9px',
                     }}
                   >

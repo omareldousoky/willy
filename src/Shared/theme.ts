@@ -17,6 +17,16 @@ export const theme = {
       boxShadow: 'none', // no box-shadow
     }),
   },
+  selectStyleWithBorderWithSearchDropDown: {
+    control: (provided) => ({
+      ...provided,
+      '&:hover': { borderColor: theme.colors.primary }, // border style on hover
+      border: `1px solid ${theme.colors.veryLightGray}`, // default border color
+      borderTopRightRadius: `0`,
+      borderBottomRightRadius: `0`,
+      boxShadow: 'none', // no box-shadow
+    }),
+  },
   selectStyleWithoutBorder: {
     control: (provided) => ({
       ...provided,
