@@ -57,9 +57,9 @@ import SupervisionsList from '../Components/managerHierarchy/supervisionsList';
 import BusinessActivities from '../Components/ManageLoanDetails/businessActivities';
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
-import TerrorismList from '../Components/terrorismMoneyLaundering/terrorismList';
+import TerrorismList from '../Components/ManageTerrorism/terrorismList';
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
-import TerrorismUnList from '../Components/terrorismMoneyLaundering/terrorismUnList'
+import TerrorismUnList from '../Components/ManageTerrorism/terrorismUnList'
 import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList';
 
 const appRoutes = [
