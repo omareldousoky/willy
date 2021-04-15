@@ -959,5 +959,6 @@
     "rejectionDetails": "تفاصيل الإبلاغ عن العميل",
     "done": "تم",
     "viewRejectionReason": "عرض سبب الرفض",
-    "terroristsListUn": "قوائم الإرهابين الدولية"
+    "terroristsListUn": "قوائم الإرهابين الدولية",
+    "na":"لا يوجد"
 }

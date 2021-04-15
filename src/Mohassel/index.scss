@@ -426,6 +426,11 @@ code {
 	}
 
 }
+.small-text {
+	font-size: .79rem;
+	font-weight: bold;
+	text-align: right;
+}
 @media print {
 	* {
 		font-size: 14px;

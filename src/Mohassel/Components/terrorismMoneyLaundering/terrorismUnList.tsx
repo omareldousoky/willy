@@ -61,42 +61,57 @@ class TerrorismUnList extends Component<Props, State> {
 			showModal: false,
 		}
 		this.mappers = [
-			{
-				title: local.name,
-				key: "name",
-				render: data => data.name
-			},
-			{
-				title: local.nationality,
-				key: "nationality",
-				render: data => data.nationality
-			},
-			{
-				title: local.nationalId,
-				key: "nationalId",
-				render: data => data.nationalId
-			},
-			{
-				title: local.birthDate,
-				key: 'birthDate',
-				render: data => data.birthDate
-			},
-			{
-				title: local.creationDate,
-				key: 'createAt',
-				render: data => data?.created?.at ? fullEnglishDate (data.created.at): null
-
-			},
-		]
+      {
+        title: local.name,
+        key: 'name',
+        render: (data) => (
+          <p className="small-text">
+            {data.name !== 'na' ? data.name : local.na}
+          </p>
+        ),
+      },
+      {
+        title: local.nationality,
+        key: 'nationality',
+        render: (data) => 
+          <p className="small-text">
+            {data.nationality !== 'na' ? data.nationality : local.na}
+          </p>
+      },
+      {
+        title: local.nationalId,
+        key: 'nationalId',
+        render: (data) =>
+          <p className="small-text">
+            {data.nationalId !== 'na' ? data.nationalId : local.na}
+          </p>
+      },
+      {
+        title: local.birthDate,
+        key: 'birthDate',
+        render: (data) => 
+          <p className="small-text">
+            {data.birthDate !== 'na' ? data.birthDate : local.na}
+          </p>
+      },
+      {
+        title: local.creationDate,
+        key: 'createAt',
+        render: (data) =>
+          <p className="small-text">
+              {data?.created?.at ? fullEnglishDate(data.created.at) : local.na}
+          </p>
+      },
+    ]
 	}
 	componentDidMount() {
-		this.getTerrorists();
+		this.props.search({size: this.state.size, from: this.state.from,url:'terroristUn'});
 		this.setState({
 			tabsToRender: antiTerrorismMoneyLaunderingArray()
 		})
 	}
 	async getTerrorists() {
-		this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'terroristUn', name:'',fromDate: 0 , toDate: 0 })
+		this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'terroristUn'})
 		if (this.props.error) {
 			Swal.fire('', getErrorMessage(this.props.error), "error")
 		}

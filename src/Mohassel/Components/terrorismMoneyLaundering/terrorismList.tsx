@@ -64,39 +64,39 @@ class TerrorismList extends Component<Props, State> {
 			{
 				title: local.name,
 				key: "name",
-				render: data => data.name
+				render: data => <p className="small-text">{data.name}</p>
 			},
 			{
 				title: local.nationality,
 				key: "nationality",
-				render: data => data.nationality
+				render: data =><p className="small-text">{data.nationality}</p>
 			},
 			{
 				title: local.nationalId,
 				key: "nationalId",
-				render: data => data.nationalId
+				render: data => <p className="small-text">{data.nationalId}</p>
 			},
 			{
 				title: local.birthDate,
 				key: 'birthDate',
-				render: data => data.birthDate
+				render: data => <p className="small-text">{data.birthDate}</p>
 			},
 			{
 				title: local.creationDate,
 				key: 'createAt',
-			   render: data => data?.created?.at ? fullEnglishDate (data.created.at): null,
+			   render: data => data?.created?.at ? <p className="small-text">{fullEnglishDate (data.created.at)}</p>: null,
 
 			},
 		]
 	}
 	componentDidMount() {
-		this.getTerrorists();
+		this.props.search({size: this.state.size, from: this.state.from, url:'terrorist'});
 		this.setState({
 			tabsToRender: antiTerrorismMoneyLaunderingArray()
 		})
 	}
 	async getTerrorists() {
-		this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'terrorist',name:'',fromDate: 0 , toDate: 0  })
+		this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'terrorist'})
 		if (this.props.error) {
 			Swal.fire('', getErrorMessage(this.props.error), "error")
 		}
