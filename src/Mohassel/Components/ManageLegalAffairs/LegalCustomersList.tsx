@@ -205,12 +205,14 @@ const LegalCustomersList: FunctionComponent = () => {
       title: '',
       key: 'legalSettlement',
       render: (data) => (
-        <button
-          className="btn clickable-action rounded-0 border-right"
-          onClick={() => toggleShowActions(data)}
-        >
-          {local.registerSettlement}
-        </button>
+        <Can I="updateSettlement" a="legal">
+          <button
+            className="btn clickable-action rounded-0 border-right"
+            onClick={() => toggleShowActions(data)}
+          >
+            {local.registerSettlement}
+          </button>
+        </Can>
       ),
     },
   ]
