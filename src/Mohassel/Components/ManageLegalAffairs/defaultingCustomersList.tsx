@@ -417,7 +417,10 @@ class DefaultingCustomersList extends Component<Props, State> {
         const { defaultingCustomerStatus, branches } = values
         const printReportReq: IReviewedDefaultingCustomersReq = {
           status: defaultingCustomerStatus ?? '',
-          branches: branches.length ? branches.map((branch) => branch._id) : [],
+          branches:
+            branches.length === 1 && branches[0] === ''
+              ? []
+              : branches.map((branch) => branch._id),
         }
 
         console.log({ printReportReq })
