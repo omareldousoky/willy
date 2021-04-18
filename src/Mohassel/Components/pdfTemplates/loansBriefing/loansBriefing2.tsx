@@ -19,10 +19,9 @@ const LoansBriefing2 = (props: LoansBriefing2Props) => {
     <div className="loans-briefing-2" lang="ar">
       <div
         style={{
-          margin: '10px 0',
+          margin: '10px',
           display: 'flex',
           justifyContent: 'space-between',
-          width: '98%',
           backgroundColor: 'white',
         }}
       >
@@ -33,10 +32,9 @@ const LoansBriefing2 = (props: LoansBriefing2Props) => {
       </div>
       <div
         style={{
-          margin: '10px 0',
+          margin: '10px',
           display: 'flex',
           justifyContent: 'space-between',
-          width: '98%',
           backgroundColor: 'white',
         }}
       >
