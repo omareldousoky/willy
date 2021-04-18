@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 
-import { Card, Modal } from 'react-bootstrap'
+import { Button, Card, Modal, Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import Swal from 'sweetalert2'
@@ -20,7 +20,9 @@ import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from './manageLegalAffairsInitials'
 import { TableMapperItem } from './types'
 import { DefaultedCustomer } from './defaultingCustomersList'
-import LegalSettlementForm from './LegalSettlementForm'
+import LegalSettlementForm, {
+  ISettlementFormValues,
+} from './LegalSettlementForm'
 import { getSettlementFees } from '../../Services/APIs/LegalAffairs/defaultingCustomers'
 
 interface ISettlementFees {
@@ -32,9 +34,13 @@ const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
   const [size, setSize] = useState<number>(10)
 
+  const [settlementCustomer, setSettlementCustomer] = useState<
+    (DefaultedCustomer & ISettlementFormValues) | null
+  >(null)
+
   const [
-    settlementCustomer,
-    setSettlementCustomer,
+    customerToView,
+    setCustomerToView,
   ] = useState<DefaultedCustomer | null>(null)
 
   const [settlementFees, setSettlementFees] = useState<ISettlementFees | null>(
@@ -42,7 +48,7 @@ const LegalCustomersList: FunctionComponent = () => {
   )
   const [isSettlementLoading, setIsSettlementLoading] = useState(false)
 
-  const data = useSelector((state: any) => state.search.data)
+  const data = useSelector((state: any) => state.search.data) || []
   const error = useSelector((state: any) => state.search.error)
   const loading = useSelector((state: any) => state.search.loading)
   const totalCount = useSelector((state: any) => state.search.totalCount)
@@ -106,7 +112,9 @@ const LegalCustomersList: FunctionComponent = () => {
     return customer[customer.status][name]
   }
 
-  const toggleShowActions = (customer: DefaultedCustomer) => {
+  const toggleShowActions = (
+    customer: DefaultedCustomer & ISettlementFormValues
+  ) => {
     setSettlementCustomer((previousValue) =>
       previousValue?._id === customer._id ? null : customer
     )
@@ -159,12 +167,12 @@ const LegalCustomersList: FunctionComponent = () => {
     },
     {
       title: local.courtSessionType,
-      key: '',
+      key: 'courtSessionType',
       render: (data) => (hasCourtSession(data) ? local[data.status] : ''),
     },
     {
       title: local.courtSessionDate,
-      key: '',
+      key: 'courtSessionDate',
       render: (data) =>
         hasCourtSession(data)
           ? timeToArabicDate(data[data.status].date, true)
@@ -172,7 +180,7 @@ const LegalCustomersList: FunctionComponent = () => {
     },
     {
       title: local.theDecision,
-      key: '',
+      key: 'theDecision',
       render: (data) => renderCourtField(data, 'decision'),
     },
     {
@@ -180,6 +188,9 @@ const LegalCustomersList: FunctionComponent = () => {
       key: 'caseStatusSummary',
       render: (data) => data.caseStatusSummary,
     },
+  ]
+
+  const tableActionsMapper: TableMapperItem[] = [
     {
       title: '',
       key: 'view',
@@ -193,8 +204,7 @@ const LegalCustomersList: FunctionComponent = () => {
             title={local.logs}
             src={require('../../Assets/view.svg')}
             onClick={() => {
-              // this.showLogs(data)
-              console.log('View customer')
+              setCustomerToView(data)
             }}
           ></img>
         ),
@@ -276,7 +286,7 @@ const LegalCustomersList: FunctionComponent = () => {
                 from={from}
                 size={size}
                 totalCount={totalCount}
-                mappers={tableMapper}
+                mappers={[...tableMapper, ...tableActionsMapper]}
                 pagination
                 data={data}
                 url={url}
@@ -312,6 +322,37 @@ const LegalCustomersList: FunctionComponent = () => {
               />
             </Modal.Body>
           </div>
+        </Modal>
+      )}
+
+      {customerToView && (
+        <Modal show={!!customerToView} size="lg">
+          <Modal.Header>
+            <Modal.Title>{local.logs}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Table>
+              <thead>
+                <tr>
+                  {tableMapper.map((mapper) => (
+                    <th key={mapper.key}>{mapper.title}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {tableMapper.map((mapper) => (
+                    <td key={mapper.key}>{mapper.render(customerToView)}</td>
+                  ))}
+                </tr>
+              </tbody>
+            </Table>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setCustomerToView(null)}>
+              {local.cancel}
+            </Button>
+          </Modal.Footer>
         </Modal>
       )}
     </>

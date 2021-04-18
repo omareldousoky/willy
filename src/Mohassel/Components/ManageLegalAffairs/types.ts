@@ -1,4 +1,5 @@
 import { FormikProps } from 'formik'
+import { ReactNode } from 'react'
 import * as Yup from 'yup'
 
 
@@ -51,5 +52,5 @@ export interface TableMapperItem {
   title: string | (() => JSX.Element)
   key: string
   sortable?: boolean
-  render: (data: any) => void
+  render: (data: any) => ReactNode
 }
