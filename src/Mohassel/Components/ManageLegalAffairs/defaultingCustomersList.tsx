@@ -258,7 +258,7 @@ class DefaultingCustomersList extends Component<Props, State> {
     }
     async findLoans(customer: Customer) {
         this.setState({ modalLoader: true, selectedCustomer: customer })
-        const results = await searchLoan({ from: 0, size: 1000, customerKey: customer.key })
+        const results = await searchLoan({ from: 0, size: 1000, customerKey: customer.key, type: 'micro' })
         if (results.status === 'success') {
             this.setState({ modalLoader: false, loanSearchResults: results.body.applications.filter(loan => loan.application.status && ['pending', 'issued'].includes(loan.application.status)) });
         } else {

@@ -290,7 +290,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     })
                 }
             }
-            if(application.body.entitledToSign.length > 0){
+            if(application.body.entitledToSign && application.body.entitledToSign.length > 0){
                 const entitledArr: Array<EntitledToSign> = []
                 application.body.entitledToSign.forEach(customer =>
                     {
