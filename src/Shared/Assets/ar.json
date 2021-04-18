@@ -980,5 +980,8 @@
     "privateReconciliation": "توكيل تصالح خاص",
     "waiver":"تنازل",
     "registerSettlement": "تسجيل طلب تصالح",
-    "legalCaseNumber": "رقم القضية"
+    "legalCaseNumber": "رقم القضية",
+    "settlementSuccess": "تم بنجاح تسجيل طلب تصالح",
+    "end": "إنهاء",
+    "saveAndContinue": "حفظ و متابعة"
 }

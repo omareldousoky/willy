@@ -402,6 +402,11 @@ code {
 	padding: .75rem 2.72rem;
 }
 
+.wide-btn {
+	min-width: 180px;
+	padding: 10px 0;
+}
+
 .main-card {
 	margin: 2rem !important; // class used with <Card /> so we need to override style with !important
 }
@@ -425,6 +430,14 @@ code {
 		}
 	}
 
+}
+.hide-card-styles{
+	border: none;
+	margin: 0 !important;
+
+	.card-body {
+		padding: 0;
+	}
 }
 @media print {
 	* {

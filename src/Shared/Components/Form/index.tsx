@@ -16,8 +16,14 @@ import local from '../../../Shared/Assets/ar.json'
 const AppForm: FunctionComponent<AppFormProps> = ({
   formFields,
   onSubmit,
+  onCancel,
   defaultValues,
-  options: { disabled = false, renderPairs = false },
+  options: {
+    disabled = false,
+    renderPairs = false,
+    submitBtnText = local.submit,
+    wideBtns = false,
+  },
 }) => {
   const initialValues = createFormFieldsInitValue(formFields, defaultValues)
   const validationSchema = createValidationSchema(formFields)
@@ -44,14 +50,25 @@ const AppForm: FunctionComponent<AppFormProps> = ({
               <FormFields formFields={formFields} formikProps={formikProps} />
             )}
 
-            <div className="d-flex justify-content-end">
+            <div className="d-flex flex-row-reverse justify-content-between mt-3 mb-2">
               <Button
                 type="submit"
                 data-qc="submit"
+                variant="primary"
                 disabled={disabled || !dirty || !isValid}
+                className={wideBtns ? 'wide-btn' : ''}
               >
-                {local.submit}
+                {submitBtnText}
               </Button>
+              {onCancel && (
+                <Button
+                  variant="outline-primary"
+                  onClick={onCancel}
+                  className={wideBtns ? 'wide-btn' : ''}
+                >
+                  {local.cancel}
+                </Button>
+              )}
             </div>
           </Form>
         )

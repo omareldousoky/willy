@@ -7,7 +7,7 @@ export interface IFieldDefaultProps {
   readOnly?: boolean
 }
 export interface IField extends IFieldDefaultProps {
-  type: 'text' | 'date' | 'number'
+  type: 'text' | 'date' | 'number' | 'textarea'
   label: string
   validation: Yup.Schema<any>
 }
@@ -54,9 +54,12 @@ export type FormFieldsProps = {
 export type AppFormProps = {
   formFields: IFormField[]
   onSubmit: (values: any, formikHelpers: FormikHelpers<any>) => void
+  onCancel?: () => void
   defaultValues?: any
   options: {
     disabled?: boolean
     renderPairs?: boolean
+    submitBtnText?: string
+    wideBtns?: boolean
   }
 }

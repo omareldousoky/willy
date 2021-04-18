@@ -8,18 +8,9 @@ import AppForm from '../../../Shared/Components/Form'
 import { IFormField } from '../../../Shared/Components/Form/types'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { defaultValidationSchema } from '../../../Shared/validations'
-import {
-  settleLegalCustomer,
-} from '../../Services/APIs/LegalAffairs/defaultingCustomers'
-
-export interface ILegalSettlementFormProps {
-  settlementFees: {
-    penaltyFees: number
-    courtFees: number
-  }
-  customerId: string
-  onSubmit: () => void
-}
+import { settleLegalCustomer } from '../../Services/APIs/LegalAffairs/defaultingCustomers'
+import colorVariables from '../../../Shared/Assets/scss/app.scss'
+import { DefaultedCustomer } from './defaultingCustomersList'
 
 export type SettlementStatus =
   | 'privateReconciliation'
@@ -49,11 +40,19 @@ export interface ISettlementFormValues {
 export interface ISettlementReqBody {
   settlement: ISettlementFormValues
 }
+export interface ILegalSettlementFormProps {
+  settlementFees: {
+    penaltyFees: number
+    courtFees: number
+  }
+  customer: DefaultedCustomer & ISettlementFormValues
+  onSubmit: () => void
+}
 
 const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
   settlementFees,
-  customerId,
   onSubmit,
+  customer,
 }) => {
   const settlementForm: IFormField[] = [
     {
@@ -61,7 +60,7 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
       type: 'checkbox',
       label: local.thePenalty,
       validation: defaultValidationSchema.required(local.required),
-      checkboxLabel: `${local.isPaid} ${local.thePenalty}`
+      checkboxLabel: `${local.isPaid} ${local.thePenalty}`,
     },
     {
       name: 'penaltyFees',
@@ -75,7 +74,7 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
       type: 'checkbox',
       label: local.courtFees,
       validation: defaultValidationSchema.required(local.required),
-      checkboxLabel: `${local.isPaid} ${local.thePenalty}`
+      checkboxLabel: `${local.isPaid} ${local.thePenalty}`,
     },
     {
       name: 'courtFees',
@@ -178,26 +177,26 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
     },
     {
       name: 'comments',
-      type: 'text',
+      type: 'textarea',
       label: local.comments,
       validation: defaultValidationSchema,
     },
   ]
 
   const defaultValues = {
-    penaltiesPaid: false,
-    courtFeesPaid: false,
-    caseNumber: '',
-    caseYear: '',
-    court: '',
-    courtDetails: '',
-    lawyerName: '',
-    laywerPhoneNumberOne: '',
-    laywerPhoneNumberTwo: '',
-    laywerPhoneNumberThree: '',
-    settlementType: '',
-    settlementStatus: '',
-    comments: '',
+    penaltiesPaid: customer.penaltiesPaid ?? false,
+    courtFeesPaid: customer.courtFeesPaid ?? false,
+    caseNumber: customer.caseNumber ?? '',
+    caseYear: customer.caseYear ?? '',
+    court: customer.court ?? '',
+    courtDetails: customer.courtDetails ?? '',
+    lawyerName: customer.lawyerName ?? '',
+    laywerPhoneNumberOne: customer.laywerPhoneNumberOne ?? '',
+    laywerPhoneNumberTwo: customer.laywerPhoneNumberTwo ?? '',
+    laywerPhoneNumberThree: customer.laywerPhoneNumberThree ?? '',
+    settlementType: customer.settlementType ?? '',
+    settlementStatus: customer.settlementStatus ?? '',
+    comments: customer.comments ?? '',
   }
 
   const handleSubmit = async (values: ISettlementFormValues) => {
@@ -205,9 +204,16 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
       settlement: values,
     }
 
-    const response = await settleLegalCustomer(settlementReqBody, customerId)
+    const response = await settleLegalCustomer(settlementReqBody, customer._id)
 
-    if (response.status !== 'success') {
+    if (response.status === 'success') {
+      Swal.fire({
+        title: local.settlementSuccess,
+        icon: 'success',
+        confirmButtonText: local.end,
+        confirmButtonColor: colorVariables.green,
+      })
+    } else {
       Swal.fire('error', getErrorMessage(response.error), 'error')
     }
 
@@ -216,7 +222,7 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
 
   return (
     <div className="form__container">
-      <Card className="main-card">
+      <Card className="main-card hide-card-styles">
         <Card.Body>
           <AppForm
             formFields={settlementForm}
@@ -227,7 +233,9 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
             }}
             options={{
               renderPairs: true,
+              wideBtns: true,
             }}
+            onCancel={onSubmit}
           />
         </Card.Body>
       </Card>

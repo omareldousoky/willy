@@ -63,6 +63,9 @@ const FormField: FunctionComponent<FormFieldProps> = ({
           </Form.Control>
         )
 
+      case 'textarea':
+        return <Form.Control {...inputFieldProps} as="textarea" rows={3} />
+
       default:
         return <Form.Control {...inputFieldProps} type={field.type} />
     }

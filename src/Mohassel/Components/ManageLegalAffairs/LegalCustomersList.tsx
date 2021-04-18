@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 
-import { Button, Card, Modal } from 'react-bootstrap'
+import { Card, Modal } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import Swal from 'sweetalert2'
@@ -18,10 +18,8 @@ import local from '../../../Shared/Assets/ar.json'
 import Search from '../../../Shared/Components/Search/search'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from './manageLegalAffairsInitials'
-import { IPrintAction, TableMapperItem } from './types'
+import { TableMapperItem } from './types'
 import { DefaultedCustomer } from './defaultingCustomersList'
-import LegalPrintActionsCell from './LegalPrintActionsCell'
-import LegalSettlementPdfTemp from '../pdfTemplates/LegalSettlement'
 import LegalSettlementForm from './LegalSettlementForm'
 import { getSettlementFees } from '../../Services/APIs/LegalAffairs/defaultingCustomers'
 
@@ -184,6 +182,25 @@ const LegalCustomersList: FunctionComponent = () => {
     },
     {
       title: '',
+      key: 'view',
+      render: (data) =>
+        (data.branchManagerReview ||
+          data.areaManagerReview ||
+          data.areaSupervisorReview ||
+          data.financialManagerReview) && (
+          <img
+            style={{ cursor: 'pointer', marginLeft: 20 }}
+            title={local.logs}
+            src={require('../../Assets/view.svg')}
+            onClick={() => {
+              // this.showLogs(data)
+              console.log('View customer')
+            }}
+          ></img>
+        ),
+    },
+    {
+      title: '',
       key: 'actions',
       render: (data) => (
         <Can I="updateDefaultingCustomer" a="legal">
@@ -286,18 +303,15 @@ const LegalCustomersList: FunctionComponent = () => {
           <Modal.Header>
             <Modal.Title>{local.legalSettlement}</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            <LegalSettlementForm
-              settlementFees={settlementFees}
-              customerId={settlementCustomer._id}
-              onSubmit={hideSettlementModal}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={hideSettlementModal}>
-              {local.cancel}
-            </Button>
-          </Modal.Footer>
+          <div className="px-5 py-4">
+            <Modal.Body className="p-0">
+              <LegalSettlementForm
+                settlementFees={settlementFees}
+                onSubmit={hideSettlementModal}
+                customer={settlementCustomer}
+              />
+            </Modal.Body>
+          </div>
         </Modal>
       )}
     </>
