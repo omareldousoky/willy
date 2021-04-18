@@ -431,10 +431,6 @@ code {
 }
 
 @media print {
-  * {
-    -webkit-print-color-adjust: exact;
-  }
-
   .print-none {
   	display: none !important;
   }
@@ -448,6 +444,7 @@ code {
     display: inline-block;
     background-size: 95px;
     background-position: center;
+    -webkit-print-color-adjust: exact;
   }
 
   // logo inside `th` -> old templates, please use `logo-print` if possible
