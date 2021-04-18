@@ -2,7 +2,7 @@ import React from 'react';
 import './loanContract.scss';
 import * as Barcode from 'react-barcode';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { numbersToArabic, timeToArabicDate, dayToArabic, timeToArabicDateNow } from "../../../../Shared/Services/utils";
+import { numbersToArabic, timeToArabicDate, dayToArabic } from "../../../../Shared/Services/utils";
 import Tafgeet from 'tafgeetjs';
 
 const LoanContract = (props) => {
