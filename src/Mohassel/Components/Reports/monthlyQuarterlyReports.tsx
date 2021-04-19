@@ -48,33 +48,6 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
           local: 'التقرير الربع سنوي',
           inputs: ["quarterYear", "quarterNumber"],
           permission: 'quarterlyReport'
-        },
-        {
-          key: 'loanAge',
-          local: 'اعمار الديون تساهيل',
-          inputs: [],
-          // permission: 'loanAge'
-          permission: 'monthlyReport',
-          needsRequest: true,
-          state: "processing"
-
-        },
-        {
-          key: 'tasaheelRisks',
-          local: 'مخاطر تساهيل',
-          inputs: [],
-          // permission: 'tasaheelRisks'
-          permission: 'monthlyReport',
-          needsRequest: true,
-
-        },
-        {
-          key: 'monthlyAnalysis',
-          local: 'التحليل الشهري تساهيل',
-          inputs: [],
-          // permission: 'monthlyAnalysis'
-          permission: 'monthlyReport',
-          needsRequest: true
         }
       ],
       data: {},
@@ -195,11 +168,9 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
                           <span style={{ marginLeft: 40 }}>#{index + 1}</span>
                           <span style={{ marginLeft: 40 }}>{pdf.local}</span>
                         </div>
-                        {pdf.state && <div style={{ display: 'flex' }}>
-                          <span style={{ marginLeft: 40 }}>{pdf.state }</span>
-                        </div>}
-                      {pdf.needsRequest ? <Button disabled={pdf.state==="processing"}>request</Button> :
-                       <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.handlePrint(pdf)} />}                      </div>
+
+                       <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.handlePrint(pdf)} />
+                       </div>
                     </Card.Body>
                   </Card>
                 </Can>
