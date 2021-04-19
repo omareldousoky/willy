@@ -298,6 +298,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         isInvalid={errors.gracePeriod && touched.gracePeriod}
+                                        disabled
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {errors.gracePeriod}
