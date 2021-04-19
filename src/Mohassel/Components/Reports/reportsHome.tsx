@@ -9,6 +9,8 @@ import IscoreReports from "./iscoreReports";
 import Card from "react-bootstrap/Card";
 import OracleIntegration from "./oracleIntegration";
 import OperationsReports from "./operationsReports";
+import { TasaheelReports } from "./TasaheelReports";
+
 interface State {
     id: string;
     activeTab: string;
@@ -50,7 +52,12 @@ class ReportsHome extends Component<{}, State> {
                 {
                     header: local.monthlyQuarterlyReports,
                     stringKey: 'monthlyQuarterlyReports',
-                }]
+                },
+                {
+                    header: local.tasaheelReports,
+                    stringKey: 'tasaheelReports',
+                }
+            ]
         }
     }
     handleOptionChange = (changeEvent) => {
@@ -72,6 +79,8 @@ class ReportsHome extends Component<{}, State> {
                 return <OperationsReports />;
             case "monthlyQuarterlyReports":
                 return <MonthlyQuarterlyReports/>
+            case "tasaheelReports":
+                return <TasaheelReports/>
             default:
                 return null;
         }
