@@ -15,7 +15,7 @@ export default function CustomerBasicsCard(props: Props) {
       <div className="row-nowrap">
         <span className="basic-info">
           <img alt="user-basic" src={require('../../Assets/usersBasic.svg')} />
-          <Form.Label>{local.basicInfo}</Form.Label>
+          <Form.Label className="ml-2">{local.basicInfo}</Form.Label>
         </span>
       </div>
       <div className="customer-basics-container">

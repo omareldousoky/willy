@@ -205,54 +205,43 @@ class ClearanceProfile extends Component<
     return (
       <>
         <Loader open={this.state.loading} type="fullscreen" />
-        <div style={{ paddingLeft: 30 }}>
+        <div className="px-4 d-flex flex-column">
           {this.state.data.status === 'underReview' && (
-            <>
-              <Loader open={this.state.loading} type="fullscreen" />
-              <div style={{ paddingLeft: 30 }}>
-                {this.state.data.status === 'underReview' && (
-                  <>
-                    <Can I="editClearance" a="application">
-                      <img
-                        style={{ cursor: 'pointer', marginLeft: 20 }}
-                        alt="edit"
-                        src={require('../../Assets/editIcon.svg')}
-                        onClick={() =>
-                          this.props.history.push(
-                            '/clearances/edit-clearance',
-                            {
-                              clearanceId: this.props.location.state
-                                .clearanceId,
-                            }
-                          )
-                        }
-                      />
-                    </Can>
-                    {local.editClearance}
-                  </>
-                )}
-              </div>
-              <Card>
-                <CardNavBar
-                  header="here"
-                  array={this.state.tabsArray}
-                  active={this.state.activeTab}
-                  selectTab={(stringKey: string) => {
-                    this.setState({ activeTab: stringKey })
-                  }}
+            <div>
+              <Can I="editClearance" a="application">
+                <img
+                  style={{ cursor: 'pointer', marginLeft: 20 }}
+                  alt="edit"
+                  src={require('../../Assets/editIcon.svg')}
+                  onClick={() =>
+                    this.props.history.push('/clearances/edit-clearance', {
+                      clearanceId: this.props.location.state.clearanceId,
+                    })
+                  }
                 />
-                <Card.Title>
-                  <CustomerBasicsCard
-                    customerKey={this.state.data.customerKey}
-                    branchName={this.state.data.bankName}
-                    customerName={this.state.data.customerName}
-                  />
-                </Card.Title>
-                <Card.Body>{this.renderContent()}</Card.Body>
-              </Card>
-            </>
+              </Can>
+              {local.editClearance}
+            </div>
           )}
         </div>
+        <Card>
+          <CardNavBar
+            header="here"
+            array={this.state.tabsArray}
+            active={this.state.activeTab}
+            selectTab={(stringKey: string) => {
+              this.setState({ activeTab: stringKey })
+            }}
+          />
+          <Card.Title>
+            <CustomerBasicsCard
+              customerKey={this.state.data.customerKey}
+              branchName={this.state.data.bankName}
+              customerName={this.state.data.customerName}
+            />
+          </Card.Title>
+          <Card.Body>{this.renderContent()}</Card.Body>
+        </Card>
       </>
     )
   }
