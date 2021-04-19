@@ -474,6 +474,7 @@ class Payment extends Component<Props, State>{
     this.props.changePaymentState(0)
   }
   renderPaymentMethods() {
+    console.log(this.props.paymentState, this.props)
     switch (this.props.paymentState) {
       case 0: return (
         <PaymentIcons
@@ -494,6 +495,7 @@ class Payment extends Component<Props, State>{
         truthDate={this.state.truthDate}
         paymentType={this.props.paymentType}
         penaltyAction={this.state.penaltyAction}
+        sme={this.props.application.product.type === 'sme'}
         />
       case 2: return (
         <Card className="payment-menu">
