@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import * as local from '../../../Shared/Assets/ar.json'
-import LtsClosing from './LtsClosing/ltsClosing'
-import HeaderWithCards,{Tab} from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards, { Tab } from '../HeaderWithCards/headerWithCards'
 import { financialClosingArray } from './financialClosingInitials'
+import LtsBlocking from './LtsBlocking/ltsBlocking'
 
 interface State {
   tabsArray: Array<Tab>;
@@ -10,7 +10,7 @@ interface State {
 interface Props {
   withHeader: boolean;
 }
-class FinancialClosing extends Component<Props, State> {
+class FinancialBlocking extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -27,19 +27,19 @@ class FinancialClosing extends Component<Props, State> {
       <>
         {this.props.withHeader && (
           <HeaderWithCards
-            header={local.ltsClosing}
+            header={local.financialBlocking}
             array={this.state.tabsArray}
             active={this.state.tabsArray
               .map((item) => {
                 return item.icon
               })
-              .indexOf('assignProductToBranch')}
+              .indexOf('blocking')}
           />
         )}
-
-        <LtsClosing />
+        <LtsBlocking/>
       </>
     )
   }
 }
-export default FinancialClosing
+
+export default FinancialBlocking
