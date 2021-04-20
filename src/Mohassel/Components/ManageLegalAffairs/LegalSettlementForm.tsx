@@ -178,7 +178,7 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
     // TODO: change field
     {
       name: 'file1',
-      type: 'file',
+      type: 'photo',
       label: `file 1`,
       validation: defaultValidationSchema,
     },

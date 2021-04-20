@@ -5,11 +5,18 @@ import { Schema } from 'yup'
 
 import { getNestedByStringKey } from '../../Services/utils'
 import { FormFieldProps } from './types'
-import DocumentUploader from '../documentUploader/documentUploader'
+import DocumentPhoto from '../documentPhoto/documentPhoto'
 
 const FormField: FunctionComponent<FormFieldProps> = ({
   field,
-  formikProps: { values, handleChange, handleBlur, touched, errors },
+  formikProps: {
+    values,
+    setFieldValue,
+    handleChange,
+    handleBlur,
+    touched,
+    errors,
+  },
 }) => {
   const fieldErrors = getNestedByStringKey(errors, field.name)
   const isToucehd = !!getNestedByStringKey(touched, field.name)
@@ -68,21 +75,14 @@ const FormField: FunctionComponent<FormFieldProps> = ({
         return <Form.Control {...inputFieldProps} as="textarea" rows={3} />
 
       // TODO: change props
-      case 'file':
+      case 'photo':
         return (
-          <DocumentUploader
-            documentType={{
-              pages: 1,
-              type: 'fieldType',
-              paperType: 'A4',
-              name: 'fieldName',
-              updatable: true,
-              active: true,
+          <DocumentPhoto
+            name={inputFieldProps.name}
+            handleImageChange={(imageFile) => {
+              setFieldValue(inputFieldProps.name, imageFile)
             }}
-            keyId="keyId"
-            keyName="applicationId"
-            edit={true}
-            view={true}
+            handleBlur={inputFieldProps.onBlur}
           />
         )
 

@@ -326,7 +326,11 @@ const LegalCustomersList: FunctionComponent = () => {
       )}
 
       {customerToView && (
-        <Modal show={!!customerToView} size="lg">
+        <Modal
+          show={!!customerToView}
+          onHide={() => setCustomerToView(null)}
+          size="lg"
+        >
           <Modal.Header>
             <Modal.Title>{local.logs}</Modal.Title>
           </Modal.Header>

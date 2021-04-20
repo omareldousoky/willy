@@ -8,7 +8,7 @@ export interface IFieldDefaultProps {
 }
 
 export interface IField extends IFieldDefaultProps {
-  type: 'text' | 'date' | 'number' | 'textarea' | 'file'
+  type: 'text' | 'date' | 'number' | 'textarea' | 'photo'
   label: string
   validation: Yup.Schema<any>
 }
