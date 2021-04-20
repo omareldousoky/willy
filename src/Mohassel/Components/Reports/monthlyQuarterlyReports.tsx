@@ -18,8 +18,6 @@ export interface PDF {
   local?: string;
   inputs?: Array<string>;
   permission: string;
-  needsRequest?: boolean;
-  state?: 'processing' | 'succeeded' | 'failed';
 }
 
 interface State {
@@ -168,7 +166,6 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
                           <span style={{ marginLeft: 40 }}>#{index + 1}</span>
                           <span style={{ marginLeft: 40 }}>{pdf.local}</span>
                         </div>
-
                        <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.handlePrint(pdf)} />
                        </div>
                     </Card.Body>
