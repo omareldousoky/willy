@@ -5,6 +5,7 @@ import { Schema } from 'yup'
 
 import { getNestedByStringKey } from '../../Services/utils'
 import { FormFieldProps } from './types'
+import DocumentUploader from '../documentUploader/documentUploader'
 
 const FormField: FunctionComponent<FormFieldProps> = ({
   field,
@@ -65,6 +66,25 @@ const FormField: FunctionComponent<FormFieldProps> = ({
 
       case 'textarea':
         return <Form.Control {...inputFieldProps} as="textarea" rows={3} />
+
+      // TODO: change props
+      case 'file':
+        return (
+          <DocumentUploader
+            documentType={{
+              pages: 1,
+              type: 'fieldType',
+              paperType: 'A4',
+              name: 'fieldName',
+              updatable: true,
+              active: true,
+            }}
+            keyId="keyId"
+            keyName="applicationId"
+            edit={true}
+            view={true}
+          />
+        )
 
       default:
         return <Form.Control {...inputFieldProps} type={field.type} />

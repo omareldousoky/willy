@@ -6,8 +6,9 @@ export interface IFieldDefaultProps {
   type: string
   readOnly?: boolean
 }
+
 export interface IField extends IFieldDefaultProps {
-  type: 'text' | 'date' | 'number' | 'textarea'
+  type: 'text' | 'date' | 'number' | 'textarea' | 'file'
   label: string
   validation: Yup.Schema<any>
 }

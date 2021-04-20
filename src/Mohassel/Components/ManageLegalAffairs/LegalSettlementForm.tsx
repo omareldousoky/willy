@@ -175,6 +175,13 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
         },
       ],
     },
+    // TODO: change field
+    {
+      name: 'file1',
+      type: 'file',
+      label: `file 1`,
+      validation: defaultValidationSchema,
+    },
     {
       name: 'comments',
       type: 'textarea',
