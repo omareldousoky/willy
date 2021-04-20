@@ -1,4 +1,4 @@
-import React, { Component, FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import Card from 'react-bootstrap/Card';
 
 const LaundryReports: FunctionComponent = () => {
