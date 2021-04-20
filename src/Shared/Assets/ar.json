@@ -953,5 +953,17 @@
     "tasaheelReports": "تقارير تساهيل",
     "tasaheelRisks": "مخاطر تساهيل",
     "loanAge": "اعمار الديون تساهيل",
-    "monthlyAnalysis": "التحليل الشهري تساهيل"
+    "monthlyAnalysis": "التحليل الشهري تساهيل",
+    "risksReportTitle":"تقرير محفظة القروض حسب أعمار أرصدة العملاء متضمنا المخاطر فى تاريخ",
+    "clientsCreditsAge":" أعمار أرصدة العملاء",
+    "totalWallet":" إجمالى محفظة العملاء - أصل فقط",
+    "customDebtRequired": " مخصص الديون المطلوب",
+    "numberOfClientsWithPartialPayments":"عدد العملاء الذين لديهم سدادات جزئية",
+    "undeservedCredit": "رصيد العملاء الذى لم يستحق",
+    "lateCredit":"رصيد العملاء المتأخر",
+    "totalCredit":"إجمالى أرصدة العملاء",
+    "undeservedCreditGeneral": "رصيد لم يستحق",
+    "rescheduledCredit": "أرصدة مجدوله",
+    "doubtfulCredit": "أرصدة مجدولة مشكوك فى سدادها",
+    "totalGeneral":"إجمالى"
 }
