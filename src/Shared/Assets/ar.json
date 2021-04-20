@@ -965,5 +965,12 @@
     "undeservedCreditGeneral": "رصيد لم يستحق",
     "rescheduledCredit": "أرصدة مجدوله",
     "doubtfulCredit": "أرصدة مجدولة مشكوك فى سدادها",
-    "totalGeneral":"إجمالى"
+    "totalGeneral":"إجمالى",
+    "debtsAgingTitle": "تقرير اعمار الديون فى",
+    "clientsAgingDebts": "أعمار ديون العملاء",
+    "lateCredits":"رصيد المتأخرات",
+    "totalLoansWallet": "إجمالى محفظة القروض",
+    "latePercentage": "نسبة المتأخرات",
+    "principalOrigin": "اصل",
+    "costs":"مصاريف"
 }
