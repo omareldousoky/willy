@@ -9,7 +9,7 @@ import IscoreReports from "./iscoreReports";
 import Card from "react-bootstrap/Card";
 import OracleIntegration from "./oracleIntegration";
 import OperationsReports from "./operationsReports";
-import { TasaheelReports } from "./TasaheelReports";
+import { TasaheelReports } from "./TasaheelReports/TasaheelReports";
 
 interface State {
     id: string;
