@@ -8,15 +8,13 @@ interface HeaderProps {
 	showCurrentTime?: boolean;
   fromDate?: string;
   toDate?: string;
-	subHeader?: JSX.Element;
 }
 export const Header = ({
 	title,
-	showCurrentUser,
-	showCurrentTime,
+	showCurrentUser = true,
+	showCurrentTime = true,
   fromDate,
   toDate,
-	subHeader,
 }: HeaderProps) => {
   return (
     <>
@@ -38,7 +36,6 @@ export const Header = ({
           {toDate && `إلى : ${timeToArabicDate(new Date(toDate).valueOf(), false)}`}
         </p>
       </div>
-			{subHeader}
 		</>	
   )
 }
