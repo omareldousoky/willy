@@ -14,11 +14,11 @@ const OfficersPercentPaymentHeader = ({
         <>
             <div className="wrapper">
                 <span className="logo-print" role="img" />
-                <p className="m-0 ml-3 text-left text-sm">
+                <p className="m-0 ml-3 text-sm">
                     ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
                 </p>
             </div>
-            <p className="mr-3 text-right">شركة تساهيل للتمويل متناهي الصغر</p>
+            <p className="ml-2 text-left">شركة تساهيل للتمويل متناهي الصغر</p>
             <div
                 style={{
                     display: "flex",
