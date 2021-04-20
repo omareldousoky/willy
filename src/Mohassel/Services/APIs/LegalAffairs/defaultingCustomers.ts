@@ -1,5 +1,5 @@
 import axios from '../axios-instance';
-import { ISettlementReqBody } from '../../../Components/ManageLegalAffairs/LegalSettlementForm';
+import { ISettlementReqBody } from '../../../Components/ManageLegalAffairs/LegalCustomersList/LegalSettlementForm';
 
 export const searchDefaultingCustomers = async (data: object) => {
     const url = process.env.REACT_APP_BASE_URL + '/search/defaulting-customer';

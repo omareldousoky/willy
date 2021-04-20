@@ -5,25 +5,25 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
-import { Loader } from '../../../Shared/Components/Loader'
-import { search, searchFilters } from '../../../Shared/redux/search/actions'
+import { Loader } from '../../../../Shared/Components/Loader'
+import { search, searchFilters } from '../../../../Shared/redux/search/actions'
 import {
   getErrorMessage,
   timeToArabicDate,
-} from '../../../Shared/Services/utils'
-import ability from '../../config/ability'
-import Can from '../../config/Can'
-import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-import local from '../../../Shared/Assets/ar.json'
-import Search from '../../../Shared/Components/Search/search'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
-import { manageLegalAffairsArray } from './manageLegalAffairsInitials'
-import { TableMapperItem } from './types'
-import { DefaultedCustomer } from './defaultingCustomersList'
+} from '../../../../Shared/Services/utils'
+import ability from '../../../config/ability'
+import Can from '../../../config/Can'
+import DynamicTable from '../../../../Shared/Components/DynamicTable/dynamicTable'
+import local from '../../../../Shared/Assets/ar.json'
+import Search from '../../../../Shared/Components/Search/search'
+import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
+import { manageLegalAffairsArray } from '../manageLegalAffairsInitials'
+import { TableMapperItem } from '../types'
+import { DefaultedCustomer } from '../defaultingCustomersList'
 import LegalSettlementForm, {
   ISettlementFormValues,
 } from './LegalSettlementForm'
-import { getSettlementFees } from '../../Services/APIs/LegalAffairs/defaultingCustomers'
+import { getSettlementFees } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 
 interface ISettlementFees {
   penaltyFees: number
@@ -202,7 +202,7 @@ const LegalCustomersList: FunctionComponent = () => {
           <img
             style={{ cursor: 'pointer', marginLeft: 20 }}
             title={local.logs}
-            src={require('../../Assets/view.svg')}
+            src={require('../../../Assets/view.svg')}
             onClick={() => {
               setCustomerToView(data)
             }}
@@ -217,7 +217,7 @@ const LegalCustomersList: FunctionComponent = () => {
           <img
             style={{ cursor: 'pointer' }}
             alt="edit"
-            src={require('../../Assets/editIcon.svg')}
+            src={require('../../../Assets/editIcon.svg')}
             onClick={() => {
               history.push({
                 pathname: '/legal-affairs/customer-actions',

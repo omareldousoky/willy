@@ -1,9 +1,6 @@
 import React, { FunctionComponent } from 'react'
-import { useHistory } from 'react-router-dom'
 
-import ability from '../../config/ability'
 import local from '../../../Shared/Assets/ar.json'
-import Can from '../../config/Can'
 
 const LegalPrintActionsCell: FunctionComponent<{
   actions: any
