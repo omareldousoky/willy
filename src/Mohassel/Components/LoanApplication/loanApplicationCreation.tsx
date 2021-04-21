@@ -174,7 +174,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 branchManagerId: '',
                 managerVisitDate: '',
                 entitledToSignIds: [],
-                entitledToSign: []
+                entitledToSign: [],
+                customerType: '',
             },
             customerType: '',
             loading: false,
@@ -525,6 +526,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const defaultApplication = this.state.application;
         this.getOfficerName(response.representative);
         defaultApplication.customerName = response.customerName;
+        defaultApplication.customerType = response.customerType;
         defaultApplication.nationalId = response.nationalId;
         defaultApplication.birthDate = this.getDateString(response.birthDate);
         defaultApplication.gender = getGenderFromNationalId(response.nationalId);
