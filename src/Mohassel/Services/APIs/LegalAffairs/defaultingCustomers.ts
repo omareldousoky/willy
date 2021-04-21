@@ -1,5 +1,6 @@
 import axios from '../axios-instance';
 import { ISettlementReqBody } from '../../../Components/ManageLegalAffairs/LegalCustomersList/LegalSettlementForm';
+import { ReviewReqBody } from '../../../Components/ManageLegalAffairs/LegalCustomersList';
 
 export const searchDefaultingCustomers = async (data: object) => {
     const url = process.env.REACT_APP_BASE_URL + '/search/defaulting-customer';
@@ -82,6 +83,18 @@ export const getSettlementFees = async (id: string) => {
     
     try {
         const res = await axios.get(url);
+        return { status: "success", body: res.data }
+    }
+    catch (error) {
+        return { status: "error", error: error.response.data }
+    }
+}
+
+export const reviewLegalCustomer = async (reqBody: ReviewReqBody) => {
+    const url = process.env.REACT_APP_BASE_URL + `/legal/review-settlement`;
+    
+    try {
+        const res = await axios.put(url, reqBody);
         return { status: "success", body: res.data }
     }
     catch (error) {

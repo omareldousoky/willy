@@ -57,7 +57,7 @@ export type AppFormProps = {
   onSubmit: (values: any, formikHelpers: FormikHelpers<any>) => void
   onCancel?: () => void
   defaultValues?: any
-  options: {
+  options?: {
     disabled?: boolean
     renderPairs?: boolean
     submitBtnText?: string

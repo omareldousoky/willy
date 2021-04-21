@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useEffect } from 'react'
 
 import { Form, FormControlProps } from 'react-bootstrap'
 import { Schema } from 'yup'
@@ -49,6 +49,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
         return (
           <Form.Check
             {...inputFieldProps}
+            disabled={inputFieldProps.readOnly}
             type="checkbox"
             label={field.checkboxLabel}
           />

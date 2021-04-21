@@ -979,9 +979,17 @@
     "reconciliationType": "نوع التصالح",
     "privateReconciliation": "توكيل تصالح خاص",
     "waiver":"تنازل",
-    "registerSettlement": "تسجيل طلب تصالح",
+    "registerSettlement": "طلب تصالح",
     "legalCaseNumber": "رقم القضية",
     "settlementSuccess": "تم بنجاح تسجيل طلب تصالح",
     "end": "إنهاء",
-    "saveAndContinue": "حفظ و متابعة"
+    "saveAndContinue": "حفظ و متابعة",
+    "registerLegalAction": "طلب شئون قانونية",
+    "roleType": "الدور الوظيفي",
+    "settlementTitle": "أنت على وشك تأكيد مراجعة طلب تصالح",
+    "addNotes": "أضف ملاحظة",
+    "notDone": "لم يتم",
+    "settlementStatus": "حالة التصالح",
+    "error": "خطأ",
+    "reviewSettlement": "مراجعة التصالح"
 }

@@ -1,7 +1,5 @@
 import { FormikProps } from 'formik'
 import { ReactNode } from 'react'
-import * as Yup from 'yup'
-
 
 export interface ICourtSession {
   date: number

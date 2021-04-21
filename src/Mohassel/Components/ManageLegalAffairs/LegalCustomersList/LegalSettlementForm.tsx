@@ -45,14 +45,16 @@ export interface ILegalSettlementFormProps {
     penaltyFees: number
     courtFees: number
   }
-  customer: DefaultedCustomer & ISettlementFormValues
+  customerId: string
+  customerSettlement: ISettlementFormValues | undefined
   onSubmit: () => void
 }
 
 const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
   settlementFees,
   onSubmit,
-  customer,
+  customerId,
+  customerSettlement,
 }) => {
   const settlementForm: IFormField[] = [
     {
@@ -175,7 +177,7 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
         },
       ],
     },
-    // TODO: change field
+    // TODO: change field keys
     {
       name: 'file1',
       type: 'photo',
@@ -191,19 +193,19 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
   ]
 
   const defaultValues = {
-    penaltiesPaid: customer.penaltiesPaid ?? false,
-    courtFeesPaid: customer.courtFeesPaid ?? false,
-    caseNumber: customer.caseNumber ?? '',
-    caseYear: customer.caseYear ?? '',
-    court: customer.court ?? '',
-    courtDetails: customer.courtDetails ?? '',
-    lawyerName: customer.lawyerName ?? '',
-    laywerPhoneNumberOne: customer.laywerPhoneNumberOne ?? '',
-    laywerPhoneNumberTwo: customer.laywerPhoneNumberTwo ?? '',
-    laywerPhoneNumberThree: customer.laywerPhoneNumberThree ?? '',
-    settlementType: customer.settlementType ?? '',
-    settlementStatus: customer.settlementStatus ?? '',
-    comments: customer.comments ?? '',
+    penaltiesPaid: false,
+    courtFeesPaid: false,
+    caseNumber: '',
+    caseYear: '',
+    court: '',
+    courtDetails: '',
+    lawyerName: '',
+    laywerPhoneNumberOne: '',
+    laywerPhoneNumberTwo: '',
+    laywerPhoneNumberThree: '',
+    settlementType: '',
+    settlementStatus: '',
+    comments: '',
   }
 
   const handleSubmit = async (values: ISettlementFormValues) => {
@@ -211,7 +213,7 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
       settlement: values,
     }
 
-    const response = await settleLegalCustomer(settlementReqBody, customer._id)
+    const response = await settleLegalCustomer(settlementReqBody, customerId)
 
     if (response.status === 'success') {
       Swal.fire({
@@ -227,20 +229,28 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
     onSubmit()
   }
 
+  const isReviewed = customerSettlement?.settlementStatus === 'reviewed'
+  
   return (
     <div className="form__container">
       <Card className="main-card hide-card-styles">
         <Card.Body>
           <AppForm
-            formFields={settlementForm}
+            formFields={
+              isReviewed
+                ? settlementForm.map((field) => ({ ...field, readOnly: true }))
+                : settlementForm
+            }
             onSubmit={handleSubmit}
             defaultValues={{
               ...defaultValues,
               ...settlementFees,
+              ...customerSettlement,
             }}
             options={{
               renderPairs: true,
               wideBtns: true,
+              disabled: isReviewed,
             }}
             onCancel={onSubmit}
           />

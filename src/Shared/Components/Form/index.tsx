@@ -18,15 +18,19 @@ const AppForm: FunctionComponent<AppFormProps> = ({
   onSubmit,
   onCancel,
   defaultValues,
-  options: {
+  options = {},
+}) => {
+  const initialValues = createFormFieldsInitValue(formFields, defaultValues)
+  const validationSchema = createValidationSchema(formFields)  
+
+  const {
     disabled = false,
     renderPairs = false,
     submitBtnText = local.submit,
     wideBtns = false,
-  },
-}) => {
-  const initialValues = createFormFieldsInitValue(formFields, defaultValues)
-  const validationSchema = createValidationSchema(formFields)
+  } = options
+
+  console.log({ options })
 
   return (
     <Formik
