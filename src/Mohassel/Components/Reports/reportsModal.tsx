@@ -55,7 +55,6 @@ const ReportsModal = (props: Props) => {
   const getIds = (list: Record<string, string>[]): string[] =>
     list?.length ? list.map((item) => item._id) : [];
   const getCustomerKey = (key?: string): string | undefined => {
-    console.log(key);
     if (!customerDropDownValue || key === undefined) return undefined;
     return customerDropDownValue === "customerKey"
       ? key
