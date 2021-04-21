@@ -4,6 +4,10 @@ export interface LaundryReportRequest {
 	branches: string[];
 }
 
+interface LaundryReportResponse<T> {
+	response: T[];
+}
+
 export interface FalteringPaymentsSingleResponse {
 	branch?: string;
 	groupCode?: string;
@@ -21,6 +25,23 @@ export interface FalteringPaymentsSingleResponse {
 	index?: number;
 }
 
-export interface FalteringPaymentsResponse {
-	response: FalteringPaymentsSingleResponse[];
+export type FalteringPaymentsResponse = LaundryReportResponse<FalteringPaymentsSingleResponse>
+
+export interface EarlyPaymentsSingleResponse {
+	branch?: string;
+	groupCode?: string;
+	groupName?: string;
+	customerCode?: string;
+	customerName?: string;
+	amount?: number;
+	duration?: number;
+	loanDate?: string;
+	cashoutAmount?: number;
+	cashoutDate?: string;
+	cashedoutInstallments?: number;
+	cashingoutCustomerName?: string;
+	index?: number;
 }
+
+export type EarlyPaymentsResponse = LaundryReportResponse<EarlyPaymentsSingleResponse>
+

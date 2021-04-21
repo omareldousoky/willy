@@ -12,9 +12,13 @@ import ReportsModal from './reportsModal';
 import Can from "../../config/Can";
 import { FalteringPayments } from '../pdfTemplates/falteringPayments/falteringPayments';
 import { Button } from 'react-bootstrap';
+import { fetchEarlyPaymentsReport } from '../../Services/APIs/Reports/earlyPayments';
+import { EarlyPayments } from '../pdfTemplates/earlyPayments/earlyPayments';
 
 enum ReportEnum {
   FalteringPayments = "falteringPayments",
+  EarlyPayments = "earlyPayments",
+  EarlyPayments4Months = "earlyPayments4Months",
 }
 
 const laundryPdfs = [
@@ -23,6 +27,16 @@ const laundryPdfs = [
 		local: "تقرير سداد المتعثرين",
 		inputs: ["dateFromTo", "branches"],
 		permission: ReportEnum.FalteringPayments,
+	}, {
+		key: ReportEnum.EarlyPayments,
+		local: "تقرير السداد المعجل",
+		inputs: ["dateFromTo", "branches"],
+		permission: ReportEnum.EarlyPayments,
+	}, {
+		key: ReportEnum.EarlyPayments4Months,
+		local: "تقرير السداد المعجل خلال ٤ شهور",
+		inputs: ["dateFromTo", "branches"],
+		permission: ReportEnum.EarlyPayments4Months,
 	}]
 				
 const LaundryReports: FunctionComponent = () => {
@@ -57,7 +71,7 @@ const LaundryReports: FunctionComponent = () => {
   const handleFetchReport = (res: ApiResponse<any>, report: ReportEnum) => {
     if (res.status === "success") {
       if (!res.body || !Object.keys(res.body).length) {
-				setLoading(true)
+			setLoading(false)
         Swal.fire("error", local.noResults);
       } else {
 				setData(res.body)
@@ -88,8 +102,14 @@ const LaundryReports: FunctionComponent = () => {
 		setToDate(toDate)
     switch (selectedPdf?.key) {
       case ReportEnum.FalteringPayments:
-				const res = await fetchFalteringPaymentsReport(reportRequest(values));
-    		return handleFetchReport(res, ReportEnum.FalteringPayments);
+				const falteringResponse = await fetchFalteringPaymentsReport(reportRequest(values));
+    		return handleFetchReport(falteringResponse, ReportEnum.FalteringPayments);
+			case ReportEnum.EarlyPayments:
+				const earlyResponse = await fetchEarlyPaymentsReport(reportRequest(values));
+    		return handleFetchReport(earlyResponse, ReportEnum.EarlyPayments);
+      case ReportEnum.EarlyPayments4Months:
+				const early4MonthsResponse = await fetchEarlyPaymentsReport(reportRequest(values), true);
+    		return handleFetchReport(early4MonthsResponse, ReportEnum.EarlyPayments4Months);
       default:
         return null;
     }
@@ -151,8 +171,18 @@ const LaundryReports: FunctionComponent = () => {
 			{printReport === ReportEnum.FalteringPayments && data && (
 				<FalteringPayments data={data} fromDate={fromDate} toDate={toDate} />
 			)}
+			{printReport === ReportEnum.EarlyPayments && data && (
+				<EarlyPayments data={data} fromDate={fromDate} toDate={toDate} />
+			)}
+			{printReport === ReportEnum.EarlyPayments4Months && data && (
+				<EarlyPayments data={data} fromDate={fromDate} toDate={toDate} is4Months />
+			)}
 		</>
 	)
 }
 
 export default LaundryReports
+function fetchEarlyPayments4MonthsReport(arg0: LaundryReportRequest) {
+	throw new Error('Function not implemented.');
+}
+
