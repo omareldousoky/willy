@@ -1,6 +1,7 @@
 import axios from '../axios-instance';
-import { ISettlementReqBody } from '../../../Components/ManageLegalAffairs/LegalCustomersList/LegalSettlementForm';
 import { ReviewReqBody } from '../../../Components/ManageLegalAffairs/LegalCustomersList';
+import { ISettlementReqBody } from '../../../Components/ManageLegalAffairs/LegalCustomersList/LegalSettlementForm';
+
 
 export const searchDefaultingCustomers = async (data: object) => {
     const url = process.env.REACT_APP_BASE_URL + '/search/defaulting-customer';
@@ -102,7 +103,7 @@ export const reviewLegalCustomer = async (reqBody: ReviewReqBody) => {
     }
 }
 
-export const uploadDefaultingCustomer = async (reqBody: { data: FormData }) => {
+export const uploadDefaultingCustomer = async (reqBody: FormData) => {
     const url =
       process.env.REACT_APP_BASE_URL +
       '/legal/upload-defaulting-customers-document'

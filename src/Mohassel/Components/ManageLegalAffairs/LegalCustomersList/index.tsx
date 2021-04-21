@@ -35,7 +35,7 @@ import {
 import { IFormField } from '../../../../Shared/Components/Form/types'
 import { defaultValidationSchema } from '../../../../Shared/validations'
 import AppForm from '../../../../Shared/Components/Form'
-import UploadLegalCustomers from './UploadLegalCustomers'
+import UploadLegalCustomers from './UploadCustomersForm'
 
 interface ISettlementFees {
   penaltyFees: number
@@ -605,7 +605,13 @@ const LegalCustomersList: FunctionComponent = () => {
           <Modal.Title>{local.uploadDefaultingCustomers}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <UploadLegalCustomers onCancel={() => setIsUploadModalOpen(false)} />
+          <UploadLegalCustomers
+            onCancel={() => setIsUploadModalOpen(false)}
+            onSubmit={(response) => {
+              setIsUploadModalOpen(false)
+              getLegalCustomers()
+            }}
+          />
         </Modal.Body>
       </Modal>
     </>

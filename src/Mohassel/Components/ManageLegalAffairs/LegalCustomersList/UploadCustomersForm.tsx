@@ -4,40 +4,39 @@ import * as Yup from 'yup'
 
 import AppForm from '../../../../Shared/Components/Form'
 import { FileField, IFormField } from '../../../../Shared/Components/Form/types'
-import { defaultValidationSchema } from '../../../../Shared/validations'
 import local from '../../../../Shared/Assets/ar.json'
 import { uploadDefaultingCustomer } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
+import Swal from 'sweetalert2'
+import { getErrorMessage } from '../../../../Shared/Services/utils'
 
-const UploadLegalCustomers = ({ onCancel }) => {
+const UploadLegalCustomers = ({ onCancel, onSubmit }) => {
   const SUPPORTED_FORMATS = ['xlsx', 'xls', 'xlsm', 'csv']
-  const formFields: IFormField[] = [
+  const formFields: [FileField] = [
     {
       name: 'data',
       label: local.chooseFile,
       type: 'file',
       accepts: SUPPORTED_FORMATS.map((format) => '.' + format).join(','),
-      // validation: Yup.mixed().test(
-      //   'fileFormat',
-      //   'Unsupported Format',
-      //   (value) => {
-      //     console.log(value.type)
-      //     return value && SUPPORTED_FORMATS.includes(value.type)
-      //   }
-      // ),
+      validation: Yup.mixed().required(local.required),
     },
   ]
 
   const handleSubmit = async (values: { data }) => {
-    console.log(typeof values.data)
-    
     const formData = new FormData()
-    formData.append('data', values.data)
-    
-    console.log({ formData, values })
+    formData.append('data', values.data[0])
 
-    const response = await uploadDefaultingCustomer({data: formData})
-    console.log({response});
-    
+    const response = await uploadDefaultingCustomer(formData)
+
+    if (response.status === 'success') {
+      Swal.fire({
+        title: local.success,
+        icon: 'success',
+        confirmButtonText: local.end,
+      })
+      onSubmit(response)
+    } else {
+      Swal.fire(local.error, getErrorMessage(response.error.error), 'error')
+    }
   }
 
   return (

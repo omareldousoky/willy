@@ -30,8 +30,6 @@ const AppForm: FunctionComponent<AppFormProps> = ({
     wideBtns = false,
   } = options
 
-  console.log({ options })
-
   return (
     <Formik
       initialValues={initialValues}
@@ -42,10 +40,6 @@ const AppForm: FunctionComponent<AppFormProps> = ({
       {(formikProps: FormikProps<any>) => {
         const { handleSubmit: formikHandleSubmit, errors, dirty } = formikProps
         const isValid = !Object.keys(errors).length
-
-        {
-          console.log({ disabled, dirty, errors })
-        }
 
         return (
           <Form onSubmit={formikHandleSubmit}>

@@ -993,5 +993,6 @@
     "error": "خطأ",
     "reviewSettlement": "مراجعة التصالح",
     "uploadDefaultingCustomers": "رفع قائمة المتأخرين",
-    "chooseFile": "إختر ملف"
+    "chooseFile": "إختر ملف",
+    "success": "تم بنجاح"
 }

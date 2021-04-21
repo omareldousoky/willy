@@ -38,6 +38,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
     name: field.name,
     value: fieldValue,
     readOnly: field.readOnly ?? false,
+    disabled: field.disabled ?? field.readOnly ?? false,
     'data-qc': field.name,
     isInvalid: !!fieldErrors && isToucehd,
     onChange: handleChange,
@@ -90,17 +91,12 @@ const FormField: FunctionComponent<FormFieldProps> = ({
       case 'file':
         return (
           <Form.File
-            {...inputFieldProps}
+            name={inputFieldProps.name}
             type="file"
             accept={field.accepts}
-            multiple={false}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              console.log({ files: e.target.files })
-
-              if (e.target.files) {
-                setFieldValue(inputFieldProps.name, e.target.files[0])
-              }
-            }}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setFieldValue(inputFieldProps.name, e.target.files)
+            }
           />
         )
 

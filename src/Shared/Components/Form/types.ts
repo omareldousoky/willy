@@ -5,6 +5,7 @@ export interface IFieldDefaultProps {
   name: string
   type: string
   readOnly?: boolean
+  disabled?: boolean
 }
 
 export interface IField extends IFieldDefaultProps {
@@ -38,11 +39,11 @@ export interface ISelectField extends IFieldDefaultProps {
 export interface FileField extends IFieldDefaultProps {
   type: 'file'
   accepts: string
-  // validation: Yup.Schema<any>
+  validation: Yup.Schema<any>
   label: string
 }
 
-export type IFormField = ISelectField | IField | ICheckboxField | FileField
+export type IFormField = IField | ISelectField | ICheckboxField | FileField
 
 export type GroupFieldProps = {
   field: IGroupField
