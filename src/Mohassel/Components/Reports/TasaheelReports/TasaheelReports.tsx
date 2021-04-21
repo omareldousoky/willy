@@ -14,7 +14,8 @@ import { Button, Card } from "react-bootstrap";
 import HeaderWithCards from "../../HeaderWithCards/headerWithCards";
 import { Loader } from "../../../../Shared/Components/Loader";
 import ReportsModal from "../reportsModal";
-import { RisksReport } from "./RisksReports";
+import { RisksReport } from "./RisksReport";
+import { DebtsAgingReport} from "./DebtsAgingReport";
 
 import {
   getAllLoanAge,
@@ -40,7 +41,7 @@ export const TasaheelReports = () => {
       getAll: getAllLoanAge,
       requestReport: generateLoanAgeReport,
       getReportDetails: getLoanAgeReport,
-      printComponent: "",
+      printComponent: DebtsAgingReport,
     },
   };
   const [tabs, setTabs] = useState<any[]>([]);
@@ -171,10 +172,6 @@ export const TasaheelReports = () => {
             {tabs.length > 0 && (
               <div className="d-flex justify-content-between">
                 <Card.Title>{tabs[activeTabIndex()].header}</Card.Title>
-                {/* {ability.can(
-                  tabs[activeTabIndex()]?.permission || "",
-                  tabs[activeTabIndex()]?.permissionKey
-                ) && ( */}
                 <Can
                   I={tabs[activeTabIndex()].permission || ""}
                   a={tabs[activeTabIndex()].permissionKey}
@@ -187,7 +184,6 @@ export const TasaheelReports = () => {
                     {local.requestNewreport}
                   </Button>
                 </Can>
-                {/* )} */}
               </div>
             )}
             {reports?.length > 0 ? (
