@@ -481,7 +481,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             [key]: query,
             from: 0,
             size: 1000,
-            excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds],
+            excludedIds: [this.state.application.customerID, ...this.state.application.entitledToSignIds],
             customerType: 'individual'
         }
         this.setState({ loading: true });
@@ -593,7 +593,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             let errorMessage1 = "";
             let errorMessage2 = "";
             if (selectedGuarantor.body.blocked.isBlocked === true) {
-                errorMessage1 = local.theCustomerIsBlocked;
+                errorMessage1 = selectedGuarantor.body.customerType === 'company'
+                ? local.theCompanyIsBlocked
+                : local.theCustomerIsBlocked;
             }
             const check = await this.checkCustomersLimits([selectedGuarantor.body], true);
             if (check.flag === true && check.customers && selectedGuarantor.body.blocked.isBlocked !== true) {
@@ -618,6 +620,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true })
         const selectedGuarantor = await getCustomerByID(obj._id)
         if (selectedGuarantor.status === 'success') {
+          if (selectedGuarantor.body.blocked.isBlocked !== true) {
             const defaultApplication = { ...values }
             const defaultentitledToSign = { ...defaultApplication.entitledToSign };
             const defaultCustomer = { ...defaultentitledToSign[index] };
@@ -625,6 +628,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             defaultApplication.entitledToSignIds.push(obj._id)
             defaultApplication.entitledToSign[index] = defaultCustomer;
             this.setState({ application: defaultApplication, loading: false });
+          } else {
+            Swal.fire('error', local.theCustomerIsBlocked, 'error')
+          }
         } else {
             Swal.fire('Error !', getErrorMessage(selectedGuarantor.error.error), 'error');
         }
@@ -1255,13 +1261,22 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         </div>
                         <div className="d-flex flex-column" style={{ margin: '20px 60px' }}>
                             <img style={{ width: 75, margin: '40px 20px' }} src={require('../../Assets/group.svg')} />
-                            <Button onClick={() => this.setCustomerType('sme')}>sme</Button>
+                            <Button onClick={() => this.setCustomerType('sme')}>{local.company}</Button>
                         </div>
                     </div> :
                         <div style={{ display: "flex", flexDirection: "row" }} >
                             <Wizard
                                 currentStepNumber={this.state.step - 1}
-                                stepsDescription={(this.state.customerType !== 'group') ? [local.customersDetails, local.loanInfo, local.guarantorInfo] : [local.customersDetails, local.loanInfo]}
+                                stepsDescription={this.state.customerType === 'individual'
+                                  ? [
+                                      local.customersDetails,
+                                      local.loanInfo,
+                                      local.guarantorInfo,
+                                    ]
+                                  : this.state.customerType === 'sme'
+                                  ? [local.viewCompany, local.loanInfo, local.guarantorInfo]
+                                  : [local.customersDetails, local.loanInfo]
+                                }
                             />
                             {this.renderSteps()}
                         </div>

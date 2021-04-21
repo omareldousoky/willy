@@ -194,6 +194,9 @@ export const GuarantorTableView = (props: Props) => {
                         {props.application.customer?.customerType === 'company' && <Button variant='primary' style={{ marginRight: 10 }} onClick={() => {changeModal(true); addGuarantorCompany(true)}}>{local.addCompanyAsGuarantor}</Button>}
                     </div>
                 }
+                {props.application.customer.customerType === 'company' && (
+                  <h3>{local.individuals}</h3>
+                )}
                 {(individualGuarantors.length > 0) ? <Table style={{ textAlign: 'right' }}>
                     <thead>
                         <tr>

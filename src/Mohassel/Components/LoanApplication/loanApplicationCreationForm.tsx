@@ -37,8 +37,11 @@ export const LoanApplicationCreationForm = (props: any) => {
     const getResearcherOptions = async (inputValue: string) => {
         const res = await searchResearcher({ from: 0, size: 100, name: inputValue, branchId: branchId });
         if (res.status === "success") {
-            setResearcherOptions(res.body.data);
-            return res.body.data;
+          const activeResearchers = res.body.data.filter(
+            (researcher) => researcher.status === 'active'
+          )
+          setResearcherOptions(activeResearchers)
+          return activeResearchers
         } else {
             setOptions([]);
             Swal.fire("error", getErrorMessage(res.error.error),"error");

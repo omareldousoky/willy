@@ -975,5 +975,10 @@
     "addCompanyAsGuarantor": "إضافة شركة كضامن",
     "noCompanyGuarantor":"لا يوجد شركة كضامن",
     "bankPayment": "دفع بنكي",
-    "bankBranch": "فرع البنك"
+    "bankBranch": "فرع البنك",
+    "atLeastOneEntiitledToSign": "يجب إدخال على الاقل عميل له حق التوقيع",
+    "individuals": "الافراد",
+    "theCompanyIsBlocked": "هذه الشركة موقوف التعامل معها",
+    "blockCompany": "حظر الشركة",
+    "unblockCompany": "فك حظر الشركة"
 }

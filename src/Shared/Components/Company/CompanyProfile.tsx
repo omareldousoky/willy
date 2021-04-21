@@ -169,8 +169,8 @@ export const Company = () => {
       {
         icon: "deactivate-user",
         title: company?.blocked?.isBlocked
-          ? local.unblockCustomer
-          : local.blockCustomer,
+          ? local.unblockCompany
+          : local.blockCompany,
         permission: ability.can('blockAndUnblockCustomer', 'customer'),
         onActionClick: () =>
           handleActivationClick({

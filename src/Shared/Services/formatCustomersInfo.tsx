@@ -118,7 +118,7 @@ export const getCompanyInfo = ({
       },
       {
         fieldTitle: companyCode,
-        fieldData: company.code || "",
+        fieldData: company.key || "",
         showFieldCondition: true,
       },
       {

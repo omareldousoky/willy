@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { getDocumentsTypes } from '../../Services/APIs/encodingFiles/getDocumentsTypes';
 import Swal from 'sweetalert2';
-import * as local from '../../../Shared/Assets/ar.json';
+import local from '../../../Shared/Assets/ar.json';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
@@ -95,6 +95,20 @@ class EncodingFiles extends Component<Props, State> {
                                             <Col style={{ minWidth: "20%" }}>
                                                 <div style={{ fontSize: "12px", color: "#6e6e6e" }}>{local.documentFor}</div>
                                                 <div style={{ fontSize: "12px", color: "#2f2f2f", fontWeight: "bold" }}>{documentTypeLocalization(documentType.type)} </div>
+                                            </Col>
+                                            <Col style={{ minWidth: '20%' }}>
+                                              <div style={{ fontSize: '12px', color: '#6e6e6e' }}>
+                                                {local.documentForCustomerOfType}
+                                              </div>
+                                              <div
+                                                style={{
+                                                  fontSize: '12px',
+                                                  color: '#2f2f2f',
+                                                  fontWeight: 'bold',
+                                                }}
+                                              >
+                                                {local[documentType.customerType]}{' '}
+                                              </div>
                                             </Col>
                                             <Can I='documentTypes' a='config'><Col>
                                                 <span
