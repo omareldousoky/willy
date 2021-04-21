@@ -182,7 +182,3 @@ const LaundryReports: FunctionComponent = () => {
 }
 
 export default LaundryReports
-function fetchEarlyPayments4MonthsReport(arg0: LaundryReportRequest) {
-	throw new Error('Function not implemented.');
-}
-
