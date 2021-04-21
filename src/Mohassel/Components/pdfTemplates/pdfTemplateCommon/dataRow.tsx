@@ -43,7 +43,7 @@ const DataRow = ({
       {isDate && (
         <td className={className || ''} {...meta}>
           {value
-            ? timeToArabicDate(Number(value) || 0, false)
+            ? timeToArabicDate(Number(new Date (value).valueOf()) || 0, false)
             : stringPlaceholder}
         </td>
       )}

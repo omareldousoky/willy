@@ -33,7 +33,7 @@ export const Header = ({
         <p className="m-auto" style={{ fontSize: '16px' }}>
           {title} {fromDate && `من : `}
           {fromDate && `${timeToArabicDate(new Date(fromDate).valueOf(), false)}`}
-          {toDate && `إلى : ${timeToArabicDate(new Date(toDate).valueOf(), false)}`}
+          {toDate && ` إلى : ${timeToArabicDate(new Date(toDate).valueOf(), false)}`}
         </p>
       </div>
 		</>	
