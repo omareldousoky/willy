@@ -972,5 +972,6 @@
     "totalLoansWallet": "إجمالى محفظة القروض",
     "latePercentage": "نسبة المتأخرات",
     "principalOrigin": "اصل",
-    "costs":"مصاريف"
+    "costs":"مصاريف",
+    "currentCredit": "الرصيد الحالى"
 }
