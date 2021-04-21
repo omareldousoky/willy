@@ -67,7 +67,6 @@ interface Props {
   truthDate: string;
   paymentType: string;
   penaltyAction: string;
-  sme?: boolean;
 }
 interface SelectObject {
   label: string;
@@ -153,7 +152,6 @@ class PayInstallment extends Component<Props, State> {
   }
 
   render() {
-    console.log(this.props.sme)
     return (
       <Card className="payment-menu">
         <div className="payment-info" style={{ textAlign: "center" }}>

@@ -973,5 +973,7 @@
     "documentForCustomerOfType": "مستند خاص بعميل من نوع",
     "businessActivityDetails": "تفاصيل النشاط",
     "addCompanyAsGuarantor": "إضافة شركة كضامن",
-    "noCompanyGuarantor":"لا يوجد شركة كضامن"
+    "noCompanyGuarantor":"لا يوجد شركة كضامن",
+    "bankPayment": "دفع بنكي",
+    "bankBranch": "فرع البنك"
 }
