@@ -702,7 +702,7 @@ export const iscoreBank = (bankId: string) => {
   }
 };
 
-export const createValidationSchema = (formFields: IFormField[]) => {
+export const createValidationSchema = (formFields: (IFormField | IGroupField)[]) => {
   const validationFields = formFields.reduce((acc, formField) => {
     if (isGroupField(formField)) {
       const groupFormField = {
@@ -733,10 +733,10 @@ export const arrayToPairs = <T extends unknown>(array: any[]): T[][] =>
 export const getNestedByStringKey = (obj: {}, key: string) =>
   key.split('.').reduce((p, c) => (p && p[c]) || undefined, obj)
 
- export const isGroupField = (formField: IFormField) => formField?.type === 'group'
+ export const isGroupField = (formField: IFormField | IGroupField) => formField?.type === 'group'
  
  export const createFormFieldsInitValue = (
-   formFields: IFormField[],
+   formFields: (IFormField | IGroupField)[],
    defaultValues: any
  ) => {
    return formFields.reduce((acc, formField) => {

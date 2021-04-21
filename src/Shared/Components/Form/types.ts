@@ -19,6 +19,7 @@ export interface ICheckboxField extends IFieldDefaultProps {
   checkboxLabel: string
   validation: Yup.Schema<any>
 }
+
 export interface IGroupField extends IFieldDefaultProps {
   type: 'group'
   fields: IFormField[]
@@ -34,7 +35,14 @@ export interface ISelectField extends IFieldDefaultProps {
   }[]
 }
 
-export type IFormField = IGroupField | ISelectField | IField | ICheckboxField
+export interface FileField extends IFieldDefaultProps {
+  type: 'file'
+  accepts: string
+  // validation: Yup.Schema<any>
+  label: string
+}
+
+export type IFormField = ISelectField | IField | ICheckboxField | FileField
 
 export type GroupFieldProps = {
   field: IGroupField
@@ -43,7 +51,7 @@ export type GroupFieldProps = {
 }
 
 export type FormFieldProps = {
-  field: IField | ISelectField | ICheckboxField
+  field: IFormField
   formikProps: FormikProps<any>
 }
 

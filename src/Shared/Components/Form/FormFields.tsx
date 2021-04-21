@@ -39,14 +39,17 @@ export const FormFieldPairs: FunctionComponent<FormFieldsProps> = ({
   formFields,
   formikProps,
 }) => {
-  const formFieldPairs = arrayToPairs<IFormField>(formFields)
+  const formFieldPairs = arrayToPairs<IFormField | IGroupField>(formFields)
 
   return (
     <>
-      {formFieldPairs.map((fieldPairs: IFormField[]) => {
+      {formFieldPairs.map((fieldPairs) => {
         const isPair = !!fieldPairs[1]
 
-        const renderPairsField = (field: IFormField, index: number) =>
+        const renderPairsField = (
+          field: IFormField | IGroupField,
+          index: number
+        ) =>
           isGroupField(field) ? (
             <Col>
               <GroupField
@@ -80,7 +83,7 @@ const FormFields: FunctionComponent<FormFieldsProps> = ({
 }) => {
   return (
     <>
-      {formFields.map((field: IFormField) => {
+      {formFields.map((field: IFormField | IGroupField) => {
         if (isGroupField(field)) {
           return (
             <GroupField

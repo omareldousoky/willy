@@ -21,7 +21,7 @@ const AppForm: FunctionComponent<AppFormProps> = ({
   options = {},
 }) => {
   const initialValues = createFormFieldsInitValue(formFields, defaultValues)
-  const validationSchema = createValidationSchema(formFields)  
+  const validationSchema = createValidationSchema(formFields)
 
   const {
     disabled = false,
@@ -42,6 +42,10 @@ const AppForm: FunctionComponent<AppFormProps> = ({
       {(formikProps: FormikProps<any>) => {
         const { handleSubmit: formikHandleSubmit, errors, dirty } = formikProps
         const isValid = !Object.keys(errors).length
+
+        {
+          console.log({ disabled, dirty, errors })
+        }
 
         return (
           <Form onSubmit={formikHandleSubmit}>

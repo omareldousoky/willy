@@ -10,7 +10,6 @@ import { getErrorMessage } from '../../../../Shared/Services/utils'
 import { defaultValidationSchema } from '../../../../Shared/validations'
 import { settleLegalCustomer } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import colorVariables from '../../../../Shared/Assets/scss/app.scss'
-import { DefaultedCustomer } from '../defaultingCustomersList'
 
 export type SettlementStatus =
   | 'privateReconciliation'

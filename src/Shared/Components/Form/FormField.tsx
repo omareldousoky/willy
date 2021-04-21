@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from 'react'
+import React, { ChangeEvent, FunctionComponent } from 'react'
 
 import { Form, FormControlProps } from 'react-bootstrap'
 import { Schema } from 'yup'
@@ -27,6 +27,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
   ) as FormControlProps['value']
 
   const isRequired = (validationSchema: Schema<any>) =>
+    !!validationSchema &&
     !!validationSchema
       .describe()
       .tests.find((test: any) => test.name === 'required')
@@ -75,7 +76,6 @@ const FormField: FunctionComponent<FormFieldProps> = ({
       case 'textarea':
         return <Form.Control {...inputFieldProps} as="textarea" rows={3} />
 
-      // TODO: change props
       case 'photo':
         return (
           <DocumentPhoto
@@ -84,6 +84,23 @@ const FormField: FunctionComponent<FormFieldProps> = ({
               setFieldValue(inputFieldProps.name, imageFile)
             }}
             handleBlur={inputFieldProps.onBlur}
+          />
+        )
+
+      case 'file':
+        return (
+          <Form.File
+            {...inputFieldProps}
+            type="file"
+            accept={field.accepts}
+            multiple={false}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              console.log({ files: e.target.files })
+
+              if (e.target.files) {
+                setFieldValue(inputFieldProps.name, e.target.files[0])
+              }
+            }}
           />
         )
 

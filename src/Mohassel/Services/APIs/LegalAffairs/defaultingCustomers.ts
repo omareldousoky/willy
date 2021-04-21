@@ -101,3 +101,17 @@ export const reviewLegalCustomer = async (reqBody: ReviewReqBody) => {
         return { status: "error", error: error.response.data }
     }
 }
+
+export const uploadDefaultingCustomer = async (reqBody: { data: FormData }) => {
+    const url =
+      process.env.REACT_APP_BASE_URL +
+      '/legal/upload-defaulting-customers-document'
+  
+    try {
+      const res = await axios.post(url, reqBody)
+      return { status: 'success', body: res.data }
+    } catch (error) {
+      return { status: 'error', error: error.response.data }
+    }
+  }
+  

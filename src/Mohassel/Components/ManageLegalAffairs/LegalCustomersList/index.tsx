@@ -5,7 +5,7 @@ import React, {
   ChangeEvent,
 } from 'react'
 
-import { Button, Card, FormCheck, Modal, Table } from 'react-bootstrap'
+import { Button, Card, Form, FormCheck, Modal, Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import Swal from 'sweetalert2'
@@ -35,6 +35,7 @@ import {
 import { IFormField } from '../../../../Shared/Components/Form/types'
 import { defaultValidationSchema } from '../../../../Shared/validations'
 import AppForm from '../../../../Shared/Components/Form'
+import UploadLegalCustomers from './UploadLegalCustomers'
 
 interface ISettlementFees {
   penaltyFees: number
@@ -109,7 +110,9 @@ const LegalCustomersList: FunctionComponent = () => {
   const [settlementFees, setSettlementFees] = useState<ISettlementFees | null>(
     null
   )
+
   const [isSettlementLoading, setIsSettlementLoading] = useState(false)
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
 
   const data = useSelector((state: any) => state.search.data) || []
   const error = useSelector((state: any) => state.search.error)
@@ -253,10 +256,8 @@ const LegalCustomersList: FunctionComponent = () => {
       ids: [customerIdForReview],
       ...values,
     }
-    console.log({ reviewReqBody })
 
     const response = await reviewLegalCustomer(reviewReqBody)
-    console.log({ response })
 
     if (response.status === 'success') {
       Swal.fire({
@@ -457,6 +458,15 @@ const LegalCustomersList: FunctionComponent = () => {
                   {local.noOfUsers + ` (${totalCount || 0})`}
                 </span>
               </div>
+
+              <div>
+                <Button
+                  className="big-button ml-2"
+                  onClick={() => setIsUploadModalOpen(true)}
+                >
+                  {local.uploadDefaultingCustomers}
+                </Button>
+              </div>
             </div>
             <hr className="dashed-line" />
             <Search
@@ -585,6 +595,19 @@ const LegalCustomersList: FunctionComponent = () => {
           </Modal.Body>
         </Modal>
       )}
+
+      <Modal
+        show={isUploadModalOpen}
+        onHide={() => setIsUploadModalOpen(false)}
+        size="lg"
+      >
+        <Modal.Header>
+          <Modal.Title>{local.uploadDefaultingCustomers}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <UploadLegalCustomers onCancel={() => setIsUploadModalOpen(false)} />
+        </Modal.Body>
+      </Modal>
     </>
   )
 }
