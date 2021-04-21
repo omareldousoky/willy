@@ -323,8 +323,8 @@ export const AsyncManagersDropDown = ({
     if (res.status === "success") {
       const data = res.body?.response;
       if (Array.isArray(data) && data.length)
-        res.body?.response.map(({id, name}) => 
-            newOptions.push({ id, name })
+        res.body?.response.map(({id, name, branches}) => 
+            newOptions.push({ id, name, branches })
           )
 			setOptions({
 				options: newOptions,

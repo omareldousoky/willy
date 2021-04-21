@@ -1,7 +1,7 @@
 export interface OfficersProductivityRequest {
   startDate: number;
   endDate: number;
-	users: string[];
+  branches: string[];
   gracePeriod?: number;
 }
 
@@ -44,11 +44,14 @@ export interface OfficersProductivityResponse
 	extends CommonOfficersProductivity {
 	response: OfficersProductivityOperationManager[];
 	_id?: string;
+	startDate: number;
+	endDate: number;
 }
 
 export interface CurrentHierarchiesSingleResponse {
 	id: string;
 	name?: string;
+	branches?: Array<string>;
 }
 
 export interface CurrentHierarchiesResponse {

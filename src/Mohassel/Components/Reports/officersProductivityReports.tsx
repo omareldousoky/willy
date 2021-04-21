@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import Can from '../../config/Can';
 import { fetchOfficersProductivityReport, getOfficersProductivityReportById, getOfficersProductivityReports } from '../../Services/APIs/Reports/officersProductivity';
 import ReportsModal from './reportsModal';
-import { OfficersProductivityRequest, OfficersProductivityResponse } from '../../Models/OfficersProductivityReport';
+import { CurrentHierarchiesSingleResponse, OfficersProductivityRequest, OfficersProductivityResponse } from '../../Models/OfficersProductivityReport';
 import OfficersProductivity from '../pdfTemplates/officersPercentPayment/officersProductivity/officersProductivity';
 
 interface State {
@@ -56,7 +56,7 @@ class OfficersProductivityReports extends Component<{}, State>{
                 59,
                 999
               ),
-            users: values.managers,
+            branches: [].concat(...values.managers.map((manager: CurrentHierarchiesSingleResponse) => manager.branches)),
             gracePeriod: values.gracePeriod,
         }
         this.setState({ loading: true })
@@ -116,7 +116,7 @@ class OfficersProductivityReports extends Component<{}, State>{
                     </Card.Body>
                 </Card>
                 {this.state.showModal && <ReportsModal pdf={{ key: 'officersProductivity', local: 'نسبة سداد المندوبين', inputs: ['dateFromTo', 'managers', 'gracePeriod'], permission: 'officersProductivityReport' }} show={this.state.showModal} hideModal={() => this.setState({ showModal: false })} submit={(values) => this.handleSubmit(values)} />}   
-                {this.state.dataToPrint && <OfficersProductivity fromDate={"2021-03-11"} toDate={"2021-04-14"} data={this.state.dataToPrint} />}
+                {this.state.dataToPrint && <OfficersProductivity data={this.state.dataToPrint} />}
             </>
         )
     }

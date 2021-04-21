@@ -8,19 +8,17 @@ import OfficersPercentPaymentFooter from '../officersPercentPaymentFooter'
 import ManagerTotalRow from './managerTotalRow'
 
 interface OfficersProductivityProps {
-  fromDate: string;
-  toDate: string;
   data: OfficersProductivityResponse;
 }
 
 const OfficersProductivity = (props: OfficersProductivityProps) => {
-  const { fromDate, toDate, data } = props
-  const { response } = data
+  const { data } = props
+  const { response, endDate, startDate } = data
   return (
 		<>
 			<Orientation size="portrait" />
 			<div className="officers-payment officers-productivity" lang="ar">
-				<OfficersPercentPaymentHeader toDate={toDate} fromDate={fromDate} />
+				<OfficersPercentPaymentHeader toDate={endDate} fromDate={startDate} />
 				<table className="body">
 					<thead>
 						<tr>

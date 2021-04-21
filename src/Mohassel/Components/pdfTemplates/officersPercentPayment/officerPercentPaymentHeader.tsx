@@ -4,8 +4,8 @@ import { timeToArabicDate } from "../../../../Shared/Services/utils";
 import "./officersPercentPayment.scss";
 
 interface OfficersPercentPaymentHeaderProps {
-    fromDate: string;
-    toDate: string;
+    fromDate: string | number;
+    toDate: string | number;
 }
 const OfficersPercentPaymentHeader = ({
     fromDate,

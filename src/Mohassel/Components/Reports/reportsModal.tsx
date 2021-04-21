@@ -70,7 +70,7 @@ const ReportsModal = (props: Props) => {
       loanOfficerIds: getIds(values.representatives),
       geoAreas: getIds(values.geoAreas),
       key: getCustomerKey(values.customerKeyword),
-      managers: getIds(values.managers),
+      managers: values.managers,
     });
   }
   function getInitialValues() {
