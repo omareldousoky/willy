@@ -75,7 +75,7 @@ class TerrorismList extends Component<Props, State> {
 			{
 				title: local.nationalId,
 				key: "nationalId",
-				render: data => <p className="small-text">{data.nationalId}</p>
+				render: data => <p className="small-text" dir="ltr">{data.nationalId}</p>
 			},
 			{
 				title: local.birthDate,

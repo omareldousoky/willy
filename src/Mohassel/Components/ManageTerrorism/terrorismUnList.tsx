@@ -83,7 +83,7 @@ class TerrorismUnList extends Component<Props, State> {
         title: local.nationalId,
         key: 'nationalId',
         render: (data) =>
-          <p className="small-text">
+          <p className="small-text" dir="ltr">
             {data.nationalId !== 'na' ? data.nationalId : local.na}
           </p>
       },

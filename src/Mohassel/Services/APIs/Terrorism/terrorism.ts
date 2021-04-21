@@ -61,3 +61,13 @@ export const uploadTerroristUnDocument = async (data: FormData) => {
         return { status: "error", error: error.response.data }
     }
 }
+export const downloadSuspectsReport = async() =>{
+    const url =  `${REACT_APP_BASE_URL}/report/suspected-customers`;
+    try{
+        const res = await axios.get(url);
+        return { status: "success", body: res.data }
+    }
+    catch (error) {
+        return { status: "error", error: error.response.data }
+    }
+}

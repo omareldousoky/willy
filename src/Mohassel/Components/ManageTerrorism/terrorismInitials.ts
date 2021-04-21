@@ -26,5 +26,8 @@ export const fullEnglishDate = (timeStamp: number) => {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    hour12: false,
+    minute: 'numeric',
+    second: 'numeric'
   }).replace(/,/g, '')
 }
