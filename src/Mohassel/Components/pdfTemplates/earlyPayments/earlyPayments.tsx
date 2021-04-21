@@ -49,7 +49,7 @@ export const EarlyPayments = ({ data, toDate, fromDate, is4Months }: EarlyPaymen
 							<th rowSpan={2}>المدة</th>
 							<th rowSpan={2}>تاريخ القرض</th>
 							<th rowSpan={2}>نشاط العميل</th>
-							<th rowSpan={2}>تاريخ التكييش</th>
+							<th rowSpan={2}>قيمة التكييش</th>
 							<th rowSpan={2}>تاريخ التكييش</th>
 							<th rowSpan={2}>
 								عدد أقساط التي
@@ -62,22 +62,22 @@ export const EarlyPayments = ({ data, toDate, fromDate, is4Months }: EarlyPaymen
 					{response.length &&
 						response.map((row: EarlyPaymentsSingleResponse) => {
 							return (
-									<tr key={row.index ?? Math.random().toString(36).substr(7)}>
-										<DataRow value={row.index} type="number" />
-										<DataRow value={row.branch} type="string" />
-										<DataRow value={row.groupCode} type="number" placeholderType="string" />
-										<DataRow value={row.groupName} type="string" />
-										<DataRow value={row.customerCode} type="number" placeholderType="string" />
-										<DataRow value={row.customerName} type="string" />
-										<DataRow value={row.amount} type="money" />
-										<DataRow value={row.duration} type="number" placeholderType="string" />
-										<DataRow value={row.loanDate} type="date" />
-										<DataRow value={row.cashoutAmount} type="string" />
-										<DataRow value={row.cashoutDate} type="date" />
-										<DataRow value={row.cashoutDate} type="date" />
-										<DataRow value={row.cashedoutInstallments} type="number" />
-										<DataRow value={row.cashingoutCustomerName} type="string" />
-									</tr>
+								<tr key={row.index ?? Math.random().toString(36).substr(7)}>
+									<DataRow value={row.index} type="number" />
+									<DataRow value={row.branch} type="string" />
+									<DataRow value={row.groupCode} type="number" placeholderType="string" />
+									<DataRow value={row.groupName} type="string" />
+									<DataRow value={row.customerCode} type="number" placeholderType="string" />
+									<DataRow value={row.customerName} type="string" />
+									<DataRow value={row.amount} type="money" />
+									<DataRow value={row.duration} type="number" placeholderType="string" />
+									<DataRow value={row.loanDate} type="date" />
+									<DataRow value={row.customerActivity} type="string" />
+									<DataRow value={row.cashoutAmount} type="number" />
+									<DataRow value={row.cashoutDate} type="date" />
+									<DataRow value={row.cashedoutInstallments} type="number" />
+									<DataRow value={row.cashingoutCustomerName} type="string" />
+								</tr>
 							)}
 						)}
 					</tbody>

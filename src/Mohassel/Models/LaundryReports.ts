@@ -36,6 +36,7 @@ export interface EarlyPaymentsSingleResponse {
 	amount?: number;
 	duration?: number;
 	loanDate?: string;
+	customerActivity?: string;
 	cashoutAmount?: number;
 	cashoutDate?: string;
 	cashedoutInstallments?: number;
