@@ -191,7 +191,12 @@ class LoanProfile extends Component<Props, State>{
             if (application.guarantors.length > 0) {
                 application.guarantors.forEach(guar => ids.push(guar.nationalId))
             }
-            ids.push(application.customer.nationalId)
+            if (application.entitledToSign.length > 0) {
+              application.entitledToSign.forEach(
+                (cust) => cust.nationalId && ids.push(cust.nationalId)
+              )
+            }
+            application.customer.nationalId && ids.push(application.customer.nationalId)
         }
         const obj: { nationalIds: string[]; date?: Date } = {
             nationalIds: ids
@@ -385,7 +390,7 @@ class LoanProfile extends Component<Props, State>{
                     manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)}
                     paymentType={"penalties"} randomPendingActions={this.state.randomPendingActions} />
             case 'entitledToSign':
-                return <GuarantorTableView guarantors={this.state.application.guarantors} customerId={this.state.application.customer._id} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} />
+                return <GuarantorTableView guarantors={this.state.application.entitledToSign} customerId={this.state.application.customer._id} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} entitledToSign />
             default:
                 return null
         }

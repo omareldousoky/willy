@@ -25,6 +25,7 @@ interface Props {
     getGeoArea: Function;
     customerId?: string;
     application: any;
+    entitledToSign?: boolean;
 }
 
 export const GuarantorTableView = (props: Props) => {
@@ -188,20 +189,20 @@ export const GuarantorTableView = (props: Props) => {
     return (
         <>
             <div className="d-flex flex-column align-items-start justify-content-center">
-                {((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && 
+                {!props.entitledToSign && ((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && 
                     <div className="mt-5 mb-5">
                         <Button variant='primary' onClick={() => changeModal(true)}>{local.addGuarantor}</Button>
                         {props.application.customer?.customerType === 'company' && <Button variant='primary' style={{ marginRight: 10 }} onClick={() => {changeModal(true); addGuarantorCompany(true)}}>{local.addCompanyAsGuarantor}</Button>}
                     </div>
                 }
-                {props.application.customer.customerType === 'company' && (
+                {!props.entitledToSign && props.application.customer.customerType === 'company' && (
                   <h3>{local.individuals}</h3>
                 )}
                 {(individualGuarantors.length > 0) ? <Table style={{ textAlign: 'right' }}>
                     <thead>
                         <tr>
                             <th></th>
-                            <th>{local.guarantorCode}</th>
+                            <th>{local.customerCode}</th>
                             <th>{local.name}</th>
                             <th>{local.nationalId}</th>
                             <th>{local.area}</th>
@@ -234,20 +235,20 @@ export const GuarantorTableView = (props: Props) => {
                                 {props.iScores && props.iScores.length > 0 && props.getIscore && props.status && !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(props.status) && <Can I='getIscore' a='customer'>
                                     <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => getIscore(guar)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span></td>
                                 </Can>}
-                                {(props.guarantors.length > props.application.product.noOfGuarantors) && ((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td>}
+                                {(props.guarantors.length > props.application.product.noOfGuarantors) && !props.entitledToSign && ((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td>}
                             </tr>)
                         }
                         )}
                     </tbody>
                 </Table>
                     : <p>{local.noGuarantors}</p>}
-                    {props.application.customer.customerType === 'company' && <div className="mt-5 w-100">
+                    {!props.entitledToSign && props.application.customer.customerType === 'company' && <div className="mt-5 w-100">
                         <h3>{local.companies}</h3>
                         {companyGuarantors.length > 0 ? <Table style={{ textAlign: 'right' }}>
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>{local.guarantorCode}</th>
+                                    <th>{local.companyCode}</th>
                                     <th>{local.companyName}</th>
                                     <th>{local.taxCardNumber}</th>
                                     <th>{local.commercialRegisterNumber}</th>
