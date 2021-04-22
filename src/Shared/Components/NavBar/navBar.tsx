@@ -539,17 +539,25 @@ class NavBar extends Component<Props, State> {
                   </Nav.Link>
                 </Can>
               )}
-              {!this.props.hide && (
-                <Can I="financialClosing" a="application">
-                  <Nav.Link
-                    onClick={() =>
-                      this.props.history.push('/financial-closing')
-                    }
-                  >
-                    {local.financialClosing}
-                  </Nav.Link>
-                </Can>
-              )}
+              {!this.props.hide &&
+              ability.can('financialBlocking', 'application') ? (
+                <Nav.Link
+                  onClick={() =>
+                    this.props.history.push('/financial-closing/lts-blocking')
+                  }
+                >
+                  {local.manageFinancialTransaction}
+                </Nav.Link>
+              ) : !this.props.hide &&
+                ability.can('financialClosing', 'application') ? (
+                <Nav.Link
+                  onClick={() =>
+                    this.props.history.push('/financial-closing/lts-closing')
+                  }
+                >
+                  {local.manageFinancialTransaction}
+                </Nav.Link>
+              ) : null}
               {!this.props.hide && (
                 <Can I="getDefaultingCustomer" a="legal">
                   <Nav.Link

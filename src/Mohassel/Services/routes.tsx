@@ -58,7 +58,9 @@ import BusinessActivities from '../Components/ManageLoanDetails/businessActiviti
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities'
 import FinancialClosing from '../Components/FinancialClosing/financialClosing'
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
+import FinancialBlocking from '../Components/FinancialClosing/financialBlocking'
 import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList'
+import FinancialReviewing from '../Components/FinancialClosing/FinancialReviewing'
 
 const appRoutes = [
   {
@@ -658,12 +660,41 @@ const appRoutes = [
       },
       {
         path: '/financial-closing',
-        label: local.financialClosing,
+        label: local.manageFinancialTransaction,
         render: (props) => (
-          <Can I="financialClosing" a="application">
-            <FinancialClosing {...props} />
+          <Can I="getFinancialBlocking" a="application">
+            <FinancialBlocking {...props} withHeader />{' '}
           </Can>
         ),
+        routes: [
+          {
+            path: '/lts-closing',
+            label: local.ltsClosing,
+            render: (props) => (
+              <Can I="financialClosing" a="application">
+                <FinancialClosing {...props} withHeader />
+              </Can>
+            ),
+          },
+          {
+            path: '/lts-blocking',
+            label: local.financialBlocking,
+            render: (props) => (
+              <Can I="getFinancialBlocking" a="application">
+                <FinancialBlocking {...props} withHeader />{' '}
+              </Can>
+            ),
+          },
+          {
+            path: '/lts-review-oracle',
+            label: local.oracleReports,
+            render: (props) => (
+              <Can I="summarizeTransactions" a="oracleIntegration">
+                <FinancialReviewing {...props} withHeader />{' '}
+              </Can>
+            ),
+          },
+        ],
       },
       {
         path: '/legal-affairs',
