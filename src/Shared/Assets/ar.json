@@ -955,6 +955,7 @@
     "rejectionDetails": "تفاصيل الإبلاغ عن العميل",
     "done": "تم",
     "viewRejectionReason": "عرض سبب الرفض",
+		"laundryReports": "تقارير غسيل الأموال",
     "chooseCloseDate":"تحديد تاريخ الاغلاق المالي",
     "closing":"الإغلاق",
     "blocking":"حظر",

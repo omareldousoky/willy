@@ -9,6 +9,7 @@ import IscoreReports from "./iscoreReports";
 import Card from "react-bootstrap/Card";
 import OracleIntegration from "./oracleIntegration";
 import OperationsReports from "./operationsReports";
+import LaundryReports from "./laundryReports";
 import OfficersProductivityReports from "./officersProductivityReports";
 interface State {
     id: string;
@@ -53,10 +54,15 @@ class ReportsHome extends Component<{}, State> {
                     stringKey: 'monthlyQuarterlyReports',
                 },
                 {
+                    header: local.laundryReports,
+                    stringKey: 'laundryReports',
+                },
+                {
                     header: local.officersProductivityReport,
                     stringKey: 'officersProductivityReports',
                     permission: 'officersProductivityReport',
-                  },]
+                },
+            ]
         }
     }
     handleOptionChange = (changeEvent) => {
@@ -78,6 +84,8 @@ class ReportsHome extends Component<{}, State> {
                 return <OperationsReports />;
             case "monthlyQuarterlyReports":
                 return <MonthlyQuarterlyReports/>
+            case "laundryReports":
+                return <LaundryReports />
             case "officersProductivityReports":
                 return <OfficersProductivityReports/>
             default:
