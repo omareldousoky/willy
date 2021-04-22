@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { OfficersProductivityResponse } from '../../../../Models/OfficersProductivityReport'
 import Orientation from '../../../Common/orientation'
-import OfficersPercentPaymentHeader from '../officerPercentPaymentHeader'
+import { Header } from '../../pdfTemplateCommon/header'
 import { formatPercent } from '../officersPercentPayment'
 import '../officersPercentPayment.scss'
 import OfficersPercentPaymentFooter from '../officersPercentPaymentFooter'
@@ -18,7 +18,11 @@ const OfficersProductivity = (props: OfficersProductivityProps) => {
 		<>
 			<Orientation size="portrait" />
 			<div className="officers-payment officers-productivity" lang="ar">
-				<OfficersPercentPaymentHeader toDate={endDate} fromDate={startDate} />
+			<Header
+				toDate={endDate}
+				fromDate={startDate}
+				title="تقرير نسب السداد و الانتاجيه للمندوبين"
+			/>
 				<table className="body">
 					<thead>
 						<tr>
