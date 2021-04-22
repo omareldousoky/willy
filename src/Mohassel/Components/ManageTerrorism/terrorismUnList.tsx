@@ -17,7 +17,6 @@ import { Formik } from "formik"
 import { uploadTerroristUnDocument } from "../../Services/APIs/Terrorism/terrorism"
 import * as Yup from "yup"
 import { TerroristResponse } from "../../../Shared/Services/interfaces"
-import { TerroristsCustomers } from "./terroristsCustomers"
 interface Props {
 	data: TerroristResponse[];
 	error: string;
@@ -157,7 +156,6 @@ class TerrorismUnList extends Component<Props, State> {
               </span>
             </div>
             <div>
-              <TerroristsCustomers />
               <Can I="createTerrorist" a="customer">
                 <Button
                   className="big-button mx-2"
