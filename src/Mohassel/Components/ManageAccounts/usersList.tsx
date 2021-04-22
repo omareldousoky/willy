@@ -98,8 +98,8 @@ class UsersList extends Component<Props, State> {
     })
     this.setState({
       manageAccountTabs: manageAccountsArray()
-    })   
-  }
+    })
+  }   
 
   async handleActivationClick(data: any) {
     const req = { id: data._id, status: data.status === "active" ? "inactive" : "active" }
