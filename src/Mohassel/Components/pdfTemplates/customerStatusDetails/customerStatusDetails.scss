@@ -58,8 +58,7 @@ print {
         & .borderless {
             border: 0px;
         }
-    }
-    .logo-print{
+			.logo-print{
         max-width:75px;
         max-height:35px;
         display: list-item;
@@ -68,6 +67,7 @@ print {
         height: 35px;   
         width: 100px;
         list-style-position: inside;
+    	}
     }
 }
 
