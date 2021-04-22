@@ -1,13 +1,14 @@
-import React from "react";
-import "./style.scss";
+import React from 'react'
+import './style.scss'
+import Tafgeet from 'tafgeetjs'
 import {
   numbersToArabic,
   timeToArabicDate,
   dayToArabic,
-} from "../../../../Shared/Services/utils";
-import Tafgeet from "tafgeetjs";
+} from '../../../../Shared/Services/utils'
 
 const SmeLoanContract = (props) => {
+  console.log(props)
   return (
     <>
       <div className="loan-contract" dir="rtl" lang="ar">
@@ -23,31 +24,31 @@ const SmeLoanContract = (props) => {
                           <td>
                             <table
                               style={{
-                                fontSize: "12px",
-                                margin: "10px 0px",
-                                textAlign: "center",
-                                width: "100%",
+                                fontSize: '12px',
+                                margin: '10px 0px',
+                                textAlign: 'center',
+                                width: '100%',
                               }}
                             >
                               <thead>
-                                <tr style={{ height: "10px" }}></tr>
+                                <tr style={{ height: '10px' }} />
                                 <tr
                                   style={{
-                                    width: "100%",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    justifyContent: "space-between",
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
                                   }}
                                 >
                                   <th colSpan={6}>
-                                    <div className={"logo-print"}></div>
+                                    <div className="logo-print" />
                                   </th>
                                   <th colSpan={6}>
                                     ترخيص ممارسه نشاط التمويل متناهي الصغر رقم
                                     (2) لسنه 2015
                                   </th>
                                 </tr>
-                                <tr style={{ height: "10px" }}></tr>
+                                <tr style={{ height: '10px' }} />
                               </thead>
                             </table>
                           </td>
@@ -68,7 +69,7 @@ const SmeLoanContract = (props) => {
               <tr>
                 <td
                   className="report-content-cell"
-                  style={{ textAlign: "right" }}
+                  style={{ textAlign: 'right' }}
                 >
                   <div className="main">
                     <div className="headtitle textcenter">مرفق رقم (2) </div>
@@ -78,8 +79,8 @@ const SmeLoanContract = (props) => {
                       <u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u>
                     </div>
                     <div>
-                      انه في يوم{" "}
-                      {dayToArabic(new Date(props.data.creationDate).getDay())}{" "}
+                      انه في يوم{' '}
+                      {dayToArabic(new Date(props.data.creationDate).getDay())}{' '}
                       الموافق {timeToArabicDate(props.data.creationDate, false)}
                     </div>
                     <div>
@@ -106,18 +107,18 @@ const SmeLoanContract = (props) => {
                           </td>
                         </tr>
 
-                        <tr style={{ textAlign: "left", lineHeight: "5" }}>
+                        <tr style={{ textAlign: 'left', lineHeight: '5' }}>
                           <td colSpan={4}>&quot;طرف أول - مقرض&quot;</td>
                         </tr>
 
-                        <tr style={{ margin: "5px 0" }}>
+                        <tr style={{ margin: '5px 0' }}>
                           <td>
                             <div>
                               <b>ثانيا:- السادة/شركة :-</b>
-                              <span>{`  ${props.data.customer.customerName}`}</span>
+                              <span>{`  ${props.data.customer.businessName}`}</span>
                             </div>
                           </td>
-                          <td style={{ width: "30%" }}>
+                          <td style={{ width: '30%' }}>
                             <div>
                               <b> سجل تجاري رقم :</b>
                               <span>
@@ -125,42 +126,42 @@ const SmeLoanContract = (props) => {
                               </span>
                             </div>
                           </td>
-                          <td style={{ width: "30%" }}>
+                          <td style={{ width: '30%' }}>
                             <div>
                               <b>والكائن مقرها الرئيسي في:</b>
-                              <span>
-                                {props.application?.company?.businessAddress}
-                              </span>
+                              <span>{props.data.customer.businessAddress}</span>
                             </div>
                           </td>
                         </tr>
-                        {props.application?.viceCustomers?.map(
-                          (viceCustomer, index) => (
+                        {props.data.entitledToSign.map(
+                          (entitledToSign, index) => (
                             <tr key={index}>
                               <td>
                                 <div>
                                   <b className="word-break">
                                     ويمثلها في التوقيع السيد :
                                   </b>
-                                  <span>{viceCustomer.name}</span>
+                                  <span>{entitledToSign.customerName}</span>
                                 </div>
                               </td>
                               <td>
                                 <div>
                                   <b className="word-break">
-                                    {" "}
-                                    ويحمل بطاقه رقم قومى{" "}
+                                    {' '}
+                                    ويحمل بطاقه رقم قومى{' '}
                                   </b>
                                   <span>
-                                    {viceCustomer.nationalId &&
-                                      numbersToArabic(viceCustomer.nationalId)}
+                                    {entitledToSign.nationalId &&
+                                      numbersToArabic(
+                                        entitledToSign.nationalId
+                                      )}
                                   </span>
                                 </div>
                               </td>
                             </tr>
                           )
                         )}
-                        <tr style={{ textAlign: "left", lineHeight: "5" }}>
+                        <tr style={{ textAlign: 'left', lineHeight: '5' }}>
                           <td colSpan={4}>&quot;طرف ثان - مقترض&quot;</td>
                         </tr>
                       </tbody>
@@ -176,7 +177,7 @@ const SmeLoanContract = (props) => {
                       </div>
                       <div>
                         وقد تقدم الطرف الثانى بطلب للحصول على قرض من فرع الطرف
-                        الاول الكائن {"_______________________________________"}{" "}
+                        الاول الكائن {'_______________________________________'}{' '}
                         لحاجته للسيوله النقديه يخصص استخدامه فى تمويل نشاطه
                         الجاري وذلك وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤ المشار
                         اليه .
@@ -203,12 +204,12 @@ const SmeLoanContract = (props) => {
                       <div className="title">البند الثاني</div>
                       <div>
                         يقر الطرف الثانى ( المقترض ) باستلامه من الطرف الاول (
-                        المقرض ) مبلغ وقدره{" "}
+                        المقرض ) مبلغ وقدره{' '}
                         {`${numbersToArabic(
                           props.data.principal
                         )} جنيه (${new Tafgeet(
                           props.data.principal,
-                          "EGP"
+                          'EGP'
                         ).parse()})`}
                         نقدا . ويعتبر توقيع الطرف الثانى على هذا العقد بمثابه
                         اقرارا نهائيا منه باستلام كامل مبلغ القرض.
@@ -234,18 +235,18 @@ const SmeLoanContract = (props) => {
                           props.data.principal
                         )} جنيه (${new Tafgeet(
                           props.data.principal,
-                          "EGP"
-                        ).parse()})`}{" "}
+                          'EGP'
+                        ).parse()})`}{' '}
                         يتم سداده علي ( مدة السداد ) وذلك علي النحو التالي : ـ
-                        بواقع {"_____________________________"} قسط ( اسبوعيه او
-                        كل خمسة عشر يوما او كل شهر ) قيمة كل قسط
-                        {"____________________________ "}
-                        يبدأ في{" "}
+                        بواقع {' _____________________________'} قسط ( اسبوعيه
+                        او كل خمسة عشر يوما او كل شهر ) قيمة كل قسط
+                        {'____________________________ '}
+                        يبدأ في{' '}
                         {timeToArabicDate(
                           props.data.installmentsObject.installments[0]
                             .dateOfPayment,
                           false
-                        )}{" "}
+                        )}{' '}
                         وينتهي في
                         {timeToArabicDate(
                           props.data.installmentsObject.installments[
@@ -253,9 +254,9 @@ const SmeLoanContract = (props) => {
                               1
                           ].dateOfPayment,
                           false
-                        )}{" "}
-                        علي ان يتم السداد نقدي بمقر فرع الطرف الاول الكائن في{" "}
-                        {"____________________________ "}
+                        )}{' '}
+                        علي ان يتم السداد نقدي بمقر فرع الطرف الاول الكائن في{' '}
+                        {'____________________________ '}
                       </div>
                     </section>
 
@@ -291,7 +292,7 @@ const SmeLoanContract = (props) => {
                       </div>
                     </section>
 
-                    <section style={{ pageBreakAfter: "always" }}>
+                    <section style={{ pageBreakAfter: 'always' }}>
                       <div className="title">البند الثامن</div>
                       <div>
                         فى حاله عدم التزام المقترض باى من التزاماتهما التعاقديه
@@ -377,7 +378,7 @@ const SmeLoanContract = (props) => {
                                 لعنوانه يلتزم بأخطار الطرف الاخر بموجب خطاب مسجل
                                 بعلم الوصول والا اعتبر اعلانه على العنوان الاول
                                 صحيحا ونافذا ومنتجا لكافه اثاره القانونيه. وقد
-                                تحرر هذا العقد من عدد {"( ________ )"} نسخه تسلم
+                                تحرر هذا العقد من عدد {'( ________ '} نسخه تسلم
                                 لكل طرف نسخه للعمل بمقتضاها عند اللزوم.
                               </div>
                             </section>
@@ -398,11 +399,11 @@ const SmeLoanContract = (props) => {
                                 المحكمة التي وافق عليها مقدما .
                               </div>
                               <div>
-                                تحريرا في{" "}
+                                تحريرا في{' '}
                                 {timeToArabicDate(
                                   props.data.creationDate,
                                   false
-                                )}{" "}
+                                )}{' '}
                               </div>
                             </section>
                           </td>
@@ -473,7 +474,7 @@ const SmeLoanContract = (props) => {
                             وبموجب عقد التمويل الشخصي المشار إلية بعالية بأنني
                             أضمن وأكفل الطرف الثاني من عقد التمويل الشخصي.
                             السادة شركة
-                            {`  ${props.data.customer.customerName} `} في سداد
+                            {`  ${props.data.customer.businessName} `} في سداد
                             أقساط التمويل الممنوح لها من الطرف الأول بموجب عقد
                             التمويل الشخصي المشار إلية بعالية وكل مايستحق علية
                             من عوائد وعمولات ومصاريف وذلك طول فترة سداد التمويل
@@ -484,8 +485,8 @@ const SmeLoanContract = (props) => {
                                 التمويل الشخصي المشار إلية بعالية وأن توقيعي على
                                 الكفالة التضامنية بمثابة توقيعي على هذا العقد
                                 كطرف ثالث كفيل وضامن لسداد التمويل الممنوح من
-                                الطرف الاول للسادة شركة{" "}
-                                {`  ${props.data.customer.customerName} `}
+                                الطرف الاول للسادة شركة{' '}
+                                {`  ${props.data.customer.businessName} `}
                               </li>
                               <li>
                                 أصرح للطرف الأول بالأستعلام والأطلاع على حساباتي
@@ -499,8 +500,8 @@ const SmeLoanContract = (props) => {
                               <li>
                                 أقر بأنة يحق للطرف الأول دون الرجوع لي مطالبتي
                                 بسداد الدين المستحق لصالحة والناتج عن التمويل
-                                الممنوح للسادة شركة{" "}
-                                {`  ${props.data.customer.customerName} `}
+                                الممنوح للسادة شركة{' '}
+                                {`  ${props.data.customer.businessName} `}
                                 وذالك بموجب توقيعي على هذة الكفالة التضامنية
                                 وذالك دون أعتراض مني على ذلك .
                               </li>
@@ -533,7 +534,7 @@ const SmeLoanContract = (props) => {
                                 <tr>
                                   <td style={{ paddingBottom: 80 }}>
                                     <div>
-                                      الاسم/ {"                              "}
+                                      الاسم/ {'                              '}
                                     </div>
                                   </td>
                                   <td style={{ paddingBottom: 80 }}>
@@ -554,7 +555,7 @@ const SmeLoanContract = (props) => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default SmeLoanContract;
+export default SmeLoanContract

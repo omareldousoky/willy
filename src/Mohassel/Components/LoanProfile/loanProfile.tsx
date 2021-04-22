@@ -58,6 +58,7 @@ import { Col, Form } from 'react-bootstrap';
 import { arabicGender, timeToArabicDate, downloadFile, iscoreStatusColor, iscoreBank } from '../../../Shared/Services/utils';
 import { getCompanyInfo, getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
 import { FieldProps } from '../../../Shared/Components/Profile/types';
+import SmeLoanContract from '../pdfTemplates/smeLoanContract'
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -676,7 +677,17 @@ class LoanProfile extends Component<Props, State>{
                 icon: 'green-download',
                 title: local.downloadPDF,
                 permission: this.state.application.status === "created",
-                onActionClick: () => { this.setState({ print: 'all' }, () => window.print()) }
+                onActionClick: () => { 
+                  this.setState(
+                    (prevState) => ({
+                      print:
+                        prevState.application.customer.customerType === 'company'
+                          ? 'allSME'
+                          : 'all',
+                    }),
+                    () => window.print()
+                  )
+                 }
             },
             {
                 icon: 'editIcon',
@@ -828,6 +839,12 @@ class LoanProfile extends Component<Props, State>{
                             : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails} />
                         }
                     </>}
+                {this.state.print === 'allSME' && (
+                  <SmeLoanContract
+                    data={this.state.application}
+                    branchDetails={this.state.branchDetails}
+                  />
+                )}
                 {this.state.print === 'followUpStatement' && <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} members={this.state.individualsWithInstallments} />}
                 {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} remainingTotal={this.state.remainingTotal} members={this.state.individualsWithInstallments} />}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} branchDetails={this.state.branchDetails} />}
