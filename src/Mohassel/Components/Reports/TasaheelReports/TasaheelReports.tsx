@@ -15,7 +15,7 @@ import HeaderWithCards from "../../HeaderWithCards/headerWithCards";
 import { Loader } from "../../../../Shared/Components/Loader";
 import ReportsModal from "../reportsModal";
 import { RisksReport } from "./RisksReport";
-import { DebtsAgingReport} from "./DebtsAgingReport";
+import { DebtsAgingReport } from "./DebtsAgingReport";
 
 import {
   getAllLoanAge,
@@ -66,13 +66,7 @@ export const TasaheelReports = () => {
         permissionKey: "report",
       });
     setTabs(allowedTabs);
-    setActiveTabKey(allowedTabs[0]?.stringKey ||'')
-    // monthlyAnalysis: {
-    //   getAll: getAllMonthlyAnalysis,
-    //   requestReport: generateMonthlyAnalysisReport,
-    //   getReportDetails: getMonthlyAnalysisReport,
-    //   printComponent: ""
-    // },
+    setActiveTabKey(allowedTabs[0]?.stringKey || "");
   }, []);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
