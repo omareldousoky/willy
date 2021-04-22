@@ -216,7 +216,7 @@ export const TasaheelReports = () => {
                         <div
                           style={{ cursor: "pointer" }}
                           onClick={() => downloadGeneratedReport(report._id)}
-                          className="download-green-icon"
+                          className="download-icon"
                         />
                       )}
                     </div>
