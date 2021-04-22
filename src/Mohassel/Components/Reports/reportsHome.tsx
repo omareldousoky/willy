@@ -10,7 +10,7 @@ import Card from "react-bootstrap/Card";
 import OracleIntegration from "./oracleIntegration";
 import OperationsReports from "./operationsReports";
 import { TasaheelReports } from "./TasaheelReports/TasaheelReports";
-
+import LaundryReports from "./laundryReports";
 interface State {
     id: string;
     activeTab: string;
@@ -56,6 +56,10 @@ class ReportsHome extends Component<{}, State> {
                 {
                     header: local.tasaheelReports,
                     stringKey: 'tasaheelReports',
+                },
+                {
+                    header: local.laundryReports,
+                    stringKey: 'laundryReports',
                 }
             ]
         }
@@ -81,6 +85,8 @@ class ReportsHome extends Component<{}, State> {
                 return <MonthlyQuarterlyReports/>
             case "tasaheelReports":
                 return <TasaheelReports/>
+			case "laundryReports":
+				return <LaundryReports />
             default:
                 return null;
         }
