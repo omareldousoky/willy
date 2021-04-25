@@ -2,7 +2,7 @@ import React from 'react';
 import './loanContractForGroup.scss';
 import * as Barcode from 'react-barcode';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { numbersToArabic, timeToArabicDate, dayToArabic, timeToArabicDateNow } from "../../../../Shared/Services/utils";
+import { numbersToArabic, timeToArabicDate, dayToArabic } from "../../../../Shared/Services/utils";
 import Tafgeet from 'tafgeetjs';
 
 const LoanContractForGroup = (props) => {
@@ -343,7 +343,7 @@ const LoanContractForGroup = (props) => {
                   <div className="headtitle textcenter"><u>إقرار وتعهد</u></div>
                   <div>نقر نحن الموقعين أدناه بإلتزامنا وتعهدنا بسداد وتسليم قيمة الاقساط المستحقه في مواعيدها
                   المحدده بموجب عقد
-                القرض المؤرخ في {timeToArabicDateNow(false)} وحتي تمام سدادها بالكامل، وأن يكون السداد عن طريق احد الأعضاء او بواسطة من ينوب عن المجموعة الي شركة تساهيل للتمويل متناهي الصغر ذاتها وبمقر خزينة فرع الشركة المتعامل معه أو بأحدي وسائل الدفع
+                القرض المؤرخ في {timeToArabicDate(props.data.creationDate, false)} وحتي تمام سدادها بالكامل، وأن يكون السداد عن طريق احد الأعضاء او بواسطة من ينوب عن المجموعة الي شركة تساهيل للتمويل متناهي الصغر ذاتها وبمقر خزينة فرع الشركة المتعامل معه أو بأحدي وسائل الدفع
                 الالكتروني المعتمده
                 من هيئة الرقابة المالية ولا يحق لنا بأى حال من الاحوال سداد قيمة أي قسط من الاقساط الي
                 شخص اخر غير خزينة فرع
@@ -358,7 +358,7 @@ const LoanContractForGroup = (props) => {
                   <div>
                     لذا و بناءً على رغبتنا جميعاً نرفض عمل أي جدولة للتمويل أو تأجيل للاقساط أو الحصول على فترة سماح لأي اقساط مستحقة طوال فترة التمويل وبأننا ملتزمون جميعاً بسداد الأقساط طبقاً لجدول الأقساط المسلم لي من الشركة
               </div>
-                  <div>تحريرا في {timeToArabicDateNow(false)}</div>
+                  <div>تحريرا في {timeToArabicDate(props.data.creationDate, false)}</div>
 
                   <table>
 
@@ -383,8 +383,8 @@ const LoanContractForGroup = (props) => {
                 <div className="main">
                   <div>
                     <div className="title_last">
-                      <Barcode value={props.data.applicationKey} />
-                      <div>{props.data.applicationKey}</div>
+                      <Barcode value={props.data.loanApplicationKey} />
+                      <div>{props.data.loanApplicationKey}</div>
                       <div>{timeToArabicDate(props.data.creationDate, false)}</div>
                       <div>{leaderName}</div>
 
@@ -450,14 +450,14 @@ const LoanContractForGroup = (props) => {
                 <div className="main">
                   <div className="last">
                     <div className="title_last">
-                      <Barcode value={props.data.applicationKey} />
-                      <div>{props.data.applicationKey}</div>
+                      <Barcode value={props.data.loanApplicationKey} />
+                      <div>{props.data.loanApplicationKey}</div>
                       <div>{timeToArabicDate(props.data.creationDate, false)}</div>
                       <div>{leaderName}</div>
 
                       <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
-                      <Barcode value={props.data.applicationKey} />
-                      <div>{props.data.applicationKey}</div>
+                      <Barcode value={props.data.loanApplicationKey} />
+                      <div>{props.data.loanApplicationKey}</div>
                       <div>{timeToArabicDate(props.data.creationDate, false)}</div>
                       <div>{leaderName}</div>
                     </div>

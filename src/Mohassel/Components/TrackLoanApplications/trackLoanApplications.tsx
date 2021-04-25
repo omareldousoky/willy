@@ -202,7 +202,7 @@ class TrackLoanApplications extends Component<Props, State>{
       size,
       from,
       url: "application",
-      branchId,
+      branchId:  branchId || searchFilters.branchId,
     }).then(() => {
       if (error) Swal.fire("", getErrorMessage(error), "error");
     });
@@ -232,7 +232,7 @@ class TrackLoanApplications extends Component<Props, State>{
     const res = await getBranch(id);
     if (res.status === 'success') {
       this.setState({ branchDetails: res.body?.data })
-    } else console.log('error getting branch details')
+    } else console.log('error getting branch data')
   }
   async getReviewedData() {
     const token = getCookie('token');

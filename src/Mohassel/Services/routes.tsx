@@ -58,7 +58,9 @@ import BusinessActivities from '../Components/ManageLoanDetails/businessActiviti
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
+import FinancialBlocking from '../Components/FinancialClosing/financialBlocking'
 import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList';
+import FinancialReviewing from '../Components/FinancialClosing/FinancialReviewing'
 import { CompanyList, CompanyProfile } from "../../Shared/Components";
 import CompanyCreation from '../Components/CustomerCreation/companyCreation';
 
@@ -496,8 +498,22 @@ const appRoutes = [
         render: (props) => <Can I='getOfficersGroups' a ='branch'> <SupervisionsList {...props}/> </Can>
       },{
         path: '/financial-closing',
-        label: local.financialClosing,
-        render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} /></Can>
+        label: local.manageFinancialTransaction,
+        render:(props) => <Can I= "getFinancialBlocking" a="application"><FinancialBlocking {...props} withHeader /> </Can>,
+         routes:[{
+          path: '/lts-closing',
+          label: local.ltsClosing,
+          render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} withHeader /></Can>
+        },{
+            path: '/lts-blocking',
+            label: local.financialBlocking,
+            render:(props) => <Can I= "getFinancialBlocking" a="application"><FinancialBlocking {...props} withHeader /> </Can>
+         },{
+            path: '/lts-review-oracle',
+            label: local.oracleReports,
+            render:(props) => <Can I="summarizeTransactions" a="oracleIntegration"><FinancialReviewing {...props} withHeader /> </Can>
+         }
+      ]
       },{
         path: '/legal-affairs',
         label: local.legalAffairs,
