@@ -1,72 +1,15 @@
 import React from 'react';
 import './followUpStatment.scss';
-import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic, dayToArabic, timeToArabicDateNow } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, numbersToArabic, dayToArabic } from "../../../../Shared/Services/utils";
 import store from '../../../../Shared/redux/store';
-import { roundTo2, shareInGroup, shareInGroupFallBack } from '../customerCard/customerCard';
+import { roundTo2 } from '../customerCard/customerCard';
 import { IndividualWithInstallments } from '../../LoanProfile/loanProfile';
-import { getOriginalTableData } from '../../LoanProfile/followupStatementView';
 interface Props {
     data: any;
     branchDetails: any;
-    members: IndividualWithInstallments[];
+    members: IndividualWithInstallments;
 }
 
-export function dateShift(creationDate, index) {
-    const originalDate = new Date(creationDate);
-    const originalMonth = originalDate.getMonth();
-    const dateInMonth = new Date(creationDate).getDate()
-    if (1 <= dateInMonth && dateInMonth <= 10) {
-        originalDate.setMonth(originalMonth + index)
-        originalDate.setDate(20)
-    } else if (11 <= dateInMonth && dateInMonth <= 20) {
-        originalDate.setMonth(originalMonth + index)
-        originalMonth + index === 1 ? originalDate.setDate(28) : originalDate.setDate(30)
-    } else if (21 <= dateInMonth && dateInMonth <= 31) {
-        originalDate.setMonth(originalMonth + 1 + index)
-        originalDate.setDate(10)
-    }
-    if (originalDate.getDay() === 5) {
-        originalDate.setDate(originalDate.getDate() + 2)
-    }
-    if (originalDate.getDay() === 6) {
-        originalDate.setDate(originalDate.getDate() + 1)
-    }
-
-    return originalDate.valueOf()
-}
-export function twoWeekGroupShift(day) {
-    const originalDate = new Date(day)
-    switch (originalDate.getDay()) {
-        case 0:
-            //sunday
-            return originalDate.setDate(originalDate.getDate() - 5).valueOf()
-        case 1:
-            return originalDate.setDate(originalDate.getDate() - 6).valueOf()
-        case 2:
-            return originalDate.setDate(originalDate.getDate() - 7).valueOf()
-        case 3:
-            return originalDate.setDate(originalDate.getDate() - 8).valueOf()
-        case 4:
-            return originalDate.setDate(originalDate.getDate() - 9).valueOf()
-        case 5:
-            return originalDate.setDate(originalDate.getDate() - 10).valueOf()
-        case 6:
-            return originalDate.setDate(originalDate.getDate() - 11).valueOf()
-        default:
-            return originalDate.valueOf()
-    }
-}
-export function shiftDaysBackAvoidingWeeekend(day) {
-    const originalDate = new Date(day)
-    if (originalDate.getDay() === 5) {
-        originalDate.setDate(originalDate.getDate() - 1)
-    }
-    if (originalDate.getDay() === 6) {
-        originalDate.setDate(originalDate.getDate() - 2)
-    }
-    return originalDate.valueOf()
-}
 const FollowUpStatementPDF = (props: Props) => {
     function getCustomerData(key: string) {
         if (props.data.product.beneficiaryType === "individual")
@@ -116,12 +59,11 @@ const FollowUpStatementPDF = (props: Props) => {
                         <th>القيمه</th>
                         <th style={{ width: "40%" }}>ملاحظات</th>
                     </tr>
-                    {getOriginalTableData(props.members, props.data.product.beneficiaryType).map((installment, index) => {
+                    {props.members.installmentTable.map((installment, index) => {
                         return (
                             <tr key={index}>
                                 <td>{numbersToArabic(props.data.applicationKey) + "/" + numbersToArabic(installment.id)}</td>
-                                <td>{timeToArabicDate(props.data.product.beneficiaryType !== "individual" ? (props.data.product.periodLength === 1 && props.data.product.periodType === 'months') ? dateShift(props.data.creationDate, index) : (props.data.product.periodLength === 14 && props.data.product.periodType === 'days') ? twoWeekGroupShift(installment.dateOfPayment) : (installment.dateOfPayment - (5 * 24 * 60 * 60 * 1000))
-                                    : (props.data.product.periodLength === 1 && props.data.product.periodType === 'months') ? dateShift(props.data.creationDate, index) : shiftDaysBackAvoidingWeeekend(installment.dateOfPayment - 3 * (5 * 24 * 60 * 60 * 1000)), false)}</td>
+                                <td>{timeToArabicDate(installment.dateOfPayment, false)}</td>
                                 <td>{numbersToArabic(roundTo2(installment.installmentResponse))}</td>
                                 <td></td>
                             </tr>
@@ -129,7 +71,7 @@ const FollowUpStatementPDF = (props: Props) => {
                     })}
                 </tbody>
             </table>
-            {props.data.product.beneficiaryType !== "individual" ?
+            {props.data.product.beneficiaryType !== "individual" && props.members.customerTable ?
                 <table className="table-content" style={{ width: "50%" }}>
                     <tbody>
                         <tr>
@@ -140,14 +82,13 @@ const FollowUpStatementPDF = (props: Props) => {
                             <th>النشاط</th>
                             <th>المنطقه</th>
                         </tr>
-                        {props.data.group.individualsInGroup.map((individualInGroup, index) => {
-                            const share = shareInGroup(props.members, individualInGroup.customer._id);
+                        {props.members.customerTable.map((individualInGroup, index) => {
                             return (
                                 <tr key={index}>
                                     <td>{numbersToArabic(individualInGroup.customer.key)}</td>
                                     <td>{individualInGroup.customer.customerName}</td>
                                     <td>{numbersToArabic(individualInGroup.amount)}</td>
-                                    <td>{numbersToArabic(share === 0 ? shareInGroupFallBack(individualInGroup.amount, props.data.principal, props.data.installmentsObject.installments[0].installmentResponse) : share)}</td>
+                                    <td>{numbersToArabic(individualInGroup.installmentAmount)}</td>
                                     <td>{individualInGroup.customer.businessSector + "-" + individualInGroup.customer.businessActivity + "-" + individualInGroup.customer.businessSpeciality}</td>
                                     <td>{individualInGroup.customer.district}</td>
                                 </tr>
