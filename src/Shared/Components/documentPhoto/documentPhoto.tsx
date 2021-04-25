@@ -183,6 +183,7 @@ class DocumentPhoto extends Component<Props, State> {
         cursor: 'pointer',
         border: '#e5e5e5 solid 1px',
         borderRadius: 4,
+        margin: 0
       }}
         data-qc={`upload-${name}`}
         onDrag={this.overrideEventDefaults}

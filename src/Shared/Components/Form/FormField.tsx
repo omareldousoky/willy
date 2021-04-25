@@ -85,6 +85,8 @@ const FormField: FunctionComponent<FormFieldProps> = ({
               setFieldValue(inputFieldProps.name, imageFile)
             }}
             handleBlur={inputFieldProps.onBlur}
+            view={inputFieldProps.disabled}
+            edit={!inputFieldProps.disabled}
           />
         )
 

@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react'
 
-import { Card } from 'react-bootstrap'
+import { Card, Form } from 'react-bootstrap'
 import Swal from 'sweetalert2'
 
 import local from '../../../../Shared/Assets/ar.json'
@@ -10,6 +10,8 @@ import { getErrorMessage } from '../../../../Shared/Services/utils'
 import { defaultValidationSchema } from '../../../../Shared/validations'
 import { settleLegalCustomer } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import colorVariables from '../../../../Shared/Assets/scss/app.scss'
+import { SettledCustomer } from '.'
+
 
 export type SettlementStatus =
   | 'privateReconciliation'
@@ -18,7 +20,7 @@ export type SettlementStatus =
   | 'stopLegalAffairs'
   | 'waiver'
 
-export interface ISettlementFormValues {
+export interface SettlementFormValues {
   penaltiesPaid: boolean
   penaltyFees: number
   courtFeesPaid: boolean
@@ -37,23 +39,21 @@ export interface ISettlementFormValues {
 }
 
 export interface ISettlementReqBody {
-  settlement: ISettlementFormValues
+  settlement: SettlementFormValues
 }
 export interface ILegalSettlementFormProps {
   settlementFees: {
     penaltyFees: number
     courtFees: number
   }
-  customerId: string
-  customerSettlement: ISettlementFormValues | undefined
+  customer: SettledCustomer
   onSubmit: () => void
 }
 
 const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
   settlementFees,
   onSubmit,
-  customerId,
-  customerSettlement,
+  customer,
 }) => {
   const settlementForm: IFormField[] = [
     {
@@ -183,6 +183,7 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
       label: `file 1`,
       validation: defaultValidationSchema,
     },
+    // TODO: change field keys
     {
       name: 'comments',
       type: 'textarea',
@@ -191,28 +192,37 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
     },
   ]
 
+  const customerPreviewFields = [
+    {
+      name: 'customerName',
+      label: local.name,
+    },
+    {
+      name: 'customerKey',
+      label: local.customerId,
+    },
+    {
+      name: 'nationalId',
+      label: local.nationalId,
+    },
+  ]
+
   const defaultValues = {
+    customerDetails: {
+      customerName: customer.customerName,
+      customerKey: customer.customerKey,
+      nationalId: customer.nationalId,
+    },
     penaltiesPaid: false,
     courtFeesPaid: false,
-    caseNumber: '',
-    caseYear: '',
-    court: '',
-    courtDetails: '',
-    lawyerName: '',
-    laywerPhoneNumberOne: '',
-    laywerPhoneNumberTwo: '',
-    laywerPhoneNumberThree: '',
-    settlementType: '',
-    settlementStatus: '',
-    comments: '',
   }
 
-  const handleSubmit = async (values: ISettlementFormValues) => {
+  const handleSubmit = async (values: SettlementFormValues) => {
     const settlementReqBody: ISettlementReqBody = {
       settlement: values,
     }
 
-    const response = await settleLegalCustomer(settlementReqBody, customerId)
+    const response = await settleLegalCustomer(settlementReqBody, customer._id)
 
     if (response.status === 'success') {
       Swal.fire({
@@ -228,12 +238,37 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
     onSubmit()
   }
 
+  const customerSettlement = customer.settlement
   const isReviewed = customerSettlement?.settlementStatus === 'reviewed'
-  
+
+  const renderCustomerDetails = () => (
+    <div className="row">
+      {customerPreviewFields.map(
+        (field: { name: string; label: string }, index: number) => (
+          <Form.Group
+            className={index === 0 ? 'col-sm-12' : 'col-sm-6'}
+            controlId={field.name}
+            key={field.name}
+          >
+            <Form.Label column title={field.label}>
+              {field.label}
+            </Form.Label>
+            <Form.Control
+              type="text"
+              value={customer[field.name]}
+              readOnly
+              disabled
+            />
+          </Form.Group>
+        )
+      )}
+    </div>
+  )
   return (
     <div className="form__container">
       <Card className="main-card hide-card-styles">
         <Card.Body>
+          {renderCustomerDetails()}
           <AppForm
             formFields={
               isReviewed

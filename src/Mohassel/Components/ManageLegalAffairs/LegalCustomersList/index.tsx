@@ -26,7 +26,7 @@ import { manageLegalAffairsArray } from '../manageLegalAffairsInitials'
 import { TableMapperItem } from '../types'
 import { DefaultedCustomer } from '../defaultingCustomersList'
 import LegalSettlementForm, {
-  ISettlementFormValues,
+  SettlementFormValues,
 } from './LegalSettlementForm'
 import {
   getSettlementFees,
@@ -37,7 +37,7 @@ import { defaultValidationSchema } from '../../../../Shared/validations'
 import AppForm from '../../../../Shared/Components/Form'
 import UploadLegalCustomers from './UploadCustomersForm'
 
-interface ISettlementFees {
+interface SettlementFees {
   penaltyFees: number
   courtFees: number
 }
@@ -54,10 +54,11 @@ export interface ReviewReqBody {
   ids: string[]
 }
 
-export interface SettlementCustomer extends DefaultedCustomer {
-  settlement: ISettlementFormValues
+export interface SettledCustomer extends DefaultedCustomer {
+  settlement: SettlementFormValues
 }
 
+// TODO: Move to separate file and use it in defaultingCustomers too
 const adminTypes = [
   {
     value: 'branchManagerReview',
@@ -92,7 +93,7 @@ const LegalCustomersList: FunctionComponent = () => {
   const [
     customerForSettlement,
     setCustomerForSettlement,
-  ] = useState<SettlementCustomer | null>(null)
+  ] = useState<SettledCustomer | null>(null)
 
   const [
     customerForView,
@@ -103,11 +104,11 @@ const LegalCustomersList: FunctionComponent = () => {
     string[]
   >([])
 
-  const [customerIdForReview, setCustomerIdForReview] = useState<string | null>(
-    null
-  )
+  const [customerIdsForReview, setCustomerIdsForReview] = useState<
+    string[] | null
+  >(null)
 
-  const [settlementFees, setSettlementFees] = useState<ISettlementFees | null>(
+  const [settlementFees, setSettlementFees] = useState<SettlementFees | null>(
     null
   )
 
@@ -116,7 +117,7 @@ const LegalCustomersList: FunctionComponent = () => {
 
   const data = useSelector((state: any) => state.search.data) || []
   const error = useSelector((state: any) => state.search.error)
-  const loading = useSelector((state: any) => state.search.loading)
+  const loading = useSelector((state: any) => state.loading)
   const totalCount = useSelector((state: any) => state.search.totalCount)
 
   const history = useHistory()
@@ -124,6 +125,10 @@ const LegalCustomersList: FunctionComponent = () => {
 
   const tabs = manageLegalAffairsArray()
   const url = 'legal-affairs'
+
+  const canReview = adminTypes.some((type) =>
+    ability.can(type.permission, type.key)
+  )
 
   useEffect(() => {
     return () => {
@@ -139,8 +144,10 @@ const LegalCustomersList: FunctionComponent = () => {
     setIsSettlementLoading(true)
 
     const settlementFeesRes = await getSettlementFees(
+      // TODO: use _id instead of loanId after backend deploy
       customerForSettlement.loanId
     )
+
     if (settlementFeesRes.status === 'success') {
       setSettlementFees({
         penaltyFees: settlementFeesRes.body?.penaltyFees ?? 0,
@@ -183,7 +190,7 @@ const LegalCustomersList: FunctionComponent = () => {
     return customer[customer.status][name]
   }
 
-  const toggleShowActions = (customer: SettlementCustomer) => {
+  const toggleCustomerForSettlement = (customer: SettledCustomer) => {
     setCustomerForSettlement((previousValue) =>
       previousValue?._id === customer._id ? null : customer
     )
@@ -248,12 +255,12 @@ const LegalCustomersList: FunctionComponent = () => {
     type: AdminType
     notes: string
   }) => {
-    if (!customerIdForReview?.length) {
+    if (!customerIdsForReview?.length) {
       return
     }
 
     const reviewReqBody: ReviewReqBody = {
-      ids: [customerIdForReview],
+      ids: customerIdsForReview,
       ...values,
     }
 
@@ -270,7 +277,7 @@ const LegalCustomersList: FunctionComponent = () => {
       Swal.fire(local.error, getErrorMessage(response.error.error), 'error')
     }
 
-    setCustomerIdForReview(null)
+    setCustomerIdsForReview(null)
   }
 
   const selectFieldMapper: TableMapperItem = {
@@ -303,7 +310,7 @@ const LegalCustomersList: FunctionComponent = () => {
       render: (data) =>
         ability.can('getCustomer', 'customer') ? (
           <span
-            style={{ cursor: 'pointer' }}
+            className="clickable"
             onClick={() =>
               history.push('/customers/view-customer', {
                 id: data.customerId,
@@ -366,8 +373,8 @@ const LegalCustomersList: FunctionComponent = () => {
           data.areaSupervisorReview ||
           data.financialManagerReview) && (
           <img
-            style={{ cursor: 'pointer' }}
             title={local.logs}
+            className="clickable"
             src={require('../../../Assets/view.svg')}
             onClick={() => {
               setCustomerForView(data)
@@ -398,29 +405,29 @@ const LegalCustomersList: FunctionComponent = () => {
     {
       title: '',
       key: 'legalSettlement',
-      render: (data) => (
-        <Can I="updateSettlement" a="legal">
-          <div className="d-flex align-items-center p-1">
+      render: (data: SettledCustomer) => (
+        <div className="d-flex align-items-center p-1">
+          <Can I="updateSettlement" a="legal">
             <button
               className="btn clickable-action rounded-0 p-0 font-weight-normal mr-2"
               style={{ color: '#2f2f2f', fontSize: '.9rem' }}
-              onClick={() => toggleShowActions(data)}
+              onClick={() => toggleCustomerForSettlement(data)}
             >
               {local.registerSettlement}
             </button>
+          </Can>
 
-            {data.settlement && (
-              <img
-                title={local.read}
-                className="clickable"
-                src={require('../../../Assets/check-circle.svg')}
-                onClick={() => {
-                  setCustomerIdForReview(data._id)
-                }}
-              />
-            )}
-          </div>
-        </Can>
+          {canReview && data.settlement && (
+            <img
+              title={local.read}
+              className="clickable"
+              src={require('../../../Assets/check-circle.svg')}
+              onClick={() => {
+                setCustomerIdsForReview([data._id])
+              }}
+            />
+          )}
+        </div>
       ),
     },
   ]
@@ -460,12 +467,26 @@ const LegalCustomersList: FunctionComponent = () => {
               </div>
 
               <div>
-                <Button
-                  className="big-button ml-2"
-                  onClick={() => setIsUploadModalOpen(true)}
-                >
-                  {local.uploadDefaultingCustomers}
-                </Button>
+                {canReview && (
+                  <Button
+                    className="big-button ml-2"
+                    onClick={() =>
+                      setCustomerIdsForReview([...customerIdsForBulkAction])
+                    }
+                    disabled={!customerIdsForBulkAction?.length}
+                  >
+                    {local.read}
+                  </Button>
+                )}
+
+                <Can I="updateSettlement" a="legal">
+                  <Button
+                    className="big-button ml-2"
+                    onClick={() => setIsUploadModalOpen(true)}
+                  >
+                    {local.uploadDefaultingCustomers}
+                  </Button>
+                </Can>
               </div>
             </div>
             <hr className="dashed-line" />
@@ -494,126 +515,125 @@ const LegalCustomersList: FunctionComponent = () => {
                   ...tableMapper,
                   ...tableActionsMapper,
                 ]}
-                pagination
                 data={data}
                 url={url}
                 changeNumber={(key: string, number: number) => {
                   if (key === 'size') setSize(number)
                   if (key === 'from') setFrom(number)
                 }}
+                pagination
               />
             )}
           </Card.Body>
         </Card>
+
+        {customerForSettlement && settlementFees && (
+          <Modal
+            show={!!customerForSettlement && !!settlementFees}
+            onHide={hideSettlementModal}
+            size="lg"
+          >
+            <Modal.Header>
+              <Modal.Title>{local.legalSettlement}</Modal.Title>
+            </Modal.Header>
+            <div className="px-5 py-4">
+              <Modal.Body className="p-0">
+                <LegalSettlementForm
+                  settlementFees={settlementFees}
+                  onSubmit={() => {
+                    getLegalCustomers()
+                    hideSettlementModal()
+                  }}
+                  customer={customerForSettlement}
+                />
+              </Modal.Body>
+            </div>
+          </Modal>
+        )}
+
+        {customerForView && (
+          <Modal
+            show={!!customerForView}
+            onHide={() => setCustomerForView(null)}
+            size="lg"
+          >
+            <Modal.Header>
+              <Modal.Title>{local.logs}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>{local.reviewDate}</th>
+                    <th>{local.reviewStatus}</th>
+                    <th>{local.doneBy}</th>
+                    <th>{local.comments}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {adminTypes.map((adminType) =>
+                    customerForView ? renderLogRow(adminType.value) : undefined
+                  )}
+                </tbody>
+              </Table>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() => setCustomerForView(null)}
+              >
+                {local.cancel}
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
+
+        {!!customerIdsForReview?.length && (
+          <Modal
+            show={!!customerIdsForReview?.length}
+            onHide={() => setCustomerIdsForReview(null)}
+            size="lg"
+          >
+            <Modal.Header>
+              <Modal.Title>{local.settlementTitle}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <AppForm
+                formFields={reviewFormFields}
+                onSubmit={(values) => handleReviewCustomerSubmit(values)}
+                onCancel={() => setCustomerIdsForReview(null)}
+                options={{
+                  wideBtns: true,
+                  submitBtnText: local.reviewSettlement,
+                }}
+              />
+            </Modal.Body>
+          </Modal>
+        )}
+
+        <Modal
+          show={isUploadModalOpen}
+          onHide={() => setIsUploadModalOpen(false)}
+          size="lg"
+        >
+          <Modal.Header>
+            <Modal.Title>{local.uploadDefaultingCustomers}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <UploadLegalCustomers
+              onCancel={() => setIsUploadModalOpen(false)}
+              onSubmit={(response) => {
+                setIsUploadModalOpen(false)
+                getLegalCustomers()
+              }}
+            />
+          </Modal.Body>
+        </Modal>
       </div>
 
       {/* {
         <LegalSettlementPdfTemp/>
       } */}
-
-      {customerForSettlement && settlementFees && (
-        <Modal
-          show={!!customerForSettlement && !!settlementFees}
-          onHide={hideSettlementModal}
-          size="lg"
-        >
-          <Modal.Header>
-            <Modal.Title>{local.legalSettlement}</Modal.Title>
-          </Modal.Header>
-          <div className="px-5 py-4">
-            <Modal.Body className="p-0">
-              <LegalSettlementForm
-                settlementFees={settlementFees}
-                onSubmit={() => {
-                  getLegalCustomers()
-                  hideSettlementModal()
-                }}
-                customerId={customerForSettlement._id}
-                customerSettlement={customerForSettlement.settlement}
-              />
-            </Modal.Body>
-          </div>
-        </Modal>
-      )}
-
-      {customerForView && (
-        <Modal
-          show={!!customerForView}
-          onHide={() => setCustomerForView(null)}
-          size="lg"
-        >
-          <Modal.Header>
-            <Modal.Title>{local.logs}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Table>
-              <thead>
-                <tr>
-                  <th>{local.reviewDate}</th>
-                  <th>{local.reviewStatus}</th>
-                  <th>{local.doneBy}</th>
-                  <th>{local.comments}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {adminTypes.map((adminType) =>
-                  customerForView ? renderLogRow(adminType.value) : undefined
-                )}
-              </tbody>
-            </Table>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() => setCustomerForView(null)}
-            >
-              {local.cancel}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      )}
-
-      {customerIdForReview && (
-        <Modal
-          show={!!customerIdForReview}
-          onHide={() => setCustomerIdForReview(null)}
-          size="lg"
-        >
-          <Modal.Header>
-            <Modal.Title>{local.settlementTitle}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <AppForm
-              formFields={reviewFormFields}
-              onSubmit={(values) => handleReviewCustomerSubmit(values)}
-              onCancel={() => setCustomerIdForReview(null)}
-              options={{
-                wideBtns: true,
-                submitBtnText: local.reviewSettlement,
-              }}
-            />
-          </Modal.Body>
-        </Modal>
-      )}
-
-      <Modal
-        show={isUploadModalOpen}
-        onHide={() => setIsUploadModalOpen(false)}
-        size="lg"
-      >
-        <Modal.Header>
-          <Modal.Title>{local.uploadDefaultingCustomers}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <UploadLegalCustomers
-            onCancel={() => setIsUploadModalOpen(false)}
-            onSubmit={(response) => {
-              setIsUploadModalOpen(false)
-              getLegalCustomers()
-            }}
-          />
-        </Modal.Body>
-      </Modal>
     </>
   )
 }

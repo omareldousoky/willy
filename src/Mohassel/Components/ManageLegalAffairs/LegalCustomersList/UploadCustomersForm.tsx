@@ -3,7 +3,7 @@ import React from 'react'
 import * as Yup from 'yup'
 
 import AppForm from '../../../../Shared/Components/Form'
-import { FileField, IFormField } from '../../../../Shared/Components/Form/types'
+import { FileField } from '../../../../Shared/Components/Form/types'
 import local from '../../../../Shared/Assets/ar.json'
 import { uploadDefaultingCustomer } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import Swal from 'sweetalert2'
