@@ -38,7 +38,7 @@ const ManagersCreation: FunctionComponent<ManagersCreationProps> = ({
 
   const getManagers = async () => {
     const res = await getManagerHierarchy(branchId)
-    if (res.status === 'success') {
+    if (res.status === 'success' && res.body?.data) {
       const {
         operationsManager,
         areaManager,
