@@ -31,7 +31,6 @@ const ManagersCreation: FunctionComponent<ManagersCreationProps> = ({
     const res = await searchUsers(query)
     if (res.status === 'success' && res.body.data) {
       setUsers(res.body.data)
-      // this.setState({ users: res.body.data })
     }
     setLoading(false)
   }
