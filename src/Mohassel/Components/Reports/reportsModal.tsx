@@ -45,6 +45,7 @@ interface Props {
   hideModal: () => void;
   submit: (values) => void;
   getExcel?: (values) => void;
+  submitButtonText?: string;
 }
 
 const ReportsModal = (props: Props) => {
@@ -645,7 +646,7 @@ const ReportsModal = (props: Props) => {
                     </Button>
                   )}
                 <Button type="submit" variant="primary">
-                  {local.downloadPDF}
+                  {props.submitButtonText || local.downloadPDF}
                 </Button>
               </Modal.Footer>
             </Form>
