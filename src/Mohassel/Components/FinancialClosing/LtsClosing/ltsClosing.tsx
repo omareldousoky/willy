@@ -12,9 +12,6 @@ import { Loader } from '../../../../Shared/Components/Loader'
 import * as local from '../../../../Shared/Assets/ar.json'
 import Can from '../../../config/Can'
 
-interface Props extends RouteComponentProps {
-  history: any
-}
 interface State {
   loading: boolean
 }
@@ -30,8 +27,8 @@ const ltsClosingValidation = Yup.object().shape({
     }
   ),
 })
-class LtsClosing extends Component<Props, State> {
-  constructor(props: Props) {
+class LtsClosing extends Component<RouteComponentProps, State> {
+  constructor(props: RouteComponentProps) {
     super(props)
     this.state = {
       loading: false,

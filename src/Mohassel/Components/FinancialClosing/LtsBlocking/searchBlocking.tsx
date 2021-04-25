@@ -1,67 +1,71 @@
 import { Col, InputGroup, DropdownButton, Dropdown } from 'react-bootstrap'
 import React, { Component, useEffect } from 'react'
-import * as local from '../../../../Shared/Assets/ar.json'
 import Select, { ValueType } from 'react-select'
-import { connect } from "react-redux"
+import { connect } from 'react-redux'
 import { Formik, Field, FormikValues, Form, useFormikContext } from 'formik'
 import * as Yup from 'yup'
-import { theme } from '../../../../theme'
+import Swal from 'sweetalert2'
+import * as local from '../../../../Shared/Assets/ar.json'
 import DateField from '../../Common/FormikFields/dateField'
 import { search, searchFilters } from '../../../../Shared/redux/search/actions'
 import { loading } from '../../../../Shared/redux/loading/actions'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
 import TextField from '../../Common/FormikFields/textField'
-import Swal from 'sweetalert2'
+import { theme } from '../../../../Shared/theme'
 
 interface Props {
-    size: number;
-    from: number;
-    search: (data) => Promise<void>;
-    error: string;
-    searchFilters: (data) => void;
-    setLoading: (data) => void;
-    onSubmit: () => void;
+  size: number
+  from: number
+  search: (data) => Promise<void>
+  error: string
+  searchFilters: (data) => void
+  setLoading: (data) => void
+  onSubmit: () => void
 }
 interface Option {
-    label: string;
-    value: string;
+  label: string
+  value: string
 }
 export interface BlockingObj {
-    from: number;
-    size: number;
-    branchCode: number;
-    branchName: string;
-    status: string;
-    blockDate: number | string;
-    blockDateFilter: string;
+  from: number
+  size: number
+  branchCode: number
+  branchName: string
+  status: string
+  blockDate: number | string
+  blockDateFilter: string
 }
 interface State {
-  dropDownValue: string;
+  dropDownValue: string
 }
 const ValueChangeListener = () => {
-    const { submitForm, values } = useFormikContext<FormikValues>()
+  const { submitForm, values } = useFormikContext<FormikValues>()
 
-    useEffect(() => {
-        if (values) {
-            submitForm()        
-        }
-    }, [values, submitForm])
+  useEffect(() => {
+    if (values) {
+      submitForm()
+    }
+  }, [values, submitForm])
 
-    return null
+  return null
 }
-const today: Date = new Date();
+const today: Date = new Date()
 const blockingValidationSchema = Yup.object().shape({
-    blockDate: Yup.string().test('block date cant be in the future', local.dateCantBeInFuture, (value: string) => {
-        return value ? new Date(value).valueOf() <= today.valueOf() : true;
-    }),
-    branchName: Yup.string().trim(),
-    branchCode: Yup.number(),
-    blockDateFilter: Yup.string().when('blockDate',{
-    is: (blockDate) =>  !!blockDate ,
+  blockDate: Yup.string().test(
+    'block date cant be in the future',
+    local.dateCantBeInFuture,
+    (value: string) => {
+      return value ? new Date(value).valueOf() <= today.valueOf() : true
+    }
+  ),
+  branchName: Yup.string().trim(),
+  branchCode: Yup.number(),
+  blockDateFilter: Yup.string().when('blockDate', {
+    is: (blockDate) => !!blockDate,
     then: Yup.string().required(local.required),
     otherwise: Yup.string(),
-    }),
-    status: Yup.string().trim()
+  }),
+  status: Yup.string().trim(),
 })
 class SearchBlocking extends Component<Props, State> {
   constructor(props: Props) {
@@ -70,6 +74,7 @@ class SearchBlocking extends Component<Props, State> {
       dropDownValue: 'branchName',
     }
   }
+
   getArValue(key: string) {
     const arDropDownValue = {
       branchName: local.branchName,
@@ -78,29 +83,36 @@ class SearchBlocking extends Component<Props, State> {
     }
     return arDropDownValue[key]
   }
-  handleSubmit = async(values: BlockingObj) =>{
+
+  handleSubmit = async (values: BlockingObj) => {
     const obj = {
-      status:  values.status ,
-      blockDate:  values.blockDateFilter ? new Date (values.blockDate as string).setHours(23,59,59,999).valueOf() : 0,
+      status: values.status,
+      blockDate: values.blockDateFilter
+        ? new Date(values.blockDate as string)
+            .setHours(23, 59, 59, 999)
+            .valueOf()
+        : 0,
       blockDateFilter: values.blockDateFilter,
       branchCode: values.branchCode,
       branchName: values.branchName,
     }
-    if(obj){
-    this.props.searchFilters(obj)
-    this.props.search({
-        ...obj,
-        from: this.props.from,
-        size: this.props.size,
-        url: 'block'
-    }).then(()=>{
-      if(this.props.error)
-      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
-      else this.props.onSubmit()
+    if (obj) {
+      this.props.searchFilters(obj)
+      this.props
+        .search({
+          ...obj,
+          from: this.props.from,
+          size: this.props.size,
+          url: 'block',
+        })
+        .then(() => {
+          if (this.props.error)
+            Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          else this.props.onSubmit()
+        })
     }
-    );
-   }  
   }
+
   render() {
     return (
       <Formik
@@ -123,7 +135,7 @@ class SearchBlocking extends Component<Props, State> {
             <div className="d-flex">
               <Col sm={6} className="my-2">
                 <div className="dropdown-container">
-                <p className="dropdown-label">{local.operationType}</p>
+                  <p className="dropdown-label">{local.operationType}</p>
                   <Select<Option>
                     isClearable
                     styles={theme.selectStyleWithoutBorder}
@@ -136,7 +148,7 @@ class SearchBlocking extends Component<Props, State> {
                         const { value } = event as Option
                         formikProps.setFieldValue('status', value)
                         formikProps.setFieldValue('blockDateFilter', '')
-                        formikProps.setFieldValue('blockDate','')
+                        formikProps.setFieldValue('blockDate', '')
                       } else {
                         formikProps.setFieldValue('status', '')
                       }
@@ -172,16 +184,16 @@ class SearchBlocking extends Component<Props, State> {
                     ))}
                   </DropdownButton>
                   <Field
-                          type="text"
-                          name={this.state.dropDownValue}
-                          data-qc="searchKeyword"
-                          onChange={formikProps.handleChange}
-                          placeholder={local.searchByBranchNameOrCode}
-                          className="m-0"
-                          component={TextField}
-                          onlyField
-                          value={formikProps.values[this.state.dropDownValue]}
-                        />
+                    type="text"
+                    name={this.state.dropDownValue}
+                    data-qc="searchKeyword"
+                    onChange={formikProps.handleChange}
+                    placeholder={local.searchByBranchNameOrCode}
+                    className="m-0"
+                    component={TextField}
+                    onlyField
+                    value={formikProps.values[this.state.dropDownValue]}
+                  />
                 </InputGroup>
               </Col>
             </div>
@@ -196,14 +208,15 @@ class SearchBlocking extends Component<Props, State> {
                   className="m-0 full-width"
                   label={local.blockDate}
                   isClearable
-                  onClear={()=>{formikProps.setFieldValue('blockDate','')}}
+                  onClear={() => {
+                    formikProps.setFieldValue('blockDate', '')
+                  }}
                   id="blockDate"
-
                 />
               </Col>
-               <Col sm={6}>
+              <Col sm={6}>
                 <div className="dropdown-container">
-                <p className="dropdown-label">{local.branchesStatus}</p> 
+                  <p className="dropdown-label">{local.branchesStatus}</p>
                   <Select<Option>
                     isClearable
                     styles={theme.selectStyleWithoutBorder}
@@ -227,7 +240,12 @@ class SearchBlocking extends Component<Props, State> {
                     ]}
                   />
                 </div>
-                {(formikProps.errors.blockDateFilter && !!formikProps.values.blockDate) && <div className="errorMsg">{formikProps.errors.blockDateFilter}</div>}
+                {formikProps.errors.blockDateFilter &&
+                  !!formikProps.values.blockDate && (
+                    <div className="errorMsg">
+                      {formikProps.errors.blockDateFilter}
+                    </div>
+                  )}
               </Col>
             </div>
             <ValueChangeListener />
