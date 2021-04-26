@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Table from 'react-bootstrap/Table';
-import { downloadFile, getErrorMessage, guarantorOrderLocal, iscoreStatusColor, iscoreBank } from "../../../Shared/Services/utils";
+import { downloadFile, getErrorMessage, guarantorOrderLocal, iscoreStatusColor, iscoreBank, orderLocal } from "../../../Shared/Services/utils";
 import Can from '../../config/Can';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -184,8 +184,14 @@ export const GuarantorTableView = (props: Props) => {
         changeModal(false);
     }
     const pass = props.status && ['reviewed', 'created', 'approved', 'secondReview', 'thirdReview'].includes(props.status)
-    const individualGuarantors = props.guarantors.filter(guarantor => guarantor.customerType === 'individual')
-    const companyGuarantors = props.guarantors.filter(guarantor => guarantor.customerType === 'company')
+    const individualGuarantors: { guarantor: Customer; index: number }[] = []
+    const companyGuarantors: { guarantor: Customer; index: number }[] = []
+    props.guarantors.forEach((guarantor, i) => {
+        const guarObj = { guarantor, index: i }
+        guarantor.customerType === 'company'
+        ? companyGuarantors.push(guarObj)
+        : individualGuarantors.push(guarObj)
+    })
     return (
         <>
             <div className="d-flex flex-column align-items-start justify-content-center">
@@ -217,17 +223,27 @@ export const GuarantorTableView = (props: Props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {individualGuarantors.length > 0 && individualGuarantors.map((guar, i) => {
-                            const iScore = props.iScores && props.iScores.length > 0 ? props.iScores.filter(score => score.nationalId === guar.nationalId)[0] : {};
-                            const area = props.getGeoArea(guar.geoAreaId);
-                            return (<tr key={i}>
-                                <td>{guarantorOrderLocal[i && i > 10 ? "default" : i]}</td>
-                                <td>{guar.key}</td>
-                                <td>{guar.customerName || ''}</td>
-                                <td>{guar.nationalId || ''}</td>
+                        {individualGuarantors.length > 0 && individualGuarantors.map((guar) => {
+                            const iScore = props.iScores && props.iScores.length > 0 ? props.iScores.filter(score => score.nationalId === guar.guarantor.nationalId)[0] : {};
+                            const area = props.getGeoArea(guar.guarantor.geoAreaId);
+                            return (<tr key={guar.index}>
+                                {props.entitledToSign
+                                    ? orderLocal[
+                                        guar.index && guar.index > 10
+                                            ? 'default'
+                                            : guar.index
+                                        ]
+                                    : guarantorOrderLocal[
+                                        guar.index && guar.index > 10
+                                            ? 'default'
+                                            : guar.index
+                                ]}
+                                <td>{guar.guarantor.key}</td>
+                                <td>{guar.guarantor.customerName || ''}</td>
+                                <td>{guar.guarantor.nationalId || ''}</td>
                                 <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name || ''}</td>
-                                <td>{guar.customerHomeAddress || ''}</td>
-                                <td>{guar.mobilePhoneNumber || ''}</td>
+                                <td>{guar.guarantor.customerHomeAddress || ''}</td>
+                                <td>{guar.guarantor.mobilePhoneNumber || ''}</td>
                                 {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td style={{ color: iscoreStatusColor(iScore.iscore).color }}>{iScore.iscore}</td>}
                                 {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td>{iscoreStatusColor(iScore.iscore).status}</td>}
                                 {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td>{iScore.bankCodes && iScore.bankCodes.map(code => `${iscoreBank(code)} `)}</td>}
@@ -263,17 +279,17 @@ export const GuarantorTableView = (props: Props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {companyGuarantors.length > 0 && companyGuarantors.map((guar, i) => {
+                                {companyGuarantors.length > 0 && companyGuarantors.map((guar) => {
                                     // const iScore = props.iScores && props.iScores.length > 0 ? props.iScores.filter(score => score.nationalId === guar.nationalId)[0] : {};
                                     // const area = props.getGeoArea(guar.geoAreaId);
-                                    return (<tr key={i}>
-                                        <td>{guarantorOrderLocal[i && i > 10 ? "default" : i]}</td>
-                                        <td>{guar.key}</td>
-                                        <td>{guar.businessName || ''}</td>
-                                        <td>{guar.taxCardNumber|| ''}</td>
+                                    return (<tr key={guar.index}>
+                                        <td>{guarantorOrderLocal[guar.index && guar.index > 10 ? "default" : guar.index]}</td>
+                                        <td>{guar.guarantor.key}</td>
+                                        <td>{guar.guarantor.businessName || ''}</td>
+                                        <td>{guar.guarantor.taxCardNumber|| ''}</td>
                                         {/* <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name || ''}</td> */}
-                                        <td>{guar.commercialRegisterNumber || ''}</td>
-                                        <td>{guar.businessAddress || ''}</td>
+                                        <td>{guar.guarantor.commercialRegisterNumber || ''}</td>
+                                        <td>{guar.guarantor.businessAddress || ''}</td>
                                         {/* {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td style={{ color: iscoreStatusColor(iScore.iscore).color }}>{iScore.iscore}</td>}
                                         {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td>{iscoreStatusColor(iScore.iscore).status}</td>}
                                         {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td>{iScore.bankCodes && iScore.bankCodes.map(code => `${iscoreBank(code)} `)}</td>}

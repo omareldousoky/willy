@@ -198,7 +198,7 @@ class CompanyCreation extends Component<Props, State>{
       const res = await editCustomer(objToSubmit, this.state.selectedCustomer._id);
       if (res.status === 'success') {
         this.setState({ loading: false });
-        Swal.fire("", local.customerEdited, "success").then(() => { this.setState({ step: 3, customerId: res.body.customerId }) })
+        Swal.fire("", local.companyEdited, "success").then(() => { this.setState({ step: 3, customerId: res.body.customerId }) })
       } else {
         this.setState({ loading: false },()=> Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
       }
@@ -206,7 +206,7 @@ class CompanyCreation extends Component<Props, State>{
       const res = await createCustomer(objToSubmit);
       if (res.status === 'success') {
         this.setState({ loading: false });
-        Swal.fire("", local.customerCreated + ' ' + local.withCode + ' ' + res.body.customerKey, "success").then(() => { this.setState({ step: 3, customerId: res.body.customerId }) })
+        Swal.fire("", local.companyCreated + ' ' + local.withCode + ' ' + res.body.customerKey, "success").then(() => { this.setState({ step: 3, customerId: res.body.customerId }) })
       } else {
         this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
       }

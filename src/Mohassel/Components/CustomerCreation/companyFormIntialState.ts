@@ -40,8 +40,6 @@ export const companyCreationValidationStepTwo = Yup.object().shape({
   applicationDate: Yup.string().test(
       "Max Date", dateShouldBeBeforeToday,
       (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }).required(required),
-  permanentEmployeeCount: Yup.string().trim(),
-  partTimeEmployeeCount: Yup.string().trim(),
   comments: Yup.string().trim().max(500, maxLength100)
 })
 

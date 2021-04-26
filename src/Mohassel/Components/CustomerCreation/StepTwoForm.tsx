@@ -333,15 +333,15 @@ export const StepTwoForm = (props: any) => {
                 </Col>
                 {isCompany && <Col sm={6}>
                     <Form.Group controlId="businessActivityDetails">
-                        <Form.Label className="customer-form-label">{local.businessActivityDetails}</Form.Label>
+                        <Form.Label className="customer-form-label">{`${local.businessActivityDetails}*`}</Form.Label>
                         <Form.Control
-                            type="text"
+                            as="textarea"
                             name="businessActivityDetails"
                             data-qc="businessActivityDetails"
                             value={values.businessActivityDetails}
                             onBlur={handleBlur}
                             onChange={handleChange}
-                            // maxLength={5}
+                            maxLength={500}
                             isInvalid={errors.businessActivityDetails && touched.businessActivityDetails}
                         />
                         <Form.Control.Feedback type="invalid">

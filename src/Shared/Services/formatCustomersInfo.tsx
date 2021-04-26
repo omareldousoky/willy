@@ -24,7 +24,6 @@ const {
   taxCardNumber,
   commercialRegisterNumber,
   creationDate,
-  governorate,
   businessActivity,
   businessSpeciality,
   male,
@@ -137,11 +136,6 @@ export const getCompanyInfo = ({
         showFieldCondition: true,
       },
       {
-        fieldTitle: governorate,
-        fieldData: company.governorate || "",
-        showFieldCondition: true,
-      },
-      {
         fieldTitle: creationDate,
         fieldData:
           (company.created?.at && getDateAndTime(company.created?.at)) || "",
@@ -150,11 +144,6 @@ export const getCompanyInfo = ({
       {
         fieldTitle: businessActivity,
         fieldData: company.businessActivity || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: local.businessSpeciality,
-        fieldData: company?.businessSpeciality || "",
         showFieldCondition: true,
       },
   ];

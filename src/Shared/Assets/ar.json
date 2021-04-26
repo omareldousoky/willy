@@ -999,5 +999,7 @@
     "individuals": "الافراد",
     "theCompanyIsBlocked": "هذه الشركة موقوف التعامل معها",
     "blockCompany": "حظر الشركة",
-    "unblockCompany": "فك حظر الشركة"
+    "unblockCompany": "فك حظر الشركة",
+    "companyCreated": "تم انشاء الشركة بنجاح",
+    "companyEdited": "تم تعديل الشركة بنجاح"
 }

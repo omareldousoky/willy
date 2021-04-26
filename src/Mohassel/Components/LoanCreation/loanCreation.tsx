@@ -30,6 +30,7 @@ interface CustomerData {
   productName: string;
   entryDate: number;
   status: string;
+  businessName: string;
 }
 interface State {
   loanCreationDate: string;
@@ -81,6 +82,7 @@ class LoanCreation extends Component<Props, State> {
         productName: '',
         entryDate: 0,
         status: '',
+        businessName: '',
       },
       beneficiaryType: '',
       installmentsData: {},
@@ -109,7 +111,7 @@ class LoanCreation extends Component<Props, State> {
         customerData: {
           id: id,
           customerName: res.body.customer.customerName,
-          customerType: '',
+          customerType: res.body.customer.customerType,
           principal: res.body.principal,
           currency: res.body.product.currency,
           noOfInstallments: res.body.product.noOfInstallments,
@@ -119,6 +121,7 @@ class LoanCreation extends Component<Props, State> {
           productName: res.body.product.productName,
           entryDate: res.body.entryDate,
           status: res.body.status,
+          businessName: res.body.customer.businessName,
         }
       })
       if(type === "issue"){
@@ -205,8 +208,14 @@ class LoanCreation extends Component<Props, State> {
           </thead>
           <tbody>
             <tr>
-              <td>{beneficiaryType(this.state.beneficiaryType)}</td>
-              <td>{this.state.beneficiaryType === 'group' ? this.state.application.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer?.customerName:this.state.customerData.customerName}</td>
+              <td>
+                {beneficiaryType(
+                    this.state.customerData.customerType === 'company'
+                      ? 'company'
+                      : this.state.beneficiaryType
+                )}
+              </td>
+              <td>{this.state.beneficiaryType === 'group' ? this.state.application.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer?.customerName : this.state.customerData.customerName || this.state.customerData.businessName}</td>
               <td>{this.state.customerData.principal}</td>
               <td>{this.getCurrency()}</td>
               <td>{this.state.customerData.noOfInstallments}</td>
