@@ -443,6 +443,10 @@ code {
 	align-items: flex-start;
 }
 @media print {
+	* {
+		font-size: 14px;
+	}
+	
 	.print-none {
 		display: none !important;
 	}
