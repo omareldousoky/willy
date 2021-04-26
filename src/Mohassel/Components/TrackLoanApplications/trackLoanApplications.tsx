@@ -181,9 +181,8 @@ class TrackLoanApplications extends Component<Props, State>{
     }
   }
   componentDidMount() {
-    const type = (ability.can('getIssuedSMELoan','application')) ? 'sme' : 'micro'
-    this.props.setSearchFilters({ type })
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId, type }).then(() => {
+    this.props.setSearchFilters({ type: 'micro' })
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId, type: 'micro'}).then(() => {
       if (this.props.error)
         Swal.fire("", getErrorMessage(this.props.error), "error")
     }

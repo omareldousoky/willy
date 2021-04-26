@@ -162,7 +162,7 @@ class BulkApplicationCreation extends Component<Props, State>{
     ]
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "approved", type: (ability.can('getSMEApplication','application')) ? 'sme' : 'micro' }).then(()=>{
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "approved", type: 'micro' }).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
@@ -170,7 +170,7 @@ class BulkApplicationCreation extends Component<Props, State>{
     this.setState({ manageApplicationsTabs: manageApplicationsArray() })
   }
   getApplications() {
-    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "approved", type: (ability.can('getSMEApplication','application')) ? 'sme' : 'micro' }
+    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "approved" }
     this.props.search(query).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")

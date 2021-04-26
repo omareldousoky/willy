@@ -165,12 +165,12 @@ class BulkApplicationReview extends Component<Props, State>{
   componentDidMount() {
     if (ability.can('secondReview', 'application') || ability.can('thirdReview', 'application')) {
       this.setState({ checkPermission: true });
-      this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" , branchId : this.state.branchId !== 'hq' ? this.state.branchId : '', type: (ability.can('getSMEApplication','application')) ? 'sme' : 'micro'}).then(()=>{
+      this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" , branchId : this.state.branchId !== 'hq' ? this.state.branchId : '', type: 'micro'}).then(()=>{
         if(this.props.error)
         Swal.fire("Error !",getErrorMessage(this.props.error),"error")
       }
       );
-      this.props.setSearchFilters({ size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" , branchId : this.state.branchId !== 'hq' ? this.state.branchId : ''});
+      this.props.setSearchFilters({ size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" , branchId : this.state.branchId !== 'hq' ? this.state.branchId : '', type: 'micro'});
       this.setState({ manageApplicationsTabs: manageApplicationsArray() })
     }
   }
@@ -202,7 +202,7 @@ class BulkApplicationReview extends Component<Props, State>{
     }
   }
   getApplications() {
-    this.props.search( { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', type: (ability.can('getSMEApplication','application')) ? 'sme' : 'micro' }).then(()=>{
+    this.props.search( { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', type: 'micro' }).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }

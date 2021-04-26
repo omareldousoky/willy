@@ -35,7 +35,6 @@ interface State {
   payerName: string;
   payerId: string;
   employees: Array<Employee>;
-  randomPaymentTypes: Array<SelectObject>;
 }
 interface FormValues {
   truthDate: string;
@@ -60,6 +59,7 @@ interface Application {
   installmentsObject: InstallmentsObject;
   product: {
     beneficiaryType: string;
+    type: string;
   };
   group: {
     individualsInGroup: Array<Member>;
@@ -100,15 +100,25 @@ class ManualPayment extends Component<Props, State> {
       payerName: '',
       payerId: '',
       employees: [],
-      randomPaymentTypes: [
-        { label: local.reissuingFees, value: "reissuingFees" },
-        { label: local.legalFees, value: "legalFees" },
-        { label: local.clearanceFees, value: "clearanceFees" },
-        { label: local.toktokStamp, value: "toktokStamp" },
-        { label: local.tricycleStamp, value: "tricycleStamp" }
-      ],
     };
   }
+
+  getRandomPaymentTypes = () => {
+    const randomPaymentTypes = [
+      { label: local.reissuingFees, value: 'reissuingFees' },
+      { label: local.legalFees, value: 'legalFees' },
+      { label: local.clearanceFees, value: 'clearanceFees' },
+      { label: local.toktokStamp, value: 'toktokStamp' },
+      { label: local.tricycleStamp, value: 'tricycleStamp' },
+    ]
+    const smeRandomPaymentTypes = randomPaymentTypes.filter(
+      (option) => !['toktokStamp', 'tricycleStamp'].includes(option.value)
+    )
+    return this.props.application.product.type === 'sme'
+      ? smeRandomPaymentTypes
+      : randomPaymentTypes
+  }
+
   getUsersByAction = async (input: string, values) => {
     const obj = {
       size: 100,
@@ -144,7 +154,7 @@ class ManualPayment extends Component<Props, State> {
                           isInvalid={Boolean(this.props.formikProps.errors.randomPaymentType) && Boolean(this.props.formikProps.touched.randomPaymentType)}
                         >
                           <option value=""></option>
-                          {this.state.randomPaymentTypes.map(
+                          {this.getRandomPaymentTypes().map(
                             (randomPaymentType: SelectObject) => {
                               return (<option key={randomPaymentType.value} value={randomPaymentType.value}>{randomPaymentType.label}</option>);
                             }

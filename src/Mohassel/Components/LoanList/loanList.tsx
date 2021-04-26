@@ -103,8 +103,8 @@ class LoanList extends Component<Props, State> {
   }
   componentDidMount() {
     const type = (ability.can('getIssuedSMELoan','application')) ? 'sme' : 'micro'
-    this.props.setSearchFilters({ type })
-    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", type }).then(()=>{
+    this.props.setSearchFilters({ type: 'micro' })
+    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", type: 'micro' }).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
