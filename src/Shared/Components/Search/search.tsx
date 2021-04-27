@@ -664,7 +664,7 @@ const addSearchToProps = (dispatch) => {
     searchFilters: (data) => dispatch(searchFilters(data)),
     setLoading: (data) => dispatch(loading(data)),
     setIssuedLoansSearchFilters: (data) =>
-      dispatch(issuedLoansSearchFilters(data)),
+    dispatch(issuedLoansSearchFilters(data)),
   };
 };
 

@@ -50,7 +50,7 @@ class TerrorismUnList extends Component<Props, State> {
 		title: (() => void) | string;
 		key: string;
 		sortable?: boolean;
-		render: (data: any) => void;
+		render: (data: TerroristResponse) => void;
 	}[]
 	constructor(props: Props) {
 		super(props)
