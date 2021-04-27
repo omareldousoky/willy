@@ -311,7 +311,7 @@ class LoanCreation extends Component<Props, State> {
           }
         </Formik>
       </Container>
-      {this.state.print && <PaymentReceipt receiptData={this.state.receiptData} fromLoanIssuance={true}/>}
+      {this.state.print && <PaymentReceipt receiptData={this.state.receiptData} fromLoanIssuance={true} companyReceipt={this.state.application.customer.customerType === 'company'} />}
       </>
     )
   }

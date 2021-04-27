@@ -24,7 +24,7 @@ export const companyCreationValidationStepOne = Yup.object().shape({
     legalStructure: Yup.string().trim().required(required),
     businessLicenseNumber: Yup.string().max(50, maxLength50).required(required),
     businessSector: Yup.string().max(50, maxLength50).required(required),
-    businessActivityDetails: Yup.string().max(50, maxLength50).required(required),
+    businessActivityDetails: Yup.string().max(500, maxLength500).required(required),
     // businessLicenseIssuePlace: Yup.string().trim().max(100, maxLength100),
     businessLicenseIssueDate: Yup.string().test(
         "Max Date", dateShouldBeBeforeToday,

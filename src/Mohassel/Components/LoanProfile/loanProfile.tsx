@@ -853,7 +853,7 @@ class LoanProfile extends Component<Props, State>{
                 {this.state.print === 'followUpStatement' && <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} members={this.state.individualsWithInstallments} />}
                 {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} remainingTotal={this.state.remainingTotal} members={this.state.individualsWithInstallments} />}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} branchDetails={this.state.branchDetails} />}
-                {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} data={this.state.application} />}
+                {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} data={this.state.application} companyReceipt={this.state.application.customer.customerType === 'company'} />}
                 {this.state.print === 'payEarly' && <EarlyPaymentReceipt receiptData={this.state.receiptData} branchDetails={this.state.branchDetails} earlyPaymentData={this.state.earlyPaymentData} data={this.state.application} />}
                 {(this.state.print === 'randomPayment' || this.state.print === 'penalty') ? <RandomPaymentReceipt receiptData={this.state.receiptData} data={this.state.application} /> : null}
             </Container>

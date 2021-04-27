@@ -1001,5 +1001,7 @@
     "blockCompany": "حظر الشركة",
     "unblockCompany": "فك حظر الشركة",
     "companyCreated": "تم انشاء الشركة بنجاح",
-    "companyEdited": "تم تعديل الشركة بنجاح"
+    "companyEdited": "تم تعديل الشركة بنجاح",
+    "na": "لا يوجد",
+    "Usedalllegalwaysofcollectingthemoney": "إستنفاذ الطرق الودية والقانونية للتحصيل"
 }

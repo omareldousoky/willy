@@ -138,26 +138,69 @@ class CustomerSearch extends Component<Props, State>{
                         <h5>{this.props.source}</h5>
                         <Button variant="danger" onClick={() => this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>×</Button>
                     </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.name}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.customerName}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.nationalId}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.nationalId}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.birthDate}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.birthDate && getRenderDate(this.props.selectedCustomer.birthDate)}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.nationalIdIssueDate}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.nationalIdIssueDate && getRenderDate(this.props.selectedCustomer.nationalIdIssueDate)}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.customerHomeAddress}</p>
-                        <p style={{ width: '60%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{this.props.selectedCustomer.customerHomeAddress}</p>
-                    </div>
+                    {this.props.selectedCustomer.customerType === 'individual' ? (
+                        <>
+                            <div className="d-flex flex-row">
+                                <p>{local.name}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.customerName}</p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.nationalId}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.nationalId}</p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.birthDate}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.birthDate && getRenderDate(this.props.selectedCustomer.birthDate)}</p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.nationalIdIssueDate}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.nationalIdIssueDate && getRenderDate(this.props.selectedCustomer.nationalIdIssueDate)}</p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.customerHomeAddress}</p>
+                                <p style={{ width: '60%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{this.props.selectedCustomer.customerHomeAddress}</p>
+                            </div>
+                            </>
+                    ) : (
+                        <>
+                            <div className="d-flex flex-row">
+                                <p>{local.companyName}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>
+                                {this.props.selectedCustomer.businessName}
+                                </p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.companyCode}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>
+                                {this.props.selectedCustomer.key}
+                                </p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.taxCardNumber}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>
+                                {this.props.selectedCustomer.taxCardNumber}
+                                </p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.commercialRegisterNumber}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>
+                                {this.props.selectedCustomer.commercialRegisterNumber}
+                                </p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.companyAddress}</p>
+                                <p
+                                style={{
+                                    width: '60%',
+                                    margin: '0 10px 0 0',
+                                    wordBreak: 'break-all',
+                                }}
+                                >
+                                {this.props.selectedCustomer.businessAddress}
+                                </p>
+                            </div>
+                        </>
+                    )}
                 </div>
                 }
                 {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source === 'loanApplication' && <InfoBox info={this.props.sme ? [getCompanyInfo({ company: this.props.selectedCustomer })] : [getCustomerInfo({customerDetails: this.props.selectedCustomer})]} />}

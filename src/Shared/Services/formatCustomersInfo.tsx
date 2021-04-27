@@ -24,7 +24,7 @@ const {
   taxCardNumber,
   commercialRegisterNumber,
   creationDate,
-  businessActivity,
+  businessSector,
   businessSpeciality,
   male,
   female,
@@ -142,8 +142,8 @@ export const getCompanyInfo = ({
         showFieldCondition: true,
       },
       {
-        fieldTitle: businessActivity,
-        fieldData: company.businessActivity || "",
+        fieldTitle: businessSector,
+        fieldData: company.businessSector || "",
         showFieldCondition: true,
       },
   ];
@@ -160,7 +160,6 @@ export const getCustomerInfo = ({
     key,
     nationalId,
     birthDate,
-    branchName,
     gender,
     nationalIdIssueDate,
     businessSector,
@@ -184,11 +183,6 @@ export const getCustomerInfo = ({
     {
       fieldTitle: customerCode,
       fieldData: key || "",
-      showFieldCondition: true,
-    },
-    {
-      fieldTitle: local.branchName,
-      fieldData: branchName || "",
       showFieldCondition: true,
     },
     {
@@ -225,17 +219,17 @@ export const getCustomerInfo = ({
     },
     {
       fieldTitle: local.businessSector,
-      fieldData: businessSector || "",
+      fieldData: businessSector || local.na,
       showFieldCondition: true,
     },
     {
       fieldTitle: local.businessActivity,
-      fieldData: businessActivity || "",
+      fieldData: businessActivity || local.na,
       showFieldCondition: true,
     },
     {
       fieldTitle: local.businessSpeciality,
-      fieldData: businessSpeciality || "",
+      fieldData: businessSpeciality || local.na,
       showFieldCondition: true,
     },
     {
@@ -250,27 +244,27 @@ export const getCustomerInfo = ({
     },
     {
       fieldTitle: local.customerHomeAddress,
-      fieldData: customerHomeAddress || "",
+      fieldData: customerHomeAddress || local.na,
       showFieldCondition: true,
     },
     {
       fieldTitle: local.postalCode,
-      fieldData: homePostalCode || "",
+      fieldData: homePostalCode || local.na,
       showFieldCondition: true,
     },
     {
       fieldTitle: local.homePhoneNumber,
-      fieldData: homePhoneNumber || "",
+      fieldData: homePhoneNumber || local.na,
       showFieldCondition: true,
     },
     {
       fieldTitle: local.faxNumber,
-      fieldData: faxNumber || "",
+      fieldData: faxNumber || local.na,
       showFieldCondition: true,
     },
     {
       fieldTitle: local.mobilePhoneNumber,
-      fieldData: mobilePhoneNumber || "",
+      fieldData: mobilePhoneNumber || local.na,
       showFieldCondition: true,
     },
   ];
