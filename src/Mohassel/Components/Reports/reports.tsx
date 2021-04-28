@@ -39,6 +39,7 @@ import { downloadFile } from '../../../Shared/Services/utils';
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
 import CustomerTransactionReport from '../pdfTemplates/customerTransactionReport/customerTransactionReport';
 import { getCustomerTransactions } from '../../Services/APIs/Reports/customerTransactions';
+import { Button } from 'react-bootstrap';
 
 export interface PDF {
   key?: string;
@@ -607,10 +608,18 @@ class Reports extends Component<{}, State> {
                     <Card.Body>
                       <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0px 20px', fontWeight: 'bold', alignItems: 'center' }}>
                         <div>
-                          <span style={{ marginLeft: 40 }}>#{index + 1}</span>
+                        <span className="mr-5 text-secondary">
+                          #{index + 1}
+                        </span>
                           <span>{pdf.local}</span>
                         </div>
-                        <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.handlePrint(pdf)} />
+                        <Button
+                        type="button"
+                        variant="default"
+                        onClick={() => this.handlePrint(pdf)}
+                        title="download">
+                          <span className="download-icon" aria-hidden="true" />
+                          </Button>
                       </div>
                     </Card.Body>
                   </Card>

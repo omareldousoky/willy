@@ -121,13 +121,8 @@ const LaundryReports: FunctionComponent = () => {
 				<Loader type="fullscreen" open={loading} />
 				<Card.Body style={{ padding: 15 }}>
 					<div className="custom-card-header">
-						<div
-							style={{
-								display: "flex",
-								alignItems: "center",
-							}}
-						>
-							<Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
+						<div className="d-flex">
+							<Card.Title className="mr-5">
 								{local.laundryReports}
 							</Card.Title>
 						</div>
@@ -139,19 +134,19 @@ const LaundryReports: FunctionComponent = () => {
                     <Card.Body>
                       <div className="d-flex justify-content-between align-items-center px-2">
                         <div className="font-weight-bold">
-                          <span className="mr-4">
+                          <span className="mr-4 text-secondary">
                             #{index + 1}
                           </span>
                           <span>{pdf.local}</span>
                         </div>
-												<Button
-													type="button"
-													variant="default"
+                        <Button
+                          type="button"
+                          variant="default"
                           onClick={() => handlePrint(pdf)}
-													title="download"
-												>
-													<span className="download-icon" aria-hidden="true" />
-												</Button>
+                          title="download"
+                        >
+                          <span className="download-icon" aria-hidden="true" />
+                        </Button>
                       </div>
                     </Card.Body>
                   </Card>

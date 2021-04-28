@@ -213,11 +213,14 @@ export const TasaheelReports = () => {
                         )}
                       </div>
                       {report.status === "created" && (
-                        <div
-                          style={{ cursor: "pointer" }}
-                          onClick={() => downloadGeneratedReport(report._id)}
-                          className="download-icon"
-                        />
+                        <Button
+                        type="button"
+                        variant="default"
+                        onClick={() => downloadGeneratedReport(report._id)}
+                        title="download"
+                      >
+                        <span className="download-icon" aria-hidden="true" />
+                      </Button>
                       )}
                     </div>
                   </Card.Body>

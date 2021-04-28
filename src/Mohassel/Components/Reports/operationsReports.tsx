@@ -44,6 +44,7 @@ import MonthComparison from "../pdfTemplates/monthComparison/monthComparison";
 import ActiveWalletIndividual from "../pdfTemplates/activeWalletIndividual/activeWalletIndividual";
 import { ActiveWalletRequest, fetchActiveWalletGroupReport, fetchActiveWalletIndividualReport } from "../../Services/APIs/Reports/activeWallet";
 import ActiveWalletGroup from "../pdfTemplates/activeWalletGroup/activeWalletGroup";
+import { Button } from "react-bootstrap";
 
 export interface PDF {
   key?: string;
@@ -415,13 +416,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           <Loader type="fullscreen" open={this.state.loading} />
           <Card.Body style={{ padding: 15 }}>
             <div className="custom-card-header">
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
+              <div className="d-flex">
+                <Card.Title className="mr-5">
                   {local.operationsReports}
                 </Card.Title>
               </div>
@@ -431,34 +427,21 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                 <Can I={pdf.permission} a="report" key={index}>
                   <Card key={index}>
                     <Card.Body>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          padding: "0 20px",
-                          fontWeight: "bold",
-                          alignItems: "center",
-                        }}
-                      >
+                      <div className="d-flex justify-content-between font-weight-bold">
                         <div>
-                          <span
-                            style={{
-                              marginLeft: 40,
-                            }}
-                          >
+                          <span className="mr-5 text-secondary">
                             #{index + 1}
                           </span>
                           <span>{pdf.local}</span>
                         </div>
-                        <img
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          alt="download"
-                          data-qc="download"
-                          src={require(`../../Assets/green-download.svg`)}
+                        <Button
+                          type="button"
+                          variant="default"
                           onClick={() => this.handlePrint(pdf)}
-                        />
+                          title="download"
+                        >
+                          <span className="download-icon" aria-hidden="true" />
+                        </Button>
                       </div>
                     </Card.Body>
                   </Card>

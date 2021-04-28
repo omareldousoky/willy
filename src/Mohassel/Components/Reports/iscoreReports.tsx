@@ -77,15 +77,31 @@ class IscoreReports extends Component<{}, State>{
                             return (
                                 <Card key={index}>
                                     <Card.Body>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0px 20px', fontWeight: 'bold', alignItems: 'center' }}>
-                                            <div style={{ display: 'flex' }}>
-                                                <span style={{ marginLeft: 40 }}>#{index + 1}</span>
-                                                <span style={{ marginLeft: 40, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}><span>{local.loanAppCreationDate}</span>{timeToArabicDate(pdf.created.at, true)}</span>
-                                                <span style={{ marginLeft: 40 }}>{getIscoreReportStatus(pdf.status)}</span>
-                                                <span style={{ marginLeft: 40 }}>{pdf.fileName}</span>
-                                                {pdf.status === 'created' && <span style={{ marginLeft: 40, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}><span>{local.creationDate}</span>{timeToArabicDate(pdf.fileGeneratedAt, true)}</span>}
+                                    <div className="d-flex justify-content-between font-weight-bold">
+                                            <div className="d-flex">
+                                                <span className="mr-5 text-secondary">#{index + 1}</span>
+                                                <span className="mr-5 d-flex flex-start flex-column"><span>{local.loanAppCreationDate}</span>{timeToArabicDate(pdf.created.at, true)}</span>
+                                                <span className={`mr-5  text-${
+                                                    pdf.status === "created"
+                                                    ? "success"
+                                                    : pdf.status === "processing"
+                                                    ? "warning"
+                                                    : "danger"
+                                                } `}>
+                                                    {getIscoreReportStatus(pdf.status)}</span>
+                                                <span className="mr-5" >{pdf.fileName}</span>
+                                                {pdf.status === 'created' && <span className="mr-5 d-flex flex-start flex-column"><span>{local.creationDate}</span>{timeToArabicDate(pdf.fileGeneratedAt, true)}</span>}
                                             </div>
-                                            {pdf.status === 'created' && <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.getFile(pdf)} />}
+                                            {pdf.status === 'created' &&
+                                                <Button
+                                                type="button"
+                                                variant="default"
+                                                onClick={() => this.getFile(pdf)}
+                                                title="download"
+                                            >
+                                                <span className="download-icon" aria-hidden="true" />
+                                            </Button>
+                                            }
                                         </div>
                                     </Card.Body>
                                 </Card>

@@ -161,13 +161,22 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
                 <Can I={pdf.permission} a="report" key={index}>
                   <Card>
                     <Card.Body>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0px 20px', fontWeight: 'bold', alignItems: 'center' }}>
-                        <div style={{ display: 'flex' }}>
-                          <span style={{ marginLeft: 40 }}>#{index + 1}</span>
+                      <div className="d-flex justify-content-between font-weight-bold">
+                        <div style={{ display: "flex" }}>
+                          <span className="mr-5 text-secondary">
+                            #{index + 1}
+                          </span>
                           <span style={{ marginLeft: 40 }}>{pdf.local}</span>
                         </div>
-                       <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.handlePrint(pdf)} />
-                       </div>
+                        <Button
+                          type="button"
+                          variant="default"
+                          onClick={() => this.handlePrint(pdf)}
+                          title="download"
+                        >
+                          <span className="download-icon" aria-hidden="true" />
+                        </Button>
+                      </div>
                     </Card.Body>
                   </Card>
                 </Can>
