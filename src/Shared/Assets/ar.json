@@ -993,5 +993,7 @@
     "unblocked":"غير محظور",
     "operationType":"نوع العملية",
     "branchesStatus":"حاله الفروع",
-    "manageFinancialTransaction":"إدارة المعاملات المالية"
+    "manageFinancialTransaction":"إدارة المعاملات المالية",
+    "penaltyLessThanOrEqual": "المبلغ يجب ان يكون اقل او يساوي قيمة الغرامة",
+    "noPenalty": "لا توجد غرامة"
 }

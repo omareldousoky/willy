@@ -6,9 +6,8 @@ const endOfDay: Date = new Date();
 endOfDay.setHours(23, 59, 59, 59);
 const beforeFeb2021 = new Date("1-31-2021").setHours(23, 59, 59, 59).valueOf()
 
-export const paymentValidation = Yup.object().shape({
+export const paymentValidation = penalty => Yup.object().shape({
   payAmount: Yup.number()
-    .moreThan(0, local.minPayment)
     .required(local.required)
     .when("paymentType", {
       is: paymentType => paymentType !== "penalties",
@@ -17,8 +16,12 @@ export const paymentValidation = Yup.object().shape({
         function (this: any, value: number) {
           return value <= this.parent.max;
         }
-      ),
-      otherwise: Yup.number().moreThan(0, local.minPayment)
+      )
+      .moreThan(0, local.minPayment)
+      ,
+      otherwise:
+        Yup.number()       
+          .max(penalty || 0, ` ${penalty ? `${local.penaltyLessThanOrEqual} ${penalty}` : local.noPenalty}`)
     }),
   randomPaymentType: Yup.string().when("paymentType", {
     is: paymentType => paymentType === "random",

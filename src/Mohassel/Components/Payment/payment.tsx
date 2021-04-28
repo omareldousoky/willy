@@ -487,14 +487,15 @@ class Payment extends Component<Props, State>{
       );
       case 1:
         return <PayInstallment
-        installments={this.props.installments}
-        application={this.props.application}
-        handleSubmit={this.handleSubmit}
-        payAmount={this.state.payAmount}
-        truthDate={this.state.truthDate}
-        paymentType={this.props.paymentType}
-        penaltyAction={this.state.penaltyAction}
-        />
+            penalty={this.state.penalty}
+            installments={this.props.installments}
+            application={this.props.application}
+            handleSubmit={this.handleSubmit}
+            payAmount={this.state.payAmount}
+            truthDate={this.state.truthDate}
+            paymentType={this.props.paymentType}
+            penaltyAction={this.state.penaltyAction}
+            />
       case 2: return (
         <Card className="payment-menu">
           <Loader type="fullsection" open={this.state.loading} />
