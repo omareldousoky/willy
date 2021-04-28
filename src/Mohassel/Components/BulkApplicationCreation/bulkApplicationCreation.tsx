@@ -112,7 +112,7 @@ class BulkApplicationCreation extends Component<Props, State>{
         title: local.customerName,
         key: "name",
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
-          {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
+          {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName || data.application.customer.businessName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
             </div>)

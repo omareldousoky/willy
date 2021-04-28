@@ -274,13 +274,7 @@ class TrackLoanApplications extends Component<Props, State>{
     return true
   }
   render() {
-    const searchKeys = ability.can('getSMEApplication','application') ? [
-      "keyword",
-      "dateFromTo",
-      "branch",
-      "status-application",
-      "sme"
-    ] : [
+    const searchKeys = [
       "keyword",
       "dateFromTo",
       "branch",
@@ -293,6 +287,19 @@ class TrackLoanApplications extends Component<Props, State>{
       key: "loanCode",
       render: data => data.application.customer.commercialRegisterNumber
     })
+    const dropDownKeys = [
+      'name',
+      'nationalId',
+      'key',
+      'customerKey',
+      'customerCode',
+      'customerShortenedCode',
+    ]
+    ability.can('getSMEApplication','application') && searchKeys.push('sme'); dropDownKeys.push(
+      'businessName',
+      'taxCardNumber',
+      'commercialRegisterNumber'
+    )
     return (
       <>
         <div className="print-none">
@@ -317,14 +324,7 @@ class TrackLoanApplications extends Component<Props, State>{
               <hr className="dashed-line" />
               <Search
                 searchKeys={searchKeys}
-                dropDownKeys={[
-                  "name",
-                  "nationalId",
-                  "key",
-                  "customerKey",
-                  "customerCode",
-                  "customerShortenedCode",
-                ]}
+                dropDownKeys={dropDownKeys}
                 url="application"
                 from={this.state.from}
                 size={this.state.size}

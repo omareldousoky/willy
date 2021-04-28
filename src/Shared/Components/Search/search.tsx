@@ -229,7 +229,10 @@ class Search extends Component<Props, State> {
         case "printed":
           initialState.printed = false;
         case "sme":
-          initialState.type = 'micro';
+          initialState.type =
+            this.props.url === "loan"
+              ? this.props.issuedLoansSearchFilters.type
+              : 'micro';
       }
     });
     return initialState;

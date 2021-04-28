@@ -167,13 +167,26 @@ class LoanList extends Component<Props, State> {
   render() {
     const array = manageLoansArray();
     const smePermission = ( ability.can('getIssuedSMELoan','application') && this.props.searchFilters.type === 'sme' )
-    const searchKeys = ability.can('getIssuedSMELoan','application') ? ['keyword', 'dateFromTo', 'status', 'branch', 'doubtful', 'writtenOff', 'sme'] : ['keyword', 'dateFromTo', 'status', 'branch', 'doubtful', 'writtenOff']
+    const searchKeys = ['keyword', 'dateFromTo', 'status', 'branch', 'doubtful', 'writtenOff']
     const filteredMappers = ( smePermission ) ? this.mappers.filter(mapper => mapper.key !== 'nationalId') : this.mappers
     if ( smePermission ) filteredMappers.splice(3, 0, {
       title: local.commercialRegisterNumber,
-      key: "loanCode",
+      key: "commercialRegisterNumber",
       render: data => data.application.customer.commercialRegisterNumber
     })
+    const dropDownKeys = [
+      'name',
+      'nationalId',
+      'key',
+      'customerKey',
+      'customerCode',
+      'customerShortenedCode',
+    ]
+    ability.can('getIssuedSMELoan','application') && searchKeys.push('sme'); dropDownKeys.push(
+      'businessName',
+      'taxCardNumber',
+      'commercialRegisterNumber',
+    )
     
     return (
       <>
@@ -194,14 +207,7 @@ class LoanList extends Component<Props, State> {
             <hr className="dashed-line" />
             <Search
               searchKeys={searchKeys}
-							dropDownKeys={[
-								"name",
-								"nationalId",
-								"key",
-								"customerKey",
-								"customerCode",
-								"customerShortenedCode",
-							]}
+							dropDownKeys={dropDownKeys}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               setFrom={(from) => this.setState({ from: from })}
               datePlaceholder={local.issuanceDate}

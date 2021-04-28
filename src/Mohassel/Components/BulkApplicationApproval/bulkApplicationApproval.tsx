@@ -106,7 +106,7 @@ class BulkApplicationApproval extends Component<Props, State>{
         title: local.customerName,
         key: "name",
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
-          {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
+          {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName || data.application.customer.businessName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
             </div>)
@@ -121,7 +121,7 @@ class BulkApplicationApproval extends Component<Props, State>{
       {
         title: local.customerType,
         key: "customerType",
-        render: data => local[data.application.product.beneficiaryType]
+        render: data => local[data.application.customer.customerType === 'company' ? 'company' : data.application.product.beneficiaryType]
       },
       {
         title: local.principal,
@@ -196,7 +196,18 @@ class BulkApplicationApproval extends Component<Props, State>{
     }
   }
   render() {
-    const searchKey = ability.can('getSMEApplication','application') ? ['keyword', 'dateFromTo', 'branch', 'sme'] : ['keyword', 'dateFromTo', 'branch']
+    const searchKey = ['keyword', 'dateFromTo', 'branch']
+    const dropDownKeys = [
+      'name',
+      'nationalId',
+      'key',
+      'customerKey',
+      'customerCode',
+      'customerShortenedCode',
+    ]
+    ability.can('getSMEApplication','application') && searchKey.push('sme'); dropDownKeys.push('businessName',
+    'taxCardNumber',
+    'commercialRegisterNumber')
     return (
       <>
         <HeaderWithCards
@@ -223,7 +234,7 @@ class BulkApplicationApproval extends Component<Props, State>{
             <hr className="dashed-line" />
             <Search
               searchKeys={searchKey}
-              dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
+              dropDownKeys={dropDownKeys}
               url="application"
               from={this.state.from}
               size={this.state.size}
