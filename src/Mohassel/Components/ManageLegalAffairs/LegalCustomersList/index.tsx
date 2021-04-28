@@ -26,10 +26,16 @@ import local from '../../../../Shared/Assets/ar.json'
 import Search from '../../../../Shared/Components/Search/search'
 import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from '../manageLegalAffairsInitials'
-import { AdminType, ReviewReqBody, SettledCustomer, SettlementFormValues, SettlementInfo, TableMapperItem } from '../types'
+import {
+  AdminType,
+  ReviewReqBody,
+  SettledCustomer,
+  SettlementFormValues,
+  SettlementInfo,
+  TableMapperItem,
+} from '../types'
 import { DefaultedCustomer, ManagerReviews } from '../defaultingCustomersList'
-import LegalSettlementForm, {
-} from './LegalSettlementForm'
+import LegalSettlementForm from './LegalSettlementForm'
 import {
   getSettlementFees,
   reviewLegalCustomer,
@@ -44,7 +50,6 @@ import { getBranch } from '../../../Services/APIs/Branch/getBranch'
 import { getManagerHierarchy } from '../../../Services/APIs/ManagerHierarchy/getManagerHierarchy'
 import { Managers } from '../../managerHierarchy/branchBasicsCard'
 import managerTypes from '../configs/managerTypes'
-
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -304,34 +309,35 @@ const LegalCustomersList: FunctionComponent = () => {
     setCustomersForReview(null)
   }
 
-  const selectFieldMapper: TableMapperItem = {
-    title: () => (
-      <FormCheck
-        type="checkbox"
-        onChange={toggleSelectAllCustomers}
-        checked={
-          !!customersForBulkAction.length &&
-          customersForBulkAction.length === data.length
-        }
-        disabled={!searchFilters.reviewer}
-      />
-    ),
-    key: 'selected',
-    render: (data: SettledCustomer) => (
-      <FormCheck
-        type="checkbox"
-        checked={
-          !!customersForBulkAction.find((customer) => customer._id === data._id)
-        }
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          toggleSelectCustomer(e, data)
-        }
-        disabled={!searchFilters.reviewer}
-      />
-    ),
-  }
-
   const tableMapper: TableMapperItem[] = [
+    {
+      title: () => (
+        <FormCheck
+          type="checkbox"
+          onChange={toggleSelectAllCustomers}
+          checked={
+            !!customersForBulkAction.length &&
+            customersForBulkAction.length === data.length
+          }
+          disabled={!searchFilters.reviewer}
+        />
+      ),
+      key: 'selected',
+      render: (data: SettledCustomer) => (
+        <FormCheck
+          type="checkbox"
+          checked={
+            !!customersForBulkAction.find(
+              (customer) => customer._id === data._id
+            )
+          }
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            toggleSelectCustomer(e, data)
+          }
+          disabled={!searchFilters.reviewer}
+        />
+      ),
+    },
     {
       title: local.customerId,
       key: 'customerKey',
