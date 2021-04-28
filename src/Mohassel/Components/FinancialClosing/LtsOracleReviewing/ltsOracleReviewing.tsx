@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card } from 'react-bootstrap'
+import { Button, Card } from 'react-bootstrap'
 import { Loader } from '../../../../Shared/Components/Loader'
 import local from '../../../../Shared/Assets/ar.json'
 import { downloadOracleReviewFile, getOracleReviewFiles, ReviewFilesResponse } from '../../../Services/APIs/loanApplication/financialClosing'
@@ -58,13 +58,19 @@ class LtsOracleReviewing extends Component<{}, State> {
                   <Card.Body>
                     <div className="file-review-container">
                       <div className="d-flex align-items-center">
-                        <span className="mx-3">#{index + 1}</span>
+                        <span className="mx-3 text-secondary">#{index + 1}</span>
                         <span className="file-date-container mx-5">
                           <span>{local.closeDate}</span>
                           {file.toDate? timeToArabicDate(file.toDate, true):''}
                         </span>
                         <span className="mx-5">{file.fileName}</span>
-                        <span className="mx-5">{local[file.status]}</span>
+                        <span className={`mx-5  text-${
+                            file.status === "created"
+                              ? "success"
+                              : file.status === "queued"
+                              ? "warning"
+                              : "danger"
+                          } `}>{local[file.status]}</span>
                         {file.status === 'created' && (
                           <span className="file-date-container mx-5">
                             <span>{local.creationDate}</span>
@@ -73,13 +79,14 @@ class LtsOracleReviewing extends Component<{}, State> {
                         )}
                       </div>
                       {file.status === 'created' && (
-                        <img
-                         className="btn"
-                          alt="download"
-                          data-qc="download"
-                          src={require(`../../../Assets/green-download.svg`)}
-                          onClick={() => this.getFileUrl(file._id)}
-                        />
+                           <Button
+                           type="button"
+                           variant="default"
+                           onClick={() => this.getFileUrl(file._id)}
+                           title="download"
+                         >
+                           <span className="download-icon" aria-hidden="true" />
+                         </Button>
                       )}
                     </div>
                   </Card.Body>
