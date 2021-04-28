@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import * as Yup from 'yup'
 
@@ -9,8 +9,17 @@ import { uploadDefaultingCustomer } from '../../../Services/APIs/LegalAffairs/de
 import Swal from 'sweetalert2'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
 
+interface UploadLegalCustomerResponse {
+  nationalId: string
+  reason: string
+}
+
 const UploadLegalCustomers = ({ onCancel, onSubmit }) => {
+  const [failedCustomerURI, setfailedCustomerURI] = useState('')
+  const [isDisabled, setIsDisabled] = useState(false)
+
   const SUPPORTED_FORMATS = ['xlsx', 'xls', 'xlsm', 'csv']
+
   const formFields: [FileField] = [
     {
       name: 'data',
@@ -21,19 +30,45 @@ const UploadLegalCustomers = ({ onCancel, onSubmit }) => {
     },
   ]
 
+  const generateFailedCSV = (rows: UploadLegalCustomerResponse[][]) => {
+    const csvContent =
+      'data:text/csv;charset=utf-8,' +
+      `${local.nationalId},${local.reason}\n` +
+      rows.map((row: UploadLegalCustomerResponse[]) =>
+        row
+          .map(
+            (failedCustomer: UploadLegalCustomerResponse) =>
+              `${failedCustomer.nationalId},${getErrorMessage(
+                failedCustomer.reason
+              )}`
+          )
+          .join('\n')
+      )
+
+    const encodedUri = encodeURI(csvContent)
+    // window.open(encodedUri)
+    setfailedCustomerURI(encodedUri)
+  }
+
   const handleSubmit = async (values: { data }) => {
+    setIsDisabled(true)
+
     const formData = new FormData()
     formData.append('data', values.data[0])
 
     const response = await uploadDefaultingCustomer(formData)
 
     if (response.status === 'success') {
-      Swal.fire({
-        title: local.success,
-        icon: 'success',
-        confirmButtonText: local.end,
-      })
-      onSubmit(response)
+      if (response.body?.failedNationalIds?.length) {
+        generateFailedCSV([response.body.failedNationalIds])
+      } else {
+        Swal.fire({
+          title: local.success,
+          icon: 'success',
+          confirmButtonText: local.end,
+        })
+        onSubmit(response)
+      }
     } else {
       Swal.fire(local.error, getErrorMessage(response.error.error), 'error')
     }
@@ -44,8 +79,23 @@ const UploadLegalCustomers = ({ onCancel, onSubmit }) => {
       formFields={formFields}
       onSubmit={(values) => handleSubmit(values)}
       onCancel={onCancel}
+      onChange={() => {
+        setIsDisabled(false)
+        setfailedCustomerURI('')
+      }}
       options={{
         wideBtns: true,
+        disabled: isDisabled,
+        footer: failedCustomerURI && (
+          <a
+            className="btn btn-outline-danger"
+            href={failedCustomerURI}
+            download={local.customersFailedToUpload}
+            role="button"
+          >
+            {local.customersFailedToUpload}
+          </a>
+        ),
       }}
     />
   )

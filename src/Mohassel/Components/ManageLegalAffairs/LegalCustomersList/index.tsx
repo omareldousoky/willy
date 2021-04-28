@@ -11,7 +11,10 @@ import { useHistory } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
 import { Loader } from '../../../../Shared/Components/Loader'
-import { search, searchFilters } from '../../../../Shared/redux/search/actions'
+import {
+  search,
+  searchFilters as searchFiltersAction,
+} from '../../../../Shared/redux/search/actions'
 import {
   getErrorMessage,
   timeToArabicDate,
@@ -24,7 +27,7 @@ import Search from '../../../../Shared/Components/Search/search'
 import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from '../manageLegalAffairsInitials'
 import { TableMapperItem } from '../types'
-import { DefaultedCustomer } from '../defaultingCustomersList'
+import { DefaultedCustomer, ManagerReviews } from '../defaultingCustomersList'
 import LegalSettlementForm, {
   SettlementFormValues,
 } from './LegalSettlementForm'
@@ -36,10 +39,19 @@ import { IFormField } from '../../../../Shared/Components/Form/types'
 import { defaultValidationSchema } from '../../../../Shared/validations'
 import AppForm from '../../../../Shared/Components/Form'
 import UploadLegalCustomers from './UploadCustomersForm'
+import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
+import { Branch } from '../../../../Shared/Services/interfaces'
+import { getBranch } from '../../../Services/APIs/Branch/getBranch'
+import { getManagerHierarchy } from '../../../Services/APIs/ManagerHierarchy/getManagerHierarchy'
+import { Managers } from '../../managerHierarchy/branchBasicsCard'
 
-interface SettlementFees {
+interface SettlementInfo {
   penaltyFees: number
   courtFees: number
+  lawyerCardURL: string
+  criminalScheduleURL: string
+  caseDataAcknowledgmentURL: string
+  decreePhotoCopyURL: string
 }
 
 type AdminType =
@@ -55,11 +67,11 @@ export interface ReviewReqBody {
 }
 
 export interface SettledCustomer extends DefaultedCustomer {
-  settlement: SettlementFormValues
+  settlement: SettlementFormValues & ManagerReviews
 }
 
-// TODO: Move to separate file and use it in defaultingCustomers too
-const adminTypes = [
+// TODO [Refactor]: Move to separate file and use it in defaultingCustomers too
+const managerTypes = [
   {
     value: 'branchManagerReview',
     text: local.branchManagerReview,
@@ -94,31 +106,41 @@ const LegalCustomersList: FunctionComponent = () => {
     customerForSettlement,
     setCustomerForSettlement,
   ] = useState<SettledCustomer | null>(null)
+  const [settlementInfo, setSettlementInfo] = useState<SettlementInfo | null>(
+    null
+  )
 
   const [
     customerForView,
     setCustomerForView,
-  ] = useState<DefaultedCustomer | null>(null)
+  ] = useState<SettledCustomer | null>(null)
 
-  const [customerIdsForBulkAction, setCustomerIdsForBulkAction] = useState<
-    string[]
+  const [customersForBulkAction, setCustomersForBulkAction] = useState<
+    SettledCustomer[]
   >([])
 
-  const [customerIdsForReview, setCustomerIdsForReview] = useState<
-    string[] | null
+  const [customersForReview, setCustomersForReview] = useState<
+    SettledCustomer[] | null
   >(null)
 
-  const [settlementFees, setSettlementFees] = useState<SettlementFees | null>(
+  const [
+    customerForPrint,
+    setCustomerForPrint,
+  ] = useState<SettledCustomer | null>(null)
+  const [branchForPrint, setBranchForPrint] = useState<Branch | null>(null)
+  const [managersForPrint, setManagersForPrint] = useState<Managers | null>(
     null
   )
 
   const [isSettlementLoading, setIsSettlementLoading] = useState(false)
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
 
-  const data = useSelector((state: any) => state.search.data) || []
-  const error = useSelector((state: any) => state.search.error)
-  const loading = useSelector((state: any) => state.loading)
+  const data: SettledCustomer[] =
+    useSelector((state: any) => state.search.data) || []
+  const error: string = useSelector((state: any) => state.search.error)
+  const loading: boolean = useSelector((state: any) => state.loading)
   const totalCount = useSelector((state: any) => state.search.totalCount)
+  const searchFilters = useSelector((state: any) => state.searchFilters)
 
   const history = useHistory()
   const dispatch = useDispatch()
@@ -126,42 +148,88 @@ const LegalCustomersList: FunctionComponent = () => {
   const tabs = manageLegalAffairsArray()
   const url = 'legal-affairs'
 
-  const canReview = adminTypes.some((type) =>
+  const canReview = managerTypes.some((type) =>
     ability.can(type.permission, type.key)
   )
 
   useEffect(() => {
     return () => {
-      dispatch(searchFilters({}))
+      dispatch(searchFiltersAction({}))
     }
   }, [])
 
-  const getFees = async () => {
-    if (!customerForSettlement) {
-      return
+  useEffect(() => {
+    const fetchBranch = async () => {
+      if (!customerForPrint?.customerBranchId) {
+        return
+      }
+
+      const response = (await getBranch(
+        customerForPrint.customerBranchId
+      )) as any
+
+      if (response.status === 'success') {
+        setBranchForPrint(response.body?.data as Branch)
+      } else {
+        Swal.fire('error', getErrorMessage(response.error.error), 'error')
+      }
     }
 
-    setIsSettlementLoading(true)
+    const fetchManagerHierarchy = async () => {
+      if (!customerForPrint?.customerBranchId) {
+        return
+      }
 
-    const settlementFeesRes = await getSettlementFees(
-      // TODO: use _id instead of loanId after backend deploy
-      customerForSettlement.loanId
-    )
+      const response = await getManagerHierarchy(
+        customerForPrint.customerBranchId
+      )
 
-    if (settlementFeesRes.status === 'success') {
-      setSettlementFees({
-        penaltyFees: settlementFeesRes.body?.penaltyFees ?? 0,
-        courtFees: settlementFeesRes.body?.courtFees ?? 0,
-      })
-    } else {
-      Swal.fire('error', getErrorMessage(error), 'error')
+      if (response.status === 'success') {
+        setManagersForPrint(response.body?.data as Managers)
+      } else {
+        Swal.fire('error', getErrorMessage(response.error.error), 'error')
+      }
     }
 
-    setIsSettlementLoading(false)
-  }
+    if (customerForPrint) {
+      fetchBranch()
+      fetchManagerHierarchy()
+    }
+  }, [customerForPrint])
 
   useEffect(() => {
-    getFees()
+    if (branchForPrint && managersForPrint) {
+      window.print()
+    }
+  }, [branchForPrint, managersForPrint])
+
+  useEffect(() => {
+    const fetchSettlementFees = async () => {
+      if (!customerForSettlement) {
+        return
+      }
+
+      setIsSettlementLoading(true)
+
+      const response = await getSettlementFees(customerForSettlement._id)
+
+      if (response.status === 'success') {
+        setSettlementInfo({
+          penaltyFees: response.body?.penaltyFees ?? 0,
+          courtFees: response.body?.courtFees ?? 0,
+          lawyerCardURL: response.body?.lawyerCardURL,
+          criminalScheduleURL: response.body?.criminalScheduleURL,
+          caseDataAcknowledgmentURL: response.body?.caseDataAcknowledgmentURL,
+          decreePhotoCopyURL: response.body?.decreePhotoCopyURL,
+        })
+      } else {
+        Swal.fire('error', getErrorMessage(response.error.error), 'error')
+      }
+
+      setIsSettlementLoading(false)
+    }
+
+    fetchSettlementFees()
   }, [customerForSettlement])
 
   const getLegalCustomers = () =>
@@ -175,9 +243,13 @@ const LegalCustomersList: FunctionComponent = () => {
 
   useEffect(() => {
     getLegalCustomers()
+  }, [dispatch, from, size])
 
-    if (error) Swal.fire('error', getErrorMessage(error), 'error')
-  }, [dispatch, error, from, size])
+  useEffect(() => {
+    if (error) {
+      Swal.fire('error', getErrorMessage(error), 'error')
+    }
+  }, [error])
 
   const hasCourtSession = (data: DefaultedCustomer) =>
     data.status !== 'financialManagerReview' && data[data.status]
@@ -198,49 +270,53 @@ const LegalCustomersList: FunctionComponent = () => {
 
   const hideSettlementModal = () => {
     setCustomerForSettlement(null)
-    setSettlementFees(null)
+    setSettlementInfo(null)
   }
 
   const toggleSelectAllCustomers = (e: ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.currentTarget.checked
 
     if (isChecked) {
-      const allCustomerIds = data.map(
-        (customer: DefaultedCustomer) => customer._id
-      )
-
-      setCustomerIdsForBulkAction(allCustomerIds)
+      setCustomersForBulkAction([...data])
     } else {
-      setCustomerIdsForBulkAction([])
+      setCustomersForBulkAction([])
     }
   }
 
   const toggleSelectCustomer = (
     e: ChangeEvent<HTMLInputElement>,
-    id: string
+    customer: SettledCustomer
   ) => {
     const isChecked = e.currentTarget.checked
 
     if (isChecked) {
-      setCustomerIdsForBulkAction((previousValue) => [...previousValue, id])
+      setCustomersForBulkAction((previousValue) => [...previousValue, customer])
     } else {
-      setCustomerIdsForBulkAction((previousValue) =>
-        previousValue.filter((prevId) => prevId !== id)
+      setCustomersForBulkAction((previousValue) =>
+        previousValue.filter(
+          (prevCustomer) => prevCustomer?._id !== customer._id
+        )
       )
     }
   }
 
+  const availableManagerReview = (customers: SettledCustomer[] | null) =>
+    managerTypes.filter(
+      (type) =>
+        ability.can(type.permission, type.key) &&
+        !customers?.find(
+          (customer) => customer.settlement && customer.settlement[type.value]
+        )
+    )
   const reviewFormFields: IFormField[] = [
     {
       name: 'type',
       type: 'select',
       label: local.roleType,
-      options: adminTypes
-        .filter((type) => ability.can(type.permission, type.key))
-        .map((type) => ({
-          value: type.value,
-          label: type.text,
-        })),
+      options: availableManagerReview(customersForReview).map((type) => ({
+        value: type.value,
+        label: type.text,
+      })),
       validation: defaultValidationSchema.required(local.required),
     },
     {
@@ -255,12 +331,12 @@ const LegalCustomersList: FunctionComponent = () => {
     type: AdminType
     notes: string
   }) => {
-    if (!customerIdsForReview?.length) {
+    if (!customersForReview?.length) {
       return
     }
 
     const reviewReqBody: ReviewReqBody = {
-      ids: customerIdsForReview,
+      ids: customersForReview.map((customer) => customer._id),
       ...values,
     }
 
@@ -274,10 +350,10 @@ const LegalCustomersList: FunctionComponent = () => {
       })
       getLegalCustomers()
     } else {
-      Swal.fire(local.error, getErrorMessage(response.error.error), 'error')
+      Swal.fire('error', getErrorMessage(response.error.error), 'error')
     }
 
-    setCustomerIdsForReview(null)
+    setCustomersForReview(null)
   }
 
   const selectFieldMapper: TableMapperItem = {
@@ -286,19 +362,23 @@ const LegalCustomersList: FunctionComponent = () => {
         type="checkbox"
         onChange={toggleSelectAllCustomers}
         checked={
-          !!customerIdsForBulkAction.length &&
-          customerIdsForBulkAction.length === data.length
+          !!customersForBulkAction.length &&
+          customersForBulkAction.length === data.length
         }
+        disabled={!searchFilters.reviewer}
       />
     ),
     key: 'selected',
-    render: (data) => (
+    render: (data: SettledCustomer) => (
       <FormCheck
         type="checkbox"
-        checked={!!customerIdsForBulkAction.find((id) => id === data._id)}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          toggleSelectCustomer(e, data._id)
+        checked={
+          !!customersForBulkAction.find((customer) => customer._id === data._id)
         }
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          toggleSelectCustomer(e, data)
+        }
+        disabled={!searchFilters.reviewer}
       />
     ),
   }
@@ -329,6 +409,12 @@ const LegalCustomersList: FunctionComponent = () => {
       render: (data) => data.customerName,
     },
     {
+      title: local.creationDate,
+      key: 'creationDate',
+      render: (data) =>
+        data.created.at ? timeToArabicDate(data.created.at, true) : '',
+    },
+    {
       title: local.caseNumber,
       key: 'caseNumber',
       render: (data) => data.caseNumber,
@@ -349,11 +435,6 @@ const LegalCustomersList: FunctionComponent = () => {
       render: (data) => (hasCourtSession(data) ? local[data.status] : ''),
     },
     {
-      title: local.caseStatusSummary,
-      key: 'caseStatusSummary',
-      render: (data) => data.caseStatusSummary,
-    },
-    {
       title: local.settlementStatus,
       key: 'settlementStatus',
       render: (data) =>
@@ -363,15 +444,19 @@ const LegalCustomersList: FunctionComponent = () => {
     },
   ]
 
+  const hasReviews = (settlement: SettlementFormValues & ManagerReviews) =>
+    settlement.branchManagerReview ||
+    settlement.areaManagerReview ||
+    settlement.areaSupervisorReview ||
+    settlement.financialManagerReview
+
   const tableActionsMapper: TableMapperItem[] = [
     {
       title: '',
       key: 'view',
-      render: (data) =>
-        (data.branchManagerReview ||
-          data.areaManagerReview ||
-          data.areaSupervisorReview ||
-          data.financialManagerReview) && (
+      render: (data: SettledCustomer) =>
+        data.settlement &&
+        hasReviews(data.settlement) && (
           <img
             title={local.logs}
             className="clickable"
@@ -417,13 +502,27 @@ const LegalCustomersList: FunctionComponent = () => {
             </button>
           </Can>
 
-          {canReview && data.settlement && (
+          {canReview &&
+            data.settlement &&
+            !!availableManagerReview([data]).length && (
+              <img
+                title={local.read}
+                className="clickable mr-2"
+                src={require('../../../Assets/check-circle.svg')}
+                onClick={() => {
+                  setCustomersForReview([data])
+                }}
+              />
+            )}
+
+          {data.settlement?.settlementStatus === 'reviewed' && (
             <img
-              title={local.read}
+              title={local.print}
               className="clickable"
-              src={require('../../../Assets/check-circle.svg')}
+              style={{ maxWidth: 18 }}
+              src={require('../../../Assets/green-download.svg')}
               onClick={() => {
-                setCustomerIdsForReview([data._id])
+                setCustomerForPrint(data)
               }}
             />
           )}
@@ -433,14 +532,14 @@ const LegalCustomersList: FunctionComponent = () => {
   ]
 
   const renderLogRow = (key: string) =>
-    !!customerForView &&
-    !!customerForView[key] && (
+    !!customerForView?.settlement &&
+    !!customerForView.settlement[key] && (
       <tr>
-        <td>{timeToArabicDate(customerForView[key].at, true)}</td>
+        <td>{timeToArabicDate(customerForView.settlement[key].at, true)}</td>
         <td>{local[key]}</td>
-        <td>{customerForView[key]?.userName}</td>
+        <td>{customerForView.settlement[key]?.userName}</td>
         <td style={{ wordBreak: 'break-word' }}>
-          {customerForView[key]?.notes}
+          {customerForView.settlement[key]?.notes}
         </td>
       </tr>
     )
@@ -471,9 +570,9 @@ const LegalCustomersList: FunctionComponent = () => {
                   <Button
                     className="big-button ml-2"
                     onClick={() =>
-                      setCustomerIdsForReview([...customerIdsForBulkAction])
+                      setCustomersForReview([...customersForBulkAction])
                     }
-                    disabled={!customerIdsForBulkAction?.length}
+                    disabled={!customersForBulkAction?.length}
                   >
                     {local.read}
                   </Button>
@@ -491,7 +590,12 @@ const LegalCustomersList: FunctionComponent = () => {
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['keyword', 'legal-status', 'dateFromTo']}
+              searchKeys={[
+                'keyword',
+                'dateFromTo',
+                'legal-status',
+                'defaultingCustomerStatus',
+              ]}
               dropDownKeys={[
                 'name',
                 'key',
@@ -527,9 +631,9 @@ const LegalCustomersList: FunctionComponent = () => {
           </Card.Body>
         </Card>
 
-        {customerForSettlement && settlementFees && (
+        {customerForSettlement && settlementInfo && (
           <Modal
-            show={!!customerForSettlement && !!settlementFees}
+            show={!!customerForSettlement && !!settlementInfo}
             onHide={hideSettlementModal}
             size="lg"
           >
@@ -539,11 +643,12 @@ const LegalCustomersList: FunctionComponent = () => {
             <div className="px-5 py-4">
               <Modal.Body className="p-0">
                 <LegalSettlementForm
-                  settlementFees={settlementFees}
+                  settlementInfo={settlementInfo}
                   onSubmit={() => {
                     getLegalCustomers()
                     hideSettlementModal()
                   }}
+                  onCancel={hideSettlementModal}
                   customer={customerForSettlement}
                 />
               </Modal.Body>
@@ -551,7 +656,7 @@ const LegalCustomersList: FunctionComponent = () => {
           </Modal>
         )}
 
-        {customerForView && (
+        {!!customerForView && (
           <Modal
             show={!!customerForView}
             onHide={() => setCustomerForView(null)}
@@ -571,8 +676,8 @@ const LegalCustomersList: FunctionComponent = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {adminTypes.map((adminType) =>
-                    customerForView ? renderLogRow(adminType.value) : undefined
+                  {managerTypes.map((adminType) =>
+                    renderLogRow(adminType.value)
                   )}
                 </tbody>
               </Table>
@@ -588,10 +693,10 @@ const LegalCustomersList: FunctionComponent = () => {
           </Modal>
         )}
 
-        {!!customerIdsForReview?.length && (
+        {!!customersForReview?.length && (
           <Modal
-            show={!!customerIdsForReview?.length}
-            onHide={() => setCustomerIdsForReview(null)}
+            show={!!customersForReview?.length}
+            onHide={() => setCustomersForReview(null)}
             size="lg"
           >
             <Modal.Header>
@@ -601,7 +706,7 @@ const LegalCustomersList: FunctionComponent = () => {
               <AppForm
                 formFields={reviewFormFields}
                 onSubmit={(values) => handleReviewCustomerSubmit(values)}
-                onCancel={() => setCustomerIdsForReview(null)}
+                onCancel={() => setCustomersForReview(null)}
                 options={{
                   wideBtns: true,
                   submitBtnText: local.reviewSettlement,
@@ -631,9 +736,13 @@ const LegalCustomersList: FunctionComponent = () => {
         </Modal>
       </div>
 
-      {/* {
-        <LegalSettlementPdfTemp/>
-      } */}
+      {customerForPrint && branchForPrint && managersForPrint && (
+        <LegalSettlementPdfTemp
+          branchName={branchForPrint.name}
+          customer={customerForPrint}
+          managers={managersForPrint}
+        />
+      )}
     </>
   )
 }

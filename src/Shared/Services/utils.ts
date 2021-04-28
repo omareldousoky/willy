@@ -702,12 +702,16 @@ export const iscoreBank = (bankId: string) => {
   }
 };
 
-export const createValidationSchema = (formFields: (IFormField | IGroupField)[]) => {
+export const createValidationSchema = (
+  formFields: (IFormField | IGroupField)[],
+  validationSort?: [string, string][]
+) => {
   const validationFields = formFields.reduce((acc, formField) => {
     if (isGroupField(formField)) {
       const groupFormField = {
         [formField.name]: createValidationSchema(
-          (formField as IGroupField).fields
+          (formField as IGroupField).fields,
+          validationSort
         ),
       }
 
@@ -718,7 +722,7 @@ export const createValidationSchema = (formFields: (IFormField | IGroupField)[])
     return { ...acc, [name]: validation }
   }, {})
 
-  return Yup.object().shape(validationFields)
+  return Yup.object().shape(validationFields, validationSort)
 }
 
 export const arrayToPairs = <T extends unknown>(array: any[]): T[][] =>
@@ -754,8 +758,7 @@ export const getNestedByStringKey = (obj: {}, key: string) =>
 
      return {
        ...acc,
-       [name]:
-         name === 'date' && initValue ? getDateString(initValue) : initValue,
+       [name]: initValue,
      }
    }, {})
  }

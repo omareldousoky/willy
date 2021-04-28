@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, { FunctionComponent, useState } from 'react'
 
 import { Card } from 'react-bootstrap'
 import { useHistory, useLocation } from 'react-router'
@@ -6,11 +6,11 @@ import { useHistory, useLocation } from 'react-router'
 import local from '../../../Shared/Assets/ar.json'
 import { DefaultedCustomer } from './defaultingCustomersList'
 import { ICourtSession, ILegalActionsForm } from './types'
-import customerActionsFields from './configs/customerActionsForm'
 import AppForm from '../../../Shared/Components/Form'
 import { updateLegalAffairsCustomers } from '../../Services/APIs/LegalAffairs/defaultingCustomers'
 import Swal from 'sweetalert2'
 import { getErrorMessage } from '../../../Shared/Services/utils'
+import customerActionsFields from './configs/CustomerActionsForm'
 
 const LegalActionsForm: FunctionComponent = () => {
   const [isSubmiting, setIsSubmiting] = useState(false)
@@ -70,7 +70,7 @@ const LegalActionsForm: FunctionComponent = () => {
             options={{
               disabled: !customer._id || isSubmiting,
               renderPairs: true,
-              wideBtns: true
+              wideBtns: true,
             }}
           />
         </Card.Body>

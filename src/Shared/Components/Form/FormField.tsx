@@ -1,11 +1,12 @@
-import React, { ChangeEvent, FunctionComponent } from 'react'
+import React, { ChangeEvent, FunctionComponent, useContext } from 'react'
 
 import { Form, FormControlProps } from 'react-bootstrap'
 import { Schema } from 'yup'
 
-import { getNestedByStringKey } from '../../Services/utils'
+import { getDateString, getNestedByStringKey } from '../../Services/utils'
 import { FormFieldProps } from './types'
 import DocumentPhoto from '../documentPhoto/documentPhoto'
+import { AppFormContext } from '.'
 
 const FormField: FunctionComponent<FormFieldProps> = ({
   field,
@@ -18,6 +19,8 @@ const FormField: FunctionComponent<FormFieldProps> = ({
     errors,
   },
 }) => {
+  const { defaultValues } = useContext(AppFormContext)
+
   const fieldErrors = getNestedByStringKey(errors, field.name)
   const isToucehd = !!getNestedByStringKey(touched, field.name)
 
@@ -54,6 +57,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
             disabled={inputFieldProps.readOnly}
             type="checkbox"
             label={field.checkboxLabel}
+            defaultChecked={!!inputFieldProps.value}
           />
         )
 
@@ -87,6 +91,10 @@ const FormField: FunctionComponent<FormFieldProps> = ({
             handleBlur={inputFieldProps.onBlur}
             view={inputFieldProps.disabled}
             edit={!inputFieldProps.disabled}
+            photoObject={{
+              photoURL: defaultValues[field.name + 'URL'] ?? '',
+              photoFile: '',
+            }}
           />
         )
 
@@ -103,7 +111,17 @@ const FormField: FunctionComponent<FormFieldProps> = ({
         )
 
       default:
-        return <Form.Control {...inputFieldProps} type={field.type} />
+        return (
+          <Form.Control
+            {...inputFieldProps}
+            type={field.type}
+            value={
+              field.type === 'date' && inputFieldProps.value
+                ? getDateString(inputFieldProps.value)
+                : inputFieldProps.value
+            }
+          />
+        )
     }
   }
 

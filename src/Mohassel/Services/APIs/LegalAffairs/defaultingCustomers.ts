@@ -67,7 +67,7 @@ export const deleteCustomerDefaultedLoan =  async (data: {ids: string[]}) => {
     }
 }
 
-export const settleLegalCustomer = async (reqBody: ISettlementReqBody, id: string) => {
+export const settleLegalCustomer = async (reqBody: FormData, id: string) => {
     const url = process.env.REACT_APP_BASE_URL + `/legal/update-settlement/${id}`;
     
     try {
@@ -79,8 +79,8 @@ export const settleLegalCustomer = async (reqBody: ISettlementReqBody, id: strin
     }
 }
 
-export const getSettlementFees = async (id: string) => {
-    const url = process.env.REACT_APP_BASE_URL + `/legal/get-settlement-fees/${id}`;
+export const getSettlementFees = async (customerId: string) => {
+    const url = process.env.REACT_APP_BASE_URL + `/legal/settlement-info/${customerId}`;
     
     try {
         const res = await axios.get(url);

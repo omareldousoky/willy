@@ -29,7 +29,15 @@ interface Review {
     notes: string;
     userName: string;
 }
-export interface DefaultedCustomer {
+
+export interface ManagerReviews {
+    branchManagerReview?: Review;
+    areaManagerReview?: Review;
+    areaSupervisorReview?: Review;
+    financialManagerReview?: Review;
+}
+
+export interface DefaultedCustomer extends ManagerReviews {
     _id: string;
     updated: { at: number; by: string };
     created: { at: number; by: string };
@@ -41,10 +49,7 @@ export interface DefaultedCustomer {
     customerName: string;
     customerId: string;
     customerKey: number;
-    branchManagerReview?: Review;
-    areaManagerReview?: Review;
-    areaSupervisorReview?: Review;
-    financialManagerReview?: Review;
+    customerBranchId?: string
 }
 interface Props {
     history: any;

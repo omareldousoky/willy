@@ -2,36 +2,51 @@ import React from 'react'
 
 import './index.scss'
 
-import { DefaultedCustomer } from '../../ManageLegalAffairs/defaultingCustomersList'
 import local from '../../../../Shared/Assets/ar.json'
-import { IPrintAction } from '../../ManageLegalAffairs/types'
-import { extractLastChars } from '../../../../Shared/Services/utils'
+import {
+  extractLastChars,
+  timeToArabicDateNow,
+} from '../../../../Shared/Services/utils'
+import { SettledCustomer } from '../../ManageLegalAffairs/LegalCustomersList'
+import { Managers } from '../../managerHierarchy/branchBasicsCard'
 
 const LegalSettlement = ({
-  action,
   customer,
+  branchName,
+  managers,
 }: {
-  action: IPrintAction
-  customer: DefaultedCustomer
+  customer: SettledCustomer
+  branchName: string
+  managers: Managers
 }) => {
+  const customerSettlement = customer.settlement
+
   return (
     <div className="legal-settlement__container">
       <div className="headtitle">
-        <div>شركة تساهيل للتمويل متناهي الصغر</div>
-        <div>
-          <u>فرع: المنوفيه - منوف</u>
+        <div className="d-flex justify-content-between">
+          <div>
+            <span>شركة تساهيل للتمويل متناهي الصغر</span> <br />
+            <u>فرع: {branchName}</u>
+          </div>
+
+          <div>
+            <span>{timeToArabicDateNow(true)}</span> <br />
+            <span>تمت المراجعه</span>
+          </div>
         </div>
-        <div></div>
-        <div className="center">طلب {action.label}</div>
+
+        <div className="center">
+          طلب ({local[customerSettlement.settlementType]})
+        </div>
       </div>
       <div className="marginlineheight">
-        <div>تحريرا في: 2020/09/01</div>
+        <div>تحريرا في: {timeToArabicDateNow(false)}</div>
         <div>
-          من الأستاذ/ --------------------------------------- مدير فرع /
-          المنوفيه - منوف
+          من الأستاذ/ {managers.branchManager?.name} مدير فرع /{branchName}
         </div>
-        <div>إلي الأستاذ/ مشرف المنطقة</div>
-        <div>إلي الأستاذ/ مدير العمليات</div>
+        <div>إلي الأستاذ/ مشرف المنطقة {managers.areaSupervisor?.name}</div>
+        <div>إلي الأستاذ/ مدير العمليات {managers.operationsManager?.name}</div>
         <div>إلي الأستاذ/ المدير المالي</div>
         <div>
           يرجي الموافقه علي الإجراء المطلوب للعميل/ {customer.customerName}، حسب
@@ -51,37 +66,37 @@ const LegalSettlement = ({
         </thead>
         <tbody>
           <tr>
-            <td rowSpan={3}>{action.label}</td>
-            <td>1601</td>
-            <td>2020</td>
-            <td>جنح مركز منوف</td>
-            <td colSpan={2}>سامح جلال ابو عطيه صقر</td>
+            <td rowSpan={3}>{local[customerSettlement.settlementType]}</td>
+            <td>{customerSettlement.caseNumber}</td>
+            <td>{customerSettlement.caseYear}</td>
+            <td>{customerSettlement.court}</td>
+            <td colSpan={2}>{customerSettlement.lawyerName}</td>
             <td className="center" rowSpan={2}>
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                defaultChecked={customerSettlement.penaltiesPaid}
+              />
             </td>
             <td className="center" rowSpan={2}>
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                defaultChecked={customerSettlement.courtFeesPaid}
+              />
             </td>
           </tr>
           <tr>
             <td colSpan={3} rowSpan={2}>
-              ايصال الأمانه/ تاريخ الجلسه 3/11/2020
-              <br />
-              إستئناف أول جلسه رقم المحضر 6869/2020
-              <br />
-              رقم الحكم الإبتدائي/
-              <br />
-              رقم الحكم الإستئنافي/
-              <br />
-              تاريخ الجلسه/
+              {customerSettlement.courtDetails}
             </td>
-            <td style={{ width: 'fit-content' }}>01222790490</td>
-            <td></td>
+            <td style={{ width: 'fit-content' }}>
+              {customerSettlement.lawyerPhoneNumberOne}
+            </td>
+            <td>{customerSettlement.lawyerPhoneNumberTwo}</td>
           </tr>
           <tr>
-            <td colSpan={2}></td>
-            <td className="center">335</td>
-            <td className="center">1000</td>
+            <td colSpan={2}>{customerSettlement.lawyerPhoneNumberThree}</td>
+            <td className="center">{customerSettlement.penaltyFees}</td>
+            <td className="center">{customerSettlement.courtFees}</td>
           </tr>
         </tbody>
 
@@ -95,8 +110,8 @@ const LegalSettlement = ({
 
           <tr>
             <td>{local[customer.customerType]}</td>
-            <td>{customer.customerName}</td>
             <td>{customer.customerKey}</td>
+            <td>{customer.customerName}</td>
             <td>{extractLastChars(customer.loanKey + '', 3)}</td>
             <td>{customer.customerKey}</td>
             <td colSpan={2}>{customer.customerName}</td>
@@ -108,35 +123,48 @@ const LegalSettlement = ({
         <div>
           <u>التفاصيل:</u>
         </div>
-        <div>المحامي : سامح جلال ابو عطيه صقر</div>
       </div>
 
       <div style={{ height: '10em' }}></div>
 
       <table>
         <thead>
-          <tr className="headtitle">
-            <th> رقم الحكم الابتدائي</th>
-            <th>رقم الحكم الاستئنافي</th>
-            <th>تاريخ الجلسة</th>
-          </tr>
-        </thead>
-      </table>
-
-      <div style={{ height: '5em' }}></div>
-
-      <table>
-        <thead>
-          <tr className="headtitle">
+          <tr className="headtitle center">
             <th>مدير الفرع</th>
             <th>مشرف المنطقه</th>
             <th>مدير المنطقه</th>
             <th>المدير المالي</th>
           </tr>
         </thead>
+
+        <div style={{ height: '1.5em' }}></div>
+
+        <tbody>
+          <tr className="center">
+            <td>------------------</td>
+            <td>------------------</td>
+            <td>------------------</td>
+            <td>------------------</td>
+          </tr>
+        </tbody>
       </table>
 
-      <div style={{ height: '5em' }}></div>
+      <div style={{ height: '10em' }}></div>
+
+      <footer className="d-flex">
+        <span className="mr-3">** يجب إرفاق الاتى :</span>
+        <span className="mr-5 d-flex align-items-center">
+          <input className="mr-1" type="checkbox" /> <span>صوره من الحكم</span>
+        </span>
+        <span className="mr-5 d-flex align-items-center">
+          <input className="mr-1" type="checkbox" />
+          <span>شهادة من الجدول الجنائى ببيانات القضيه</span>
+        </span>
+        <span className="d-flex align-items-center">
+          <input className="mr-1" type="checkbox" />
+          <span>صورة من كارنيه المحامى المراد إصدار التوكيل له</span>
+        </span>
+      </footer>
     </div>
   )
 }

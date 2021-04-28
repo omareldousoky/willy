@@ -43,7 +43,9 @@ export interface FileField extends IFieldDefaultProps {
   label: string
 }
 
-export type IFormField = IField | ISelectField | ICheckboxField | FileField
+type ISingleField = IField | ISelectField | ICheckboxField | FileField
+
+export type IFormField = ISingleField | IGroupField
 
 export type GroupFieldProps = {
   field: IGroupField
@@ -52,7 +54,7 @@ export type GroupFieldProps = {
 }
 
 export type FormFieldProps = {
-  field: IFormField
+  field: ISingleField
   formikProps: FormikProps<any>
 }
 
@@ -65,11 +67,14 @@ export type AppFormProps = {
   formFields: IFormField[]
   onSubmit: (values: any, formikHelpers: FormikHelpers<any>) => void
   onCancel?: () => void
+  onChange?: () => void
   defaultValues?: any
   options?: {
     disabled?: boolean
     renderPairs?: boolean
     submitBtnText?: string
     wideBtns?: boolean
+    validationSort?: [string, string][] // use this to sort fields when validation depends on each other
+    footer?: JSX.Element | string
   }
 }

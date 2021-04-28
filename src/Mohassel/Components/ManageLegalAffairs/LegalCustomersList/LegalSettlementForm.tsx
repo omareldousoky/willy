@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useState } from 'react'
 
 import { Card, Form } from 'react-bootstrap'
 import Swal from 'sweetalert2'
@@ -11,7 +11,6 @@ import { defaultValidationSchema } from '../../../../Shared/validations'
 import { settleLegalCustomer } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import colorVariables from '../../../../Shared/Assets/scss/app.scss'
 import { SettledCustomer } from '.'
-
 
 export type SettlementStatus =
   | 'privateReconciliation'
@@ -30,9 +29,9 @@ export interface SettlementFormValues {
   court: string
   courtDetails: string
   lawyerName: string
-  laywerPhoneNumberOne: string
-  laywerPhoneNumberTwo: string
-  laywerPhoneNumberThree: string
+  lawyerPhoneNumberOne: string
+  lawyerPhoneNumberTwo: string
+  lawyerPhoneNumberThree: string
   settlementType: SettlementStatus
   settlementStatus: 'reviewed' | 'underReview'
   comments: string
@@ -42,19 +41,22 @@ export interface ISettlementReqBody {
   settlement: SettlementFormValues
 }
 export interface ILegalSettlementFormProps {
-  settlementFees: {
+  settlementInfo: {
     penaltyFees: number
     courtFees: number
   }
   customer: SettledCustomer
   onSubmit: () => void
+  onCancel: () => void
 }
 
 const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
-  settlementFees,
+  settlementInfo,
   onSubmit,
+  onCancel,
   customer,
 }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const settlementForm: IFormField[] = [
     {
       name: 'penaltiesPaid',
@@ -88,25 +90,25 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
       name: 'caseNumber',
       type: 'text',
       label: local.legalCaseNumber,
-      validation: defaultValidationSchema.required(local.required),
+      validation: defaultValidationSchema,
     },
     {
       name: 'caseYear',
       type: 'text',
       label: local.year,
-      validation: defaultValidationSchema.required(local.required),
+      validation: defaultValidationSchema,
     },
     {
       name: 'court',
       type: 'text',
       label: local.court,
-      validation: defaultValidationSchema.required(local.required),
+      validation: defaultValidationSchema,
     },
     {
       name: 'courtDetails',
       type: 'text',
       label: local.caseData,
-      validation: defaultValidationSchema.required(local.required),
+      validation: defaultValidationSchema,
     },
     {
       name: 'lawyerName',
@@ -115,19 +117,19 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
       validation: defaultValidationSchema.required(local.required),
     },
     {
-      name: 'laywerPhoneNumberOne',
+      name: 'lawyerPhoneNumberOne',
       type: 'text',
       label: `${local.number} ${local.phoneNumber} ${local.theLawyer} 1`,
       validation: defaultValidationSchema.required(local.required),
     },
     {
-      name: 'laywerPhoneNumberTwo',
+      name: 'lawyerPhoneNumberTwo',
       type: 'text',
       label: `${local.number} ${local.phoneNumber} ${local.theLawyer} 2`,
       validation: defaultValidationSchema,
     },
     {
-      name: 'laywerPhoneNumberThree',
+      name: 'lawyerPhoneNumberThree',
       type: 'text',
       label: `${local.number} ${local.phoneNumber} ${local.theLawyer} 3`,
       validation: defaultValidationSchema,
@@ -176,14 +178,30 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
         },
       ],
     },
-    // TODO: change field keys
     {
-      name: 'file1',
+      name: 'lawyerCard',
       type: 'photo',
-      label: `file 1`,
+      label: local.lawyerCard,
       validation: defaultValidationSchema,
     },
-    // TODO: change field keys
+    {
+      name: 'criminalSchedule',
+      type: 'photo',
+      label: local.criminalSchedule,
+      validation: defaultValidationSchema,
+    },
+    {
+      name: 'caseDataAcknowledgment',
+      type: 'photo',
+      label: local.caseDataAcknowledgment,
+      validation: defaultValidationSchema,
+    },
+    {
+      name: 'decreePhotoCopy',
+      type: 'photo',
+      label: local.decreePhotoCopy,
+      validation: defaultValidationSchema,
+    },
     {
       name: 'comments',
       type: 'textarea',
@@ -218,11 +236,18 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
   }
 
   const handleSubmit = async (values: SettlementFormValues) => {
-    const settlementReqBody: ISettlementReqBody = {
-      settlement: values,
-    }
+    const formData = new FormData()
+    const formFields = Object.keys(values)
 
-    const response = await settleLegalCustomer(settlementReqBody, customer._id)
+    formFields.forEach((fieldKey) => {
+      if (values[fieldKey] !== undefined) {
+        formData.append(fieldKey, values[fieldKey])
+      }
+    })
+
+    setIsSubmitting(true)
+
+    const response = await settleLegalCustomer(formData, customer._id)
 
     if (response.status === 'success') {
       Swal.fire({
@@ -235,6 +260,7 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
       Swal.fire('error', getErrorMessage(response.error), 'error')
     }
 
+    setIsSubmitting(true)
     onSubmit()
   }
 
@@ -271,22 +297,22 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
           {renderCustomerDetails()}
           <AppForm
             formFields={
-              isReviewed
+              isReviewed || isSubmitting
                 ? settlementForm.map((field) => ({ ...field, readOnly: true }))
                 : settlementForm
             }
             onSubmit={handleSubmit}
             defaultValues={{
               ...defaultValues,
-              ...settlementFees,
+              ...settlementInfo,
               ...customerSettlement,
             }}
             options={{
               renderPairs: true,
               wideBtns: true,
-              disabled: isReviewed,
+              disabled: isReviewed || isSubmitting,
             }}
-            onCancel={onSubmit}
+            onCancel={onCancel}
           />
         </Card.Body>
       </Card>

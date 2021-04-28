@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import React, { createContext, FunctionComponent } from 'react'
 
 import { Form, Formik, FormikProps } from 'formik'
 import { Button } from 'react-bootstrap'
@@ -9,25 +9,38 @@ import {
   createValidationSchema,
 } from '../../Services/utils'
 import FormFields, { FormFieldPairs } from './FormFields'
-import { AppFormProps } from './types'
+import { AppFormProps, IFormField } from './types'
 import local from '../../../Shared/Assets/ar.json'
+
+interface FormContext {
+  defaultValues: {}
+}
+
+export const AppFormContext = createContext<FormContext>({
+  defaultValues: {},
+})
 
 // TODO: change naming
 const AppForm: FunctionComponent<AppFormProps> = ({
   formFields,
   onSubmit,
   onCancel,
+  onChange,
   defaultValues,
   options = {},
 }) => {
   const initialValues = createFormFieldsInitValue(formFields, defaultValues)
-  const validationSchema = createValidationSchema(formFields)
+  const validationSchema = createValidationSchema(
+    formFields,
+    options.validationSort
+  )
 
   const {
     disabled = false,
     renderPairs = false,
     submitBtnText = local.submit,
     wideBtns = false,
+    footer,
   } = options
 
   return (
@@ -42,15 +55,23 @@ const AppForm: FunctionComponent<AppFormProps> = ({
         const isValid = !Object.keys(errors).length
 
         return (
-          <Form onSubmit={formikHandleSubmit}>
-            {renderPairs ? (
-              <FormFieldPairs
-                formFields={formFields}
-                formikProps={formikProps}
-              />
-            ) : (
-              <FormFields formFields={formFields} formikProps={formikProps} />
-            )}
+          <Form onSubmit={formikHandleSubmit} onChange={onChange}>
+            <AppFormContext.Provider
+              value={{
+                defaultValues,
+              }}
+            >
+              {renderPairs ? (
+                <FormFieldPairs
+                  formFields={formFields}
+                  formikProps={formikProps}
+                />
+              ) : (
+                <FormFields formFields={formFields} formikProps={formikProps} />
+              )}
+            </AppFormContext.Provider>
+
+            {footer}
 
             <div className="d-flex flex-row-reverse justify-content-between mt-3 mb-2">
               <Button
