@@ -766,3 +766,27 @@ export const getNestedByStringKey = (obj: {}, key: string) =>
  export const extractLastChars = (str: string, numberOfChars: number) =>
  str?.slice ? str.slice(str.length - numberOfChars, str.length) : str
 
+export const DateAsFileName = ()=>{
+  const today = new Date();
+  const date =today.getDate()+'-'+(today.getMonth()+1)+'-'+ today.getFullYear();
+  const time = today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
+  const dateTime = date+' '+time;
+  return dateTime;
+}
+
+ export const DownloadAsCsv = async(name: string, data: string) =>{
+  const blob = new Blob([data], {
+    type: 'data:text/csv;charset=utf-8,',
+  })
+  const blobURL = window.URL.createObjectURL(blob)
+  const anchor = document.createElement('a')
+  anchor.download = `${name} ${DateAsFileName()}.csv`
+  anchor.dir="rtl"
+  anchor.href = blobURL
+  anchor.dataset.downloadurl = [
+    'text/csv',
+    anchor.download,
+    anchor.href,
+  ].join(',')
+  anchor.click()
+ }

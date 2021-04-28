@@ -45,6 +45,7 @@ interface Props {
   hideModal: () => void;
   submit: (values) => void;
   getExcel?: (values) => void;
+  submitButtonText?: string;
 }
 
 const ReportsModal = (props: Props) => {
@@ -54,7 +55,6 @@ const ReportsModal = (props: Props) => {
   const getIds = (list: Record<string, string>[]): string[] =>
     list?.length ? list.map((item) => item._id) : [];
   const getCustomerKey = (key?: string): string | undefined => {
-    console.log(key);
     if (!customerDropDownValue || key === undefined) return undefined;
     return customerDropDownValue === "customerKey"
       ? key
@@ -646,7 +646,7 @@ const ReportsModal = (props: Props) => {
                     </Button>
                   )}
                 <Button type="submit" variant="primary">
-                  {local.downloadPDF}
+                  {props.submitButtonText || local.downloadPDF}
                 </Button>
               </Modal.Footer>
             </Form>
