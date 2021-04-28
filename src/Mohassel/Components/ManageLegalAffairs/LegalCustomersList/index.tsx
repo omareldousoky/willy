@@ -569,7 +569,6 @@ const LegalCustomersList: FunctionComponent = () => {
                 size={size}
                 totalCount={totalCount}
                 mappers={[
-                  selectFieldMapper,
                   ...tableMapper,
                   ...tableActionsMapper,
                 ]}
