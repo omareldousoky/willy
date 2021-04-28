@@ -5,7 +5,7 @@ import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
 import { default as errorMessages } from "../../Shared/Assets/errorMessages.json";
 import * as Yup from 'yup'
-import { IFormField, IGroupField, IField } from "../Components/Form/types";
+import { FormField, GroupField, Field } from "../Components/Form/types";
 
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
@@ -703,14 +703,14 @@ export const iscoreBank = (bankId: string) => {
 };
 
 export const createValidationSchema = (
-  formFields: (IFormField | IGroupField)[],
+  formFields: (FormField | GroupField)[],
   validationSort?: [string, string][]
 ) => {
   const validationFields = formFields.reduce((acc, formField) => {
     if (isGroupField(formField)) {
       const groupFormField = {
         [formField.name]: createValidationSchema(
-          (formField as IGroupField).fields,
+          (formField as GroupField).fields,
           validationSort
         ),
       }
@@ -718,7 +718,7 @@ export const createValidationSchema = (
       return { ...acc, ...groupFormField }
     }
 
-    const { name, validation } = formField as IField
+    const { name, validation } = formField as Field
     return { ...acc, [name]: validation }
   }, {})
 
@@ -737,10 +737,10 @@ export const arrayToPairs = <T extends unknown>(array: any[]): T[][] =>
 export const getNestedByStringKey = (obj: {}, key: string) =>
   key.split('.').reduce((p, c) => (p && p[c]) || undefined, obj)
 
- export const isGroupField = (formField: IFormField | IGroupField) => formField?.type === 'group'
+ export const isGroupField = (formField: FormField | GroupField) => formField?.type === 'group'
  
  export const createFormFieldsInitValue = (
-   formFields: (IFormField | IGroupField)[],
+   formFields: (FormField | GroupField)[],
    defaultValues: any
  ) => {
    return formFields.reduce((acc, formField) => {
@@ -749,7 +749,7 @@ export const getNestedByStringKey = (obj: {}, key: string) =>
 
      if (isGroupField(formField)) {
        const fields = createFormFieldsInitValue(
-         (formField as IGroupField).fields,
+         (formField as GroupField).fields,
          initValue
        )
 

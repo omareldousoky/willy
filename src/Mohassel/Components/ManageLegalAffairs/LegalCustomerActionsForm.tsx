@@ -5,7 +5,7 @@ import { useHistory, useLocation } from 'react-router'
 
 import local from '../../../Shared/Assets/ar.json'
 import { DefaultedCustomer } from './defaultingCustomersList'
-import { ICourtSession, ILegalActionsForm } from './types'
+import { CourtSession, LegalActionsForm } from './types'
 import AppForm from '../../../Shared/Components/Form'
 import { updateLegalAffairsCustomers } from '../../Services/APIs/LegalAffairs/defaultingCustomers'
 import Swal from 'sweetalert2'
@@ -21,8 +21,8 @@ const LegalActionsForm: FunctionComponent = () => {
   const history = useHistory()
 
   const formatCourt = (
-    court: ICourtSession | undefined
-  ): ICourtSession | undefined => {
+    court: CourtSession | undefined
+  ): CourtSession | undefined => {
     return court?.date
       ? {
           ...court,
@@ -31,7 +31,7 @@ const LegalActionsForm: FunctionComponent = () => {
       : undefined
   }
 
-  const formValuesToActionReq = (values: ILegalActionsForm) => ({
+  const formValuesToActionReq = (values: LegalActionsForm) => ({
     ...customer,
     ...values,
     firstCourtSession: formatCourt(values.firstCourtSession),
@@ -40,8 +40,8 @@ const LegalActionsForm: FunctionComponent = () => {
     misdemeanorAppealSession: formatCourt(values.misdemeanorAppealSession),
   })
 
-  const handleSubmit = async (values: ILegalActionsForm) => {
-    const actionReqBody: ILegalActionsForm &
+  const handleSubmit = async (values: LegalActionsForm) => {
+    const actionReqBody: LegalActionsForm &
       DefaultedCustomer = formValuesToActionReq(values)
 
     setIsSubmiting(true)

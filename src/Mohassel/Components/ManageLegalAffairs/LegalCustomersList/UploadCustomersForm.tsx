@@ -8,11 +8,7 @@ import local from '../../../../Shared/Assets/ar.json'
 import { uploadDefaultingCustomer } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import Swal from 'sweetalert2'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
-
-interface UploadLegalCustomerResponse {
-  nationalId: string
-  reason: string
-}
+import { UploadLegalCustomerResponse } from '../types'
 
 const UploadLegalCustomers = ({ onCancel, onSubmit }) => {
   const [failedCustomerURI, setfailedCustomerURI] = useState('')
@@ -46,11 +42,12 @@ const UploadLegalCustomers = ({ onCancel, onSubmit }) => {
       )
 
     const encodedUri = encodeURI(csvContent)
-    // window.open(encodedUri)
     setfailedCustomerURI(encodedUri)
   }
 
   const handleSubmit = async (values: { data }) => {
+    console.log({ values })
+
     setIsDisabled(true)
 
     const formData = new FormData()

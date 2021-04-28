@@ -7,8 +7,8 @@ import {
   extractLastChars,
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
-import { SettledCustomer } from '../../ManageLegalAffairs/LegalCustomersList'
 import { Managers } from '../../managerHierarchy/branchBasicsCard'
+import { SettledCustomer } from '../../ManageLegalAffairs/types'
 
 const LegalSettlement = ({
   customer,

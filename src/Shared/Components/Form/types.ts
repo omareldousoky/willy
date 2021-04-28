@@ -1,32 +1,32 @@
 import * as Yup from 'yup'
 import { FormikHelpers, FormikProps } from 'formik'
 
-export interface IFieldDefaultProps {
+export interface FieldDefaultProps {
   name: string
   type: string
   readOnly?: boolean
   disabled?: boolean
 }
 
-export interface IField extends IFieldDefaultProps {
+export interface Field extends FieldDefaultProps {
   type: 'text' | 'date' | 'number' | 'textarea' | 'photo'
   label: string
   validation: Yup.Schema<any>
 }
 
-export interface ICheckboxField extends IFieldDefaultProps {
+export interface CheckboxField extends FieldDefaultProps {
   type: 'checkbox'
   label: string
   checkboxLabel: string
   validation: Yup.Schema<any>
 }
 
-export interface IGroupField extends IFieldDefaultProps {
+export interface GroupField extends FieldDefaultProps {
   type: 'group'
-  fields: IFormField[]
+  fields: FormField[]
 }
 
-export interface ISelectField extends IFieldDefaultProps {
+export interface SelectField extends FieldDefaultProps {
   type: 'select'
   label: string
   validation: Yup.Schema<any>
@@ -36,35 +36,35 @@ export interface ISelectField extends IFieldDefaultProps {
   }[]
 }
 
-export interface FileField extends IFieldDefaultProps {
+export interface FileField extends FieldDefaultProps {
   type: 'file'
   accepts: string
   validation: Yup.Schema<any>
   label: string
 }
 
-type ISingleField = IField | ISelectField | ICheckboxField | FileField
+type SingleField = Field | SelectField | CheckboxField | FileField
 
-export type IFormField = ISingleField | IGroupField
+export type FormField = SingleField | GroupField
 
 export type GroupFieldProps = {
-  field: IGroupField
+  field: GroupField
   formikProps: FormikProps<any>
   pairs?: boolean
 }
 
 export type FormFieldProps = {
-  field: ISingleField
+  field: SingleField
   formikProps: FormikProps<any>
 }
 
 export type FormFieldsProps = {
-  formFields: IFormField[]
+  formFields: FormField[]
   formikProps: FormikProps<any>
 }
 
 export type AppFormProps = {
-  formFields: IFormField[]
+  formFields: FormField[]
   onSubmit: (values: any, formikHelpers: FormikHelpers<any>) => void
   onCancel?: () => void
   onChange?: () => void

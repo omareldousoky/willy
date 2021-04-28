@@ -26,16 +26,15 @@ import local from '../../../../Shared/Assets/ar.json'
 import Search from '../../../../Shared/Components/Search/search'
 import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from '../manageLegalAffairsInitials'
-import { TableMapperItem } from '../types'
+import { AdminType, ReviewReqBody, SettledCustomer, SettlementFormValues, SettlementInfo, TableMapperItem } from '../types'
 import { DefaultedCustomer, ManagerReviews } from '../defaultingCustomersList'
 import LegalSettlementForm, {
-  SettlementFormValues,
 } from './LegalSettlementForm'
 import {
   getSettlementFees,
   reviewLegalCustomer,
 } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
-import { IFormField } from '../../../../Shared/Components/Form/types'
+import { FormField } from '../../../../Shared/Components/Form/types'
 import { defaultValidationSchema } from '../../../../Shared/validations'
 import AppForm from '../../../../Shared/Components/Form'
 import UploadLegalCustomers from './UploadCustomersForm'
@@ -44,59 +43,8 @@ import { Branch } from '../../../../Shared/Services/interfaces'
 import { getBranch } from '../../../Services/APIs/Branch/getBranch'
 import { getManagerHierarchy } from '../../../Services/APIs/ManagerHierarchy/getManagerHierarchy'
 import { Managers } from '../../managerHierarchy/branchBasicsCard'
+import managerTypes from '../configs/managerTypes'
 
-interface SettlementInfo {
-  penaltyFees: number
-  courtFees: number
-  lawyerCardURL: string
-  criminalScheduleURL: string
-  caseDataAcknowledgmentURL: string
-  decreePhotoCopyURL: string
-}
-
-type AdminType =
-  | 'branchManagerReview'
-  | 'areaSupervisorReview'
-  | 'areaManagerReview'
-  | 'financialManagerReview'
-
-export interface ReviewReqBody {
-  type: AdminType
-  notes: string
-  ids: string[]
-}
-
-export interface SettledCustomer extends DefaultedCustomer {
-  settlement: SettlementFormValues & ManagerReviews
-}
-
-// TODO [Refactor]: Move to separate file and use it in defaultingCustomers too
-const managerTypes = [
-  {
-    value: 'branchManagerReview',
-    text: local.branchManagerReview,
-    permission: 'branchManagerReview',
-    key: 'legal',
-  },
-  {
-    value: 'areaManagerReview',
-    text: local.areaManagerReview,
-    permission: 'areaManagerReview',
-    key: 'legal',
-  },
-  {
-    value: 'areaSupervisorReview',
-    text: local.areaSupervisorReview,
-    permission: 'areaSupervisorReview',
-    key: 'legal',
-  },
-  {
-    value: 'financialManagerReview',
-    text: local.financialManagerReview,
-    permission: 'financialManagerReview',
-    key: 'legal',
-  },
-]
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -308,7 +256,7 @@ const LegalCustomersList: FunctionComponent = () => {
           (customer) => customer.settlement && customer.settlement[type.value]
         )
     )
-  const reviewFormFields: IFormField[] = [
+  const reviewFormFields: FormField[] = [
     {
       name: 'type',
       type: 'select',

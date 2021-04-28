@@ -9,7 +9,7 @@ import {
   createValidationSchema,
 } from '../../Services/utils'
 import FormFields, { FormFieldPairs } from './FormFields'
-import { AppFormProps, IFormField } from './types'
+import { AppFormProps, FormField } from './types'
 import local from '../../../Shared/Assets/ar.json'
 
 interface FormContext {
@@ -20,7 +20,7 @@ export const AppFormContext = createContext<FormContext>({
   defaultValues: {},
 })
 
-// TODO: change naming
+// TODO: change the naming
 const AppForm: FunctionComponent<AppFormProps> = ({
   formFields,
   onSubmit,
