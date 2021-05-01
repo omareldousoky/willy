@@ -50,7 +50,7 @@ import LeadProfile from '../Components/HalanIntegration/leadProfile'
 import EditLead from '../Components/HalanIntegration/editLead'
 import GeoAreas from '../Components/GeoAreas/geoAreas'
 import BulkApplicationReview from '../Components/BulkApplicarionReview/bulkApplicationReview'
-import CreateClearance from '../Components/Clearance/create-clearance'
+import ClearanceCreation from '../Components/Clearance/clearanceCreation'
 import ClearancesList from '../Components/Clearance/clearancesList'
 import ClearanceProfile from '../Components/Clearance/clearanceProfile'
 import SupervisionGroupsList from '../Components/managerHierarchy/supervisionGroupsList'
@@ -110,7 +110,7 @@ const appRoutes = [
             label: local.createClearance,
             render: (props) => (
               <Can I="newClearance" a="application">
-                <CreateClearance {...props} />
+                <ClearanceCreation {...props} />
               </Can>
             ),
           },
@@ -625,7 +625,7 @@ const appRoutes = [
             label: local.editClearance,
             render: (props) => (
               <Can I="editClearance" a="application">
-                <CreateClearance {...props} edit />
+                <ClearanceCreation {...props} edit />
               </Can>
             ),
           },

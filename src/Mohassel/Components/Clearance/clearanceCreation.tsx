@@ -5,7 +5,7 @@ import { Formik } from 'formik'
 import Swal from 'sweetalert2'
 import CustomerBasicsCard from './basicInfoCustomer'
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
-import { CreateClearanceForm } from './createClearanceForm'
+import { ClearanceCreationForm } from './clearanceCreationForm'
 import {
   clearanceCreationValidation,
   clearanceData,
@@ -47,7 +47,7 @@ interface State {
   }[]
   penalty: number
 }
-class CreateClearance extends Component<Props, State> {
+class ClearanceCreation extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -248,7 +248,7 @@ class CreateClearance extends Component<Props, State> {
                 validateOnBlur
               >
                 {(formikProps) => (
-                  <CreateClearanceForm
+                  <ClearanceCreationForm
                     {...formikProps}
                     cancel={() => this.cancel()}
                     edit={this.props.edit}
@@ -274,4 +274,4 @@ class CreateClearance extends Component<Props, State> {
   }
 }
 
-export default withRouter(CreateClearance)
+export default withRouter(ClearanceCreation)

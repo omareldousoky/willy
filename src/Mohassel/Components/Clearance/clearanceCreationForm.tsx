@@ -32,11 +32,10 @@ interface Props {
   ) => any
 }
 
-export const CreateClearanceForm = (props: Props) => {
+export const ClearanceCreationForm = (props: Props) => {
   const [selectedApplication, setApplication] = useState(
     props.paidLoans.filter((loan) => loan.id === props.values.loanId)
   )
-  const { status } = props.values
   const handleReceiptPhotoChange = (imageFile) => {
     props.setFieldValue('receiptPhoto', imageFile)
   }
@@ -252,16 +251,14 @@ export const CreateClearanceForm = (props: Props) => {
                 photoFile: props.values.receiptPhoto,
               }}
               edit={props.edit}
-              view={props.review}
               handleImageChange={handleReceiptPhotoChange}
               handleBlur={props.handleBlur}
             />
           </Col>
           <Col>
             <Row className="row-nowrap">
-              {' '}
               <Form.Label className="clearance-label">
-                {local.clearanceDocumentPhoto}{' '}
+                {local.clearanceDocumentPhoto}
               </Form.Label>
               {props.errors.documentPhoto && (
                 <Form.Label className="error-msg">
