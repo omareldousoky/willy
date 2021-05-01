@@ -133,7 +133,7 @@ class ClearanceProfile extends Component<
   renderMainInfo() {
     return (
       <Table striped bordered hover>
-        <tbody style={{ padding: '2rem 0' }}>
+        <tbody className="px-0 py-2">
           <tr>
             <td style={header}>{local.registrationDate}*</td>
             <td style={cell}>{timeToDate(this.state.data.registrationDate)}</td>
@@ -190,7 +190,6 @@ class ClearanceProfile extends Component<
             photoObject={{
               photoURL: this.state.data.receiptPhotoURL,
             }}
-            edit={false}
             view
           />
         </Row>
@@ -206,7 +205,6 @@ class ClearanceProfile extends Component<
             photoObject={{
               photoURL: this.state.data.documentPhotoURL,
             }}
-            edit={false}
             view
           />
         </Row>

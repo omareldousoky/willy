@@ -24,6 +24,7 @@ import { getClearance } from '../../Services/APIs/clearance/getClearance'
 import { updateClearance } from '../../Services/APIs/clearance/updateClearance'
 import { Loader } from '../../../Shared/Components/Loader'
 import PenaltyStrike from './penaltyStrike'
+import Wizard from '../wizard/Wizard'
 
 interface CreateClearanceRouteState {
   customerId?: string
@@ -39,6 +40,7 @@ interface State {
     branchName: string
     customerName: string
   }
+  step: number
   loading: boolean
   step1: ClearanceValues
   paidLoans: {
@@ -56,6 +58,7 @@ class ClearanceCreation extends Component<Props, State> {
         branchName: '',
         customerName: '',
       },
+      step: 1,
       step1: clearanceData,
       paidLoans: [],
       loading: false,
@@ -218,57 +221,79 @@ class ClearanceCreation extends Component<Props, State> {
     this.setState({ loading: false })
   }
 
+  renderStepOne() {
+    return (
+      <Formik
+        enableReinitialize
+        initialValues={this.state.step1}
+        validationSchema={
+          this.props.edit
+            ? clearanceEditValidation
+            : clearanceCreationValidation
+        }
+        onSubmit={this.submit}
+        validateOnChange
+        validateOnBlur
+      >
+        {(formikProps) => (
+          <ClearanceCreationForm
+            {...formikProps}
+            cancel={() => this.cancel()}
+            edit={this.props.edit}
+            customerKey={this.state.customer.key}
+            paidLoans={this.state.paidLoans}
+            penalty={this.state.penalty}
+          />
+        )}
+      </Formik>
+    )
+  }
+
+  renderSteps() {
+    switch (this.state.step) {
+      case 1:
+        return this.renderStepOne()
+
+      default:
+        return null
+    }
+  }
+
   render() {
     return (
       <>
+        <Loader open={this.state.loading} type="fullscreen" />
         {this.state.step1.loanId && (
           <PenaltyStrike loanId={this.state.step1.loanId} />
         )}
-        <Card>
-          <Card.Title>
-            <CustomerBasicsCard
-              customerKey={this.state.customer.key}
-              branchName={this.state.customer.branchName}
-              customerName={this.state.customer.customerName}
-            />
-          </Card.Title>
-          <Loader open={this.state.loading} type="fullscreen" />
-          {this.state.paidLoans.length > 0 ? (
-            <Card.Body>
-              <Formik
-                enableReinitialize
-                initialValues={this.state.step1}
-                validationSchema={
-                  this.props.edit
-                    ? clearanceEditValidation
-                    : clearanceCreationValidation
-                }
-                onSubmit={this.submit}
-                validateOnChange
-                validateOnBlur
-              >
-                {(formikProps) => (
-                  <ClearanceCreationForm
-                    {...formikProps}
-                    cancel={() => this.cancel()}
-                    edit={this.props.edit}
-                    customerKey={this.state.customer.key}
-                    paidLoans={this.state.paidLoans}
-                    penalty={this.state.penalty}
-                  />
-                )}
-              </Formik>
-            </Card.Body>
-          ) : (
-            <div className="text-align-center my-2">
-              <img
-                alt="no-data-found"
-                src={require('../../../Shared/Assets/no-results-found.svg')}
-              />
-              <h4>{local.noLoansForClearance}</h4>
-            </div>
-          )}
-        </Card>
+        <Card.Title>
+          <CustomerBasicsCard
+            customerKey={this.state.customer.key}
+            branchName={this.state.customer.branchName}
+            customerName={this.state.customer.customerName}
+          />
+        </Card.Title>
+        <div className="container">
+          <Card className="w-100">
+            {this.state.paidLoans.length > 0 ? (
+              <div className="d-flex flex-row">
+                <Wizard
+                  currentStepNumber={this.state.step - 1}
+                  stepsDescription={[local.mainInfo, local.documents]}
+                />
+                <Card.Body>{this.renderSteps()}</Card.Body>
+              </div>
+            ) : (
+              <div className="text-align-center my-2">
+                <img
+                  alt="no-data-found"
+                  src={require('../../../Shared/Assets/no-results-found.svg')}
+                />
+                <h4>{local.noLoansForClearance}</h4>
+              </div>
+            )}
+          </Card>
+        </div>
       </>
     )
   }
