@@ -21,10 +21,9 @@ import {
 import { getApplicationsKeys } from '../../Services/APIs/clearance/getApplicagionsKey'
 import { createClearance } from '../../Services/APIs/clearance/createClearance'
 import { getClearance } from '../../Services/APIs/clearance/getClearance'
-import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties'
 import { updateClearance } from '../../Services/APIs/clearance/updateClearance'
 import { Loader } from '../../../Shared/Components/Loader'
-import { reviewClearance } from '../../Services/APIs/clearance/reviewClearance'
+import PenaltyStrike from './penaltyStrike'
 
 interface CreateClearanceRouteState {
   customerId?: string
@@ -33,7 +32,6 @@ interface CreateClearanceRouteState {
 
 interface Props extends RouteComponentProps<{}, {}, CreateClearanceRouteState> {
   edit: boolean
-  review: boolean
 }
 interface State {
   customer: {
@@ -66,7 +64,7 @@ class CreateClearance extends Component<Props, State> {
   }
 
   componentDidMount() {
-    if (this.props.edit || this.props.review) {
+    if (this.props.edit) {
       this.getClearanceById()
     } else if (this.props.location.state?.customerId) {
       this.getCustomer(this.props.location.state.customerId)
@@ -111,7 +109,6 @@ class CreateClearance extends Component<Props, State> {
             branchName: res.body.data.branchName,
           },
         })
-        await this.calculatePenalty(res.body.data.loanId)
         await this.getCustomerPaidLoans(res.body.data.customerId)
       }
       this.setState({ loading: false })
@@ -157,8 +154,6 @@ class CreateClearance extends Component<Props, State> {
   submit = async (values) => {
     if (this.props.edit) {
       await this.editClearance(values)
-    } else if (this.props.review) {
-      await this.reviewClearance(values)
     } else {
       await this.createNewClearance(values)
     }
@@ -188,20 +183,6 @@ class CreateClearance extends Component<Props, State> {
       step1: clearanceData,
     })
     this.props.history.goBack()
-  }
-
-  async calculatePenalty(loanId: string) {
-    this.setState({ loading: true })
-    const res = await calculatePenalties({
-      id: loanId,
-      truthDate: new Date().getTime(),
-    })
-    if (res.body) {
-      this.setState({ penalty: res.body.penalty, loading: false })
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
   }
 
   async createNewClearance(values) {
@@ -237,44 +218,12 @@ class CreateClearance extends Component<Props, State> {
     this.setState({ loading: false })
   }
 
-  async reviewClearance(values) {
-    if (this.props.location.state?.clearanceId) {
-      this.setState({ loading: true })
-      const res = await reviewClearance(
-        this.props.location.state?.clearanceId,
-        { status: values.status }
-      )
-      if (res.status === 'success') {
-        Swal.fire('Success', '', 'success').then(() =>
-          this.props.history.goBack()
-        )
-      } else {
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      }
-    }
-    this.setState({ loading: false })
-  }
-
-  renderPenaltyStrike() {
-    return this.state.penalty ? (
-      <div className="error-container">
-        <img
-          alt="error"
-          src={require('../../Assets/error-red-circle.svg')}
-          style={{ marginLeft: 20 }}
-        />
-        <h4>
-          <span style={{ margin: '0 10px' }}> {local.penaltyMessage}</span>{' '}
-          <span style={{ color: '#d51b1b' }}>{this.state.penalty}</span>
-        </h4>
-      </div>
-    ) : null
-  }
-
   render() {
     return (
       <>
-        {this.renderPenaltyStrike()}
+        {this.state.step1.loanId && (
+          <PenaltyStrike loanId={this.state.step1.loanId} />
+        )}
         <Card>
           <Card.Title>
             <CustomerBasicsCard
@@ -290,7 +239,7 @@ class CreateClearance extends Component<Props, State> {
                 enableReinitialize
                 initialValues={this.state.step1}
                 validationSchema={
-                  this.props.edit || this.props.review
+                  this.props.edit
                     ? clearanceEditValidation
                     : clearanceCreationValidation
                 }
@@ -303,7 +252,6 @@ class CreateClearance extends Component<Props, State> {
                     {...formikProps}
                     cancel={() => this.cancel()}
                     edit={this.props.edit}
-                    review={this.props.review}
                     customerKey={this.state.customer.key}
                     paidLoans={this.state.paidLoans}
                     penalty={this.state.penalty}
@@ -312,7 +260,7 @@ class CreateClearance extends Component<Props, State> {
               </Formik>
             </Card.Body>
           ) : (
-            <div style={{ textAlign: 'center', marginBottom: 40 }}>
+            <div className="text-align-center my-2">
               <img
                 alt="no-data-found"
                 src={require('../../../Shared/Assets/no-results-found.svg')}

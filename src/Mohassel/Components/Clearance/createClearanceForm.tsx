@@ -17,7 +17,6 @@ interface Props {
   touched: ClearanceTouched
   paidLoans: any[]
   edit: boolean
-  review: boolean
   customerKey: string
   penalty: number
   handleChange: (
@@ -65,10 +64,10 @@ export const CreateClearanceForm = (props: Props) => {
               options={props.paidLoans}
               getOptionLabel={(option) => option.Key}
               getOptionValue={(option) => option.id}
-              isDisabled={props.edit || props.review}
+              isDisabled={props.edit}
             />
             {props.errors.loanId && (
-              <Form.Label className="errorMsg">
+              <Form.Label className="error-msg">
                 {props.errors.loanId}
               </Form.Label>
             )}
@@ -98,7 +97,6 @@ export const CreateClearanceForm = (props: Props) => {
               value={props.values.registrationDate as string}
               onChange={props.handleChange}
               onBlur={props.handleBlur}
-              disabled={props.review}
               isInvalid={
                 (props.errors.registrationDate &&
                   props.touched.registrationDate) as boolean
@@ -119,7 +117,6 @@ export const CreateClearanceForm = (props: Props) => {
               value={props.values.receiptDate as string}
               onChange={props.handleChange}
               onBlur={props.handleBlur}
-              disabled={props.review}
               isInvalid={
                 (props.errors.receiptDate &&
                   props.touched.receiptDate) as boolean
@@ -146,9 +143,7 @@ export const CreateClearanceForm = (props: Props) => {
                 (props.errors.transactionKey &&
                   props.touched.transactionKey) as boolean
               }
-              disabled={
-                !!(props.values.manualReceipt || props.review) as boolean
-              }
+              disabled={!!props.values.manualReceipt as boolean}
             />
             <Form.Control.Feedback type="invalid">
               {props.errors.transactionKey}
@@ -169,9 +164,7 @@ export const CreateClearanceForm = (props: Props) => {
                 (props.errors.manualReceipt &&
                   props.touched.manualReceipt) as boolean
               }
-              disabled={
-                !!(props.values.transactionKey || props.review) as boolean
-              }
+              disabled={!!props.values.transactionKey as boolean}
             />
             <Form.Control.Feedback type="invalid">
               {props.errors.manualReceipt}
@@ -191,7 +184,6 @@ export const CreateClearanceForm = (props: Props) => {
               value={props.values.clearanceReason}
               onChange={props.handleChange}
               onBlur={props.handleBlur}
-              disabled={props.review}
               isInvalid={
                 (props.errors.clearanceReason &&
                   props.touched.clearanceReason) as boolean
@@ -212,7 +204,6 @@ export const CreateClearanceForm = (props: Props) => {
               value={props.values.bankName}
               onChange={props.handleChange}
               onBlur={props.handleBlur}
-              disabled={props.review}
               isInvalid={
                 (props.errors.bankName && props.touched.bankName) as boolean
               }
@@ -234,7 +225,6 @@ export const CreateClearanceForm = (props: Props) => {
               value={props.values.notes}
               onChange={props.handleChange}
               onBlur={props.handleBlur}
-              disabled={props.review}
               isInvalid={(props.errors.notes && props.touched.notes) as boolean}
             />
             <Form.Control.Feedback type="invalid">
@@ -249,7 +239,7 @@ export const CreateClearanceForm = (props: Props) => {
                 {local.clearanceReceiptPhoto}
               </Form.Label>
               {props.errors.receiptPhoto && (
-                <Form.Label className="errorMsg">
+                <Form.Label className="error-msg">
                   {props.errors.receiptPhoto}
                 </Form.Label>
               )}
@@ -274,7 +264,7 @@ export const CreateClearanceForm = (props: Props) => {
                 {local.clearanceDocumentPhoto}{' '}
               </Form.Label>
               {props.errors.documentPhoto && (
-                <Form.Label className="errorMsg">
+                <Form.Label className="error-msg">
                   {props.errors.documentPhoto}
                 </Form.Label>
               )}
@@ -283,7 +273,6 @@ export const CreateClearanceForm = (props: Props) => {
               data-qc="documentPhoto"
               name="documentPhoto"
               edit={props.edit}
-              view={props.review}
               photoObject={{
                 photoURL: props.values.documentPhotoURL || '',
                 photoFile: props.values.documentPhoto,
@@ -293,84 +282,20 @@ export const CreateClearanceForm = (props: Props) => {
             />
           </Col>
         </Row>
-        {props.review ? (
-          <>
-            {status === 'underReview' && (
-              <Form.Group as={Row}>
-                <Col>
-                  <Button
-                    className="btn-reject btn-danger"
-                    style={{
-                      width:
-                        !props.penalty || props.penalty <= 0 ? '60%' : '30%',
-                    }}
-                    type="submit"
-                    onClick={() => {
-                      props.setFieldValue('status', 'rejected')
-                    }}
-                  >
-                    {local.rejected}
-                  </Button>
-                </Col>
-
-                {(!props.penalty || props.penalty <= 0) && (
-                  <Col>
-                    <Button
-                      type="submit"
-                      className="btn-submit-next"
-                      onClick={() => {
-                        props.setFieldValue('status', 'approved')
-                      }}
-                      style={{ float: 'left', width: '60%' }}
-                    >
-                      {local.approved}
-                    </Button>
-                  </Col>
-                )}
-              </Form.Group>
-            )}
-            {status === 'rejected' && (
-              <Form.Group as={Row}>
-                <Col>
-                  <Button
-                    className="btn-warning"
-                    style={{ width: '30%' }}
-                    type="submit"
-                    onClick={() => {
-                      props.setFieldValue('status', 'underReview')
-                    }}
-                  >
-                    {local.undoReviewClearance}
-                  </Button>
-                </Col>
-              </Form.Group>
-            )}
-          </>
-        ) : (
-          <Form.Group as={Row}>
-            <Col>
-              <Button
-                variant="secondary"
-                style={{ width: '60%' }}
-                onClick={() => {
-                  props.cancel()
-                }}
-              >
-                {local.cancel}
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                className="btn-submit-next"
-                style={{ float: 'left', width: '60%' }}
-                type="submit"
-                data-qc="next"
-              >
-                {props.edit ? local.editClearance : local.registerClearance}
-              </Button>
-            </Col>
-          </Form.Group>
-        )}
+        <div className="d-flex justify-content-between">
+          <Button
+            variant="secondary"
+            className="w-25"
+            onClick={() => {
+              props.cancel()
+            }}
+          >
+            {local.cancel}
+          </Button>
+          <Button className="w-25" type="submit" data-qc="submit">
+            {props.edit ? local.editClearance : local.registerClearance}
+          </Button>
+        </div>
       </Form>
     </div>
   )

@@ -634,7 +634,7 @@ const appRoutes = [
             label: local.reviewClearance,
             render: (props) => (
               <Can I="reviewClearance" a="application">
-                <CreateClearance {...props} review />
+                <ClearanceProfile {...props} review />
               </Can>
             ),
           },
