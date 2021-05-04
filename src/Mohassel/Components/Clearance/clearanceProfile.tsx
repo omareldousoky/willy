@@ -187,9 +187,7 @@ class ClearanceProfile extends Component<
           <DocumentPhoto
             data-qc="receiptPhoto"
             name="receiptPhoto"
-            photoObject={{
-              photoURL: this.state.data.receiptPhotoURL,
-            }}
+            photoURL={this.state.data.receiptPhotoURL}
             view
           />
         </Row>
@@ -202,9 +200,7 @@ class ClearanceProfile extends Component<
           <DocumentPhoto
             data-qc="documentPhoto"
             name="documentPhoto"
-            photoObject={{
-              photoURL: this.state.data.documentPhotoURL,
-            }}
+            photoURL={this.state.data.documentPhotoURL}
             view
           />
         </Row>
