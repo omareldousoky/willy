@@ -112,12 +112,12 @@ class ClearanceProfile extends Component<
     }
   }
 
-  async reviewClearance(values) {
+  async reviewClearanceByStatus(status: string) {
     if (this.props.location.state?.clearanceId) {
       this.setState({ loading: true })
       const res = await reviewClearance(
         this.props.location.state?.clearanceId,
-        { status: values.status }
+        { status }
       )
       if (res.status === 'success') {
         Swal.fire('Success', '', 'success').then(() =>
@@ -135,11 +135,11 @@ class ClearanceProfile extends Component<
       <Table striped bordered hover>
         <tbody className="px-0 py-2">
           <tr>
-            <td style={header}>{local.registrationDate}*</td>
+            <td style={header}>{local.registrationDate}</td>
             <td style={cell}>{timeToDate(this.state.data.registrationDate)}</td>
           </tr>
           <tr>
-            <td style={header}>{local.receiptDate}*</td>
+            <td style={header}>{local.receiptDate}</td>
             <td style={cell}>{timeToDate(this.state.data.receiptDate)}</td>
           </tr>
           {this.state.data.transactionKey && (
@@ -155,19 +155,19 @@ class ClearanceProfile extends Component<
             </tr>
           )}
           <tr>
-            <td style={header}>{local.clearanceReason}*</td>
+            <td style={header}>{local.clearanceReason}</td>
             <td style={cell}>{this.state.data.clearanceReason}</td>
           </tr>
           <tr>
-            <td style={header}>{local.bankName}*</td>
+            <td style={header}>{local.bankName}</td>
             <td style={cell}>{this.state.data.bankName}</td>
           </tr>
           <tr>
-            <td style={header}>{local.comments}*</td>
+            <td style={header}>{local.comments}</td>
             <td style={cell}>{this.state.data.notes}</td>
           </tr>
           <tr>
-            <td style={header}>{local.status}*</td>
+            <td style={header}>{local.status}</td>
             <td style={cell}>{this.state.data.status}</td>
           </tr>
         </tbody>
@@ -228,7 +228,7 @@ class ClearanceProfile extends Component<
         <Loader open={this.state.loading} type="fullscreen" />
         <div className="d-flex">
           <div className="px-4 d-flex flex-column w-25">
-            {this.state.data.status === 'underReview' && (
+            {this.state.data.status === 'underReview' && !this.props.review && (
               <div>
                 <Can I="editClearance" a="application">
                   <span
@@ -250,10 +250,42 @@ class ClearanceProfile extends Component<
               </div>
             )}
           </div>
-          {this.props.review && (
+          {this.props.review && this.state.data.status === 'rejected' && (
             <div className="px-4 d-flex w-75 justify-content-end">
-              <Button>test</Button>
+              <Button
+                className="bg-button w-25"
+                variant="outline-info"
+                onClick={async () => {
+                  await this.reviewClearanceByStatus('underReview')
+                }}
+              >
+                {local.undoReviewClearance}
+              </Button>
             </div>
+          )}
+          {this.props.review && this.state.data.status === 'underReview' && (
+            <>
+              <div className="px-4 d-flex w-75 justify-content-end">
+                <Button
+                  className="bg-button w-25 mx-2"
+                  variant="outline-danger"
+                  onClick={async () => {
+                    await this.reviewClearanceByStatus('rejected')
+                  }}
+                >
+                  {local.rejected}
+                </Button>
+                <Button
+                  className="bg-button w-25"
+                  variant="outline-primary"
+                  onClick={async () => {
+                    await this.reviewClearanceByStatus('approved')
+                  }}
+                >
+                  {local.approved}
+                </Button>
+              </div>
+            </>
           )}
         </div>
         <Card>
