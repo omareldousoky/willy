@@ -493,7 +493,7 @@ export const CustomerProfile = (props: Props) => {
         permission: ability.can("newClearance", "application"),
         onActionClick: () =>
           history.push("/customers/create-clearance", {
-            id: location.state.id,
+            customerId: location.state.id,
           }),
       },
       {
