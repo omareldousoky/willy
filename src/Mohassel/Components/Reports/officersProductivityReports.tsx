@@ -32,14 +32,13 @@ class OfficersProductivityReports extends Component<{}, State>{
     async getProductivityReports() {
         this.setState({ loading: true })
         const res = await getOfficersProductivityReports();
-        if (res.status === 'success') {
+        if (res.status === 'success' && res.body?.files) {
             this.setState({
                 data: res.body.files ?? [],
                 loading: false,
             })
         } else {
             this.setState({ loading: false });
-            Swal.fire("error", local.searchError, 'error')
         }
     }
     async handleSubmit(values) {
