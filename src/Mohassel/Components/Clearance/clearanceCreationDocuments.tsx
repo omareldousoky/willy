@@ -27,7 +27,7 @@ const ClearanceCreationDocuments = (
             {local.clearanceReceiptPhoto}
           </Form.Label>
           {props.errors.receiptPhoto && (
-            <Form.Label className="errorMsg">
+            <Form.Label className="error-msg px-2">
               {props.errors.receiptPhoto}
             </Form.Label>
           )}
@@ -47,7 +47,7 @@ const ClearanceCreationDocuments = (
             {local.clearanceDocumentPhoto}
           </Form.Label>
           {props.errors.documentPhoto && (
-            <Form.Label className="errorMsg">
+            <Form.Label className="error-msg px-2">
               {props.errors.documentPhoto}
             </Form.Label>
           )}
