@@ -1005,5 +1005,5 @@
     "na": "لا يوجد",
     "Usedalllegalwaysofcollectingthemoney": "إستنفاذ الطرق الودية والقانونية للتحصيل",
     "maxLength20": "لا يمكن ان يكون اكثر من 20",
-    "duplicateRegisterMessage": "رقم السجل موجود بالفعل لعميل اخر"
+    "lengthShouldBe9": "رقم البطاقة يجب ان يكون 9 ارقام"
 }

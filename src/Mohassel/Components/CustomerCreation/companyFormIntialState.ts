@@ -12,7 +12,8 @@ const {
   maxGlobalLimitReachedError,
   dateShouldBeBeforeToday,
   maxLength500,
-  maxLength20
+  maxLength20,
+  lengthShouldBe9
 } = local;
 
 const endOfDay: Date = new Date();
@@ -30,10 +31,15 @@ export const companyCreationValidationStepOne = Yup.object().shape({
     businessLicenseIssueDate: Yup.string().test(
         "Max Date", dateShouldBeBeforeToday,
         (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }).required(required),
-    commercialRegisterNumber: Yup.string().max(20, maxLength20).required(required),
+    commercialRegisterNumber:Yup.string().max(20, maxLength20).required(required),
     commercialRegisterExpiryDate: Yup.date().required(required),
     // industryRegisterNumber: Yup.string().max(50, maxLength50).required(required),
-    taxCardNumber: Yup.string().max(20, maxLength20).required(required),
+    taxCardNumber: Yup.string()
+    .when('taxCardNumberChecker', {
+        is: true,
+        then: Yup.string().test('error', local.duplicateNationalIdMessage, () => false),
+        otherwise: Yup.string().length(9, lengthShouldBe9).required(required)
+    }),
 })
 
 export const companyCreationValidationStepTwo = Yup.object().shape({
