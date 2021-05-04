@@ -1,47 +1,27 @@
 import React, { useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import Select from 'react-select'
+import { FormikProps } from 'formik'
 import * as local from '../../../Shared/Assets/ar.json'
-import {
-  ClearanceValues,
-  ClearanceErrors,
-  ClearanceTouched,
-} from './clearanceFormIntialState'
+import { ClearanceDataValues } from './clearanceFormIntialState'
 // import DocumentPhoto from '../../../Shared/Components/documentPhoto/documentPhoto'
 import { theme } from '../../../Shared/theme'
 import './clearance.scss'
 
 interface Props {
-  values: ClearanceValues
-  errors: ClearanceErrors
-  touched: ClearanceTouched
   paidLoans: any[]
   edit: boolean
   customerKey: string
   penalty: number
-  handleChange: (
-    eventOrPath: string | React.ChangeEvent<any>
-  ) => void | ((eventOrTextValue: string | React.ChangeEvent<any>) => void)
-  handleBlur: (eventOrString: any) => void | ((e: any) => void)
-  handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void
   cancel: (e?: React.FormEvent<HTMLFormElement> | undefined) => void
-  setFieldValue: (
-    field: string,
-    value: any,
-    shouldValidate?: boolean | undefined
-  ) => any
 }
 
-export const ClearanceCreationForm = (props: Props) => {
+export const ClearanceCreationForm = (
+  props: Props & FormikProps<ClearanceDataValues>
+) => {
   const [selectedApplication, setApplication] = useState(
     props.paidLoans.filter((loan) => loan.id === props.values.loanId)
   )
-  // const handleReceiptPhotoChange = (imageFile) => {
-  //   props.setFieldValue('receiptPhoto', imageFile)
-  // }
-  // const handleDocumentPhotoChange = (imageFile) => {
-  //   props.setFieldValue('documentPhoto', imageFile)
-  // }
   return (
     <Form onSubmit={props.handleSubmit}>
       <Row className="px-2 py-3">
@@ -223,54 +203,6 @@ export const ClearanceCreationForm = (props: Props) => {
           </Form.Control.Feedback>
         </Form.Group>
       </Row>
-      {/* <Row className="px-2 py-3">
-        <Col>
-          <Row>
-            <Form.Label className="clearance-label">
-              {local.clearanceReceiptPhoto}
-            </Form.Label>
-            {props.errors.receiptPhoto && (
-              <Form.Label className="error-msg">
-                {props.errors.receiptPhoto}
-              </Form.Label>
-            )}
-          </Row>
-          <DocumentPhoto
-            data-qc="receiptPhoto"
-            name="receiptPhoto"
-            photoObject={{
-              photoURL: props.values.receiptPhotoURL || '',
-              photoFile: props.values.receiptPhoto,
-            }}
-            edit={props.edit}
-            handleImageChange={handleReceiptPhotoChange}
-            handleBlur={props.handleBlur}
-          />
-        </Col>
-        <Col>
-          <Row className="row-nowrap">
-            <Form.Label className="clearance-label">
-              {local.clearanceDocumentPhoto}
-            </Form.Label>
-            {props.errors.documentPhoto && (
-              <Form.Label className="error-msg">
-                {props.errors.documentPhoto}
-              </Form.Label>
-            )}
-          </Row>
-          <DocumentPhoto
-            data-qc="documentPhoto"
-            name="documentPhoto"
-            edit={props.edit}
-            photoObject={{
-              photoURL: props.values.documentPhotoURL || '',
-              photoFile: props.values.documentPhoto,
-            }}
-            handleImageChange={handleDocumentPhotoChange}
-            handleBlur={props.handleBlur}
-          />
-        </Col>
-      </Row> */}
       <div className="d-flex justify-content-between">
         <Button
           variant="secondary"
@@ -282,7 +214,7 @@ export const ClearanceCreationForm = (props: Props) => {
           {local.cancel}
         </Button>
         <Button className="w-25" type="submit" data-qc="submit">
-          {props.edit ? local.editClearance : local.registerClearance}
+          {local.next}
         </Button>
       </div>
     </Form>

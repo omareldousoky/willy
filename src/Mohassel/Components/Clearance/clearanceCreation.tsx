@@ -1,16 +1,20 @@
 import React, { Component } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { Card } from 'react-bootstrap'
+import { Card, Container } from 'react-bootstrap'
 import { Formik } from 'formik'
 import Swal from 'sweetalert2'
 import CustomerBasicsCard from './basicInfoCustomer'
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
 import { ClearanceCreationForm } from './clearanceCreationForm'
 import {
-  clearanceCreationValidation,
+  clearanceStep1CreationValidation,
   clearanceData,
-  clearanceEditValidation,
-  ClearanceValues,
+  ClearanceDataValues,
+  clearanceDocuments,
+  ClearanceDocumentsValues,
+  clearanceStep2EditValidation,
+  clearanceStep2CreationValidation,
+  ClearanceRequest,
 } from './clearanceFormIntialState'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans'
@@ -25,6 +29,7 @@ import { updateClearance } from '../../Services/APIs/clearance/updateClearance'
 import { Loader } from '../../../Shared/Components/Loader'
 import PenaltyStrike from './penaltyStrike'
 import Wizard from '../wizard/Wizard'
+import ClearanceCreationDocuments from './clearanceCreationDocuments'
 
 interface CreateClearanceRouteState {
   customerId?: string
@@ -42,7 +47,8 @@ interface State {
   }
   step: number
   loading: boolean
-  step1: ClearanceValues
+  step1: ClearanceDataValues
+  step2: ClearanceDocumentsValues
   paidLoans: {
     Key: number
     id: string
@@ -60,6 +66,7 @@ class ClearanceCreation extends Component<Props, State> {
       },
       step: 1,
       step1: clearanceData,
+      step2: clearanceDocuments,
       paidLoans: [],
       loading: false,
       penalty: 0,
@@ -80,7 +87,7 @@ class ClearanceCreation extends Component<Props, State> {
       this.setState({ loading: true })
       const res = await getClearance(this.props.location.state.clearanceId)
       if (res.status === 'success') {
-        const clearance: ClearanceValues = {
+        const clearanceStep1: ClearanceDataValues = {
           customerId: res.body.data.customerId,
           loanId: res.body.data.loanId,
           transactionKey: res.body.data.transactionKey
@@ -91,21 +98,26 @@ class ClearanceCreation extends Component<Props, State> {
           notes: res.body.data.notes,
           registrationDate: res.body.data.registrationDate,
           receiptDate: res.body.data.receiptDate,
-          receiptPhotoURL: res.body.data.receiptPhotoURL,
-          documentPhotoURL: res.body.data.documentPhotoURL,
           manualReceipt: res.body.data.manualReceipt
             ? res.body.data.manualReceipt
             : '',
           status: res.body.data.status,
         }
         if (res.body.data.receiptDate)
-          clearance.receiptDate = timeToDateyyymmdd(res.body.data.receiptDate)
+          clearanceStep1.receiptDate = timeToDateyyymmdd(
+            res.body.data.receiptDate
+          )
         if (res.body.data.registrationDate)
-          clearance.registrationDate = timeToDateyyymmdd(
+          clearanceStep1.registrationDate = timeToDateyyymmdd(
             res.body.data.registrationDate
           )
+        const clearanceStep2: ClearanceDocumentsValues = {
+          receiptPhotoURL: res.body.data.receiptPhotoURL,
+          documentPhotoURL: res.body.data.documentPhotoURL,
+        }
         this.setState({
-          step1: clearance,
+          step1: clearanceStep1,
+          step2: clearanceStep2,
           customer: {
             key: res.body.data.customerKey,
             customerName: res.body.data.customerName,
@@ -155,37 +167,60 @@ class ClearanceCreation extends Component<Props, State> {
   }
 
   submit = async (values) => {
-    if (this.props.edit) {
-      await this.editClearance(values)
+    if (this.state.step === 1) {
+      this.setState(
+        (prevState) =>
+          ({
+            [`step${prevState.step}`]: values,
+            step: prevState.step + 1,
+          } as State)
+      )
     } else {
-      await this.createNewClearance(values)
+      const clearance = this.prepareClearance(values)
+      if (this.props.edit) {
+        await this.editClearance(clearance)
+      } else {
+        await this.createNewClearance(clearance)
+      }
     }
   }
 
-  prepareClearance = (values: ClearanceValues) => {
-    const clearance = values
+  prepareClearance = (values: ClearanceDocumentsValues) => {
+    this.setState({ step2: values })
+    const clearance: ClearanceRequest = {
+      ...this.state.step1,
+    }
     if (!clearance.customerId) {
       clearance.customerId = this.props.location.state?.customerId || ''
     }
     if (clearance.receiptDate) {
       clearance.receiptDate = new Date(clearance.receiptDate).valueOf()
     }
-    delete clearance.receiptPhotoURL
-    delete clearance.documentPhotoURL
-    delete clearance.status
     clearance.registrationDate = new Date(clearance.registrationDate).valueOf()
     const formData = new FormData()
     Object.entries(clearance).map(([key, value]) => {
       formData.append(key, value)
     })
+    if (values.receiptPhoto)
+      formData.append('receiptPhoto', values.receiptPhoto)
+    if (values.documentPhoto)
+      formData.append('documentPhoto', values.documentPhoto)
     return formData
   }
 
   cancel() {
     this.setState({
+      step: 1,
       step1: clearanceData,
+      step2: clearanceDocuments,
     })
     this.props.history.goBack()
+  }
+
+  previousStep(step: number): void {
+    this.setState({
+      step: step - 1,
+    } as State)
   }
 
   async createNewClearance(values) {
@@ -226,11 +261,7 @@ class ClearanceCreation extends Component<Props, State> {
       <Formik
         enableReinitialize
         initialValues={this.state.step1}
-        validationSchema={
-          this.props.edit
-            ? clearanceEditValidation
-            : clearanceCreationValidation
-        }
+        validationSchema={clearanceStep1CreationValidation}
         onSubmit={this.submit}
         validateOnChange
         validateOnBlur
@@ -249,11 +280,39 @@ class ClearanceCreation extends Component<Props, State> {
     )
   }
 
+  renderStepTwo() {
+    return (
+      <Container>
+        <Formik
+          enableReinitialize
+          initialValues={this.state.step2}
+          validationSchema={
+            this.props.edit
+              ? clearanceStep2EditValidation
+              : clearanceStep2CreationValidation
+          }
+          onSubmit={this.submit}
+          validateOnChange
+          validateOnBlur
+        >
+          {(formikProps) => (
+            <ClearanceCreationDocuments
+              {...formikProps}
+              edit={this.props.edit}
+              previousStep={() => this.previousStep(2)}
+            />
+          )}
+        </Formik>
+      </Container>
+    )
+  }
+
   renderSteps() {
     switch (this.state.step) {
       case 1:
         return this.renderStepOne()
-
+      case 2:
+        return this.renderStepTwo()
       default:
         return null
     }
