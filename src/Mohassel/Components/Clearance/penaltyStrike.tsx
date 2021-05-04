@@ -11,8 +11,8 @@ const PenaltyStrike = (props: { loanId: string }) => {
       id: loanId,
       truthDate: new Date().getTime(),
     })
-    if (res.body && res.body.penalty) {
-      setPenalty(res.body.penalty)
+    if (res.status === 'success') {
+      if (res.body & res.body.penalty) setPenalty(res.body.penalty)
     } else Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
   }
   useEffect(() => {
