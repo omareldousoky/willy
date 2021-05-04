@@ -48,6 +48,8 @@ interface State {
     customerType: string;
   };
   step2: {
+    geographicalDistribution: string;
+    geoAreaId: string;
     representative: any;
     newRepresentative: any;
     representativeName: string;
@@ -133,6 +135,8 @@ class CompanyCreation extends Component<Props, State>{
         taxCardNumber: res.body.taxCardNumber,
       };
       const customerExtraDetails = {
+        geographicalDistribution: res.body.geographicalDistribution,
+        geoAreaId: res.body.geoAreaId ? res.body.geoAreaId : '',
         representative: res.body.representative,
         representativeName: res.body.representativeName,
         applicationDate: timeToDateyyymmdd(res.body.applicationDate),
@@ -181,7 +185,12 @@ class CompanyCreation extends Component<Props, State>{
     }
   }
   async createEditCustomer() {
-    const objToSubmit = { ...this.state.step1, ...this.state.step2 };
+    const objToSubmit = {
+      ...this.state.step1,
+      ...this.state.step2,
+      customerName: this.state.step1.businessName,
+      customerHomeAddress: this.state.step1.businessAddress,
+    };
     objToSubmit.businessLicenseIssueDate = new Date(objToSubmit.businessLicenseIssueDate).valueOf();
     objToSubmit.applicationDate = new Date(objToSubmit.applicationDate).valueOf();
     objToSubmit.commercialRegisterExpiryDate = new Date(objToSubmit.commercialRegisterExpiryDate).valueOf();

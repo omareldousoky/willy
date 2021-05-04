@@ -36,6 +36,8 @@ export const companyCreationValidationStepOne = Yup.object().shape({
 })
 
 export const companyCreationValidationStepTwo = Yup.object().shape({
+  geographicalDistribution: Yup.string().trim(),
+  geoAreaId: Yup.string().trim().required(local.required),
   representative: Yup.string().trim().required(required),
   applicationDate: Yup.string().test(
       "Max Date", dateShouldBeBeforeToday,
@@ -44,6 +46,8 @@ export const companyCreationValidationStepTwo = Yup.object().shape({
 })
 
 export const companyCreationValidationStepTwoEdit = Yup.object().shape({
+  geographicalDistribution: Yup.string().trim(),
+  geoAreaId: Yup.string().trim().required(local.required),
   representative: Yup.string().trim().required(required),
   applicationDate: Yup.string().test(
       "Max Date", dateShouldBeBeforeToday,

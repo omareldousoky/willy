@@ -85,6 +85,8 @@ export const step3 = {
     }
 };
 export const step2Company = {
+    geographicalDistribution: '',
+    geoAreaId: '',
     representative: '',
     newRepresentative: '',
     representativeName: '',

@@ -67,7 +67,7 @@ export const StepThreeForm = (props: any) => {
     return (
         <Form onSubmit={handleSubmit}>
             <Loader open={loading} type="fullscreen" />
-            {!isCompany && <Row>
+            <Row>
                 <Col sm={12}>
                     <Form.Group controlId="geoAreaId">
                         <Form.Label className="customer-form-label">{`${local.geographicalDistribution}*`}</Form.Label>
@@ -90,7 +90,7 @@ export const StepThreeForm = (props: any) => {
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
-            </Row>}
+            </Row>
             <Row>
                 <Col sm={6}>
                     <Form.Group controlId="representative">
