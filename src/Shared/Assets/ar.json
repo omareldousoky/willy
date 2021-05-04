@@ -1003,5 +1003,6 @@
     "companyCreated": "تم انشاء الشركة بنجاح",
     "companyEdited": "تم تعديل الشركة بنجاح",
     "na": "لا يوجد",
-    "Usedalllegalwaysofcollectingthemoney": "إستنفاذ الطرق الودية والقانونية للتحصيل"
+    "Usedalllegalwaysofcollectingthemoney": "إستنفاذ الطرق الودية والقانونية للتحصيل",
+    "maxLength20": "لا يمكن ان يكون اكثر من 20"
 }
