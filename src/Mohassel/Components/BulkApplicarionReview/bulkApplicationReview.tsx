@@ -285,12 +285,24 @@ class BulkApplicationReview extends Component<Props, State>{
   render() {
     const searchKey = ['keyword', 'dateFromTo', 'review-application']
     const smePermission = ( ability.can('getIssuedSMELoan','application') && this.props.searchFilters.type === 'sme' )
-    const filteredMappers = ( smePermission ) ? this.mappers.filter(mapper => !['nationalId', 'age'].includes(mapper.key)) : this.mappers
-    if ( smePermission ) filteredMappers.splice(3, 0, {
-      title: local.commercialRegisterNumber,
-      key: "commercialRegisterNumber",
-      render: data => data.application.customer.commercialRegisterNumber
-    })
+    const filteredMappers = smePermission 
+      ? this.mappers.filter(
+        (mapper) => 
+          !['nationalId', 'age', 'businessActivity'].includes(mapper.key)
+        )
+      : this.mappers
+    if ( smePermission ) {
+      filteredMappers.splice(3, 0, {
+        title: local.commercialRegisterNumber,
+        key: "commercialRegisterNumber",
+        render: data => data.application.customer.commercialRegisterNumber
+      })
+      filteredMappers.splice(7, 0, {
+        title: local.businessSector,
+        key: 'businessSector',
+        render: (data) => data.application.customer.businessSector,
+      })
+    }
     const dropDownKeys = [
       "name",
       "nationalId",

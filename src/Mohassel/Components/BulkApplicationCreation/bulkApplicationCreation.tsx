@@ -162,6 +162,7 @@ class BulkApplicationCreation extends Component<Props, State>{
     ]
   }
   componentDidMount() {
+    this.props.setSearchFilters({ type: 'micro' })
     this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "approved", type: 'micro' }).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")

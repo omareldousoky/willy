@@ -730,7 +730,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             };
             const guarsArr = Array(selectedProductDetails.noOfGuarantors).fill(element)
             const defaultApplication = { ...this.state.application };
-            defaultApplication.guarantors = guarsArr;
+            defaultApplication.guarantors = selectedProductDetails.type === 'sme' ? [] : guarsArr;
             defaultApplication.productID = id;
             defaultApplication.guarantorIds = [];
             this.setState({ loading: false, application: defaultApplication });

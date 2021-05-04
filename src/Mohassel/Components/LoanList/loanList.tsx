@@ -6,7 +6,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Search from '../../../Shared/Components/Search/search';
 import { connect } from 'react-redux';
-import { search, searchFilters } from '../../../Shared/redux/search/actions';
+import { issuedLoansSearchFilters, search, searchFilters } from '../../../Shared/redux/search/actions';
 import { timeToDateyyymmdd, beneficiaryType, iscoreDate, getErrorMessage, getFullCustomerKey } from "../../../Shared/Services/utils";
 import { manageLoansArray } from './manageLoansInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
@@ -23,7 +23,7 @@ interface Props {
   searchFilters: any;
   issuedLoansSearchFilters: any;
   search: (data) => Promise<void>;
-  setSearchFilters: (data) => void;
+  setIssuedLoanSearchFilters: (data) => void;
 };
 interface State {
   size: number;
@@ -102,14 +102,18 @@ class LoanList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    const type = (ability.can('getIssuedSMELoan','application')) ? 'sme' : 'micro'
-    this.props.setSearchFilters({ type: 'micro' })
-    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", type: 'micro' }).then(()=>{
-      if(this.props.error)
-      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    const query = {
+      ...this.props.issuedLoansSearchFilters,
+      size: this.state.size,
+      from: this.state.from,
+      url: 'loan',
+      sort: 'issueDate',
     }
-    );;
-    this.setState({ manageLoansTabs: manageLoansArray() })
+    !Object.keys(query).includes('type') ? (query.type = 'micro') : null
+    this.props.search(query).then(() => {
+      if (this.props.error)
+        Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+    })
   }
   getStatus(status: string) {
     switch (status) {
@@ -132,15 +136,8 @@ class LoanList extends Component<Props, State> {
     )
   }
   async getLoans() {
-    const {
-      searchFilters,
-      search,
-      error,
-      fromBranch,
-      branchId,
-      issuedLoansSearchFilters,
-    } = this.props;
-    const { customerShortenedCode, customerKey } = searchFilters;
+    const { error, fromBranch, branchId } = this.props;
+    const { customerShortenedCode, customerKey } = this.props.searchFilters;
     const { size, from } = this.state;
     const modifiedSearchFilters = {
       ...searchFilters,
@@ -151,18 +148,15 @@ class LoanList extends Component<Props, State> {
     const query = {
       ...modifiedSearchFilters,
       ...issuedLoansSearchFilters,
-      branchId: fromBranch ? branchId : searchFilters.branchId,
+      branchId: fromBranch ? branchId : this.props.searchFilters.branchId,
       size,
       from,
 			url: "loan",
 			sort: "issueDate",
 		};
-    search(query).then(() => {
+    this.props.search(query).then(() => {
       if (error) Swal.fire("Error !", getErrorMessage(error), "error");
     });
-  }
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
   }
   render() {
     const array = manageLoansArray();
@@ -238,7 +232,7 @@ class LoanList extends Component<Props, State> {
 const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
-    setSearchFilters: data => dispatch(searchFilters(data)),
+    setIssuedLoanSearchFilters: data => dispatch(issuedLoansSearchFilters(data)),
   };
 };
 const mapStateToProps = state => {

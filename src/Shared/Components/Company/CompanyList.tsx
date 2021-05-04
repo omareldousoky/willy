@@ -78,11 +78,17 @@ const List = ({
   }, [branchId, from, size]);
   
   useEffect(() => {
-    const tabs = manageCustomersArray();
-    setManageCompaniesTab(tabs);
-    return () => {
-      dispatch(searchFilters({}));
-    };
+    dispatch(searchFilters({}))
+    dispatch(
+      search({
+        size,
+        from,
+        url: 'customer',
+        branchId,
+        customerType: 'company',
+      })
+    )
+    if (error) Swal.fire('error', getErrorMessage(error), 'error')
   }, []);
   const companyActions: Actions[] = [
     {
