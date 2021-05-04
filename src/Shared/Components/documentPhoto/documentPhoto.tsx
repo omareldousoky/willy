@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
-import Card from 'react-bootstrap/Card'
 import './documentPhoto.scss'
-import Row from 'react-bootstrap/Row'
+import { Row, Image } from 'react-bootstrap'
+
 import local from '../../Assets/ar.json'
 
 interface Props {
-  photoObject?: {
-    photoURL: string
-    photoFile?: File
-  }
+  photoURL?: string
   view?: boolean
   handleImageChange?: any
   name: string
@@ -39,14 +36,14 @@ class DocumentPhoto extends Component<Props, State> {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.photoObject?.photoURL && props.photoObject?.photoPhotoURL !== '')
+    if (props?.photoURL && props?.photoPhotoURL !== '')
       if (
         (props.edit || props.view) &&
-        props.photoObject.photoPhotoURL !== state.imgSrc &&
+        props.photoPhotoURL !== state.imgSrc &&
         state.key !== 'updated'
       ) {
         return {
-          imgSrc: props.photoObject.photoURL,
+          imgSrc: props.photoURL,
           key: 'updated',
         }
       }
@@ -163,7 +160,7 @@ class DocumentPhoto extends Component<Props, State> {
 
   renderUploadPhoto(key: number) {
     return (
-      <Card.Body
+      <div
         key={key}
         className="photo-upload-container"
         onClick={() => this.triggerInputFile()}
@@ -184,13 +181,13 @@ class DocumentPhoto extends Component<Props, State> {
           </div>
           {!this.props.view && <div>{local.documentUploadBrowseFileText}</div>}
         </div>
-      </Card.Body>
+      </div>
     )
   }
 
   renderPhotoByName(key: number) {
     return (
-      <Card.Body key={key} className="photo-upload-container">
+      <div key={key} className="photo-upload-container">
         {!this.props.view && (
           <Row data-qc="photo-actions" className="photo-actions">
             <span className="icon" onClick={(e) => this.deleteDocument(e)}>
@@ -200,7 +197,7 @@ class DocumentPhoto extends Component<Props, State> {
         )}
         <Row style={{ height: '' }}>
           <div>
-            <img
+            <Image
               className="uploaded-photo"
               src={this.state.imgSrc as string}
               key={key}
@@ -208,13 +205,13 @@ class DocumentPhoto extends Component<Props, State> {
             />
           </div>
         </Row>
-      </Card.Body>
+      </div>
     )
   }
 
   renderContainer() {
     return (
-      <Card
+      <div
         style={{
           display: 'flex',
           width: '100%',
@@ -260,12 +257,12 @@ class DocumentPhoto extends Component<Props, State> {
               }
               return this.renderPhotoByName(key)
             })}
-      </Card>
+      </div>
     )
   }
 
   render() {
-    return <div style={{ width: '100%' }}>{this.renderContainer()}</div>
+    return <>{this.renderContainer()}</>
   }
 }
 
