@@ -9,6 +9,7 @@ import IscoreReports from "./iscoreReports";
 import Card from "react-bootstrap/Card";
 import OracleIntegration from "./oracleIntegration";
 import OperationsReports from "./operationsReports";
+import { TasaheelReports } from "./TasaheelReports/TasaheelReports";
 import LaundryReports from "./laundryReports";
 import OfficersProductivityReports from "./officersProductivityReports";
 interface State {
@@ -54,6 +55,10 @@ class ReportsHome extends Component<{}, State> {
                     stringKey: 'monthlyQuarterlyReports',
                 },
                 {
+                    header: local.tasaheelReports,
+                    stringKey: 'tasaheelReports',
+                },
+                {
                     header: local.laundryReports,
                     stringKey: 'laundryReports',
                 },
@@ -84,6 +89,8 @@ class ReportsHome extends Component<{}, State> {
                 return <OperationsReports />;
             case "monthlyQuarterlyReports":
                 return <MonthlyQuarterlyReports/>
+            case "tasaheelReports":
+                return <TasaheelReports/>            
             case "laundryReports":
                 return <LaundryReports />
             case "officersProductivityReports":
