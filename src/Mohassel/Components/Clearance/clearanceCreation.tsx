@@ -176,7 +176,8 @@ class ClearanceCreation extends Component<Props, State> {
           } as State)
       )
     } else {
-      const clearance = this.prepareClearance(values)
+      this.setState({ step2: values })
+      const clearance = this.prepareClearance()
       if (this.props.edit) {
         await this.editClearance(clearance)
       } else {
@@ -185,10 +186,11 @@ class ClearanceCreation extends Component<Props, State> {
     }
   }
 
-  prepareClearance = (values: ClearanceDocumentsValues) => {
-    this.setState({ step2: values })
+  prepareClearance = () => {
     const clearance: ClearanceRequest = {
       ...this.state.step1,
+      receiptPhoto: this.state.step2.receiptPhoto,
+      documentPhoto: this.state.step2.documentPhoto,
     }
     if (!clearance.customerId) {
       clearance.customerId = this.props.location.state?.customerId || ''
@@ -199,12 +201,9 @@ class ClearanceCreation extends Component<Props, State> {
     clearance.registrationDate = new Date(clearance.registrationDate).valueOf()
     const formData = new FormData()
     Object.entries(clearance).map(([key, value]) => {
-      formData.append(key, value)
+      if (value) formData.append(key, value)
     })
-    if (values.receiptPhoto)
-      formData.append('receiptPhoto', values.receiptPhoto)
-    if (values.documentPhoto)
-      formData.append('documentPhoto', values.documentPhoto)
+
     return formData
   }
 
@@ -223,9 +222,8 @@ class ClearanceCreation extends Component<Props, State> {
     } as State)
   }
 
-  async createNewClearance(values) {
+  async createNewClearance(clearance) {
     this.setState({ loading: true })
-    const clearance = this.prepareClearance(values)
     const res = await createClearance(clearance)
     if (res.status === 'success') {
       Swal.fire('Success', '', 'success').then(() =>
@@ -237,9 +235,8 @@ class ClearanceCreation extends Component<Props, State> {
     this.setState({ loading: false })
   }
 
-  async editClearance(values) {
+  async editClearance(clearance) {
     this.setState({ loading: true })
-    const clearance = this.prepareClearance(values)
     if (this.props.location.state?.clearanceId) {
       const res = await updateClearance(
         this.props.location.state?.clearanceId,
@@ -293,7 +290,6 @@ class ClearanceCreation extends Component<Props, State> {
           }
           onSubmit={this.submit}
           validateOnChange
-          validateOnBlur
         >
           {(formikProps) => (
             <ClearanceCreationDocuments
