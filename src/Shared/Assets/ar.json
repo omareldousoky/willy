@@ -1005,5 +1005,7 @@
     "unblocked":"غير محظور",
     "operationType":"نوع العملية",
     "branchesStatus":"حاله الفروع",
-    "manageFinancialTransaction":"إدارة المعاملات المالية"
+    "manageFinancialTransaction":"إدارة المعاملات المالية",
+    "officersProductivityReport": "نسبة سداد المندوبين"
+
 }
