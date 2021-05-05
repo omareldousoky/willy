@@ -550,7 +550,7 @@ class Payment extends Component<Props, State>{
               enableReinitialize
               initialValues={{ ...this.state, max: (this.props.application.status === 'canceled') ? this.props.application.principal : this.props.application.installmentsObject.totalInstallments.installmentSum, paymentType: this.props.paymentType }}
               onSubmit={this.handleSubmit}
-              validationSchema={manualPaymentValidation}
+              validationSchema={() => manualPaymentValidation(this.state.penalty)}
               validateOnBlur
               validateOnChange
             >
