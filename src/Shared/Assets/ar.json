@@ -1015,6 +1015,7 @@
     "operationType":"نوع العملية",
     "branchesStatus":"حاله الفروع",
     "manageFinancialTransaction":"إدارة المعاملات المالية",
+    "officersProductivityReport": "نسبة سداد المندوبين",
     "companyWebsite": "الموقع الإلكترونى للشركة",
     "legalStructure": "الشكل القانوني",
     "commercialRegisterExpiryDate": "تاريخ نهاية السجل التجاري",
