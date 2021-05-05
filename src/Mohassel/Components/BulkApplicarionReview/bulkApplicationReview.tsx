@@ -202,7 +202,7 @@ class BulkApplicationReview extends Component<Props, State>{
     }
   }
   getApplications() {
-    this.props.search( { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', type: 'micro' }).then(()=>{
+    this.props.search( { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application' }).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }

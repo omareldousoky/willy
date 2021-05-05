@@ -140,8 +140,7 @@ export const LoanApplicationValidation = Yup.object().shape({
             }
         }).test("principal", local.customerMaxPrincipalError,
             function (this: any, value: any) {
-                const { customerTotalPrincipals, customerMaxPrincipal, principals, beneficiaryType, customerType } = this.parent
-                if (customerType === 'company') return true
+                const { customerTotalPrincipals, customerMaxPrincipal, principals, beneficiaryType } = this.parent
                 if (customerMaxPrincipal && customerMaxPrincipal > 0 && value <= customerMaxPrincipal) {
                     return true
                 } else if (customerMaxPrincipal === 0 && value <= (beneficiaryType === "group" ? principals.maxGroupPrincipal : principals.maxIndividualPrincipal)) {
@@ -243,7 +242,8 @@ export const SMELoanApplicationValidation = Yup.object().shape({
             }
         }).test("principal", local.customerMaxPrincipalError,
             function (this: any, value: any) {
-                const { customerTotalPrincipals, customerMaxPrincipal, principals, beneficiaryType } = this.parent
+                const { customerTotalPrincipals, customerMaxPrincipal, principals, beneficiaryType, customerType } = this.parent
+                if (customerType === 'company') return true
                 if (customerMaxPrincipal && customerMaxPrincipal > 0 && value <= customerMaxPrincipal) {
                     return true
                 } else if (customerMaxPrincipal === 0 && value <= (beneficiaryType === "group" ? principals.maxGroupPrincipal : principals.maxIndividualPrincipal)) {

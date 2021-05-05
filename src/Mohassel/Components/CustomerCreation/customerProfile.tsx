@@ -528,7 +528,6 @@ export const CustomerProfile = (props: Props) => {
         <Profile
           source='individual'
           loading={loading}
-          // backButtonText={local.viewCustomer}
           tabs={tabs}
           activeTab={activeTab}
           setActiveTab={(stringKey) => changeActiveTab(stringKey)}

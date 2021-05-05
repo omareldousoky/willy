@@ -69,10 +69,6 @@ interface State {
   loading: boolean;
   hasLoan: boolean;
   isGuarantor: boolean;
-  searchResults: {
-    results: Array<object>;
-    empty: boolean;
-  };
   oldRepresentative: string;
   branchId: string;
 }
@@ -88,10 +84,6 @@ class CompanyCreation extends Component<Props, State>{
       loading: false,
       hasLoan: false,
       isGuarantor: false,
-      searchResults: {
-        results: [],
-        empty: false
-      },
       selectedCustomer: {},
       oldRepresentative: '',
       branchId: ''

@@ -495,7 +495,6 @@ class Payment extends Component<Props, State>{
     this.props.changePaymentState(0)
   }
   renderPaymentMethods() {
-    console.log(this.props.paymentState, this.props)
     switch (this.props.paymentState) {
       case 0: return (
         <PaymentIcons
