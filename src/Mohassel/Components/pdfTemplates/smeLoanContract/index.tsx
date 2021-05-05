@@ -8,7 +8,6 @@ import {
 } from '../../../../Shared/Services/utils'
 
 const SmeLoanContract = (props) => {
-  console.log(props)
   return (
     <>
       <div className="loan-contract" dir="rtl" lang="ar">
