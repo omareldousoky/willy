@@ -21,7 +21,7 @@ export const paymentValidation = penalty => Yup.object().shape({
       ,
       otherwise:
         Yup.number()       
-          .max(penalty || 0, ` ${penalty ? `${local.penaltyLessThanOrEqual} ${penalty}` : local.noPenalty}`)
+          .max(penalty, ` ${penalty ? `${local.penaltyLessThanOrEqual} ${penalty}` : local.noPenalty}`)
     }),
   randomPaymentType: Yup.string().when("paymentType", {
     is: paymentType => paymentType === "random",
