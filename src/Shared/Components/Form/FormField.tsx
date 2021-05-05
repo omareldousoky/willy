@@ -3,10 +3,11 @@ import React, { ChangeEvent, FunctionComponent, useContext } from 'react'
 import { Form, FormControlProps } from 'react-bootstrap'
 import { Schema } from 'yup'
 
-import { getDateString, getNestedByStringKey } from '../../Services/utils'
+import { getDateString } from '../../Services/utils'
 import { FormFieldProps } from './types'
 import DocumentPhoto from '../documentPhoto/documentPhoto'
 import { AppFormContext } from '.'
+import { getNestedByStringKey } from './utils'
 
 const FormField: FunctionComponent<FormFieldProps> = ({
   field,

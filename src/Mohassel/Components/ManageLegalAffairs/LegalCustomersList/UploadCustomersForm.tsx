@@ -46,8 +46,6 @@ const UploadLegalCustomers = ({ onCancel, onSubmit }) => {
   }
 
   const handleSubmit = async (values: { data }) => {
-    console.log({ values })
-
     setIsDisabled(true)
 
     const formData = new FormData()

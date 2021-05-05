@@ -702,29 +702,6 @@ export const iscoreBank = (bankId: string) => {
   }
 };
 
-export const createValidationSchema = (
-  formFields: (FormField | GroupField)[],
-  validationSort?: [string, string][]
-) => {
-  const validationFields = formFields.reduce((acc, formField) => {
-    if (isGroupField(formField)) {
-      const groupFormField = {
-        [formField.name]: createValidationSchema(
-          (formField as GroupField).fields,
-          validationSort
-        ),
-      }
-
-      return { ...acc, ...groupFormField }
-    }
-
-    const { name, validation } = formField as Field
-    return { ...acc, [name]: validation }
-  }, {})
-
-  return Yup.object().shape(validationFields, validationSort)
-}
-
 export const arrayToPairs = <T extends unknown>(array: any[]): T[][] =>
   array.reduce(
     (result, value, index, sourceArray) =>
@@ -733,35 +710,6 @@ export const arrayToPairs = <T extends unknown>(array: any[]): T[][] =>
         : result,
     []
   )
-
-export const getNestedByStringKey = (obj: {}, key: string) =>
-  key.split('.').reduce((p, c) => (p && p[c]) || undefined, obj)
-
- export const isGroupField = (formField: FormField | GroupField) => formField?.type === 'group'
- 
- export const createFormFieldsInitValue = (
-   formFields: (FormField | GroupField)[],
-   defaultValues: any
- ) => {
-   return formFields.reduce((acc, formField) => {
-     const { name } = formField
-     const initValue = defaultValues ? defaultValues[name] : undefined
-
-     if (isGroupField(formField)) {
-       const fields = createFormFieldsInitValue(
-         (formField as GroupField).fields,
-         initValue
-       )
-
-       return { ...acc, [name]: fields }
-     }
-
-     return {
-       ...acc,
-       [name]: initValue,
-     }
-   }, {})
- }
 
  export const extractLastChars = (str: string, numberOfChars: number) =>
  str?.slice ? str.slice(str.length - numberOfChars, str.length) : str

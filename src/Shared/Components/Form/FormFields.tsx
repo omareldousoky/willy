@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react'
 
 import { Row, Col } from 'react-bootstrap'
 
-import { arrayToPairs, isGroupField } from '../../../Shared/Services/utils'
+import { arrayToPairs } from '../../../Shared/Services/utils'
 import FormField from './FormField'
 import {
   FormField as FormFieldInterface,
@@ -11,6 +11,7 @@ import {
   FormFieldsProps,
   GroupFieldProps,
 } from './types'
+import { isGroupField } from './utils'
 
 const GroupField: FunctionComponent<GroupFieldProps> = ({
   field,

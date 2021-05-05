@@ -9,6 +9,7 @@ import {
 } from '../../../../Shared/Services/utils'
 import { Managers } from '../../managerHierarchy/branchBasicsCard'
 import { SettledCustomer } from '../../ManageLegalAffairs/types'
+import { Header } from '../pdfTemplateCommon/header'
 
 const LegalSettlement = ({
   customer,
@@ -22,24 +23,15 @@ const LegalSettlement = ({
   const customerSettlement = customer.settlement
 
   return (
-    <div className="legal-settlement__container">
-      <div className="headtitle">
-        <div className="d-flex justify-content-between">
-          <div>
-            <span>شركة تساهيل للتمويل متناهي الصغر</span> <br />
-            <u>فرع: {branchName}</u>
-          </div>
+    <div className="legal-settlement-container">
+      <Header
+        title={` طلب (${local[customerSettlement.settlementType]})`}
+        branchName={branchName}
+        showCurrentTime={false}
+        showCurrentUser={false}
+        showCurrentDate
+      />
 
-          <div>
-            <span>{timeToArabicDateNow(true)}</span> <br />
-            <span>تمت المراجعه</span>
-          </div>
-        </div>
-
-        <div className="center">
-          طلب ({local[customerSettlement.settlementType]})
-        </div>
-      </div>
       <div className="marginlineheight">
         <div>تحريرا في: {timeToArabicDateNow(false)}</div>
         <div>
@@ -54,7 +46,7 @@ const LegalSettlement = ({
         </div>
       </div>
 
-      <table className="procedure">
+      <table className="procedure w-100">
         <thead>
           <tr>
             <th>الإجراء المطلوب</th>
@@ -71,13 +63,13 @@ const LegalSettlement = ({
             <td>{customerSettlement.caseYear}</td>
             <td>{customerSettlement.court}</td>
             <td colSpan={2}>{customerSettlement.lawyerName}</td>
-            <td className="center" rowSpan={2}>
+            <td className="text-center" rowSpan={2}>
               <input
                 type="checkbox"
                 defaultChecked={customerSettlement.penaltiesPaid}
               />
             </td>
-            <td className="center" rowSpan={2}>
+            <td className="text-center" rowSpan={2}>
               <input
                 type="checkbox"
                 defaultChecked={customerSettlement.courtFeesPaid}
@@ -95,8 +87,8 @@ const LegalSettlement = ({
           </tr>
           <tr>
             <td colSpan={2}>{customerSettlement.lawyerPhoneNumberThree}</td>
-            <td className="center">{customerSettlement.penaltyFees}</td>
-            <td className="center">{customerSettlement.courtFees}</td>
+            <td className="text-center">{customerSettlement.penaltyFees}</td>
+            <td className="text-center">{customerSettlement.courtFees}</td>
           </tr>
         </tbody>
 
@@ -127,9 +119,9 @@ const LegalSettlement = ({
 
       <div style={{ height: '10em' }}></div>
 
-      <table>
+      <table className="w-100">
         <thead>
-          <tr className="headtitle center">
+          <tr className="headtitle text-center">
             <th>مدير الفرع</th>
             <th>مشرف المنطقه</th>
             <th>مدير المنطقه</th>
@@ -140,7 +132,7 @@ const LegalSettlement = ({
         <div style={{ height: '1.5em' }}></div>
 
         <tbody>
-          <tr className="center">
+          <tr className="text-center">
             <td>------------------</td>
             <td>------------------</td>
             <td>------------------</td>

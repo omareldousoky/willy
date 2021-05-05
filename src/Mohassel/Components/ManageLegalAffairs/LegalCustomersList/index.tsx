@@ -27,7 +27,7 @@ import Search from '../../../../Shared/Components/Search/search'
 import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from '../manageLegalAffairsInitials'
 import {
-  AdminType,
+  ManagerReveiwEnum,
   ReviewReqBody,
   SettledCustomer,
   SettlementFormValues,
@@ -41,7 +41,7 @@ import {
   reviewLegalCustomer,
 } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import { FormField } from '../../../../Shared/Components/Form/types'
-import { defaultValidationSchema } from '../../../../Shared/validations'
+import { defaultValidationSchema } from '../validations'
 import AppForm from '../../../../Shared/Components/Form'
 import UploadLegalCustomers from './UploadCustomersForm'
 import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
@@ -154,6 +154,12 @@ const LegalCustomersList: FunctionComponent = () => {
     if (branchForPrint && managersForPrint) {
       window.print()
     }
+
+    window.onafterprint = () => {
+      setCustomerForPrint(null)
+      setBranchForPrint(null)
+      setManagersForPrint(null)
+    }
   }, [branchForPrint, managersForPrint])
 
   useEffect(() => {
@@ -205,7 +211,7 @@ const LegalCustomersList: FunctionComponent = () => {
   }, [error])
 
   const hasCourtSession = (data: DefaultedCustomer) =>
-    data.status !== 'financialManagerReview' && data[data.status]
+    data.status !== ManagerReveiwEnum.FinancialManager && data[data.status]
 
   const renderCourtField = (customer: DefaultedCustomer, name: string) => {
     if (!hasCourtSession(customer)) {
@@ -281,7 +287,7 @@ const LegalCustomersList: FunctionComponent = () => {
   ]
 
   const handleReviewCustomerSubmit = async (values: {
-    type: AdminType
+    type: ManagerReveiwEnum
     notes: string
   }) => {
     if (!customersForReview?.length) {
@@ -343,8 +349,11 @@ const LegalCustomersList: FunctionComponent = () => {
       key: 'customerKey',
       render: (data) =>
         ability.can('getCustomer', 'customer') ? (
-          <span
-            className="clickable"
+          <Button
+            type="button"
+            variant="default"
+            title={local.customerId}
+            className="p-0"
             onClick={() =>
               history.push('/customers/view-customer', {
                 id: data.customerId,
@@ -352,7 +361,7 @@ const LegalCustomersList: FunctionComponent = () => {
             }
           >
             {data.customerKey}
-          </span>
+          </Button>
         ) : (
           data.customerKey
         ),
@@ -411,14 +420,15 @@ const LegalCustomersList: FunctionComponent = () => {
       render: (data: SettledCustomer) =>
         data.settlement &&
         hasReviews(data.settlement) && (
-          <img
+          <Button
+            type="button"
+            variant="default"
+            onClick={() => setCustomerForView(data)}
+            className="p-0"
             title={local.logs}
-            className="clickable"
-            src={require('../../../Assets/view.svg')}
-            onClick={() => {
-              setCustomerForView(data)
-            }}
-          />
+          >
+            <img alt={local.logs} src={require('../../../Assets/view.svg')} />
+          </Button>
         ),
     },
     {
@@ -459,26 +469,34 @@ const LegalCustomersList: FunctionComponent = () => {
           {canReview &&
             data.settlement &&
             !!availableManagerReview([data]).length && (
-              <img
+              <Button
+                type="button"
+                variant="default"
+                className="mr-2 p-0"
+                onClick={() => setCustomersForReview([data])}
                 title={local.read}
-                className="clickable mr-2"
-                src={require('../../../Assets/check-circle.svg')}
-                onClick={() => {
-                  setCustomersForReview([data])
-                }}
-              />
+              >
+                <img
+                  alt={local.read}
+                  src={require('../../../Assets/check-circle.svg')}
+                />
+              </Button>
             )}
 
           {data.settlement?.settlementStatus === 'reviewed' && (
-            <img
+            <Button
+              type="button"
+              variant="default"
+              className="mr-2 p-0"
+              onClick={() => setCustomerForPrint(data)}
               title={local.print}
-              className="clickable"
-              style={{ maxWidth: 18 }}
-              src={require('../../../Assets/green-download.svg')}
-              onClick={() => {
-                setCustomerForPrint(data)
-              }}
-            />
+            >
+              <img
+                alt={local.print}
+                style={{ maxWidth: 18 }}
+                src={require('../../../Assets/green-download.svg')}
+              />
+            </Button>
           )}
         </div>
       ),
@@ -568,10 +586,7 @@ const LegalCustomersList: FunctionComponent = () => {
                 from={from}
                 size={size}
                 totalCount={totalCount}
-                mappers={[
-                  ...tableMapper,
-                  ...tableActionsMapper,
-                ]}
+                mappers={[...tableMapper, ...tableActionsMapper]}
                 data={data}
                 url={url}
                 changeNumber={(key: string, number: number) => {

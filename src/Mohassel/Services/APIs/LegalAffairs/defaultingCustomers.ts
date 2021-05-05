@@ -1,7 +1,7 @@
 import axios from '../axios-instance';
-import { ReviewReqBody } from '../../../Components/ManageLegalAffairs/LegalCustomersList';
-import { ISettlementReqBody } from '../../../Components/ManageLegalAffairs/LegalCustomersList/LegalSettlementForm';
 
+import { DefaultedCustomer } from '../../../Components/ManageLegalAffairs/defaultingCustomersList';
+import { LegalActionsForm, ReviewReqBody } from '../../../Components/ManageLegalAffairs/types';
 
 export const searchDefaultingCustomers = async (data: object) => {
     const url = process.env.REACT_APP_BASE_URL + '/search/defaulting-customer';
@@ -25,15 +25,16 @@ export const searchLegalAffairsCustomers = async (data: object) => {
     }
 }
 
-export const updateLegalAffairsCustomers = async (data: object) => {
-    const url = process.env.REACT_APP_BASE_URL + '/legal/update-customer';
-    try {
-        const res = await axios.put(url, data);
-        return { status: "success", body: res.data }
-    }
-    catch (error) {
-        return { status: "error", error: error.response.data }
-    }
+export const updateLegalAffairsCustomers = async (
+  data: LegalActionsForm & DefaultedCustomer
+) => {
+  const url = process.env.REACT_APP_BASE_URL + '/legal/update-customer'
+  try {
+    const res = await axios.put(url, data)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
 }
 
 export const addCustomerToDefaultingList =  async (data: {customerId: string; loanId: string}) => {

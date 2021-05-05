@@ -8,9 +8,12 @@ import AppForm from '../../../../Shared/Components/Form'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
 import { settleLegalCustomer } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import colorVariables from '../../../../Shared/Assets/scss/app.scss'
-import { ILegalSettlementFormProps, SettlementFormValues } from '../types'
+import {
+  ILegalSettlementFormProps,
+  SettlementFormValues,
+  SettlementStatusEnum,
+} from '../types'
 import settlementForm from '../configs/settlementForm'
-
 
 const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
   settlementInfo,
@@ -75,7 +78,8 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
   }
 
   const customerSettlement = customer.settlement
-  const isReviewed = customerSettlement?.settlementStatus === 'reviewed'
+  const isReviewed =
+    customerSettlement?.settlementStatus === SettlementStatusEnum.Reviewed
 
   const renderCustomerDetails = () => (
     <div className="row">
@@ -101,7 +105,7 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
     </div>
   )
   return (
-    <div className="form__container">
+    <div>
       <Card className="main-card hide-card-styles">
         <Card.Body>
           {renderCustomerDetails()}

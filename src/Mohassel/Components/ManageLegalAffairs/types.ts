@@ -62,14 +62,15 @@ export interface SettlementInfo {
   decreePhotoCopyURL: string
 }
 
-export type AdminType =
-  | 'branchManagerReview'
-  | 'areaSupervisorReview'
-  | 'areaManagerReview'
-  | 'financialManagerReview'
+export enum ManagerReveiwEnum {
+  BranchManager = 'branchManagerReview',
+  AreaManager = 'areaManagerReview',
+  AreaSupervisor = 'areaSupervisorReview',
+  FinancialManager = 'financialManagerReview',
+}
 
 export interface ReviewReqBody {
-  type: AdminType
+  type: ManagerReveiwEnum
   notes: string
   ids: string[]
 }
@@ -78,12 +79,18 @@ export interface SettledCustomer extends DefaultedCustomer {
   settlement: SettlementFormValues & ManagerReviews
 }
 
-export type SettlementStatus =
-  | 'privateReconciliation'
-  | 'settleByGeneralLawyer'
-  | 'settleByCompanyLawyer'
-  | 'stopLegalAffairs'
-  | 'waiver'
+export enum SettlementTypeEnum {
+  PrivateReconciliation = 'privateReconciliation',
+  SettleByGeneralLawyer = 'settleByGeneralLawyer',
+  SettleByCompanyLawyer = 'settleByCompanyLawyer',
+  StopLegalAffairs = 'stopLegalAffairs',
+  Waiver = 'waiver',
+}
+
+export enum SettlementStatusEnum {
+  Reviewed = 'reviewed',
+  UnderReview = 'underReview',
+}
 
 export interface SettlementFormValues {
   penaltiesPaid: boolean
@@ -98,8 +105,8 @@ export interface SettlementFormValues {
   lawyerPhoneNumberOne: string
   lawyerPhoneNumberTwo: string
   lawyerPhoneNumberThree: string
-  settlementType: SettlementStatus
-  settlementStatus: 'reviewed' | 'underReview'
+  settlementType: SettlementTypeEnum
+  settlementStatus: SettlementStatusEnum
   comments: string
 }
 
@@ -120,4 +127,3 @@ export interface UploadLegalCustomerResponse {
   nationalId: string
   reason: string
 }
-

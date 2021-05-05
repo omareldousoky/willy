@@ -4,13 +4,11 @@ import { Form, Formik, FormikProps } from 'formik'
 import { Button } from 'react-bootstrap'
 
 import './style.scss'
-import {
-  createFormFieldsInitValue,
-  createValidationSchema,
-} from '../../Services/utils'
+
 import FormFields, { FormFieldPairs } from './FormFields'
-import { AppFormProps, FormField } from './types'
+import { AppFormProps } from './types'
 import local from '../../../Shared/Assets/ar.json'
+import { createFormFieldsInitValue, createValidationSchema } from './utils'
 
 interface FormContext {
   defaultValues: {}

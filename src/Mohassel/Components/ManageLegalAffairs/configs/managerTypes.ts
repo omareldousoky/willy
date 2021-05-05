@@ -1,28 +1,29 @@
 import local from '../../../../Shared/Assets/ar.json'
+import { ManagerReveiwEnum } from '../types'
 
 const managerTypes = [
   {
-    value: 'branchManagerReview',
+    value: ManagerReveiwEnum.BranchManager,
     text: local.branchManagerReview,
-    permission: 'branchManagerReview',
+    permission: ManagerReveiwEnum.BranchManager,
     key: 'legal',
   },
   {
-    value: 'areaManagerReview',
+    value: ManagerReveiwEnum.AreaManager,
     text: local.areaManagerReview,
-    permission: 'areaManagerReview',
+    permission: ManagerReveiwEnum.AreaManager,
     key: 'legal',
   },
   {
-    value: 'areaSupervisorReview',
+    value: ManagerReveiwEnum.AreaSupervisor,
     text: local.areaSupervisorReview,
-    permission: 'areaSupervisorReview',
+    permission: ManagerReveiwEnum.AreaSupervisor,
     key: 'legal',
   },
   {
-    value: 'financialManagerReview',
+    value: ManagerReveiwEnum.FinancialManager,
     text: local.financialManagerReview,
-    permission: 'financialManagerReview',
+    permission: ManagerReveiwEnum.FinancialManager,
     key: 'legal',
   },
 ]
