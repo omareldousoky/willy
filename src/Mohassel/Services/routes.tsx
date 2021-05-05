@@ -57,7 +57,9 @@ import SupervisionGroupsList from '../Components/managerHierarchy/supervisionGro
 import BusinessActivities from '../Components/ManageLoanDetails/businessActivities'
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities'
 import FinancialClosing from '../Components/FinancialClosing/financialClosing'
+import TerrorismList from '../Components/ManageTerrorism/terrorismList'
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
+import TerrorismUnList from '../Components/ManageTerrorism/terrorismUnList'
 import FinancialBlocking from '../Components/FinancialClosing/financialBlocking'
 import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList'
 import FinancialReviewing from '../Components/FinancialClosing/FinancialReviewing'
@@ -691,6 +693,35 @@ const appRoutes = [
             render: (props) => (
               <Can I="summarizeTransactions" a="oracleIntegration">
                 <FinancialReviewing {...props} withHeader />{' '}
+              </Can>
+            ),
+          },
+        ],
+      },
+      {
+        path: '/manage-anti-terrorism',
+        label: local.antiTerrorismMoneyLaundering,
+        render: (props) => (
+          <Can I="getTerrorist" a="customer">
+            <TerrorismList {...props} />
+          </Can>
+        ),
+        routes: [
+          {
+            path: '/anti-terrorism',
+            label: local.antiTerrorism,
+            render: (props) => (
+              <Can I="getTerrorist" a="customer">
+                <TerrorismList {...props} />
+              </Can>
+            ),
+          },
+          {
+            path: '/anti-union-terrorism',
+            label: local.antiTerrorism,
+            render: (props) => (
+              <Can I="getTerrorist" a="customer">
+                <TerrorismUnList {...props} />
               </Can>
             ),
           },

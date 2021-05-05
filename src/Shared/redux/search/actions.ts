@@ -7,6 +7,10 @@ import { searchActionLogs } from '../../../Mohassel/Services/APIs/ActionLogs/sea
 import { searchLeads } from '../../../Mohassel/Services/APIs/Leads/searchLeads'
 import { searchClearance } from '../../../Mohassel/Services/APIs/clearance/searchClearance'
 import { searchGroups } from '../../../Mohassel/Services/APIs/ManagerHierarchy/searchGroups'
+import {
+  searchTerrorists,
+  searchUnTerrorists,
+} from '../../../Mohassel/Services/APIs/Terrorism/terrorism'
 import { searchLoanOfficer } from '../../../Mohassel/Services/APIs/LoanOfficers/searchLoanOfficer'
 import { searchDefaultingCustomers } from '../../../Mohassel/Services/APIs/LegalAffairs/defaultingCustomers'
 import { searchFinancialBlocking } from '../../../Mohassel/Services/APIs/loanApplication/financialClosing'
@@ -219,6 +223,44 @@ export const search = (obj) => {
           dispatch({
             type: 'SEARCH',
             payload: { ...res.error, status: res.status },
+          })
+        }
+      }
+    case 'terrorist':
+      return async (dispatch) => {
+        delete obj.url
+        dispatch({ type: 'SET_LOADING', payload: true })
+        const res = await searchTerrorists(obj)
+        if (res.status === 'success') {
+          dispatch({ type: 'SET_LOADING', payload: false })
+          dispatch({
+            type: 'SEARCH',
+            payload: { ...res.body, status: res.status, error: undefined },
+          })
+        } else {
+          dispatch({ type: 'SET_LOADING', payload: false })
+          dispatch({
+            type: 'SEARCH',
+            payload: { ...(res.error as Record<string, string>) },
+          })
+        }
+      }
+    case 'terroristUn':
+      return async (dispatch) => {
+        delete obj.url
+        dispatch({ type: 'SET_LOADING', payload: true })
+        const res = await searchUnTerrorists(obj)
+        if (res.status === 'success') {
+          dispatch({ type: 'SET_LOADING', payload: false })
+          dispatch({
+            type: 'SEARCH',
+            payload: { ...res.body, status: res.status, error: undefined },
+          })
+        } else {
+          dispatch({ type: 'SET_LOADING', payload: false })
+          dispatch({
+            type: 'SEARCH',
+            payload: { ...(res.error as Record<string, string>) },
           })
         }
       }

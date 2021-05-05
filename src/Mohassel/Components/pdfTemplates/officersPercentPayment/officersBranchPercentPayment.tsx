@@ -1,6 +1,6 @@
 import React from 'react'
 import { OfficerBranchPercentPaymentResponse } from '../../../Services/interfaces'
-import OfficersPercentPaymentHeader from './officerPercentPaymentHeader'
+import { Header } from '../pdfTemplateCommon/header'
 import { formatPercent } from './officersPercentPayment'
 import './officersPercentPayment.scss'
 import OfficersPercentPaymentFooter from './officersPercentPaymentFooter'
@@ -15,7 +15,11 @@ const OfficerBranchPercentPayment = (props: OfficerPercentPaymentProps) => {
   const { fromDate, toDate, data } = props
   return (
     <div className="officers-payment officers-branch-payment" lang="ar">
-      <OfficersPercentPaymentHeader toDate={toDate} fromDate={fromDate} />
+      <Header
+        toDate={toDate}
+        fromDate={fromDate}
+        title="تقرير نسب السداد و الانتاجيه للمندوبين"
+      />
       <table className="body">
         <thead>
           <tr>

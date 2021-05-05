@@ -8,6 +8,8 @@ import Reports from './reports'
 import IscoreReports from './iscoreReports'
 import OracleIntegration from './oracleIntegration'
 import OperationsReports from './operationsReports'
+import { TasaheelReports } from './TasaheelReports/TasaheelReports'
+import LaundryReports from './laundryReports'
 
 interface State {
   activeTab: string
@@ -49,6 +51,14 @@ class ReportsHome extends Component<{}, State> {
           header: local.monthlyQuarterlyReports,
           stringKey: 'monthlyQuarterlyReports',
         },
+        {
+          header: local.tasaheelReports,
+          stringKey: 'tasaheelReports',
+        },
+        {
+          header: local.laundryReports,
+          stringKey: 'laundryReports',
+        },
       ],
     }
   }
@@ -73,6 +83,10 @@ class ReportsHome extends Component<{}, State> {
         return <OperationsReports />
       case 'monthlyQuarterlyReports':
         return <MonthlyQuarterlyReports />
+      case 'tasaheelReports':
+        return <TasaheelReports />
+      case 'laundryReports':
+        return <LaundryReports />
       default:
         return null
     }
@@ -94,4 +108,5 @@ class ReportsHome extends Component<{}, State> {
     )
   }
 }
+
 export default ReportsHome

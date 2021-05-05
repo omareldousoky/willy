@@ -218,7 +218,14 @@ const CustomerProfile = (
               <tbody>
                 <tr>
                   <td>{local.customerName}</td>
-                  <td>{customerDetails?.customerName}</td>
+                  <td className="row-nowrap">
+                    {customerDetails?.customerName}{' '}
+                    {customerDetails?.suspects?.length && (
+                      <div className="status-chip rejected ml-2">
+                        {local.customerMayTerrorist}
+                      </div>
+                    )}{' '}
+                  </td>
                 </tr>
                 <tr>
                   <td>{local.branchName}</td>
