@@ -13,7 +13,8 @@ const {
   dateShouldBeBeforeToday,
   maxLength500,
   maxLength20,
-  lengthShouldBe9
+  lengthShouldBe9,
+  duplicateCompanyNumberMessage
 } = local;
 
 const endOfDay: Date = new Date();
@@ -37,7 +38,7 @@ export const companyCreationValidationStepOne = Yup.object().shape({
     taxCardNumber: Yup.string()
     .when('taxCardNumberChecker', {
         is: true,
-        then: Yup.string().test('error', local.duplicateNationalIdMessage, () => false),
+        then: Yup.string().test('error', duplicateCompanyNumberMessage, () => false),
         otherwise: Yup.string().length(9, lengthShouldBe9).required(required)
     }),
 })

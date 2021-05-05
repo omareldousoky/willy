@@ -595,7 +595,7 @@ export const StepTwoForm = (props: any) => {
                                 isInvalid={errors.taxCardNumber && touched.taxCardNumber}
                             />
                         <Form.Control.Feedback type="invalid">
-                            {(errors.taxCardNumber === local.duplicateNationalIdMessage)? local.duplicateNationalIdMessage + local.withCode + values.taxCardNumberDupKey  : errors.taxCardNumber }
+                            {(errors.taxCardNumber === local.duplicateCompanyNumberMessage)? local.duplicateCompanyNumberMessage + local.withCode + values.taxCardNumberDupKey  : errors.taxCardNumber }
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
