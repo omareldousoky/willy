@@ -11,7 +11,10 @@ const {
   mustBeOneOrMore,
   maxGlobalLimitReachedError,
   dateShouldBeBeforeToday,
-  maxLength500
+  maxLength500,
+  maxLength20,
+  lengthShouldBe9,
+  duplicateCompanyNumberMessage
 } = local;
 
 const endOfDay: Date = new Date();
@@ -22,20 +25,27 @@ export const companyCreationValidationStepOne = Yup.object().shape({
     businessAddress: Yup.string().trim().max(500, maxLength500).required(required),
     businessCharacteristic: Yup.string().trim().required(required),
     legalStructure: Yup.string().trim().required(required),
-    businessLicenseNumber: Yup.string().max(50, maxLength50).required(required),
+    businessLicenseNumber: Yup.string().max(20, maxLength20).required(required),
     businessSector: Yup.string().max(50, maxLength50).required(required),
     businessActivityDetails: Yup.string().max(500, maxLength500).required(required),
     // businessLicenseIssuePlace: Yup.string().trim().max(100, maxLength100),
     businessLicenseIssueDate: Yup.string().test(
         "Max Date", dateShouldBeBeforeToday,
         (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }).required(required),
-    commercialRegisterNumber: Yup.string().max(50, maxLength50).required(required),
+    commercialRegisterNumber:Yup.string().max(20, maxLength20).required(required),
     commercialRegisterExpiryDate: Yup.date().required(required),
     // industryRegisterNumber: Yup.string().max(50, maxLength50).required(required),
-    taxCardNumber: Yup.string().max(50, maxLength50).required(required),
+    taxCardNumber: Yup.string()
+    .when('taxCardNumberChecker', {
+        is: true,
+        then: Yup.string().test('error', duplicateCompanyNumberMessage, () => false),
+        otherwise: Yup.string().length(9, lengthShouldBe9).required(required)
+    }),
 })
 
 export const companyCreationValidationStepTwo = Yup.object().shape({
+  geographicalDistribution: Yup.string().trim(),
+  geoAreaId: Yup.string().trim().required(local.required),
   representative: Yup.string().trim().required(required),
   applicationDate: Yup.string().test(
       "Max Date", dateShouldBeBeforeToday,
@@ -44,6 +54,8 @@ export const companyCreationValidationStepTwo = Yup.object().shape({
 })
 
 export const companyCreationValidationStepTwoEdit = Yup.object().shape({
+  geographicalDistribution: Yup.string().trim(),
+  geoAreaId: Yup.string().trim().required(local.required),
   representative: Yup.string().trim().required(required),
   applicationDate: Yup.string().test(
       "Max Date", dateShouldBeBeforeToday,

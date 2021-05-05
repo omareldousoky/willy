@@ -8,7 +8,7 @@ import { checkIssueDate, getErrorMessage } from "../../../Shared/Services/utils"
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
-import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
+import { checkDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
 import Can from '../../config/Can';
 import Swal from 'sweetalert2';
 import ability from '../../config/ability';
@@ -75,7 +75,7 @@ export const StepOneForm = (props: any) => {
                   }
                   if (value.length === 14) {
                     setLoading(true);
-                    const res = await checkNationalIdDuplicates(value);
+                    const res = await checkDuplicates('nationalId', value);
                     if (res.status === 'success') {
                       setLoading(false);
                       setFieldValue('nationalIdChecker', res.body.Exists);

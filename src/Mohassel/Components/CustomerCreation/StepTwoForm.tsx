@@ -10,6 +10,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
 import Swal from 'sweetalert2';
 import { getErrorMessage } from '../../../Shared/Services/utils';
+import { checkDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
 
 export interface Village {
     villageName: { ar: string };
@@ -304,8 +305,28 @@ export const StepTwoForm = (props: any) => {
                 </Col>
             </Row>
             </>}
+            {isCompany && <Row>  
+                <Col sm={12}>
+                    <Form.Group controlId="businessActivityDetails">
+                        <Form.Label className="customer-form-label">{`${local.businessActivityDetails}*`}</Form.Label>
+                        <Form.Control
+                            as="textarea"
+                            name="businessActivityDetails"
+                            data-qc="businessActivityDetails"
+                            value={values.businessActivityDetails}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            maxLength={500}
+                            isInvalid={errors.businessActivityDetails && touched.businessActivityDetails}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.businessActivityDetails}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>
+                </Row>}
             <Row>
-                <Col sm={isCompany ? 6 : 12}>
+                <Col sm={12}>
                     <Form.Group controlId="businessSector">
                         <Form.Label className="customer-form-label">{`${local.businessSector}*`}</Form.Label>
                         <Can I="updateCustomerHasLoan" a="customer" passThrough>
@@ -330,25 +351,7 @@ export const StepTwoForm = (props: any) => {
                             </Form.Control>} 
                             </Can>
                     </Form.Group>
-                </Col>
-                {isCompany && <Col sm={6}>
-                    <Form.Group controlId="businessActivityDetails">
-                        <Form.Label className="customer-form-label">{`${local.businessActivityDetails}*`}</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            name="businessActivityDetails"
-                            data-qc="businessActivityDetails"
-                            value={values.businessActivityDetails}
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            maxLength={500}
-                            isInvalid={errors.businessActivityDetails && touched.businessActivityDetails}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {errors.businessActivityDetails}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>}
+                </Col> 
             </Row>
             {!isCompany && <Row>
                 <Col sm={6}>
@@ -560,16 +563,39 @@ export const StepTwoForm = (props: any) => {
                                 value={values.taxCardNumber}
                                 onBlur={handleBlur}
                                 maxLength={100}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
                                     const re = /^\d*$/;
-                                    if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                        setFieldValue('taxCardNumber', event.currentTarget.value)
+                                    const { value } = event.currentTarget;
+                                    
+                                    if (value === '' || re.test(value)) {
+                                        setFieldValue('taxCardNumber', value)
                                     }
+                                    if (value.length == 9) {
+                                        setLoading(true);
+                                        const res = await checkDuplicates('taxCardNumber', value);
+                                        if (res.status === "success") {
+                                          setLoading(false);
+                                          setFieldValue(
+                                            "taxCardNumberChecker",
+                                            res.body.Exists
+                                          );
+                                          if (res.body.Exists) {
+                                            setFieldValue(
+                                              "taxCardNumberDupKey",
+                                              res.body.CustomerKey
+                                            );
+                                          }
+                                        } else {
+                                          setLoading(false);
+                                          Swal.fire("Error !",getErrorMessage(res.error.error),"error");
+                                        }
+                                      } 
+
                                 }}
                                 isInvalid={errors.taxCardNumber && touched.taxCardNumber}
                             />
                         <Form.Control.Feedback type="invalid">
-                            {errors.taxCardNumber}
+                            {(errors.taxCardNumber === local.duplicateCompanyNumberMessage)? local.duplicateCompanyNumberMessage + local.withCode + values.taxCardNumberDupKey  : errors.taxCardNumber }
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>

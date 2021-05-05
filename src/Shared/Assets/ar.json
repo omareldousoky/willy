@@ -1040,5 +1040,8 @@
     "companyCreated": "تم انشاء الشركة بنجاح",
     "companyEdited": "تم تعديل الشركة بنجاح",
     "na": "لا يوجد",
-    "Usedalllegalwaysofcollectingthemoney": "إستنفاذ الطرق الودية والقانونية للتحصيل"
+    "Usedalllegalwaysofcollectingthemoney": "إستنفاذ الطرق الودية والقانونية للتحصيل",
+    "maxLength20": "لا يمكن ان يكون اكثر من 20",
+    "lengthShouldBe9": "رقم البطاقة يجب ان يكون 9 ارقام",
+    "duplicateCompanyNumberMessage": "رقم البطاقة موجود بالفعل لشركة اخرى"
 }
