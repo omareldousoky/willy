@@ -4,8 +4,6 @@ import JsZip from "jszip";
 import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
 import { default as errorMessages } from "../../Shared/Assets/errorMessages.json";
-import * as Yup from 'yup'
-import { FormField, GroupField, Field } from "../Components/Form/types";
 
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {

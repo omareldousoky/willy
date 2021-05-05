@@ -3,9 +3,9 @@ import React, { ChangeEvent, FunctionComponent, useContext } from 'react'
 import { Form, FormControlProps } from 'react-bootstrap'
 import { Schema } from 'yup'
 
-import { getDateString } from '../../Services/utils'
+import { getDateString } from '../../../../Shared/Services/utils'
 import { FormFieldProps } from './types'
-import DocumentPhoto from '../documentPhoto/documentPhoto'
+import DocumentPhoto from '../../../../Shared/Components/documentPhoto/documentPhoto'
 import { AppFormContext } from '.'
 import { getNestedByStringKey } from './utils'
 

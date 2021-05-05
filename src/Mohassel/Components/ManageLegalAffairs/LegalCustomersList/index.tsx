@@ -40,9 +40,9 @@ import {
   getSettlementFees,
   reviewLegalCustomer,
 } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
-import { FormField } from '../../../../Shared/Components/Form/types'
+import { FormField } from '../Form/types'
 import { defaultValidationSchema } from '../validations'
-import AppForm from '../../../../Shared/Components/Form'
+import AppForm from '../Form'
 import UploadLegalCustomers from './UploadCustomersForm'
 import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
 import { Branch } from '../../../../Shared/Services/interfaces'

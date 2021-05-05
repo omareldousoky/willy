@@ -4,7 +4,7 @@ import { Card, Form } from 'react-bootstrap'
 import Swal from 'sweetalert2'
 
 import local from '../../../../Shared/Assets/ar.json'
-import AppForm from '../../../../Shared/Components/Form'
+import AppForm from '../Form'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
 import { settleLegalCustomer } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import colorVariables from '../../../../Shared/Assets/scss/app.scss'
