@@ -110,6 +110,7 @@ class LoanList extends Component<Props, State> {
       sort: 'issueDate',
     }
     !Object.keys(query).includes('type') ? (query.type = 'micro') : null
+    this.props.setIssuedLoanSearchFilters({ type: query.type })
     this.props.search(query).then(() => {
       if (this.props.error)
         Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
@@ -140,14 +141,14 @@ class LoanList extends Component<Props, State> {
     const { customerShortenedCode, customerKey } = this.props.searchFilters;
     const { size, from } = this.state;
     const modifiedSearchFilters = {
-      ...searchFilters,
+      ...this.props.searchFilters,
       customerKey: !!customerShortenedCode
         ? getFullCustomerKey(customerShortenedCode)
         : customerKey || undefined,
     };
     const query = {
       ...modifiedSearchFilters,
-      ...issuedLoansSearchFilters,
+      ...this.props.issuedLoansSearchFilters,
       branchId: fromBranch ? branchId : this.props.searchFilters.branchId,
       size,
       from,

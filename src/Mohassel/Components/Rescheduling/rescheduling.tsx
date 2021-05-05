@@ -110,7 +110,6 @@ class Rescheduling extends Component<Props, State>{
         return (
             <>
                  <HeaderWithCards
-                    header=''
                     array={tabsArray}
                     active={this.calculateActiveTabIndex()}
                     selectTab={(activeTab: string) => this.setState({ activeTab })}

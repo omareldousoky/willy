@@ -380,7 +380,6 @@ class Payment extends Component<Props, State>{
       }
     } else if (this.props.paymentState === 4) {
       const obj = {
-        id: this.props.applicationId,
         payAmount: values.payAmount,
         bankOfPayment: values.bankOfPayment,
         bankOfPaymentBranch: values.bankOfPaymentBranch,
@@ -388,7 +387,7 @@ class Payment extends Component<Props, State>{
         truthDate: new Date(values.truthDate).valueOf(),
         installmentNumber: Number(values.installmentNumber)
       }
-      const res = await manualBankPayment(obj);
+      const res = await manualBankPayment(obj, this.props.applicationId);
       if (res.status === "success") {
         this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
       } else {

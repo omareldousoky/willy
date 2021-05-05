@@ -124,12 +124,12 @@ const List = ({
     },
     {
       title: taxCardNumber,
-      key: "TaxCardNumber",
+      key: "taxCardNumber",
       render: (data) => data.taxCardNumber,
     },
     {
       title: commercialRegisterNumber,
-      key: "CommercialRegisterNumber",
+      key: "commercialRegisterNumber",
       render: (data) => data.commercialRegisterNumber,
     },
     {
