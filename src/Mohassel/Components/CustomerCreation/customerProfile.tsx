@@ -431,8 +431,7 @@ export const CustomerProfile = (props: Props) => {
         fieldTitle: "ratings",
         fieldData: ratings,
         showFieldCondition: Boolean(
-          customerDetails?.hasLoan &&
-            ability.can("customerCategorization", "customer")
+          ability.can("customerCategorization", "customer")
         ),
       },
     ],
