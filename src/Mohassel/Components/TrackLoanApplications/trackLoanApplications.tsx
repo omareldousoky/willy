@@ -280,13 +280,20 @@ class TrackLoanApplications extends Component<Props, State>{
       "branch",
       "status-application",
     ]
-    const smePermission = ( ability.can('getIssuedSMELoan','application') && this.props.searchFilters.type === 'sme' )
+    const smePermission = ( ability.can('getSMEApplication','application') && this.props.searchFilters.type === 'sme' )
     const filteredMappers = ( smePermission ) ? this.mappers.filter(mapper => mapper.key !== 'nationalId') : this.mappers
-    if ( smePermission ) filteredMappers.splice(3, 0, {
-      title: local.commercialRegisterNumber,
-      key: "loanCode",
-      render: data => data.application.customer.commercialRegisterNumber
-    })
+    if ( smePermission ) {
+      filteredMappers.splice(3, 0, {
+        title: local.commercialRegisterNumber,
+        key: "commercialRegisterNumber",
+        render: data => data.application.customer.commercialRegisterNumber
+      })
+      filteredMappers.splice(4, 0, {
+        title: local.taxCardNumber,
+        key: 'taxCardNumber',
+        render: (data) => data.application.customer.taxCardNumber,
+      })
+    }
     const dropDownKeys = [
       'name',
       'nationalId',

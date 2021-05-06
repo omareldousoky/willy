@@ -385,7 +385,6 @@ class Payment extends Component<Props, State>{
         bankOfPaymentBranch: values.bankOfPaymentBranch,
         receiptNumber: values.receiptNumber,
         truthDate: new Date(values.truthDate).valueOf(),
-        installmentNumber: Number(values.installmentNumber)
       }
       const res = await manualBankPayment(obj, this.props.applicationId);
       if (res.status === "success") {

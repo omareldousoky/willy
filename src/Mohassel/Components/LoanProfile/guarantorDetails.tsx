@@ -251,7 +251,7 @@ export const GuarantorTableView = (props: Props) => {
                                 {props.iScores && props.iScores.length > 0 && props.getIscore && props.status && !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(props.status) && <Can I='getIscore' a='customer'>
                                     <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => getIscore(guar)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span></td>
                                 </Can>}
-                                {(props.guarantors.length > props.application.product.noOfGuarantors) && !props.entitledToSign && ((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td>}
+                                {(props.guarantors.length > props.application.product.noOfGuarantors) && !props.entitledToSign && ((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar.guarantor)} /></td>}
                             </tr>)
                         }
                         )}
@@ -297,7 +297,7 @@ export const GuarantorTableView = (props: Props) => {
                                         {props.iScores && props.iScores.length > 0 && props.getIscore && props.status && !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(props.status) && <Can I='getIscore' a='customer'>
                                             <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => getIscore(guar)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span></td>
                                         </Can>} */}
-                                        {(props.guarantors.length > props.application.product.noOfGuarantors) && ((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td>}
+                                        {(props.guarantors.length > props.application.product.noOfGuarantors) && ((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar.guarantor)} /></td>}
                                     </tr>)
                                 }
                                 )}

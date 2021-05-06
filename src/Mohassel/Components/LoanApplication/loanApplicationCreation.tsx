@@ -670,7 +670,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     removeEntitledToSignRow(obj, index, values) {
         this.setState({ loading: true });
         const defaultApplication = { ...values }
-        defaultApplication.entitledToSignIds = defaultApplication.entitledToSignIds.filter(id => obj.guarantor._id !== id)
+        defaultApplication.entitledToSignIds = defaultApplication.entitledToSignIds.filter(id => obj.entitledToSign._id !== id)
         defaultApplication.entitledToSign.splice(index, 1);
         this.setState({ application: defaultApplication, loading: false });
     }
