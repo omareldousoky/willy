@@ -21,6 +21,7 @@ import { timeToDateyyymmdd, beneficiaryType, getErrorMessage } from '../../../Sh
 import local from '../../../Shared/Assets/ar.json';
 import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicationInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import ability from '../../config/ability';
 
 interface Product {
   productName: string;
@@ -105,7 +106,7 @@ class BulkApplicationApproval extends Component<Props, State>{
         title: local.customerName,
         key: "name",
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
-          {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
+          {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName || data.application.customer.businessName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
             </div>)
@@ -120,7 +121,7 @@ class BulkApplicationApproval extends Component<Props, State>{
       {
         title: local.customerType,
         key: "customerType",
-        render: data => local[data.application.product.beneficiaryType]
+        render: data => local[data.application.customer.customerType === 'company' ? 'company' : data.application.product.beneficiaryType]
       },
       {
         title: local.principal,
@@ -195,6 +196,18 @@ class BulkApplicationApproval extends Component<Props, State>{
     }
   }
   render() {
+    const searchKey = ['keyword', 'dateFromTo', 'branch']
+    const dropDownKeys = [
+      'name',
+      'nationalId',
+      'key',
+      'customerKey',
+      'customerCode',
+      'customerShortenedCode',
+    ]
+    ability.can('getSMEApplication','application') && searchKey.push('sme'); dropDownKeys.push('businessName',
+    'taxCardNumber',
+    'commercialRegisterNumber')
     return (
       <>
         <HeaderWithCards
@@ -220,8 +233,8 @@ class BulkApplicationApproval extends Component<Props, State>{
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['keyword', 'dateFromTo', 'branch']}
-              dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
+              searchKeys={searchKey}
+              dropDownKeys={dropDownKeys}
               url="application"
               from={this.state.from}
               size={this.state.size}
@@ -284,7 +297,9 @@ class BulkApplicationApproval extends Component<Props, State>{
                       >
                         <option value="" disabled></option>
                         <option value='tasaheel'>{local.tasaheel}</option>
-                        <option value='cib'>CIB</option>
+                        {this.props.searchFilters.type === 'micro' && (
+                            <option value="cib">CIB</option>
+                        )}
                       </Form.Control>
                       <Form.Control.Feedback type="invalid">
                         {formikProps.errors.fundSource}

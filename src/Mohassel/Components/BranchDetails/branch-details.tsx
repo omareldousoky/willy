@@ -228,7 +228,6 @@ interface State {
             <Card  className={'card'}>
             <Loader type="fullscreen" open={this.props.loading || this.state.productsLoading}  />
               <CardNavBar 
-              header = {'here'}
               array ={this.state.tabsArray}
               active = {this.state.activeTab}
               selectTab={(index: string) => this.setState({ activeTab: index })}

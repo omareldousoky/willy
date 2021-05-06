@@ -212,6 +212,7 @@ export class MoveCustomers extends Component<{}, State> {
       size: this.state.size,
       from: this.state.from,
       representativeId: this.state.selectedLO?._id,
+      customerType: 'individual',
     });
     if (res.status === "success") {
       this.setState({

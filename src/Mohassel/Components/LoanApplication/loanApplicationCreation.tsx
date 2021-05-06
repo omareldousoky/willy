@@ -9,7 +9,7 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import * as local from '../../../Shared/Assets/ar.json';
-import { Application, Vice, LoanApplicationValidation } from './loanApplicationStates';
+import { Application, Vice, LoanApplicationValidation, SMELoanApplicationValidation, SMELoanApplicationStep2Validation, EntitledToSign } from './loanApplicationStates';
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
@@ -36,6 +36,7 @@ import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/cust
 import Select from 'react-select';
 import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
 import { theme } from '../../../theme';
+import { Customer } from '../../../Shared/Services/interfaces';
 
 interface Props {
     history: any;
@@ -53,23 +54,6 @@ interface LoanOfficer {
     username: string;
     name: string;
 }
-export interface Customer {
-    _id?: string;
-    key?: string;
-    customerID?: string;
-    customerName?: string;
-    customerCode?: string;
-    nationalId?: string;
-    birthDate?: string;
-    gender?: string;
-    nationalIdIssueDate?: string;
-    businessSector?: string;
-    businessActivity?: string;
-    businessSpeciality?: string;
-    permanentEmployeeCount?: string;
-    partTimeEmployeeCount?: string;
-    district?: string;
-}
 export interface Results {
     results: Array<object>;
     empty: boolean;
@@ -83,8 +67,6 @@ interface State {
     selectedGroupLeader: string;
     selectedLoanOfficer: LoanOfficer;
     searchResults: Results;
-    guarantor1Res: Results;
-    guarantor2Res: Results;
     formulas: Array<Formula>;
     products: Array<any>;
     loanUsage: Array<object>;
@@ -92,9 +74,6 @@ interface State {
     branchCustomers: Array<object>;
     selectedCustomers: Array<Customer>;
     businessSectors: Array<BusinessSector>;
-    guarantor1: any;
-    guarantor2: any;
-    viceCustomers: Array<Vice>;
     prevId: string;
     searchGroupCustomerKey: string;
     showModal: boolean;
@@ -193,7 +172,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 customerMaxPrincipal: 0,
                 branchManagerAndDate: false,
                 branchManagerId: '',
-                managerVisitDate: ''
+                managerVisitDate: '',
+                entitledToSignIds: [],
+                entitledToSign: [],
+                customerType: '',
             },
             customerType: '',
             loading: false,
@@ -216,20 +198,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             businessSectors: [],
             selectedCustomers: [],
             searchGroupCustomerKey: '',
-            guarantor1Res: {
-                results: [],
-                empty: false
-            },
-            guarantor2Res: {
-                results: [],
-                empty: false
-            },
-            guarantor1: {},
-            guarantor2: {},
-            viceCustomers: [{
-                name: '',
-                phoneNumber: ''
-            }],
             prevId: '',
             showModal: false,
             customerToView: {}
@@ -323,6 +291,21 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     })
                 }
             }
+            if(application.body.entitledToSign?.length > 0){
+                const entitledArr: Array<EntitledToSign> = []
+                application.body.entitledToSign.forEach(customer =>
+                    {
+                    entitledArr.push({
+                        searchResults: {
+                            results: [],
+                            empty: false
+                        },
+                        entitledToSign: customer,
+                    })
+                    formData.entitledToSignIds.push(customer._id)
+                })
+                formData.entitledToSign = entitledArr
+            }
             formData.entryDate = (application.body.entryDate) ? this.getDateString(application.body.entryDate) : '';
             formData.visitationDate = (application.body.visitationDate) ? this.getDateString(application.body.visitationDate) : '';
             formData.usage = (application.body.usage) ? application.body.usage : '';
@@ -335,12 +318,12 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             formData.undoReviewDate = application.body.undoReviewDate;
             formData.rejectionDate = application.body.reviewedDate;
             formData.guarantors = guarsArr;
-            // formData.individualDetails = application.body.group.individualsInGroups
             formData.managerVisitDate = (!application.body.managerVisitDate || application.body.managerVisitDate === 0) ? '' : this.getDateString(application.body.managerVisitDate);
             formData.branchManagerId = application.body.branchManagerId;
+            formData.researcherId = application.body.researcherId
             this.setState({
                 selectedCustomer: application.body.customer,
-                customerType: application.body.product.beneficiaryType,
+                customerType: (application.body.product.beneficiaryType === 'individual' && application.body.product.type === 'sme') ? 'sme' : application.body.product.beneficiaryType,
                 application: formData,
                 loading: false
             })
@@ -427,6 +410,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             size: 2000,
             branchId: this.tokenData.branch,
             representativeId: this.state.selectedLoanOfficer._id,
+            customerType: 'individual',
           }
         : {
             from: 0,
@@ -439,6 +423,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
               : ["key"].includes(key)
               ? Number(keyword)
               : undefined,
+            customerType: 'individual',
           };
     const results = await searchCustomer(query);
         if (results.status === 'success') {
@@ -450,7 +435,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     handleSearch = async (key, query) => {
         this.setState({ loading: true });
-        const results = await searchCustomer({ from: 0, size: 1000, [key]: query })
+        const body = { from: 0, size: 1000, [key]: query, customerType: this.state.customerType === 'sme' ? 'company' : 'individual'}
+        const results = await searchCustomer(body)
         if (results.status === 'success') {
             if (results.body.data.length > 0) {
                 this.setState({ loading: false, searchResults: { results: results.body.data, empty: false } });
@@ -462,12 +448,13 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
-    handleSearchGuarantors = async (key, query, index) => {
+    handleSearchGuarantors = async (key, query, index, companySearch?: boolean) => {
         const obj = {
             [key]: query,
             from: 0,
             size: 1000,
-            excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds]
+            excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds],
+            customerType: companySearch ? 'company' : 'individual'
         }
         this.setState({ loading: true });
         const results = await searchCustomer(obj)
@@ -481,6 +468,34 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 defaultGuar.searchResults = { results: results.body.data, empty: true };
             }
             defaultApp.guarantors[index] = defaultGuar
+            this.setState({
+                application: defaultApp
+            }, () => { this.setState({ loading: false }) });
+        } else {
+            Swal.fire("Error !",getErrorMessage(results.error.error), 'error')
+            this.setState({ loading: false });
+        }
+    }
+    handleSearchEntitledToSign = async (key, query, index) => {
+        const obj = {
+            [key]: query,
+            from: 0,
+            size: 1000,
+            excludedIds: [this.state.application.customerID, ...this.state.application.entitledToSignIds],
+            customerType: 'individual'
+        }
+        this.setState({ loading: true });
+        const results = await searchCustomer(obj)
+        if (results.status === 'success') {
+            const defaultApp = { ...this.state.application };
+            const defaultEntitledToSign = { ...defaultApp.entitledToSign };
+            const defaultCustomer = { ...defaultEntitledToSign[index] };
+            if (results.body.data.length > 0) {
+                defaultCustomer.searchResults = { results: results.body.data, empty: false };
+            } else {
+                defaultCustomer.searchResults = { results: results.body.data, empty: true };
+            }
+            defaultApp.entitledToSign[index] = defaultCustomer
             this.setState({
                 application: defaultApp
             }, () => { this.setState({ loading: false }) });
@@ -511,6 +526,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const defaultApplication = this.state.application;
         this.getOfficerName(response.representative);
         defaultApplication.customerName = response.customerName;
+        defaultApplication.customerType = response.customerType;
         defaultApplication.nationalId = response.nationalId;
         defaultApplication.birthDate = this.getDateString(response.birthDate);
         defaultApplication.gender = getGenderFromNationalId(response.nationalId);
@@ -577,7 +593,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             let errorMessage1 = "";
             let errorMessage2 = "";
             if (selectedGuarantor.body.blocked.isBlocked === true) {
-                errorMessage1 = local.theCustomerIsBlocked;
+                errorMessage1 = selectedGuarantor.body.customerType === 'company'
+                ? local.theCompanyIsBlocked
+                : local.theCustomerIsBlocked;
             }
             const check = await this.checkCustomersLimits([selectedGuarantor.body], true);
             if (check.flag === true && check.customers && selectedGuarantor.body.blocked.isBlocked !== true) {
@@ -598,6 +616,26 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         }
         this.setState({ loading: false });
     }
+    selectEntitledToSign = async (obj, index, values) => {
+        this.setState({ loading: true })
+        const selectedGuarantor = await getCustomerByID(obj._id)
+        if (selectedGuarantor.status === 'success') {
+          if (selectedGuarantor.body.blocked.isBlocked !== true) {
+            const defaultApplication = { ...values }
+            const defaultentitledToSign = { ...defaultApplication.entitledToSign };
+            const defaultCustomer = { ...defaultentitledToSign[index] };
+            defaultCustomer.entitledToSign = { ...selectedGuarantor.body, id: obj._id };
+            defaultApplication.entitledToSignIds.push(obj._id)
+            defaultApplication.entitledToSign[index] = defaultCustomer;
+            this.setState({ application: defaultApplication, loading: false });
+          } else {
+            Swal.fire('error', local.theCustomerIsBlocked, 'error')
+          }
+        } else {
+            Swal.fire('Error !', getErrorMessage(selectedGuarantor.error.error), 'error');
+        }
+        this.setState({ loading: false });
+    }
     removeGuarantor = (obj, index, values) => {
         this.setState({ loading: true });
         const defaultApplication = { ...values }
@@ -610,11 +648,30 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         defaultApplication.guarantors[index] = defaultGuar;
         this.setState({ application: defaultApplication, loading: false });
     }
+    removeEntitledToSign = (obj, index, values) => {
+        this.setState({ loading: true });
+        const defaultApplication = { ...values }
+        const defaultEntitledToSign = { ...defaultApplication.entitledToSign };
+        const defaultCustomer = { ...defaultEntitledToSign[index] };
+        defaultApplication.entitledToSignIds = defaultApplication.entitledToSignIds.filter(id => obj._id !== id)
+        defaultCustomer.entitledToSign = {};
+        defaultCustomer.searchResults.results = [];
+        defaultCustomer.searchResults.empty = false;
+        defaultApplication.entitledToSign[index] = defaultCustomer;
+        this.setState({ application: defaultApplication, loading: false });
+    }
     removeOptionalGuar(obj, index, values) {
         this.setState({ loading: true });
         const defaultApplication = { ...values }
         defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(id => obj.guarantor._id !== id)
         defaultApplication.guarantors.splice(index, 1);
+        this.setState({ application: defaultApplication, loading: false });
+    }
+    removeEntitledToSignRow(obj, index, values) {
+        this.setState({ loading: true });
+        const defaultApplication = { ...values }
+        defaultApplication.entitledToSignIds = defaultApplication.entitledToSignIds.filter(id => obj.guarantor._id !== id)
+        defaultApplication.entitledToSign.splice(index, 1);
         this.setState({ application: defaultApplication, loading: false });
     }
     populateLoanProduct(selectedProductDetails) {
@@ -673,7 +730,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             };
             const guarsArr = Array(selectedProductDetails.noOfGuarantors).fill(element)
             const defaultApplication = { ...this.state.application };
-            defaultApplication.guarantors = guarsArr;
+            defaultApplication.guarantors = selectedProductDetails.type === 'sme' ? [] : guarsArr;
             defaultApplication.productID = id;
             defaultApplication.guarantorIds = [];
             this.setState({ loading: false, application: defaultApplication });
@@ -682,16 +739,35 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
-    addOptionalGuarantor() {
-        const element = {
+    addOptionalGuarantor(stringKey?: string) {
+        const element: {
+            searchResults: Results;
+            guarantor: Customer;
+            isCompany?: boolean;
+        } = {
             searchResults: {
                 results: [],
                 empty: false
             },
             guarantor: {},
         };
+        if (stringKey === 'company') element.isCompany = true
         const defaultApplication = { ...this.state.application };
         defaultApplication.guarantors.push(element)
+        this.setState({
+            application: defaultApplication
+        })
+    }
+    addEntitledToSignRow() {
+        const element = {
+            searchResults: {
+                results: [],
+                empty: false
+            },
+            entitledToSign: {},
+        }
+        const defaultApplication = { ...this.state.application };
+        defaultApplication.entitledToSign.push(element)
         this.setState({
             application: defaultApplication
         })
@@ -709,7 +785,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         })
     }
     submit = async (values: Application) => {
-        if (this.state.step === 2 && this.state.customerType === 'individual') {
+        if (this.state.step === 2 && ['individual', 'sme'].includes(this.state.customerType)) {
             this.step('forward');
         } else {
             const obj = { ...values }
@@ -727,6 +803,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             if (obj.beneficiaryType !== 'group') {
                 principalToSend = obj.principal
             }
+            const viceCustomers = obj.viceCustomers.filter(item => item !== undefined);
             const objToSubmit = {
                 customerId: obj.customerID,
                 guarantorIds: obj.guarantorIds,
@@ -750,11 +827,13 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 usage: obj.usage,
                 representativeId: obj.representative,
                 enquirorId: obj.enquirorId,
+                researcherId: obj.researcherId,
                 visitationDate: new Date(obj.visitationDate).valueOf(),
                 individualDetails: individualsToSend,
-                viceCustomers: obj.viceCustomers.filter(item => item !== undefined),
+                viceCustomers: viceCustomers,
                 branchManagerId: values.branchManagerId,
                 managerVisitDate: values.managerVisitDate ? new Date(values.managerVisitDate).valueOf() : 0,
+                entitledToSignIds: obj.entitledToSignIds,
             }
             if (this.state.application.guarantorIds.length < this.state.application.noOfGuarantors && this.state.customerType === 'individual') {
                 Swal.fire("error", local.selectTwoGuarantors, 'error')
@@ -1009,7 +1088,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     renderStepOne() {
         return (
             <div className="d-flex flex-column justify-content-center" style={{ textAlign: 'right', width: '90%', padding: 20 }}>
-                {(this.state.customerType === 'individual') ? <div style={{ justifyContent: 'center', display: 'flex' }}>
+                {(this.state.customerType !== 'group') ? <div style={{ justifyContent: 'center', display: 'flex' }}>
             <CustomerSearch
               source="loanApplication"
               style={{ width: "100%" }}
@@ -1017,6 +1096,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
               selectedCustomer={this.state.selectedCustomer}
               searchResults={this.state.searchResults}
               selectCustomer={(customer) => this.selectCustomer(customer)}
+              sme={this.state.customerType === 'sme'}
 						/>
                 </div> :
                     <div>
@@ -1091,7 +1171,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
 									className="w-25"
 									disabled={(this.state.customerType === 'group' 
 											&& (this.state.selectedGroupLeader.length === 0 || this.state.selectedCustomers.length < 3)) 
-											|| (this.state.customerType === 'individual' && (Object.keys(this.state.selectedCustomer).length === 0)
+											|| (['individual', 'sme'].includes(this.state.customerType) && (Object.keys(this.state.selectedCustomer).length === 0)
 										)}
 									onClick={() => this.step('forward')}
 									>
@@ -1106,7 +1186,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             <Formik
                 initialValues={this.state.application}
                 onSubmit={this.submit}
-                validationSchema={LoanApplicationValidation}
+                validationSchema={(this.state.customerType === 'sme') ? SMELoanApplicationValidation : LoanApplicationValidation}
                 validateOnBlur
                 validateOnChange
                 enableReinitialize
@@ -1115,11 +1195,11 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     <LoanApplicationCreationForm {...formikProps}
                         formulas={this.state.formulas}
                         loanUsage={this.state.loanUsage}
-                        products={this.state.products.filter(product => product.beneficiaryType === this.state.customerType)}
+                        products={this.state.products.filter(product => (['individual', 'sme'].includes(this.state.customerType)) ? product.beneficiaryType === 'individual' : product.beneficiaryType === 'group')}
                         loanOfficers={this.state.loanOfficers}
                         step={(key) => this.step(key)}
                         getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}
-                        customer={(this.state.customerType === 'individual') ? this.state.selectedCustomer : this.state.selectedCustomers}
+                        customer={(this.state.customerType === 'group') ? this.state.selectedCustomers : this.state.selectedCustomer}
                     />
                 }
             </Formik>
@@ -1130,7 +1210,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             <Formik
                 initialValues={this.state.application}
                 onSubmit={this.submit}
-                validationSchema={LoanApplicationValidation}
+                validationSchema={ this.state.customerType === 'sme' ? SMELoanApplicationStep2Validation : LoanApplicationValidation}
                 validateOnBlur
                 validateOnChange
                 enableReinitialize
@@ -1138,12 +1218,17 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 {(formikProps) =>
                     <LoanApplicationCreationGuarantorForm {...formikProps}
                         step={(key) => this.step(key)}
-                        addGuar={() => this.addOptionalGuarantor()}
+                        addGuar={(stringKey?: string) => this.addOptionalGuarantor(stringKey)}
                         removeGuar={(guarantor, i, values) => this.removeOptionalGuar(guarantor, i, values)}
-                        handleSearch={(key, query, guarantor) => { this.handleSearchGuarantors(key, query, guarantor) }}
+                        handleSearch={(key, query, guarantor, companySearch) => { this.handleSearchGuarantors(key, query, guarantor, companySearch) }}
                         selectGuarantor={(query, guarantor, values) => { this.selectGuarantor(query, guarantor, values) }}
                         removeGuarantor={(query, guarantor, values) => { this.removeGuarantor(query, guarantor, values) }}
-                        customer={(this.state.customerType === 'individual') ? this.state.selectedCustomer : this.state.selectedCustomers}
+                        addEntitledToSignRow={(stringKey?: string) => this.addEntitledToSignRow()}
+                        removeEntitledToSignRow={(guarantor, i, values) => this.removeEntitledToSignRow(guarantor, i, values)}
+                        handleSearchEntitledToSign={(key, query, guarantor, companySearch) => { this.handleSearchEntitledToSign(key, query, guarantor) }}
+                        selectEntitledToSign={(query, guarantor, values) => { this.selectEntitledToSign(query, guarantor, values) }}
+                        removeEntitledToSign={(query, guarantor, values) => { this.removeEntitledToSign(query, guarantor, values) }}
+                        customer={(this.state.customerType === 'group') ? this.state.selectedCustomers : this.state.selectedCustomer}
                     />
                 }
             </Formik>
@@ -1174,11 +1259,24 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                             <img style={{ width: 75, margin: '40px 20px' }} src={require('../../Assets/group.svg')} />
                             <Button onClick={() => this.setCustomerType('group')}>{local.group}</Button>
                         </div>
+                        <div className="d-flex flex-column" style={{ margin: '20px 60px' }}>
+                            <img style={{ width: 75, margin: '40px 20px' }} src={require('../../Assets/group.svg')} />
+                            <Button onClick={() => this.setCustomerType('sme')}>{local.company}</Button>
+                        </div>
                     </div> :
                         <div style={{ display: "flex", flexDirection: "row" }} >
                             <Wizard
                                 currentStepNumber={this.state.step - 1}
-                                stepsDescription={(this.state.customerType === 'individual') ? [local.customersDetails, local.loanInfo, local.guarantorInfo] : [local.customersDetails, local.loanInfo]}
+                                stepsDescription={this.state.customerType === 'individual'
+                                  ? [
+                                      local.customersDetails,
+                                      local.loanInfo,
+                                      local.guarantorInfo,
+                                    ]
+                                  : this.state.customerType === 'sme'
+                                  ? [local.viewCompany, local.loanInfo, local.guarantorInfo]
+                                  : [local.customersDetails, local.loanInfo]
+                                }
                             />
                             {this.renderSteps()}
                         </div>
