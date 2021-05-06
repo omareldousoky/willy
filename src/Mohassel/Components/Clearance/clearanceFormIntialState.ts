@@ -42,8 +42,8 @@ export const clearanceData: ClearanceDataValues = {
   clearanceReason: '',
   bankName: '',
   notes: '',
-  registrationDate: 0,
-  receiptDate: 0,
+  registrationDate: '',
+  receiptDate: '',
   manualReceipt: '',
 }
 export const clearanceDocuments: ClearanceDocumentsValues = {
@@ -58,11 +58,10 @@ export const clearanceStep1CreationValidation = Yup.object().shape({
   bankName: Yup.string().trim().required(local.required),
   notes: Yup.string().trim(),
   registrationDate: Yup.string()
-    .trim()
-    .required(local.required)
     .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
       return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
-    }),
+    })
+    .required(local.required),
   receiptDate: Yup.string().test(
     'Max Date',
     local.dateShouldBeBeforeToday,

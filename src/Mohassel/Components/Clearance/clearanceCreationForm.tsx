@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
-import Select from 'react-select'
+import Select, { ValueType } from 'react-select'
 import { FormikProps } from 'formik'
 import * as local from '../../../Shared/Assets/ar.json'
 import { ClearanceDataValues } from './clearanceFormIntialState'
-// import DocumentPhoto from '../../../Shared/Components/documentPhoto/documentPhoto'
 import { theme } from '../../../Shared/theme'
 import './clearance.scss'
 
+interface PaidLoan {
+  Key: number | string
+  id: string
+}
 interface Props {
-  paidLoans: any[]
+  paidLoans: PaidLoan[]
   edit: boolean
   customerKey: string
   penalty: number
@@ -19,9 +22,9 @@ interface Props {
 export const ClearanceCreationForm = (
   props: Props & FormikProps<ClearanceDataValues>
 ) => {
-  const [selectedApplication, setApplication] = useState(
-    props.paidLoans.filter((loan) => loan.id === props.values.loanId)
-  )
+  const [selectedApplication, setSelectedApplication] = useState<
+    PaidLoan | PaidLoan[]
+  >(props.paidLoans.filter((loan) => loan.id === props.values.loanId))
   return (
     <Form onSubmit={props.handleSubmit}>
       <Row className="px-2 py-3">
@@ -29,18 +32,21 @@ export const ClearanceCreationForm = (
           <Form.Label className="clearance-label">
             {local.financeCode}
           </Form.Label>
-          <Select
+          <Select<PaidLoan>
             name="application"
             data-qc="application"
             styles={theme.selectStyleWithBorder}
             theme={theme.selectTheme}
             value={selectedApplication}
-            onChange={(event) => {
-              props.setFieldValue('loanId', event.id)
-              setApplication(event)
+            onChange={(event: ValueType<PaidLoan> | PaidLoan) => {
+              if (event) {
+                const { id } = event as PaidLoan
+                props.setFieldValue('loanId', id)
+                setSelectedApplication(event as PaidLoan)
+              }
             }}
             options={props.paidLoans}
-            getOptionLabel={(option) => option.Key}
+            getOptionLabel={(option) => option.Key as string}
             getOptionValue={(option) => option.id}
             isDisabled={props.edit}
           />
