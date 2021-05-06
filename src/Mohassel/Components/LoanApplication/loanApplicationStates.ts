@@ -245,7 +245,7 @@ export const SMELoanApplicationValidation = Yup.object().shape({
                 const { customerTotalPrincipals, customerMaxPrincipal, principals, beneficiaryType, customerType } = this.parent
                 if (customerMaxPrincipal && customerMaxPrincipal > 0 && value <= customerMaxPrincipal) {
                     return true
-                } else if (customerType !== 'company' && customerMaxPrincipal === 0 && value <= (beneficiaryType === "group" ? principals.maxGroupPrincipal : principals.maxIndividualPrincipal)) {
+                } else if ((customerType === 'company' && !customerMaxPrincipal) || (customerMaxPrincipal === 0 && value <= (beneficiaryType === "group" ? principals.maxGroupPrincipal : principals.maxIndividualPrincipal))) {
                     return true
                 } else {
                     return false
