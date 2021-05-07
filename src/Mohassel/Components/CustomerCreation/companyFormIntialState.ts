@@ -9,7 +9,6 @@ const {
   mustBeNotMoreThanHundred,
   mustBeGreaterThanZero,
   mustBeOneOrMore,
-  maxGlobalLimitReachedError,
   dateShouldBeBeforeToday,
   maxLength500,
   maxLength20,
@@ -65,11 +64,14 @@ export const companyCreationValidationStepTwoEdit = Yup.object().shape({
   comments: Yup.string().trim().max(500, maxLength100),
   guarantorMaxLoans: Yup.number().required().min(1, mustBeOneOrMore).max(100, mustBeNotMoreThanHundred).required(required),
   maxLoansAllowed: Yup.number().required().min(1, mustBeOneOrMore).max(100, mustBeNotMoreThanHundred).required(required),
-  maxPrincipal: Yup.number().min(0, mustBeGreaterThanZero).test("maxPrincipal", maxGlobalLimitReachedError,
-      function (this: any, value: any) {
-          const { principals } = this.parent
-          if (value <= principals.maxIndividualPrincipal) {
-              return true
-          } else return false
-      }).required(required),
+  maxPrincipal: Yup.number()
+    .min(0, mustBeGreaterThanZero)
+    // .test("maxPrincipal", maxGlobalLimitReachedError,
+    //   function (this: any, value: any) {
+    //       const { principals } = this.parent
+    //       if (value <= principals.maxIndividualPrincipal) {
+    //           return true
+    //       } else return false
+    //   })
+    .required(required),
 })

@@ -59,7 +59,7 @@ class CustomerSearch extends Component<Props, State>{
             case 'code': return local.partialCode;
             case 'customerShortenedCode': return local.customerShortenedCode;
             case 'businessName': return local.companyName;
-            case 'businessLicenseNumber': return local.businessLicenseNumber;
+            case 'taxCardNumber': return local.taxCardNumber;
             case 'commercialRegisterNumber': return local.commercialRegisterNumber;
             default: return '';
         }
@@ -72,7 +72,7 @@ class CustomerSearch extends Component<Props, State>{
 		const isCode = dropDownValue === "code";
 
     if (
-      (['nationalId', 'businessLicenseNumber', 'commercialRegisterNumber'].includes(dropDownValue) || isKey || isCode) &&
+      (['nationalId', 'taxCardNumber', 'commercialRegisterNumber'].includes(dropDownValue) || isKey || isCode) &&
       isNaN(Number(searchKey))
     ) {
       Swal.fire("", local.SearchOnlyNumbers, "error");
@@ -88,25 +88,25 @@ class CustomerSearch extends Component<Props, State>{
     }
   };
     render() {
-        const dropDownArray: string[] = this.props.sme ? ['key', 'code','businessName', 'businessLicenseNumber', 'commercialRegisterNumber'] : ['name', 'key', 'nationalId', 'code', 'customerShortenedCode'];
+        const dropDownArray: string[] = this.props.sme ? ['key', 'code', 'customerShortenedCode', 'businessName', 'taxCardNumber', 'commercialRegisterNumber'] : ['name', 'key', 'nationalId', 'code', 'customerShortenedCode'];
         return (
             <div style={{ display: 'flex', flexDirection: 'column', ...this.props.style }} className={this.props.className || ""}>
                 {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && <div style={{ width: '100%' }}>
                     <div style={{ width: '100%', justifyContent: 'flex-start', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <p style={{ margin: 'auto 20px' }}>{this.props.header ? this.props.header : local.search}</p>
                         <InputGroup>
-														<DropdownButton
+                            <DropdownButton
                                 as={InputGroup.Append}
                                 variant="outline-secondary"
                                 title={this.getArValue(this.state.dropDownValue)}
                                 id="input-group-dropdown-2"
                                 data-qc="search-dropdown"
                             >
-															{dropDownArray.map((key, index) =>
-																	<Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key, searchKey: '' })}>{this.getArValue(key)}</Dropdown.Item>
-															)}
+                                {dropDownArray.map((key, index) =>
+                                        <Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key, searchKey: '' })}>{this.getArValue(key)}</Dropdown.Item>
+                                )}
                             </DropdownButton>
-														<InputGroup.Append>
+                            <InputGroup.Append>
                                 <InputGroup.Text className="bg-white rounded-0"><span className="fa fa-search fa-rotate-90" /></InputGroup.Text>
                             </InputGroup.Append>
                             <FormControl

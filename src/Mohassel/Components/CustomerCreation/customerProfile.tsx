@@ -431,8 +431,7 @@ export const CustomerProfile = (props: Props) => {
         fieldTitle: "ratings",
         fieldData: ratings,
         showFieldCondition: Boolean(
-          customerDetails?.hasLoan &&
-            ability.can("customerCategorization", "customer")
+          ability.can("customerCategorization", "customer")
         ),
       },
     ],
@@ -493,7 +492,7 @@ export const CustomerProfile = (props: Props) => {
         permission: ability.can("newClearance", "application"),
         onActionClick: () =>
           history.push("/customers/create-clearance", {
-            customerId: location.state.id,
+            id: location.state.id,
           }),
       },
       {

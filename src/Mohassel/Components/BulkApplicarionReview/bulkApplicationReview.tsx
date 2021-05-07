@@ -284,7 +284,7 @@ class BulkApplicationReview extends Component<Props, State>{
   }
   render() {
     const searchKey = ['keyword', 'dateFromTo', 'review-application']
-    const smePermission = ( ability.can('getIssuedSMELoan','application') && this.props.searchFilters.type === 'sme' )
+    const smePermission = ( ability.can('getSMEApplication','application') && this.props.searchFilters.type === 'sme' )
     const filteredMappers = smePermission 
       ? this.mappers.filter(
         (mapper) => 
@@ -296,6 +296,11 @@ class BulkApplicationReview extends Component<Props, State>{
         title: local.commercialRegisterNumber,
         key: "commercialRegisterNumber",
         render: data => data.application.customer.commercialRegisterNumber
+      })
+      filteredMappers.splice(4, 0, {
+        title: local.taxCardNumber,
+        key: 'taxCardNumber',
+        render: (data) => data.application.customer.taxCardNumber,
       })
       filteredMappers.splice(7, 0, {
         title: local.businessSector,
