@@ -11,6 +11,7 @@ import { updateLegalAffairsCustomers } from '../../Services/APIs/LegalAffairs/de
 import Swal from 'sweetalert2'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import customerActionsFields from './configs/CustomerActionsForm'
+import { handleUpdateSuccess } from './utils'
 
 const LegalActionsForm: FunctionComponent = () => {
   const [isSubmiting, setIsSubmiting] = useState(false)
@@ -51,7 +52,7 @@ const LegalActionsForm: FunctionComponent = () => {
     setIsSubmiting(false)
 
     if (response.status == 'success') {
-      history.push('/legal-affairs/legal-actions')
+      handleUpdateSuccess(() => history.push('/legal-affairs/legal-actions'))
     } else {
       Swal.fire('error', getErrorMessage(response.error.error), 'error')
     }

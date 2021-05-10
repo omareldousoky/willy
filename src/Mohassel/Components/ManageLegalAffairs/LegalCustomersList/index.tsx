@@ -50,6 +50,7 @@ import { getBranch } from '../../../Services/APIs/Branch/getBranch'
 import { getManagerHierarchy } from '../../../Services/APIs/ManagerHierarchy/getManagerHierarchy'
 import { Managers } from '../../managerHierarchy/branchBasicsCard'
 import managerTypes from '../configs/managerTypes'
+import { handleUpdateSuccess } from '../utils'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -287,13 +288,7 @@ const LegalCustomersList: FunctionComponent = () => {
   ]
 
   const handleUpdateCustomerSuccess = (label = '') => {
-    Swal.fire({
-      title: `${local.done} ${label}`,
-      icon: 'success',
-      confirmButtonText: local.end,
-    }).then(() => {
-      getLegalCustomers()
-    })
+    handleUpdateSuccess(getLegalCustomers, label)
   }
 
   const handleReviewCustomerSubmit = async (values: {
