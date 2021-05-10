@@ -252,11 +252,11 @@ class Search extends Component<Props, State> {
     };
     return arDropDownValue[key];
   }
-  statusDropdown(formikProps: FormikProps<FormikValues>, index: number, array: { value: string; text: string; permission?: string; key?: string }[], field?: string) {
+  statusDropdown(formikProps: FormikProps<FormikValues>, index: number, array: { value: string; text: string; permission?: string; key?: string }[], field?: string, label?: string) {
     return (
       <Col key={index} sm={6} style={{ marginTop: (index < 2 ? 0 : 20) }}>
         <div className="dropdown-container">
-          <p className="dropdown-label">{local.status}</p>
+          <p className="dropdown-label">{label || local.status}</p>
           <Form.Control
             as="select"
             className="dropdown-select"
@@ -513,7 +513,7 @@ class Search extends Component<Props, State> {
                     { value: "areaSupervisorReview", text: local.areaSupervisorReview, permission: 'areaSupervisorReview', key: 'legal' },
                     { value: "areaManagerReview", text: local.areaManagerReview, permission: 'areaManagerReview', key: 'legal' },
                     { value: "financialManagerReview", text: local.financialManagerReview, permission: 'financialManagerReview', key: 'legal' },
-                  ], 'reviewer')
+                  ], 'reviewer', local.reviewStatus)
                 }
                 if (searchKey === "branch" && this.viewBranchDropdown()) {
                   return (
@@ -650,7 +650,7 @@ class Search extends Component<Props, State> {
                       value: 'financialManagerReview',
                       text: local.financialManagerReview,
                     },
-                  ])
+                  ], undefined, local.judgementStatus)
                 }
               })}
 

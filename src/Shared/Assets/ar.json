@@ -1057,5 +1057,6 @@
     "unblocked":"غير محظور",
     "operationType":"نوع العملية",
     "branchesStatus":"حاله الفروع",
-    "manageFinancialTransaction":"إدارة المعاملات المالية"
+    "manageFinancialTransaction":"إدارة المعاملات المالية",
+    "judgementStatus": "حالة القضاء"
 }
