@@ -1,4 +1,9 @@
-import React, { ChangeEvent, FunctionComponent, useContext } from 'react'
+import React, {
+  ChangeEvent,
+  FunctionComponent,
+  useContext,
+  useRef,
+} from 'react'
 
 import { Form, FormControlProps } from 'react-bootstrap'
 import { Schema } from 'yup'
@@ -21,6 +26,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
   },
 }) => {
   const { defaultValues } = useContext(AppFormContext)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const fieldErrors = getNestedByStringKey(errors, field.name)
   const isToucehd = !!getNestedByStringKey(touched, field.name)
@@ -103,11 +109,17 @@ const FormField: FunctionComponent<FormFieldProps> = ({
         return (
           <Form.File
             name={inputFieldProps.name}
+            id={inputFieldProps.name}
             type="file"
             accept={field.accepts}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setFieldValue(inputFieldProps.name, e.target.files)
+              setFieldValue(inputFieldProps.name, e.currentTarget.files)
             }
+            onClick={() => {
+              if (fileInputRef.current === null) return
+              fileInputRef.current.value = ''
+            }}
+            ref={fileInputRef}
           />
         )
 
