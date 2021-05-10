@@ -286,6 +286,16 @@ const LegalCustomersList: FunctionComponent = () => {
     },
   ]
 
+  const handleUpdateCustomerSuccess = (label = '') => {
+    Swal.fire({
+      title: `${local.done} ${label}`,
+      icon: 'success',
+      confirmButtonText: local.end,
+    }).then(() => {
+      getLegalCustomers()
+    })
+  }
+
   const handleReviewCustomerSubmit = async (values: {
     type: ManagerReveiwEnum
     notes: string
@@ -302,12 +312,7 @@ const LegalCustomersList: FunctionComponent = () => {
     const response = await reviewLegalCustomer(reviewReqBody)
 
     if (response.status === 'success') {
-      Swal.fire({
-        title: `${local.done} ${local.review}`,
-        icon: 'success',
-        confirmButtonText: local.end,
-      })
-      getLegalCustomers()
+      handleUpdateCustomerSuccess(local.review)
     } else {
       Swal.fire('error', getErrorMessage(response.error.error), 'error')
     }
@@ -613,8 +618,8 @@ const LegalCustomersList: FunctionComponent = () => {
                 <LegalSettlementForm
                   settlementInfo={settlementInfo}
                   onSubmit={() => {
-                    getLegalCustomers()
                     hideSettlementModal()
+                    handleUpdateCustomerSuccess()
                   }}
                   onCancel={hideSettlementModal}
                   customer={customerForSettlement}
@@ -695,9 +700,9 @@ const LegalCustomersList: FunctionComponent = () => {
           <Modal.Body>
             <UploadLegalCustomers
               onCancel={() => setIsUploadModalOpen(false)}
-              onSubmit={(response) => {
+              onSubmit={() => {
                 setIsUploadModalOpen(false)
-                getLegalCustomers()
+                handleUpdateCustomerSuccess()
               }}
             />
           </Modal.Body>
