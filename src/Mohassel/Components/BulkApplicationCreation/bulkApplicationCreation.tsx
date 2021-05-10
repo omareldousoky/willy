@@ -21,6 +21,7 @@ import { bulkApplicationCreationValidation } from './bulkApplicationCreationVali
 import Search from '../../../Shared/Components/Search/search';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicationInitials';
+import ability from '../../config/ability';
 
 interface Product {
   productName: string;
@@ -111,7 +112,7 @@ class BulkApplicationCreation extends Component<Props, State>{
         title: local.customerName,
         key: "name",
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
-          {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
+          {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName || data.application.customer.businessName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
             </div>)
@@ -161,7 +162,8 @@ class BulkApplicationCreation extends Component<Props, State>{
     ]
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "approved" }).then(()=>{
+    this.props.setSearchFilters({ type: 'micro' })
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "approved", type: 'micro' }).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
@@ -217,6 +219,7 @@ class BulkApplicationCreation extends Component<Props, State>{
     }
   }
   render() {
+    const searchKey = ability.can('getSMEApplication','application') ? ['dateFromTo', 'sme'] : ['dateFromTo']
     return (
       <>
         <HeaderWithCards
@@ -241,7 +244,7 @@ class BulkApplicationCreation extends Component<Props, State>{
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['dateFromTo']}
+              searchKeys={searchKey}
               datePlaceholder={local.entryDate}
               url="application"
               from={this.state.from}

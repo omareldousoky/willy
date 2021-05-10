@@ -208,7 +208,6 @@ class UserDetails extends Component<Props, State> {
         <Card className="card">
           <Loader type="fullsection" open={this.state.isLoading} />
           <CardNavBar
-            header={'here'}
             array={this.state.tabsArray}
             active={this.state.activeTab}
             selectTab={(index: string) => this.setState({ activeTab: index })}

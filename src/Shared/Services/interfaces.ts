@@ -78,9 +78,10 @@ export interface Customer {
 		reason?: string;
     };
     suspects?: { 
-       id?: string;
+        id?: string;
         type?: string;
     }[];
+    customerType?: string;
 }
 
 export interface Action {
@@ -110,6 +111,7 @@ export interface DocumentType {
     id?: string;
     pages: number;
     type: string;
+    customerType: string;
     paperType: string;
     name: string;
     active?: boolean;
