@@ -81,7 +81,7 @@ class LtsBlockingModal extends Component<Props, State> {
           <Form className="w-100 py-3 m-2" onSubmit={formikProps.handleSubmit}>
             <Modal.Header>
               <Modal.Title className="m-auto">
-                {local.bulkLoanApplicationsApproval}
+                {local.ltsBlocking}
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
