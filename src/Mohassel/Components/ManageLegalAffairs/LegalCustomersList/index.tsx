@@ -102,7 +102,7 @@ const LegalCustomersList: FunctionComponent = () => {
   const tabs = manageLegalAffairsArray()
   const url = 'legal-affairs'
 
-  const canReview = managerTypes.some((type) =>
+  const isCurrentUserManager = managerTypes.some((type) =>
     ability.can(type.permission, type.key)
   )
 
@@ -466,8 +466,8 @@ const LegalCustomersList: FunctionComponent = () => {
             </button>
           </Can>
 
-          {canReview &&
-            data.settlement &&
+          {isCurrentUserManager &&
+            data.settlement?.settlementStatus === 'reviewed' &&
             !!availableManagerReview([data]).length && (
               <Button
                 type="button"
@@ -538,7 +538,7 @@ const LegalCustomersList: FunctionComponent = () => {
               </div>
 
               <div>
-                {canReview && (
+                {isCurrentUserManager && (
                   <Button
                     className="big-button ml-2"
                     onClick={() =>
