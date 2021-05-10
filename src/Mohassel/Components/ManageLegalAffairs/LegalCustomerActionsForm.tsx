@@ -24,12 +24,21 @@ const LegalActionsForm: FunctionComponent = () => {
   const formatCourt = (
     court: CourtSession | undefined
   ): CourtSession | undefined => {
-    return court?.date
+    if (!court) return undefined
+
+    const courtFields = Object.keys(court)
+    const emptyCourtFields = courtFields.filter(
+      (courtField) => court[courtField] === undefined
+    )
+
+    if (courtFields.length === emptyCourtFields.length) return undefined
+
+    return court.date
       ? {
           ...court,
           date: new Date(court.date).valueOf(),
         }
-      : undefined
+      : court
   }
 
   const formValuesToActionReq = (values: LegalActionsForm) => ({
