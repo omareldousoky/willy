@@ -35,7 +35,7 @@ import ViewProduct from '../Components/LoanProductCreation/loanProductView'
 import LoanRollBack from '../Components/LoanProfile/loanRollBack'
 import EncodingFiles from '../Components/Tools/encodingFiles'
 import DocumentTypeCreation from '../Components/documentTypeCreation/documentTypeCreation'
-import CustomerProfile from '../Components/CustomerCreation/customerProfile'
+import { CustomerProfile } from '../Components/CustomerCreation/customerProfile'
 import ActionLogs from '../Components/ActionLogs/action-logs'
 import SourceOfFund from '../Components/SourceOfFund/sourceOfFund'
 import CIB from '../Components/CIB/cib'
@@ -63,6 +63,8 @@ import TerrorismUnList from '../Components/ManageTerrorism/terrorismUnList'
 import FinancialBlocking from '../Components/FinancialClosing/financialBlocking'
 import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList'
 import FinancialReviewing from '../Components/FinancialClosing/FinancialReviewing'
+import { CompanyList, CompanyProfile } from '../../Shared/Components'
+import CompanyCreation from '../Components/CustomerCreation/companyCreation'
 
 const appRoutes = [
   {
@@ -115,6 +117,36 @@ const appRoutes = [
                 <CreateClearance {...props} />
               </Can>
             ),
+          },
+        ],
+      },
+      {
+        path: '/company',
+        label: local.companies,
+        render: (props) => (
+          <Can I="getCustomer" a="customer">
+            <CompanyList {...props} />
+          </Can>
+        ),
+        routes: [
+          {
+            path: '/new-company',
+            label: local.newCompany,
+            render: (props) => (
+              <Can I="createCustomer" a="customer">
+                <CompanyCreation {...props} edit={false} />
+              </Can>
+            ),
+          },
+          {
+            path: '/edit-company',
+            label: local.editCompany,
+            render: (props) => <CompanyCreation {...props} edit />,
+          },
+          {
+            path: '/view-company',
+            label: local.viewCompany,
+            render: (props) => <CompanyProfile {...props} />,
           },
         ],
       },

@@ -45,7 +45,7 @@ const PaymentReceipt = (props) => {
                     }}
                   >
                     <th colSpan={6}>
-                      <div className="logo-print-tb" />
+                      <div className="logo-print" />
                     </th>
                     <th colSpan={6}>
                       ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
@@ -72,7 +72,11 @@ const PaymentReceipt = (props) => {
                   </span>
                 </div>
                 <div>
-                  <span className="title">{local.customerName}</span>
+                  <span className="title">
+                    {props.companyReceipt
+                      ? local.companyName
+                      : local.customerName}
+                  </span>
                   <span className="info">{receiptData.customerName}</span>
                 </div>
                 <div>

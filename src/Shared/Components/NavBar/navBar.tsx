@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
-import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
-import InputGroup from 'react-bootstrap/InputGroup'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import {
+  Button,
+  Form,
+  InputGroup,
+  Nav,
+  Navbar,
+  NavDropdown,
+} from 'react-bootstrap'
 import * as local from '../../Assets/ar.json'
 import Can from '../../../Mohassel/config/Can'
 import { Loader } from '../Loader'
@@ -293,8 +296,10 @@ class NavBar extends Component<Props, State> {
           </Navbar.Collapse>
         </Navbar>
         <Navbar
+          className="text-white bold"
           style={{ backgroundColor: '#2a3390', height: 75, marginBottom: 20 }}
           expand="lg"
+          variant="dark"
         >
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -313,19 +318,42 @@ class NavBar extends Component<Props, State> {
                   src={require('../../Assets/homeIcon.svg')}
                 />
               </Nav.Link>
+              {/* //TODO come back to after we figure permissions */}
               {ability.can('getCustomer', 'customer') ? (
-                <Nav.Link onClick={() => this.props.history.push('/customers')}>
-                  {local.customers}
-                </Nav.Link>
+                <NavDropdown title={local.customers} id="basic-nav-dropdown">
+                  <NavDropdown.Item
+                    className="primary"
+                    onClick={() => this.props.history.push('/customers')}
+                  >
+                    {local.persons}
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    className="primary"
+                    onClick={() => this.props.history.push('/company')}
+                  >
+                    {local.companies}
+                  </NavDropdown.Item>
+                </NavDropdown>
               ) : !this.props.hide &&
                 ability.can('changeOfficer', 'customer') ? (
-                <Nav.Link
-                  onClick={() =>
-                    this.props.history.push('/customers/move-customers')
-                  }
-                >
-                  {local.customers}
-                </Nav.Link>
+                <NavDropdown title={local.customers} id="basic-nav-dropdown">
+                  <NavDropdown.Item
+                    className="primary"
+                    onClick={() =>
+                      this.props.history.push('/customers/move-customers')
+                    }
+                  >
+                    {local.persons}
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    className="primary"
+                    onClick={() =>
+                      this.props.history.push('/company//move-company')
+                    }
+                  >
+                    {local.companies}
+                  </NavDropdown.Item>
+                </NavDropdown>
               ) : null}
               {!this.props.hide && ability.can('getLoanProduct', 'product') ? (
                 <Nav.Link

@@ -2,18 +2,22 @@ import React, { Component } from 'react'
 import { Formik } from 'formik'
 import Container from 'react-bootstrap/Container'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { RouteProps } from 'react-router'
 import Swal from 'sweetalert2'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
 import Select from 'react-select'
-import produce from 'immer'
-import local from '../../../Shared/Assets/ar.json'
+import { produce } from 'immer'
+import * as local from '../../../Shared/Assets/ar.json'
 import {
   Application,
   Vice,
   LoanApplicationValidation,
+  SMELoanApplicationValidation,
+  SMELoanApplicationStep2Validation,
+  EntitledToSign,
 } from './loanApplicationStates'
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm'
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
@@ -28,6 +32,7 @@ import {
   editApplication,
 } from '../../Services/APIs/loanApplication/newApplication'
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication'
+import { Location } from '../LoanCreation/loanCreation'
 import { getCookie } from '../../../Shared/Services/getCookie'
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
 import {
@@ -36,16 +41,21 @@ import {
 } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import {
   parseJwt,
+  beneficiaryType,
   getAge,
   getFullCustomerKey,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
-import { getMaxPrinciples } from '../../Services/APIs/configApis/config'
+import {
+  getBusinessSectors,
+  getMaxPrinciples,
+} from '../../Services/APIs/configApis/config'
 import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationGuarantorForm'
 import DualBox from '../DualListBox/dualListBox'
 import InfoBox from '../userInfoBox'
 import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import Wizard from '../wizard/Wizard'
+import { BusinessSector } from '../CustomerCreation/StepTwoForm'
 import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans'
 
 import { theme } from '../../../Shared/theme'
@@ -83,17 +93,13 @@ interface State {
   selectedGroupLeader: string
   selectedLoanOfficer: LoanOfficer
   searchResults: Results
-  guarantor1Res: Results
-  guarantor2Res: Results
   formulas: Array<Formula>
   products: Array<any>
   loanUsage: Array<object>
   loanOfficers: Array<LoanOfficer>
   branchCustomers: Array<object>
   selectedCustomers: Array<Customer>
-  guarantor1: any
-  guarantor2: any
-  viceCustomers: Array<Vice>
+  businessSectors: Array<BusinessSector>
   prevId: string
   searchGroupCustomerKey: string
   showModal: boolean
@@ -211,7 +217,14 @@ class LoanApplicationCreation extends Component<Props, State> {
 
   handleSearch = async (key, query) => {
     this.setState({ loading: true })
-    const results = await searchCustomer({ from: 0, size: 1000, [key]: query })
+    const body = {
+      from: 0,
+      size: 1000,
+      [key]: query,
+      customerType:
+        this.state.customerType === 'sme' ? 'company' : 'individual',
+    }
+    const results = await searchCustomer(body)
     if (results.status === 'success') {
       this.setState({
         loading: false,
@@ -226,7 +239,12 @@ class LoanApplicationCreation extends Component<Props, State> {
     }
   }
 
-  handleSearchGuarantors = async (key, query, index) => {
+  handleSearchGuarantors = async (
+    key,
+    query,
+    index,
+    companySearch?: boolean
+  ) => {
     const obj = {
       [key]: query,
       from: 0,
@@ -235,6 +253,7 @@ class LoanApplicationCreation extends Component<Props, State> {
         this.state.application.customerID,
         ...this.state.application.guarantorIds,
       ],
+      customerType: companySearch ? 'company' : 'individual',
     }
     this.setState({ loading: true })
     const results = await searchCustomer(obj)
@@ -251,6 +270,49 @@ class LoanApplicationCreation extends Component<Props, State> {
           app.guarantors[index] = defaultGuar
         }),
         () => this.setState({ loading: false })
+      )
+    } else {
+      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      this.setState({ loading: false })
+    }
+  }
+
+  handleSearchEntitledToSign = async (key, query, index) => {
+    const obj = {
+      [key]: query,
+      from: 0,
+      size: 1000,
+      excludedIds: [
+        this.state.application.customerID,
+        ...this.state.application.entitledToSignIds,
+      ],
+      customerType: 'individual',
+    }
+    this.setState({ loading: true })
+    const results = await searchCustomer(obj)
+    if (results.status === 'success') {
+      const defaultApp = { ...this.state.application }
+      const defaultEntitledToSign = { ...defaultApp.entitledToSign }
+      const defaultCustomer = { ...defaultEntitledToSign[index] }
+      if (results.body.data.length > 0) {
+        defaultCustomer.searchResults = {
+          results: results.body.data,
+          empty: false,
+        }
+      } else {
+        defaultCustomer.searchResults = {
+          results: results.body.data,
+          empty: true,
+        }
+      }
+      defaultApp.entitledToSign[index] = defaultCustomer
+      this.setState(
+        {
+          application: defaultApp,
+        },
+        () => {
+          this.setState({ loading: false })
+        }
       )
     } else {
       Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
@@ -496,6 +558,28 @@ class LoanApplicationCreation extends Component<Props, State> {
         }
       }
 
+      if (application.body.entitledToSign?.length > 0) {
+        const entitledArr: Array<EntitledToSign> = []
+        application.body.entitledToSign.forEach((customer) => {
+          entitledArr.push({
+            searchResults: {
+              results: [],
+              empty: false,
+            },
+            entitledToSign: customer,
+          })
+          this.setState(
+            produce<State>((draftState) => {
+              draftState.application.entitledToSignIds.push(customer._id)
+            })
+          )
+        })
+        this.setState(
+          produce<State>((draftState) => {
+            draftState.application.entitledToSign = entitledArr
+          })
+        )
+      }
       this.setState(
         produce<State>((draftState) => {
           const app = draftState.application
@@ -525,11 +609,13 @@ class LoanApplicationCreation extends Component<Props, State> {
           app.undoReviewDate = undoReviewDate
           app.rejectionDate = reviewedDate
           app.guarantors = guarsArr
-          // app.individualDetails = application.body.group.individualsInGroups
           app.managerVisitDate = this.getDateString(managerVisitDate)
           app.branchManagerId = branchManagerId
           draftState.selectedCustomer = application.body.customer
-          draftState.customerType = application.body.product.beneficiaryType
+          draftState.customerType =
+            product.beneficiaryType === 'individual' && product.type === 'sme'
+              ? 'sme'
+              : product.beneficiaryType
           draftState.loading = false
         })
       )
@@ -643,6 +729,9 @@ class LoanApplicationCreation extends Component<Props, State> {
         branchManagerAndDate: false,
         branchManagerId: '',
         managerVisitDate: '',
+        entitledToSignIds: [],
+        entitledToSign: [],
+        customerType: '',
       },
       customerType: '',
       loading: false,
@@ -662,24 +751,9 @@ class LoanApplicationCreation extends Component<Props, State> {
       loanOfficers: [],
       products: [],
       branchCustomers: [],
+      businessSectors: [],
       selectedCustomers: [],
       searchGroupCustomerKey: '',
-      guarantor1Res: {
-        results: [],
-        empty: false,
-      },
-      guarantor2Res: {
-        results: [],
-        empty: false,
-      },
-      guarantor1: {},
-      guarantor2: {},
-      viceCustomers: [
-        {
-          name: '',
-          phoneNumber: '',
-        },
-      ],
       prevId: '',
       showModal: false,
       customerToView: {},
@@ -754,7 +828,8 @@ class LoanApplicationCreation extends Component<Props, State> {
       this.setState(
         produce((draftState) => {
           draftState.loading = false
-          draftState.application.guarantors = guarsArr
+          draftState.application.guarantors =
+            selectedProductDetails.type === 'sme' ? [] : guarsArr
           draftState.application.productID = id
           draftState.application.guarantorIds = []
         })
@@ -840,7 +915,10 @@ class LoanApplicationCreation extends Component<Props, State> {
       let customerIsBlockedError = ''
       let customerInvolvedInAnotherLoanError = ''
       if (selectedGuarantor.body.blocked.isBlocked === true) {
-        customerIsBlockedError = local.theCustomerIsBlocked
+        customerIsBlockedError =
+          selectedGuarantor.body.customerType === 'company'
+            ? local.theCompanyIsBlocked
+            : local.theCustomerIsBlocked
       }
       const check = await this.checkCustomersLimits(
         [selectedGuarantor.body],
@@ -881,8 +959,39 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ loading: false })
   }
 
+  selectEntitledToSign = async (obj, index, values) => {
+    this.setState({ loading: true })
+    const selectedGuarantor = await getCustomerByID(obj._id)
+    if (selectedGuarantor.status === 'success') {
+      if (selectedGuarantor.body.blocked.isBlocked !== true) {
+        const defaultApplication = { ...values }
+        const defaultentitledToSign = { ...defaultApplication.entitledToSign }
+        const defaultCustomer = { ...defaultentitledToSign[index] }
+        defaultCustomer.entitledToSign = {
+          ...selectedGuarantor.body,
+          id: obj._id,
+        }
+        defaultApplication.entitledToSignIds.push(obj._id)
+        defaultApplication.entitledToSign[index] = defaultCustomer
+        this.setState({ application: defaultApplication, loading: false })
+      } else {
+        Swal.fire('error', local.theCustomerIsBlocked, 'error')
+      }
+    } else {
+      Swal.fire(
+        'Error !',
+        getErrorMessage(selectedGuarantor.error.error),
+        'error'
+      )
+    }
+    this.setState({ loading: false })
+  }
+
   submit = async (values: Application) => {
-    if (this.state.step === 2 && this.state.customerType === 'individual') {
+    if (
+      this.state.step === 2 &&
+      ['individual', 'sme'].includes(this.state.customerType)
+    ) {
       this.setState({ application: { ...values } }, () => this.step('forward'))
     } else {
       const obj = { ...values }
@@ -905,6 +1014,9 @@ class LoanApplicationCreation extends Component<Props, State> {
       if (obj.beneficiaryType !== 'group') {
         principalToSend = obj.principal
       }
+      const viceCustomers = obj.viceCustomers.filter(
+        (item) => item !== undefined
+      )
       const objToSubmit = {
         customerId: obj.customerID,
         guarantorIds: obj.guarantorIds,
@@ -929,13 +1041,15 @@ class LoanApplicationCreation extends Component<Props, State> {
         usage: obj.usage,
         representativeId: obj.representative,
         enquirorId: obj.enquirorId,
+        researcherId: obj.researcherId,
         visitationDate: new Date(obj.visitationDate).valueOf(),
         individualDetails: individualsToSend,
-        viceCustomers: obj.viceCustomers.filter((item) => item !== undefined),
+        viceCustomers,
         branchManagerId: values.branchManagerId,
         managerVisitDate: values.managerVisitDate
           ? new Date(values.managerVisitDate).valueOf()
           : 0,
+        entitledToSignIds: obj.entitledToSignIds,
       }
       if (
         this.state.application.guarantorIds.length <
@@ -976,6 +1090,21 @@ class LoanApplicationCreation extends Component<Props, State> {
     }
   }
 
+  removeEntitledToSign = (obj, index, values) => {
+    this.setState({ loading: true })
+    const defaultApplication = { ...values }
+    const defaultEntitledToSign = { ...defaultApplication.entitledToSign }
+    const defaultCustomer = { ...defaultEntitledToSign[index] }
+    defaultApplication.entitledToSignIds = defaultApplication.entitledToSignIds.filter(
+      (id) => obj._id !== id
+    )
+    defaultCustomer.entitledToSign = {}
+    defaultCustomer.searchResults.results = []
+    defaultCustomer.searchResults.empty = false
+    defaultApplication.entitledToSign[index] = defaultCustomer
+    this.setState({ application: defaultApplication, loading: false })
+  }
+
   async viewCustomer(id) {
     this.setState({ loading: true })
     const selectedCustomer = await getCustomerByID(id)
@@ -991,20 +1120,39 @@ class LoanApplicationCreation extends Component<Props, State> {
     }
   }
 
-  addOptionalGuarantor() {
-    const element = {
+  addOptionalGuarantor(stringKey?: string) {
+    const element: {
+      searchResults: Results
+      guarantor: Customer
+      isCompany?: boolean
+    } = {
       searchResults: {
         results: [],
         empty: false,
       },
       guarantor: {},
     }
-
+    if (stringKey === 'company') element.isCompany = true
     this.setState(
       produce<State>((draftState) => {
         draftState.application.guarantors.push(element)
       })
     )
+  }
+
+  addEntitledToSignRow() {
+    const element = {
+      searchResults: {
+        results: [],
+        empty: false,
+      },
+      entitledToSign: {},
+    }
+    const defaultApplication = { ...this.state.application }
+    defaultApplication.entitledToSign.push(element)
+    this.setState({
+      application: defaultApplication,
+    })
   }
 
   populateLoanProduct(selectedProductDetails) {
@@ -1096,12 +1244,23 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ application, loading: false })
   }
 
+  removeEntitledToSignRow(obj, index, values) {
+    this.setState({ loading: true })
+    const defaultApplication = { ...values }
+    defaultApplication.entitledToSignIds = defaultApplication.entitledToSignIds.filter(
+      (id) => obj.guarantor._id !== id
+    )
+    defaultApplication.entitledToSign.splice(index, 1)
+    this.setState({ application: defaultApplication, loading: false })
+  }
+
   populateCustomer(response) {
     this.getOfficerName(response.representative)
     this.setState(
       produce<State>((draftState) => {
         const app = draftState.application
         app.customerName = response.customerName
+        app.customerType = response.customerType
         app.nationalId = response.nationalId
         app.birthDate = this.getDateString(response.birthDate)
         app.gender = getGenderFromNationalId(response.nationalId)
@@ -1127,6 +1286,7 @@ class LoanApplicationCreation extends Component<Props, State> {
             size: 2000,
             branchId: this.tokenData.branch,
             representativeId: this.state.selectedLoanOfficer._id,
+            customerType: 'individual',
           }
         : {
             from: 0,
@@ -1139,6 +1299,7 @@ class LoanApplicationCreation extends Component<Props, State> {
               : ['key'].includes(key)
               ? Number(keyword)
               : undefined,
+            customerType: 'individual',
           }
     const results = await searchCustomer(query)
     if (results.status === 'success') {
@@ -1331,7 +1492,7 @@ class LoanApplicationCreation extends Component<Props, State> {
         className="d-flex flex-column justify-content-center"
         style={{ textAlign: 'right', width: '90%', padding: 20 }}
       >
-        {this.state.customerType === 'individual' ? (
+        {this.state.customerType !== 'group' ? (
           <div style={{ justifyContent: 'center', display: 'flex' }}>
             <CustomerSearch
               source="loanApplication"
@@ -1340,6 +1501,7 @@ class LoanApplicationCreation extends Component<Props, State> {
               selectedCustomer={this.state.selectedCustomer}
               searchResults={this.state.searchResults}
               selectCustomer={(customer) => this.selectCustomer(customer)}
+              sme={this.state.customerType === 'sme'}
             />
           </div>
         ) : (
@@ -1451,7 +1613,7 @@ class LoanApplicationCreation extends Component<Props, State> {
               (this.state.customerType === 'group' &&
                 (this.state.selectedGroupLeader.length === 0 ||
                   this.state.selectedCustomers.length < 3)) ||
-              (this.state.customerType === 'individual' &&
+              (['individual', 'sme'].includes(this.state.customerType) &&
                 Object.keys(this.state.selectedCustomer).length === 0)
             }
             onClick={() => this.step('forward')}
@@ -1468,7 +1630,11 @@ class LoanApplicationCreation extends Component<Props, State> {
       <Formik
         initialValues={this.state.application}
         onSubmit={this.submit}
-        validationSchema={LoanApplicationValidation}
+        validationSchema={
+          this.state.customerType === 'sme'
+            ? SMELoanApplicationValidation
+            : LoanApplicationValidation
+        }
         validateOnBlur
         validateOnChange
         enableReinitialize
@@ -1478,16 +1644,18 @@ class LoanApplicationCreation extends Component<Props, State> {
             {...formikProps}
             formulas={this.state.formulas}
             loanUsage={this.state.loanUsage}
-            products={this.state.products.filter(
-              (product) => product.beneficiaryType === this.state.customerType
+            products={this.state.products.filter((product) =>
+              ['individual', 'sme'].includes(this.state.customerType)
+                ? product.beneficiaryType === 'individual'
+                : product.beneficiaryType === 'group'
             )}
             loanOfficers={this.state.loanOfficers}
             step={(key) => this.step(key)}
             getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}
             customer={
-              this.state.customerType === 'individual'
-                ? this.state.selectedCustomer
-                : this.state.selectedCustomers
+              this.state.customerType === 'group'
+                ? this.state.selectedCustomers
+                : this.state.selectedCustomer
             }
           />
         )}
@@ -1500,7 +1668,11 @@ class LoanApplicationCreation extends Component<Props, State> {
       <Formik
         initialValues={this.state.application}
         onSubmit={this.submit}
-        validationSchema={LoanApplicationValidation}
+        validationSchema={
+          this.state.customerType === 'sme'
+            ? SMELoanApplicationStep2Validation
+            : LoanApplicationValidation
+        }
         validateOnBlur
         validateOnChange
         enableReinitialize
@@ -1509,12 +1681,14 @@ class LoanApplicationCreation extends Component<Props, State> {
           <LoanApplicationCreationGuarantorForm
             {...formikProps}
             step={(key) => this.step(key)}
-            addGuar={() => this.addOptionalGuarantor()}
+            addGuar={(stringKey?: string) =>
+              this.addOptionalGuarantor(stringKey)
+            }
             removeGuar={(guarantor, i, values) =>
               this.removeOptionalGuar(guarantor, i, values)
             }
-            handleSearch={(key, query, guarantor) => {
-              this.handleSearchGuarantors(key, query, guarantor)
+            handleSearch={(key, query, guarantor, companySearch) => {
+              this.handleSearchGuarantors(key, query, guarantor, companySearch)
             }}
             selectGuarantor={(query, guarantor, values) => {
               this.selectGuarantor(query, guarantor, values)
@@ -1522,10 +1696,30 @@ class LoanApplicationCreation extends Component<Props, State> {
             removeGuarantor={(query, guarantor, values) => {
               this.removeGuarantor(query, guarantor, values)
             }}
+            addEntitledToSignRow={(stringKey?: string) =>
+              this.addEntitledToSignRow()
+            }
+            removeEntitledToSignRow={(guarantor, i, values) =>
+              this.removeEntitledToSignRow(guarantor, i, values)
+            }
+            handleSearchEntitledToSign={(
+              key,
+              query,
+              guarantor,
+              companySearch
+            ) => {
+              this.handleSearchEntitledToSign(key, query, guarantor)
+            }}
+            selectEntitledToSign={(query, guarantor, values) => {
+              this.selectEntitledToSign(query, guarantor, values)
+            }}
+            removeEntitledToSign={(query, guarantor, values) => {
+              this.removeEntitledToSign(query, guarantor, values)
+            }}
             customer={
-              this.state.customerType === 'individual'
-                ? this.state.selectedCustomer
-                : this.state.selectedCustomers
+              this.state.customerType === 'group'
+                ? this.state.selectedCustomers
+                : this.state.selectedCustomer
             }
           />
         )}
@@ -1579,6 +1773,19 @@ class LoanApplicationCreation extends Component<Props, State> {
                   {local.group}
                 </Button>
               </div>
+              <div
+                className="d-flex flex-column"
+                style={{ margin: '20px 60px' }}
+              >
+                <img
+                  alt="group"
+                  style={{ width: 75, margin: '40px 20px' }}
+                  src={require('../../Assets/group.svg')}
+                />
+                <Button onClick={() => this.setCustomerType('sme')}>
+                  {local.company}
+                </Button>
+              </div>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -1591,6 +1798,8 @@ class LoanApplicationCreation extends Component<Props, State> {
                         local.loanInfo,
                         local.guarantorInfo,
                       ]
+                    : this.state.customerType === 'sme'
+                    ? [local.viewCompany, local.loanInfo, local.guarantorInfo]
                     : [local.customersDetails, local.loanInfo]
                 }
               />

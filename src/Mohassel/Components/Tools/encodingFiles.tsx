@@ -23,15 +23,7 @@ class EncodingFiles extends Component<RouteComponentProps, State> {
   constructor(props: RouteComponentProps) {
     super(props)
     this.state = {
-      documentTypes: [
-        {
-          id: '',
-          pages: 0,
-          type: '',
-          paperType: '',
-          name: '',
-        },
-      ],
+      documentTypes: [],
       loading: false,
       manageToolsTabs: [],
     }
@@ -94,114 +86,139 @@ class EncodingFiles extends Component<RouteComponentProps, State> {
                 </Button>
               </Can>
             </div>
-            {this.state.documentTypes.map((documentType, index) => {
-              return (
-                <div
-                  key={index}
-                  style={{
-                    border: 'solid 1px #e5e5e5',
-                    textAlign: 'right',
-                    margin: '20px',
-                    padding: '20px',
-                  }}
-                >
-                  <Row className="row-nowrap">
-                    <Col style={{ minWidth: '20%' }}>
-                      <div
-                        style={{
-                          fontSize: '14px',
-                          fontWeight: 'bold',
-                          color: '#2f2f2f',
-                        }}
-                      >
-                        {documentType.name}
-                      </div>{' '}
-                    </Col>
-                    <Col>
-                      <div style={{ fontSize: '12px', color: '#6e6e6e' }}>
-                        {local.numOfPages}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: '12px',
-                          color: '#2f2f2f',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        {documentType.pages}{' '}
-                      </div>
-                    </Col>
-                    <Col>
-                      <div style={{ fontSize: '12px', color: '#6e6e6e' }}>
-                        {local.allowUpdate}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: '12px',
-                          color: '#2f2f2f',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        {documentType.updatable ? local.yes : local.no}{' '}
-                      </div>
-                    </Col>
-                    <Col>
-                      <div style={{ fontSize: '12px', color: '#6e6e6e' }}>
-                        {local.status}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: '12px',
-                          color: '#2f2f2f',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        {documentType.active
-                          ? local.activated
-                          : local.deactivated}{' '}
-                      </div>
-                    </Col>
-                    <Col style={{ minWidth: '20%' }}>
-                      <div style={{ fontSize: '12px', color: '#6e6e6e' }}>
-                        {local.documentFor}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: '12px',
-                          color: '#2f2f2f',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        {documentTypeLocalization(documentType.type)}{' '}
-                      </div>
-                    </Col>
-                    <Can I="documentTypes" a="config">
-                      <Col>
-                        <span
-                          onClick={() => {
-                            this.props.history.push({
-                              pathname:
-                                '/tools/encoding-files/edit-encoding-files',
-                              state: { documentType },
-                            })
+            {this.state.documentTypes.length > 0 ? (
+              this.state.documentTypes.map((documentType, index) => {
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      border: 'solid 1px #e5e5e5',
+                      textAlign: 'right',
+                      margin: '20px',
+                      padding: '20px',
+                    }}
+                  >
+                    <Row className="row-nowrap">
+                      <Col style={{ minWidth: '20%' }}>
+                        <div
+                          style={{
+                            fontSize: '14px',
+                            fontWeight: 'bold',
+                            color: '#2f2f2f',
                           }}
-                          className="icon"
                         >
-                          <img
-                            alt="edit"
-                            src={require('../../Assets/editIcon.svg')}
-                          />
-                        </span>
+                          {documentType.name}
+                        </div>{' '}
                       </Col>
-                    </Can>
-                  </Row>
-                </div>
-              )
-            })}
+                      <Col>
+                        <div style={{ fontSize: '12px', color: '#6e6e6e' }}>
+                          {local.numOfPages}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: '12px',
+                            color: '#2f2f2f',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          {documentType.pages}{' '}
+                        </div>
+                      </Col>
+                      <Col>
+                        <div style={{ fontSize: '12px', color: '#6e6e6e' }}>
+                          {local.allowUpdate}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: '12px',
+                            color: '#2f2f2f',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          {documentType.updatable ? local.yes : local.no}{' '}
+                        </div>
+                      </Col>
+                      <Col>
+                        <div style={{ fontSize: '12px', color: '#6e6e6e' }}>
+                          {local.status}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: '12px',
+                            color: '#2f2f2f',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          {documentType.active
+                            ? local.activated
+                            : local.deactivated}{' '}
+                        </div>
+                      </Col>
+                      <Col style={{ minWidth: '20%' }}>
+                        <div style={{ fontSize: '12px', color: '#6e6e6e' }}>
+                          {local.documentFor}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: '12px',
+                            color: '#2f2f2f',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          {documentTypeLocalization(documentType.type)}{' '}
+                        </div>
+                      </Col>
+                      <Col style={{ minWidth: '20%' }}>
+                        <div style={{ fontSize: '12px', color: '#6e6e6e' }}>
+                          {local.documentForCustomerOfType}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: '12px',
+                            color: '#2f2f2f',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          {local[documentType.customerType]}{' '}
+                        </div>
+                      </Col>
+                      <Can I="documentTypes" a="config">
+                        <Col>
+                          <span
+                            onClick={() => {
+                              this.props.history.push({
+                                pathname:
+                                  '/tools/encoding-files/edit-encoding-files',
+                                state: { documentType },
+                              })
+                            }}
+                            className="icon"
+                          >
+                            <img
+                              alt="edit"
+                              src={require('../../Assets/editIcon.svg')}
+                            />
+                          </span>
+                        </Col>
+                      </Can>
+                    </Row>
+                  </div>
+                )
+              })
+            ) : (
+              <div style={{ textAlign: 'center', marginBottom: 40 }}>
+                <img
+                  alt="no-data-found"
+                  src={require('../../../Shared/Assets/no-results-found.svg')}
+                />
+                <h4>{local.noResultsFound}</h4>
+              </div>
+            )}
           </Card.Body>
         </Card>
       </div>
     )
   }
 }
+
 export default withRouter(EncodingFiles)

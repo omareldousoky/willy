@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import * as local from '../../../Shared/Assets/ar.json'
-import { Customer } from '../../../Shared/Services/interfaces'
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import InfoBox from '../userInfoBox'
+import { Customer } from '../../../Shared/Services/interfaces'
 
 interface Props {
   group: any
@@ -66,7 +66,6 @@ class GroupInfoBox extends Component<Props, State> {
       >
         <h5>{local.mainGroupInfo}</h5>
         <CardNavBar
-          header="here"
           array={this.state.tabsArray}
           active={this.state.activeTab}
           selectTab={(index: number) =>

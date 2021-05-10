@@ -10,6 +10,7 @@ import OracleIntegration from './oracleIntegration'
 import OperationsReports from './operationsReports'
 import { TasaheelReports } from './TasaheelReports/TasaheelReports'
 import LaundryReports from './laundryReports'
+import OfficersProductivityReports from './officersProductivityReports'
 
 interface State {
   activeTab: string
@@ -41,12 +42,12 @@ class ReportsHome extends Component<{}, State> {
           header: local.operationsReports,
           stringKey: 'operationsReports',
         },
-        {
-          header: local.oracleIntegration,
-          stringKey: 'oracleIntegration',
-          permission: 'summarizeTransactions',
-          permissionKey: 'oracleIntegration',
-        },
+        // {
+        //     header: local.oracleIntegration,
+        //     stringKey: 'oracleIntegration',
+        //     permission: 'summarizeTransactions',
+        //     permissionKey: 'oracleIntegration'
+        // },
         {
           header: local.monthlyQuarterlyReports,
           stringKey: 'monthlyQuarterlyReports',
@@ -58,6 +59,11 @@ class ReportsHome extends Component<{}, State> {
         {
           header: local.laundryReports,
           stringKey: 'laundryReports',
+        },
+        {
+          header: local.officersProductivityReport,
+          stringKey: 'officersProductivityReports',
+          permission: 'officersProductivityReport',
         },
       ],
     }
@@ -87,6 +93,8 @@ class ReportsHome extends Component<{}, State> {
         return <TasaheelReports />
       case 'laundryReports':
         return <LaundryReports />
+      case 'officersProductivityReports':
+        return <OfficersProductivityReports />
       default:
         return null
     }
@@ -97,7 +105,6 @@ class ReportsHome extends Component<{}, State> {
       <Card>
         <div className="print-none">
           <CardNavBar
-            header="here"
             array={this.state.tabsArray}
             active={this.state.activeTab}
             selectTab={(index: string) => this.setState({ activeTab: index })}

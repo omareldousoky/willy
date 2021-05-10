@@ -7,7 +7,10 @@ import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import Search from '../../../Shared/Components/Search/search'
-import { search, searchFilters } from '../../../Shared/redux/search/actions'
+import {
+  issuedLoansSearchFilters,
+  search,
+} from '../../../Shared/redux/search/actions'
 import {
   timeToDateyyymmdd,
   beneficiaryType,
@@ -16,6 +19,7 @@ import {
 } from '../../../Shared/Services/utils'
 import { manageLoansArray } from './manageLoansInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import ability from '../../config/ability'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -27,12 +31,11 @@ interface Props extends RouteComponentProps {
   searchFilters: any
   issuedLoansSearchFilters: any
   search: (data) => Promise<void>
-  setSearchFilters: (data) => void
+  setIssuedLoanSearchFilters: (data) => void
 }
 interface State {
   size: number
   from: number
-  searchKeys: any
 }
 
 class LoanList extends Component<Props, State> {
@@ -48,21 +51,17 @@ class LoanList extends Component<Props, State> {
     this.state = {
       size: 10,
       from: 0,
-      searchKeys: [
-        'keyword',
-        'dateFromTo',
-        'status',
-        'branch',
-        'doubtful',
-        'writtenOff',
-      ],
     }
     this.mappers = [
       {
         title: local.customerType,
         key: 'customerType',
         render: (data) =>
-          beneficiaryType(data.application.product.beneficiaryType),
+          beneficiaryType(
+            data.application.customer.customerType === 'company'
+              ? 'company'
+              : data.application.product.beneficiaryType
+          ),
       },
       {
         title: local.loanCode,
@@ -82,8 +81,12 @@ class LoanList extends Component<Props, State> {
               })
             }
           >
-            {data.application.product.beneficiaryType === 'individual' ? (
+            {data.application.product.beneficiaryType === 'individual' &&
+            data.application.product.type === 'micro' ? (
               data.application.customer.customerName
+            ) : data.application.product.beneficiaryType === 'individual' &&
+              data.application.product.type === 'sme' ? (
+              data.application.customer.businessName
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {data.application.group?.individualsInGroup.map((member) =>
@@ -155,22 +158,19 @@ class LoanList extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.props
-      .search({
-        ...this.props.issuedLoansSearchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'loan',
-        sort: 'issueDate',
-      })
-      .then(() => {
-        if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
-      })
-  }
-
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
+    const query = {
+      ...this.props.issuedLoansSearchFilters,
+      size: this.state.size,
+      from: this.state.from,
+      url: 'loan',
+      sort: 'issueDate',
+    }
+    !Object.keys(query).includes('type') ? (query.type = 'micro') : null
+    this.props.setIssuedLoanSearchFilters({ type: query.type })
+    this.props.search(query).then(() => {
+      if (this.props.error)
+        Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+    })
   }
 
   getStatus(status: string) {
@@ -189,18 +189,18 @@ class LoanList extends Component<Props, State> {
   }
 
   async getLoans() {
-    const { error, fromBranch, branchId, issuedLoansSearchFilters } = this.props
+    const { error, fromBranch, branchId } = this.props
     const { customerShortenedCode, customerKey } = this.props.searchFilters
     const { size, from } = this.state
     const modifiedSearchFilters = {
-      ...searchFilters,
+      ...this.props.searchFilters,
       customerKey: customerShortenedCode
         ? getFullCustomerKey(customerShortenedCode)
         : customerKey || undefined,
     }
     const query = {
       ...modifiedSearchFilters,
-      ...issuedLoansSearchFilters,
+      ...this.props.issuedLoansSearchFilters,
       branchId: fromBranch ? branchId : this.props.searchFilters.branchId,
       size,
       from,
@@ -231,6 +231,40 @@ class LoanList extends Component<Props, State> {
 
   render() {
     const array = manageLoansArray()
+    const smePermission =
+      ability.can('getIssuedSMELoan', 'application') &&
+      this.props.searchFilters.type === 'sme'
+    const searchKeys = [
+      'keyword',
+      'dateFromTo',
+      'status',
+      'branch',
+      'doubtful',
+      'writtenOff',
+    ]
+    const filteredMappers = smePermission
+      ? this.mappers.filter((mapper) => mapper.key !== 'nationalId')
+      : this.mappers
+    if (smePermission)
+      filteredMappers.splice(3, 0, {
+        title: local.commercialRegisterNumber,
+        key: 'commercialRegisterNumber',
+        render: (data) => data.application.customer.commercialRegisterNumber,
+      })
+    const dropDownKeys = [
+      'name',
+      'nationalId',
+      'key',
+      'customerKey',
+      'customerCode',
+      'customerShortenedCode',
+    ]
+    ability.can('getIssuedSMELoan', 'application') && searchKeys.push('sme')
+    dropDownKeys.push(
+      'businessName',
+      'taxCardNumber',
+      'commercialRegisterNumber'
+    )
     return (
       <>
         <HeaderWithCards
@@ -258,15 +292,8 @@ class LoanList extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={this.state.searchKeys}
-              dropDownKeys={[
-                'name',
-                'nationalId',
-                'key',
-                'customerKey',
-                'customerCode',
-                'customerShortenedCode',
-              ]}
+              searchKeys={searchKeys}
+              dropDownKeys={dropDownKeys}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               setFrom={(from) => this.setState({ from })}
               datePlaceholder={local.issuanceDate}
@@ -281,7 +308,7 @@ class LoanList extends Component<Props, State> {
               size={this.state.size}
               url="loan"
               totalCount={this.props.totalCount}
-              mappers={this.mappers}
+              mappers={filteredMappers}
               pagination
               data={this.props.data}
               changeNumber={(key: string, number: number) => {
@@ -298,7 +325,8 @@ class LoanList extends Component<Props, State> {
 const addSearchToProps = (dispatch) => {
   return {
     search: (data) => dispatch(search(data)),
-    setSearchFilters: (data) => dispatch(searchFilters(data)),
+    setIssuedLoanSearchFilters: (data) =>
+      dispatch(issuedLoansSearchFilters(data)),
   }
 }
 const mapStateToProps = (state) => {

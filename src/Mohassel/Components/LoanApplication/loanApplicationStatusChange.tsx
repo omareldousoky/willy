@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import { Container } from 'react-bootstrap'
+import Container from 'react-bootstrap/Container'
+import { getApplication } from '../../Services/APIs/loanApplication/getApplication'
+import { Loader } from '../../../Shared/Components/Loader'
+import StatusHelper from './statusHelper'
 import {
   rejectApplication,
   undoreviewApplication,
@@ -9,14 +12,18 @@ import {
 } from '../../Services/APIs/loanApplication/stateHandler'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
-import { Loader } from '../../../Shared/Components/Loader'
-import { getApplication } from '../../Services/APIs/loanApplication/getApplication'
-import StatusHelper from './statusHelper'
+import { getErrorMessage } from '../../../Shared/Services/utils'
+import {
+  BranchDetails,
+  BranchDetailsResponse,
+  getBranch,
+} from '../../Services/APIs/Branch/getBranch'
 
 interface State {
   loading: boolean
   application: any
   geoAreas: Array<any>
+  branchDetails?: BranchDetails
 }
 
 interface LoanStatusChangeRouteState {
@@ -55,7 +62,7 @@ class LoanStatusChange extends Component<
           this.props.history.push('/track-loan-applications')
         })
       } else {
-        Swal.fire('error', local.statusChangeError, 'error')
+        Swal.fire('error', getErrorMessage(res.error.error), 'error')
         this.setState({ loading: false })
       }
     } else if (status === 'unreview') {
@@ -69,7 +76,7 @@ class LoanStatusChange extends Component<
           this.props.history.push('/track-loan-applications')
         })
       } else {
-        Swal.fire('error', local.statusChangeError, 'error')
+        Swal.fire('error', getErrorMessage(res.error.error), 'error')
         this.setState({ loading: false })
       }
     } else if (status === 'reject') {
@@ -84,9 +91,21 @@ class LoanStatusChange extends Component<
           this.props.history.push('/track-loan-applications')
         })
       } else {
-        Swal.fire('error', local.statusChangeError, 'error')
+        Swal.fire('error', getErrorMessage(res.error.error), 'error')
         this.setState({ loading: false })
       }
+    }
+  }
+
+  async getBranchData(branchId: string) {
+    const res = await getBranch(branchId)
+    if (res.status === 'success') {
+      this.setState({
+        branchDetails: (res.body as BranchDetailsResponse)?.data,
+      })
+    } else {
+      const err = res.error as Record<string, string>
+      Swal.fire('Error !', getErrorMessage(err.error), 'error')
     }
   }
 
@@ -114,6 +133,7 @@ class LoanStatusChange extends Component<
     if (application.status === 'success') {
       if (application.body.guarantors.length > 0)
         this.getGeoAreas(application.body.branchId)
+      this.getBranchData(application.body.branchId)
       this.setState({
         application: application.body,
         loading: false,
@@ -138,6 +158,7 @@ class LoanStatusChange extends Component<
               }}
               application={this.state.application}
               getGeoArea={(area) => this.getCustomerGeoArea(area)}
+              branchName={this.state.branchDetails?.name}
             />
           </div>
         )}

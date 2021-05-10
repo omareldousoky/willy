@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
 import { connect } from 'react-redux'
 import Modal from 'react-bootstrap/Modal'
 import Swal from 'sweetalert2'
 import Table from 'react-bootstrap/Table'
-import { Button, Card } from 'react-bootstrap'
-import { Loader } from '../../../Shared/Components/Loader'
-import ReviewedApplicationsPDF from '../pdfTemplates/reviewedApplications/reviewedApplications'
-import Can from '../../config/Can'
+import { Loader } from '../../../Shared/Components/Loader';
+import ReviewedApplicationsPDF from '../pdfTemplates/reviewedApplications/reviewedApplications';
+import Can from '../../config/Can';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
@@ -30,6 +31,7 @@ import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApp
 import { manageApplicationsArray } from './manageApplicationInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { LoanApplicationReportRequest } from '../../Services/interfaces'
+import ability from '../../config/ability'
 
 interface Product {
   productName: string
@@ -98,7 +100,11 @@ class TrackLoanApplications extends Component<Props, State> {
         title: local.customerType,
         key: 'customerType',
         render: (data) =>
-          beneficiaryType(data.application.product.beneficiaryType),
+          beneficiaryType(
+            data.application.customer.customerType === 'company'
+              ? 'company'
+              : data.application.product.beneficiaryType
+          ),
       },
       {
         title: local.applicationCode,
@@ -110,8 +116,12 @@ class TrackLoanApplications extends Component<Props, State> {
         key: 'name',
         sortable: true,
         render: (data) =>
-          data.application.product.beneficiaryType === 'individual' ? (
+          data.application.product.beneficiaryType === 'individual' &&
+          data.application.product.type === 'micro' ? (
             data.application.customer.customerName
+          ) : data.application.product.beneficiaryType === 'individual' &&
+            data.application.product.type === 'sme' ? (
+            data.application.customer.businessName
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {data.application.group?.individualsInGroup.map((member) =>
@@ -168,12 +178,14 @@ class TrackLoanApplications extends Component<Props, State> {
   }
 
   componentDidMount() {
+    this.props.setSearchFilters({ type: 'micro' })
     this.props
       .search({
         size: this.state.size,
         from: this.state.from,
         url: 'application',
         branchId: this.props.branchId,
+        type: 'micro',
       })
       .then(() => {
         if (this.props.error)
@@ -403,6 +415,33 @@ class TrackLoanApplications extends Component<Props, State> {
   }
 
   render() {
+    const searchKeys = ['keyword', 'dateFromTo', 'branch', 'status-application']
+    const smePermission =
+      ability.can('getIssuedSMELoan', 'application') &&
+      this.props.searchFilters.type === 'sme'
+    const filteredMappers = smePermission
+      ? this.mappers.filter((mapper) => mapper.key !== 'nationalId')
+      : this.mappers
+    if (smePermission)
+      filteredMappers.splice(3, 0, {
+        title: local.commercialRegisterNumber,
+        key: 'loanCode',
+        render: (data) => data.application.customer.commercialRegisterNumber,
+      })
+    const dropDownKeys = [
+      'name',
+      'nationalId',
+      'key',
+      'customerKey',
+      'customerCode',
+      'customerShortenedCode',
+    ]
+    ability.can('getSMEApplication', 'application') && searchKeys.push('sme')
+    dropDownKeys.push(
+      'businessName',
+      'taxCardNumber',
+      'commercialRegisterNumber'
+    )
     return (
       <>
         <div className="print-none">
@@ -459,20 +498,8 @@ class TrackLoanApplications extends Component<Props, State> {
               </div>
               <hr className="dashed-line" />
               <Search
-                searchKeys={[
-                  'keyword',
-                  'dateFromTo',
-                  'branch',
-                  'status-application',
-                ]}
-                dropDownKeys={[
-                  'name',
-                  'nationalId',
-                  'key',
-                  'customerKey',
-                  'customerCode',
-                  'customerShortenedCode',
-                ]}
+                searchKeys={searchKeys}
+                dropDownKeys={dropDownKeys}
                 url="application"
                 from={this.state.from}
                 size={this.state.size}
@@ -485,7 +512,7 @@ class TrackLoanApplications extends Component<Props, State> {
                 from={this.state.from}
                 size={this.state.size}
                 totalCount={this.props.totalCount}
-                mappers={this.mappers}
+                mappers={filteredMappers}
                 pagination
                 data={this.props.data}
                 changeNumber={(key: string, number: number) => {

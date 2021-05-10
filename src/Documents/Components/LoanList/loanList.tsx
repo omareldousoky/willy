@@ -146,6 +146,7 @@ class LoanList extends Component<Props, State> {
         from: this.state.from,
         url: 'loan',
         sort: 'issueDate',
+        type: 'micro',
       })
       .then(() => {
         if (this.props.error)
@@ -183,6 +184,7 @@ class LoanList extends Component<Props, State> {
         url: 'loan',
         branchId: this.props.branchId,
         sort: 'issueDate',
+        type: 'micro',
       }
     } else {
       query = {
@@ -192,6 +194,7 @@ class LoanList extends Component<Props, State> {
         from: this.state.from,
         url: 'loan',
         sort: 'issueDate',
+        type: 'micro',
       }
     }
     this.props.search(query).then(() => {

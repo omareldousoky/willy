@@ -80,6 +80,7 @@ interface State {
       lat: number
       lng: number
     }
+    customerType: string
   }
   step2: {
     businessAddressLatLong: string

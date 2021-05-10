@@ -1,15 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { Formik } from 'formik'
-import Card from 'react-bootstrap/Card'
-import Modal from 'react-bootstrap/Modal'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import FormCheck from 'react-bootstrap/FormCheck'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 import Swal from 'sweetalert2'
+import { Button, Card, Col, Form, FormCheck, Modal, Row } from 'react-bootstrap'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'
@@ -24,6 +18,7 @@ import { bulkApplicationCreationValidation } from './bulkApplicationCreationVali
 import Search from '../../../Shared/Components/Search/search'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicationInitials'
+import ability from '../../config/ability'
 
 interface Product {
   productName: string
@@ -136,7 +131,8 @@ class BulkApplicationCreation extends Component<Props, State> {
             }
           >
             {data.application.product.beneficiaryType === 'individual' ? (
-              data.application.customer.customerName
+              data.application.customer.customerName ||
+              data.application.customer.businessName
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {data.application.group?.individualsInGroup.map((member) =>
@@ -195,12 +191,14 @@ class BulkApplicationCreation extends Component<Props, State> {
   }
 
   componentDidMount() {
+    this.props.setSearchFilters({ type: 'micro' })
     this.props
       .search({
         size: this.state.size,
         from: this.state.from,
         url: 'application',
         status: 'approved',
+        type: 'micro',
       })
       .then(() => {
         if (this.props.error)
@@ -280,6 +278,9 @@ class BulkApplicationCreation extends Component<Props, State> {
   }
 
   render() {
+    const searchKey = ability.can('getSMEApplication', 'application')
+      ? ['dateFromTo', 'sme']
+      : ['dateFromTo']
     return (
       <>
         <HeaderWithCards
@@ -320,7 +321,7 @@ class BulkApplicationCreation extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['dateFromTo']}
+              searchKeys={searchKey}
               datePlaceholder={local.entryDate}
               url="application"
               from={this.state.from}

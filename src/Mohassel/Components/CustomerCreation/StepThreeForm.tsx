@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
 import AsyncSelect from 'react-select/async'
 import Swal from 'sweetalert2'
+import { Button, Col, Form, Row } from 'react-bootstrap'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -43,6 +40,7 @@ export const StepThreeForm = (props: any) => {
     setFieldValue,
     previousStep,
     edit,
+    isCompany,
   } = props
   const getLoanOfficers = async (inputValue: string) => {
     const res = await searchLoanOfficer({
@@ -190,72 +188,75 @@ export const StepThreeForm = (props: any) => {
           </Form.Group>
         </Col>
       </Row>
-      <Row>
-        <Col sm={6}>
-          <Form.Group controlId="permanentEmployeeCount">
-            <Form.Label className="customer-form-label">
-              {local.permanentEmployeeCount}
-            </Form.Label>
-            <Form.Control
-              type="text"
-              name="permanentEmployeeCount"
-              data-qc="permanentEmployeeCount"
-              value={values.permanentEmployeeCount}
-              onBlur={handleBlur}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const re = /^\d*$/
-                if (
-                  event.currentTarget.value === '' ||
-                  re.test(event.currentTarget.value)
-                ) {
-                  setFieldValue(
-                    'permanentEmployeeCount',
-                    event.currentTarget.value
-                  )
+      {!isCompany && (
+        <Row>
+          <Col sm={6}>
+            <Form.Group controlId="permanentEmployeeCount">
+              <Form.Label className="customer-form-label">
+                {local.permanentEmployeeCount}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="permanentEmployeeCount"
+                data-qc="permanentEmployeeCount"
+                value={values.permanentEmployeeCount}
+                onBlur={handleBlur}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  const re = /^\d*$/
+                  if (
+                    event.currentTarget.value === '' ||
+                    re.test(event.currentTarget.value)
+                  ) {
+                    setFieldValue(
+                      'permanentEmployeeCount',
+                      event.currentTarget.value
+                    )
+                  }
+                }}
+                isInvalid={
+                  errors.permanentEmployeeCount &&
+                  touched.permanentEmployeeCount
                 }
-              }}
-              isInvalid={
-                errors.permanentEmployeeCount && touched.permanentEmployeeCount
-              }
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.permanentEmployeeCount}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Col>
-        <Col sm={6}>
-          <Form.Group controlId="partTimeEmployeeCount">
-            <Form.Label className="customer-form-label">
-              {local.partTimeEmployeeCount}
-            </Form.Label>
-            <Form.Control
-              type="text"
-              name="partTimeEmployeeCount"
-              data-qc="partTimeEmployeeCount"
-              value={values.partTimeEmployeeCount}
-              onBlur={handleBlur}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const re = /^\d*$/
-                if (
-                  event.currentTarget.value === '' ||
-                  re.test(event.currentTarget.value)
-                ) {
-                  setFieldValue(
-                    'partTimeEmployeeCount',
-                    event.currentTarget.value
-                  )
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.permanentEmployeeCount}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col sm={6}>
+            <Form.Group controlId="partTimeEmployeeCount">
+              <Form.Label className="customer-form-label">
+                {local.partTimeEmployeeCount}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="partTimeEmployeeCount"
+                data-qc="partTimeEmployeeCount"
+                value={values.partTimeEmployeeCount}
+                onBlur={handleBlur}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  const re = /^\d*$/
+                  if (
+                    event.currentTarget.value === '' ||
+                    re.test(event.currentTarget.value)
+                  ) {
+                    setFieldValue(
+                      'partTimeEmployeeCount',
+                      event.currentTarget.value
+                    )
+                  }
+                }}
+                isInvalid={
+                  errors.partTimeEmployeeCount && touched.partTimeEmployeeCount
                 }
-              }}
-              isInvalid={
-                errors.partTimeEmployeeCount && touched.partTimeEmployeeCount
-              }
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.partTimeEmployeeCount}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Col>
-      </Row>
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.partTimeEmployeeCount}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+      )}
       <Can I="updateNationalId" a="customer" passThrough>
         {(allowed) =>
           ((props.edit &&
@@ -290,7 +291,6 @@ export const StepThreeForm = (props: any) => {
                 {(ability.can('updateCustomerHasLoan', 'customer') ||
                   !props.hasLoan) && (
                   <>
-                    {' '}
                     <Col sm={6}>
                       <Form.Group controlId="maxLoansAllowed">
                         <Form.Label className="customer-form-label">{`${local.maxLoansAllowed}`}</Form.Label>

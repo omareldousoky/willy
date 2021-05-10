@@ -38,6 +38,7 @@ interface CustomerData {
   productName: string
   entryDate: number
   status: string
+  businessName: string
 }
 interface State {
   loanCreationDate: string
@@ -95,6 +96,7 @@ class LoanCreation extends Component<
         productName: '',
         entryDate: 0,
         status: '',
+        businessName: '',
       },
       beneficiaryType: '',
       installmentsData: {},
@@ -127,7 +129,7 @@ class LoanCreation extends Component<
         customerData: {
           id,
           customerName: res.body.customer.customerName,
-          customerType: '',
+          customerType: res.body.customer.customerType,
           principal: res.body.principal,
           currency: res.body.product.currency,
           noOfInstallments: res.body.product.noOfInstallments,
@@ -137,6 +139,7 @@ class LoanCreation extends Component<
           productName: res.body.product.productName,
           entryDate: res.body.entryDate,
           status: res.body.status,
+          businessName: res.body.customer.businessName,
         },
       }))
       if (type === 'issue') {
@@ -256,13 +259,20 @@ class LoanCreation extends Component<
             </thead>
             <tbody>
               <tr>
-                <td>{beneficiaryType(this.state.beneficiaryType)}</td>
+                <td>
+                  {beneficiaryType(
+                    this.state.customerData.customerType === 'company'
+                      ? 'company'
+                      : this.state.beneficiaryType
+                  )}
+                </td>
                 <td>
                   {this.state.beneficiaryType === 'group'
                     ? this.state.application.group.individualsInGroup.find(
                         (customer) => customer.type === 'leader'
                       )?.customer?.customerName
-                    : this.state.customerData.customerName}
+                    : this.state.customerData.customerName ||
+                      this.state.customerData.businessName}
                 </td>
                 <td>{this.state.customerData.principal}</td>
                 <td>{this.getCurrency()}</td>
@@ -406,6 +416,9 @@ class LoanCreation extends Component<
           <PaymentReceipt
             receiptData={this.state.receiptData}
             fromLoanIssuance
+            companyReceipt={
+              this.state.application.customer.customerType === 'company'
+            }
           />
         )}
       </>

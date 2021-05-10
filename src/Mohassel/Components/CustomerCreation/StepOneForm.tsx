@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
-import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
+import { Button, Col, Form, Row } from 'react-bootstrap'
 import { Loader } from '../../../Shared/Components/Loader'
 import { checkIssueDate, getErrorMessage } from '../../../Shared/Services/utils'
 import {
@@ -12,7 +9,7 @@ import {
 } from '../../Services/nationalIdValidation'
 import Map from '../Map/map'
 import * as local from '../../../Shared/Assets/ar.json'
-import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup'
+import { checkDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup'
 import Can from '../../config/Can'
 import ability from '../../config/ability'
 
@@ -111,7 +108,7 @@ export const StepOneForm = (props: any) => {
                     }
                     if (value.length === 14) {
                       setLoading(true)
-                      const res = await checkNationalIdDuplicates(value)
+                      const res = await checkDuplicates('nationalId', value)
                       if (res.status === 'success') {
                         setLoading(false)
                         setFieldValue('nationalIdChecker', res.body.Exists)

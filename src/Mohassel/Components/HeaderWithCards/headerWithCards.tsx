@@ -13,7 +13,7 @@ export interface Tab {
 }
 
 interface HeaderWithCardsProps {
-  header: string
+  header?: string
   array: Array<Tab>
   active: number | string
   selectTab?: (index: string) => void

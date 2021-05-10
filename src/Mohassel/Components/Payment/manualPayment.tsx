@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
-import Button from 'react-bootstrap/Button'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Form from 'react-bootstrap/Form'
 import { connect } from 'react-redux'
 import AsyncSelect from 'react-select/async'
 import Swal from 'sweetalert2'
+import { Button, Col, Form, Row } from 'react-bootstrap'
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { payment } from '../../../Shared/redux/payment/actions'
@@ -23,7 +20,6 @@ interface SelectObject {
 }
 interface State {
   employees: Array<Employee>
-  randomPaymentTypes: Array<SelectObject>
 }
 interface FormValues {
   truthDate: string
@@ -48,6 +44,7 @@ interface Application {
   installmentsObject: InstallmentsObject
   product: {
     beneficiaryType: string
+    type: string
   }
   group: {
     individualsInGroup: Array<Member>
@@ -72,20 +69,30 @@ interface Props {
   randomPendingActions: Array<PendingActions>
   formikProps: any
   retainState: (data) => void
+  bankPayment?: boolean
 }
 class ManualPayment extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
       employees: [],
-      randomPaymentTypes: [
-        { label: local.reissuingFees, value: 'reissuingFees' },
-        { label: local.legalFees, value: 'legalFees' },
-        { label: local.clearanceFees, value: 'clearanceFees' },
-        { label: local.toktokStamp, value: 'toktokStamp' },
-        { label: local.tricycleStamp, value: 'tricycleStamp' },
-      ],
     }
+  }
+
+  getRandomPaymentTypes = () => {
+    const randomPaymentTypes = [
+      { label: local.reissuingFees, value: 'reissuingFees' },
+      { label: local.legalFees, value: 'legalFees' },
+      { label: local.clearanceFees, value: 'clearanceFees' },
+      { label: local.toktokStamp, value: 'toktokStamp' },
+      { label: local.tricycleStamp, value: 'tricycleStamp' },
+    ]
+    const smeRandomPaymentTypes = randomPaymentTypes.filter(
+      (option) => !['toktokStamp', 'tricycleStamp'].includes(option.value)
+    )
+    return this.props.application.product.type === 'sme'
+      ? smeRandomPaymentTypes
+      : randomPaymentTypes
   }
 
   getUsersByAction = async (input: string, values) => {
@@ -133,7 +140,7 @@ class ManualPayment extends Component<Props, State> {
                 }
               >
                 <option value="" />
-                {this.state.randomPaymentTypes.map(
+                {this.getRandomPaymentTypes().map(
                   (randomPaymentType: SelectObject) => {
                     return (
                       <option
@@ -288,50 +295,98 @@ class ManualPayment extends Component<Props, State> {
               </Form.Control>
             </Form.Group>
           )}
-          <Form.Group as={Col} md={6} controlId="whoPaid">
-            <Form.Label
-              style={{ paddingRight: 0 }}
-              column
-            >{`${local.whoMadeThePayment}`}</Form.Label>
-            <Form.Control
-              as="select"
-              name="payerType"
-              data-qc="payerType"
-              value={this.props.formikProps.values.payerType}
-              onChange={this.props.formikProps.handleChange}
-              onBlur={this.props.formikProps.handleBlur}
-              isInvalid={
-                Boolean(this.props.formikProps.errors.payerType) &&
-                Boolean(this.props.formikProps.touched.payerType)
-              }
-            >
-              <option value="" />
-              <Can I="payInstallment" an="application">
-                <option value="beneficiary" data-qc="beneficiary">
-                  {local.customer}
-                </option>
-                <option value="employee" data-qc="employee">
-                  {local.employee}
-                </option>
-                <option value="family" data-qc="family">
-                  {local.familyMember}
-                </option>
-                <option value="nonFamily" data-qc="nonFamily">
-                  {local.nonFamilyMember}
-                </option>
-              </Can>
-              {this.props.paymentType === 'normal' && (
-                <Can I="payByInsurance" an="application">
-                  <option value="insurance" data-qc="insurance">
-                    {local.byInsurance}
+          {this.props.bankPayment && (
+            <>
+              <Form.Group as={Col} md={6} controlId="bankOfPayment">
+                <Form.Label
+                  style={{ paddingRight: 0 }}
+                  column
+                >{`${local.bankName}`}</Form.Label>
+                <Form.Control
+                  name="bankOfPayment"
+                  data-qc="bankOfPayment"
+                  value={this.props.formikProps.values.bankOfPayment}
+                  onBlur={this.props.formikProps.handleBlur}
+                  onChange={this.props.formikProps.handleChange}
+                  isInvalid={
+                    Boolean(this.props.formikProps.errors.bankOfPayment) &&
+                    Boolean(this.props.formikProps.touched.bankOfPayment)
+                  }
+                />
+                <Form.Control.Feedback type="invalid">
+                  {this.props.formikProps.errors.bankOfPayment}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group as={Col} md={6} controlId="bankOfPaymentBranch">
+                <Form.Label
+                  style={{ paddingRight: 0 }}
+                  column
+                >{`${local.bankBranch}`}</Form.Label>
+                <Form.Control
+                  name="bankOfPaymentBranch"
+                  data-qc="bankOfPaymentBranch"
+                  value={this.props.formikProps.values.bankOfPaymentBranch}
+                  onBlur={this.props.formikProps.handleBlur}
+                  onChange={this.props.formikProps.handleChange}
+                  isInvalid={
+                    Boolean(
+                      this.props.formikProps.errors.bankOfPaymentBranch
+                    ) &&
+                    Boolean(this.props.formikProps.touched.bankOfPaymentBranch)
+                  }
+                />
+                <Form.Control.Feedback type="invalid">
+                  {this.props.formikProps.errors.bankOfPaymentBranch}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </>
+          )}
+          {!this.props.bankPayment && (
+            <Form.Group as={Col} md={6} controlId="whoPaid">
+              <Form.Label
+                style={{ paddingRight: 0 }}
+                column
+              >{`${local.whoMadeThePayment}`}</Form.Label>
+              <Form.Control
+                as="select"
+                name="payerType"
+                data-qc="payerType"
+                value={this.props.formikProps.values.payerType}
+                onChange={this.props.formikProps.handleChange}
+                onBlur={this.props.formikProps.handleBlur}
+                isInvalid={
+                  Boolean(this.props.formikProps.errors.payerType) &&
+                  Boolean(this.props.formikProps.touched.payerType)
+                }
+              >
+                <option value="" />
+                <Can I="payInstallment" an="application">
+                  <option value="beneficiary" data-qc="beneficiary">
+                    {local.customer}
+                  </option>
+                  <option value="employee" data-qc="employee">
+                    {local.employee}
+                  </option>
+                  <option value="family" data-qc="family">
+                    {local.familyMember}
+                  </option>
+                  <option value="nonFamily" data-qc="nonFamily">
+                    {local.nonFamilyMember}
                   </option>
                 </Can>
-              )}
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              {this.props.formikProps.errors.payerType}
-            </Form.Control.Feedback>
-          </Form.Group>
+                {this.props.paymentType === 'normal' && (
+                  <Can I="payByInsurance" an="application">
+                    <option value="insurance" data-qc="insurance">
+                      {local.byInsurance}
+                    </option>
+                  </Can>
+                )}
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {this.props.formikProps.errors.payerType}
+              </Form.Control.Feedback>
+            </Form.Group>
+          )}
           {this.props.formikProps.values.payerType === 'beneficiary' &&
             this.props.application.product.beneficiaryType === 'group' && (
               <Form.Group as={Col} md={6} controlId="customer">

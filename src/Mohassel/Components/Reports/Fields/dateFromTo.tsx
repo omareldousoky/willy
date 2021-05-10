@@ -51,6 +51,8 @@ export const DateFromToField = (props: DateFromToFieldProps) => {
             key={from.id || from.name}
             disabled={from.disabled}
             validate={from.validate}
+						min={from.min}
+            max={from.max}
           />
           <span className="mr-1">{local.to}</span>
           <Field
@@ -66,7 +68,8 @@ export const DateFromToField = (props: DateFromToFieldProps) => {
             key={to.id || to.name}
             disabled={to.disabled}
             validate={to.validate}
-            min={from.value}
+            min={to.min || from.value}
+            max={to.max}
           />
         </div>
         <span className="text-danger ml-auto mt-2">

@@ -70,7 +70,6 @@ interface State {
   manageApplicationsTabs: any[]
   checkPermission: boolean
   branchId: string
-  searchKey: string[]
 }
 interface Props extends RouteComponentProps {
   loading: boolean
@@ -100,7 +99,6 @@ class BulkApplicationReview extends Component<Props, State> {
       size: 10,
       manageApplicationsTabs: [],
       checkPermission: false,
-      searchKey: ['keyword', 'dateFromTo', 'review-application'],
       branchId: JSON.parse(getCookie('ltsbranch'))._id,
     }
     this.mappers = [
@@ -143,7 +141,8 @@ class BulkApplicationReview extends Component<Props, State> {
             }
           >
             {data.application.product.beneficiaryType === 'individual' ? (
-              data.application.customer.customerName
+              data.application.customer.customerName ||
+              data.application.customer.businessName
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {data.application?.group?.individualsInGroup?.map((member) =>
@@ -234,6 +233,7 @@ class BulkApplicationReview extends Component<Props, State> {
           url: 'application',
           status: 'reviewed',
           branchId: this.state.branchId !== 'hq' ? this.state.branchId : '',
+          type: 'micro',
         })
         .then(() => {
           if (this.props.error)
@@ -245,12 +245,8 @@ class BulkApplicationReview extends Component<Props, State> {
         url: 'application',
         status: 'reviewed',
         branchId: this.state.branchId !== 'hq' ? this.state.branchId : '',
+        type: 'micro',
       })
-      if (this.state.branchId === 'hq') {
-        this.setState({
-          searchKey: ['keyword', 'dateFromTo', 'branch', 'review-application'],
-        })
-      }
       this.setState({ manageApplicationsTabs: manageApplicationsArray() })
     }
   }
@@ -413,6 +409,44 @@ class BulkApplicationReview extends Component<Props, State> {
   }
 
   render() {
+    const searchKey = ['keyword', 'dateFromTo', 'review-application']
+    const smePermission =
+      ability.can('getIssuedSMELoan', 'application') &&
+      this.props.searchFilters.type === 'sme'
+    const filteredMappers = smePermission
+      ? this.mappers.filter(
+          (mapper) =>
+            !['nationalId', 'age', 'businessActivity'].includes(mapper.key)
+        )
+      : this.mappers
+    if (smePermission) {
+      filteredMappers.splice(3, 0, {
+        title: local.commercialRegisterNumber,
+        key: 'commercialRegisterNumber',
+        render: (data) => data.application.customer.commercialRegisterNumber,
+      })
+      filteredMappers.splice(7, 0, {
+        title: local.businessSector,
+        key: 'businessSector',
+        render: (data) => data.application.customer.businessSector,
+      })
+    }
+    const dropDownKeys = [
+      'name',
+      'nationalId',
+      'key',
+      'customerKey',
+      'customerCode',
+      'customerShortenedCode',
+    ]
+    this.state.branchId === 'hq' && searchKey.push('branch')
+    ability.can('getSMEApplication', 'application') && searchKey.push('sme')
+    dropDownKeys.push(
+      'businessName',
+      'taxCardNumber',
+      'commercialRegisterNumber'
+    )
+
     return (
       this.state.checkPermission && (
         <>
@@ -449,7 +483,6 @@ class BulkApplicationReview extends Component<Props, State> {
                   className="big-button"
                   style={{ height: 70 }}
                 >
-                  {' '}
                   {local.bulkLoanApplicationReviews}
                 </Button>
               </div>
@@ -457,14 +490,8 @@ class BulkApplicationReview extends Component<Props, State> {
 
               {this.state.branchId === 'hq' ? (
                 <Search
-                  searchKeys={this.state.searchKey}
-                  dropDownKeys={[
-                    'name',
-                    'nationalId',
-                    'key',
-                    'customerKey',
-                    'customerCode',
-                  ]}
+                  searchKeys={searchKey}
+                  dropDownKeys={dropDownKeys}
                   url="application"
                   from={this.state.from}
                   size={this.state.size}
@@ -472,14 +499,8 @@ class BulkApplicationReview extends Component<Props, State> {
                 />
               ) : (
                 <Search
-                  searchKeys={this.state.searchKey}
-                  dropDownKeys={[
-                    'name',
-                    'nationalId',
-                    'key',
-                    'customerKey',
-                    'customerCode',
-                  ]}
+                  searchKeys={searchKey}
+                  dropDownKeys={dropDownKeys}
                   url="application"
                   from={this.state.from}
                   size={this.state.size}
@@ -492,7 +513,7 @@ class BulkApplicationReview extends Component<Props, State> {
                 size={this.state.size}
                 url="application"
                 totalCount={this.props.totalCount}
-                mappers={this.mappers}
+                mappers={filteredMappers}
                 pagination
                 data={this.props.data}
                 changeNumber={(key: string, number: number) => {

@@ -27,6 +27,7 @@ class EncodingFiles extends Component<{}, State> {
           pages: 0,
           type: '',
           paperType: '',
+          customerType: 'individual',
           name: '',
         },
       ],

@@ -11,7 +11,6 @@ import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { getDateAndTime } from '../../Services/getRenderDate'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-import { blockCustomer } from '../../Services/APIs/blockCustomer/blockCustomer'
 import ability from '../../config/ability'
 import { manageCustomersArray } from './manageCustomersInitial'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
@@ -19,14 +18,13 @@ import {
   getErrorMessage,
   getFullCustomerKey,
 } from '../../../Shared/Services/utils'
-import HalanLinkageModal from './halanLinkageModal'
+import { ActionsIconGroup } from '../../../Shared/Components'
+import { Actions } from '../../../Shared/Components/ActionsIconGroup/types'
 
 interface State {
   size: number
   from: number
   manageCustomersTabs: any[]
-  showHalanLinkageModal?: boolean
-  openActionsId: string
 }
 
 interface SearchFilters {
@@ -56,14 +54,35 @@ class CustomersList extends Component<Props, State> {
     render: (data: any) => void
   }[]
 
+  customerActions: Actions[]
+
   constructor(props) {
     super(props)
     this.state = {
       size: 10,
       from: 0,
       manageCustomersTabs: [],
-      openActionsId: '',
     }
+    this.customerActions = [
+      {
+        actionTitle: local.editCustomer,
+        actionIcon: 'editIcon',
+
+        actionPermission:
+          ability.can('updateCustomer', 'customer') ||
+          ability.can('updateNationalId', 'customer'),
+        actionOnClick: (id) =>
+          this.props.history.push('/customers/edit-customer', { id }),
+      },
+      {
+        actionTitle: local.viewCustomer,
+        actionIcon: 'view',
+
+        actionPermission: ability.can('getCustomer', 'customer'),
+        actionOnClick: (id) =>
+          this.props.history.push('/customers/view-customer', { id }),
+      },
+    ]
 
     this.mappers = [
       {
@@ -96,85 +115,13 @@ class CustomersList extends Component<Props, State> {
           data.created?.at ? getDateAndTime(data.created?.at) : '',
       },
       {
-        title: '',
+        title: local.actions,
         key: 'actions',
         render: (data) => (
-          <div className="position-relative">
-            <button
-              className="btn clickable-action"
-              type="button"
-              onClick={() =>
-                this.setState((prevState) => ({
-                  openActionsId:
-                    prevState.openActionsId === data._id ? '' : data._id,
-                }))
-              }
-            >
-              {local.actions}
-            </button>
-            {this.state.openActionsId === data._id && (
-              <div className="actions-list">
-                {(ability.can('updateCustomer', 'customer') ||
-                  ability.can('updateNationalId', 'customer')) && (
-                  <button
-                    className="btn item rounded-0"
-                    type="button"
-                    onClick={() => {
-                      this.props.history.push('/customers/edit-customer', {
-                        id: data._id,
-                      })
-                    }}
-                  >
-                    {local.editCustomer}
-                  </button>
-                )}
-                <Can I="getCustomer" a="customer">
-                  <button
-                    className="btn item rounded-0"
-                    type="button"
-                    onClick={() => {
-                      this.props.history.push('/customers/view-customer', {
-                        id: data._id,
-                      })
-                    }}
-                  >
-                    {local.viewCustomer}
-                  </button>
-                </Can>
-                <Can I="newClearance" a="application">
-                  <button
-                    className="btn item rounded-0"
-                    type="button"
-                    onClick={() => {
-                      this.props.history.push('/customers/create-clearance', {
-                        customerId: data._id,
-                      })
-                    }}
-                  >
-                    {local.createClearance}
-                  </button>
-                </Can>
-                <Can I="blockAndUnblockCustomer" a="customer">
-                  <button
-                    className="btn item rounded-0"
-                    type="button"
-                    onClick={() => this.handleActivationClick(data)}
-                  >
-                    {data.blocked?.isBlocked
-                      ? local.unblockCustomer
-                      : local.blockCustomer}
-                  </button>
-                </Can>
-                <button
-                  className="btn item rounded-0"
-                  type="button"
-                  onClick={() => this.setState({ showHalanLinkageModal: true })}
-                >
-                  {local.halanLinkage}
-                </button>
-              </div>
-            )}
-          </div>
+          <ActionsIconGroup
+            currentCustomerId={data._id}
+            actions={this.customerActions}
+          />
         ),
       },
     ]
@@ -187,6 +134,7 @@ class CustomersList extends Component<Props, State> {
         from: this.state.from,
         url: 'customer',
         branchId: this.props.branchId,
+        customerType: 'individual',
       })
       .then(() => {
         if (this.props.error) {
@@ -194,70 +142,6 @@ class CustomersList extends Component<Props, State> {
         }
       })
     this.setState({ manageCustomersTabs: manageCustomersArray() })
-  }
-
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
-  }
-
-  async handleActivationClick(data) {
-    const { value: text } = await Swal.fire({
-      title:
-        data.blocked?.isBlocked === true
-          ? local.unblockReason
-          : local.blockReason,
-      input: 'text',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText:
-        data.blocked?.isBlocked === true
-          ? local.unblockCustomer
-          : local.blockCustomer,
-      cancelButtonText: local.cancel,
-      inputValidator: (value) => {
-        if (!value) {
-          return local.required
-        }
-        return ''
-      },
-    })
-    if (text) {
-      Swal.fire({
-        title: local.areYouSure,
-        text:
-          data.blocked?.isBlocked === true
-            ? local.customerWillBeUnblocked
-            : local.customerWillBeBlocked,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText:
-          data.blocked?.isBlocked === true
-            ? local.unblockCustomer
-            : local.blockCustomer,
-        cancelButtonText: local.cancel,
-      }).then(async (result) => {
-        if (result.value) {
-          const res = await blockCustomer(data._id, {
-            toBeBlocked: data.blocked?.isBlocked !== true,
-            reason: text,
-          })
-          if (res.status === 'success') {
-            Swal.fire(
-              '',
-              data.blocked?.isBlocked === true
-                ? local.customerUnblockedSuccessfully
-                : local.customerBlockedSuccessfully,
-              'success'
-            ).then(() => window.location.reload())
-          } else {
-            Swal.fire('', local.searchError, 'error')
-          }
-        }
-      })
-    }
   }
 
   getCustomers() {
@@ -274,6 +158,7 @@ class CustomersList extends Component<Props, State> {
         from,
         url: 'customer',
         branchId,
+        customerType: 'individual',
       })
       .then(() => {
         if (error) {
@@ -348,26 +233,14 @@ class CustomersList extends Component<Props, State> {
                 data={this.props.data}
                 url="customer"
                 changeNumber={(key: string, number: number) => {
-                  this.setState(
-                    { [key]: number, openActionsId: '' } as any,
-                    () => this.getCustomers()
+                  this.setState({ [key]: number } as any, () =>
+                    this.getCustomers()
                   )
                 }}
               />
             )}
           </Card.Body>
         </Card>
-        {this.state.showHalanLinkageModal && this.state.openActionsId && (
-          <HalanLinkageModal
-            show={this.state.showHalanLinkageModal}
-            hideModal={() => this.setState({ showHalanLinkageModal: false })}
-            customer={
-              this.props.data.filter(
-                (customer) => customer._id === this.state.openActionsId
-              )[0]
-            }
-          />
-        )}
       </>
     )
   }

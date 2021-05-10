@@ -155,6 +155,7 @@ class SourceOfFund extends Component<Props, State> {
       sort: 'issueDate',
       status: 'issued',
       fundSource: 'cib',
+      type: 'micro',
     })
     this.setState({ manageLoansTabs: manageLoansArray() })
   }
@@ -215,6 +216,7 @@ class SourceOfFund extends Component<Props, State> {
         sort: 'issueDate',
         status: 'issued',
         fundSource: 'cib',
+        type: 'micro',
       }
     } else {
       query = {
@@ -225,6 +227,7 @@ class SourceOfFund extends Component<Props, State> {
         sort: 'issueDate',
         status: 'issued',
         fundSource: 'cib',
+        type: 'micro',
       }
     }
     this.props.search(query)

@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import Button from 'react-bootstrap/Button'
-import Row from 'react-bootstrap/Row'
-import Form from 'react-bootstrap/Form'
+import { Button, Form, Row } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import * as local from '../../../Shared/Assets/ar.json'
 import DocumentUploader from '../../../Shared/Components/documentUploader/documentUploader'
@@ -115,7 +113,7 @@ class DeathCertificate extends Component<Props, State> {
                 )
                 this.setState({ loading: false })
               }}
-            >{`${local.download}(${this.props.selectionArray.length})`}</Button>{' '}
+            >{`${local.download}(${this.props.selectionArray.length})`}</Button>
           </div>
         </Row>
         <DocumentUploader
@@ -125,6 +123,7 @@ class DeathCertificate extends Component<Props, State> {
             paperType: 'A4',
             name: 'deathCertificate',
             updatable: false,
+            customerType: 'individual',
             active: true,
           }}
           edit={this.props.edit}

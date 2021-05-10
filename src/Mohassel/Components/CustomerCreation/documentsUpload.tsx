@@ -33,6 +33,7 @@ interface Props {
   loading: boolean
   documents: any[]
   selectionArray: Image[]
+  isCompany?: boolean
 }
 class DocumentsUpload extends Component<Props, State> {
   constructor(props) {
@@ -45,7 +46,11 @@ class DocumentsUpload extends Component<Props, State> {
   }
 
   async componentDidMount() {
-    const response = await getDocumentsTypes('customer')
+    const response = await getDocumentsTypes(
+      'customer',
+      false,
+      this.props.isCompany ? 'company' : 'individual'
+    )
     if (response.status === 'success') {
       this.setState({
         documentTypes: response.body.documentTypes,

@@ -12,7 +12,6 @@ export interface Tab {
   permissionKey?: string
 }
 interface Props {
-  header: string
   array: Array<Tab>
   active: number | string
   selectTab: (index) => void

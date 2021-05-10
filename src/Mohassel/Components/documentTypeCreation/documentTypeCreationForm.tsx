@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
+import { Button, Col, Form, Row } from 'react-bootstrap'
 import * as local from '../../../Shared/Assets/ar.json'
 import { DocumentType } from '../../../Shared/Services/interfaces'
 
@@ -93,6 +90,30 @@ class DocumentTypeCreationForm extends Component<Props, State> {
               </Form.Control>
               <Form.Control.Feedback type="invalid">
                 {this.props.errors.type}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group controlId="customerType">
+              <Form.Label className="data-label">{`${local.documentForCustomerOfType} *`}</Form.Label>
+              <Form.Control
+                as="select"
+                name="customerType"
+                value={this.props.values.customerType}
+                onChange={this.props.handleChange}
+                onBlur={this.props.handleBlur}
+                isInvalid={
+                  (this.props.errors.customerType &&
+                    this.props.touched.customerType) as boolean
+                }
+                disabled={this.props.edit}
+              >
+                <option value="" disabled />
+                <option value="individual">{local.individual}</option>
+                <option value="company">{local.company}</option>
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {this.props.errors.customerType}
               </Form.Control.Feedback>
             </Form.Group>
           </Col>

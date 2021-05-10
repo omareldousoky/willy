@@ -21,4 +21,5 @@ export const reportsModalValidation: ObjectSchema<
   representatives: array().nullable(),
   geoAreas: array().nullable(),
   loanApplicationKey: string(),
+  managers: array().nullable().min(1, local.mustBeOneOrMore),
 })

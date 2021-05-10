@@ -149,11 +149,12 @@ class CustomerCardPDF extends Component<Props, State> {
                 <div className="frame">{numbersToArabic(this.getCode())}</div>
                 <div className="frame">
                   {this.props.data.product.beneficiaryType === 'individual'
-                    ? this.props.data.customer.customerName
+                    ? this.props.data.customer.customerName ||
+                      this.props.data.customer.businessName
                     : this.props.data.group.individualsInGroup.find(
                         (customer) => customer.type === 'leader'
                       ).customer.customerName}
-                </div>
+                </div>{' '}
               </td>
               <td>
                 {' '}

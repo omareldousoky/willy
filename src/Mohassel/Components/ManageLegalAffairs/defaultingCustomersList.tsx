@@ -275,7 +275,12 @@ class DefaultingCustomersList extends Component<Props, State> {
 
   handleSearch = async (key, query) => {
     this.setState({ modalLoader: true })
-    const results = await searchCustomer({ from: 0, size: 1000, [key]: query })
+    const results = await searchCustomer({
+      from: 0,
+      size: 1000,
+      [key]: query,
+      customerType: 'individual',
+    })
     if (results.status === 'success') {
       if (results.body.data.length > 0) {
         this.setState({
@@ -349,6 +354,7 @@ class DefaultingCustomersList extends Component<Props, State> {
       from: 0,
       size: 1000,
       customerKey: customer.key,
+      type: 'micro',
     })
     if (results.status === 'success') {
       this.setState({

@@ -15,12 +15,14 @@ export const step1: any = {
     lng: 0,
   },
   customerHomeAddress: '',
+  currentHomeAddress: '',
   homePostalCode: '',
   homePhoneNumber: '',
   mobilePhoneNumber: '',
   faxNumber: '',
   emailAddress: '',
   customerWebsite: '',
+  customerType: 'individual',
 }
 
 export const step2 = {
@@ -47,8 +49,42 @@ export const step2 = {
   industryRegisterNumber: '',
   taxCardNumber: '',
 }
-
+export const step1Company = {
+  businessName: '',
+  businessAddress: '',
+  businessCharacteristic: '',
+  businessSector: '',
+  businessActivityDetails: '',
+  businessLicenseNumber: '',
+  // businessLicenseIssuePlace: '',
+  businessLicenseIssueDate: '',
+  commercialRegisterNumber: '',
+  // industryRegisterNumber: '',
+  taxCardNumber: '',
+  legalStructure: '',
+  commercialRegisterExpiryDate: '',
+  customerType: 'company',
+}
 export const step3 = {
+  geographicalDistribution: '',
+  geoAreaId: '',
+  representative: '',
+  newRepresentative: '',
+  representativeName: '',
+  applicationDate: timeToDateyyymmdd(-1),
+  permanentEmployeeCount: '',
+  partTimeEmployeeCount: '',
+  comments: '',
+  guarantorMaxLoans: 1,
+  maxLoansAllowed: 1,
+  maxPrincipal: 0,
+  principals: {
+    maxIndividualPrincipal: 0,
+    maxGroupIndividualPrincipal: 0,
+    maxGroupPrincipal: 0,
+  },
+}
+export const step2Company = {
   geographicalDistribution: '',
   geoAreaId: '',
   representative: '',

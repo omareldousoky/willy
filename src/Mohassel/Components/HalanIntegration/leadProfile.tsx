@@ -53,7 +53,6 @@ const LeadProfile = (
       </div>
       <Card style={{ marginTop: 10 }} className="print-none">
         <CardNavBar
-          header="here"
           array={tabs}
           active={activeTab}
           selectTab={(stringKey: string) => changeActiveTab(stringKey)}

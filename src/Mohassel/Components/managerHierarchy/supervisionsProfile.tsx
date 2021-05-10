@@ -226,7 +226,6 @@ class SupervisionsProfile extends Component<
       <>
         <Card>
           <CardNavBar
-            header="here"
             array={this.state.tabsArray}
             active={this.state.activeTab}
             selectTab={(stringKey: string) => {

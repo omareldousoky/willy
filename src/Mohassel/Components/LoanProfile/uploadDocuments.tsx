@@ -69,7 +69,13 @@ class UploadDocuments extends Component<Props, State> {
   }
 
   async getDocumentTypes() {
-    const response = await getDocumentsTypes('loanApplication,issuedLoan')
+    const response = await getDocumentsTypes(
+      'loanApplication,issuedLoan',
+      false,
+      this.props.application.customer.customerType === 'company'
+        ? 'company'
+        : 'individual'
+    )
     if (response.status === 'success') {
       this.setState({
         documentTypes: response.body.documentTypes,

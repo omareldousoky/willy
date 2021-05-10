@@ -5,7 +5,6 @@ print {
 		text-align: center;
 		padding: 10px 5px;
 		page-break-after: always;
-		direction: rtl;
 		-webkit-print-color-adjust: exact;
 		background-color: #fff;
 		font-size: 11px;
@@ -77,6 +76,37 @@ print {
 	.officers-branch-payment {
 		table.body>tbody tr:last-of-type {
 			border-top: 1px solid black;
+		}
+	}
+
+	.officers-productivity {
+		font-family: Arial, Helvetica, sans-serif;
+
+		table.body>tbody tr {
+			p {
+				font-size: 11px;
+			}
+			&.total {
+				border-top: 1px solid black;
+			}
+		}
+
+		.manager {
+			border: 1px solid #ccc;
+			min-width: 3cm;
+		}
+		.area-supervisor {
+			@extend .manager;
+			background-color: #cccccc;
+		}
+		.operations {
+			@extend .manager;
+			background-color: #e4e464;
+		}
+
+		.area-manager {
+			@extend .manager;
+			background-color: #b5cbe9;
 		}
 	}
 }

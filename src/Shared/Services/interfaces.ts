@@ -36,11 +36,7 @@ export interface Customer {
   code?: number
   comments?: string
   commercialRegisterNumber?: string
-  created?: {
-    by?: string
-    at?: number
-    userName?: string
-  }
+  created?: Trace
   customerAddressLatLong?: string
   customerHomeAddress?: string
   currentHomeAddress?: string
@@ -81,6 +77,7 @@ export interface Customer {
     id?: string
     type?: string
   }[]
+  customerType?: string
 }
 
 export interface Action {
@@ -110,6 +107,7 @@ export interface DocumentType {
   id?: string
   pages: number
   type: string
+  customerType: string
   paperType: string
   name: string
   active?: boolean

@@ -8,6 +8,7 @@ export const documentType: DocumentType = {
   type: '',
   paperType: '',
   name: '',
+  customerType: 'individual',
   active: true,
   updatable: true,
 }
