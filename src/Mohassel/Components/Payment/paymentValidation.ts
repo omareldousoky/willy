@@ -109,6 +109,32 @@ export const manualPaymentValidation = (penalty) => Yup.object().shape({
   payerNationalId: Yup.string()
 })
 
+export const manualBankPaymentValidation = Yup.object().shape({
+  payAmount: Yup.number()
+    .moreThan(0, local.minPayment)
+    .required(local.required)
+    .when("paymentType", {
+      is: paymentType => paymentType !== "penalties",
+      then: Yup.number().test("Should not exceed required amount",
+        local.amountShouldNotExceedReqAmount,
+        function (this: any, value: number) {
+          return value <= this.parent.max;
+        }
+      ),
+      otherwise: Yup.number().moreThan(0, local.minPayment)
+    }),
+  truthDate: Yup.string()
+    .test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
+      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
+    })
+    .test("not before 1-2-2021", local.dateCantBeBeforeFeb2021, (value: any) => {
+      return value ? new Date(value).valueOf() >= beforeFeb2021 : true;
+    }),
+  receiptNumber: Yup.string().required(local.required),
+  bankOfPayment: Yup.string().required(local.required),
+  bankOfPaymentBranch: Yup.string().required(local.required),
+})
+
 export const rollbackValidation = Yup.object().shape({
   truthDate: Yup.date().required(local.required)
     .test("not before 1-2-2021", local.dateCantBeBeforeFeb2021, (value: any) => {

@@ -6,8 +6,8 @@ interface HeaderProps {
 	title: string;
 	showCurrentUser?: boolean;
 	showCurrentTime?: boolean;
-  fromDate?: string;
-  toDate?: string;
+  fromDate?: string | number;
+  toDate?: string | number;
 }
 export const Header = ({
 	title,
