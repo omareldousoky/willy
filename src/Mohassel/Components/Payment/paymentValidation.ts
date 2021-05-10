@@ -6,7 +6,7 @@ const endOfDay: Date = new Date();
 endOfDay.setHours(23, 59, 59, 59);
 const beforeFeb2021 = new Date("1-31-2021").setHours(23, 59, 59, 59).valueOf()
 
-export const paymentValidation = Yup.object().shape({
+export const paymentValidation = penalty => Yup.object().shape({
   payAmount: Yup.number()
     .moreThan(0, local.minPayment)
     .required(local.required)
@@ -18,7 +18,9 @@ export const paymentValidation = Yup.object().shape({
           return value <= this.parent.max;
         }
       ),
-      otherwise: Yup.number().moreThan(0, local.minPayment)
+      otherwise:
+        Yup.number()       
+          .max(penalty, ` ${penalty && penalty > 0  ? `${local.penaltyLessThanOrEqual} ${penalty}` : local.noPenalty}`)
     }),
   randomPaymentType: Yup.string().when("paymentType", {
     is: paymentType => paymentType === "random",
@@ -70,7 +72,7 @@ export const earlyPaymentValidation = Yup.object().shape({
   payerNationalId: Yup.string(),
 })
 
-export const manualPaymentValidation = Yup.object().shape({
+export const manualPaymentValidation = (penalty) => Yup.object().shape({
   payAmount: Yup.number()
     .moreThan(0, local.minPayment)
     .required(local.required)
@@ -82,7 +84,8 @@ export const manualPaymentValidation = Yup.object().shape({
           return value <= this.parent.max;
         }
       ),
-      otherwise: Yup.number().moreThan(0, local.minPayment)
+      otherwise: Yup.number()
+      .max(penalty, ` ${penalty && penalty > 0  ? `${local.penaltyLessThanOrEqual} ${penalty}` : local.noPenalty}`)
     }),
   truthDate: Yup.string()
     .test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
