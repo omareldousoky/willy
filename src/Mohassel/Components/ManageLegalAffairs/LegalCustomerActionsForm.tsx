@@ -60,7 +60,7 @@ const LegalActionsForm: FunctionComponent = () => {
 
   return (
     <div className="container">
-      <Card className="main-card">
+      <Card className="m-0 mb-4">
         <Card.Header>{local.legalAffairs}</Card.Header>
 
         <Card.Body>
