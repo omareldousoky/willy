@@ -170,27 +170,24 @@ class NavBar extends Component<Props, State> {
         <Navbar expand="lg" style={{ background: '#f5f5f5', padding: 0 }}>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="logo-navbar">
-              <div style={{ flex: 1 }}>
-                <Navbar.Brand style={{ marginLeft: 40 }}><img alt="navbar-logo" src={require('../../../Shared/Assets/Logo.svg')} /></Navbar.Brand>
-                <Navbar.Text style={{ marginLeft: 40 }}><h5 className="primary-color">{local.lowRateLoan}</h5></Navbar.Text>
-              </div>
+                <Navbar.Brand className="ml-4"><img alt="navbar-logo" src={require('../../../Shared/Assets/Logo.svg')} /></Navbar.Brand>
+                <Navbar.Text className="mx-5"><h5 className="text-primary font-weight-bold">{local.lowRateLoan}</h5></Navbar.Text>
               <div style={{ flex: 2, display: 'flex', width: '100%' }}>
-                <div className="refresh-logo-navbar"><img alt="navbar-refresh" src={require('../../Assets/refresh.svg')} /></div>
                 <div className="info-navbar">
-                  <span style={{ marginLeft: 10 }}>{local.currentPeriodStartsIn}</span>
-                  <span style={{ marginLeft: 10 }} className="primary-color">  {this.getDaysOfMonth().firstDay}  </span>
-                  <span style={{ marginLeft: 10 }}>{local.andEndsIn}</span>
-                  <span className="primary-color">  {this.getDaysOfMonth().lastDay}  </span>
+                  <span>{local.currentPeriodStartsIn}</span>
+                  <span className="text-primary mx-2 font-weight-bold">  {this.getDaysOfMonth().firstDay}  </span>
+                  <span>{local.andEndsIn}</span>
+                  <span className="text-primary mx-2 font-weight-bold">  {this.getDaysOfMonth().lastDay}  </span>
                 </div>
               </div>
               <div className="navbar-choose-branch" onClick={() => this.setState({ openBranchList: !this.state.openBranchList })}>
                 <div>
                   <div className="selected-branch">
                     <div className="pin-icon"><span className="fa fa-map-marker-alt fa-lg"></span></div>
-                    <span>{this.state.selectedBranch._id === "" ? local.selectBranch : this.state.selectedBranch.name}</span>
+                    <span className="text-white font-weight-bold">{this.state.selectedBranch._id === "" ? local.selectBranch : this.state.selectedBranch.name}</span>
                   </div>
                 </div>
-                <img alt="drop-down-arrow" src={require('../../Assets/dropDownArrow.svg')} />
+                <img  style={{width: "40px" }} alt="drop-down-arrow" src={require('../../Assets/dropDownArrow.svg')} />
               </div>
               {this.state.openBranchList ? this.renderBranchList() : null}
             </Nav>
