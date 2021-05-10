@@ -22,7 +22,7 @@ const settlementForm: FormField[] = [
     type: 'checkbox',
     label: local.courtFees,
     validation: defaultValidationSchema.required(local.required),
-    checkboxLabel: `${local.isPaid} ${local.thePenalty}`,
+    checkboxLabel: `${local.isPaid} ${local.courtFees}`,
   },
   {
     name: 'courtFees',
