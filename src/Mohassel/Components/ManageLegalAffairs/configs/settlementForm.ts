@@ -1,6 +1,6 @@
 import local from '../../../../Shared/Assets/ar.json'
-import { FormField } from '../../../../Shared/Components/Form/types'
-import { defaultValidationSchema } from '../validations'
+import { FormField } from '../Form/types'
+import { defaultValidationSchema, phoneNumberValidationSchema } from '../validations'
 
 const settlementForm: FormField[] = [
   {
@@ -65,19 +65,19 @@ const settlementForm: FormField[] = [
     name: 'lawyerPhoneNumberOne',
     type: 'text',
     label: `${local.number} ${local.phoneNumber} ${local.theLawyer} 1`,
-    validation: defaultValidationSchema.required(local.required),
+    validation: phoneNumberValidationSchema.required(local.required),
   },
   {
     name: 'lawyerPhoneNumberTwo',
     type: 'text',
     label: `${local.number} ${local.phoneNumber} ${local.theLawyer} 2`,
-    validation: defaultValidationSchema,
+    validation: phoneNumberValidationSchema,
   },
   {
     name: 'lawyerPhoneNumberThree',
     type: 'text',
     label: `${local.number} ${local.phoneNumber} ${local.theLawyer} 3`,
-    validation: defaultValidationSchema,
+    validation: phoneNumberValidationSchema,
   },
   {
     name: 'settlementType',
