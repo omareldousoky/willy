@@ -488,7 +488,7 @@ const LegalCustomersList: FunctionComponent = () => {
               </Button>
             )}
 
-          {data.settlement?.settlementStatus === 'reviewed' && (
+          {data.settlement?.financialManagerReview && (
             <Button
               type="button"
               variant="default"
