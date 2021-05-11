@@ -122,5 +122,6 @@
     "can_not_delete_defaulting_customer": {"en":"Can't delete defaulting customer with financial manager approval", "ar": "لا يمكن مسح عميل متأخر تم مراجعته من المدير المالي"},
     "invalid_block_date_in_future":{"en":"The financial blocking date is in the future","ar":"تاريخ الحجب المالي في المستقبل"},
     "invalid_system_is_financially_blocked":{"en":"The system is financially blocked at this date","ar":"النظام محجوب ماليا في هذا التاريخ"},
-    "invalid_system_is_not_financially_blocked":{"en":"The system is not financially blocked at this date","ar":"النظام غير محجوب ماليا في هذا التاريخ"}
+    "invalid_system_is_not_financially_blocked":{"en":"The system is not financially blocked at this date","ar":"النظام غير محجوب ماليا في هذا التاريخ"},
+    "invalid_file_format":{"en":"Invalid file format","ar":"الملف المرفوع ليس صحيح"}
 }
