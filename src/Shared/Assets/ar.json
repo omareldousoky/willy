@@ -1015,6 +1015,8 @@
     "operationType":"نوع العملية",
     "branchesStatus":"حاله الفروع",
     "manageFinancialTransaction":"إدارة المعاملات المالية",
+    "penaltyLessThanOrEqual": "المبلغ يجب ان يكون اقل او يساوي قيمة الغرامة",
+    "noPenalty": "لا توجد غرامة",
     "officersProductivityReport": "نسبة سداد المندوبين",
     "companyWebsite": "الموقع الإلكترونى للشركة",
     "legalStructure": "الشكل القانوني",

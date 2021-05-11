@@ -6,9 +6,9 @@ import { connect } from 'react-redux'
 import Modal from 'react-bootstrap/Modal'
 import Swal from 'sweetalert2'
 import Table from 'react-bootstrap/Table'
-import { Loader } from '../../../Shared/Components/Loader';
-import ReviewedApplicationsPDF from '../pdfTemplates/reviewedApplications/reviewedApplications';
-import Can from '../../config/Can';
+import { Loader } from '../../../Shared/Components/Loader'
+import ReviewedApplicationsPDF from '../pdfTemplates/reviewedApplications/reviewedApplications'
+import Can from '../../config/Can'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
@@ -417,17 +417,23 @@ class TrackLoanApplications extends Component<Props, State> {
   render() {
     const searchKeys = ['keyword', 'dateFromTo', 'branch', 'status-application']
     const smePermission =
-      ability.can('getIssuedSMELoan', 'application') &&
+      ability.can('getSMEApplication', 'application') &&
       this.props.searchFilters.type === 'sme'
     const filteredMappers = smePermission
       ? this.mappers.filter((mapper) => mapper.key !== 'nationalId')
       : this.mappers
-    if (smePermission)
+    if (smePermission) {
       filteredMappers.splice(3, 0, {
         title: local.commercialRegisterNumber,
-        key: 'loanCode',
+        key: 'commercialRegisterNumber',
         render: (data) => data.application.customer.commercialRegisterNumber,
       })
+      filteredMappers.splice(4, 0, {
+        title: local.taxCardNumber,
+        key: 'taxCardNumber',
+        render: (data) => data.application.customer.taxCardNumber,
+      })
+    }
     const dropDownKeys = [
       'name',
       'nationalId',

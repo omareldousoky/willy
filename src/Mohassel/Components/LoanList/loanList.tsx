@@ -233,7 +233,7 @@ class LoanList extends Component<Props, State> {
     const array = manageLoansArray()
     const smePermission =
       ability.can('getIssuedSMELoan', 'application') &&
-      this.props.searchFilters.type === 'sme'
+      this.props.issuedLoansSearchFilters.type === 'sme'
     const searchKeys = [
       'keyword',
       'dateFromTo',
@@ -245,12 +245,18 @@ class LoanList extends Component<Props, State> {
     const filteredMappers = smePermission
       ? this.mappers.filter((mapper) => mapper.key !== 'nationalId')
       : this.mappers
-    if (smePermission)
+    if (smePermission) {
       filteredMappers.splice(3, 0, {
         title: local.commercialRegisterNumber,
         key: 'commercialRegisterNumber',
         render: (data) => data.application.customer.commercialRegisterNumber,
       })
+      filteredMappers.splice(4, 0, {
+        title: local.taxCardNumber,
+        key: 'taxCardNumber',
+        render: (data) => data.application.customer.taxCardNumber,
+      })
+    }
     const dropDownKeys = [
       'name',
       'nationalId',

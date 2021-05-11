@@ -440,7 +440,7 @@ export const GuarantorTableView = (props: Props) => {
                           <td style={{ cursor: 'pointer', padding: 10 }}>
                             <img
                               src={require('../../../Shared/Assets/deleteIcon.svg')}
-                              alt="delete"
+                              alt={local.delete}
                               onClick={() => removeGuarantor(guar.guarantor)}
                             />
                           </td>

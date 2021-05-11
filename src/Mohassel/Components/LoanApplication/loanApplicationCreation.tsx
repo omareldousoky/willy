@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Formik } from 'formik'
 import Container from 'react-bootstrap/Container'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { RouteProps } from 'react-router'
 import Swal from 'sweetalert2'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
@@ -13,7 +12,6 @@ import { produce } from 'immer'
 import * as local from '../../../Shared/Assets/ar.json'
 import {
   Application,
-  Vice,
   LoanApplicationValidation,
   SMELoanApplicationValidation,
   SMELoanApplicationStep2Validation,
@@ -32,7 +30,6 @@ import {
   editApplication,
 } from '../../Services/APIs/loanApplication/newApplication'
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication'
-import { Location } from '../LoanCreation/loanCreation'
 import { getCookie } from '../../../Shared/Services/getCookie'
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
 import {
@@ -41,15 +38,11 @@ import {
 } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import {
   parseJwt,
-  beneficiaryType,
   getAge,
   getFullCustomerKey,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
-import {
-  getBusinessSectors,
-  getMaxPrinciples,
-} from '../../Services/APIs/configApis/config'
+import { getMaxPrinciples } from '../../Services/APIs/configApis/config'
 import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationGuarantorForm'
 import DualBox from '../DualListBox/dualListBox'
 import InfoBox from '../userInfoBox'
@@ -291,28 +284,18 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const results = await searchCustomer(obj)
     if (results.status === 'success') {
-      const defaultApp = { ...this.state.application }
-      const defaultEntitledToSign = { ...defaultApp.entitledToSign }
-      const defaultCustomer = { ...defaultEntitledToSign[index] }
-      if (results.body.data.length > 0) {
-        defaultCustomer.searchResults = {
-          results: results.body.data,
-          empty: false,
-        }
-      } else {
-        defaultCustomer.searchResults = {
-          results: results.body.data,
-          empty: true,
-        }
-      }
-      defaultApp.entitledToSign[index] = defaultCustomer
       this.setState(
-        {
-          application: defaultApp,
-        },
-        () => {
-          this.setState({ loading: false })
-        }
+        produce<State>((draftState) => {
+          const app = draftState.application
+          const defaultEntitledToSign = { ...app.entitledToSign }
+          const defaultCustomer = { ...defaultEntitledToSign[index] }
+          defaultCustomer.searchResults = {
+            results: results.body.data,
+            empty: !results.body.data.length,
+          }
+          app.entitledToSign[index] = defaultCustomer
+        }),
+        () => this.setState({ loading: false })
       )
     } else {
       Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
@@ -1148,11 +1131,11 @@ class LoanApplicationCreation extends Component<Props, State> {
       },
       entitledToSign: {},
     }
-    const defaultApplication = { ...this.state.application }
-    defaultApplication.entitledToSign.push(element)
-    this.setState({
-      application: defaultApplication,
-    })
+    this.setState(
+      produce<State>((draftState) => {
+        draftState.application.entitledToSign.push(element)
+      })
+    )
   }
 
   populateLoanProduct(selectedProductDetails) {
@@ -1248,7 +1231,7 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const defaultApplication = { ...values }
     defaultApplication.entitledToSignIds = defaultApplication.entitledToSignIds.filter(
-      (id) => obj.guarantor._id !== id
+      (id) => obj.entitledToSign._id !== id
     )
     defaultApplication.entitledToSign.splice(index, 1)
     this.setState({ application: defaultApplication, loading: false })
@@ -1696,18 +1679,11 @@ class LoanApplicationCreation extends Component<Props, State> {
             removeGuarantor={(query, guarantor, values) => {
               this.removeGuarantor(query, guarantor, values)
             }}
-            addEntitledToSignRow={(stringKey?: string) =>
-              this.addEntitledToSignRow()
-            }
+            addEntitledToSignRow={() => this.addEntitledToSignRow()}
             removeEntitledToSignRow={(guarantor, i, values) =>
               this.removeEntitledToSignRow(guarantor, i, values)
             }
-            handleSearchEntitledToSign={(
-              key,
-              query,
-              guarantor,
-              companySearch
-            ) => {
+            handleSearchEntitledToSign={(key, query, guarantor) => {
               this.handleSearchEntitledToSign(key, query, guarantor)
             }}
             selectEntitledToSign={(query, guarantor, values) => {

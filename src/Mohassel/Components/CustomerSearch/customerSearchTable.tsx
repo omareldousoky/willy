@@ -68,8 +68,8 @@ class CustomerSearch extends Component<Props, State> {
         return local.customerShortenedCode
       case 'businessName':
         return local.companyName
-      case 'businessLicenseNumber':
-        return local.businessLicenseNumber
+      case 'taxCardNumber':
+        return local.taxCardNumber
       case 'commercialRegisterNumber':
         return local.commercialRegisterNumber
       default:
@@ -91,11 +91,9 @@ class CustomerSearch extends Component<Props, State> {
     const isCode = dropDownValue === 'code'
 
     if (
-      ([
-        'nationalId',
-        'businessLicenseNumber',
-        'commercialRegisterNumber',
-      ].includes(dropDownValue) ||
+      (['nationalId', 'taxCardNumber', 'commercialRegisterNumber'].includes(
+        dropDownValue
+      ) ||
         isKey ||
         isCode) &&
       Number.isNaN(Number(searchKey))
@@ -118,8 +116,9 @@ class CustomerSearch extends Component<Props, State> {
       ? [
           'key',
           'code',
+          'customerShortenedCode',
           'businessName',
-          'businessLicenseNumber',
+          'taxCardNumber',
           'commercialRegisterNumber',
         ]
       : ['name', 'key', 'nationalId', 'code', 'customerShortenedCode']

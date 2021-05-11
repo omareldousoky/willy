@@ -266,6 +266,22 @@ class BulkApplicationApproval extends Component<Props, State> {
       'taxCardNumber',
       'commercialRegisterNumber'
     )
+    const smePermission =
+      ability.can('getSMEApplication', 'application') &&
+      this.props.searchFilters.type === 'sme'
+    const filteredMappers = [...this.mappers]
+    if (smePermission) {
+      filteredMappers.splice(3, 0, {
+        title: local.commercialRegisterNumber,
+        key: 'commercialRegisterNumber',
+        render: (data) => data.application.customer.commercialRegisterNumber,
+      })
+      filteredMappers.splice(4, 0, {
+        title: local.taxCardNumber,
+        key: 'taxCardNumber',
+        render: (data) => data.application.customer.taxCardNumber,
+      })
+    }
     return (
       <>
         <HeaderWithCards
@@ -319,7 +335,7 @@ class BulkApplicationApproval extends Component<Props, State> {
               size={this.state.size}
               url="application"
               totalCount={this.props.totalCount}
-              mappers={this.mappers}
+              mappers={filteredMappers}
               pagination
               data={this.props.data}
               changeNumber={(key: string, number: number) => {

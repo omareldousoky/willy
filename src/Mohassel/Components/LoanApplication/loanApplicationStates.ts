@@ -343,13 +343,11 @@ export const SMELoanApplicationValidation = Yup.object().shape({
       local.customerMaxPrincipalError,
       function (this: any, value: any) {
         const {
-          customerTotalPrincipals,
           customerMaxPrincipal,
           principals,
           beneficiaryType,
           customerType,
         } = this.parent
-        if (customerType === 'company') return true
         if (
           customerMaxPrincipal &&
           customerMaxPrincipal > 0 &&
@@ -358,11 +356,12 @@ export const SMELoanApplicationValidation = Yup.object().shape({
           return true
         }
         if (
-          customerMaxPrincipal === 0 &&
-          value <=
-            (beneficiaryType === 'group'
-              ? principals.maxGroupPrincipal
-              : principals.maxIndividualPrincipal)
+          (customerType === 'company' && !customerMaxPrincipal) ||
+          (customerMaxPrincipal === 0 &&
+            value <=
+              (beneficiaryType === 'group'
+                ? principals.maxGroupPrincipal
+                : principals.maxIndividualPrincipal))
         ) {
           return true
         }

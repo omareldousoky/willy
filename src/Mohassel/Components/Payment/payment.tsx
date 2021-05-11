@@ -632,6 +632,7 @@ class Payment extends Component<Props, State> {
       case 1:
         return (
           <PayInstallment
+            penalty={this.state.penalty}
             installments={this.props.installments}
             application={this.props.application}
             handleSubmit={this.handleSubmit}
