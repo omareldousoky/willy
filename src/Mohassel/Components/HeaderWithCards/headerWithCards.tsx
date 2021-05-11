@@ -13,7 +13,7 @@ export interface Tab {
 }
 
 interface Props {
-  header: string;
+  header?: string;
   array: Array<Tab>;
   active: number|string;
   

@@ -35,7 +35,6 @@ interface State {
   payerName: string;
   payerId: string;
   employees: Array<Employee>;
-  randomPaymentTypes: Array<SelectObject>;
 }
 interface FormValues {
   truthDate: string;
@@ -60,6 +59,7 @@ interface Application {
   installmentsObject: InstallmentsObject;
   product: {
     beneficiaryType: string;
+    type: string;
   };
   group: {
     individualsInGroup: Array<Member>;
@@ -84,6 +84,7 @@ interface Props {
   randomPendingActions: Array<PendingActions>;
   formikProps: any;
   retainState: (data) => void;
+  bankPayment?: boolean;
 }
 class ManualPayment extends Component<Props, State> {
   constructor(props: Props) {
@@ -99,15 +100,25 @@ class ManualPayment extends Component<Props, State> {
       payerName: '',
       payerId: '',
       employees: [],
-      randomPaymentTypes: [
-        { label: local.reissuingFees, value: "reissuingFees" },
-        { label: local.legalFees, value: "legalFees" },
-        { label: local.clearanceFees, value: "clearanceFees" },
-        { label: local.toktokStamp, value: "toktokStamp" },
-        { label: local.tricycleStamp, value: "tricycleStamp" }
-      ],
     };
   }
+
+  getRandomPaymentTypes = () => {
+    const randomPaymentTypes = [
+      { label: local.reissuingFees, value: 'reissuingFees' },
+      { label: local.legalFees, value: 'legalFees' },
+      { label: local.clearanceFees, value: 'clearanceFees' },
+      { label: local.toktokStamp, value: 'toktokStamp' },
+      { label: local.tricycleStamp, value: 'tricycleStamp' },
+    ]
+    const smeRandomPaymentTypes = randomPaymentTypes.filter(
+      (option) => !['toktokStamp', 'tricycleStamp'].includes(option.value)
+    )
+    return this.props.application.product.type === 'sme'
+      ? smeRandomPaymentTypes
+      : randomPaymentTypes
+  }
+
   getUsersByAction = async (input: string, values) => {
     const obj = {
       size: 100,
@@ -143,7 +154,7 @@ class ManualPayment extends Component<Props, State> {
                           isInvalid={Boolean(this.props.formikProps.errors.randomPaymentType) && Boolean(this.props.formikProps.touched.randomPaymentType)}
                         >
                           <option value=""></option>
-                          {this.state.randomPaymentTypes.map(
+                          {this.getRandomPaymentTypes().map(
                             (randomPaymentType: SelectObject) => {
                               return (<option key={randomPaymentType.value} value={randomPaymentType.value}>{randomPaymentType.label}</option>);
                             }
@@ -221,7 +232,7 @@ class ManualPayment extends Component<Props, State> {
                         {this.props.formikProps.errors.receiptNumber}
                       </Form.Control.Feedback>
                   </Form.Group>
-                  {this.props.paymentType === "normal"  && <Form.Group as={Col} md={6} controlId="installmentNumber">
+                  {this.props.paymentType === "normal"  && !this.props.bankPayment && <Form.Group as={Col} md={6} controlId="installmentNumber">
                     <Form.Label column className="pr-0">{`${local.installmentToBePaid}`}</Form.Label>
                       <Form.Control
                         as="select"
@@ -251,7 +262,39 @@ class ManualPayment extends Component<Props, State> {
                         })}
                       </Form.Control>
                   </Form.Group>}
-                  <Form.Group as={Col} md={6} controlId="whoPaid">
+                  {this.props.bankPayment && <>
+                  <Form.Group as={Col} md={6} controlId="bankOfPayment">
+                    <Form.Label style={{ paddingRight: 0 }} column>{`${local.bankName}`}</Form.Label>
+                      <Form.Control
+                        name="bankOfPayment"
+                        data-qc="bankOfPayment"
+                        value={this.props.formikProps.values.bankOfPayment}
+                        onBlur={this.props.formikProps.handleBlur}
+                        onChange={this.props.formikProps.handleChange}
+                        isInvalid={Boolean(this.props.formikProps.errors.bankOfPayment) && Boolean(this.props.formikProps.touched.bankOfPayment)}
+                      >
+                      </Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {this.props.formikProps.errors.bankOfPayment}
+                      </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group as={Col} md={6} controlId="bankOfPaymentBranch">
+                    <Form.Label style={{ paddingRight: 0 }} column>{`${local.bankBranch}`}</Form.Label>
+                      <Form.Control
+                        name="bankOfPaymentBranch"
+                        data-qc="bankOfPaymentBranch"
+                        value={this.props.formikProps.values.bankOfPaymentBranch}
+                        onBlur={this.props.formikProps.handleBlur}
+                        onChange={this.props.formikProps.handleChange}
+                        isInvalid={Boolean(this.props.formikProps.errors.bankOfPaymentBranch) && Boolean(this.props.formikProps.touched.bankOfPaymentBranch)}
+                      >
+                      </Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {this.props.formikProps.errors.bankOfPaymentBranch}
+                      </Form.Control.Feedback>
+                  </Form.Group>
+                  </>}
+                  {!this.props.bankPayment && <Form.Group as={Col} md={6} controlId="whoPaid">
                     <Form.Label style={{ paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
                       <Form.Control
                         as="select"
@@ -276,7 +319,7 @@ class ManualPayment extends Component<Props, State> {
                       <Form.Control.Feedback type="invalid">
                         {this.props.formikProps.errors.payerType}
                       </Form.Control.Feedback>
-                  </Form.Group>
+                  </Form.Group>}
                   {this.props.formikProps.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
                     <Form.Label style={{ paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
                       <Form.Control

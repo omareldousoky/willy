@@ -8,11 +8,18 @@ import StatusHelper from './statusHelper';
 import { rejectApplication, undoreviewApplication, reviewApplication } from '../../Services/APIs/loanApplication/stateHandler';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
+import { getErrorMessage } from '../../../Shared/Services/utils';
+import {
+  BranchDetails,
+  BranchDetailsResponse,
+  getBranch,
+} from '../../Services/APIs/Branch/getBranch';
 interface State {
     prevId: string;
     loading: boolean;
     application: any;
     geoAreas: Array<any>;
+    branchDetails?: BranchDetails;
 }
 interface Props {
     history: any;
@@ -32,11 +39,23 @@ class LoanStatusChange extends Component<Props, State>{
         const appId = this.props.history.location.state.id;
         this.getAppByID(appId)
     }
+    async getBranchData(branchId: string) {
+        const res = await getBranch(branchId)
+        if (res.status === 'success') {
+          this.setState({
+            branchDetails: (res.body as BranchDetailsResponse)?.data,
+          })
+        } else {
+          const err = res.error as Record<string, string>
+          Swal.fire('Error !', getErrorMessage(err.error), 'error')
+        }
+    }
     async getAppByID(id) {
         this.setState({ loading: true });
         const application = await getApplication(id);
         if (application.status === 'success') {
             if(application.body.guarantors.length > 0) this.getGeoAreas(application.body.branchId)
+            this.getBranchData(application.body.branchId)
             this.setState({
                 application: application.body,
                 loading: false
@@ -67,7 +86,7 @@ class LoanStatusChange extends Component<Props, State>{
                 this.setState({ loading: false });
                 Swal.fire("success", local.reviewSuccess).then(() => { this.props.history.push("/track-loan-applications") })
             } else {
-                Swal.fire("error", local.statusChangeError, 'error')
+                Swal.fire("error", getErrorMessage(res.error.error), 'error')
                 this.setState({ loading: false });
             }
         } else if (status === 'unreview') {
@@ -76,7 +95,7 @@ class LoanStatusChange extends Component<Props, State>{
                 this.setState({ loading: false });
                 Swal.fire("success", local.unreviewSuccess).then(() => { this.props.history.push("/track-loan-applications") })
             } else {
-                Swal.fire("error", local.statusChangeError, 'error')
+                Swal.fire("error", getErrorMessage(res.error.error), 'error')
                 this.setState({ loading: false });
             }
         } else if (status === 'reject') {
@@ -85,7 +104,7 @@ class LoanStatusChange extends Component<Props, State>{
                 this.setState({ loading: false });
                 Swal.fire("success", local.rejectSuccess).then(() => { this.props.history.push("/track-loan-applications") })
             } else {
-                Swal.fire("error", local.statusChangeError, 'error')
+                Swal.fire("error", getErrorMessage(res.error.error), 'error')
                 this.setState({ loading: false });
             }
         }
@@ -95,7 +114,7 @@ class LoanStatusChange extends Component<Props, State>{
             <Container style={{ textAlign: 'right' }}>
                 <Loader type="fullscreen" open={this.state.loading} />
                 {Object.keys(this.state.application).length > 0 && <div>
-                    <StatusHelper status={this.props.history.location.state.action} id={this.state.application._id} handleStatusChange={(values, status) => { this.handleStatusChange(values, status) }} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} />
+                    <StatusHelper status={this.props.history.location.state.action} id={this.state.application._id} handleStatusChange={(values, status) => { this.handleStatusChange(values, status) }} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} branchName={this.state.branchDetails?.name} />
                 </div>}
             </Container>
         )

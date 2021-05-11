@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import AsyncSelect from "react-select/async";
 import { useStore } from "react-redux";
 import Select, { ValueType, Props } from "react-select";
@@ -8,6 +8,8 @@ import * as local from "../../../Shared/Assets/ar.json";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
 import { getGeoAreasByBranch } from "../../Services/APIs/GeoAreas/getGeoAreas";
 import { theme } from "../../../theme";
+import { CurrentHierarchiesSingleResponse } from "../../Models/OfficersProductivityReport";
+import { fetchCurrentHierarchies } from "../../Services/APIs/Reports/officersProductivity";
 
 export interface DropDownOption {
   name: string;
@@ -82,16 +84,7 @@ export const AsyncLoanOfficersDropDown = ({
   const [value, setValue] = useState<ValueType<DropDownOption> | null>();
   const [searchKeyword, setSearchKeyword] = useState<string>("");
 
-	// to avoid memory leak for in progress api call
-	let stillMounted = true
-	useEffect(() => {
-		return () => {
-			stillMounted = false;
-		}
-	},[])
-
   const handleLoadOptions = async () => {
-		if(!stillMounted) return
     const newOptions: DropDownOption[] = [];
     const res = await searchLoanOfficer({
       name: searchKeyword,
@@ -100,9 +93,9 @@ export const AsyncLoanOfficersDropDown = ({
       branchId,
     });
 
-    if (stillMounted && res.status === "success") {
+    if (res.status === "success") {
       const data = res.body.data;
-      Array.isArray(data) && data.length && stillMounted
+      Array.isArray(data) && data.length
         ? res.body.data.map((loanOfficer: DropDownOption) => {
             newOptions.push({
               _id: loanOfficer._id,
@@ -168,7 +161,6 @@ export const AsyncLoanOfficersDropDown = ({
   );
 };
 
-// TODO: update type & usages
 interface BranchDropDownProps extends Props<any> {
   onlyValidBranches?: boolean;
   onSelectBranch: (branch: Branch) => void;
@@ -227,6 +219,7 @@ export const BranchesDropDown = (props: BranchDropDownProps) => {
   );
 };
 
+// TODO: Make generic async dropdown component
 export const AsyncBranchGeoAreasDropDown = ({
   branchId,
   onSelectOption,
@@ -300,6 +293,81 @@ export const AsyncBranchGeoAreasDropDown = ({
         getOptionLabel={(option) => option.name}
         getOptionValue={(option) => option._id}
         isDisabled={isDisabled}
+        onFocus={maybeLoadOptions}
+        {...restProps}
+      />
+    </div>
+  );
+};
+
+export const AsyncManagersDropDown = ({
+  onSelectOption,
+  ...restProps
+}: Props<CurrentHierarchiesSingleResponse>) => {
+  const initialState: {
+    optionsLoaded: boolean;
+    options: CurrentHierarchiesSingleResponse[];
+    isLoading: boolean;
+  } = {
+    optionsLoaded: false,
+    options: [],
+    isLoading: false,
+  };
+  const [options, setOptions] = useState(initialState);
+  const [value, setValue] = useState<ValueType<CurrentHierarchiesSingleResponse> | null>();
+
+
+	const handleLoadOptions = async () => {
+    const res = await fetchCurrentHierarchies();
+    const newOptions: CurrentHierarchiesSingleResponse[] = [];
+    if (res.status === "success") {
+      const data = res.body?.response;
+      if (Array.isArray(data) && data.length)
+        res.body?.response.map(({id, name, branches}) => 
+            newOptions.push({ id, name, branches })
+          )
+			setOptions({
+				options: newOptions,
+				isLoading: false,
+				optionsLoaded: true,
+			});
+    } else {
+      setOptions({ options: [], isLoading: false, optionsLoaded: true });
+    }
+  };
+
+  const maybeLoadOptions = useCallback(() => {
+    if (!options.optionsLoaded) {
+      setOptions({ ...options, isLoading: true });
+      handleLoadOptions();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+	useEffect(() => {
+		maybeLoadOptions()
+	},[maybeLoadOptions])
+
+  return (
+    <div className="dropdown-container" style={{ flex: 2 }}>
+      <Select<CurrentHierarchiesSingleResponse>
+        cacheOptions
+        defaultOptions
+        styles={theme.selectStyleWithoutBorder}
+        theme={theme.selectTheme}
+        className="full-width"
+        name="managers"
+        data-qc="managers"
+        placeholder={local.chooseManager}
+        value={value}
+        onChange={(options) => {
+          onSelectOption(options as ValueType<CurrentHierarchiesSingleResponse>[]);
+          setValue(options);
+        }}
+        isLoading={options.isLoading}
+        options={options.options}
+        getOptionLabel={(option) => option.name || ""}
+        getOptionValue={(option) => option.id}
         onFocus={maybeLoadOptions}
         {...restProps}
       />

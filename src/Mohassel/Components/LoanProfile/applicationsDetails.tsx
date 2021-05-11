@@ -52,7 +52,7 @@ export const LoanDetailsTableView = ({ application, branchName }: LoanDetailsPro
                 </tr>
                 <tr>
                     <td>{local.customerType}</td>
-                    <td>{beneficiaryType(application.product.beneficiaryType)}</td>
+                    <td>{beneficiaryType(application.product.beneficiaryType)} - {application.product.type || ''}</td>
                 </tr>
                 <tr>
                     <td>{local.currency}</td>
@@ -131,8 +131,16 @@ export const LoanDetailsTableView = ({ application, branchName }: LoanDetailsPro
                     <td>{(application.product.beneficiaryType === 'group') ? application.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName : application.customer.representativeName}</td>
                 </tr>
                 <tr>
-                    <td>{local.enquiror}</td>
-                    <td>{application.enquirerName}</td>
+                  <td>
+                    {application.product.type === 'sme'
+                      ? local.researcher
+                      : local.enquiror}
+                  </td>
+                  <td>
+                    {application.product.type === 'sme'
+                      ? application.researcherName
+                      : application.enquirerName}
+                  </td>
                 </tr>
                 <tr>
                     <td>{local.visitationDate}</td>
@@ -278,8 +286,16 @@ export const LoanDetailsBoxView = ({ application }: Props) => {
 											: application.customer.representativeName}</Form.Label>
                 </Form.Group>
                  <Form.Group as={Col} md="3" className="d-flex flex-column">
-									<Form.Label style={{ color: '#6e6e6e' }}>{local.enquiror}</Form.Label>
-									<Form.Label>{application.enquirerName} </Form.Label>
+                  <Form.Label style={{ color: '#6e6e6e' }}>
+                    {application.product.type === 'sme'
+                      ? local.researcher
+                      : local.enquiror}
+                  </Form.Label>
+                  <Form.Label>
+                    {application.product.type === 'sme'
+                      ? application.researcherName
+                      : application.enquirerName}
+                  </Form.Label>
                 </Form.Group> 
             </Form.Row>
         </Form >

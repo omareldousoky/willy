@@ -99,6 +99,7 @@ class DeathCertificate extends Component<Props, State>  {
                         paperType: 'A4',
                         name: 'deathCertificate',
                         updatable: false,
+                        customerType: 'individual',
                         active: true,
                     }}
                     edit={this.props.edit}
