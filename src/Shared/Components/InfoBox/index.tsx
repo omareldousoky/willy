@@ -16,11 +16,11 @@ export const InfoBox = ({ info, title, boxColor }: InfoBoxProps) => {
 
   useEffect(() => setCurrentTab(info[0]), [info])
 
-  const getInfoRows = (info: FieldProps[], numberOfFieldsPerRow = 3) => {
+  const getInfoRows = (infoRow: FieldProps[], numberOfFieldsPerRow = 3) => {
     const infoRows = [
-      ...Array(Math.ceil(info.length / numberOfFieldsPerRow)),
+      ...Array(Math.ceil(infoRow.length / numberOfFieldsPerRow)),
     ].map((row, index) =>
-      info.slice(
+      infoRow.slice(
         index * numberOfFieldsPerRow,
         index * numberOfFieldsPerRow + numberOfFieldsPerRow
       )
@@ -28,8 +28,8 @@ export const InfoBox = ({ info, title, boxColor }: InfoBoxProps) => {
     return infoRows
   }
 
-  const getTabs = (info: FieldProps[][]) => {
-    return info.map((tab, index) => {
+  const getTabs = (infoTab: FieldProps[][]) => {
+    return infoTab.map((tab, index) => {
       const { fieldData } = tab[0]
       return {
         header: typeof fieldData === 'string' ? fieldData : `Tab ${index}`,
@@ -61,12 +61,12 @@ export const InfoBox = ({ info, title, boxColor }: InfoBoxProps) => {
       <div style={{ padding: 20 }}>
         {getInfoRows(currentTab).map((rowOfFields, index) => (
           <Form.Row key={index}>
-            {rowOfFields.map((field, index) => {
+            {rowOfFields.map((field, fieldIndex) => {
               const { fieldTitle, fieldData, showFieldCondition } = field
               return (
                 showFieldCondition && (
                   <Form.Group
-                    key={index}
+                    key={fieldIndex}
                     as={Col}
                     md="4"
                     className="d-flex flex-column"

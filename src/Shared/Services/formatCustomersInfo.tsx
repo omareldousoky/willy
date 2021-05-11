@@ -7,7 +7,6 @@ import ability from '../../Mohassel/config/ability'
 import {
   arabicGender,
   downloadFile,
-  getErrorMessage,
   iscoreBank,
   iscoreStatusColor,
   timeToArabicDate,
@@ -24,14 +23,7 @@ const {
   taxCardNumber,
   commercialRegisterNumber,
   creationDate,
-  businessSector,
-  businessSpeciality,
-  male,
-  female,
-  customerName,
   customerCode,
-  gender,
-  nationalId,
   groupLeaderName,
 } = local
 
@@ -56,7 +48,7 @@ const iscoreField = ({
   return (
     <>
       <Form.Label style={{ color: iscoreStatusColor(score?.iscore).color }}>
-        {score?.iscore}{' '}
+        {score?.iscore}
       </Form.Label>
       <Form.Label>{iscoreStatusColor(score?.iscore).status} </Form.Label>
       {score?.bankCodes &&
@@ -69,7 +61,6 @@ const iscoreField = ({
             style={{ cursor: 'pointer', padding: 10 }}
             onClick={() => downloadFile(score?.url)}
           >
-            {' '}
             <span
               className="fa fa-file-pdf-o"
               style={{ margin: '0px 0px 0px 5px' }}
@@ -153,7 +144,7 @@ export const getCompanyInfo = ({
       showFieldCondition: true,
     },
     {
-      fieldTitle: businessSector,
+      fieldTitle: local.businessSector,
       fieldData: company.businessSector || '',
       showFieldCondition: true,
     },

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 
-import { useHistory, useLocation } from 'react-router'
+import { useHistory, useLocation } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import { Container } from 'react-bootstrap'
 
-import { Loader } from '../Loader'
 import { InfoBox, Profile, ProfileActions } from '..'
 
 import * as local from '../../Assets/ar.json'
@@ -31,7 +30,7 @@ export const Company = () => {
   const [company, setCompany] = useState<Customer>()
   const [score, setScore] = useState<Score>()
   const [mainInfo, setMainInfo] = useState<FieldProps[][]>([])
-  const location = useLocation()
+  const location = useLocation<{ id: string }>()
   const history = useHistory()
 
   const { viewCompany, documents } = local

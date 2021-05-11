@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { useDispatch, connect } from 'react-redux'
 import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
@@ -9,9 +9,6 @@ import ability from '../../../Mohassel/config/ability'
 import { search, searchFilters } from '../../redux/search/actions'
 import { getErrorMessage, getFullCustomerKey } from '../../Services/utils'
 import { getDateAndTime } from '../../../Mohassel/Services/getRenderDate'
-import { manageCustomersArray } from '../../../Mohassel/Components/CustomerCreation/manageCustomersInitial'
-import { Card as CardType } from '../../../Mohassel/Components/ManageAccounts/manageAccountsInitials'
-import HeaderWithCards from '../../../Mohassel/Components/HeaderWithCards/headerWithCards'
 import DynamicTable from '../DynamicTable/dynamicTable'
 import Can from '../../../Mohassel/config/Can'
 import Search from '../Search/search'
@@ -29,8 +26,6 @@ const List = ({
   loading,
   totalCount,
 }: CompanyListProps) => {
-  const [openActionsId, setOpenActionsId] = useState<string>('')
-  const [manageCompaniesTab, setManageCompaniesTab] = useState<CardType[]>([])
   const [from, setFrom] = useState<number>(0)
   const [size, setSize] = useState<number>(10)
   const {
@@ -41,7 +36,6 @@ const List = ({
     commercialRegisterNumber,
     creationDate,
     editCompany,
-    governorate,
     newCompany,
     noOfCompanies,
     searchCompanyList,
@@ -109,38 +103,37 @@ const List = ({
     {
       title: companyCode,
       key: 'customerCode',
-      render: (data) => data.key,
+      render: (row) => row.key,
     },
     {
       title: companyName,
       sortable: true,
       key: 'name',
-      render: (data) => data.businessName,
+      render: (row) => row.businessName,
     },
     {
       title: taxCardNumber,
       key: 'taxCardNumber',
-      render: (data) => data.taxCardNumber,
+      render: (row) => row.taxCardNumber,
     },
     {
       title: commercialRegisterNumber,
       key: 'commercialRegisterNumber',
-      render: (data) => data.commercialRegisterNumber,
+      render: (row) => row.commercialRegisterNumber,
     },
     {
       title: creationDate,
       sortable: true,
       key: 'createdAt',
-      render: (data) =>
-        data.created?.at ? getDateAndTime(data.created?.at) : '',
+      render: (row) => (row.created?.at ? getDateAndTime(row.created?.at) : ''),
     },
     {
       title: actions,
       key: 'actions',
       // eslint-disable-next-line react/display-name
-      render: (data) => (
+      render: (row) => (
         <ActionsIconGroup
-          currentCustomerId={data._id}
+          currentCustomerId={row._id}
           actions={companyActions}
         />
       ),
@@ -194,7 +187,7 @@ const List = ({
             url="customer"
             from={from}
             size={size}
-            setFrom={(from) => setFrom(from)}
+            setFrom={(newFrom) => setFrom(newFrom)}
             hqBranchIdRequest={branchId}
           />
           <DynamicTable

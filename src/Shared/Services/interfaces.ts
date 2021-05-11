@@ -36,7 +36,7 @@ export interface Customer {
   code?: number
   comments?: string
   commercialRegisterNumber?: string
-  created?: Trace
+  created?: Signature
   customerAddressLatLong?: string
   customerHomeAddress?: string
   currentHomeAddress?: string
