@@ -1,18 +1,17 @@
-import React from "react";
+import React from 'react'
 
-//Components
-import { Loader } from "../Loader";
-import BackButton from "../../../Mohassel/Components/BackButton/back-button";
-import { CardNavBar } from "../../../Mohassel/Components/HeaderWithCards/cardNavbar";
-import DocumentsUpload from "../../../Mohassel/Components/CustomerCreation/documentsUpload";
-import DeathCertificate from '../../../Mohassel/Components/CustomerCreation/deathCertificate';
-import { CustomerCategorization } from "../../../Mohassel/Components/CustomerCreation/customerCategorization";
+// Components
+import Card from 'react-bootstrap/Card'
+import Table from 'react-bootstrap/Table'
+import { Loader } from '../Loader'
+import BackButton from '../../../Mohassel/Components/BackButton/back-button'
+import { CardNavBar } from '../../../Mohassel/Components/HeaderWithCards/cardNavbar'
+import DocumentsUpload from '../../../Mohassel/Components/CustomerCreation/documentsUpload'
+import DeathCertificate from '../../../Mohassel/Components/CustomerCreation/deathCertificate'
+import { CustomerCategorization } from '../../../Mohassel/Components/CustomerCreation/customerCategorization'
 
-//Bootstrap Components
-import Card from "react-bootstrap/Card";
-import Table from "react-bootstrap/Table";
-import { ProfileProps } from "./types";
-
+// Bootstrap Components
+import { ProfileProps } from './types'
 
 export const Profile = ({
   source,
@@ -30,17 +29,19 @@ export const Profile = ({
     <>
       <Loader open={loading} type="fullscreen" />
       <div className="rowContainer print-none" style={{ paddingLeft: 30 }}>
-       {backButtonText &&  <BackButton title={backButtonText} className="print-none" />}
+        {backButtonText && (
+          <BackButton title={backButtonText} className="print-none" />
+        )}
         {editPermission && editText && (
           <div
             className="print-none"
-            style={{ cursor: "pointer" }}
+            style={{ cursor: 'pointer' }}
             onClick={editOnClick}
           >
             <img
-              className={"iconImage"}
-              alt={"edit"}
-              src={require("../../Assets/editIcon.svg")}
+              className="iconImage"
+              alt="edit"
+              src={require('../../Assets/editIcon.svg')}
             />
             {editText}
           </div>
@@ -53,75 +54,90 @@ export const Profile = ({
           selectTab={(stringKey: string) => setActiveTab(stringKey)}
         />
         <Card.Body>
-          {(activeTab === "mainInfo" ||
-            activeTab === "workInfo" ||
-            activeTab === "differentInfo" )&& (
-              <Table
-                striped
-                bordered
-                style={{ textAlign: "right" }}
-                className="horizontal-table"
-              >
-
-                <tbody>
-                  {tabsData[activeTab].map((field, index) => {
-                    const { fieldTitle, fieldData, showFieldCondition } = field;
-                    return (
-                      showFieldCondition && (
-                        <tr key={index}>
-                          <td style={field.fieldTitleStyle ?? field.fieldTitleStyle}>{fieldTitle}</td>
-                          <td style={field.fieldDataStyle ?? field.fieldDataStyle}>{fieldData}</td>
-                        </tr>
-                      )
-                    );
-                  })}
-                </tbody>
-              </Table>
-            )}
-          {activeTab === "customerScore" &&
+          {(activeTab === 'mainInfo' ||
+            activeTab === 'workInfo' ||
+            activeTab === 'differentInfo') && (
+            <Table
+              striped
+              bordered
+              style={{ textAlign: 'right' }}
+              className="horizontal-table"
+            >
+              <tbody>
+                {tabsData[activeTab].map((field, index) => {
+                  const { fieldTitle, fieldData, showFieldCondition } = field
+                  return (
+                    showFieldCondition && (
+                      <tr key={index}>
+                        <td
+                          style={field.fieldTitleStyle ?? field.fieldTitleStyle}
+                        >
+                          {fieldTitle}
+                        </td>
+                        <td
+                          style={field.fieldDataStyle ?? field.fieldDataStyle}
+                        >
+                          {fieldData}
+                        </td>
+                      </tr>
+                    )
+                  )
+                })}
+              </tbody>
+            </Table>
+          )}
+          {activeTab === 'customerScore' &&
             tabsData[activeTab].map((field, index) => {
-              const { fieldData,showFieldCondition } = field;
+              const { fieldData, showFieldCondition } = field
               return (
-                Array.isArray(fieldData) && showFieldCondition &&(
+                Array.isArray(fieldData) &&
+                showFieldCondition && (
                   <CustomerCategorization key={index} ratings={fieldData} />
                 )
-              );
+              )
             })}
-          {activeTab === "documents" &&
+          {activeTab === 'documents' &&
             tabsData[activeTab].map((field, index) => {
-              const { fieldData , showFieldCondition} = field;
+              const { fieldData, showFieldCondition } = field
               return (
-                typeof fieldData === "string" && showFieldCondition && (
+                typeof fieldData === 'string' &&
+                showFieldCondition && (
                   <DocumentsUpload
-                  key={index}
+                    key={index}
                     customerId={fieldData}
                     edit={false}
-                    view={true}
+                    view
                     isCompany={source === 'company'}
                   />
                 )
-              );
+              )
             })}
-          {activeTab === "reports" &&
+          {activeTab === 'reports' &&
             tabsData[activeTab].map((field) => {
-              const { fieldData, showFieldCondition } = field;
-              return showFieldCondition && React.isValidElement(fieldData) && fieldData;
-            })}
-          {activeTab === "deathCertificate" &&
-            tabsData[activeTab].map((field, index) => {
-              const { fieldData, showFieldCondition } = field;
+              const { fieldData, showFieldCondition } = field
               return (
-                typeof fieldData === "string" && showFieldCondition &&(
+                showFieldCondition &&
+                React.isValidElement(fieldData) &&
+                fieldData
+              )
+            })}
+          {activeTab === 'deathCertificate' &&
+            tabsData[activeTab].map((field, index) => {
+              const { fieldData, showFieldCondition } = field
+              return (
+                typeof fieldData === 'string' &&
+                showFieldCondition && (
                   <DeathCertificate
-                  key={index}
-                    edit={true}
+                    key={index}
+                    edit
                     view={false}
                     customerId={fieldData}
-                  />)
-              );
+                  />
+                )
+              )
             })}
         </Card.Body>
       </Card>
     </>
-  );
-};
+  )
+}

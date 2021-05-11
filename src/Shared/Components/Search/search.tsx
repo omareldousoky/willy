@@ -28,18 +28,18 @@ import { getActionsList } from '../../../Mohassel/Services/APIs/ActionLogs/getAc
 import Can from '../../../Mohassel/config/Can'
 
 interface InitialFormikState {
-  name?: string;
-  keyword?: string;
-  fromDate?: string;
-  toDate?: string;
-  governorate?: string;
-  status?: string;
-  action?: string;
-  branchId?: string;
-  isDoubtful?: boolean;
-  isWrittenOff?: boolean;
-  printed?: boolean;
-  type?: string;
+  name?: string
+  keyword?: string
+  fromDate?: string
+  toDate?: string
+  governorate?: string
+  status?: string
+  action?: string
+  branchId?: string
+  isDoubtful?: boolean
+  isWrittenOff?: boolean
+  printed?: boolean
+  type?: string
 }
 interface Props {
   size: number
@@ -72,7 +72,12 @@ class Search extends Component<Props, State> {
     super(props)
     this.state = {
       governorates: [],
-      dropDownValue: this.props.url === "actionLogs" ? "authorName" : this.props.dropDownKeys?.includes('businessName') ? 'businessName' : "name",
+      dropDownValue:
+        this.props.url === 'actionLogs'
+          ? 'authorName'
+          : this.props.dropDownKeys?.includes('businessName')
+          ? 'businessName'
+          : 'name',
       actionsList: [],
     }
   }
@@ -139,11 +144,11 @@ class Search extends Component<Props, State> {
         case 'printed':
           initialState.printed = false
           break
-				case "sme":
+        case 'sme':
           initialState.type =
-            this.props.url === "loan"
+            this.props.url === 'loan'
               ? this.props.issuedLoansSearchFilters.type
-              : 'micro';
+              : 'micro'
           break
         default:
           break
@@ -153,10 +158,13 @@ class Search extends Component<Props, State> {
   }
 
   componentDidMount() {
-    if (this.props.url === "customer" && !this.props.dropDownKeys?.includes('businessName')) {
-      this.getGov();
-    } else if (this.props.url === "actionLogs") {
-      this.getActionsList();
+    if (
+      this.props.url === 'customer' &&
+      !this.props.dropDownKeys?.includes('businessName')
+    ) {
+      this.getGov()
+    } else if (this.props.url === 'actionLogs') {
+      this.getActionsList()
     }
   }
 
@@ -253,14 +261,18 @@ class Search extends Component<Props, State> {
     if (url === 'supervisionsGroups') {
       obj.status = this.props.chosenStatus
     }
-    if(!['application', 'loan'].includes(url)) { delete obj.type } else { obj.type = obj.type ?  obj.type : 'micro' }
+    if (!['application', 'loan'].includes(url)) {
+      delete obj.type
+    } else {
+      obj.type = obj.type ? obj.type : 'micro'
+    }
     if (url === 'customer')
       obj.customerType = this.props.dropDownKeys?.includes('businessName')
         ? 'company'
         : 'individual'
-    obj = this.removeEmptyArg(obj);
-    this.props.setFrom ? this.props.setFrom(0) : null;
-    this.props.searchFilters(obj);
+    obj = this.removeEmptyArg(obj)
+    this.props.setFrom ? this.props.setFrom(0) : null
+    this.props.searchFilters(obj)
     this.props.search({
       ...obj,
       from: 0,
@@ -292,7 +304,12 @@ class Search extends Component<Props, State> {
     return true
   }
 
-  statusDropdown(formikProps: FormikProps<FormikValues>, index: number, array: { value: string; text: string; permission?: string; key?: string }[], field?: string) {
+  statusDropdown(
+    formikProps: FormikProps<FormikValues>,
+    index: number,
+    array: { value: string; text: string; permission?: string; key?: string }[],
+    field?: string
+  ) {
     return (
       <Col key={index} sm={6} style={{ marginTop: index < 2 ? 0 : 20 }}>
         <div className="dropdown-container">
@@ -708,7 +725,7 @@ class Search extends Component<Props, State> {
                     </Col>
                   )
                 }
-                if (searchKey === "sme") {
+                if (searchKey === 'sme') {
                   return (
                     <Col key={index} sm={3} style={{ marginTop: 20 }}>
                       <Form.Group className="row-nowrap" controlId="sme">
@@ -719,15 +736,15 @@ class Search extends Component<Props, State> {
                           checked={formikProps.values.type === 'sme'}
                           onChange={(e) =>
                             formikProps.setFieldValue(
-                              "type",
+                              'type',
                               e.currentTarget.checked ? 'sme' : 'micro'
                             )
                           }
-                          label='sme'
+                          label="sme"
                         />
                       </Form.Group>
                     </Col>
-                  );
+                  )
                 }
               })}
 
