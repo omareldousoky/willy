@@ -71,14 +71,14 @@ class CustomersList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId }).then(() => {
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId, customerType: 'individual' }).then(() => {
       if(this.props.error){;
         Swal.fire("error", getErrorMessage(this.props.error),"error" )
       }
     })
   }
   getCustomers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId }).then(() => {
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId, customerType: 'individual' }).then(() => {
       if(this.props.error){;
         Swal.fire("error", getErrorMessage(this.props.error),"error" )
       }

@@ -41,7 +41,7 @@ const PaymentReceipt = (props) => {
                                     <span className="info">{numbersToArabic(receiptData.receiptNumber)}</span>
                                 </div>
                                 <div>
-                                    <span className="title">{local.customerName}</span>
+                                    <span className="title">{props.companyReceipt ? local.companyName : local.customerName}</span>
                                     <span className="info">{receiptData.customerName}</span>
                                 </div>
                                 <div>

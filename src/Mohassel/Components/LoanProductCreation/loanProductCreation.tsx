@@ -36,6 +36,7 @@ class LoanProductCreation extends Component<Props, State>{
                 productName: '',
                 beneficiaryType: 'individual',
                 calculationFormulaId: '',
+                type: 'micro',
                 loanNature: 'cash',
                 currency: 'egp',
                 periodLength: 1,

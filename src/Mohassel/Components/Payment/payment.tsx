@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import { Formik, FormikProps } from 'formik';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
-import { earlyPaymentValidation, manualPaymentValidation } from './paymentValidation';
+import { earlyPaymentValidation, manualBankPaymentValidation, manualPaymentValidation } from './paymentValidation';
 import { getDateString, getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import { PendingActions } from '../../../Shared/Services/interfaces';
 import { payment } from '../../../Shared/redux/payment/actions';
@@ -22,6 +22,7 @@ import EarlyPayment from './earlyPayment';
 import ManualPayment from './manualPayment';
 import { randomManualPayment } from '../../Services/APIs/Payment/randomManualPayment';
 import { editManualOtherPayment } from '../../Services/APIs/Payment/editManualOtherPayment';
+import { manualBankPayment } from '../../Services/APIs/Payment/manualBankPayment';
 
 interface Installment {
   id: number;
@@ -90,6 +91,8 @@ interface State {
   payerId: string;
   employees: Array<Employee>;
   randomPaymentType: string;
+  bankOfPayment: string;
+  bankOfPaymentBranch: string;
 }
 
 class Payment extends Component<Props, State>{
@@ -163,6 +166,8 @@ class Payment extends Component<Props, State>{
       payerId: '',
       employees: [],
       randomPaymentType: '',
+      bankOfPayment: '',
+      bankOfPaymentBranch: '',
     }
        this.mappers = normalTableMappers;
   }
@@ -373,6 +378,20 @@ class Payment extends Component<Props, State>{
       } else {
         this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
       }
+    } else if (this.props.paymentState === 4) {
+      const obj = {
+        payAmount: values.payAmount,
+        bankOfPayment: values.bankOfPayment,
+        bankOfPaymentBranch: values.bankOfPaymentBranch,
+        receiptNumber: values.receiptNumber,
+        truthDate: new Date(values.truthDate).valueOf(),
+      }
+      const res = await manualBankPayment(obj, this.props.applicationId);
+      if (res.status === "success") {
+        this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
+      } else {
+        this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
+      }
     } else {
       if (this.props.paymentType === "normal") {
       if (this.props.manualPaymentEditId === "") {
@@ -487,14 +506,15 @@ class Payment extends Component<Props, State>{
       );
       case 1:
         return <PayInstallment
-        installments={this.props.installments}
-        application={this.props.application}
-        handleSubmit={this.handleSubmit}
-        payAmount={this.state.payAmount}
-        truthDate={this.state.truthDate}
-        paymentType={this.props.paymentType}
-        penaltyAction={this.state.penaltyAction}
-        />
+            penalty={this.state.penalty}
+            installments={this.props.installments}
+            application={this.props.application}
+            handleSubmit={this.handleSubmit}
+            payAmount={this.state.payAmount}
+            truthDate={this.state.truthDate}
+            paymentType={this.props.paymentType}
+            penaltyAction={this.state.penaltyAction}
+            />
       case 2: return (
         <Card className="payment-menu">
           <Loader type="fullsection" open={this.state.loading} />
@@ -549,7 +569,7 @@ class Payment extends Component<Props, State>{
               enableReinitialize
               initialValues={{ ...this.state, max: (this.props.application.status === 'canceled') ? this.props.application.principal : this.props.application.installmentsObject.totalInstallments.installmentSum, paymentType: this.props.paymentType }}
               onSubmit={this.handleSubmit}
-              validationSchema={manualPaymentValidation}
+              validationSchema={() => manualPaymentValidation(this.state.penalty)}
               validateOnBlur
               validateOnChange
             >
@@ -565,6 +585,44 @@ class Payment extends Component<Props, State>{
                   randomPendingActions={this.props.randomPendingActions}
                   formikProps={formikProps}
                   retainState={(values) => this.setState({ ...values })}
+                />
+              }
+            </Formik>
+          </div>
+        </Card>
+      )
+      case 4: return (
+        <Card className="payment-menu">
+          <div className="payment-info" style={{ textAlign: 'center' }}>
+            <img height="90" alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
+            <h6 style={{ cursor: 'pointer' }} onClick={() => this.props.changePaymentState(0)}>
+							<span className="fa fa-long-arrow-alt-right" />              
+            	<span className="font-weight-bolder">&nbsp;{local.bankPayment}</span>
+						</h6>
+          </div>
+          <div className="verticalLine"></div>
+          <div style={{ width: '100%', padding: 20 }}>
+            <Formik
+              enableReinitialize
+              initialValues={{ ...this.state, max: (this.props.application.status === 'canceled') ? this.props.application.principal : this.props.application.installmentsObject.totalInstallments.installmentSum, paymentType: this.props.paymentType }}
+              onSubmit={this.handleSubmit}
+              validationSchema={manualBankPaymentValidation}
+              validateOnBlur
+              validateOnChange
+            >
+              {(formikProps) =>
+                <ManualPayment
+                  payAmount={this.state.payAmount}
+                  truthDate={this.state.truthDate}
+                  paymentType={this.props.paymentType}
+                  receiptNumber={this.state.receiptNumber}
+                  setPayerType={(payerType: string) => this.setState({ payerType: payerType })}
+                  application={this.props.application}
+                  handleSubmit={this.handleSubmit}
+                  randomPendingActions={this.props.randomPendingActions}
+                  formikProps={formikProps}
+                  retainState={(values) => this.setState({ ...values })}
+                  bankPayment
                 />
               }
             </Formik>
