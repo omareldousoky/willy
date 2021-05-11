@@ -201,7 +201,7 @@ class NavBar extends Component<Props, State> {
               {/* //TODO come back to after we figure permissions */}
               {ability.can('getCustomer', 'customer') ? <NavDropdown title={local.customers} id="basic-nav-dropdown" >
                 <NavDropdown.Item className="primary" onClick={() => this.props.history.push('/customers')}>{local.persons}</NavDropdown.Item>
-                <NavDropdown.Item className="primary" onClick={() => this.props.history.push('/company')}>{local.companies}</NavDropdown.Item>
+                <Can I="getCompany" a="customer"><NavDropdown.Item className="primary" onClick={() => this.props.history.push('/company')}>{local.companies}</NavDropdown.Item></Can>
               </NavDropdown> :
                 !this.props.hide && ability.can('changeOfficer', 'customer') ?
                   <NavDropdown title={local.customers} id="basic-nav-dropdown" >
