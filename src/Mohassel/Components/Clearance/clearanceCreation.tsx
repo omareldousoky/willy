@@ -1,16 +1,20 @@
 import React, { Component } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { Card } from 'react-bootstrap'
+import { Card, Container } from 'react-bootstrap'
 import { Formik } from 'formik'
 import Swal from 'sweetalert2'
 import CustomerBasicsCard from './basicInfoCustomer'
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
-import { CreateClearanceForm } from './createClearanceForm'
+import { ClearanceCreationForm } from './clearanceCreationForm'
 import {
-  clearanceCreationValidation,
+  clearanceStep1CreationValidation,
   clearanceData,
-  clearanceEditValidation,
-  ClearanceValues,
+  ClearanceDataValues,
+  clearanceDocuments,
+  ClearanceDocumentsValues,
+  clearanceStep2EditValidation,
+  clearanceStep2CreationValidation,
+  ClearanceRequest,
 } from './clearanceFormIntialState'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans'
@@ -21,10 +25,11 @@ import {
 import { getApplicationsKeys } from '../../Services/APIs/clearance/getApplicagionsKey'
 import { createClearance } from '../../Services/APIs/clearance/createClearance'
 import { getClearance } from '../../Services/APIs/clearance/getClearance'
-import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties'
 import { updateClearance } from '../../Services/APIs/clearance/updateClearance'
 import { Loader } from '../../../Shared/Components/Loader'
-import { reviewClearance } from '../../Services/APIs/clearance/reviewClearance'
+import PenaltyStrike from './penaltyStrike'
+import Wizard from '../wizard/Wizard'
+import ClearanceCreationDocuments from './clearanceCreationDocuments'
 
 interface CreateClearanceRouteState {
   customerId?: string
@@ -33,7 +38,6 @@ interface CreateClearanceRouteState {
 
 interface Props extends RouteComponentProps<{}, {}, CreateClearanceRouteState> {
   edit: boolean
-  review: boolean
 }
 interface State {
   customer: {
@@ -41,15 +45,17 @@ interface State {
     branchName: string
     customerName: string
   }
+  step: number
   loading: boolean
-  step1: ClearanceValues
+  step1: ClearanceDataValues
+  step2: ClearanceDocumentsValues
   paidLoans: {
     Key: number
     id: string
   }[]
   penalty: number
 }
-class CreateClearance extends Component<Props, State> {
+class ClearanceCreation extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -58,7 +64,9 @@ class CreateClearance extends Component<Props, State> {
         branchName: '',
         customerName: '',
       },
+      step: 1,
       step1: clearanceData,
+      step2: clearanceDocuments,
       paidLoans: [],
       loading: false,
       penalty: 0,
@@ -66,7 +74,7 @@ class CreateClearance extends Component<Props, State> {
   }
 
   componentDidMount() {
-    if (this.props.edit || this.props.review) {
+    if (this.props.edit) {
       this.getClearanceById()
     } else if (this.props.location.state?.customerId) {
       this.getCustomer(this.props.location.state.customerId)
@@ -79,7 +87,7 @@ class CreateClearance extends Component<Props, State> {
       this.setState({ loading: true })
       const res = await getClearance(this.props.location.state.clearanceId)
       if (res.status === 'success') {
-        const clearance: ClearanceValues = {
+        const clearanceStep1: ClearanceDataValues = {
           customerId: res.body.data.customerId,
           loanId: res.body.data.loanId,
           transactionKey: res.body.data.transactionKey
@@ -90,28 +98,32 @@ class CreateClearance extends Component<Props, State> {
           notes: res.body.data.notes,
           registrationDate: res.body.data.registrationDate,
           receiptDate: res.body.data.receiptDate,
-          receiptPhotoURL: res.body.data.receiptPhotoURL,
-          documentPhotoURL: res.body.data.documentPhotoURL,
           manualReceipt: res.body.data.manualReceipt
             ? res.body.data.manualReceipt
             : '',
           status: res.body.data.status,
         }
         if (res.body.data.receiptDate)
-          clearance.receiptDate = timeToDateyyymmdd(res.body.data.receiptDate)
+          clearanceStep1.receiptDate = timeToDateyyymmdd(
+            res.body.data.receiptDate
+          )
         if (res.body.data.registrationDate)
-          clearance.registrationDate = timeToDateyyymmdd(
+          clearanceStep1.registrationDate = timeToDateyyymmdd(
             res.body.data.registrationDate
           )
+        const clearanceStep2: ClearanceDocumentsValues = {
+          receiptPhotoURL: res.body.data.receiptPhotoURL,
+          documentPhotoURL: res.body.data.documentPhotoURL,
+        }
         this.setState({
-          step1: clearance,
+          step1: clearanceStep1,
+          step2: clearanceStep2,
           customer: {
             key: res.body.data.customerKey,
             customerName: res.body.data.customerName,
             branchName: res.body.data.branchName,
           },
         })
-        await this.calculatePenalty(res.body.data.loanId)
         await this.getCustomerPaidLoans(res.body.data.customerId)
       }
       this.setState({ loading: false })
@@ -155,58 +167,63 @@ class CreateClearance extends Component<Props, State> {
   }
 
   submit = async (values) => {
-    if (this.props.edit) {
-      await this.editClearance(values)
-    } else if (this.props.review) {
-      await this.reviewClearance(values)
+    if (this.state.step === 1) {
+      this.setState(
+        (prevState) =>
+          ({
+            [`step${prevState.step}`]: values,
+            step: prevState.step + 1,
+          } as State)
+      )
     } else {
-      await this.createNewClearance(values)
+      this.setState({ step2: values })
+      const clearance = this.prepareClearance()
+      if (this.props.edit) {
+        await this.editClearance(clearance)
+      } else {
+        await this.createNewClearance(clearance)
+      }
     }
   }
 
-  prepareClearance = (values: ClearanceValues) => {
-    const clearance = values
+  prepareClearance = () => {
+    const clearance: ClearanceRequest = {
+      ...this.state.step1,
+      receiptPhoto: this.state.step2.receiptPhoto,
+      documentPhoto: this.state.step2.documentPhoto,
+    }
     if (!clearance.customerId) {
       clearance.customerId = this.props.location.state?.customerId || ''
     }
     if (clearance.receiptDate) {
       clearance.receiptDate = new Date(clearance.receiptDate).valueOf()
     }
-    delete clearance.receiptPhotoURL
-    delete clearance.documentPhotoURL
-    delete clearance.status
     clearance.registrationDate = new Date(clearance.registrationDate).valueOf()
     const formData = new FormData()
     Object.entries(clearance).map(([key, value]) => {
-      formData.append(key, value)
+      if (value) formData.append(key, value)
     })
+
     return formData
   }
 
   cancel() {
     this.setState({
+      step: 1,
       step1: clearanceData,
+      step2: clearanceDocuments,
     })
     this.props.history.goBack()
   }
 
-  async calculatePenalty(loanId: string) {
-    this.setState({ loading: true })
-    const res = await calculatePenalties({
-      id: loanId,
-      truthDate: new Date().getTime(),
-    })
-    if (res.body) {
-      this.setState({ penalty: res.body.penalty, loading: false })
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
+  previousStep(step: number): void {
+    this.setState({
+      step: step - 1,
+    } as State)
   }
 
-  async createNewClearance(values) {
+  async createNewClearance(clearance) {
     this.setState({ loading: true })
-    const clearance = this.prepareClearance(values)
     const res = await createClearance(clearance)
     if (res.status === 'success') {
       Swal.fire('Success', '', 'success').then(() =>
@@ -218,9 +235,8 @@ class CreateClearance extends Component<Props, State> {
     this.setState({ loading: false })
   }
 
-  async editClearance(values) {
+  async editClearance(clearance) {
     this.setState({ loading: true })
-    const clearance = this.prepareClearance(values)
     if (this.props.location.state?.clearanceId) {
       const res = await updateClearance(
         this.props.location.state?.clearanceId,
@@ -237,93 +253,105 @@ class CreateClearance extends Component<Props, State> {
     this.setState({ loading: false })
   }
 
-  async reviewClearance(values) {
-    if (this.props.location.state?.clearanceId) {
-      this.setState({ loading: true })
-      const res = await reviewClearance(
-        this.props.location.state?.clearanceId,
-        { status: values.status }
-      )
-      if (res.status === 'success') {
-        Swal.fire('Success', '', 'success').then(() =>
-          this.props.history.goBack()
-        )
-      } else {
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      }
-    }
-    this.setState({ loading: false })
+  renderStepOne() {
+    return (
+      <Formik
+        enableReinitialize
+        initialValues={this.state.step1}
+        validationSchema={clearanceStep1CreationValidation}
+        onSubmit={this.submit}
+        validateOnChange
+        validateOnBlur
+      >
+        {(formikProps) => (
+          <ClearanceCreationForm
+            {...formikProps}
+            cancel={() => this.cancel()}
+            edit={this.props.edit}
+            customerKey={this.state.customer.key}
+            paidLoans={this.state.paidLoans}
+            penalty={this.state.penalty}
+          />
+        )}
+      </Formik>
+    )
   }
 
-  renderPenaltyStrike() {
-    return this.state.penalty ? (
-      <div className="error-container">
-        <img
-          alt="error"
-          src={require('../../Assets/error-red-circle.svg')}
-          style={{ marginLeft: 20 }}
-        />
-        <h4>
-          <span style={{ margin: '0 10px' }}> {local.penaltyMessage}</span>{' '}
-          <span style={{ color: '#d51b1b' }}>{this.state.penalty}</span>
-        </h4>
-      </div>
-    ) : null
+  renderStepTwo() {
+    return (
+      <Container>
+        <Formik
+          enableReinitialize
+          initialValues={this.state.step2}
+          validationSchema={
+            this.props.edit
+              ? clearanceStep2EditValidation
+              : clearanceStep2CreationValidation
+          }
+          onSubmit={this.submit}
+          validateOnChange
+        >
+          {(formikProps) => (
+            <ClearanceCreationDocuments
+              {...formikProps}
+              edit={this.props.edit}
+              previousStep={() => this.previousStep(2)}
+            />
+          )}
+        </Formik>
+      </Container>
+    )
+  }
+
+  renderSteps() {
+    switch (this.state.step) {
+      case 1:
+        return this.renderStepOne()
+      case 2:
+        return this.renderStepTwo()
+      default:
+        return null
+    }
   }
 
   render() {
     return (
       <>
-        {this.renderPenaltyStrike()}
-        <Card>
-          <Card.Title>
-            <CustomerBasicsCard
-              customerKey={this.state.customer.key}
-              branchName={this.state.customer.branchName}
-              customerName={this.state.customer.customerName}
-            />
-          </Card.Title>
-          <Loader open={this.state.loading} type="fullscreen" />
-          {this.state.paidLoans.length > 0 ? (
-            <Card.Body>
-              <Formik
-                enableReinitialize
-                initialValues={this.state.step1}
-                validationSchema={
-                  this.props.edit || this.props.review
-                    ? clearanceEditValidation
-                    : clearanceCreationValidation
-                }
-                onSubmit={this.submit}
-                validateOnChange
-                validateOnBlur
-              >
-                {(formikProps) => (
-                  <CreateClearanceForm
-                    {...formikProps}
-                    cancel={() => this.cancel()}
-                    edit={this.props.edit}
-                    review={this.props.review}
-                    customerKey={this.state.customer.key}
-                    paidLoans={this.state.paidLoans}
-                    penalty={this.state.penalty}
-                  />
-                )}
-              </Formik>
-            </Card.Body>
-          ) : (
-            <div style={{ textAlign: 'center', marginBottom: 40 }}>
-              <img
-                alt="no-data-found"
-                src={require('../../../Shared/Assets/no-results-found.svg')}
-              />
-              <h4>{local.noLoansForClearance}</h4>
-            </div>
-          )}
-        </Card>
+        <Loader open={this.state.loading} type="fullscreen" />
+        {this.state.step1.loanId && (
+          <PenaltyStrike loanId={this.state.step1.loanId} />
+        )}
+        <Card.Title>
+          <CustomerBasicsCard
+            customerKey={this.state.customer.key}
+            branchName={this.state.customer.branchName}
+            customerName={this.state.customer.customerName}
+          />
+        </Card.Title>
+        <div className="container">
+          <Card className="w-100">
+            {this.state.paidLoans.length > 0 ? (
+              <div className="d-flex flex-row">
+                <Wizard
+                  currentStepNumber={this.state.step - 1}
+                  stepsDescription={[local.mainInfo, local.documents]}
+                />
+                <Card.Body>{this.renderSteps()}</Card.Body>
+              </div>
+            ) : (
+              <div className="text-align-center my-2">
+                <img
+                  alt="no-data-found"
+                  src={require('../../../Shared/Assets/no-results-found.svg')}
+                />
+                <h4>{local.noLoansForClearance}</h4>
+              </div>
+            )}
+          </Card>
+        </div>
       </>
     )
   }
 }
 
-export default withRouter(CreateClearance)
+export default withRouter(ClearanceCreation)

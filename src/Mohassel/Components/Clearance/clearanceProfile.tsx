@@ -2,7 +2,7 @@ import React, { Component, CSSProperties } from 'react'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
-import { Container, Form, Row } from 'react-bootstrap'
+import { Button, Container, Form, Row } from 'react-bootstrap'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -15,6 +15,8 @@ import { getClearance } from '../../Services/APIs/clearance/getClearance'
 import DocumentPhoto from '../../../Shared/Components/documentPhoto/documentPhoto'
 import { getErrorMessage, timeToDate } from '../../../Shared/Services/utils'
 import './clearance.scss'
+import PenaltyStrike from './penaltyStrike'
+import { reviewClearance } from '../../Services/APIs/clearance/reviewClearance'
 
 interface State {
   loading: boolean
@@ -36,11 +38,17 @@ const cell: CSSProperties = {
   color: theme.colors.blackText,
 }
 
+interface Props {
+  review?: boolean
+}
+
 class ClearanceProfile extends Component<
-  RouteComponentProps<{}, {}, { clearanceId: string }>,
+  RouteComponentProps<{}, {}, { clearanceId: string }> & Props,
   State
 > {
-  constructor(props: RouteComponentProps<{}, {}, { clearanceId: string }>) {
+  constructor(
+    props: RouteComponentProps<{}, {}, { clearanceId: string }> & Props
+  ) {
     super(props)
     this.state = {
       activeTab: 'clearanceDetails',
@@ -104,16 +112,34 @@ class ClearanceProfile extends Component<
     }
   }
 
+  async reviewClearanceByStatus(status: string) {
+    if (this.props.location.state?.clearanceId) {
+      this.setState({ loading: true })
+      const res = await reviewClearance(
+        this.props.location.state?.clearanceId,
+        { status }
+      )
+      if (res.status === 'success') {
+        Swal.fire('Success', '', 'success').then(() =>
+          this.props.history.goBack()
+        )
+      } else {
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      }
+    }
+    this.setState({ loading: false })
+  }
+
   renderMainInfo() {
     return (
       <Table striped bordered hover>
-        <tbody style={{ padding: '2rem 0' }}>
+        <tbody className="px-0 py-2">
           <tr>
-            <td style={header}>{local.registrationDate}*</td>
+            <td style={header}>{local.registrationDate}</td>
             <td style={cell}>{timeToDate(this.state.data.registrationDate)}</td>
           </tr>
           <tr>
-            <td style={header}>{local.receiptDate}*</td>
+            <td style={header}>{local.receiptDate}</td>
             <td style={cell}>{timeToDate(this.state.data.receiptDate)}</td>
           </tr>
           {this.state.data.transactionKey && (
@@ -129,19 +155,19 @@ class ClearanceProfile extends Component<
             </tr>
           )}
           <tr>
-            <td style={header}>{local.clearanceReason}*</td>
+            <td style={header}>{local.clearanceReason}</td>
             <td style={cell}>{this.state.data.clearanceReason}</td>
           </tr>
           <tr>
-            <td style={header}>{local.bankName}*</td>
+            <td style={header}>{local.bankName}</td>
             <td style={cell}>{this.state.data.bankName}</td>
           </tr>
           <tr>
-            <td style={header}>{local.comments}*</td>
+            <td style={header}>{local.comments}</td>
             <td style={cell}>{this.state.data.notes}</td>
           </tr>
           <tr>
-            <td style={header}>{local.status}*</td>
+            <td style={header}>{local.status}</td>
             <td style={cell}>{this.state.data.status}</td>
           </tr>
         </tbody>
@@ -154,7 +180,6 @@ class ClearanceProfile extends Component<
       <Container>
         <Row>
           <Row className="row-nowrap mr-1">
-            {' '}
             <Form.Label className="clearance-label">
               {local.clearanceReceiptPhoto}
             </Form.Label>
@@ -162,16 +187,12 @@ class ClearanceProfile extends Component<
           <DocumentPhoto
             data-qc="receiptPhoto"
             name="receiptPhoto"
-            photoObject={{
-              photoURL: this.state.data.receiptPhotoURL,
-            }}
-            edit={false}
+            photoURL={this.state.data.receiptPhotoURL}
             view
           />
         </Row>
         <Row>
           <Row className="row-nowrap mr-1">
-            {' '}
             <Form.Label className="clearance-label">
               {local.clearanceDocumentPhoto}
             </Form.Label>
@@ -179,10 +200,7 @@ class ClearanceProfile extends Component<
           <DocumentPhoto
             data-qc="documentPhoto"
             name="documentPhoto"
-            photoObject={{
-              photoURL: this.state.data.documentPhotoURL,
-            }}
-            edit={false}
+            photoURL={this.state.data.documentPhotoURL}
             view
           />
         </Row>
@@ -204,24 +222,70 @@ class ClearanceProfile extends Component<
   render() {
     return (
       <>
+        {this.state.data.loanId && (
+          <PenaltyStrike loanId={this.state.data.loanId} />
+        )}
         <Loader open={this.state.loading} type="fullscreen" />
-        <div className="px-4 d-flex flex-column">
-          {this.state.data.status === 'underReview' && (
-            <div>
-              <Can I="editClearance" a="application">
-                <img
-                  style={{ cursor: 'pointer', marginLeft: 20 }}
-                  alt="edit"
-                  src={require('../../Assets/editIcon.svg')}
-                  onClick={() =>
-                    this.props.history.push('/clearances/edit-clearance', {
-                      clearanceId: this.props.location.state.clearanceId,
-                    })
-                  }
-                />
-              </Can>
-              {local.editClearance}
+        <div className="d-flex">
+          <div className="px-4 d-flex flex-column w-25">
+            {this.state.data.status === 'underReview' && !this.props.review && (
+              <div>
+                <Can I="editClearance" a="application">
+                  <span
+                    className="btn p-0"
+                    onClick={() =>
+                      this.props.history.push('/clearances/edit-clearance', {
+                        clearanceId: this.props.location.state.clearanceId,
+                      })
+                    }
+                  >
+                    <img
+                      className="pr-2"
+                      alt="edit"
+                      src={require('../../Assets/editIcon.svg')}
+                    />
+                  </span>
+                </Can>
+                {local.editClearance}
+              </div>
+            )}
+          </div>
+          {this.props.review && this.state.data.status === 'rejected' && (
+            <div className="px-4 d-flex w-75 justify-content-end">
+              <Button
+                className="bg-button w-25"
+                variant="outline-info"
+                onClick={async () => {
+                  await this.reviewClearanceByStatus('underReview')
+                }}
+              >
+                {local.undoReviewClearance}
+              </Button>
             </div>
+          )}
+          {this.props.review && this.state.data.status === 'underReview' && (
+            <>
+              <div className="px-4 d-flex w-75 justify-content-end">
+                <Button
+                  className="bg-button w-25 mx-2"
+                  variant="outline-danger"
+                  onClick={async () => {
+                    await this.reviewClearanceByStatus('rejected')
+                  }}
+                >
+                  {local.rejected}
+                </Button>
+                <Button
+                  className="bg-button w-25"
+                  variant="outline-primary"
+                  onClick={async () => {
+                    await this.reviewClearanceByStatus('approved')
+                  }}
+                >
+                  {local.approved}
+                </Button>
+              </div>
+            </>
           )}
         </div>
         <Card>
