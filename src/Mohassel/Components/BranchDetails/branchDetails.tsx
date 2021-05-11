@@ -294,7 +294,6 @@ class BranchDetails extends Component<Props, State> {
             open={this.props.loading || this.state.productsLoading}
           />
           <CardNavBar
-            header="here"
             array={this.state.tabsArray}
             active={this.state.activeTab}
             selectTab={(index: string) => this.setState({ activeTab: index })}

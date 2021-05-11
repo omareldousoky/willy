@@ -167,7 +167,6 @@ class RoleProfile extends Component<RouteComponentProps<{}, {}, Role>, State> {
             </div>
             <Card style={{ marginTop: 15 }}>
               <CardNavBar
-                header="here"
                 array={this.state.tabsArray}
                 active={this.state.activeTab}
                 selectTab={(index: string) =>
