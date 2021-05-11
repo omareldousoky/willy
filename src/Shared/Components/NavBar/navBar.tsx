@@ -205,7 +205,7 @@ class NavBar extends Component<Props, State> {
               {/* //TODO come back to after we figure permissions */}
               {ability.can('getCustomer', 'customer') ? <NavDropdown title={local.customers} id="basic-nav-dropdown" >
                 <NavDropdown.Item className="primary" onClick={() => this.props.history.push('/customers')}>{local.persons}</NavDropdown.Item>
-                <NavDropdown.Item className="primary" onClick={() => this.props.history.push('/company')}>{local.companies}</NavDropdown.Item>
+                <Can I="getCompany" a="customer"><NavDropdown.Item className="primary" onClick={() => this.props.history.push('/company')}>{local.companies}</NavDropdown.Item></Can>
               </NavDropdown> :
                 !this.props.hide && ability.can('changeOfficer', 'customer') ?
                   <NavDropdown title={local.customers} id="basic-nav-dropdown" >
@@ -238,7 +238,6 @@ class NavBar extends Component<Props, State> {
             {!this.props.hide && <Can I='getLead' a='halanuser'><Nav.Link onClick={() => this.props.history.push('/halan-integration/leads')}>{local.halan}</Nav.Link></Can>}
             {!this.props.hide && <Can I="getClearance" a='application'><Nav.Link onClick={()=> this.props.history.push('/clearances')}>{local.clearances}</Nav.Link> </Can>}
             {!this.props.hide && <Can I='getOfficersGroups' a ='branch'><Nav.Link onClick={()=>this.props.history.push('/supervisions-levels')}>{local.levelsOfSupervision}</Nav.Link></Can>}
-            {!this.props.hide &&  <Can I = "financialClosing" a="application"><Nav.Link onClick={()=>this.props.history.push('/financial-closing')}>{local.financialClosing}</Nav.Link></Can>}
             {!this.props.hide && ability.can('getTerrorist', 'customer') ? <Nav.Link onClick={() => this.props.history.push('/manage-anti-terrorism/anti-terrorism')}>{local.antiTerrorism}</Nav.Link >: null}
             {!this.props.hide && ability.can("financialBlocking","application")? <Nav.Link onClick={()=>this.props.history.push('/financial-closing/lts-blocking')}>{local.manageFinancialTransaction}</Nav.Link>:
             !this.props.hide  && ability.can("financialClosing","application") ? <Nav.Link onClick={()=>this.props.history.push('/financial-closing/lts-closing')}>{local.manageFinancialTransaction}</Nav.Link> :

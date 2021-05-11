@@ -37,6 +37,7 @@ import Select from 'react-select';
 import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
 import { theme } from '../../../theme';
 import { Customer } from '../../../Shared/Services/interfaces';
+import Can from '../../config/Can';
 
 interface Props {
     history: any;
@@ -1259,10 +1260,12 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                             <img style={{ width: 75, margin: '40px 20px' }} src={require('../../Assets/group.svg')} />
                             <Button onClick={() => this.setCustomerType('group')}>{local.group}</Button>
                         </div>
-                        <div className="d-flex flex-column" style={{ margin: '20px 60px' }}>
-                            <img style={{ width: 75, margin: '40px 20px' }} src={require('../../Assets/group.svg')} />
-                            <Button onClick={() => this.setCustomerType('sme')}>{local.company}</Button>
-                        </div>
+                        <Can I="getSMEApplication" a="application">
+                          <div className="d-flex flex-column" style={{ margin: '20px 60px' }}>
+                              <img style={{ width: 75, margin: '40px 20px' }} src={require('../../Assets/group.svg')} />
+                              <Button onClick={() => this.setCustomerType('sme')}>{local.company}</Button>
+                          </div>
+                        </Can>
                     </div> :
                         <div style={{ display: "flex", flexDirection: "row" }} >
                             <Wizard
