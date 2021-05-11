@@ -6,7 +6,10 @@ import Swal from 'sweetalert2'
 import local from '../../../../Shared/Assets/ar.json'
 import AppForm from '../Form'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
-import { settleLegalCustomer } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
+import {
+  deleteSettlementDocument,
+  settleLegalCustomer,
+} from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import colorVariables from '../../../../Shared/Assets/scss/app.scss'
 import {
   ILegalSettlementFormProps,
@@ -77,6 +80,16 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
     onSubmit()
   }
 
+  const handlePhotoChange = async (name: string, value: File | string) => {
+    if (value !== '') return
+
+    const response = await deleteSettlementDocument(customer._id, name)
+
+    if (response.status !== 'success') {
+      Swal.fire('error', getErrorMessage(response.error), 'error')
+    }
+  }
+
   const customerSettlement = customer.settlement
   const isReviewed =
     customerSettlement?.settlementStatus === SettlementStatusEnum.Reviewed
@@ -126,6 +139,7 @@ const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
               wideBtns: true,
               disabled: isReviewed || isSubmitting,
             }}
+            onPhotoChange={handlePhotoChange}
             onCancel={onCancel}
           />
         </Card.Body>

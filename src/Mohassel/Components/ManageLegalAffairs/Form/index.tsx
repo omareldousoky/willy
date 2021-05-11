@@ -12,10 +12,11 @@ import { createFormFieldsInitValue, createValidationSchema } from './utils'
 
 interface FormContext {
   defaultValues: {}
+  onPhotoChange?: (name: string, value: string | File) => void
 }
 
 export const AppFormContext = createContext<FormContext>({
-  defaultValues: {},
+  defaultValues: {}
 })
 
 // TODO: change the naming
@@ -24,6 +25,7 @@ const AppForm: FunctionComponent<AppFormProps> = ({
   onSubmit,
   onCancel,
   onChange,
+  onPhotoChange,
   defaultValues,
   options = {},
 }) => {
@@ -57,6 +59,7 @@ const AppForm: FunctionComponent<AppFormProps> = ({
             <AppFormContext.Provider
               value={{
                 defaultValues,
+                onPhotoChange
               }}
             >
               {renderPairs ? (

@@ -116,4 +116,24 @@ export const uploadDefaultingCustomer = async (reqBody: FormData) => {
       return { status: 'error', error: error.response.data }
     }
   }
+
+ export const deleteSettlementDocument = async (
+   customerId: string,
+   type: string
+ ) => {
+   const url =
+     process.env.REACT_APP_BASE_URL + '/legal/delete-settlement-document'
+
+   try {
+     const res = await axios.delete(url, {
+       data: {
+         id: customerId,
+         type,
+       },
+     })
+     return { status: 'success', body: res.data }
+   } catch (error) {
+     return { status: 'error', error: error.response.data }
+   }
+ }
   

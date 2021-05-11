@@ -1,5 +1,6 @@
 import * as Yup from 'yup'
 import { FormikHelpers, FormikProps } from 'formik'
+import { FormEvent } from 'react'
 
 export interface FieldDefaultProps {
   name: string
@@ -67,7 +68,8 @@ export type AppFormProps = {
   formFields: FormField[]
   onSubmit: (values: any, formikHelpers: FormikHelpers<any>) => void
   onCancel?: () => void
-  onChange?: () => void
+  onChange?: (event: FormEvent<unknown>) => void
+  onPhotoChange?: (name: string, value: File | string) => void
   defaultValues?: any
   options?: {
     disabled?: boolean

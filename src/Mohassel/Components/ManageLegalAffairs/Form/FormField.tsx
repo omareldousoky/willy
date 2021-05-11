@@ -25,7 +25,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
     errors,
   },
 }) => {
-  const { defaultValues } = useContext(AppFormContext)
+  const { defaultValues, onPhotoChange } = useContext(AppFormContext)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const fieldErrors = getNestedByStringKey(errors, field.name)
@@ -94,6 +94,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
             name={inputFieldProps.name}
             handleImageChange={(imageFile) => {
               setFieldValue(inputFieldProps.name, imageFile)
+              onPhotoChange && onPhotoChange(inputFieldProps.name, imageFile)
             }}
             handleBlur={inputFieldProps.onBlur}
             view={inputFieldProps.disabled}
