@@ -187,8 +187,8 @@ class NavBar extends Component<Props, State> {
                   </div>
                 </div>
                 <img  style={{width: "40px" }} alt="drop-down-arrow" src={require('../../Assets/dropDownArrow.svg')} />
-              </div>
               {this.state.openBranchList ? this.renderBranchList() : null}
+              </div>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
