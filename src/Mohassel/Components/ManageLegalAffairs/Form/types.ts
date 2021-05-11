@@ -3,45 +3,45 @@ import { FormikHelpers, FormikProps } from 'formik'
 import { FormEvent } from 'react'
 
 export interface FieldDefaultProps {
-  name: string
-  type: string
-  readOnly?: boolean
-  disabled?: boolean
+  name: string;
+  type: string;
+  readOnly?: boolean;
+  disabled?: boolean;
 }
 
 export interface Field extends FieldDefaultProps {
-  type: 'text' | 'date' | 'number' | 'textarea' | 'photo'
-  label: string
-  validation: Yup.Schema<any>
+  type: 'text' | 'date' | 'number' | 'textarea' | 'photo';
+  label: string;
+  validation: Yup.Schema<any>;
 }
 
 export interface CheckboxField extends FieldDefaultProps {
-  type: 'checkbox'
-  label: string
-  checkboxLabel: string
-  validation: Yup.Schema<any>
+  type: 'checkbox';
+  label: string;
+  checkboxLabel: string;
+  validation: Yup.Schema<any>;
 }
 
 export interface GroupField extends FieldDefaultProps {
-  type: 'group'
-  fields: FormField[]
+  type: 'group';
+  fields: FormField[];
 }
 
 export interface SelectField extends FieldDefaultProps {
-  type: 'select'
-  label: string
-  validation: Yup.Schema<any>
+  type: 'select';
+  label: string;
+  validation: Yup.Schema<any>;
   options: {
-    value: string
-    label: string
-  }[]
+    value: string;
+    label: string;
+  }[];
 }
 
 export interface FileField extends FieldDefaultProps {
-  type: 'file'
-  accepts: string
-  validation: Yup.Schema<any>
-  label: string
+  type: 'file';
+  accepts: string;
+  validation: Yup.Schema<any>;
+  label: string;
 }
 
 type SingleField = Field | SelectField | CheckboxField | FileField
@@ -49,34 +49,34 @@ type SingleField = Field | SelectField | CheckboxField | FileField
 export type FormField = SingleField | GroupField
 
 export type GroupFieldProps = {
-  field: GroupField
-  formikProps: FormikProps<any>
-  pairs?: boolean
+  field: GroupField;
+  formikProps: FormikProps<any>;
+  pairs?: boolean;
 }
 
 export type FormFieldProps = {
-  field: SingleField
-  formikProps: FormikProps<any>
+  field: SingleField;
+  formikProps: FormikProps<any>;
 }
 
 export type FormFieldsProps = {
-  formFields: FormField[]
-  formikProps: FormikProps<any>
+  formFields: FormField[];
+  formikProps: FormikProps<any>;
 }
 
 export type AppFormProps = {
-  formFields: FormField[]
-  onSubmit: (values: any, formikHelpers: FormikHelpers<any>) => void
-  onCancel?: () => void
-  onChange?: (event: FormEvent<unknown>) => void
-  onPhotoChange?: (name: string, value: File | string) => void
-  defaultValues?: any
+  formFields: FormField[];
+  onSubmit: (values: any, formikHelpers: FormikHelpers<any>) => void;
+  onCancel?: () => void;
+  onChange?: (event: FormEvent<unknown>) => void;
+  onPhotoChange?: (name: string, value: File | string) => void;
+  defaultValues?: any;
   options?: {
-    disabled?: boolean
-    renderPairs?: boolean
-    submitBtnText?: string
-    wideBtns?: boolean
-    validationSort?: [string, string][] // use this to sort fields when validation depends on each other
-    footer?: JSX.Element | string
-  }
+    disabled?: boolean;
+    renderPairs?: boolean;
+    submitBtnText?: string;
+    wideBtns?: boolean;
+    validationSort?: [string, string][]; // use this to sort fields when validation depends on each other
+    footer?: JSX.Element | string;
+  };
 }

@@ -16,9 +16,9 @@ const LegalSettlement = ({
   branchName,
   managers,
 }: {
-  customer: SettledCustomer
-  branchName: string
-  managers: Managers
+  customer: SettledCustomer;
+  branchName: string;
+  managers: Managers;
 }) => {
   const customerSettlement = customer.settlement
 

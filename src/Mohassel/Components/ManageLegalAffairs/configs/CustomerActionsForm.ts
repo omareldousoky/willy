@@ -1,5 +1,5 @@
 import local from '../../../../Shared/Assets/ar.json'
-import { Field, FormField } from '../../../../Shared/Components/Form/types'
+import { Field, FormField } from '../Form/types'
 import { defaultValidationSchema } from '../validations'
 
 const createCourtFields = (courtLabel: string): Field[] => [

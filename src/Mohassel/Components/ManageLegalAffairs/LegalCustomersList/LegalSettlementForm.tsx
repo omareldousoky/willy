@@ -12,13 +12,13 @@ import {
 } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import colorVariables from '../../../../Shared/Assets/scss/app.scss'
 import {
-  ILegalSettlementFormProps,
+  LegalSettlementFormProps,
   SettlementFormValues,
   SettlementStatusEnum,
 } from '../types'
 import settlementForm from '../configs/settlementForm'
 
-const LegalSettlementForm: FunctionComponent<ILegalSettlementFormProps> = ({
+const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
   settlementInfo,
   onSubmit,
   onCancel,

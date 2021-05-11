@@ -292,8 +292,8 @@ const LegalCustomersList: FunctionComponent = () => {
   }
 
   const handleReviewCustomerSubmit = async (values: {
-    type: ManagerReveiwEnum
-    notes: string
+    type: ManagerReveiwEnum;
+    notes: string;
   }) => {
     if (!customersForReview?.length) {
       return

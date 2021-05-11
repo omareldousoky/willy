@@ -49,7 +49,7 @@ export interface DefaultedCustomer extends ManagerReviews {
     customerName: string;
     customerId: string;
     customerKey: number;
-    customerBranchId?: string
+    customerBranchId?: string;
 }
 interface Props {
     history: any;
