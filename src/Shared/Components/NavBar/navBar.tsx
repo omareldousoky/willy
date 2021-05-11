@@ -79,7 +79,11 @@ class NavBar extends Component<Props, State> {
     if (res.status === "success") {
       document.cookie = 'ltsbranch=' + JSON.stringify(branch) + (process.env.REACT_APP_DOMAIN ? `;domain=${process.env.REACT_APP_DOMAIN}`: '') + ';path=/;';
       setToken(res.body.token);
-      this.setState({ loading: false, selectedBranch: branch })
+      this.setState({
+        loading: false,
+        selectedBranch: branch,
+        openBranchList: false,
+      });
       if(refresh) this.props.history.push("/");
     } else console.log(res)
   }
