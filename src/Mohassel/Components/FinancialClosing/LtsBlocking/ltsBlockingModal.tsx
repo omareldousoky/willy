@@ -101,7 +101,7 @@ class LtsBlockingModal extends Component<Props, State> {
                 >
                   <Modal.Header>
                     <Modal.Title className="m-auto">
-                      {local.bulkLoanApplicationsApproval}
+                      {local.ltsBlocking}
                     </Modal.Title>
                   </Modal.Header>
                   <Modal.Body>

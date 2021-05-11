@@ -557,17 +557,6 @@ class NavBar extends Component<Props, State> {
                   </Nav.Link>
                 </Can>
               )}
-              {!this.props.hide && (
-                <Can I="financialClosing" a="application">
-                  <Nav.Link
-                    onClick={() =>
-                      this.props.history.push('/financial-closing')
-                    }
-                  >
-                    {local.financialClosing}
-                  </Nav.Link>
-                </Can>
-              )}
               {!this.props.hide && ability.can('getTerrorist', 'customer') ? (
                 <Nav.Link
                   onClick={() =>
