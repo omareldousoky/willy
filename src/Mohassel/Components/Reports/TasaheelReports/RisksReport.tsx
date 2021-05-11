@@ -1,33 +1,33 @@
-import React from "react";
-import "./styles.scss";
+import React from 'react'
+import './styles.scss'
 
-import { timeToArabicDateNow } from "../../../../Shared/Services/utils";
-import * as local from "../../../../Shared/Assets/ar.json";
+import { timeToArabicDateNow } from '../../../../Shared/Services/utils'
+import * as local from '../../../../Shared/Assets/ar.json'
 
 export const RisksReport = (report) => {
   const formatTier = (tier) => {
     switch (tier) {
-      case "Undeserved Credit":
-        return local.undeservedCreditGeneral;
-      case "rescheduled credit":
-        return local.rescheduledCredit;
-      case "doubtful credit":
-        return local.doubtfulCredit;
-      case "total":
-        return local.totalGeneral;
+      case 'Undeserved Credit':
+        return local.undeservedCreditGeneral
+      case 'rescheduled credit':
+        return local.rescheduledCredit
+      case 'doubtful credit':
+        return local.doubtfulCredit
+      case 'total':
+        return local.totalGeneral
       default:
-        if (tier.includes("+")) {
-          return `اكثر من ${tier.replace("+", "")}`;
+        if (tier.includes('+')) {
+          return `اكثر من ${tier.replace('+', '')}`
         }
-        if (tier.includes("-")) {
-          return ` من ${tier.replace("-", ` إلى `)} يوم`;
+        if (tier.includes('-')) {
+          return ` من ${tier.replace('-', ` إلى `)} يوم`
         }
-        return tier;
+        return tier
     }
-  };
+  }
   return (
     <div lang="ar" className="report text-center font-weight-bold">
-      <table className="my-4 mx-2" style={{ fontSize: "12px" }}>
+      <table className="my-4 mx-2" style={{ fontSize: '12px' }}>
         <thead>
           <tr className="bg-white text-left">
             <td colSpan={6} className="font-weight-bold">
@@ -39,14 +39,14 @@ export const RisksReport = (report) => {
               <div>{timeToArabicDateNow(true)}</div>
             </td>
             <td colSpan={6}>
-              <div className="logo-print"></div>
+              <div className="logo-print" />
             </td>
           </tr>
         </thead>
       </table>
       <table>
         <thead className="report-header">
-          <tr className="font-weight-bold" style={{ fontSize: "14px" }}>
+          <tr className="font-weight-bold" style={{ fontSize: '14px' }}>
             <th className="text-center">{local.risksReportTitle}</th>
           </tr>
           <tr className="font-weight-bold text-center">
@@ -118,5 +118,5 @@ export const RisksReport = (report) => {
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}

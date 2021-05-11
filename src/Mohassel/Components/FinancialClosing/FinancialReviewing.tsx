@@ -5,10 +5,10 @@ import { financialClosingArray } from './financialClosingInitials'
 import LtsOracleReviewing from './LtsOracleReviewing/ltsOracleReviewing'
 
 interface State {
-  tabsArray: Array<Tab>;
+  tabsArray: Array<Tab>
 }
 interface Props {
-  withHeader: boolean;
+  withHeader: boolean
 }
 class FinancialReviewing extends Component<Props, State> {
   constructor(props) {
@@ -17,11 +17,13 @@ class FinancialReviewing extends Component<Props, State> {
       tabsArray: [],
     }
   }
+
   componentDidMount() {
     this.setState({
       tabsArray: financialClosingArray(),
     })
   }
+
   render() {
     return (
       <>
@@ -36,7 +38,7 @@ class FinancialReviewing extends Component<Props, State> {
               .indexOf('bulkLoanApplicationsReview')}
           />
         )}
-        <LtsOracleReviewing/>
+        <LtsOracleReviewing />
       </>
     )
   }

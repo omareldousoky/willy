@@ -1,124 +1,145 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
-import Swal from "sweetalert2"
-import DynamicTable from "../../../Shared/Components/DynamicTable/dynamicTable"
-import { Loader } from "../../../Shared/Components/Loader"
-import * as local from "../../../Shared/Assets/ar.json"
-import Can from "../../config/Can"
-import Modal from "react-bootstrap/Modal"
-import { search, searchFilters } from "../../../Shared/redux/search/actions"
-import Search from "../../../Shared/Components/Search/search"
-import { loading } from "../../../Shared/redux/loading/actions"
-import HeaderWithCards, { Tab } from "../HeaderWithCards/headerWithCards"
-import { antiTerrorismArray, fullEnglishDate } from "./terrorismInitials"
-import { Button, Card, Form, Row } from "react-bootstrap"
-import { getErrorMessage } from "../../../Shared/Services/utils"
-import { Formik } from "formik"
-import { uploadTerroristDocument } from "../../Services/APIs/Terrorism/terrorism"
-import * as Yup from "yup"
-import { TerroristResponse } from "../../../Shared/Services/interfaces"
-import { TerroristsCustomers } from "./terroristsCustomers"
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import Swal from 'sweetalert2'
+import Modal from 'react-bootstrap/Modal'
+import { Button, Card, Form, Row } from 'react-bootstrap'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
+import { Loader } from '../../../Shared/Components/Loader'
+import * as local from '../../../Shared/Assets/ar.json'
+import Can from '../../config/Can'
+import { search, searchFilters } from '../../../Shared/redux/search/actions'
+import Search from '../../../Shared/Components/Search/search'
+import { loading } from '../../../Shared/redux/loading/actions'
+import HeaderWithCards, { Tab } from '../HeaderWithCards/headerWithCards'
+import { antiTerrorismArray, fullEnglishDate } from './terrorismInitials'
+import { getErrorMessage } from '../../../Shared/Services/utils'
+import { uploadTerroristDocument } from '../../Services/APIs/Terrorism/terrorism'
+import { TerroristResponse } from '../../../Shared/Services/interfaces'
+import { TerroristsCustomers } from './terroristsCustomers'
+
 interface Props {
-	data: TerroristResponse[];
-	error: string;
-	totalCount: number;
-	loading: boolean;
-	searchFilters: object;
-	search: (data) => Promise<void>;
-	setSearchFilters: (data) => void;
-	setLoading: (data) => void;
+  data: TerroristResponse[]
+  error: string
+  totalCount: number
+  loading: boolean
+  searchFilters: object
+  search: (data) => Promise<void>
+  setSearchFilters: (data) => void
+  setLoading: (data) => void
 }
 interface State {
-	tabsToRender: Tab[];
-	from: number;
-	size: number;
-	showModal: boolean;
+  tabsToRender: Tab[]
+  from: number
+  size: number
+  showModal: boolean
 }
 interface FormikValues {
-	terrorismLListFile: File;
+  terrorismLListFile: File
 }
 interface Errors {
-	terrorismLListFile?: string;
+  terrorismLListFile?: string
 }
 interface Touched {
-	terrorismLListFile?: boolean;
+  terrorismLListFile?: boolean
 }
 const uploadTerroristDocumentValidation = Yup.object().shape({
-	terrorismLListFile: Yup.mixed(),
+  terrorismLListFile: Yup.mixed(),
 })
 class TerrorismList extends Component<Props, State> {
-	mappers: {
-		title: (() => void) | string;
-		key: string;
-		sortable?: boolean;
-		render: (data: TerroristResponse) => void;
-	}[]
-	constructor(props: Props) {
-		super(props)
-		this.state = {
-			tabsToRender: [],
-			from: 0,
-			size: 10,
-			showModal: false,
-		}
-		this.mappers = [
-			{
-				title: local.name,
-				key: "name",
-				render: data => <p className="small-text">{data.name}</p>
-			},
-			{
-				title: local.nationality,
-				key: "nationality",
-				render: data =><p className="small-text">{data.nationality}</p>
-			},
-			{
-				title: local.nationalId,
-				key: "nationalId",
-				render: data => <p className="small-text" dir="ltr">{data.nationalId}</p>
-			},
-			{
-				title: local.birthDate,
-				key: 'birthDate',
-				render: data => <p className="small-text">{data.birthDate}</p>
-			},
-			{
-				title: local.creationDate,
-				key: 'createAt',
-			   render: data => data?.created?.at ? <p className="small-text">{fullEnglishDate (data.created.at)}</p>: null,
+  mappers: {
+    title: (() => void) | string
+    key: string
+    sortable?: boolean
+    render: (data: TerroristResponse) => void
+  }[]
 
-			},
-		]
-	}
-	componentDidMount() {
-		this.props.search({size: this.state.size, from: this.state.from, url:'terrorist'});
-		this.setState({
-			tabsToRender: antiTerrorismArray()
-		})
-	}
-	async getTerrorists() {
-		this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'terrorist'})
-		if (this.props.error) {
-			Swal.fire('', getErrorMessage(this.props.error), "error")
-		}
-	}
-	handleSubmit = async (values: FormikValues) => {
-		this.props.setLoading(true)
-		this.setState({ showModal: false })
-		const formData = new FormData()
-		formData.append("data", values.terrorismLListFile);
-		const res = await uploadTerroristDocument(formData);
-		if (res.status === "success") {
-			Swal.fire('', local.uploadedSuccessfully, 'success').then(
-             ()=> window.location.reload())
-		} else {
-			Swal.fire('', getErrorMessage(res.error.error), "error")
-		}
-		this.props.setLoading(false)
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      tabsToRender: [],
+      from: 0,
+      size: 10,
+      showModal: false,
+    }
+    this.mappers = [
+      {
+        title: local.name,
+        key: 'name',
+        render: (data) => <p className="small-text">{data.name}</p>,
+      },
+      {
+        title: local.nationality,
+        key: 'nationality',
+        render: (data) => <p className="small-text">{data.nationality}</p>,
+      },
+      {
+        title: local.nationalId,
+        key: 'nationalId',
+        render: (data) => (
+          <p className="small-text" dir="ltr">
+            {data.nationalId}
+          </p>
+        ),
+      },
+      {
+        title: local.birthDate,
+        key: 'birthDate',
+        render: (data) => <p className="small-text">{data.birthDate}</p>,
+      },
+      {
+        title: local.creationDate,
+        key: 'createAt',
+        render: (data) =>
+          data?.created?.at ? (
+            <p className="small-text">{fullEnglishDate(data.created.at)}</p>
+          ) : null,
+      },
+    ]
+  }
 
-	}
-	render() {
-		return (
+  componentDidMount() {
+    this.props.search({
+      size: this.state.size,
+      from: this.state.from,
+      url: 'terrorist',
+    })
+    this.setState({
+      tabsToRender: antiTerrorismArray(),
+    })
+  }
+
+  async getTerrorists() {
+    this.props.search({
+      ...this.props.searchFilters,
+      size: this.state.size,
+      from: this.state.from,
+      url: 'terrorist',
+    })
+    if (this.props.error) {
+      Swal.fire('', getErrorMessage(this.props.error), 'error')
+    }
+  }
+
+  handleSubmit = async (values: FormikValues) => {
+    this.props.setLoading(true)
+    this.setState({ showModal: false })
+    const formData = new FormData()
+    formData.append('data', values.terrorismLListFile)
+    const res = await uploadTerroristDocument(formData)
+    if (res.status === 'success') {
+      Swal.fire('', local.uploadedSuccessfully, 'success').then(() =>
+        window.location.reload()
+      )
+    } else {
+      Swal.fire('', getErrorMessage(res.error.error), 'error')
+    }
+    this.props.setLoading(false)
+  }
+
+  render() {
+    return (
       <>
         <HeaderWithCards
           header={local.antiTerrorism}
@@ -169,7 +190,7 @@ class TerrorismList extends Component<Props, State> {
               size={this.state.size}
               url="terrorist"
               totalCount={this.props.totalCount}
-              pagination={true}
+              pagination
               data={this.props.data}
               mappers={this.mappers}
               changeNumber={(key: string, number: number) => {
@@ -196,7 +217,7 @@ class TerrorismList extends Component<Props, State> {
               {(formikProps) => (
                 <Form onSubmit={formikProps.handleSubmit}>
                   <Modal.Header>
-                    <Modal.Title className={'m-auto'}>
+                    <Modal.Title className="m-auto">
                       {local.uploadTerroristsList}
                     </Modal.Title>
                   </Modal.Header>
@@ -219,7 +240,7 @@ class TerrorismList extends Component<Props, State> {
                           Boolean(formikProps.errors.terrorismLListFile) &&
                           Boolean(formikProps.touched.terrorismLListFile)
                         }
-                        accept={'.xlsx,.xls,.xlsm,.csv'}
+                        accept=".xlsx,.xls,.xlsm,.csv"
                       />
                       <Form.Control.Feedback type="invalid">
                         {formikProps.errors.terrorismLListFile}
@@ -244,27 +265,28 @@ class TerrorismList extends Component<Props, State> {
         )}
       </>
     )
-	}
-	componentWillUnmount() {
-		this.props.setSearchFilters({})
-		this.props.search({url:'clearData'})
-	}
+  }
+
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+    this.props.search({ url: 'clearData' })
+  }
 }
-const addSearchToProps = dispatch => {
-	return {
-		search: data => dispatch(search(data)),
-		setSearchFilters: data => dispatch(searchFilters(data)),
-		setLoading: data => dispatch(loading(data))
-	};
-};
-const mapStateToProps = state => {
-	return {
-		data: state.search.data,
-		error: state.search.error,
-		totalCount: state.search.totalCount,
-		loading: state.loading,
-		searchFilters: state.searchFilters
-	};
-};
+const addSearchToProps = (dispatch) => {
+  return {
+    search: (data) => dispatch(search(data)),
+    setSearchFilters: (data) => dispatch(searchFilters(data)),
+    setLoading: (data) => dispatch(loading(data)),
+  }
+}
+const mapStateToProps = (state) => {
+  return {
+    data: state.search.data,
+    error: state.search.error,
+    totalCount: state.search.totalCount,
+    loading: state.loading,
+    searchFilters: state.searchFilters,
+  }
+}
 
 export default connect(mapStateToProps, addSearchToProps)(TerrorismList)
