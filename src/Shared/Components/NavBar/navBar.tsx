@@ -317,12 +317,14 @@ class NavBar extends Component<Props, State> {
                   >
                     {local.persons}
                   </NavDropdown.Item>
-                  <NavDropdown.Item
-                    className="primary"
-                    onClick={() => this.props.history.push('/company')}
-                  >
-                    {local.companies}
-                  </NavDropdown.Item>
+                  <Can I="getCompany" a="customer">
+                    <NavDropdown.Item
+                      className="primary"
+                      onClick={() => this.props.history.push('/company')}
+                    >
+                      {local.companies}
+                    </NavDropdown.Item>
+                  </Can>
                 </NavDropdown>
               ) : !this.props.hide &&
                 ability.can('changeOfficer', 'customer') ? (

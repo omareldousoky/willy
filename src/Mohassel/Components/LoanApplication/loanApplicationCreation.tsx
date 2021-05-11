@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
 import { Formik } from 'formik'
-import Container from 'react-bootstrap/Container'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
-import Modal from 'react-bootstrap/Modal'
 import Select from 'react-select'
 import { produce } from 'immer'
+import { Button, Card, Container, Form, Modal } from 'react-bootstrap'
 import * as local from '../../../Shared/Assets/ar.json'
 import {
   Application,
@@ -53,6 +49,7 @@ import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/cust
 
 import { theme } from '../../../Shared/theme'
 import { Customer } from '../../../Shared/Services/interfaces'
+import Can from '../../config/Can'
 
 interface LoanApplicationCreationRouteState {
   id: string
@@ -1749,19 +1746,21 @@ class LoanApplicationCreation extends Component<Props, State> {
                   {local.group}
                 </Button>
               </div>
-              <div
-                className="d-flex flex-column"
-                style={{ margin: '20px 60px' }}
-              >
-                <img
-                  alt="group"
-                  style={{ width: 75, margin: '40px 20px' }}
-                  src={require('../../Assets/group.svg')}
-                />
-                <Button onClick={() => this.setCustomerType('sme')}>
-                  {local.company}
-                </Button>
-              </div>
+              <Can I="getSMEApplication" a="application">
+                <div
+                  className="d-flex flex-column"
+                  style={{ margin: '20px 60px' }}
+                >
+                  <img
+                    alt="sme"
+                    style={{ width: 75, margin: '40px 20px' }}
+                    src={require('../../Assets/group.svg')}
+                  />
+                  <Button onClick={() => this.setCustomerType('sme')}>
+                    {local.company}
+                  </Button>
+                </div>
+              </Can>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'row' }}>
