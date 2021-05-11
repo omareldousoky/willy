@@ -12,7 +12,7 @@ import { InfoBox, Profile, ProfileActions } from "../../Components"
 import * as local from "../../Assets/ar.json"
 import ability from "../../../Mohassel/config/ability"
 import { getCustomerByID } from "../../../Mohassel/Services/APIs/Customer-Creation/getCustomer"
-import { getIscoreSME } from "../../../Mohassel/Services/APIs/iScore/iScore"
+import { getSMECachedIscore } from "../../../Mohassel/Services/APIs/iScore/iScore"
 import { getErrorMessage } from "../../Services/utils"
 
 import { FieldProps, TabDataProps } from "../Profile/types"
@@ -25,12 +25,12 @@ import { blockCustomer } from "../../../Mohassel/Services/APIs/blockCustomer/blo
 export interface CompanyProfileProps {
   data: any;
 }
-export const Company = () => {
+export const CompanyProfile = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [activeTab, changeActiveTab] = useState("documents")
   const [company, setCompany] = useState<Customer>()
   const [score, setScore] = useState<Score>()
-  const [mainInfo, setMainInfo] = useState<FieldProps[][]>([])
+  // const [mainInfo, setMainInfo] = useState<FieldProps[][]>([])
   const location = useLocation()
   const history = useHistory()
 
@@ -40,11 +40,12 @@ export const Company = () => {
   } = local
   const getiScores = async (id) => {
     setIsLoading(true)
-    const iScores = await getIscoreSME({
-      idValue: id,
-      name: company?.customerName,
-      productId: "002",
-      idSource: "901",
+    const iScores = await getSMECachedIscore({
+      ids: [id]
+      // idValue: id,
+      // name: company?.customerName,
+      // productId: "002",
+      // idSource: "901",
     })
     if (iScores.status === "success") {
       setScore(iScores?.body?.data[0])
@@ -62,22 +63,23 @@ export const Company = () => {
       await setCompany(res.body)
       setIsLoading(false)
       if (ability.can("viewIscore", "customer"))
-        await getiScores(res.body.taxCardNumber)
+        await getiScores(res.body.commercialRegisterNumber)
       // await getGuaranteeedLoans(res.body)
       // await getGeoArea(res.body.geoAreaId, res.body.branchId)
+      // setCompanyFields()
     } else {
       setIsLoading(false)
       Swal.fire("Error !", getErrorMessage(res.error.error), "error")
     }
   }
-  const setCompanyFields = () => company && setMainInfo([getCompanyInfo({company: company, score: score})])
+  // const setCompanyFields = () => company && setMainInfo([getCompanyInfo({company: company, score: score})])
   useEffect(() => {
     getCompanyDetails()
   }, [])
-  useEffect(() => {
-    company && setCompanyFields()
-    company && getiScores(company.taxCardNumber)
-  }, [company])
+  // useEffect(() => {
+  //   company && setCompanyFields()
+  //   company && getiScores(company.taxCardNumber)
+  // }, [company])
 
   const tabsData: TabDataProps = {
     documents: [
@@ -88,6 +90,7 @@ export const Company = () => {
       },
     ],
   }
+  const mainInfo = company && [getCompanyInfo({ company, score })]
   const tabs: Array<Tab> = [
     {
       header: documents,
@@ -187,7 +190,7 @@ export const Company = () => {
           <h3>{viewCompany}</h3>
           <ProfileActions actions={getProfileActions()} />
         </div>
-        {mainInfo.length > 0 && <InfoBox info={mainInfo} />}
+        {mainInfo && <InfoBox info={mainInfo} />}
       </div>
       <Profile
         source="company"
@@ -201,10 +204,3 @@ export const Company = () => {
     </Container>
   )
 }
-const mapStateToProps = (state) => {
-  return {
-    data: state.search.data,
-  }
-}
-
-export const CompanyProfile = connect(mapStateToProps)(Company)
