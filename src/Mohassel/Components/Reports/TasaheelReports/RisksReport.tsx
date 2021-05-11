@@ -59,18 +59,10 @@ export const RisksReport = (report) => {
               <table>
                 <tbody>
                   <tr>
-                    <td scope="row" rowSpan={2}>
-                      {local.clientsCreditsAge}
-                    </td>
-                    <td scope="col" colSpan={3}>
-                      {local.totalWallet}
-                    </td>
-
-                    <td scope="col" colSpan={2}>
-                      {local.customDebtRequired}
-                    </td>
+                    <td rowSpan={2}>{local.clientsCreditsAge}</td>
+                    <td colSpan={3}>{local.totalWallet}</td>
+                    <td colSpan={2}>{local.customDebtRequired}</td>
                   </tr>
-
                   <tr>
                     <td>{local.noOfCustomers}</td>
                     <td>{local.value}</td>

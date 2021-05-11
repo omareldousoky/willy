@@ -122,6 +122,11 @@ class TerrorismUnList extends Component<Props, State> {
     })
   }
 
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+    this.props.search({ url: 'clearData' })
+  }
+
   async getTerrorists() {
     this.props.search({
       ...this.props.searchFilters,
@@ -276,11 +281,6 @@ class TerrorismUnList extends Component<Props, State> {
         )}
       </>
     )
-  }
-
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
-    this.props.search({ url: 'clearData' })
   }
 }
 const addSearchToProps = (dispatch) => {

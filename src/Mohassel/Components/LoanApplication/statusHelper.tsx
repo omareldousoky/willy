@@ -168,7 +168,7 @@ class StatusHelper extends Component<Props, State> {
                 </tr>
               </thead>
               <tbody>
-                {individualGuarantors.map((guarantor, i) => {
+                {individualGuarantors.map((guarantor) => {
                   const area = this.props.getGeoArea(
                     guarantor.guarantor.geoAreaId
                   )

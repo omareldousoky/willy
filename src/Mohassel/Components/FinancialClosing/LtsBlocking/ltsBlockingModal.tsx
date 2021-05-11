@@ -10,6 +10,7 @@ import {
   financialBlocking,
   FinancialClosingRequest,
 } from '../../../Services/APIs/loanApplication/financialClosing'
+import { Loader } from '../../../../Shared/Components/Loader'
 
 interface Props {
   showModal: boolean
@@ -75,64 +76,67 @@ class LtsBlockingModal extends Component<Props, State> {
 
   render() {
     return (
-      this.props.showModal && (
-        <Modal
-          show={this.props.setShoModal}
-          onHied={() => this.props.setShoModal(false)}
-        >
-          <Formik
-            className="mx-2 my-0"
-            enableReinitialize
-            initialValues={{
-              blockDate: '',
-            }}
-            onSubmit={this.handleSubmit}
-            validationSchema={blockingValidationSchema}
-            validateOnBlur
-            validateOnChange
+      <>
+        <Loader open={this.state.loading} type="fullsection" />
+        {this.props.showModal && (
+          <Modal
+            show={this.props.setShoModal}
+            onHied={() => this.props.setShoModal(false)}
           >
-            {(formikProps) => (
-              <Form
-                className="w-100 py-3 m-2"
-                onSubmit={formikProps.handleSubmit}
-              >
-                <Modal.Header>
-                  <Modal.Title className="m-auto">
-                    {local.bulkLoanApplicationsApproval}
-                  </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <Row>
-                    <Col sm={12} className="my-5 mx-0 p-0">
-                      <Field
-                        type="date"
-                        name="blockDate"
-                        key="blockDate"
-                        value={formikProps.values.blockDate}
-                        component={DateField}
-                        className="m-0"
-                        label={local.blockDate}
-                        id="blockDate"
-                      />
-                    </Col>
-                  </Row>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button
-                    variant="secondary"
-                    onClick={() => this.props.setShoModal(false)}
-                  >
-                    {local.cancel}
-                  </Button>
-                  <Button type="submit" variant="primary">
-                    {local.ltsBlocking}
-                  </Button>
-                </Modal.Footer>
-              </Form>
-            )}
-          </Formik>
-        </Modal>
-      )
+            <Formik
+              className="mx-2 my-0"
+              enableReinitialize
+              initialValues={{
+                blockDate: '',
+              }}
+              onSubmit={this.handleSubmit}
+              validationSchema={blockingValidationSchema}
+              validateOnBlur
+              validateOnChange
+            >
+              {(formikProps) => (
+                <Form
+                  className="w-100 py-3 m-2"
+                  onSubmit={formikProps.handleSubmit}
+                >
+                  <Modal.Header>
+                    <Modal.Title className="m-auto">
+                      {local.bulkLoanApplicationsApproval}
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <Row>
+                      <Col sm={12} className="my-5 mx-0 p-0">
+                        <Field
+                          type="date"
+                          name="blockDate"
+                          key="blockDate"
+                          value={formikProps.values.blockDate}
+                          component={DateField}
+                          className="m-0"
+                          label={local.blockDate}
+                          id="blockDate"
+                        />
+                      </Col>
+                    </Row>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button
+                      variant="secondary"
+                      onClick={() => this.props.setShoModal(false)}
+                    >
+                      {local.cancel}
+                    </Button>
+                    <Button type="submit" variant="primary">
+                      {local.ltsBlocking}
+                    </Button>
+                  </Modal.Footer>
+                </Form>
+              )}
+            </Formik>
+          </Modal>
+        )}
+      </>
     )
   }
 }

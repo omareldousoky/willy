@@ -12,7 +12,7 @@ export const TerroristsCustomers = () => {
   const downloadSuspectsList = async () => {
     setLoading(true)
     const res = await downloadSuspectsReport()
-    if (res.status == 'success' && res.body.presignedUr) {
+    if (res.status === 'success' && res.body.presignedUr) {
       downloadFile(res.body.presignedUr)
     } else {
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')

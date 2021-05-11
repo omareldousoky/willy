@@ -8,7 +8,6 @@ import {
   getIscoreReportStatus,
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
-import Can from '../../config/Can'
 import {
   fetchOfficersProductivityReport,
   getOfficersProductivityReportById,
@@ -42,19 +41,6 @@ class OfficersProductivityReports extends Component<{}, State> {
     this.getProductivityReports()
   }
 
-  async getProductivityReports() {
-    this.setState({ loading: true })
-    const res = await getOfficersProductivityReports()
-    if (res.status === 'success' && res.body?.files) {
-      this.setState({
-        data: res.body.files ?? [],
-        loading: false,
-      })
-    } else {
-      this.setState({ loading: false })
-    }
-  }
-
   async handleSubmit(values) {
     const obj: OfficersProductivityRequest = {
       startDate: new Date(values.fromDate).setUTCHours(0, 0, 0, 0),
@@ -82,6 +68,19 @@ class OfficersProductivityReports extends Component<{}, State> {
     } else {
       this.setState({ loading: false })
       Swal.fire('error', local.fileQueuedError, 'error')
+    }
+  }
+
+  async getProductivityReports() {
+    this.setState({ loading: true })
+    const res = await getOfficersProductivityReports()
+    if (res.status === 'success' && res.body?.files) {
+      this.setState({
+        data: res.body.files ?? [],
+        loading: false,
+      })
+    } else {
+      this.setState({ loading: false })
     }
   }
 

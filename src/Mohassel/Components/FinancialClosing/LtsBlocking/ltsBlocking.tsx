@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { FormCheck } from 'react-bootstrap'
+import { Button, Card, FormCheck } from 'react-bootstrap'
 import * as local from '../../../../Shared/Assets/ar.json'
 import { Loader } from '../../../../Shared/Components/Loader'
 import {
@@ -21,7 +19,6 @@ import { financialUnlBlocking } from '../../../Services/APIs/loanApplication/fin
 import Pagination from '../../pagination/pagination'
 
 interface Props extends RouteComponentProps {
-  history: any
   data: Branch[]
   totalCount: number
   searchFilters: BlockingObj
@@ -53,10 +50,7 @@ interface State {
   selectedBranches: Branch[]
   blockDate?: number
   checkAll: boolean
-  blockDateFilter: string
 }
-
-const today: Date = new Date()
 
 class LtsBlocking extends Component<Props, State> {
   mappers: {
@@ -74,7 +68,6 @@ class LtsBlocking extends Component<Props, State> {
       from: 0,
       selectedBranches: [],
       checkAll: false,
-      blockDateFilter: 'exact',
     }
     this.mappers = [
       {
@@ -120,31 +113,6 @@ class LtsBlocking extends Component<Props, State> {
         render: (data) => this.getStatus(data.status),
       },
     ]
-  }
-
-  addRemoveItemFromChecked(branch) {
-    if (
-      this.state.selectedBranches.findIndex(
-        (branchItem) => branchItem.id == branch.id
-      ) > -1
-    ) {
-      this.setState({
-        selectedBranches: this.state.selectedBranches.filter(
-          (el) => el.id !== branch.id
-        ),
-        checkAll: false,
-      })
-    } else {
-      this.setState({
-        selectedBranches: [...this.state.selectedBranches, branch],
-      })
-    }
-  }
-
-  checkAll(e: React.FormEvent<HTMLInputElement>) {
-    if (e.currentTarget.checked) {
-      this.setState({ checkAll: true, selectedBranches: this.props.data })
-    } else this.setState({ checkAll: false, selectedBranches: [] })
   }
 
   getBranchBlockingState() {
@@ -209,6 +177,31 @@ class LtsBlocking extends Component<Props, State> {
       })
     } else {
       this.setState({ showModal: true })
+    }
+  }
+
+  checkAll(e: React.FormEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      this.setState({ checkAll: true, selectedBranches: this.props.data })
+    } else this.setState({ checkAll: false, selectedBranches: [] })
+  }
+
+  addRemoveItemFromChecked(branch) {
+    if (
+      this.state.selectedBranches.findIndex(
+        (branchItem) => branchItem.id === branch.id
+      ) > -1
+    ) {
+      this.setState((prevState) => ({
+        selectedBranches: prevState.selectedBranches.filter(
+          (el) => el.id !== branch.id
+        ),
+        checkAll: false,
+      }))
+    } else {
+      this.setState((prevState) => ({
+        selectedBranches: [...prevState.selectedBranches, branch],
+      }))
     }
   }
 

@@ -3,7 +3,8 @@ import { Formik } from 'formik'
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 import Swal from 'sweetalert2'
-import { withRouter } from 'react-router-dom'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
+import produce from 'immer'
 import Wizard from '../wizard/Wizard'
 import { Loader } from '../../../Shared/Components/Loader'
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
@@ -26,13 +27,7 @@ import {
 import ability from '../../config/ability'
 import { getMaxPrinciples } from '../../Services/APIs/configApis/config'
 
-interface Props {
-  history: Array<string>
-  location: {
-    state: {
-      id: string
-    }
-  }
+interface Props extends RouteComponentProps<{}, {}, { id?: string }> {
   edit: boolean
   isCompany?: boolean
 }
@@ -83,6 +78,18 @@ interface State {
 }
 
 class CompanyCreation extends Component<Props, State> {
+  formikStep1: any = {
+    isValid: true,
+    values: step1Company,
+    errors: {},
+  }
+
+  formikStep2: any = {
+    isValid: true,
+    values: step2Company,
+    errors: {},
+  }
+
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -100,26 +107,14 @@ class CompanyCreation extends Component<Props, State> {
   }
 
   componentDidMount() {
-    if (this.props.edit) {
-      this.getCustomerById()
+    if (this.props.edit && this.props.location.state.id) {
+      this.getCustomerById(this.props.location.state.id)
     }
   }
 
-  formikStep1: any = {
-    isValid: true,
-    values: step1Company,
-    errors: {},
-  }
-
-  formikStep2: any = {
-    isValid: true,
-    values: step2Company,
-    errors: {},
-  }
-
-  async getCustomerById() {
+  async getCustomerById(id) {
     this.setState({ loading: true })
-    const res = await getCustomerByID(this.props.location.state.id)
+    const res = await getCustomerByID(id)
     if (res.status === 'success') {
       const customerBusiness = {
         businessName: res.body.businessName,
@@ -168,16 +163,18 @@ class CompanyCreation extends Component<Props, State> {
         values: { ...this.state.step2, ...customerExtraDetails },
         isValid: true,
       }
-      this.setState({
-        loading: false,
-        selectedCustomer: res.body,
-        step1: { ...this.state.step1, ...customerBusiness },
-        step2: { ...this.state.step2, ...customerExtraDetails },
-        hasLoan: res.body.hasLoan,
-        isGuarantor: res.body.isGuarantor,
-        oldRepresentative: res.body.representative,
-        branchId: res.body.branchId,
-      } as any)
+      this.setState(
+        produce<State>((draftState) => {
+          draftState.loading = false
+          draftState.selectedCustomer = res.body
+          draftState.step1 = { ...draftState.step1, ...customerBusiness }
+          draftState.step2 = { ...draftState.step2, ...customerExtraDetails }
+          draftState.hasLoan = res.body.hasLoan
+          draftState.isGuarantor = res.body.isGuarantor
+          draftState.oldRepresentative = res.body.representative
+          draftState.branchId = res.body.branchId
+        })
+      )
     } else {
       this.setState({ loading: false }, () =>
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
@@ -185,18 +182,64 @@ class CompanyCreation extends Component<Props, State> {
     }
   }
 
+  async getGlobalPrinciple() {
+    this.setState({ loading: true })
+    const principles = await getMaxPrinciples()
+    if (principles.status === 'success') {
+      const principals = {
+        maxIndividualPrincipal: principles.body.maxIndividualPrincipal,
+        maxGroupIndividualPrincipal:
+          principles.body.maxGroupIndividualPrincipal,
+        maxGroupPrincipal: principles.body.maxGroupPrincipal,
+      }
+      this.setState(
+        produce<State>((draftState) => {
+          draftState.loading = false
+          draftState.step2.principals = principals
+        })
+      )
+    } else {
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(principles.error.error), 'error')
+      )
+    }
+  }
+
   submit = (values: object) => {
     if (this.props.edit && this.state.step === 1) this.getGlobalPrinciple()
     if (this.state.step < 2) {
-      this.setState({
-        [`step${this.state.step}`]: values,
-        step: this.state.step + 1,
-      } as any)
+      this.setState(
+        produce<State>((draftState) => {
+          draftState[`step${draftState.step}`] = values
+          draftState.step += 1
+        })
+      )
     } else {
       this.setState({ step2: values, loading: true } as any, () =>
         this.createEditCustomer()
       )
     }
+  }
+
+  handleWizardClick = (index: number) => {
+    if (this.props.edit && index === 1) this.getGlobalPrinciple()
+    if (this.formikStep1.isValid === true && this.formikStep2.isValid === true)
+      switch (this.state.step) {
+        case 1:
+          return this.setState({
+            step1: this.formikStep1.values,
+            step: index + 1,
+          })
+        case 2:
+          return this.setState({
+            step2: this.formikStep2.values,
+            step: index + 1,
+          })
+        default:
+          return this.setState({
+            step: index + 1,
+          })
+      }
   }
 
   async createEditCustomer() {
@@ -273,28 +316,6 @@ class CompanyCreation extends Component<Props, State> {
           Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
         )
       }
-    }
-  }
-
-  async getGlobalPrinciple() {
-    this.setState({ loading: true })
-    const princples = await getMaxPrinciples()
-    if (princples.status === 'success') {
-      const principals = {
-        maxIndividualPrincipal: princples.body.maxIndividualPrincipal,
-        maxGroupIndividualPrincipal: princples.body.maxGroupIndividualPrincipal,
-        maxGroupPrincipal: princples.body.maxGroupPrincipal,
-      }
-      const step2 = { ...this.state.step2 }
-      step2.principals = principals
-      this.setState({
-        loading: false,
-        step2,
-      })
-    } else {
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(princples.error.error), 'error')
-      )
     }
   }
 
@@ -397,27 +418,6 @@ class CompanyCreation extends Component<Props, State> {
       default:
         return null
     }
-  }
-
-  handleWizardClick = (index: number) => {
-    if (this.props.edit && index === 1) this.getGlobalPrinciple()
-    if (this.formikStep1.isValid == true && this.formikStep2.isValid == true)
-      switch (this.state.step) {
-        case 1:
-          return this.setState({
-            step1: this.formikStep1.values,
-            step: index + 1,
-          })
-        case 2:
-          return this.setState({
-            step2: this.formikStep2.values,
-            step: index + 1,
-          })
-        default:
-          return this.setState({
-            step: index + 1,
-          })
-      }
   }
 
   render() {

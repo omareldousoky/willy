@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useState } from 'react'
-import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
-import { Button } from 'react-bootstrap'
+import { Button, Card } from 'react-bootstrap'
 import { ApiResponse } from '../../Services/interfaces'
 import { PDF } from './reports'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -11,9 +10,9 @@ import { fetchFalteringPaymentsReport } from '../../Services/APIs/Reports/falter
 import { Loader } from '../../../Shared/Components/Loader'
 import ReportsModal from './reportsModal'
 import Can from '../../config/Can'
-import { FalteringPayments } from '../pdfTemplates/falteringPayments/falteringPayments'
+import { FalteringPayments as FalteringPaymentsPdf } from '../pdfTemplates/falteringPayments/falteringPayments'
 import { fetchEarlyPaymentsReport } from '../../Services/APIs/Reports/earlyPayments'
-import { EarlyPayments } from '../pdfTemplates/earlyPayments/earlyPayments'
+import { EarlyPayments as EarlyPaymentsPdf } from '../pdfTemplates/earlyPayments/earlyPayments'
 
 enum ReportEnum {
   FalteringPayments = 'falteringPayments',
@@ -51,18 +50,18 @@ const LaundryReports: FunctionComponent = () => {
   const [toDate, setToDate] = useState('')
   const [data, setData] = useState<any>()
 
-  const handlePrint = (selectedPdf: PDF) => {
+  const handlePrint = (chosenPdf: PDF) => {
     setShowModal(true)
-    setSelectedPdf(selectedPdf)
+    setSelectedPdf(chosenPdf)
     setData(undefined)
     setFromDate('')
     setToDate('')
   }
 
   const reportRequest = (values): LaundryReportRequest => {
-    const { fromDate, toDate, branches } = values
-    const startDate = new Date(fromDate).setHours(0, 0, 0, 0).valueOf()
-    const endDate = new Date(toDate).setHours(23, 59, 59, 999).valueOf()
+    const { branches } = values
+    const startDate = new Date(values.fromDate).setHours(0, 0, 0, 0).valueOf()
+    const endDate = new Date(values.toDate).setHours(23, 59, 59, 999).valueOf()
 
     return {
       startDate,
@@ -98,13 +97,12 @@ const LaundryReports: FunctionComponent = () => {
   const handleSubmit = async (values) => {
     const branches = values.branches.map((branch) => branch._id)
     values.branches = branches.includes('') ? [] : branches
-    const { fromDate, toDate } = values
     setShowModal(false)
     setLoading(true)
-    setFromDate(fromDate)
-    setToDate(toDate)
+    setFromDate(values.fromDate)
+    setToDate(values.toDate)
     switch (selectedPdf?.key) {
-      case ReportEnum.FalteringPayments:
+      case ReportEnum.FalteringPayments: {
         const falteringResponse = await fetchFalteringPaymentsReport(
           reportRequest(values)
         )
@@ -112,12 +110,14 @@ const LaundryReports: FunctionComponent = () => {
           falteringResponse,
           ReportEnum.FalteringPayments
         )
-      case ReportEnum.EarlyPayments:
+      }
+      case ReportEnum.EarlyPayments: {
         const earlyResponse = await fetchEarlyPaymentsReport(
           reportRequest(values)
         )
         return handleFetchReport(earlyResponse, ReportEnum.EarlyPayments)
-      case ReportEnum.EarlyPayments4Months:
+      }
+      case ReportEnum.EarlyPayments4Months: {
         const early4MonthsResponse = await fetchEarlyPaymentsReport(
           reportRequest(values),
           true
@@ -126,6 +126,7 @@ const LaundryReports: FunctionComponent = () => {
           early4MonthsResponse,
           ReportEnum.EarlyPayments4Months
         )
+      }
       default:
         return null
     }
@@ -183,13 +184,13 @@ const LaundryReports: FunctionComponent = () => {
         />
       )}
       {printReport === ReportEnum.FalteringPayments && data && (
-        <FalteringPayments data={data} fromDate={fromDate} toDate={toDate} />
+        <FalteringPaymentsPdf data={data} fromDate={fromDate} toDate={toDate} />
       )}
       {printReport === ReportEnum.EarlyPayments && data && (
-        <EarlyPayments data={data} fromDate={fromDate} toDate={toDate} />
+        <EarlyPaymentsPdf data={data} fromDate={fromDate} toDate={toDate} />
       )}
       {printReport === ReportEnum.EarlyPayments4Months && data && (
-        <EarlyPayments
+        <EarlyPaymentsPdf
           data={data}
           fromDate={fromDate}
           toDate={toDate}
