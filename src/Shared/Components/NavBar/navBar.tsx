@@ -79,7 +79,11 @@ class NavBar extends Component<Props, State> {
     if (res.status === "success") {
       document.cookie = 'ltsbranch=' + JSON.stringify(branch) + (process.env.REACT_APP_DOMAIN ? `;domain=${process.env.REACT_APP_DOMAIN}`: '') + ';path=/;';
       setToken(res.body.token);
-      this.setState({ loading: false, selectedBranch: branch })
+      this.setState({
+        loading: false,
+        selectedBranch: branch,
+        openBranchList: false,
+      });
       if(refresh) this.props.history.push("/");
     } else console.log(res)
   }
@@ -188,8 +192,8 @@ class NavBar extends Component<Props, State> {
                   </div>
                 </div>
                 <img  style={{width: "40px" }} alt="drop-down-arrow" src={require('../../Assets/dropDownArrow.svg')} />
-              </div>
               {this.state.openBranchList ? this.renderBranchList() : null}
+              </div>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
