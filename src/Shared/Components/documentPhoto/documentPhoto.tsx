@@ -35,11 +35,11 @@ class DocumentPhoto extends Component<Props, State> {
     }
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if (props?.photoURL && props?.photoPhotoURL !== '')
+  static getDerivedStateFromProps(props: Props, state: State) {
+    if (props?.photoURL && props?.photoURL !== '')
       if (
         (props.edit || props.view) &&
-        props.photoPhotoURL !== state.imgSrc &&
+        props.photoURL !== state.imgSrc &&
         state.key !== 'updated'
       ) {
         return {

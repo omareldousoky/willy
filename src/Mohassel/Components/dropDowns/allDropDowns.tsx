@@ -349,11 +349,11 @@ export const AsyncManagersDropDown = ({
         data-qc="managers"
         placeholder={local.chooseManager}
         value={value}
-        onChange={(managers) => {
+        onChange={(selectedOption) => {
           onSelectOption(
-            managers as ValueType<CurrentHierarchiesSingleResponse>[]
+            selectedOption as ValueType<CurrentHierarchiesSingleResponse>[]
           )
-          setValue(managers)
+          setValue(selectedOption)
         }}
         isLoading={options.isLoading}
         options={options.options}

@@ -184,7 +184,7 @@ class StatusHelper extends Component<Props, State> {
                         }
                       </td>
                       <td>{guarantor.guarantor.code}</td>
-                      <td>{guarantor.guarantor.customerName}</td>{' '}
+                      <td>{guarantor.guarantor.customerName}</td>
                       <td
                         style={{
                           color:
@@ -194,7 +194,7 @@ class StatusHelper extends Component<Props, State> {
                         {area.name}
                       </td>
                       <td>{guarantor.guarantor.customerHomeAddress}</td>
-                      <td>{guarantor.guarantor.mobilePhoneNumber}</td>{' '}
+                      <td>{guarantor.guarantor.mobilePhoneNumber}</td>
                     </tr>
                   )
                 })}

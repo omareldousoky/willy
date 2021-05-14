@@ -4,7 +4,7 @@ import {
   FalteringPaymentsResponse,
   LaundryReportRequest,
 } from '../../../Models/LaundryReports'
-import { ApiResponse } from '../../interfaces'
+import { ApiResponse } from '../../../Models/common'
 
 const { REACT_APP_BASE_URL } = process.env
 const fetchEarlyPaymentsUrl = `${REACT_APP_BASE_URL}/report/early-payments`

@@ -31,6 +31,9 @@ export interface Score {
   url?: string
   bankCodes?: string[]
 }
+interface LocationState {
+  id: string
+}
 const tabs: Array<Tab> = [
   {
     header: local.workInfo,
@@ -71,7 +74,7 @@ export const CustomerProfile = () => {
   const [showHalanLinkageModal, setShowHalanLinkageModal] = useState<boolean>(
     false
   )
-  const location = useLocation<{ id: string }>()
+  const location = useLocation<LocationState>()
   const history = useHistory()
 
   async function getCachediScores(id) {

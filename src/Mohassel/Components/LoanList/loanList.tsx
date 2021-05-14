@@ -265,12 +265,14 @@ class LoanList extends Component<Props, State> {
       'customerCode',
       'customerShortenedCode',
     ]
-    ability.can('getIssuedSMELoan', 'application') && searchKeys.push('sme')
-    dropDownKeys.push(
-      'businessName',
-      'taxCardNumber',
-      'commercialRegisterNumber'
-    )
+    if (ability.can('getIssuedSMELoan', 'application')) {
+      searchKeys.push('sme')
+      dropDownKeys.push(
+        'businessName',
+        'taxCardNumber',
+        'commercialRegisterNumber'
+      )
+    }
     return (
       <>
         <HeaderWithCards

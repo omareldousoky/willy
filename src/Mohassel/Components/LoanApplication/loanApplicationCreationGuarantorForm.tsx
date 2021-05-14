@@ -119,7 +119,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                   flexWrap: 'wrap',
                 }}
               >
-                {values.entitledToSign.map((guarantor, i) => {
+                {values.entitledToSign.map((customer, i) => {
                   const text = orderLocal[i && i > 10 ? 'default' : i]
                   return (
                     <Row key={i} className="col-12 text-nowrap">
@@ -129,11 +129,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                             variant="danger"
                             className="m-auto"
                             onClick={() =>
-                              props.removeEntitledToSignRow(
-                                guarantor,
-                                i,
-                                values
-                              )
+                              props.removeEntitledToSignRow(customer, i, values)
                             }
                           >
                             -
@@ -147,13 +143,13 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                         handleSearch={(key, query) =>
                           props.handleSearchEntitledToSign(key, query, i)
                         }
-                        searchResults={guarantor.searchResults}
-                        selectCustomer={(gur) => {
-                          props.selectEntitledToSign(gur, i, values)
+                        searchResults={customer.searchResults}
+                        selectCustomer={(cust) => {
+                          props.selectEntitledToSign(cust, i, values)
                         }}
-                        selectedCustomer={guarantor.entitledToSign}
-                        removeCustomer={(gur) => {
-                          props.removeEntitledToSign(gur, i, values)
+                        selectedCustomer={customer.entitledToSign}
+                        removeCustomer={(cust) => {
+                          props.removeEntitledToSign(cust, i, values)
                         }}
                         header={text}
                       />

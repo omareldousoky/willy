@@ -144,6 +144,10 @@ class CustomersList extends Component<Props, State> {
     this.setState({ manageCustomersTabs: manageCustomersArray() })
   }
 
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
+
   getCustomers() {
     const { error, branchId } = this.props
     const { customerShortenedCode, key } = this.props.searchFilters

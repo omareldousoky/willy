@@ -59,8 +59,8 @@ export const InfoBox = ({ info, title, boxColor }: InfoBoxProps) => {
         />
       )}
       <div style={{ padding: 20 }}>
-        {getInfoRows(currentTab).map((rowOfFields, index) => (
-          <Form.Row key={index}>
+        {getInfoRows(currentTab).map((rowOfFields, rowIndex) => (
+          <Form.Row key={rowIndex}>
             {rowOfFields.map((field, fieldIndex) => {
               const { fieldTitle, fieldData, showFieldCondition } = field
               return (

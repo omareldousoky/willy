@@ -4,7 +4,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { Button, Card, Col, Row } from 'react-bootstrap'
 import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../config/Can'
-import * as local from '../../../Shared/Assets/ar.json'
+import local from '../../../Shared/Assets/ar.json'
 import { getDocumentsTypes } from '../../Services/APIs/encodingFiles/getDocumentsTypes'
 import { DocumentType } from '../../../Shared/Services/interfaces'
 import {
@@ -108,7 +108,7 @@ class EncodingFiles extends Component<RouteComponentProps, State> {
                           }}
                         >
                           {documentType.name}
-                        </div>{' '}
+                        </div>
                       </Col>
                       <Col>
                         <div style={{ fontSize: '12px', color: '#6e6e6e' }}>
@@ -121,7 +121,7 @@ class EncodingFiles extends Component<RouteComponentProps, State> {
                             fontWeight: 'bold',
                           }}
                         >
-                          {documentType.pages}{' '}
+                          {documentType.pages}
                         </div>
                       </Col>
                       <Col>
@@ -151,7 +151,7 @@ class EncodingFiles extends Component<RouteComponentProps, State> {
                         >
                           {documentType.active
                             ? local.activated
-                            : local.deactivated}{' '}
+                            : local.deactivated}
                         </div>
                       </Col>
                       <Col style={{ minWidth: '20%' }}>
@@ -220,5 +220,4 @@ class EncodingFiles extends Component<RouteComponentProps, State> {
     )
   }
 }
-
 export default withRouter(EncodingFiles)

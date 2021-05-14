@@ -3,7 +3,7 @@ import {
   TerroristResponse,
   TerroristUnResponse,
 } from '../../../../Shared/Services/interfaces'
-import { ApiResponse } from '../../interfaces'
+import { ApiResponse } from '../../../Models/common'
 import axios from '../axios-instance'
 
 const { REACT_APP_BASE_URL } = process.env

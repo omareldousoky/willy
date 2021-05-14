@@ -63,9 +63,9 @@ export const LoanProductValidation = Yup.object().shape({
         const { beneficiaryType, principals, type } = this.parent
         if (
           (beneficiaryType === 'individual' &&
-            value <= principals.maxIndividualPrincipal) ||
+            value <= principals?.maxIndividualPrincipal) ||
           (beneficiaryType === 'group' &&
-            value <= principals.maxGroupPrincipal) ||
+            value <= principals?.maxGroupPrincipal) ||
           type === 'sme'
         ) {
           return true

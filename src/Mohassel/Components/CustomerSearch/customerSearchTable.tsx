@@ -253,7 +253,7 @@ class CustomerSearch extends Component<Props, State> {
                   }
                 >
                   ×
-                </Button>{' '}
+                </Button>
               </div>
               {this.props.selectedCustomer.customerType === 'individual' ? (
                 <>

@@ -89,7 +89,6 @@ interface State {
   loanOfficers: Array<LoanOfficer>
   branchCustomers: Array<object>
   selectedCustomers: Array<Customer>
-  businessSectors: Array<BusinessSector>
   prevId: string
   searchGroupCustomerKey: string
   showModal: boolean
@@ -107,14 +106,14 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.tokenData = parseJwt(token)
   }
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props: Props, state: State) {
     const application = { ...state.application }
     if (
       props.location.state.id !== state.prevId &&
       props.location.state.action !== state.application.state
     ) {
       application.state = props.location.state.action
-      application.id = props.location.state.id
+      application._id = props.location.state.id
       return {
         prevId: props.location.state.id,
         application,
@@ -538,8 +537,8 @@ class LoanApplicationCreation extends Component<Props, State> {
         }
       }
 
+      const entitledArr: Array<EntitledToSign> = []
       if (application.body.entitledToSign?.length > 0) {
-        const entitledArr: Array<EntitledToSign> = []
         application.body.entitledToSign.forEach((customer) => {
           entitledArr.push({
             searchResults: {
@@ -554,11 +553,6 @@ class LoanApplicationCreation extends Component<Props, State> {
             })
           )
         })
-        this.setState(
-          produce<State>((draftState) => {
-            draftState.application.entitledToSign = entitledArr
-          })
-        )
       }
       this.setState(
         produce<State>((draftState) => {
@@ -576,6 +570,7 @@ class LoanApplicationCreation extends Component<Props, State> {
             reviewedDate,
             managerVisitDate,
             branchManagerId,
+            researcherId,
           } = application.body
           app.entryDate = this.getDateString(entryDate)
           app.visitationDate = this.getDateString(visitationDate)
@@ -591,6 +586,8 @@ class LoanApplicationCreation extends Component<Props, State> {
           app.guarantors = guarsArr
           app.managerVisitDate = this.getDateString(managerVisitDate)
           app.branchManagerId = branchManagerId
+          app.researcherId = researcherId
+          app.entitledToSign = entitledArr
           draftState.selectedCustomer = application.body.customer
           draftState.customerType =
             product.beneficiaryType === 'individual' && product.type === 'sme'
@@ -731,7 +728,6 @@ class LoanApplicationCreation extends Component<Props, State> {
       loanOfficers: [],
       products: [],
       branchCustomers: [],
-      businessSectors: [],
       selectedCustomers: [],
       searchGroupCustomerKey: '',
       prevId: '',
@@ -944,16 +940,17 @@ class LoanApplicationCreation extends Component<Props, State> {
     const selectedGuarantor = await getCustomerByID(obj._id)
     if (selectedGuarantor.status === 'success') {
       if (selectedGuarantor.body.blocked.isBlocked !== true) {
-        const defaultApplication = { ...values }
-        const defaultentitledToSign = { ...defaultApplication.entitledToSign }
-        const defaultCustomer = { ...defaultentitledToSign[index] }
-        defaultCustomer.entitledToSign = {
-          ...selectedGuarantor.body,
-          id: obj._id,
-        }
-        defaultApplication.entitledToSignIds.push(obj._id)
-        defaultApplication.entitledToSign[index] = defaultCustomer
-        this.setState({ application: defaultApplication, loading: false })
+        const application = produce(values as Application, (draftApp) => {
+          const defaultentitledToSign = { ...draftApp.entitledToSign }
+          const defaultCustomer = { ...defaultentitledToSign[index] }
+          defaultCustomer.entitledToSign = {
+            ...selectedGuarantor.body,
+            id: obj._id,
+          }
+          draftApp.entitledToSignIds.push(obj._id)
+          draftApp.entitledToSign[index] = defaultCustomer
+        })
+        this.setState({ application, loading: false })
       } else {
         Swal.fire('error', local.theCustomerIsBlocked, 'error')
       }
@@ -1072,17 +1069,20 @@ class LoanApplicationCreation extends Component<Props, State> {
 
   removeEntitledToSign = (obj, index, values) => {
     this.setState({ loading: true })
-    const defaultApplication = { ...values }
-    const defaultEntitledToSign = { ...defaultApplication.entitledToSign }
-    const defaultCustomer = { ...defaultEntitledToSign[index] }
-    defaultApplication.entitledToSignIds = defaultApplication.entitledToSignIds.filter(
-      (id) => obj._id !== id
-    )
-    defaultCustomer.entitledToSign = {}
-    defaultCustomer.searchResults.results = []
-    defaultCustomer.searchResults.empty = false
-    defaultApplication.entitledToSign[index] = defaultCustomer
-    this.setState({ application: defaultApplication, loading: false })
+
+    const application = produce(values as Application, (draftApp) => {
+      const defaultEntitledToSign = { ...draftApp.entitledToSign }
+      const defaultCustomer = { ...defaultEntitledToSign[index] }
+      draftApp.entitledToSignIds = draftApp.entitledToSignIds.filter(
+        (id) => obj._id !== id
+      )
+      defaultCustomer.entitledToSign = {}
+      defaultCustomer.searchResults.results = []
+      defaultCustomer.searchResults.empty = false
+      draftApp.entitledToSign[index] = defaultCustomer
+    })
+
+    this.setState({ application, loading: false })
   }
 
   async viewCustomer(id) {
@@ -1128,6 +1128,7 @@ class LoanApplicationCreation extends Component<Props, State> {
       },
       entitledToSign: {},
     }
+
     this.setState(
       produce<State>((draftState) => {
         draftState.application.entitledToSign.push(element)
@@ -1226,12 +1227,14 @@ class LoanApplicationCreation extends Component<Props, State> {
 
   removeEntitledToSignRow(obj, index, values) {
     this.setState({ loading: true })
-    const defaultApplication = { ...values }
-    defaultApplication.entitledToSignIds = defaultApplication.entitledToSignIds.filter(
-      (id) => obj.entitledToSign._id !== id
-    )
-    defaultApplication.entitledToSign.splice(index, 1)
-    this.setState({ application: defaultApplication, loading: false })
+    const application = produce(values as Application, (draftApp) => {
+      draftApp.entitledToSignIds = draftApp.entitledToSignIds.filter(
+        (id) => obj.entitledToSign._id !== id
+      )
+      draftApp.entitledToSign.splice(index, 1)
+    })
+
+    this.setState({ application, loading: false })
   }
 
   populateCustomer(response) {
