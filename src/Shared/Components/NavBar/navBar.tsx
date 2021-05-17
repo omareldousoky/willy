@@ -128,7 +128,11 @@ class NavBar extends Component<Props, State> {
           : '') +
         ';path=/;'
       setToken(res.body.token)
-      this.setState({ loading: false, selectedBranch: branch })
+      this.setState({
+        loading: false,
+        selectedBranch: branch,
+        openBranchList: false,
+      })
       if (refresh) this.props.history.push('/')
     } else console.log(res)
   }
@@ -280,8 +284,8 @@ class NavBar extends Component<Props, State> {
                   alt="drop-down-arrow"
                   src={require('../../Assets/dropDownArrow.svg')}
                 />
+                {this.state.openBranchList ? this.renderBranchList() : null}
               </div>
-              {this.state.openBranchList ? this.renderBranchList() : null}
             </Nav>
           </Navbar.Collapse>
         </Navbar>
