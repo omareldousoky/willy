@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import Select from 'react-select'
-import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
+import { Button, Card, Col, Form, Row } from 'react-bootstrap'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getProducts } from '../../Services/APIs/loanProduct/getProduct'
@@ -264,7 +260,7 @@ class AssignProductsToBranches extends Component<Props, State> {
                       onClick={this.getBranchesForProducts}
                     >
                       {local.showBranches}
-                    </Button>{' '}
+                    </Button>
                   </Col>
                 </Row>
               </Form.Group>
@@ -287,7 +283,7 @@ class AssignProductsToBranches extends Component<Props, State> {
                   onClick={this.submit}
                 >
                   {local.submit}
-                </Button>{' '}
+                </Button>
               </Row>
             </Form>
           </Card.Body>

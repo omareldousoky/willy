@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
-import Button from 'react-bootstrap/Button'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Form from 'react-bootstrap/Form'
 import { connect } from 'react-redux'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { Button, Container, Form, Row } from 'react-bootstrap'
 import { getDocumentsTypes } from '../../../Mohassel/Services/APIs/encodingFiles/getDocumentsTypes'
 import DocumentUploader from '../../../Shared/Components/documentUploader/documentUploader'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -129,7 +126,7 @@ class DocumentsUpload extends Component<Props, State> {
                   )
                   this.setState({ loading: false })
                 }}
-              >{`${local.download}(${this.props.selectionArray.length})`}</Button>{' '}
+              >{`${local.download}(${this.props.selectionArray.length})`}</Button>
             </div>
           </Row>
           {this.state.documentTypes.map((documentType: DocumentType, index) => {

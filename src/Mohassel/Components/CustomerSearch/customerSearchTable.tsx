@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
-import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
 import {
+  Button,
   Dropdown,
   DropdownButton,
   FormControl,
   InputGroup,
 } from 'react-bootstrap'
-import * as local from '../../../Shared/Assets/ar.json'
 import { getRenderDate } from '../../Services/getRenderDate'
+import * as local from '../../../Shared/Assets/ar.json'
+
 import { getFullCustomerKey } from '../../../Shared/Services/utils'
 import { InfoBox } from '../../../Shared/Components'
 import {

@@ -319,7 +319,6 @@ class BulkApplicationApproval extends Component<Props, State> {
                 className="big-button"
                 style={{ height: 70 }}
               >
-                {' '}
                 {local.bulkLoanApplicationsApproval}
               </Button>
             </div>

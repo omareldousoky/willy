@@ -1,19 +1,19 @@
-import React, { useState } from 'react'
-import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
-import Governorates from '../Governorates/governorates'
 import './createBranch.scss'
+
+import React, { useState } from 'react'
+import { Button, Col, Form, Row } from 'react-bootstrap'
+
+import * as local from '../../../Shared/Assets/ar.json'
+import Governorates from '../Governorates/governorates'
 import { Loader } from '../../../Shared/Components/Loader'
 import Map from '../Map/map'
-import * as local from '../../../Shared/Assets/ar.json'
+import { checkBranchNameDuplicates } from '../../Services/APIs/Branch/checkBranchNameDuplicates'
+
 import {
-  BasicValues,
   BasicErrors,
   BasicTouched,
+  BasicValues,
 } from './branchCreationInterfaces'
-import { checkBranchNameDuplicates } from '../../Services/APIs/Branch/checkBranchNameDuplicates'
 
 interface Props {
   values: BasicValues
@@ -102,8 +102,8 @@ const StepOneForm = (props: Props) => {
               <img
                 alt="location"
                 src={require('../../Assets/activeLocation.svg')}
-              />{' '}
-              {local.branchOnMap}{' '}
+              />
+              {local.branchOnMap}
             </span>
           </Button>
         </Col>

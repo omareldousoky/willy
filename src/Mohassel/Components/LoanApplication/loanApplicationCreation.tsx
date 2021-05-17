@@ -3,9 +3,9 @@ import { Formik } from 'formik'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Select from 'react-select'
-import { produce } from 'immer'
+import produce from 'immer'
 import { Button, Card, Container, Form, Modal } from 'react-bootstrap'
-import * as local from '../../../Shared/Assets/ar.json'
+import local from '../../../Shared/Assets/ar.json'
 import {
   Application,
   LoanApplicationValidation,
