@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import Swal from "sweetalert2"
 
 import { useHistory, useLocation } from "react-router"
-import { connect } from "react-redux"
 
 import { Container } from "react-bootstrap"
 
@@ -15,7 +14,7 @@ import { getCustomerByID } from "../../../Mohassel/Services/APIs/Customer-Creati
 import { getSMECachedIscore } from "../../../Mohassel/Services/APIs/iScore/iScore"
 import { getErrorMessage } from "../../Services/utils"
 
-import { FieldProps, TabDataProps } from "../Profile/types"
+import { TabDataProps } from "../Profile/types"
 import { Tab } from "../../../Mohassel/Components/HeaderWithCards/cardNavbar"
 import { Customer } from "../../Services/interfaces"
 import { Score } from "../../../Mohassel/Components/CustomerCreation/customerProfile"
@@ -30,7 +29,6 @@ export const CompanyProfile = () => {
   const [activeTab, changeActiveTab] = useState("documents")
   const [company, setCompany] = useState<Customer>()
   const [score, setScore] = useState<Score>()
-  // const [mainInfo, setMainInfo] = useState<FieldProps[][]>([])
   const location = useLocation()
   const history = useHistory()
 
@@ -41,11 +39,7 @@ export const CompanyProfile = () => {
   const getiScores = async (id) => {
     setIsLoading(true)
     const iScores = await getSMECachedIscore({
-      ids: [id]
-      // idValue: id,
-      // name: company?.customerName,
-      // productId: "002",
-      // idSource: "901",
+      ids: [id],
     })
     if (iScores.status === "success") {
       setScore(iScores?.body?.data[0])
@@ -64,22 +58,14 @@ export const CompanyProfile = () => {
       setIsLoading(false)
       if (ability.can("viewIscore", "customer"))
         await getiScores(res.body.commercialRegisterNumber)
-      // await getGuaranteeedLoans(res.body)
-      // await getGeoArea(res.body.geoAreaId, res.body.branchId)
-      // setCompanyFields()
     } else {
       setIsLoading(false)
       Swal.fire("Error !", getErrorMessage(res.error.error), "error")
     }
   }
-  // const setCompanyFields = () => company && setMainInfo([getCompanyInfo({company: company, score: score})])
   useEffect(() => {
     getCompanyDetails()
   }, [])
-  // useEffect(() => {
-  //   company && setCompanyFields()
-  //   company && getiScores(company.taxCardNumber)
-  // }, [company])
 
   const tabsData: TabDataProps = {
     documents: [
