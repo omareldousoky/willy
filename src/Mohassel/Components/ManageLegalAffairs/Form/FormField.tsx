@@ -44,15 +44,25 @@ const FormField: FunctionComponent<FormFieldProps> = ({
 
   const label = `${field.label}${isRequired(field.validation) ? ' *' : ''}`
 
+  const trimField = (e: React.FocusEvent<any>) => {
+    setFieldValue(e.target.name, e.target.value.trim().replace(/\s\s+/g, ' '))
+  }
+
   const inputFieldProps = {
+    onBlur:
+      field.type === 'text'
+        ? (e: React.FocusEvent<any>) => {
+            trimField(e)
+            handleBlur(e)
+          }
+        : handleBlur,
     name: field.name,
     value: fieldValue,
+    onChange: handleChange,
     readOnly: field.readOnly ?? false,
     disabled: field.disabled ?? field.readOnly ?? false,
-    'data-qc': field.name,
     isInvalid: !!fieldErrors && isToucehd,
-    onChange: handleChange,
-    onBlur: handleBlur,
+    'data-qc': field.name,
   }
 
   const renderFormField = () => {
