@@ -50,7 +50,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
 
   const inputFieldProps = {
     onBlur:
-      field.type === 'text'
+      field.type === 'text' || field.type === 'textarea'
         ? (e: React.FocusEvent<any>) => {
             trimField(e)
             handleBlur(e)

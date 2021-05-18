@@ -75,8 +75,10 @@ export interface ReviewReqBody {
   ids: string[];
 }
 
+export type Settlement = SettlementFormValues & ManagerReviews
+
 export interface SettledCustomer extends DefaultedCustomer {
-  settlement: SettlementFormValues & ManagerReviews;
+  settlement: Settlement
 }
 
 export enum SettlementTypeEnum {

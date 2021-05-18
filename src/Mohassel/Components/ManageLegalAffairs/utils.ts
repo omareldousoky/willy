@@ -1,6 +1,8 @@
 import Swal from 'sweetalert2'
 
 import local from '../../../Shared/Assets/ar.json'
+import { FormField } from './Form/types'
+import { Settlement, SettlementStatusEnum } from './types'
 
 export const handleUpdateSuccess = async (callback: () => void, label = '') => {
   await Swal.fire({
@@ -11,3 +13,13 @@ export const handleUpdateSuccess = async (callback: () => void, label = '') => {
 
   callback()
 }
+
+export const isSettlementReviewed = (customerSettlement: Settlement): boolean =>
+  customerSettlement?.settlementStatus === SettlementStatusEnum.Reviewed
+
+export const mapFieldsToReadOnly = (formFields: FormField[]): FormField[] =>
+  formFields.map((field) =>
+    field.type === 'group'
+      ? { ...field, fields: mapFieldsToReadOnly(field.fields) }
+      : { ...field, readOnly: true }
+  )

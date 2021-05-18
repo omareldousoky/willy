@@ -11,12 +11,12 @@ import local from '../../../../Shared/Assets/ar.json'
 import { createFormFieldsInitValue, createValidationSchema } from './utils'
 
 interface FormContext {
-  defaultValues: {};
-  onPhotoChange?: (name: string, value: string | File) => void;
+  defaultValues: {}
+  onPhotoChange?: (name: string, value: string | File) => void
 }
 
 export const AppFormContext = createContext<FormContext>({
-  defaultValues: {}
+  defaultValues: {},
 })
 
 // TODO: change the naming
@@ -59,7 +59,7 @@ const AppForm: FunctionComponent<AppFormProps> = ({
             <AppFormContext.Provider
               value={{
                 defaultValues,
-                onPhotoChange
+                onPhotoChange,
               }}
             >
               {renderPairs ? (
@@ -79,7 +79,7 @@ const AppForm: FunctionComponent<AppFormProps> = ({
                 type="submit"
                 data-qc="submit"
                 variant="primary"
-                disabled={disabled || !dirty || !isValid}
+                disabled={disabled || !dirty}
                 className={wideBtns ? 'wide-btn' : ''}
               >
                 {submitBtnText}

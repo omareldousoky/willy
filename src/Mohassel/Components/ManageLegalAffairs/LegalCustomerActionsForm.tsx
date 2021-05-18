@@ -5,21 +5,27 @@ import { useHistory, useLocation } from 'react-router'
 
 import local from '../../../Shared/Assets/ar.json'
 import { DefaultedCustomer } from './defaultingCustomersList'
-import { CourtSession, LegalActionsForm } from './types'
+import { CourtSession, LegalActionsForm, SettledCustomer } from './types'
 import AppForm from './Form'
 import { updateLegalAffairsCustomers } from '../../Services/APIs/LegalAffairs/defaultingCustomers'
 import Swal from 'sweetalert2'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import customerActionsFields from './configs/CustomerActionsForm'
-import { handleUpdateSuccess } from './utils'
+import {
+  mapFieldsToReadOnly,
+  handleUpdateSuccess,
+  isSettlementReviewed,
+} from './utils'
 
 const LegalActionsForm: FunctionComponent = () => {
   const [isSubmiting, setIsSubmiting] = useState(false)
 
-  const location = useLocation<{ customer: DefaultedCustomer }>()
+  const location = useLocation<{ customer: SettledCustomer }>()
   const customer = location.state.customer
 
   const history = useHistory()
+
+  const isReviewed = isSettlementReviewed(customer.settlement)
 
   const formatCourt = (
     court: CourtSession | undefined
@@ -74,11 +80,15 @@ const LegalActionsForm: FunctionComponent = () => {
 
         <Card.Body>
           <AppForm
-            formFields={customerActionsFields}
+            formFields={
+              isSubmiting || isReviewed
+                ? mapFieldsToReadOnly(customerActionsFields)
+                : customerActionsFields
+            }
             onSubmit={handleSubmit}
             defaultValues={customer}
             options={{
-              disabled: !customer._id || isSubmiting,
+              disabled: !customer._id || isSubmiting || isReviewed,
               renderPairs: true,
               wideBtns: true,
             }}

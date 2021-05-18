@@ -11,12 +11,9 @@ import {
   settleLegalCustomer,
 } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import colorVariables from '../../../../Shared/Assets/scss/app.scss'
-import {
-  LegalSettlementFormProps,
-  SettlementFormValues,
-  SettlementStatusEnum,
-} from '../types'
+import { LegalSettlementFormProps, SettlementFormValues } from '../types'
 import settlementForm from '../configs/settlementForm'
+import { mapFieldsToReadOnly, isSettlementReviewed } from '../utils'
 
 const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
   settlementInfo,
@@ -51,6 +48,10 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
     courtFeesPaid: false,
   }
 
+  const customerSettlement = customer.settlement
+
+  const isReviewed = isSettlementReviewed(customerSettlement)
+
   const handleSubmit = async (values: SettlementFormValues) => {
     const formData = new FormData()
     const formFields = Object.keys(values)
@@ -76,7 +77,7 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
       Swal.fire('error', getErrorMessage(response.error), 'error')
     }
 
-    setIsSubmitting(true)
+    setIsSubmitting(false)
     onSubmit()
   }
 
@@ -89,10 +90,6 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
       Swal.fire('error', getErrorMessage(response.error), 'error')
     }
   }
-
-  const customerSettlement = customer.settlement
-  const isReviewed =
-    customerSettlement?.settlementStatus === SettlementStatusEnum.Reviewed
 
   const renderCustomerDetails = () => (
     <div className="row">
@@ -117,6 +114,7 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
       )}
     </div>
   )
+
   return (
     <div>
       <Card className="main-card hide-card-styles">
@@ -125,7 +123,7 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
           <AppForm
             formFields={
               isReviewed || isSubmitting
-                ? settlementForm.map((field) => ({ ...field, readOnly: true }))
+                ? mapFieldsToReadOnly(settlementForm)
                 : settlementForm
             }
             onSubmit={handleSubmit}
