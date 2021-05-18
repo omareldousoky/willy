@@ -2,9 +2,9 @@ import { ReactNode } from 'react'
 import { DefaultedCustomer, ManagerReviews } from './defaultingCustomersList'
 
 export interface CourtSession {
-  date: number;
-  decision: string;
-  confinementNumber: string;
+  date?: number
+  decision?: string
+  confinementNumber?: string
 }
 
 export interface LegalActionsForm {
@@ -13,10 +13,10 @@ export interface LegalActionsForm {
   court: string;
   statementOfClaim: string;
 
-  firstCourtSession?: CourtSession;
-  oppositionSession?: CourtSession;
-  oppositionAppealSession?: CourtSession;
-  misdemeanorAppealSession?: CourtSession;
+  firstCourtSession: CourtSession
+  oppositionSession: CourtSession
+  oppositionAppealSession: CourtSession
+  misdemeanorAppealSession: CourtSession
 
   misdemeanorAppealNumber: string;
   caseStatus: string;
