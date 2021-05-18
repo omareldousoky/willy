@@ -14,6 +14,7 @@ import colorVariables from '../../../../Shared/Assets/scss/app.scss'
 import { LegalSettlementFormProps, SettlementFormValues } from '../types'
 import settlementForm from '../configs/settlementForm'
 import { mapFieldsToReadOnly, isSettlementReviewed } from '../utils'
+import { Loader } from '../../../../Shared/Components/Loader'
 
 const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
   settlementInfo,
@@ -116,7 +117,9 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
   )
 
   return (
-    <div>
+    <>
+      <Loader type="fullsection" open={isSubmitting} />
+
       <Card className="main-card hide-card-styles">
         <Card.Body>
           {renderCustomerDetails()}
@@ -142,7 +145,7 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
           />
         </Card.Body>
       </Card>
-    </div>
+    </>
   )
 }
 
