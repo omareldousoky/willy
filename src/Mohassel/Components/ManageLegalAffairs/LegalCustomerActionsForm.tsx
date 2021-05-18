@@ -16,6 +16,7 @@ import {
   handleUpdateSuccess,
   isSettlementReviewed,
 } from './utils'
+import { Loader } from '../../../Shared/Components/Loader'
 
 const LegalActionsForm: FunctionComponent = () => {
   const [isSubmiting, setIsSubmiting] = useState(false)
@@ -79,9 +80,11 @@ const LegalActionsForm: FunctionComponent = () => {
         <Card.Header>{local.legalAffairs}</Card.Header>
 
         <Card.Body>
+          <Loader type="fullsection" open={isSubmiting} />
+
           <AppForm
             formFields={
-              isSubmiting || isReviewed
+              isReviewed
                 ? mapFieldsToReadOnly(customerActionsFields)
                 : customerActionsFields
             }

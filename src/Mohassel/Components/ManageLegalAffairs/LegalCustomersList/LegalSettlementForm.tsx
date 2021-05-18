@@ -117,35 +117,31 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
   )
 
   return (
-    <>
-      <Loader type="fullsection" open={isSubmitting} />
+    <Card className="main-card hide-card-styles">
+      <Card.Body>
+        <Loader type="fullsection" open={isSubmitting} />
 
-      <Card className="main-card hide-card-styles">
-        <Card.Body>
-          {renderCustomerDetails()}
-          <AppForm
-            formFields={
-              isReviewed || isSubmitting
-                ? mapFieldsToReadOnly(settlementForm)
-                : settlementForm
-            }
-            onSubmit={handleSubmit}
-            defaultValues={{
-              ...defaultValues,
-              ...settlementInfo,
-              ...customerSettlement,
-            }}
-            options={{
-              renderPairs: true,
-              wideBtns: true,
-              disabled: isReviewed || isSubmitting,
-            }}
-            onPhotoChange={handlePhotoChange}
-            onCancel={onCancel}
-          />
-        </Card.Body>
-      </Card>
-    </>
+        {renderCustomerDetails()}
+        <AppForm
+          formFields={
+            isReviewed ? mapFieldsToReadOnly(settlementForm) : settlementForm
+          }
+          onSubmit={handleSubmit}
+          defaultValues={{
+            ...defaultValues,
+            ...settlementInfo,
+            ...customerSettlement,
+          }}
+          options={{
+            renderPairs: true,
+            wideBtns: true,
+            disabled: isReviewed || isSubmitting,
+          }}
+          onPhotoChange={handlePhotoChange}
+          onCancel={onCancel}
+        />
+      </Card.Body>
+    </Card>
   )
 }
 
