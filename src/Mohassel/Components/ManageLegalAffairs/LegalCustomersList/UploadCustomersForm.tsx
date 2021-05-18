@@ -2,16 +2,21 @@ import React, { useState } from 'react'
 
 import * as Yup from 'yup'
 
-
 import local from '../../../../Shared/Assets/ar.json'
 import { uploadDefaultingCustomer } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import Swal from 'sweetalert2'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
-import { UploadLegalCustomerResponse } from '../types'
+import {
+  UploadLegalCustomerResponse,
+  UploadLegalCustomersProps,
+} from '../types'
 import AppForm from '../Form'
 import { FileField } from '../Form/types'
 
-const UploadLegalCustomers = ({ onCancel, onSubmit }) => {
+const UploadLegalCustomers = ({
+  onSubmit,
+  onCancel,
+}: UploadLegalCustomersProps) => {
   const [failedCustomerURI, setfailedCustomerURI] = useState('')
   const [isDisabled, setIsDisabled] = useState(false)
 
@@ -57,13 +62,14 @@ const UploadLegalCustomers = ({ onCancel, onSubmit }) => {
     if (response.status === 'success') {
       if (response.body?.failedNationalIds?.length) {
         generateFailedCSV([response.body.failedNationalIds])
+        onSubmit(false)
       } else {
         Swal.fire({
           title: local.success,
           icon: 'success',
           confirmButtonText: local.end,
         })
-        onSubmit(response)
+        onSubmit(true)
       }
     } else {
       Swal.fire(local.error, getErrorMessage(response.error.error), 'error')

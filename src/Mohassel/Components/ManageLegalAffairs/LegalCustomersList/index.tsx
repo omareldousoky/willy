@@ -292,8 +292,8 @@ const LegalCustomersList: FunctionComponent = () => {
   }
 
   const handleReviewCustomerSubmit = async (values: {
-    type: ManagerReveiwEnum;
-    notes: string;
+    type: ManagerReveiwEnum
+    notes: string
   }) => {
     if (!customersForReview?.length) {
       return
@@ -695,9 +695,13 @@ const LegalCustomersList: FunctionComponent = () => {
           <Modal.Body>
             <UploadLegalCustomers
               onCancel={() => setIsUploadModalOpen(false)}
-              onSubmit={() => {
-                setIsUploadModalOpen(false)
-                handleUpdateCustomerSuccess()
+              onSubmit={(areAllSucceeded) => {
+                if (areAllSucceeded) {
+                  setIsUploadModalOpen(false)
+                  handleUpdateCustomerSuccess()
+                } else {
+                  getLegalCustomers()
+                }
               }}
             />
           </Modal.Body>

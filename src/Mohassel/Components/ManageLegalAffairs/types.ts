@@ -129,3 +129,8 @@ export interface UploadLegalCustomerResponse {
   nationalId: string;
   reason: string;
 }
+
+export interface UploadLegalCustomersProps {
+  onSubmit: (areAllSucceeded: boolean) => void
+  onCancel: () => void
+}
