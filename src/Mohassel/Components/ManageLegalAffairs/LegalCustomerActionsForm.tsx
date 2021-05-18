@@ -28,17 +28,15 @@ const LegalActionsForm: FunctionComponent = () => {
 
   const isReviewed = isSettlementReviewed(customer.settlement)
 
-  const formatCourt = (
-    court: CourtSession | undefined
-  ): CourtSession | undefined => {
-    if (!court) return undefined
+  const formatCourt = (court: CourtSession | undefined): CourtSession | {} => {
+    if (!court) return {}
 
     const courtFields = Object.keys(court)
     const emptyCourtFields = courtFields.filter(
-      (courtField) => court[courtField] === undefined
+      (courtField) => !court[courtField]
     )
 
-    if (courtFields.length === emptyCourtFields.length) return undefined
+    if (courtFields.length === emptyCourtFields.length) return {}
 
     return court.date
       ? {
