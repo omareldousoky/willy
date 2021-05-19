@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
-import InputGroup from 'react-bootstrap/InputGroup'
 import AsyncSelect from 'react-select/async'
 import Swal from 'sweetalert2'
+import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap'
 import * as local from '../../../Shared/Assets/ar.json'
 import GroupInfoBox from '../LoanProfile/groupInfoBox'
 import { searchLoanOfficerAndManager } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
@@ -30,7 +26,7 @@ export const LoanApplicationCreationForm = (props: any) => {
     touched,
     setFieldValue,
   } = props
-  const [options, setOptions] = useState<Array<any>>([])
+  const [enquirerOptions, setEnquirerOptions] = useState<Array<any>>([])
   const [employees, setEmployees] = useState<Array<any>>([])
   const [researcherOptions, setResearcherOptions] = useState<Array<any>>([])
   const branchId = JSON.parse(getCookie('ltsbranch'))._id
@@ -42,10 +38,10 @@ export const LoanApplicationCreationForm = (props: any) => {
       branchId,
     })
     if (res.status === 'success') {
-      setOptions(res.body.data)
+      setEnquirerOptions(res.body.data)
       return res.body.data
     }
-    setOptions([])
+    setEnquirerOptions([])
     Swal.fire('error', getErrorMessage(res.error.error), 'error')
     return []
   }
@@ -64,7 +60,7 @@ export const LoanApplicationCreationForm = (props: any) => {
       setResearcherOptions(activeResearchers)
       return activeResearchers
     }
-    setOptions([])
+    setResearcherOptions([])
     Swal.fire('error', getErrorMessage(res.error.error), 'error')
     return []
   }
@@ -898,7 +894,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                     <AsyncSelect
                       name="enquirorId"
                       data-qc="enquirorId"
-                      value={options.filter(
+                      value={enquirerOptions.filter(
                         (lo) => lo._id === values.enquirorId
                       )}
                       onChange={(event: any) => {
