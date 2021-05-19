@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useState } from 'react'
 import Swal from 'sweetalert2'
 import { Button, Card } from 'react-bootstrap'
-import { ApiResponse } from '../../Services/interfaces'
 import { PDF } from './reports'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getErrorMessage } from '../../../Shared/Services/utils'
@@ -13,6 +12,7 @@ import Can from '../../config/Can'
 import { FalteringPayments as FalteringPaymentsPdf } from '../pdfTemplates/falteringPayments/falteringPayments'
 import { fetchEarlyPaymentsReport } from '../../Services/APIs/Reports/earlyPayments'
 import { EarlyPayments as EarlyPaymentsPdf } from '../pdfTemplates/earlyPayments/earlyPayments'
+import { ApiResponse } from '../../Models/common'
 
 enum ReportEnum {
   FalteringPayments = 'falteringPayments',

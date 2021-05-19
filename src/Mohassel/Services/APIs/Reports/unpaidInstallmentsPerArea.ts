@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios'
+import { ApiResponse } from '../../../Models/common'
 import { UnpaidInstallmentsPerAreaRequest } from '../../interfaces'
 import axios from '../axios-instance'
 
@@ -34,13 +35,6 @@ export interface UnpaidInstallmentsPerAreaResponse {
   branches: Array<BranchResponse>
   amount: number
   count: number
-}
-
-// TODO: move out to common file
-export interface ApiResponse<T> {
-  status: 'success' | 'error'
-  body?: T
-  error?: unknown
 }
 
 export const fetchUnpaidInstallmentsPerAreaReport = async (

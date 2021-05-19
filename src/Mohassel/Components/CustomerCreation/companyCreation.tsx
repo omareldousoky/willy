@@ -41,11 +41,11 @@ interface State {
     businessActivityDetails: string
     legalStructure: string
     businessLicenseNumber: string
-    // businessLicenseIssuePlace: string;
+    // businessLicenseIssuePlace: string
     businessLicenseIssueDate: any
     commercialRegisterNumber: string
     commercialRegisterExpiryDate: string | number
-    // industryRegisterNumber: string;
+    // industryRegisterNumber: string
     taxCardNumber: string
     customerType: string
   }

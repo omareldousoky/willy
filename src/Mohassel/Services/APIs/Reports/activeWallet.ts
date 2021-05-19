@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios'
+import { ApiResponse } from '../../../Models/common'
 import axios from '../axios-instance'
 
 const { REACT_APP_BASE_URL } = process.env
@@ -115,12 +116,6 @@ export interface ActiveWalletGroupResponse {
       }[]
     }[]
   }[]
-}
-// TODO: move out to common file
-export interface ApiResponse<T> {
-  status: 'success' | 'error'
-  body?: T
-  error?: unknown
 }
 
 export const fetchActiveWalletIndividualReport = async (
