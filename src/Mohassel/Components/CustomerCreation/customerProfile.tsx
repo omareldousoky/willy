@@ -24,6 +24,7 @@ import { blockCustomer } from '../../Services/APIs/blockCustomer/blockCustomer'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
 
 export interface Score {
+  id?: string // commercialRegisterNumber
   customerName?: string
   activeLoans?: string
   iscore: string

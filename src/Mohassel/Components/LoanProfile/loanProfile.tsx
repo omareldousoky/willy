@@ -2,13 +2,17 @@
 import React, { Component } from 'react'
 import Container from 'react-bootstrap/Container'
 import Swal from 'sweetalert2'
-import Card from 'react-bootstrap/Card'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { Card } from 'react-bootstrap'
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication'
 import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions'
 import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment'
-import { BranchDetails, getBranch } from '../../Services/APIs/Branch/getBranch'
+import {
+  BranchDetails,
+  BranchDetailsResponse,
+  getBranch,
+} from '../../Services/APIs/Branch/getBranch'
 import Payment from '../Payment/payment'
 import { englishToArabic } from '../../Services/statusLanguage'
 import local from '../../../Shared/Assets/ar.json'
@@ -40,7 +44,12 @@ import { cancelApplication } from '../../Services/APIs/loanApplication/stateHand
 import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment'
 import store from '../../../Shared/redux/store'
 import UploadDocuments from './uploadDocuments'
-import { getIscore, getIscoreCached } from '../../Services/APIs/iScore/iScore'
+import {
+  getIscore,
+  getIscoreCached,
+  getSMECachedIscore,
+  getSMEIscore,
+} from '../../Services/APIs/iScore/iScore'
 import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan'
 import { doubtLoan } from '../../Services/APIs/Loan/doubtLoan'
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt'
@@ -56,14 +65,15 @@ import { FollowUpStatementView } from './followupStatementView'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares'
 import { getWriteOffReasons } from '../../Services/APIs/configApis/config'
-
 import { InfoBox, ProfileActions } from '../../../Shared/Components'
+
 import {
   getCompanyInfo,
   getCustomerInfo,
 } from '../../../Shared/Services/formatCustomersInfo'
 import { FieldProps } from '../../../Shared/Components/Profile/types'
 import SmeLoanContract from '../pdfTemplates/smeLoanContract'
+import { Score } from '../CustomerCreation/customerProfile'
 
 interface EarlyPayment {
   remainingPrincipal?: number
@@ -141,7 +151,7 @@ class LoanProfile extends Component<Props, State> {
   }
 
   componentDidMount() {
-    const appId = this.props.location.state.id
+    const appId = this.props.history.location.state.id
     this.getAppByID(appId)
   }
 
@@ -227,26 +237,61 @@ class LoanProfile extends Component<Props, State> {
     return 0
   }
 
+  async getCachedIndivdualiScores(obj) {
+    this.setState({ loading: true })
+    const iScores = await getIscoreCached(obj)
+    if (iScores.status === 'success') {
+      this.setState({ loading: false })
+      return iScores.body.data
+    }
+    this.setState({ loading: false }, () =>
+      Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
+    )
+    return []
+  }
+
+  async getCachedSMEiScores(obj) {
+    this.setState({ loading: true })
+    const iScores = await getSMECachedIscore(obj)
+    if (iScores.status === 'success') {
+      this.setState({ loading: false })
+      return iScores.body.data
+    }
+    this.setState({ loading: false }, () =>
+      Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
+    )
+    return []
+  }
+
   async getCachediScores(application) {
     const ids: string[] = []
+    const commercialRegisterNumbers: string[] = []
     if (application.product.beneficiaryType === 'group') {
       application.group.individualsInGroup.forEach((member) =>
         ids.push(member.customer.nationalId)
       )
     } else {
       if (application.guarantors.length > 0) {
-        application.guarantors.forEach((guar) => ids.push(guar.nationalId))
-      }
-      if (application.entitledToSign.length > 0) {
-        application.entitledToSign.forEach(
-          (cust) => cust.nationalId && ids.push(cust.nationalId)
+        application.guarantors.forEach((guar) =>
+          guar.customerType === 'company'
+            ? commercialRegisterNumbers.push(guar.commercialRegisterNumber)
+            : ids.push(guar.nationalId)
         )
       }
-      application.customer.nationalId &&
-        ids.push(application.customer.nationalId)
+      if (application.entitledToSign && application.entitledToSign.length > 0) {
+        application.entitledToSign.forEach((cust) => ids.push(cust.nationalId))
+      }
+      application.customer.customerType === 'company'
+        ? commercialRegisterNumbers.push(
+            application.customer.commercialRegisterNumber
+          )
+        : ids.push(application.customer.nationalId)
     }
     const obj: { nationalIds: string[]; date?: Date } = {
       nationalIds: ids,
+    }
+    const smeObj: { ids: string[]; date?: Date } = {
+      ids: commercialRegisterNumbers,
     }
     if (
       [
@@ -272,16 +317,16 @@ class LoanProfile extends Component<Props, State> {
           ? this.state.application.updated.at
           : 0
       // paid & canceled => updated.at, pending,issued =>issuedDate
+      smeObj.date = obj.date
     }
-    this.setState({ loading: true })
-    const iScores = await getIscoreCached(obj)
-    if (iScores.status === 'success') {
-      this.setState({ iscores: iScores.body.data, loading: false })
-    } else {
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
-      )
+    let iscores: Array<Score> = []
+    if (obj.nationalIds.length > 0)
+      iscores = await this.getCachedIndivdualiScores(obj)
+    if (smeObj.ids.length > 0) {
+      const smeScores: Array<Score> = await this.getCachedSMEiScores(smeObj)
+      iscores.push(...smeScores)
     }
+    this.setState({ iscores })
   }
 
   setTabsToRender(application) {
@@ -427,132 +472,13 @@ class LoanProfile extends Component<Props, State> {
   async getBranchData(branchId: string) {
     const res = await getBranch(branchId)
     if (res.status === 'success') {
-      this.setState({ branchDetails: res.body?.data })
+      this.setState({
+        branchDetails: (res.body as BranchDetailsResponse)?.data,
+      })
     } else {
       const err = res.error as Record<string, string>
       Swal.fire('Error !', getErrorMessage(err.error), 'error')
     }
-  }
-
-  async getIscore(data) {
-    this.setState({ loading: true })
-    const obj = {
-      requestNumber: '148',
-      reportId: '3004',
-      product: '023',
-      loanAccountNumber: `${data.key}`,
-      number: '1703943',
-      date: '02/12/2014',
-      amount: `${this.state.application.principal}`,
-      lastName: `${data.customerName}`,
-      idSource: '003',
-      idValue: `${data.nationalId}`,
-      gender: data.gender === 'male' ? '001' : '002',
-      dateOfBirth: iscoreDate(data.birthDate),
-    }
-    const iScore = await getIscore(obj)
-    if (iScore.status === 'success') {
-      this.getCachediScores(this.state.application)
-      this.setState({ loading: false })
-    } else {
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(iScore.error.error), 'error')
-      )
-    }
-  }
-
-  getSumOfPendingActions() {
-    let sum = 0
-    this.state.pendingActions.transactions?.forEach((transaction) => {
-      sum += transaction.transactionAmount
-    })
-    return numTo2Decimal(sum)
-  }
-
-  async getMembersShare(id: string) {
-    this.setState({ loading: true })
-    const res = await getGroupMemberShares(id)
-    if (res.status === 'success') {
-      this.setState({ loading: false, individualsWithInstallments: res.body })
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
-  }
-
-  async getWriteOffReasons() {
-    this.setState({ loading: true })
-    const res = await getWriteOffReasons()
-    if (res.status === 'success') {
-      this.setState({ loading: false })
-      const options = {}
-      if (
-        this.state.application.group.individualsInGroup !== null &&
-        this.state.application.group.individualsInGroup.length > 1
-      ) {
-        res.body.reasons
-          .filter((reason) => reason.name !== 'Deceased')
-          .map((option) => {
-            options[option.name] = local[option.name.replace(/\s/g, '')]
-          })
-      } else {
-        res.body.reasons.map((option) => {
-          options[option.name] = local[option.name.replace(/\s/g, '')]
-        })
-      }
-      return options
-    }
-    this.setState({ loading: false }, () =>
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    )
-    return {}
-  }
-
-  getInfo = (): FieldProps[][] => {
-    if (
-      this.state.application.product?.beneficiaryType === 'individual' &&
-      this.state.application.customer
-    ) {
-      if (this.state.application.product?.type === 'sme') {
-        const info: FieldProps[] = getCompanyInfo({
-          company: this.state.application.customer,
-          // score: customerScore,
-          getIscore: (data) => this.getIscore(data),
-          applicationStatus: this.state.application.status,
-        })
-        return [info]
-      }
-      const customerScore = this.state.iscores.filter(
-        (score) =>
-          score.nationalId === this.state.application.customer.nationalId
-      )[0]
-      const info: FieldProps[] = getCustomerInfo({
-        customerDetails: this.state.application.customer,
-        score: customerScore,
-        isLeader: false,
-        getIscore: (data) => this.getIscore(data),
-        applicationStatus: this.state.application.status,
-      })
-      return [info]
-    }
-    if (this.state.application.product?.beneficiaryType === 'group') {
-      const groupMainInfo = this.state.application.group.individualsInGroup.map(
-        (individual) => {
-          const customerScore = this.state.iscores.filter(
-            (score) => score.nationalId === individual.customer.nationalId
-          )[0]
-          return getCustomerInfo({
-            customerDetails: individual.customer,
-            score: customerScore,
-            isLeader: individual.type === 'leader',
-            getIscore: this.getIscore,
-            applicationStatus: this.state.application.status,
-          })
-        }
-      )
-      return groupMainInfo
-    }
-    return []
   }
 
   getProfileActions = () => {
@@ -673,6 +599,7 @@ class LoanProfile extends Component<Props, State> {
         title: local.rollBackAction,
         permission:
           (ability.can('rollback', 'application') ||
+            ability.can('rollbackCancelPenalities', 'application') ||
             ability.can('rollbackPayment', 'application')) &&
           !['reviewed', 'underReview'].includes(this.state.application.status),
         onActionClick: () =>
@@ -702,6 +629,144 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () => this.doubtApplication(),
       },
     ]
+  }
+
+  getInfo = (): FieldProps[][] => {
+    if (
+      this.state.application.product?.beneficiaryType === 'individual' &&
+      this.state.application.customer
+    ) {
+      if (this.state.application.product?.type === 'sme') {
+        const smeScore = this.state.iscores.filter(
+          (score) =>
+            score.id ===
+            this.state.application.customer.commercialRegisterNumber
+        )[0]
+        const info: FieldProps[] = getCompanyInfo({
+          company: this.state.application.customer,
+          score: smeScore,
+          getIscore: (data) => this.getIscore(data),
+          applicationStatus: this.state.application.status,
+        })
+        return [info]
+      }
+      const customerScore = this.state.iscores.filter(
+        (score) =>
+          score.nationalId === this.state.application.customer.nationalId
+      )[0]
+      const info: FieldProps[] = getCustomerInfo({
+        customerDetails: this.state.application.customer,
+        score: customerScore,
+        isLeader: false,
+        getIscore: (data) => this.getIscore(data),
+        applicationStatus: this.state.application.status,
+      })
+      return [info]
+    }
+    if (this.state.application.product?.beneficiaryType === 'group') {
+      const groupMainInfo = this.state.application.group.individualsInGroup.map(
+        (individual) => {
+          const customerScore = this.state.iscores.filter(
+            (score) => score.nationalId === individual.customer.nationalId
+          )[0]
+          return getCustomerInfo({
+            customerDetails: individual.customer,
+            score: customerScore,
+            isLeader: individual.type === 'leader',
+            getIscore: this.getIscore,
+            applicationStatus: this.state.application.status,
+          })
+        }
+      )
+      return groupMainInfo
+    }
+    return []
+  }
+
+  async getIscore(data) {
+    this.setState({ loading: true })
+    const obj =
+      data.customerType === 'company'
+        ? {
+            productId: '104',
+            amount: `${this.state.application.principal}`,
+            name: `${data.businessName}`,
+            idSource: '901',
+            idValue: `${data.commercialRegisterNumber}`,
+          }
+        : {
+            requestNumber: '148',
+            reportId: '3004',
+            product: '023',
+            loanAccountNumber: `${data.key}`,
+            number: '1703943',
+            date: '02/12/2014',
+            amount: `${this.state.application.principal}`,
+            lastName: `${data.customerName}`,
+            idSource: '003',
+            idValue: `${data.nationalId}`,
+            gender: data.gender === 'male' ? '001' : '002',
+            dateOfBirth: iscoreDate(data.birthDate),
+          }
+    const iScore =
+      data.customerType === 'company'
+        ? await getSMEIscore(obj)
+        : await getIscore(obj)
+    if (iScore.status === 'success') {
+      this.getCachediScores(this.state.application)
+      this.setState({ loading: false })
+    } else {
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(iScore.error.error), 'error')
+      )
+    }
+  }
+
+  getSumOfPendingActions() {
+    let sum = 0
+    this.state.pendingActions.transactions?.forEach((transaction) => {
+      sum += transaction.transactionAmount
+    })
+    return numTo2Decimal(sum)
+  }
+
+  async getMembersShare(id: string) {
+    this.setState({ loading: true })
+    const res = await getGroupMemberShares(id)
+    if (res.status === 'success') {
+      this.setState({ loading: false, individualsWithInstallments: res.body })
+    } else
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
+  }
+
+  async getWriteOffReasons() {
+    this.setState({ loading: true })
+    const res = await getWriteOffReasons()
+    if (res.status === 'success') {
+      this.setState({ loading: false })
+      const options = {}
+      if (
+        this.state.application.group.individualsInGroup !== null &&
+        this.state.application.group.individualsInGroup.length > 1
+      ) {
+        res.body.reasons
+          .filter((reason) => reason.name !== 'Deceased')
+          .map((option) => {
+            options[option.name] = local[option.name.replace(/\s/g, '')]
+          })
+      } else {
+        res.body.reasons.map((option) => {
+          options[option.name] = local[option.name.replace(/\s/g, '')]
+        })
+      }
+      return options
+    }
+    this.setState({ loading: false }, () =>
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    )
+    return {}
   }
 
   async writeOffApplication() {

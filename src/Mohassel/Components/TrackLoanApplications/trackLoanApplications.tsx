@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
 import { connect } from 'react-redux'
-import Modal from 'react-bootstrap/Modal'
 import Swal from 'sweetalert2'
 import Table from 'react-bootstrap/Table'
+import { Button, Card, Modal } from 'react-bootstrap'
 import { Loader } from '../../../Shared/Components/Loader'
 import ReviewedApplicationsPDF from '../pdfTemplates/reviewedApplications/reviewedApplications'
 import Can from '../../config/Can'
@@ -25,7 +23,10 @@ import {
 } from '../../../Shared/Services/utils'
 import { getBranch } from '../../Services/APIs/Branch/getBranch'
 import { getCookie } from '../../../Shared/Services/getCookie'
-import { getIscoreCached } from '../../Services/APIs/iScore/iScore'
+import {
+  getIscoreCached,
+  getSMECachedIscore,
+} from '../../Services/APIs/iScore/iScore'
 import { Score } from '../CustomerCreation/customerProfile'
 import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApplications'
 import { manageApplicationsArray } from './manageApplicationInitials'
@@ -199,6 +200,7 @@ class TrackLoanApplications extends Component<Props, State> {
   }
 
   async getCachediScores(application) {
+    const smeCheck = this.props.searchFilters.type === 'sme'
     this.setState({ iScoreModal: true })
     const ids: string[] = []
     if (application.product.beneficiaryType === 'group') {
@@ -206,7 +208,11 @@ class TrackLoanApplications extends Component<Props, State> {
         ids.push(member.customer.nationalId)
       )
     } else {
-      ids.push(application.customer.nationalId)
+      ids.push(
+        smeCheck
+          ? application.customer.commercialRegisterNumber
+          : application.customer.nationalId
+      )
     }
     const obj: { nationalIds: string[]; date?: Date } = {
       nationalIds: ids,
@@ -237,7 +243,9 @@ class TrackLoanApplications extends Component<Props, State> {
       // paid & canceled => updated.at, pending,issued =>issuedDate
     }
     this.setState({ loading: true })
-    const iScores = await getIscoreCached(obj)
+    const iScores = smeCheck
+      ? await getSMECachedIscore({ ids, date: obj.date })
+      : await getIscoreCached(obj)
     if (iScores.status === 'success') {
       const customers: Score[] = []
       iScores.body.data.forEach((score: Score) => {
@@ -247,9 +255,11 @@ class TrackLoanApplications extends Component<Props, State> {
               ? application.group.individualsInGroup.filter(
                   (member) => member.customer.nationalId === score.nationalId
                 )[0].customer.customerName
-              : application.customer.customerName,
+              : application.customer.customerName ||
+                application.customer.businessName,
           iscore: score.iscore,
           nationalId: score.nationalId,
+          id: score.id,
           url: score.url,
           bankCodes: score.bankCodes || [],
         }
@@ -541,7 +551,11 @@ class TrackLoanApplications extends Component<Props, State> {
                 <thead>
                   <tr>
                     <td>{local.customer}</td>
-                    <td>{local.nationalId}</td>
+                    <td>
+                      {smePermission
+                        ? local.commercialRegisterNumber
+                        : local.nationalId}
+                    </td>
                     <td>{local.value}</td>
                     <td>{local.bankName}</td>
                     <td />
@@ -550,9 +564,11 @@ class TrackLoanApplications extends Component<Props, State> {
                 </thead>
                 <tbody>
                   {this.state.iScoreCustomers.map((customer: Score) => (
-                    <tr key={customer.nationalId}>
+                    <tr key={customer.nationalId || customer.id}>
                       <td>{customer.customerName}</td>
-                      <td>{customer.nationalId}</td>
+                      <td>
+                        {smePermission ? customer.id : customer.nationalId}
+                      </td>
                       <td
                         style={{
                           color: iscoreStatusColor(customer.iscore).color,

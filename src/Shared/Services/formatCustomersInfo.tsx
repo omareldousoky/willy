@@ -87,7 +87,6 @@ const iscoreField = ({
                 style={{ cursor: 'pointer', padding: 10 }}
                 onClick={() => getIscore(customerDetails)}
               >
-                {' '}
                 <span
                   className="fa fa-refresh"
                   style={{ margin: '0px 0px 0px 5px' }}
@@ -121,11 +120,11 @@ export const getCompanyInfo = ({
       fieldTitle: 'iScore',
       fieldData: iscoreField({
         score,
-        customerDetails: company,
-        applicationStatus,
         getIscore,
+        applicationStatus,
+        customerDetails: company,
       }),
-      showFieldCondition: ability.can('viewIscore', 'customer'),
+      showFieldCondition: !!score,
     },
     {
       fieldTitle: taxCardNumber,
@@ -191,9 +190,9 @@ export const getCustomerInfo = ({
       fieldTitle: 'iScore',
       fieldData: iscoreField({
         score,
-        customerDetails,
-        applicationStatus,
         getIscore,
+        applicationStatus,
+        customerDetails,
       }),
       showFieldCondition: !!score,
     },
