@@ -32,6 +32,7 @@ interface Props {
   };
 };
 export interface Score {
+  id?: string; // commercialRegisterNumberl
   customerName?: string;
   activeLoans?: string;
   iscore: string;
