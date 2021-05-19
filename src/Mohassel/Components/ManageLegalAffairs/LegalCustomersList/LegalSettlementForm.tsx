@@ -74,12 +74,12 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
         confirmButtonText: local.end,
         confirmButtonColor: colorVariables.green,
       })
+      onSubmit()
     } else {
       Swal.fire('error', getErrorMessage(response.error), 'error')
     }
 
     setIsSubmitting(false)
-    onSubmit()
   }
 
   const handlePhotoChange = async (name: string, value: File | string) => {
