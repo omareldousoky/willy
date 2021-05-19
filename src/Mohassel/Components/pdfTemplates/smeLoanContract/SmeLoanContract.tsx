@@ -7,7 +7,7 @@ import {
   dayToArabic,
 } from '../../../../Shared/Services/utils'
 
-const SmeLoanContract = (props) => {
+export const SmeLoanContract = (props) => {
   return (
     <>
       <div className="loan-contract" dir="rtl" lang="ar">
@@ -520,4 +520,3 @@ const SmeLoanContract = (props) => {
   )
 }
 
-export default SmeLoanContract

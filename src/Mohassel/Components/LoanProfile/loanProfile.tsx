@@ -58,8 +58,14 @@ import { Col, Form } from 'react-bootstrap';
 import { arabicGender, timeToArabicDate, downloadFile, iscoreStatusColor, iscoreBank } from '../../../Shared/Services/utils';
 import { getCompanyInfo, getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
 import { FieldProps } from '../../../Shared/Components/Profile/types';
-import SmeLoanContract from '../pdfTemplates/smeLoanContract'
-
+import {
+  SmeLoanContract,
+  AcknowledgmentAndPledge,
+  KnowYourCustomer,
+  AcknowledgmentWasSignedInFront,
+  SmeCard
+} from "../pdfTemplates/smeLoanContract";
+import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
 interface EarlyPayment {
     remainingPrincipal?: number;
     requiredAmount?: number;
@@ -98,6 +104,7 @@ interface State {
     geoAreas: Array<any>;
     remainingTotal: number;
     individualsWithInstallments: IndividualWithInstallments;
+    loanUsage: string;
 }
 
 interface Props {
@@ -127,12 +134,26 @@ class LoanProfile extends Component<Props, State>{
             remainingTotal: 0,
             individualsWithInstallments: {
                 installmentTable: []
-            }
+            },
+            loanUsage: ''
         };
     }
-    componentDidMount() {
+    async componentDidMount() {
         const appId = this.props.history.location.state.id;
         this.getAppByID(appId)
+    }
+    async  getLoanUsages() {
+        this.setState({ loading: true });
+        const res = await getLoanUsage();
+        if (res.status === "success") {
+            const uses = res.body.usages
+            const value = uses.find(use => use.id === this.state.application.usage)?.name
+            this.setState({ loanUsage: value , loading: false})
+        } else {
+            Swal.fire("Error !",getErrorMessage(res.error.error),'error');
+            this.setState({ loading: false });
+            return ''
+        }
     }
     async getManualOtherPayments(appId) {
         if (ability.can("pendingAction", "application")) {
@@ -162,6 +183,7 @@ class LoanProfile extends Component<Props, State>{
                 })
             } else this.setTabsToRender(application)
             if (ability.can('viewIscore', 'customer')) this.getCachediScores(application.body)
+            await this.getLoanUsages()
         } else {
             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(application.error.error), 'error'))
         }
@@ -845,10 +867,22 @@ class LoanProfile extends Component<Props, State>{
                         }
                     </>}
                 {this.state.print === 'allSME' && (
-                  <SmeLoanContract
-                    data={this.state.application}
-                    branchDetails={this.state.branchDetails}
-                  />
+                    <>
+                        <AcknowledgmentAndPledge entitledToSign = {this.state.application.entitledToSign}/>
+                        <KnowYourCustomer application={this.state.application} loanUsage={this.state.loanUsage}/>
+                        <AcknowledgmentWasSignedInFront application={this.state.application} />
+                        <SmeCard 
+                            application={this.state.application}
+                            penalty={this.state.penalty} 
+                            remainingTotal={this.state.remainingTotal}
+                            getGeoArea={(area) => this.getCustomerGeoArea(area)}
+                            members={this.state.individualsWithInstallments}
+                        />
+                        <SmeLoanContract
+                            data={this.state.application}
+                            branchDetails={this.state.branchDetails}
+                        />
+                  </>
                 )}
                 {this.state.print === 'followUpStatement' && <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} members={this.state.individualsWithInstallments} />}
                 {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} remainingTotal={this.state.remainingTotal} members={this.state.individualsWithInstallments} />}

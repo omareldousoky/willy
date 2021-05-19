@@ -33,6 +33,7 @@ export interface Customer {
     businessPostalCode?: string;
     businessSector?: string;
     businessSpeciality?: string;
+    businessCharacteristic?: string;
     code?: number;
     comments?: string;
     commercialRegisterNumber?: string;
@@ -82,8 +83,183 @@ export interface Customer {
         type?: string;
     }[];
     customerType?: string;
+    legalStructure?: string;
 }
-
+export interface Installment {
+    id: number;
+    installmentResponse: number;
+    principalInstallment: number;
+    feesInstallment: number;
+    totalPaid: number;
+    principalPaid: number;
+    feesPaid: number;
+    dateOfPayment: number;
+    status: string;
+    earlyPaymentReschedule?: boolean;
+    paidAt?: number;
+    pendingFees?: number;
+    pendingPrincipal?: number;
+    writtenOff?: boolean;
+  }
+  export interface TotalInstallments {
+    feesSum?: number;
+    installmentSum?: number;
+    principal?: number; 
+  }
+  export interface PenaltyPolicy{
+    beneficiaryType?: string;
+    checkAgainst?: string;
+    exemptedDays?: number;
+    instantFee?: number;
+    legacyExpiryDate? : number; 
+    penaltyFormula?: [];
+    productType?: string; 
+    startDate?: number;
+    _id?: string; 
+  }
+  export interface Vice {
+    name: string;
+    phoneNumber: string;
+    nationalId?: string;
+    nationalIdIssueDate?: string | any;
+    jobTitle?: string;
+    address?: string; 
+}
+export interface Aging {
+    fee?: number;
+    from?: number;
+    to?: number;
+}
+ export interface CalculationFormula{
+    equalInstallments?: boolean;
+    gracePeriodFees?: boolean; 
+    installmentType?: string; 
+    interestType?: string; 
+    name: string;
+    roundDirection?: string;
+    roundLastInstallment?: boolean; 
+    roundTo?: number;
+    roundWhat?: string;
+    _id: string;
+ }
+export interface Product {
+    adminFees: number;
+    allocatedDebtForGoodLoans: number;
+    aging?: Aging[];
+    allowAdminFeesAdjustment?: boolean; 
+    allowApplicationFeeAdjustment?: boolean;
+    allowInterestAdjustment?: boolean;
+    allowRepresentativeFeesAdjustment?: boolean;
+    allowStampsAdjustment?:boolean; 
+    applicationFee?: number;
+    applicationFeePercent?: number;
+    applicationFeePercentPerPerson?: number; 
+    applicationFeePercentPerPersonType?: string;
+    applicationFeeType: string;
+    beneficiaryType: "individual" | "group";
+    branchManagerAndDate?: boolean;
+    calculationFormula?: CalculationFormula;
+    code: number;
+    currency?: string;
+    deductionFee?: number;
+    earlyPaymentFees?: number;
+    enabled?: boolean;
+    gracePeriod?: number; 
+    guarantorGuaranteesMultiple?: boolean;
+    inAdvanceFees?: number;
+    inAdvanceFrom?: string;
+    inAdvanceType?: string;
+    individualApplicationFee?: number; 
+    interest?: number; 
+    interestPeriod?: string; 
+    lateDays?: number; 
+    loanImpactPrincipal?: boolean; 
+    loanNature?: string; 
+    maxInstallment?: number; 
+    maxNoOfRestructuring?: number; 
+    maxPrincipal?: number;
+    mergeDoubtedLoans?: boolean; 
+    mergeDoubtedLoansFees?: number; 
+    mergeUndoubtedLoans?: boolean; 
+    mergeUndoubtedLoansFees?: number; 
+    migratedAt?: number; 
+    minInstallment?: number;
+    minPrincipal?: number;
+    mustEnterGuarantor?: boolean; 
+    noOfGuarantors?: number; 
+    noOfInstallments?: number; 
+    periodLength?: number; 
+    periodType?: string; 
+    productName: string;
+    pushDays?: any[];
+    pushHolidays?: string; 
+    pushPayment?: number; 
+    representativeFees?: number; 
+    reviewerChiefAndDate?: boolean; 
+    spreadApplicationFee?: boolean;
+    stamps?: number; 
+    type?: string; 
+    viceFieldManagerAndDate?: boolean;
+    _id: string;
+}
+export interface Application {
+    applicationCode?: number;
+    applicationFeesPaid?: number; 
+    applicationFeesRequired?: number;
+    applicationKey: number;
+    approvalDate?: number;
+    branchId?: string;
+    branchManagerId: string;
+    branchManagerName?: string;
+    created?: Signature;
+    creationDate: number;
+    customer?: Customer;
+    earlyPaymentAmount?: number;
+    enquirerName?: string;
+    enquirorId?: string; 
+    entitledToSign?: Customer[];
+    entryDate: number;
+    fundSource?: string;
+    group?: {
+        individualsInGroup?: any;
+        _id?: string;
+    }; 
+    guarantors: Customer[];
+    installmentsObject?: {
+        installments?: Installment[];
+        totalInstallments?: TotalInstallments;
+    };
+    issueDate?: number; 
+    lastDoubtedAt? : number; 
+    loanApplicationCode?: number;
+    loanApplicationKey?: number;
+    loanApplicationKeyFormated?: string; 
+    managerVisitDate?: number; 
+    noOfRestructuring?: number; 
+    penaltiesCanceled?: number;
+    penaltiesPaid?: number;
+    penaltyPolicy?: PenaltyPolicy;
+    principal: number;
+    product?: Product;
+    rejectionDate?: number; 
+    rejectionReason?: string;
+    representativeFeesPaid?: number; 
+    representativeId?: string; 
+    rescheduled? : {};
+    researcherId?: string;
+    researcherName?: string; 
+    reviewedDate?: number; 
+    stampsPaid?: number; 
+    status?: string; 
+    thirdReviewDate?: number;
+    undoReviewDate?: number; 
+    updated?: any;
+    usage?: string; 
+    viceCustomers?: Vice[];
+    visitationDate?: number; 
+    writeOffAt?: number;
+    _id: string; 
+}
 export interface Action {
     loanBranchId: string;
     action: string;
@@ -184,6 +360,7 @@ export interface Clearance {
 interface Signature {
 	by: string;
 	at: number;
+    userName?: string;
 }
 
 export interface Trace {
@@ -384,16 +561,8 @@ export interface TerroristResponse {
 	nationality: string;
 	nationalId: string;
 	birthDate: string;
-	created: {
-		by: string;
-		at: number;
-		userName: string;
-	};
-	updated: {
-		by: string;
-		at: number;
-		userName: string;
-	};
+	created: Signature;
+	updated: Signature;
 }
 export interface TerroristUnResponse {
     id: string;
@@ -412,14 +581,6 @@ export interface TerroristUnResponse {
     serial: string;
     additionalInfo: string;
     insertionDate: string;
-    created: {
-        by: string;
-        at: number;
-        userName: string;
-    };
-    updated: {
-        by: string;
-        at: number;
-        userName: string;
-    };
+    created: Signature;
+    updated: Signature;
 }
