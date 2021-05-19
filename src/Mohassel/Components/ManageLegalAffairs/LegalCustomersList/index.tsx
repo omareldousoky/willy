@@ -393,7 +393,7 @@ const LegalCustomersList: FunctionComponent = () => {
       render: (data) => renderCourtField(data, 'confinementNumber'),
     },
     {
-      title: local.courtSessionType,
+      title: local.judgementStatus,
       key: 'courtSessionType',
       render: (data) => (hasCourtSession(data) ? local[data.status] : ''),
     },
