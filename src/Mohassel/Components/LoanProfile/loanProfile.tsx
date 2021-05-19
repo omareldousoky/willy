@@ -1,10 +1,9 @@
 /* eslint-disable prefer-destructuring */
 import React, { Component } from 'react'
-import Container from 'react-bootstrap/Container'
 import Swal from 'sweetalert2'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Card } from 'react-bootstrap'
+import { Card, Container } from 'react-bootstrap'
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication'
 import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions'
 import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment'

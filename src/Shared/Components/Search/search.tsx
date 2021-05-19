@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import { Formik, FormikProps, FormikValues } from 'formik'
 import { connect } from 'react-redux'
-import Form from 'react-bootstrap/Form'
-import InputGroup from 'react-bootstrap/InputGroup'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
-import FormControl from 'react-bootstrap/FormControl'
-import DropdownButton from 'react-bootstrap/DropdownButton'
-import Dropdown from 'react-bootstrap/Dropdown'
+import {
+  Button,
+  Col,
+  Dropdown,
+  DropdownButton,
+  Form,
+  FormControl,
+  InputGroup,
+  Row,
+} from 'react-bootstrap'
 import * as local from '../../Assets/ar.json'
 import {
   search,

@@ -94,12 +94,16 @@ export const companyCreationValidationStepTwoEdit = Yup.object().shape({
     .required(required),
   maxPrincipal: Yup.number()
     .min(0, mustBeGreaterThanZero)
-    // .test("maxPrincipal", maxGlobalLimitReachedError,
+    // .test(
+    //   'maxPrincipal',
+    //   maxGlobalLimitReachedError,
     //   function (this: any, value: any) {
-    //       const { principals } = this.parent
-    //       if (value <= principals.maxIndividualPrincipal) {
-    //           return true
-    //       } else return false
-    //   })
+    //     const { principals } = this.parent
+    //     if (value <= principals.maxIndividualPrincipal) {
+    //       return true
+    //     }
+    //     return false
+    //   }
+    // )
     .required(required),
 })

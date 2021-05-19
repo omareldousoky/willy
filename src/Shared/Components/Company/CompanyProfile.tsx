@@ -178,7 +178,6 @@ export const CompanyProfile = () => {
       <Profile
         source="company"
         loading={isLoading}
-        // backButtonText={viewCompany}
         tabs={tabs}
         activeTab={activeTab}
         setActiveTab={(stringKey) => changeActiveTab(stringKey)}
