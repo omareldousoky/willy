@@ -184,14 +184,14 @@ class NavBar extends Component<Props, State> {
                   <span className="text-primary mx-2 font-weight-bold">  {this.getDaysOfMonth().lastDay}  </span>
                 </div>
               </div>
-              <div className="navbar-choose-branch" onClick={() => this.setState({ openBranchList: !this.state.openBranchList })}>
-                <div>
+              <div className="navbar-choose-branch" >
+                <div className="d-flex"  onClick={() => this.setState({ openBranchList: !this.state.openBranchList })}>
                   <div className="selected-branch">
                     <div className="pin-icon"><span className="fa fa-map-marker-alt fa-lg"></span></div>
                     <span className="text-white font-weight-bold">{this.state.selectedBranch._id === "" ? local.selectBranch : this.state.selectedBranch.name}</span>
                   </div>
+                <img className="mx-2" style={{width: "40px" }} alt="drop-down-arrow" src={require('../../Assets/dropDownArrow.svg')} />
                 </div>
-                <img  style={{width: "40px" }} alt="drop-down-arrow" src={require('../../Assets/dropDownArrow.svg')} />
               {this.state.openBranchList ? this.renderBranchList() : null}
               </div>
             </Nav>
