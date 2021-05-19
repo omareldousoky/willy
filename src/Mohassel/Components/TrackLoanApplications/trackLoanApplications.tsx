@@ -14,7 +14,7 @@ import { timeToDateyyymmdd, beneficiaryType, parseJwt, getErrorMessage, download
 import { getBranch } from '../../Services/APIs/Branch/getBranch';
 import { getCookie } from '../../../Shared/Services/getCookie';
 import Modal from 'react-bootstrap/Modal';
-import { getIscoreCached } from '../../Services/APIs/iScore/iScore';
+import { getIscoreCached, getSMECachedIscore } from '../../Services/APIs/iScore/iScore';
 import Swal from 'sweetalert2';
 import Table from 'react-bootstrap/Table';
 import { Score } from '../CustomerCreation/customerProfile';
@@ -143,12 +143,13 @@ class TrackLoanApplications extends Component<Props, State>{
     )
   }
   async getCachediScores(application) {
+    const smeCheck = this.props.searchFilters.type === 'sme'
     this.setState({ iScoreModal: true });
     const ids: string[] = []
     if (application.product.beneficiaryType === 'group') {
       application.group.individualsInGroup.forEach(member => ids.push(member.customer.nationalId))
     } else {
-      ids.push(application.customer.nationalId)
+      ids.push(smeCheck ? application.customer.commercialRegisterNumber : application.customer.nationalId)
     }
     const obj: { nationalIds: string[]; date?: Date } = {
       nationalIds: ids
@@ -162,14 +163,15 @@ class TrackLoanApplications extends Component<Props, State>{
       // paid & canceled => updated.at, pending,issued =>issuedDate
     }
     this.setState({ loading: true });
-    const iScores = await getIscoreCached(obj);
+    const iScores = smeCheck ? await getSMECachedIscore({ids, date: obj.date}) : await getIscoreCached(obj);
     if (iScores.status === "success") {
       const customers: Score[] = [];
       iScores.body.data.forEach((score: Score) => {
         const obj = {
-          customerName: (application.product.beneficiaryType === 'group') ? application.group.individualsInGroup.filter(member => member.customer.nationalId === score.nationalId)[0].customer.customerName : application.customer.customerName,
+          customerName: (application.product.beneficiaryType === 'group') ? application.group.individualsInGroup.filter(member => member.customer.nationalId === score.nationalId)[0].customer.customerName : application.customer.customerName || application.customer.businessName,
           iscore: score.iscore,
           nationalId: score.nationalId,
+          id: score.id,
           url: score.url,
           bankCodes: score.bankCodes || []
         }
@@ -364,7 +366,7 @@ class TrackLoanApplications extends Component<Props, State>{
                 <thead>
                   <tr>
                     <td>{local.customer}</td>
-                    <td>{local.nationalId}</td>
+                    <td>{smePermission ? local.commercialRegisterNumber : local.nationalId}</td>
                     <td>{local.value}</td>
                     <td>{local.bankName}</td>
                     <td></td>
@@ -373,9 +375,9 @@ class TrackLoanApplications extends Component<Props, State>{
                 </thead>
                 <tbody>
                   {this.state.iScoreCustomers.map((customer: Score) =>
-                    <tr key={customer.nationalId}>
+                    <tr key={customer.nationalId || customer.id}>
                       <td>{customer.customerName}</td>
-                      <td>{customer.nationalId}</td>
+                      <td>{smePermission ? customer.id : customer.nationalId}</td>
                       <td style={{ color: iscoreStatusColor(customer.iscore).color }}>{customer.iscore}</td>
                       {customer.bankCodes && customer.bankCodes.length > 0 && customer.bankCodes.map(code => <td key={code}>{iscoreBank(code)}</td>)}
                       <td>{iscoreStatusColor(customer.iscore).status}</td>
