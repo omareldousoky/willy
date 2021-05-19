@@ -1059,5 +1059,7 @@
     "branchesStatus":"حاله الفروع",
     "manageFinancialTransaction":"إدارة المعاملات المالية",
     "judgementStatus": "حالة القضاء",
-    "uploadCustomersError": "تم بنجاح، ولكن لم يتم تعديل بعض العملاء"
+    "uploadCustomersError": "تم بنجاح، ولكن لم يتم تعديل بعض العملاء",
+    "downloadTemplate": "تنزيل نموذج",
+    "defaultedCustomersTemplate": "نموذج قائمة المتأخرين"
   }

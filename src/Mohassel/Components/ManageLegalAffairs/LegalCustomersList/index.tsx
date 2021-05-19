@@ -47,8 +47,6 @@ import UploadLegalCustomers from './UploadCustomersForm'
 import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
 import { Branch } from '../../../../Shared/Services/interfaces'
 import { getBranch } from '../../../Services/APIs/Branch/getBranch'
-import { getManagerHierarchy } from '../../../Services/APIs/ManagerHierarchy/getManagerHierarchy'
-import { Managers } from '../../managerHierarchy/branchBasicsCard'
 import managerTypes from '../configs/managerTypes'
 import { handleUpdateSuccess } from '../utils'
 

@@ -77,36 +77,54 @@ const UploadLegalCustomers = ({
   }
 
   return (
-    <AppForm
-      formFields={formFields}
-      onSubmit={(values) => handleSubmit(values)}
-      onCancel={onCancel}
-      onChange={() => {
-        setIsDisabled(false)
-        setfailedCustomerURI('')
-      }}
-      options={{
-        wideBtns: true,
-        disabled: isDisabled,
-        footer: failedCustomerURI && (
-          <div className="swal2-validation-message d-flex">
-            <span>{local.uploadCustomersError}</span>
-            <a
-              className="btn"
-              href={failedCustomerURI}
-              download={local.customersFailedToUpload}
-              role="button"
-            >
-              <img
-                alt={local.print}
-                style={{ maxWidth: 18 }}
-                src={require('../../../Assets/green-download.svg')}
-              />
-            </a>
-          </div>
-        ),
-      }}
-    />
+    <>
+      <div className="text-center">
+        <a
+          href="./src/Mohassel/Assets/sheets/defaulted-customers-template.xlsx"
+          download={local.defaultedCustomersTemplate}
+          role="button"
+        >
+          {local.downloadTemplate}
+          <img
+            alt={local.print}
+            style={{ maxWidth: 18 }}
+            src={require('../../../Assets/green-download.svg')}
+            className="ml-2"
+          />
+        </a>
+      </div>
+
+      <AppForm
+        formFields={formFields}
+        onSubmit={(values) => handleSubmit(values)}
+        onCancel={onCancel}
+        onChange={() => {
+          setIsDisabled(false)
+          setfailedCustomerURI('')
+        }}
+        options={{
+          wideBtns: true,
+          disabled: isDisabled,
+          footer: failedCustomerURI && (
+            <div className="swal2-validation-message d-flex">
+              <span>{local.uploadCustomersError}</span>
+              <a
+                className="btn"
+                href={failedCustomerURI}
+                download={local.customersFailedToUpload}
+                role="button"
+              >
+                <img
+                  alt={local.print}
+                  style={{ maxWidth: 18 }}
+                  src={require('../../../Assets/green-download.svg')}
+                />
+              </a>
+            </div>
+          ),
+        }}
+      />
+    </>
   )
 }
 
