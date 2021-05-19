@@ -44,7 +44,6 @@ import DualBox from '../DualListBox/dualListBox'
 import InfoBox from '../userInfoBox'
 import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import Wizard from '../wizard/Wizard'
-import { BusinessSector } from '../CustomerCreation/StepTwoForm'
 import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans'
 
 import { theme } from '../../../Shared/theme'
