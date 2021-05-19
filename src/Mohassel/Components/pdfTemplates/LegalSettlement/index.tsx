@@ -7,20 +7,20 @@ import {
   extractLastChars,
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
-import { Managers } from '../../managerHierarchy/branchBasicsCard'
+
 import { SettledCustomer } from '../../ManageLegalAffairs/types'
 import { Header } from '../pdfTemplateCommon/header'
+import { Managers } from '../../managerHierarchy/branchBasicsCard'
 
 const LegalSettlement = ({
   customer,
   branchName,
-  managers,
 }: {
-  customer: SettledCustomer;
-  branchName: string;
-  managers: Managers;
+  customer: SettledCustomer
+  branchName: string
 }) => {
   const customerSettlement = customer.settlement
+  const managers = customer.managerHierarchy ?? ({} as Managers)
 
   return (
     <div className="legal-settlement-container">

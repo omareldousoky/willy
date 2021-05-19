@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+import { Managers } from '../managerHierarchy/branchBasicsCard'
 import { DefaultedCustomer, ManagerReviews } from './defaultingCustomersList'
 
 export interface CourtSession {
@@ -79,6 +80,7 @@ export type Settlement = SettlementFormValues & ManagerReviews
 
 export interface SettledCustomer extends DefaultedCustomer {
   settlement: Settlement
+  managerHierarchy?: Managers
 }
 
 export enum SettlementTypeEnum {

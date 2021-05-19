@@ -82,9 +82,6 @@ const LegalCustomersList: FunctionComponent = () => {
     setCustomerForPrint,
   ] = useState<SettledCustomer | null>(null)
   const [branchForPrint, setBranchForPrint] = useState<Branch | null>(null)
-  const [managersForPrint, setManagersForPrint] = useState<Managers | null>(
-    null
-  )
 
   const [isSettlementLoading, setIsSettlementLoading] = useState(false)
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
@@ -129,39 +126,21 @@ const LegalCustomersList: FunctionComponent = () => {
       }
     }
 
-    const fetchManagerHierarchy = async () => {
-      if (!customerForPrint?.customerBranchId) {
-        return
-      }
-
-      const response = await getManagerHierarchy(
-        customerForPrint.customerBranchId
-      )
-
-      if (response.status === 'success') {
-        setManagersForPrint(response.body?.data as Managers)
-      } else {
-        Swal.fire('error', getErrorMessage(response.error.error), 'error')
-      }
-    }
-
     if (customerForPrint) {
       fetchBranch()
-      fetchManagerHierarchy()
     }
   }, [customerForPrint])
 
   useEffect(() => {
-    if (branchForPrint && managersForPrint) {
+    if (branchForPrint) {
       window.print()
     }
 
     window.onafterprint = () => {
       setCustomerForPrint(null)
       setBranchForPrint(null)
-      setManagersForPrint(null)
     }
-  }, [branchForPrint, managersForPrint])
+  }, [branchForPrint])
 
   useEffect(() => {
     const fetchSettlementFees = async () => {
@@ -708,11 +687,10 @@ const LegalCustomersList: FunctionComponent = () => {
         </Modal>
       </div>
 
-      {customerForPrint && branchForPrint && managersForPrint && (
+      {customerForPrint && branchForPrint && (
         <LegalSettlementPdfTemp
           branchName={branchForPrint.name}
           customer={customerForPrint}
-          managers={managersForPrint}
         />
       )}
     </>
