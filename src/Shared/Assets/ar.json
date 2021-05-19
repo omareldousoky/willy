@@ -1058,5 +1058,6 @@
     "operationType":"نوع العملية",
     "branchesStatus":"حاله الفروع",
     "manageFinancialTransaction":"إدارة المعاملات المالية",
-    "judgementStatus": "حالة القضاء"
-}
+    "judgementStatus": "حالة القضاء",
+    "uploadCustomersError": "تم بنجاح، ولكن لم يتم تعديل بعض العملاء"
+  }

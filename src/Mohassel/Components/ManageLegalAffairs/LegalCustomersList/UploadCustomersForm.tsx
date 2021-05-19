@@ -89,14 +89,21 @@ const UploadLegalCustomers = ({
         wideBtns: true,
         disabled: isDisabled,
         footer: failedCustomerURI && (
-          <a
-            className="btn btn-outline-danger"
-            href={failedCustomerURI}
-            download={local.customersFailedToUpload}
-            role="button"
-          >
-            {local.customersFailedToUpload}
-          </a>
+          <div className="swal2-validation-message d-flex">
+            <span>{local.uploadCustomersError}</span>
+            <a
+              className="btn"
+              href={failedCustomerURI}
+              download={local.customersFailedToUpload}
+              role="button"
+            >
+              <img
+                alt={local.print}
+                style={{ maxWidth: 18 }}
+                src={require('../../../Assets/green-download.svg')}
+              />
+            </a>
+          </div>
         ),
       }}
     />
