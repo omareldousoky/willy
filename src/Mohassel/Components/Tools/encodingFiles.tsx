@@ -135,7 +135,7 @@ class EncodingFiles extends Component<RouteComponentProps, State> {
                             fontWeight: 'bold',
                           }}
                         >
-                          {documentType.updatable ? local.yes : local.no}{' '}
+                          {documentType.updatable ? local.yes : local.no}
                         </div>
                       </Col>
                       <Col>
@@ -165,7 +165,7 @@ class EncodingFiles extends Component<RouteComponentProps, State> {
                             fontWeight: 'bold',
                           }}
                         >
-                          {documentTypeLocalization(documentType.type)}{' '}
+                          {documentTypeLocalization(documentType.type)}
                         </div>
                       </Col>
                       <Col style={{ minWidth: '20%' }}>
@@ -179,7 +179,7 @@ class EncodingFiles extends Component<RouteComponentProps, State> {
                             fontWeight: 'bold',
                           }}
                         >
-                          {local[documentType.customerType]}{' '}
+                          {local[documentType.customerType]}
                         </div>
                       </Col>
                       <Can I="documentTypes" a="config">
