@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { Header } from "../pdfTemplateCommon/header";
 
-import { getLoanUsage } from "../../../Services/APIs/LoanUsage/getLoanUsage";
 import {
-  getErrorMessage,
   guarantorOrderLocal,
   orderLocal,
   timeToArabicDate,
 } from "../../../../Shared/Services/utils";
 
-import Swal from "sweetalert2";
 import { Application } from "../../../../Shared/Services/interfaces";
 
 interface KnowYourCustomerProps {
@@ -102,7 +99,6 @@ export const KnowYourCustomer = ({
             </p>
             <p>
               الصفة في النشاط :-
-              {application.customer?.businessName ?? ""}
             </p>
           </div>
         ))}
@@ -135,11 +131,10 @@ export const KnowYourCustomer = ({
             </p>
             <p>
               تليفون محمـــــــول :-
-              {person.homePhoneNumber ?? ""}
+              {person.businessPhoneNumber ?? ""}
             </p>
             <p>
               الوظيفة الحاليــــــة :-
-              {application.customer?.businessName ?? ""}
             </p>
             <p>
               عنوان جهة العمـل :-
@@ -148,7 +143,7 @@ export const KnowYourCustomer = ({
           </div>
         ))}
 
-        <h3 className="text-center">إقرار بصحة البيانات</h3>
+        <h3 className="text-center my-5">إقرار بصحة البيانات</h3>
         <p>
           أقر أنا الموقع أدناه بتحمل المسئوليه القانونية عن صحة البيانات في
           النموذج عاليه والمستندات ( وصورها ) المقدمة للشركة إقر بحق الشركة في
@@ -163,7 +158,7 @@ export const KnowYourCustomer = ({
         {application.entitledToSign?.map((person, index) => (
           <div key={index}>
             <p>
-              إسم من له جق التوقيع والاقتراض :-
+              إسم من له حق التوقيع والاقتراض :-
               {person.customerName ?? ""}
             </p>
             <p>التوقيع /</p>

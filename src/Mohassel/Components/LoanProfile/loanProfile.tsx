@@ -63,9 +63,11 @@ import {
   AcknowledgmentAndPledge,
   KnowYourCustomer,
   AcknowledgmentWasSignedInFront,
-  SmeCard
+  AcknowledgmentOfCommitment
 } from "../pdfTemplates/smeLoanContract";
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
+import * as Barcode from 'react-barcode';
+
 interface EarlyPayment {
     remainingPrincipal?: number;
     requiredAmount?: number;
@@ -871,17 +873,23 @@ class LoanProfile extends Component<Props, State>{
                         <AcknowledgmentAndPledge entitledToSign = {this.state.application.entitledToSign}/>
                         <KnowYourCustomer application={this.state.application} loanUsage={this.state.loanUsage}/>
                         <AcknowledgmentWasSignedInFront application={this.state.application} />
-                        <SmeCard 
-                            application={this.state.application}
+                        <CustomerCardPDF 
+                            data={this.state.application} 
+                            getGeoArea={(area) => this.getCustomerGeoArea(area)} 
                             penalty={this.state.penalty} 
-                            remainingTotal={this.state.remainingTotal}
-                            getGeoArea={(area) => this.getCustomerGeoArea(area)}
-                            members={this.state.individualsWithInstallments}
+                            branchDetails={this.state.branchDetails} 
+                            remainingTotal={this.state.remainingTotal} 
+                            members={this.state.individualsWithInstallments} 
                         />
+                        <AcknowledgmentOfCommitment application={this.state.application} />
                         <SmeLoanContract
                             data={this.state.application}
                             branchDetails={this.state.branchDetails}
                         />
+                        <div className="text-center">
+                            <Barcode value={this.state.application.loanApplicationKey} />
+                        </div>
+
                   </>
                 )}
                 {this.state.print === 'followUpStatement' && <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} members={this.state.individualsWithInstallments} />}
