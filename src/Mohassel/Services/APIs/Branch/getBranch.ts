@@ -1,6 +1,6 @@
 import { Trace } from '../../../../Shared/Services/interfaces'
+import { ApiResponse } from '../../../Models/common'
 import axios from '../axios-instance'
-import { ApiResponse } from '../Reports/unpaidInstallmentsPerArea'
 
 export interface BranchDetails {
   branchCode: number
