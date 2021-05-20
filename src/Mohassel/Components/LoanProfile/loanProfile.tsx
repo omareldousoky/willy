@@ -886,8 +886,8 @@ class LoanProfile extends Component<Props, State>{
                             data={this.state.application}
                             branchDetails={this.state.branchDetails}
                         />
-                        <div className="text-center">
-                            <Barcode value={this.state.application.loanApplicationKey} />
+                        <div className="text-center loan-contract" >
+                            <Barcode  value={this.state.application.loanApplicationKey} />
                         </div>
 
                   </>

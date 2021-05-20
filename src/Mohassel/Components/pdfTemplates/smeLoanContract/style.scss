@@ -117,8 +117,7 @@
 }
 
 @media screen {
-  //, .contract-container
-  .loan-contract {
+  .loan-contract, .contract-container {
     max-width: 624px;
     display: none;
     & .main {
