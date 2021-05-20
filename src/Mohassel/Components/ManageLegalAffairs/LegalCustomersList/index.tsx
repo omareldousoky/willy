@@ -172,6 +172,7 @@ const LegalCustomersList: FunctionComponent = () => {
   const getLegalCustomers = () =>
     dispatch(
       search({
+        ...searchFilters,
         size,
         from,
         url,
