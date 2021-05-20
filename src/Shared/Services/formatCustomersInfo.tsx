@@ -122,8 +122,8 @@ export const getCompanyInfo = ({
       },
       {
         fieldTitle: "iScore",
-        fieldData: iscoreField({score: score, customerDetails: company, applicationStatus: applicationStatus, getIscore: getIscore}),
-        showFieldCondition: ability.can("viewIscore", "customer"),
+        fieldData: iscoreField({score: score, getIscore: getIscore, applicationStatus: applicationStatus, customerDetails: company}),
+        showFieldCondition: !!score,
       },
       {
         fieldTitle: taxCardNumber,
@@ -187,7 +187,7 @@ export const getCustomerInfo = ({
     },
     {
       fieldTitle: "iScore",
-      fieldData: iscoreField({ score: score, customerDetails: customerDetails, applicationStatus: applicationStatus, getIscore: getIscore}),
+      fieldData: iscoreField({ score: score, getIscore: getIscore, applicationStatus: applicationStatus, customerDetails: customerDetails}),
       showFieldCondition: !!score,
     },
     {

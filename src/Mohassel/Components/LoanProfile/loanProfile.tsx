@@ -35,7 +35,7 @@ import { cancelApplication } from '../../Services/APIs/loanApplication/stateHand
 import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment';
 import store from '../../../Shared/redux/store';
 import UploadDocuments from './uploadDocuments';
-import { getIscore, getIscoreCached } from '../../Services/APIs/iScore/iScore';
+import { getIscore, getIscoreCached, getSMECachedIscore, getSMEIscore } from '../../Services/APIs/iScore/iScore';
 import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan';
 import { doubtLoan } from '../../Services/APIs/Loan/doubtLoan';
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
@@ -67,6 +67,7 @@ import {
 } from "../pdfTemplates/smeLoanContract";
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
 import * as Barcode from 'react-barcode';
+import { Score } from '../CustomerCreation/customerProfile';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -207,23 +208,62 @@ class LoanProfile extends Component<Props, State>{
             }
         }
     }
+
+    async getChachedIndivdualiScores(obj) {
+      this.setState({ loading: true })
+      const iScores = await getIscoreCached(obj)
+      if (iScores.status === 'success') {
+        this.setState({ loading: false })
+        return iScores.body.data
+      }
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
+      )
+      return []
+    }
+  
+    async getCachedSMEiScores(obj) {
+      this.setState({ loading: true })
+      const iScores = await getSMECachedIscore(obj)
+      if (iScores.status === 'success') {
+        this.setState({ loading: false })
+        return iScores.body.data
+      }
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
+      )
+      return []
+    }
+    
     async getCachediScores(application) {
         const ids: string[] = []
+        const commercialRegisterNumbers: string[] = []
         if (application.product.beneficiaryType === 'group') {
             application.group.individualsInGroup.forEach(member => ids.push(member.customer.nationalId))
         } else {
             if (application.guarantors.length > 0) {
-                application.guarantors.forEach(guar => ids.push(guar.nationalId))
+              application.guarantors.forEach((guar) =>
+              guar.customerType === 'company'
+                ? commercialRegisterNumbers.push(guar.commercialRegisterNumber)
+                : ids.push(guar.nationalId)
+              )
             }
-            if (application.entitledToSign.length > 0) {
+            if (application.entitledToSign && application.entitledToSign.length > 0) {
               application.entitledToSign.forEach(
                 (cust) => cust.nationalId && ids.push(cust.nationalId)
               )
             }
-            application.customer.nationalId && ids.push(application.customer.nationalId)
+            application.customer.customerType === 'company'
+              ? commercialRegisterNumbers.push(
+                  application.customer.commercialRegisterNumber
+                )
+              : ids.push(application.customer.nationalId)
         }
         const obj: { nationalIds: string[]; date?: Date } = {
             nationalIds: ids
+        }
+        const smeObj: { ids: string[]; date?: Date } = {
+          ids: commercialRegisterNumbers,
         }
         if (["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(this.state.application.status)) {
             obj.date = (this.state.application.status === 'approved') ? this.state.application.approvalDate :
@@ -232,14 +272,16 @@ class LoanProfile extends Component<Props, State>{
                         (this.state.application.status === 'rejected') ? this.state.application.rejectionDate :
                             (['paid', 'canceled'].includes(this.state.application.status)) ? this.state.application.updated.at : 0
             // paid & canceled => updated.at, pending,issued =>issuedDate
+            smeObj.date = obj.date
         }
-        this.setState({ loading: true });
-        const iScores = await getIscoreCached(obj);
-        if (iScores.status === "success") {
-            this.setState({ iscores: iScores.body.data, loading: false })
-        } else {
-            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(iScores.error.error), 'error'))
+        let iscores: Array<Score> = []
+        if (obj.nationalIds.length > 0)
+          iscores = await this.getChachedIndivdualiScores(obj)
+        if (smeObj.ids.length > 0) {
+          const smeScores: Array<Score> = await this.getCachedSMEiScores(smeObj)
+          iscores.push(...smeScores)
         }
+        this.setState({ iscores })
     }
     setTabsToRender(application) {
         const tabsToRender = [
@@ -496,21 +538,33 @@ class LoanProfile extends Component<Props, State>{
     }
     async getIscore(data) {
         this.setState({ loading: true });
-        const obj = {
-            requestNumber: '148',
-            reportId: '3004',
-            product: '023',
-            loanAccountNumber: `${data.key}`,
-            number: '1703943',
-            date: '02/12/2014',
-            amount: `${this.state.application.principal}`,
-            lastName: `${data.customerName}`,
-            idSource: '003',
-            idValue: `${data.nationalId}`,
-            gender: (data.gender === 'male') ? '001' : '002',
-            dateOfBirth: iscoreDate(data.birthDate)
-        }
-        const iScore = await getIscore(obj);
+        const obj =
+          data.customerType === 'company'
+            ? {
+                productId: '104',
+                amount: `${this.state.application.principal}`,
+                name: `${data.businessName}`,
+                idSource: '901',
+                idValue: `${data.commercialRegisterNumber}`,
+              }
+            : {
+                requestNumber: '148',
+                reportId: '3004',
+                product: '023',
+                loanAccountNumber: `${data.key}`,
+                number: '1703943',
+                date: '02/12/2014',
+                amount: `${this.state.application.principal}`,
+                lastName: `${data.customerName}`,
+                idSource: '003',
+                idValue: `${data.nationalId}`,
+                gender: data.gender === 'male' ? '001' : '002',
+                dateOfBirth: iscoreDate(data.birthDate),
+              }
+        const iScore =
+          data.customerType === 'company'
+            ? await getSMEIscore(obj)
+            : await getIscore(obj)
         if (iScore.status === 'success') {
             this.getCachediScores(this.state.application)
             this.setState({ loading: false })
@@ -660,9 +714,14 @@ class LoanProfile extends Component<Props, State>{
     getInfo = (): FieldProps[][] => {
         if (this.state.application.product?.beneficiaryType === 'individual' && this.state.application.customer ) {
             if (this.state.application.product?.type === 'sme') {
+              const smeScore = this.state.iscores.filter(
+                (score) =>
+                  score.id ===
+                  this.state.application.customer.commercialRegisterNumber
+              )[0]
                 const info: FieldProps[] =  getCompanyInfo({
                     company: this.state.application.customer,
-                    // score: customerScore,
+                    score: smeScore,
                     getIscore: (data) => this.getIscore(data),
                     applicationStatus: this.state.application.status,
                 });
