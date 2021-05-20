@@ -3,7 +3,6 @@ import { getApplication } from '../../Services/APIs/loanApplication/getApplicati
 import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions';
 import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment';
 import { BranchDetails, getBranch } from '../../Services/APIs/Branch/getBranch';
-import InfoBox from '../userInfoBox';
 import Payment from '../Payment/payment';
 import { englishToArabic } from '../../Services/statusLanguage';
 import local from '../../../Shared/Assets/ar.json';
@@ -26,10 +25,9 @@ import LoanContract from '../pdfTemplates/loanContract/loanContract';
 import LoanContractForGroup from '../pdfTemplates/loanContractForGroup/loanContractForGroup';
 import EarlyPaymentReceipt from '../pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt';
 import { withRouter } from 'react-router-dom';
-import GroupInfoBox from './groupInfoBox';
 import Can from '../../config/Can';
 import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment';
-import { PendingActions } from '../../../Shared/Services/interfaces';
+import { Customer, PendingActions } from '../../../Shared/Services/interfaces';
 import { timeToDateyyymmdd, iscoreDate, getErrorMessage } from '../../../Shared/Services/utils';
 import { payment } from '../../../Shared/redux/payment/actions';
 import { connect } from 'react-redux';
@@ -37,7 +35,7 @@ import { cancelApplication } from '../../Services/APIs/loanApplication/stateHand
 import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment';
 import store from '../../../Shared/redux/store';
 import UploadDocuments from './uploadDocuments';
-import { getIscore, getIscoreCached } from '../../Services/APIs/iScore/iScore';
+import { getIscore, getIscoreCached, getSMECachedIscore, getSMEIscore } from '../../Services/APIs/iScore/iScore';
 import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan';
 import { doubtLoan } from '../../Services/APIs/Loan/doubtLoan';
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
@@ -52,9 +50,17 @@ import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 import { FollowUpStatementView } from './followupStatementView';
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares';
-import { Customer } from '../LoanApplication/loanApplicationCreation';
 import { Installment } from '../Payment/payInstallment';
 import { getWriteOffReasons } from '../../Services/APIs/configApis/config';
+
+import {InfoBox , ProfileActions } from '../../../Shared/Components'; 
+import { Col, Form } from 'react-bootstrap';
+import { arabicGender, timeToArabicDate, downloadFile, iscoreStatusColor, iscoreBank } from '../../../Shared/Services/utils';
+import { getCompanyInfo, getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
+import { FieldProps } from '../../../Shared/Components/Profile/types';
+import SmeLoanContract from '../pdfTemplates/smeLoanContract'
+import { Score } from '../CustomerCreation/customerProfile';
+
 interface EarlyPayment {
     remainingPrincipal?: number;
     requiredAmount?: number;
@@ -178,18 +184,62 @@ class LoanProfile extends Component<Props, State>{
             }
         }
     }
+
+    async getChachedIndivdualiScores(obj) {
+      this.setState({ loading: true })
+      const iScores = await getIscoreCached(obj)
+      if (iScores.status === 'success') {
+        this.setState({ loading: false })
+        return iScores.body.data
+      }
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
+      )
+      return []
+    }
+  
+    async getCachedSMEiScores(obj) {
+      this.setState({ loading: true })
+      const iScores = await getSMECachedIscore(obj)
+      if (iScores.status === 'success') {
+        this.setState({ loading: false })
+        return iScores.body.data
+      }
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
+      )
+      return []
+    }
+    
     async getCachediScores(application) {
         const ids: string[] = []
+        const commercialRegisterNumbers: string[] = []
         if (application.product.beneficiaryType === 'group') {
             application.group.individualsInGroup.forEach(member => ids.push(member.customer.nationalId))
         } else {
             if (application.guarantors.length > 0) {
-                application.guarantors.forEach(guar => ids.push(guar.nationalId))
+              application.guarantors.forEach((guar) =>
+              guar.customerType === 'company'
+                ? commercialRegisterNumbers.push(guar.commercialRegisterNumber)
+                : ids.push(guar.nationalId)
+              )
             }
-            ids.push(application.customer.nationalId)
+            if (application.entitledToSign && application.entitledToSign.length > 0) {
+              application.entitledToSign.forEach(
+                (cust) => cust.nationalId && ids.push(cust.nationalId)
+              )
+            }
+            application.customer.customerType === 'company'
+              ? commercialRegisterNumbers.push(
+                  application.customer.commercialRegisterNumber
+                )
+              : ids.push(application.customer.nationalId)
         }
         const obj: { nationalIds: string[]; date?: Date } = {
             nationalIds: ids
+        }
+        const smeObj: { ids: string[]; date?: Date } = {
+          ids: commercialRegisterNumbers,
         }
         if (["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(this.state.application.status)) {
             obj.date = (this.state.application.status === 'approved') ? this.state.application.approvalDate :
@@ -198,14 +248,16 @@ class LoanProfile extends Component<Props, State>{
                         (this.state.application.status === 'rejected') ? this.state.application.rejectionDate :
                             (['paid', 'canceled'].includes(this.state.application.status)) ? this.state.application.updated.at : 0
             // paid & canceled => updated.at, pending,issued =>issuedDate
+            smeObj.date = obj.date
         }
-        this.setState({ loading: true });
-        const iScores = await getIscoreCached(obj);
-        if (iScores.status === "success") {
-            this.setState({ iscores: iScores.body.data, loading: false })
-        } else {
-            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(iScores.error.error), 'error'))
+        let iscores: Array<Score> = []
+        if (obj.nationalIds.length > 0)
+          iscores = await this.getChachedIndivdualiScores(obj)
+        if (smeObj.ids.length > 0) {
+          const smeScores: Array<Score> = await this.getCachedSMEiScores(smeObj)
+          iscores.push(...smeScores)
         }
+        this.setState({ iscores })
     }
     setTabsToRender(application) {
         const tabsToRender = [
@@ -262,7 +314,12 @@ class LoanProfile extends Component<Props, State>{
             permission: 'viewActionLogs',
             permissionKey: 'user'
         }
+        const entitledToSignTab = {
+            header: local.SMEviceCustomersInfo,
+            stringKey: 'entitledToSign'
+        }
         if (application.body.product.beneficiaryType === 'individual') tabsToRender.push(guarantorsTab)
+        if (application.body.product.type === 'sme') tabsToRender.push(entitledToSignTab)
         if (application.body.status === "paid") tabsToRender.push(customerCardTab)
         if (application.body.status === "issued" || application.body.status === "pending") {
             tabsToRender.push(customerCardTab)
@@ -374,6 +431,8 @@ class LoanProfile extends Component<Props, State>{
                     currency={this.state.application.product.currency} applicationId={this.state.application._id} pendingActions={this.state.pendingActions}
                     manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)}
                     paymentType={"penalties"} randomPendingActions={this.state.randomPendingActions} />
+            case 'entitledToSign':
+                return <GuarantorTableView guarantors={this.state.application.entitledToSign} customerId={this.state.application.customer._id} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} entitledToSign />
             default:
                 return null
         }
@@ -455,21 +514,33 @@ class LoanProfile extends Component<Props, State>{
     }
     async getIscore(data) {
         this.setState({ loading: true });
-        const obj = {
-            requestNumber: '148',
-            reportId: '3004',
-            product: '023',
-            loanAccountNumber: `${data.key}`,
-            number: '1703943',
-            date: '02/12/2014',
-            amount: `${this.state.application.principal}`,
-            lastName: `${data.customerName}`,
-            idSource: '003',
-            idValue: `${data.nationalId}`,
-            gender: (data.gender === 'male') ? '001' : '002',
-            dateOfBirth: iscoreDate(data.birthDate)
-        }
-        const iScore = await getIscore(obj);
+        const obj =
+          data.customerType === 'company'
+            ? {
+                productId: '104',
+                amount: `${this.state.application.principal}`,
+                name: `${data.businessName}`,
+                idSource: '901',
+                idValue: `${data.commercialRegisterNumber}`,
+              }
+            : {
+                requestNumber: '148',
+                reportId: '3004',
+                product: '023',
+                loanAccountNumber: `${data.key}`,
+                number: '1703943',
+                date: '02/12/2014',
+                amount: `${this.state.application.principal}`,
+                lastName: `${data.customerName}`,
+                idSource: '003',
+                idValue: `${data.nationalId}`,
+                gender: data.gender === 'male' ? '001' : '002',
+                dateOfBirth: iscoreDate(data.birthDate),
+              }
+        const iScore =
+          data.customerType === 'company'
+            ? await getSMEIscore(obj)
+            : await getIscore(obj)
         if (iScore.status === 'success') {
             this.getCachediScores(this.state.application)
             this.setState({ loading: false })
@@ -616,6 +687,134 @@ class LoanProfile extends Component<Props, State>{
         }
         else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
     }
+    getInfo = (): FieldProps[][] => {
+        if (this.state.application.product?.beneficiaryType === 'individual' && this.state.application.customer ) {
+            if (this.state.application.product?.type === 'sme') {
+              const smeScore = this.state.iscores.filter(
+                (score) =>
+                  score.id ===
+                  this.state.application.customer.commercialRegisterNumber
+              )[0]
+                const info: FieldProps[] =  getCompanyInfo({
+                    company: this.state.application.customer,
+                    score: smeScore,
+                    getIscore: (data) => this.getIscore(data),
+                    applicationStatus: this.state.application.status,
+                });
+                return [info]
+            }
+            const customerScore = this.state.iscores.filter(score => score.nationalId === this.state.application.customer.nationalId)[0]
+            const info: FieldProps[] =  getCustomerInfo({
+              customerDetails: this.state.application.customer,
+              score: customerScore,
+              isLeader: false,
+              getIscore: (data) => this.getIscore(data),
+              applicationStatus: this.state.application.status,
+            });
+            return [info]
+        }
+        if (this.state.application.product?.beneficiaryType === 'group') {
+                const groupMainInfo = this.state.application.group.individualsInGroup.map((individual) => {
+                    const customerScore = this.state.iscores.filter(score => score.nationalId === individual.customer.nationalId)[0]
+                    return  getCustomerInfo({
+                            customerDetails:individual.customer,
+                            score: customerScore,
+                            isLeader: individual.type === 'leader' ,
+                            getIscore: this.getIscore,
+                            applicationStatus: this.state.application.status,
+                        })
+                })
+                return groupMainInfo
+            }
+            return []
+        }
+    
+    getProfileActions = ()=>{
+        return [
+            {
+                icon: 'editIcon',
+                title: local.memberSeperation,
+                permission: this.state.application.status === 'issued' && !this.state.application.isDoubtful && this.state.application.group.individualsInGroup && this.state.application.group.individualsInGroup.length > 1 && !this.state.application.writeOff && ability.can('splitFromGroup', 'application') ,
+                onActionClick: () => this.props.history.push('/track-loan-applications/remove-member', { id: this.props.history.location.state.id })
+            },
+            {
+                icon: 'green-download',
+                title: local.downloadPDF,
+                permission: this.state.application.status === "created",
+                onActionClick: () => { 
+                  this.setState(
+                    (prevState) => ({
+                      print:
+                        prevState.application.customer.customerType === 'company'
+                          ? 'allSME'
+                          : 'all',
+                    }),
+                    () => window.print()
+                  )
+                 }
+            },
+            {
+                icon: 'editIcon',
+                title: local.editLoan,
+                permission: this.state.application.status === "underReview" && ability.can('assignProductToCustomer','application' ),
+                onActionClick: () => this.props.history.push('/track-loan-applications/edit-loan-application', { id: this.props.history.location.state.id, action: 'edit' })
+            },
+            {
+                icon: 'editIcon',
+                title: local.reviewLoan,
+                permission: this.state.application.status === "underReview" && ability.can('reviewLoanApplication','application' ),
+                onActionClick: () => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'review' })
+            },
+            {
+                icon: 'editIcon',
+                title: local.undoLoanReview,
+                permission: this.state.application.status === "reviewed" && ability.can('rollback','application' ),
+                onActionClick: () => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'unreview' })
+            },
+            {
+                icon: 'editIcon',
+                title: local.rejectLoan,
+                permission: this.state.application.status === "reviewed" && ability.can('rejectLoanApplication','application' ),
+                onActionClick: () => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'reject' })
+            },
+            {
+                icon: 'editIcon',
+                title: local.issueLoan,
+                permission: this.state.application.status === "created" && ability.can('issueLoan','application' ),
+                onActionClick: () => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'issue' })
+            },
+            {
+                icon: 'editIcon',
+                title: local.createLoan,
+                permission: this.state.application.status === "approved" && ability.can('createLoan','application' ),
+                onActionClick: () => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'create' })
+            },
+            {
+                icon: 'closeIcon',
+                title: local.cancel,
+                permission: this.state.application.status === "underReview" && ability.can('cancelApplication','application' ),
+                onActionClick: () => this.cancelApplication()
+            },
+            {
+                icon: 'reschedule',
+                title: local.rollBackAction,
+                permission: (ability.can('rollback', 'application') || ability.can('rollbackPayment', 'application')) && !['reviewed', 'underReview'].includes(this.state.application.status),
+                onActionClick:() => this.props.history.push('/track-loan-applications/loan-roll-back', { id: this.props.history.location.state.id, status: this.state.application.status })
+            },
+            {
+                icon: 'closeIcon',
+                title: local.writeOffLoan,
+                permission: this.state.application.status === 'issued' && this.state.application.isDoubtful && !this.state.application.writeOff && ability.can('writeOff','application'),
+                onActionClick:() => this.writeOffApplication()
+            },
+            {
+                icon: 'minus',
+                title: local.doubtLoan,
+                permission: this.state.application.status === 'issued' && !this.state.application.isDoubtful && !this.state.application.writeOff && ability.can('setDoubtfulLoan','application'),
+                onActionClick:() => this.doubtApplication()
+            }
+        ]
+    }
     render() {
         return (
             <Container>
@@ -635,22 +834,7 @@ class LoanProfile extends Component<Props, State>{
                                     <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.doubtedLoan}</p>
                                 </span>}
                             </div>
-                            <div className="d-flex justify-content-end" style={{ width: '65%' }}>
-                                {this.state.application.status === 'issued' && !this.state.application.isDoubtful && this.state.application.group.individualsInGroup && this.state.application.group.individualsInGroup.length > 1 && !this.state.application.writeOff && <Can I='splitFromGroup' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/remove-member', { id: this.props.history.location.state.id })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.memberSeperation}</span></Can>}
-                                {this.state.application.status === "created" && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => { this.setState({ print: 'all' }, () => window.print()) }}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>}
-                                {this.state.application.status === 'underReview' && <Can I='assignProductToCustomer' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/edit-loan-application', { id: this.props.history.location.state.id, action: 'edit' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.editLoan}</span></Can>}
-                                {this.state.application.status === 'underReview' && <Can I='reviewLoanApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'review' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.reviewLoan}</span></Can>}
-                                {this.state.application.status === 'reviewed' && <Can I='rollback' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'unreview' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.undoLoanReview}</span></Can>}
-                                {this.state.application.status === 'reviewed' && <Can I='rejectLoanApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'reject' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rejectLoan}</span></Can>}
-                                {this.state.application.status === 'created' && <Can I='issueLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'issue' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.issueLoan}</span></Can>}
-                                {this.state.application.status === 'approved' && <Can I='createLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'create' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.createLoan}</span></Can>}
-                                {this.state.application.status === 'underReview' && <Can I='cancelApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.cancelApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.cancel}</span></Can>}
-                                {(ability.can('rollback', 'application') || ability.can('rollbackCancelPenalities', 'application') || ability.can('rollbackPayment', 'application')) && !['reviewed', 'underReview'].includes(this.state.application.status) && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-roll-back', { id: this.props.history.location.state.id, status: this.state.application.status })}> <span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rollBackAction}</span>}
-                                {this.state.application.status === 'issued' && this.state.application.isDoubtful && !this.state.application.writeOff && <Can I='writeOff' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.writeOffApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.writeOffLoan}</span></Can>}
-                                {this.state.application.status === 'issued' && !this.state.application.isDoubtful && !this.state.application.writeOff && <Can I='setDoubtfulLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.doubtApplication()}> <img alt="doubt" src={require('../../Assets/minus.svg')} style={{ height: 20, marginLeft: 5 }} />{local.doubtLoan}</span></Can>}
-
-
-                            </div>
+                            <ProfileActions actions ={this.getProfileActions()}/>
                         </div>
                         {this.state.application.status === "pending" ?
                             <div className="warning-container">
@@ -691,13 +875,10 @@ class LoanProfile extends Component<Props, State>{
                             editManualPayment={(randomPaymentId: string) => this.editManualPayment(randomPaymentId)}
                         />}
                         <div style={{ marginTop: 15 }}>
-                            {this.state.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.state.application.customer} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} /> :
-                                <GroupInfoBox group={this.state.application.group} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} />
-                            }
+                            <InfoBox info={this.getInfo()} title={this.state.application.product.beneficiaryType === 'individual' ?local.mainInfo : local.mainGroupInfo} />
                         </div>
                         <Card style={{ marginTop: 15 }}>
                             <CardNavBar
-                                header={'here'}
                                 array={this.state.tabsArray}
                                 active={this.state.activeTab}
                                 selectTab={(index: string) => this.setState({ activeTab: index, manualPaymentEditId: '' }, () => {
@@ -722,10 +903,16 @@ class LoanProfile extends Component<Props, State>{
                             : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails} />
                         }
                     </>}
+                {this.state.print === 'allSME' && (
+                  <SmeLoanContract
+                    data={this.state.application}
+                    branchDetails={this.state.branchDetails}
+                  />
+                )}
                 {this.state.print === 'followUpStatement' && <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} members={this.state.individualsWithInstallments} />}
                 {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} remainingTotal={this.state.remainingTotal} members={this.state.individualsWithInstallments} />}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} branchDetails={this.state.branchDetails} />}
-                {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} data={this.state.application} />}
+                {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} data={this.state.application} companyReceipt={this.state.application.customer.customerType === 'company'} />}
                 {this.state.print === 'payEarly' && <EarlyPaymentReceipt receiptData={this.state.receiptData} branchDetails={this.state.branchDetails} earlyPaymentData={this.state.earlyPaymentData} data={this.state.application} />}
                 {(this.state.print === 'randomPayment' || this.state.print === 'penalty') ? <RandomPaymentReceipt receiptData={this.state.receiptData} data={this.state.application} /> : null}
             </Container>

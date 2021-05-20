@@ -8,7 +8,7 @@ import Wizard from '../wizard/Wizard';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { editCustomer } from '../../Services/APIs/Customer-Creation/editCustomer';
-import { step1, step2, step3, customerCreationValidationStepOne, customerCreationValidationStepTwo, customerCreationValidationStepThree, customerCreationValidationStepThreeEdit, } from './customerFormIntialState';
+import { step1, step2, step3, customerCreationValidationStepOne, customerCreationValidationStepTwo, customerCreationValidationStepThree, customerCreationValidationStepThreeEdit } from './customerFormIntialState';
 import { StepOneForm } from './StepOneForm';
 import { StepTwoForm } from './StepTwoForm';
 import { StepThreeForm } from './StepThreeForm';
@@ -76,6 +76,7 @@ interface State {
       lat: number;
       lng: number;
     };
+    customerType: string;
   };
   step2: {
     businessAddressLatLong: string;

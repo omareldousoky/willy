@@ -19,7 +19,7 @@ export interface BranchDetails {
 	licenseDate?: number;
 	licenseNumber?: string;
 }
-interface BranchDetailsResponse extends Trace {
+export interface BranchDetailsResponse extends Trace {
 	data: BranchDetails;
 }
 

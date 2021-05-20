@@ -104,7 +104,7 @@ class LoanList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate" }).then(()=>{
+    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", type: 'micro' }).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
@@ -135,9 +135,9 @@ class LoanList extends Component<Props, State> {
   async getLoans() {
     let query = {};
     if (this.props.fromBranch) {
-      query = { ...this.props.searchFilters, ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort: "issueDate" }
+      query = { ...this.props.searchFilters, ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort: "issueDate", type: 'micro' }
     } else {
-      query = { ...this.props.searchFilters, ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate" }
+      query = { ...this.props.searchFilters, ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", type: 'micro' }
     }
     this.props.search(query).then(()=>{
       if(this.props.error)
