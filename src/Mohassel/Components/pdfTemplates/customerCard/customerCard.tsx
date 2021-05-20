@@ -93,7 +93,7 @@ class CustomerCardPDF extends Component<Props, State> {
                     <table className="titleborder">
                         <tbody>
                             <tr>
-                                <td>  العميل
+                                <td> {this.props.data.product.type === "sme" ? 'الشركة' : 'العميل'} 
                             <div className="frame">{numbersToArabic(this.getCode())}</div>
                                     <div className="frame">{this.props.data.product.beneficiaryType === "individual" ? this.props.data.customer.customerName || this.props.data.customer.businessName : this.props.data.group.individualsInGroup.find(customer => customer.type === 'leader').customer.customerName}</div>
                                 </td>
@@ -181,7 +181,7 @@ class CustomerCardPDF extends Component<Props, State> {
                             </tr>
                             <tr>
                                 <th colSpan={3} style={{backgroundColor: 'white'}}></th>
-                            <th colSpan={2} style={{padding:'10px 0', marginRight:'2rem'}}>رصيد العميل</th>
+                            <th colSpan={2} style={{padding:'10px 0', marginRight:'2rem'}}>رصيد {this.props.data.product.type === "sme" ? 'الشركة' : 'العميل'} </th>
                                 <td  colSpan={2} style={{padding:'10px 0'}}>{numbersToArabic(this.props.remainingTotal)}</td>
                             </tr>
                         </tbody>
@@ -246,6 +246,36 @@ class CustomerCardPDF extends Component<Props, State> {
                             <u>تعليمات خاصه بالسداد</u>
                         </div>
                     </div>
+                    {this.props.data.product.type === "sme" ? 
+                    <ol>
+                    <li>
+                      يتم دفع الاقساط في مواعيدها من خلال إيداع نقدي أو تحويل بنكي
+                      لحساب الشركة أو عبر أحد وسائل الدفع الالكتروني المعتمدة من
+                      هيئة الرقابة الماليه مع موافاة الفرع بصورة من المستند المؤيد
+                      لذلك .
+                    </li>
+                    <li>ممنوع منعا باتا دفع اي مبالغ نقديه للمندوب تحت اي مسمي</li>
+                    <li>
+                      الادارة غير مسئوله عن أي مبالغ يتم دفعها لاي شخص بدون وجه حق .
+                    </li>
+                    <li>
+                      يلتزم العميل بسداد غرامة تأخير قدرها واحد جنيه عن كل الف جنيه
+                      عن كل يوم تأخير من قيمة القسط إعتبارا من اليوم التالي لتاريخ
+                      الاستحقاق .
+                    </li>
+                    <li>
+                      في حالة طلب سداد المديونية المستحقة قبل تاريخ الاستحقاق المتفق
+                      عليه يتم خصم تكلفة التمويل للشهر الذي يتم فيه السداد مع إضافة
+                      عمولة سداد معجل 5 % من باقي المبلغ المستحق ( أصل ) المراد
+                      التعجيل الوفاء به .
+                    </li>
+                    <li>
+                      يحق للشركة المطالبة بقيمة القرض وكافة المصروفات تكاليف تمويله
+                      في حالة استخدام مبلغ القرض في غرض غير إستخدامه داخل النشاط أو
+                      إغلاق النشاط .
+                    </li>
+                  </ol>
+                :
                     <ol>
                         <li>يتم دفع الاقساط في مواعيدها من خلال خزينة الفرع بايصال رسمي مختوم او عبر وسائل الدفع الالكتروني المعتمده
                         من
@@ -278,6 +308,7 @@ class CustomerCardPDF extends Component<Props, State> {
                         داخل
 			النشاط او اغلاق النشاط</li>
                     </ol>
+                    } 
                 </div >
         )
     }
