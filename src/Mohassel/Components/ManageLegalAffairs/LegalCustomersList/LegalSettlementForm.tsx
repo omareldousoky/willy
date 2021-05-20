@@ -83,7 +83,8 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
   }
 
   const handlePhotoChange = async (name: string, value: File | string) => {
-    if (value !== '') return
+    if (value !== '' || !customer.settlement || !customer.settlement[name])
+      return
 
     const response = await deleteSettlementDocument(customer._id, name)
 
