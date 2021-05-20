@@ -76,7 +76,7 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
       })
       onSubmit()
     } else {
-      Swal.fire('error', getErrorMessage(response.error), 'error')
+      Swal.fire('error', getErrorMessage(response.error.error), 'error')
     }
 
     setIsSubmitting(false)
