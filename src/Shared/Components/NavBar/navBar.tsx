@@ -259,15 +259,15 @@ class NavBar extends Component<Props, State> {
                   </span>
                 </div>
               </div>
-              <div
-                className="navbar-choose-branch"
-                onClick={() =>
-                  this.setState((prevState) => ({
-                    openBranchList: !prevState.openBranchList,
-                  }))
-                }
-              >
-                <div>
+              <div className="navbar-choose-branch">
+                <div
+                  className="d-flex"
+                  onClick={() =>
+                    this.setState((prevState) => ({
+                      openBranchList: !prevState.openBranchList,
+                    }))
+                  }
+                >
                   <div className="selected-branch">
                     <div className="pin-icon">
                       <span className="fa fa-map-marker-alt fa-lg" />
@@ -278,12 +278,13 @@ class NavBar extends Component<Props, State> {
                         : this.state.selectedBranch.name}
                     </span>
                   </div>
+                  <img
+                    className="mx-2"
+                    style={{ width: '40px' }}
+                    alt="drop-down-arrow"
+                    src={require('../../Assets/dropDownArrow.svg')}
+                  />
                 </div>
-                <img
-                  style={{ width: '40px' }}
-                  alt="drop-down-arrow"
-                  src={require('../../Assets/dropDownArrow.svg')}
-                />
                 {this.state.openBranchList ? this.renderBranchList() : null}
               </div>
             </Nav>
