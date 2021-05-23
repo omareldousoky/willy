@@ -5,12 +5,11 @@ export const getDocumentsTypes = async (
   hidden?: boolean,
   customerType?: string
 ) => {
-  let url = process.env.REACT_APP_BASE_URL + `/config/document-type`
-  type ? (url = `${url}?type=${type}`) : url
-  type && customerType ? (url = `${url}&&customerType=${customerType}`) : url
-  hidden ? (url = `${url}${type ? '&' : '?'}hidden=${hidden}`) : url
+  const url = process.env.REACT_APP_BASE_URL + `/config/document-type`
+  const params = { type, hidden, customerType }
   try {
-    const res = await axios.get(url)
+    const res = await axios.get(url, { params })
+    // const res = await axios.get(url)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
