@@ -234,9 +234,13 @@ class ViewProduct extends Component<
                     </td>
                   </tr>
                   {/* <tr>
-											<td>{local.spreadApplicationFee}</td>
-											<td>{(this.state.product.spreadApplicationFee ? local.yes : local.no)}</td>
-									</tr> */}
+                    <td>{local.spreadApplicationFee}</td>
+                    <td>
+                      {this.state.product.spreadApplicationFee
+                        ? local.yes
+                        : local.no}
+                    </td>
+                  </tr> */}
                   <tr>
                     <td>{local.loanImpactPrincipal}</td>
                     <td>

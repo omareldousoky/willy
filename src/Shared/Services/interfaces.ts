@@ -178,8 +178,9 @@ export interface Clearance {
 }
 
 interface Signature {
-  by: string
-  at: number
+  by?: string
+  at?: number
+  userName?: string
 }
 
 export interface Trace {
