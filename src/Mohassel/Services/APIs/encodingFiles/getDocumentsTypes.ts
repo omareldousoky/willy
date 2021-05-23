@@ -9,7 +9,6 @@ export const getDocumentsTypes = async (
   const params = { type, hidden, customerType }
   try {
     const res = await axios.get(url, { params })
-    // const res = await axios.get(url)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
