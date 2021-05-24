@@ -51,8 +51,9 @@ const AppForm: FunctionComponent<AppFormProps> = ({
       validateOnChange
     >
       {(formikProps: FormikProps<any>) => {
-        const { handleSubmit: formikHandleSubmit, errors, dirty } = formikProps
-        const isValid = !Object.keys(errors).length
+        const { handleSubmit: formikHandleSubmit, touched } = formikProps
+
+        const isTouched = Object.keys(touched).length
 
         return (
           <Form onSubmit={formikHandleSubmit} onChange={onChange}>
@@ -79,7 +80,7 @@ const AppForm: FunctionComponent<AppFormProps> = ({
                 type="submit"
                 data-qc="submit"
                 variant="primary"
-                disabled={disabled || !dirty}
+                disabled={disabled || !isTouched}
                 className={wideBtns ? 'wide-btn' : ''}
               >
                 {submitBtnText}
