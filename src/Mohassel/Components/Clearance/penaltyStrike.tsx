@@ -12,25 +12,29 @@ const PenaltyStrike = (props: { loanId: string }) => {
       truthDate: new Date().getTime(),
     })
     if (res.status === 'success') {
-      if (res.body & res.body.penalty) setPenalty(res.body.penalty)
+      if (res.body && res.body.penalty) setPenalty(res.body.penalty)
     } else Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
   }
   useEffect(() => {
     calculatePenalty(props.loanId)
   }, [props.loanId])
-  return penalty !== 0 ? (
-    <div className="error-container">
-      <img
-        alt="error"
-        src={require('../../Assets/error-red-circle.svg')}
-        style={{ marginLeft: 20 }}
-      />
-      <h4>
-        <span style={{ margin: '0 10px' }}> {local.penaltyMessage}</span>
-        <span style={{ color: '#d51b1b' }}>{penalty}</span>
-      </h4>
-    </div>
-  ) : null
+  return (
+    <>
+      {penalty ? (
+        <div className="error-container  mx-2 my-3">
+          <img
+            alt="error"
+            src={require('../../Assets/error-red-circle.svg')}
+            style={{ marginLeft: 20 }}
+          />
+          <h4>
+            <span style={{ margin: '0 10px' }}> {local.penaltyMessage}</span>
+            <span style={{ color: '#d51b1b' }}>{penalty}</span>
+          </h4>
+        </div>
+      ) : null}
+    </>
+  )
 }
 
 export default PenaltyStrike
