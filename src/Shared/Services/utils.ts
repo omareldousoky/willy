@@ -43,6 +43,8 @@ export function beneficiaryType(val: string) {
       return local.individual;
     case "group":
       return local.group;
+    case 'company':
+      return local.company
     default:
       return "";
   }
@@ -570,6 +572,20 @@ export const guarantorOrderLocal = {
   9: "الضامن العاشر",
   default: "الضامن",
 };
+
+export const orderLocal = {
+  0: 'الاول',
+  1: 'الثاني',
+  2: 'الثالث',
+  3: 'الرابع',
+  4: 'الخامس',
+  5: 'السادس',
+  6: 'السابع',
+  7: 'الثامن',
+  8: 'التاسع',
+  9: 'العاشر',
+  default: 'العميل',
+}
 
 export const convertToTimestamp = (date?: string | number): number => {
   const today = new Date().valueOf();

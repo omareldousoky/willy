@@ -40,6 +40,7 @@ interface InitialFormikState {
   isDoubtful?: boolean;
   isWrittenOff?: boolean;
   printed?: boolean;
+  type?: string;
 }
 interface Props {
   size: number;
@@ -72,12 +73,12 @@ class Search extends Component<Props, State> {
     super(props);
     this.state = {
       governorates: [],
-      dropDownValue: this.props.url === "actionLogs" ? "authorName" : "name",
+      dropDownValue: this.props.url === "actionLogs" ? "authorName" : this.props.dropDownKeys?.includes('businessName') ? 'businessName' : "name",
       actionsList: [],
     };
   }
   componentDidMount() {
-    if (this.props.url === "customer") {
+    if (this.props.url === "customer" && !this.props.dropDownKeys?.includes('businessName')) {
       this.getGov();
     } else if (this.props.url === "actionLogs") {
       this.getActionsList();
@@ -149,6 +150,11 @@ class Search extends Component<Props, State> {
     if (url === "supervisionsGroups") {
       obj.status = this.props.chosenStatus;
     }
+    if(!['application', 'loan'].includes(url)) { delete obj.type } else { obj.type = obj.type ?  obj.type : 'micro' }
+    if (url === 'customer')
+      obj.customerType = this.props.dropDownKeys?.includes('businessName')
+        ? 'company'
+        : 'individual'
     obj = this.removeEmptyArg(obj);
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
@@ -222,6 +228,11 @@ class Search extends Component<Props, State> {
               : false;
         case "printed":
           initialState.printed = false;
+        case "sme":
+          initialState.type =
+            this.props.url === "loan"
+              ? this.props.issuedLoansSearchFilters.type
+              : 'micro';
       }
     });
     return initialState;
@@ -248,6 +259,9 @@ class Search extends Component<Props, State> {
       userName: local.username,
       hrCode: local.hrCode,
       customerShortenedCode: local.customerShortenedCode,
+      businessName: local.companyName,
+      taxCardNumber: local.taxCardNumber,
+      commercialRegisterNumber: local.commercialRegisterNumber,
       default: "",
     };
     return arDropDownValue[key];
@@ -651,6 +665,27 @@ class Search extends Component<Props, State> {
                       text: local.financialManagerReview,
                     },
                   ], undefined, local.judgementStatus)
+                }
+                if (searchKey === "sme") {
+                  return (
+                    <Col key={index} sm={3} style={{ marginTop: 20 }}>
+                      <Form.Group className="row-nowrap" controlId="sme">
+                        <Form.Check
+                          type="checkbox"
+                          name="sme"
+                          data-qc="sme"
+                          checked={formikProps.values.type === 'sme'}
+                          onChange={(e) =>
+                            formikProps.setFieldValue(
+                              "type",
+                              e.currentTarget.checked ? 'sme' : 'micro'
+                            )
+                          }
+                          label='sme'
+                        />
+                      </Form.Group>
+                    </Col>
+                  );
                 }
               })}
 

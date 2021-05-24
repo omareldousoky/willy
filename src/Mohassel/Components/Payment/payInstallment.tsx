@@ -67,6 +67,7 @@ interface Props {
   truthDate: string;
   paymentType: string;
   penaltyAction: string;
+  penalty: number;
 }
 interface SelectObject {
   label: string;
@@ -178,7 +179,7 @@ class PayInstallment extends Component<Props, State> {
               payAmount: this.props.paymentType === "normal" ? this.getRequiredAmount() : this.state.payAmount
             }}
             onSubmit={this.props.handleSubmit}
-            validationSchema={paymentValidation}
+            validationSchema={() => paymentValidation(this.props.penalty)}
             validateOnBlur
             validateOnChange
           >
@@ -440,7 +441,7 @@ class PayInstallment extends Component<Props, State> {
                   >
                     {local.cancel}
                   </Button>
-                  <Button variant="primary" data-qc="submit" type="submit">
+                  <Button variant="primary" data-qc="submit" type="submit" disabled={!formikBag.isValid}>
                     {local.submit}
                   </Button>
                 </div>

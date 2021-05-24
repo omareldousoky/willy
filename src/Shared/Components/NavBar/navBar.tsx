@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import Nav from 'react-bootstrap/Nav';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
@@ -78,7 +79,11 @@ class NavBar extends Component<Props, State> {
     if (res.status === "success") {
       document.cookie = 'ltsbranch=' + JSON.stringify(branch) + (process.env.REACT_APP_DOMAIN ? `;domain=${process.env.REACT_APP_DOMAIN}`: '') + ';path=/;';
       setToken(res.body.token);
-      this.setState({ loading: false, selectedBranch: branch })
+      this.setState({
+        loading: false,
+        selectedBranch: branch,
+        openBranchList: false,
+      });
       if(refresh) this.props.history.push("/");
     } else console.log(res)
   }
@@ -169,39 +174,46 @@ class NavBar extends Component<Props, State> {
         <Navbar expand="lg" style={{ background: '#f5f5f5', padding: 0 }}>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="logo-navbar">
-              <div style={{ flex: 1 }}>
-                <Navbar.Brand style={{ marginLeft: 40 }}><img alt="navbar-logo" src={require('../../../Shared/Assets/Logo.svg')} /></Navbar.Brand>
-                <Navbar.Text style={{ marginLeft: 40 }}><h5 className="primary-color">{local.lowRateLoan}</h5></Navbar.Text>
-              </div>
+                <Navbar.Brand className="ml-4"><img alt="navbar-logo" src={require('../../../Shared/Assets/Logo.svg')} /></Navbar.Brand>
+                <Navbar.Text className="mx-5"><h5 className="text-primary font-weight-bold">{local.lowRateLoan}</h5></Navbar.Text>
               <div style={{ flex: 2, display: 'flex', width: '100%' }}>
-                <div className="refresh-logo-navbar"><img alt="navbar-refresh" src={require('../../Assets/refresh.svg')} /></div>
                 <div className="info-navbar">
-                  <span style={{ marginLeft: 10 }}>{local.currentPeriodStartsIn}</span>
-                  <span style={{ marginLeft: 10 }} className="primary-color">  {this.getDaysOfMonth().firstDay}  </span>
-                  <span style={{ marginLeft: 10 }}>{local.andEndsIn}</span>
-                  <span className="primary-color">  {this.getDaysOfMonth().lastDay}  </span>
+                  <span>{local.currentPeriodStartsIn}</span>
+                  <span className="text-primary mx-2 font-weight-bold">  {this.getDaysOfMonth().firstDay}  </span>
+                  <span>{local.andEndsIn}</span>
+                  <span className="text-primary mx-2 font-weight-bold">  {this.getDaysOfMonth().lastDay}  </span>
                 </div>
               </div>
-              <div className="navbar-choose-branch" onClick={() => this.setState({ openBranchList: !this.state.openBranchList })}>
-                <div>
+              <div className="navbar-choose-branch" >
+                <div className="d-flex"  onClick={() => this.setState({ openBranchList: !this.state.openBranchList })}>
                   <div className="selected-branch">
                     <div className="pin-icon"><span className="fa fa-map-marker-alt fa-lg"></span></div>
-                    <span>{this.state.selectedBranch._id === "" ? local.selectBranch : this.state.selectedBranch.name}</span>
+                    <span className="text-white font-weight-bold">{this.state.selectedBranch._id === "" ? local.selectBranch : this.state.selectedBranch.name}</span>
                   </div>
+                <img className="mx-2" style={{width: "40px" }} alt="drop-down-arrow" src={require('../../Assets/dropDownArrow.svg')} />
                 </div>
-                <img alt="drop-down-arrow" src={require('../../Assets/dropDownArrow.svg')} />
-              </div>
               {this.state.openBranchList ? this.renderBranchList() : null}
+              </div>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        {<Navbar style={{ backgroundColor: '#2a3390', height: 75, marginBottom: 20 }} expand="lg">
+        {<Navbar  className='text-white bold'  style={{ backgroundColor: '#2a3390', height: 75, marginBottom: 20 }} expand="lg" variant="dark">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', fontSize:'.9em' }}>
               <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
-              {ability.can('getCustomer', 'customer') ? <Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link> 
-                : !this.props.hide && ability.can('changeOfficer', 'customer') ? <Nav.Link onClick={() => this.props.history.push('/customers/move-customers')}>{local.customers}</Nav.Link> : null}
+              {/* //TODO come back to after we figure permissions */}
+              {ability.can('getCustomer', 'customer') ? <NavDropdown title={local.customers} id="basic-nav-dropdown" >
+                <NavDropdown.Item className="primary" onClick={() => this.props.history.push('/customers')}>{local.persons}</NavDropdown.Item>
+                <Can I="getCompany" a="customer"><NavDropdown.Item className="primary" onClick={() => this.props.history.push('/company')}>{local.companies}</NavDropdown.Item></Can>
+              </NavDropdown> :
+                !this.props.hide && ability.can('changeOfficer', 'customer') ?
+                  <NavDropdown title={local.customers} id="basic-nav-dropdown" >
+                    <NavDropdown.Item className="primary" onClick={() => this.props.history.push('/customers/move-customers')}>{local.persons}</NavDropdown.Item>
+                    <NavDropdown.Item className="primary" onClick={() => this.props.history.push('/company//move-company')}>{local.companies}</NavDropdown.Item>
+            </NavDropdown> 
+              : null
+              }
               {!this.props.hide && ability.can('getLoanProduct', 'product') ? <Nav.Link onClick={() => this.props.history.push('/manage-loans/loan-products')}>{local.loans}</Nav.Link>
                : !this.props.hide && ability.can('getCalculationFormula' ,'product') ? <Nav.Link onClick={() => this.props.history.push('/manage-loans/calculation-formulas')}>{local.loans}</Nav.Link>
                 : !this.props.hide && ability.can('assignProductToBranch', 'product') ? <Nav.Link onClick={() => this.props.history.push('/manage-loans/assign-products-branches')}>{local.assignProductToBranch}</Nav.Link> : null}
@@ -226,7 +238,6 @@ class NavBar extends Component<Props, State> {
             {!this.props.hide && <Can I='getLead' a='halanuser'><Nav.Link onClick={() => this.props.history.push('/halan-integration/leads')}>{local.halan}</Nav.Link></Can>}
             {!this.props.hide && <Can I="getClearance" a='application'><Nav.Link onClick={()=> this.props.history.push('/clearances')}>{local.clearances}</Nav.Link> </Can>}
             {!this.props.hide && <Can I='getOfficersGroups' a ='branch'><Nav.Link onClick={()=>this.props.history.push('/supervisions-levels')}>{local.levelsOfSupervision}</Nav.Link></Can>}
-            {!this.props.hide &&  <Can I = "financialClosing" a="application"><Nav.Link onClick={()=>this.props.history.push('/financial-closing')}>{local.financialClosing}</Nav.Link></Can>}
             {!this.props.hide && ability.can('getTerrorist', 'customer') ? <Nav.Link onClick={() => this.props.history.push('/manage-anti-terrorism/anti-terrorism')}>{local.antiTerrorism}</Nav.Link >: null}
             {!this.props.hide && ability.can("financialBlocking","application")? <Nav.Link onClick={()=>this.props.history.push('/financial-closing/lts-blocking')}>{local.manageFinancialTransaction}</Nav.Link>:
             !this.props.hide  && ability.can("financialClosing","application") ? <Nav.Link onClick={()=>this.props.history.push('/financial-closing/lts-closing')}>{local.manageFinancialTransaction}</Nav.Link> :

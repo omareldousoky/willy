@@ -178,7 +178,6 @@ class ClearanceProfile extends Component<Props, State> {
                 </div>
                 <Card>
                     <CardNavBar
-                        header={'here'}
                         array={this.state.tabsArray}
                         active={this.state.activeTab}
                         selectTab={(stringKey: string) => { this.setState({ activeTab: stringKey }) }}

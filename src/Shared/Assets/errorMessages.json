@@ -124,5 +124,10 @@
     "invalid_system_is_financially_blocked":{"en":"The system is financially blocked at this date","ar":"النظام محجوب ماليا في هذا التاريخ"},
     "invalid_system_is_not_financially_blocked":{"en":"The system is not financially blocked at this date","ar":"النظام غير محجوب ماليا في هذا التاريخ"},
     "invalid_file_format":{"en":"Invalid file format","ar":"الملف المرفوع ليس صحيح"},
-    "files_size_too_big":{"en":"Files uploaded are too big","ar":"عفوا الملفات المرفوعة اكبر من الحجم المسموح به"}
+    "files_size_too_big":{"en":"Files uploaded are too big","ar":"عفوا الملفات المرفوعة اكبر من الحجم المسموح به"},
+    "cannot_early_pay_nano_loan":{"en":"Can't early pay nano loan", "ar":"لا يوجد سداد معجل لقرض نانو"},
+    "wrong_customer_and_product_types": {"en":"Wrong Customer and  Product Types", "ar":"نوع العميل والمنتج خاطئ"},
+    "user_not_researcher": {"en":"the user entered is not a researcher", "ar": "باحث خاطئ"},
+    "sme_min_one_entitled_to_sign":{  "en":"entitled to sign number should be at least one","ar": " عدد من له حق التوقيع يجب ان يكون واحد على الاقل"},
+    "invalid_close_date_manual_pending_actions":{"en":"There are manual pending actions before that date, please close them first","ar":"يوجد حركات يدوية معلقة قبل هذا التاريخ، برجاء إغلاقها أولاً"}
 }
