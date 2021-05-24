@@ -10,7 +10,7 @@ import {
   deleteSettlementDocument,
   settleLegalCustomer,
 } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
-import colorVariables from '../../../../Shared/Assets/scss/app.scss'
+
 import { LegalSettlementFormProps, SettlementFormValues } from '../types'
 import settlementForm from '../configs/settlementForm'
 import { mapFieldsToReadOnly, isSettlementReviewed } from '../utils'
@@ -72,7 +72,7 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
         title: local.settlementSuccess,
         icon: 'success',
         confirmButtonText: local.end,
-        confirmButtonColor: colorVariables.green,
+        confirmButtonColor: '#7dc356',
       })
       onSubmit()
     } else {

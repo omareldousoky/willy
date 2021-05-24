@@ -7,8 +7,8 @@ interface HeaderProps {
 	showCurrentUser?: boolean;
 	showCurrentTime?: boolean;
   showCurrentDate?: boolean;
-  fromDate?: string;
-  toDate?: string;
+  fromDate?: string | number;
+  toDate?: string | number;
   branchName?: string;
 }
 export const Header = ({

@@ -3,9 +3,9 @@ import { Managers } from '../managerHierarchy/branchBasicsCard'
 import { DefaultedCustomer, ManagerReviews } from './defaultingCustomersList'
 
 export interface CourtSession {
-  date?: number
-  decision?: string
-  confinementNumber?: string
+  date?: number;
+  decision?: string;
+  confinementNumber?: string;
 }
 
 export interface LegalActionsForm {
@@ -14,10 +14,10 @@ export interface LegalActionsForm {
   court: string;
   statementOfClaim: string;
 
-  firstCourtSession: CourtSession
-  oppositionSession: CourtSession
-  oppositionAppealSession: CourtSession
-  misdemeanorAppealSession: CourtSession
+  firstCourtSession: CourtSession;
+  oppositionSession: CourtSession;
+  oppositionAppealSession: CourtSession;
+  misdemeanorAppealSession: CourtSession;
 
   misdemeanorAppealNumber: string;
   caseStatus: string;
@@ -79,8 +79,8 @@ export interface ReviewReqBody {
 export type Settlement = SettlementFormValues & ManagerReviews
 
 export interface SettledCustomer extends DefaultedCustomer {
-  settlement: Settlement
-  managerHierarchy?: Managers
+  settlement: Settlement;
+  managerHierarchy?: Managers;
 }
 
 export enum SettlementTypeEnum {
@@ -133,6 +133,6 @@ export interface UploadLegalCustomerResponse {
 }
 
 export interface UploadLegalCustomersProps {
-  onSubmit: (areAllSucceeded: boolean) => void
-  onCancel: () => void
+  onSubmit: (areAllSucceeded: boolean) => void;
+  onCancel: () => void;
 }
