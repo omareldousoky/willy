@@ -3,7 +3,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { Button, Card, Container, Form, Row, Table } from 'react-bootstrap'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
-import * as local from '../../../Shared/Assets/ar.json'
+import local from '../../../Shared/Assets/ar.json'
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import Can from '../../config/Can'
 import { theme } from '../../../Shared/theme'
@@ -166,7 +166,7 @@ class ClearanceProfile extends Component<
           </tr>
           <tr>
             <td style={header}>{local.status}</td>
-            <td style={cell}>{this.state.data.status}</td>
+            <td style={cell}>{local[this.state.data.status]}</td>
           </tr>
         </tbody>
       </Table>
@@ -220,9 +220,6 @@ class ClearanceProfile extends Component<
   render() {
     return (
       <>
-        {this.state.data.loanId && (
-          <PenaltyStrike loanId={this.state.data.loanId} />
-        )}
         <Loader open={this.state.loading} type="fullscreen" />
         <div className="d-flex">
           <div className="px-4 d-flex flex-column w-25">
@@ -286,6 +283,9 @@ class ClearanceProfile extends Component<
             </>
           )}
         </div>
+        {this.state.data.loanId && (
+          <PenaltyStrike loanId={this.state.data.loanId} />
+        )}
         <Card>
           <CardNavBar
             array={this.state.tabsArray}

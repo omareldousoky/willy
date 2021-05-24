@@ -20,7 +20,7 @@ const ClearanceCreationDocuments = (
     props.setFieldValue('documentPhoto', imageFile)
   }
   return (
-    <Form onSubmit={props.handleSubmit} className="w-75">
+    <Form onSubmit={props.handleSubmit} className="w-100 m-0 p-0">
       <Form.Group controlId="receiptPhoto" className="h-25">
         <Row className="mx-3">
           <Form.Label className="clearance-label">

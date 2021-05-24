@@ -339,12 +339,14 @@ class ClearanceCreation extends Component<Props, State> {
                 <Card.Body>{this.renderSteps()}</Card.Body>
               </div>
             ) : (
-              <div className="text-align-center my-2">
-                <img
-                  alt="no-data-found"
-                  src={require('../../../Shared/Assets/no-results-found.svg')}
-                />
-                <h4>{local.noLoansForClearance}</h4>
+              <div className="d-flex justify-content-center align-items-center mr-5 text-align-center">
+                <div>
+                  <img
+                    alt="no-data-found"
+                    src={require('../../../Shared/Assets/no-results-found.svg')}
+                  />
+                  <h4>{local.noLoansForClearance}</h4>
+                </div>
               </div>
             )}
           </Card>
