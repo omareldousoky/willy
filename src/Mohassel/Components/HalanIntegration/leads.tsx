@@ -111,11 +111,6 @@ class Leads extends Component<Props, State>{
         render: data => data.branchName
       },
       {
-        title: local.phoneNumber,
-        key: "phoneNumber",
-        render: data => data.phoneNumber
-      },
-      {
         title: local.status,
         key: "status",
         render: data => this.getLeadStatus(data.status)
