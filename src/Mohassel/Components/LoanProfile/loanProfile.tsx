@@ -744,7 +744,7 @@ class LoanProfile extends Component<Props, State>{
                             customerDetails:individual.customer,
                             score: customerScore,
                             isLeader: individual.type === 'leader' ,
-                            getIscore: this.getIscore,
+                            getIscore: (data) => this.getIscore(data),
                             applicationStatus: this.state.application.status,
                         })
                 })
