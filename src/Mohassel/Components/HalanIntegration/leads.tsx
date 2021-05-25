@@ -98,32 +98,32 @@ class Leads extends Component<Props, State>{
       {
         title: local.leadName,
         key: "name",
-        render: data => data.customerName
+        render: data => <span className={data.status === 'approved' ? 'text-success' : data.status === 'rejected' ? 'text-danger' : ''}>{ data.customerName }</span>
       },
       {
         title: local.governorate,
         key: "governorate",
-        render: data => data.businessGovernate
+        render: data => <span className={data.status === 'approved' ? 'text-success' : data.status === 'rejected' ? 'text-danger' : ''}>{ data.businessGovernate }</span>
       },
       {
         title: local.branchName,
         key: "branch",
-        render: data => data.branchName
+        render: data => <span className={data.status === 'approved' ? 'text-success' : data.status === 'rejected' ? 'text-danger' : ''}>{ data.branchName }</span>
       },
       {
         title: local.status,
         key: "status",
-        render: data => this.getLeadStatus(data.status)
+        render: data => <span className={data.status === 'approved' ? 'text-success' : data.status === 'rejected' ? 'text-danger' : ''}>{ this.getLeadStatus(data.status) }</span>
       },
       {
         title: local.creationDate,
         key: "createdAt",
-        render: data => data.createdAt ? getDateAndTime(data.createdAt) : ''
+        render: data => <span className={data.status === 'approved' ? 'text-success' : data.status === 'rejected' ? 'text-danger' : ''}> {data.createdAt ? getDateAndTime(data.createdAt) : '' }</span>
       },
       {
         title: () => local.loanOfficer,
         key: "loanOfficer",
-        render: data => data.loanOfficerName
+        render: data => <span className={data.status === 'approved' ? 'text-success' : data.status === 'rejected' ? 'text-danger' : ''}> {data.loanOfficerName }</span>
       },
       {
         title: () => <Can I="assignLead" a="halanuser">{local.chooseLoanOfficer}</Can>,
