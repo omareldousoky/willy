@@ -36,8 +36,15 @@ export const createFormFieldsInitValue = (
   defaultValues: any
 ) => {
   return formFields.reduce((acc, formField) => {
-    const { name } = formField
-    const initValue = defaultValues ? defaultValues[name] : undefined
+    const { name, type } = formField
+
+    const isEmptyPhoto =
+      !!defaultValues &&
+      type === 'photo' &&
+      !Object.keys(defaultValues[name]).length
+
+    const initValue =
+      defaultValues && !isEmptyPhoto ? defaultValues[name] : undefined
 
     if (isGroupField(formField)) {
       const fields = createFormFieldsInitValue(
