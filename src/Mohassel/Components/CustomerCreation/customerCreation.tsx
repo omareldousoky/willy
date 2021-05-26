@@ -203,6 +203,8 @@ class CustomerCreation extends Component<Props, State> {
         mobilePhoneNumber: res.body.mobilePhoneNumber,
         customerWebsite: res.body.customerWebsite?.trim(),
         emailAddress: res.body.emailAddress?.trim(),
+        currHomeAddressGov: res.body.currHomeAddressGov,
+        policeStation: res.body.policeStation,
       }
       const customerBusiness = {
         businessAddressLatLong: res.body.businessAddressLatLong,

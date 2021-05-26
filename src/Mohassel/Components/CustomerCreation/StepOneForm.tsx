@@ -331,6 +331,7 @@ export const StepOneForm = (props: any) => {
                   <option
                     key={governorateLegacyCode}
                     value={governorateName.ar}
+                    selected={values.currHomeAddressGov === governorateName.ar}
                   >
                     {governorateName.ar}
                   </option>
@@ -357,7 +358,11 @@ export const StepOneForm = (props: any) => {
             >
               <option value="" disabled />
               {policeStations.map(({ districtName, districtLegacyCode }) => (
-                <option key={districtLegacyCode} value={districtName.ar}>
+                <option
+                  key={districtLegacyCode}
+                  value={districtName.ar}
+                  selected={values.policeStation === districtName.ar}
+                >
                   {districtName.ar}
                 </option>
               ))}
