@@ -20,8 +20,16 @@ import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCust
 import { Customer } from '../../../Shared/Services/interfaces';
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan';
 import { Application } from '../LoanApplication/loanApplicationStates';
-import { addCustomerToDefaultingList, deleteCustomerDefaultedLoan, reviewCustomerDefaultedLoan } from '../../Services/APIs/LegalAffairs/defaultingCustomers';
+import {
+  addCustomerToDefaultingList,
+  deleteCustomerDefaultedLoan,
+  fetchReviewedDefaultingCustomers,
+  reviewCustomerDefaultedLoan,
+} from '../../Services/APIs/LegalAffairs/defaultingCustomers'
 import ability from '../../config/ability';
+import ReportsModal from '../Reports/reportsModal';
+import { PDF } from '../Reports/reports';
+import DefaultingCustomersPdfTemplate from '../pdfTemplates/defaultingCustomers/DefaultingCustomers';
 
 interface Review {
     at: number;
@@ -51,6 +59,26 @@ export interface DefaultedCustomer extends ManagerReviews {
     customerKey: number;
     customerBranchId?: string;
 }
+export interface ReviewedDefaultingCustomer {
+  customerKey: string;
+  customerName: string;
+  customerType: string;
+  loanKey: string;
+  loanIssueDate: string;
+  customerAddress: string;
+  installmentAmount: number;
+  overdueInstallmentCount: number;
+  unpaidInstallmentCount: number;
+  unpaidInstallmentAmount: number;
+  branchName: string;
+  branchId: string;
+}
+
+export interface ReviewedDefaultingCustomersReq {
+    status: string;
+    branches: string;
+}
+
 interface Props {
     history: any;
     data: DefaultedCustomer[];
@@ -76,10 +104,12 @@ interface State {
     selectedEntries: DefaultedCustomer[];
     customerSearchResults: { results: Array<Customer>; empty: boolean };
     loanSearchResults: { application: Application; id: string }[];
+    defaultingCustomersReport: ReviewedDefaultingCustomer[];
     selectedCustomer: Customer;
     modalLoader: boolean;
     loading: boolean;
     rowToView: DefaultedCustomer;
+    showReportsModal: boolean;
 }
 const rowToViewInit = {
     _id: '',
@@ -98,6 +128,13 @@ const rowToViewInit = {
 class DefaultingCustomersList extends Component<Props, State> {
     mappers: { title: (() => void) | string; key: string; sortable?: boolean; render: (data: DefaultedCustomer) => void }[]
     loanMappers: { title: string; key: string; sortable?: boolean; render: (data: { id: string; application: Application }) => void }[]
+    reportsPDF: PDF = {
+        key: 'defaultingCustomers',
+        local: 'تقرير العملاء المتأخرون',
+        inputs: ["defaultingCustomerStatus", "branches"],
+        permission: ''
+    }
+
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -110,10 +147,12 @@ class DefaultingCustomersList extends Component<Props, State> {
             selectedEntries: [],
             customerSearchResults: { results: [], empty: false },
             loanSearchResults: [],
+            defaultingCustomersReport: [],
             selectedCustomer: {},
             modalLoader: false,
             loading: false,
-            rowToView: rowToViewInit
+            rowToView: rowToViewInit,
+            showReportsModal: false
         }
         this.mappers = [
             {
@@ -379,9 +418,42 @@ class DefaultingCustomersList extends Component<Props, State> {
           end = new Date().getTime();
        }
      }
+     async handlePrintReport(values: any) {
+        const { defaultingCustomerStatus, branches } = values
+        const printReportReq: ReviewedDefaultingCustomersReq = {
+          status: defaultingCustomerStatus ?? '',
+          branches:
+            branches.length === 1 && branches[0]._id === ''
+              ? []
+              : branches.map((branch) => branch._id),
+        }
+
+        const printReportRes: {
+          status: string;
+          body?: {result: ReviewedDefaultingCustomer[]};
+          error?: any;
+        } = await fetchReviewedDefaultingCustomers(printReportReq)
+
+        const defaultingCustomersReport = printReportRes.body?.result ?? []
+
+        if (printReportRes.status === 'success') {
+            this.setState(
+              { defaultingCustomersReport, showReportsModal: false },
+              () => {
+                window.print()
+              }
+            )
+        } else {
+            this.setState({ showReportsModal: false })
+            Swal.fire('Error !', getErrorMessage(printReportRes.error.error), 'error')
+        }
+
+
+     }
     render() {
         return (
-            <div>
+        <>
+            <div className="print-none">
                 <HeaderWithCards
                     header={local.legalAffairs}
                     array={this.state.manageLegalAffairsTabs}
@@ -404,7 +476,8 @@ class DefaultingCustomersList extends Component<Props, State> {
                                 ability.can('areaManagerReview','legal') || 
                                 ability.can('financialManagerReview','legal')) && <>
                                 <Button className='big-button' style={{ marginLeft: 10 }} disabled={this.state.selectedEntries.length === 0} onClick={() => this.bulkAction('review')}>{local.reviewAll}</Button>
-                                <Button className='big-button' disabled={this.state.selectedEntries.length === 0} onClick={() => this.bulkAction('delete')}>{local.deleteAll}</Button>
+                                <Button className='big-button' style={{ marginLeft: 10 }} disabled={this.state.selectedEntries.length === 0} onClick={() => this.bulkAction('delete')}>{local.deleteAll}</Button>
+                                <Button className='big-button' onClick={() => this.setState({ showReportsModal: true })}>{local.downloadPDF}</Button>
                                 </>}
                             </div>
                         </div>
@@ -482,7 +555,17 @@ class DefaultingCustomersList extends Component<Props, State> {
                             })}>{local.cancel}</Button>
                     </Modal.Footer>
                 </Modal>
+                {this.state.showReportsModal && (
+                    <ReportsModal
+                        pdf={this.reportsPDF}
+                        show={this.state.showReportsModal}
+                        hideModal={() => this.setState({ showReportsModal: false })}
+                        submit={(values) => this.handlePrintReport(values)}
+                        />)
+                }
             </div>
+            <DefaultingCustomersPdfTemplate customers={this.state.defaultingCustomersReport} />
+        </>
         )
     }
 }
