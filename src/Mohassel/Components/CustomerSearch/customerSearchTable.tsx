@@ -37,7 +37,7 @@ class CustomerSearch extends Component<Props, State>{
         super(props);
         this.state = {
             searchKey: '',
-            dropDownValue: props.sme ? 'businessName' : 'name'
+            dropDownValue: 'name'
         }
     }
     handleSearchChange(event) {
@@ -58,7 +58,6 @@ class CustomerSearch extends Component<Props, State>{
             case 'key': return local.code;
             case 'code': return local.partialCode;
             case 'customerShortenedCode': return local.customerShortenedCode;
-            case 'businessName': return local.companyName;
             case 'taxCardNumber': return local.taxCardNumber;
             case 'commercialRegisterNumber': return local.commercialRegisterNumber;
             default: return '';
@@ -88,7 +87,7 @@ class CustomerSearch extends Component<Props, State>{
     }
   };
     render() {
-        const dropDownArray: string[] = this.props.sme ? ['key', 'code', 'customerShortenedCode', 'businessName', 'taxCardNumber', 'commercialRegisterNumber'] : ['name', 'key', 'nationalId', 'code', 'customerShortenedCode'];
+        const dropDownArray: string[] = this.props.sme ? ['key', 'code', 'customerShortenedCode', 'name', 'taxCardNumber', 'commercialRegisterNumber'] : ['name', 'key', 'nationalId', 'code', 'customerShortenedCode'];
         return (
             <div style={{ display: 'flex', flexDirection: 'column', ...this.props.style }} className={this.props.className || ""}>
                 {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && <div style={{ width: '100%' }}>
