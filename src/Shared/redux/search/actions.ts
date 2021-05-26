@@ -12,7 +12,10 @@ import {
   searchUnTerrorists,
 } from '../../../Mohassel/Services/APIs/Terrorism/terrorism'
 import { searchLoanOfficer } from '../../../Mohassel/Services/APIs/LoanOfficers/searchLoanOfficer'
-import { searchDefaultingCustomers } from '../../../Mohassel/Services/APIs/LegalAffairs/defaultingCustomers'
+import {
+  searchDefaultingCustomers,
+  searchLegalAffairsCustomers,
+} from '../../../Mohassel/Services/APIs/LegalAffairs/defaultingCustomers'
 import { searchFinancialBlocking } from '../../../Mohassel/Services/APIs/loanApplication/financialClosing'
 
 export const search = (obj) => {
@@ -212,6 +215,25 @@ export const search = (obj) => {
         delete obj.url
         dispatch({ type: 'SET_LOADING', payload: true })
         const res = await searchDefaultingCustomers(obj)
+        if (res.status === 'success') {
+          dispatch({ type: 'SET_LOADING', payload: false })
+          dispatch({
+            type: 'SEARCH',
+            payload: { ...res.body, status: res.status, error: undefined },
+          })
+        } else {
+          dispatch({ type: 'SET_LOADING', payload: false })
+          dispatch({
+            type: 'SEARCH',
+            payload: { ...res.error, status: res.status },
+          })
+        }
+      }
+    case 'legal-affairs':
+      return async (dispatch) => {
+        delete obj.url
+        dispatch({ type: 'SET_LOADING', payload: true })
+        const res = await searchLegalAffairsCustomers(obj)
         if (res.status === 'success') {
           dispatch({ type: 'SET_LOADING', payload: false })
           dispatch({

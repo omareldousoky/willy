@@ -721,7 +721,19 @@ export const iscoreBank = (bankId: string) => {
     default:
       return 'not  found'
   }
-}
+};
+
+export const arrayToPairs = <T extends unknown>(array: any[]): T[][] =>
+  array.reduce(
+    (result, value, index, sourceArray) =>
+      index % 2 === 0
+        ? [...result, sourceArray.slice(index, index + 2)]
+        : result,
+    []
+  )
+
+ export const extractLastChars = (str: string, numberOfChars: number) =>
+ str?.slice ? str.slice(str.length - numberOfChars, str.length) : str
 
 export const DateAsFileName = () => {
   const today = new Date()

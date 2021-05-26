@@ -62,6 +62,8 @@ import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
 import TerrorismUnList from '../Components/ManageTerrorism/terrorismUnList'
 import FinancialBlocking from '../Components/FinancialClosing/financialBlocking'
 import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList'
+import LegalCustomersList from '../Components/ManageLegalAffairs/LegalCustomersList'
+import LegalActionsForm from '../Components/ManageLegalAffairs/LegalCustomerActionsForm'
 import FinancialReviewing from '../Components/FinancialClosing/FinancialReviewing'
 import { CompanyList, CompanyProfile } from '../../Shared/Components'
 import CompanyCreation from '../Components/CustomerCreation/companyCreation'
@@ -774,6 +776,24 @@ const appRoutes = [
             render: (props) => (
               <Can I="getDefaultingCustomer" a="legal">
                 <DefaultingCustomersList {...props} />
+              </Can>
+            ),
+          },
+          {
+            path: '/legal-actions',
+            label: local.legalAffairs,
+            render: (props) => (
+              <Can I="getDefaultingCustomer" a="legal">
+                <LegalCustomersList {...props} />
+              </Can>
+            ),
+          },
+          {
+            path: '/customer-actions',
+            label: local.legalAffairs,
+            render: (props) => (
+              <Can I="updateDefaultingCustomer" a="legal">
+                <LegalActionsForm {...props} />
               </Can>
             ),
           },

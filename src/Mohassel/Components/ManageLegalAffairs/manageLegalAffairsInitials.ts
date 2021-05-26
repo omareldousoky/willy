@@ -12,5 +12,15 @@ export const manageLegalAffairsArray = (): Card[] => {
       path: '/legal-affairs/late-list',
     })
   }
+
+  if (ability.can('getDefaultingCustomer', 'legal')) {
+    mangeLegalAffairsArr.push({
+      icon: 'legal-actions',
+      header: local.legalAffairs,
+      desc: local.legalAffairs,
+      path: '/legal-affairs/legal-actions',
+    })
+  }
+
   return mangeLegalAffairsArr
 }

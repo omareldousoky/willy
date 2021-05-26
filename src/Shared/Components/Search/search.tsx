@@ -309,12 +309,13 @@ class Search extends Component<Props, State> {
     formikProps: FormikProps<FormikValues>,
     index: number,
     array: { value: string; text: string; permission?: string; key?: string }[],
-    field?: string
+    field?: string,
+    label?: string
   ) {
     return (
       <Col key={index} sm={6} style={{ marginTop: index < 2 ? 0 : 20 }}>
         <div className="dropdown-container">
-          <p className="dropdown-label">{local.status}</p>
+          <p className="dropdown-label">{label || local.status}</p>
           <Form.Control
             as="select"
             className="dropdown-select"
@@ -615,7 +616,8 @@ class Search extends Component<Props, State> {
                         key: 'legal',
                       },
                     ],
-                    'reviewer'
+                    'reviewer',
+                    local.reviewStatus
                   )
                 }
                 if (searchKey === 'branch' && this.viewBranchDropdown()) {
@@ -724,6 +726,37 @@ class Search extends Component<Props, State> {
                         />
                       </Form.Group>
                     </Col>
+                  )
+                }
+                if (searchKey === 'legal-status') {
+                  return this.statusDropdown(
+                    formikProps,
+                    index,
+                    [
+                      { value: '', text: local.all },
+                      {
+                        value: 'firstCourtSession',
+                        text: local.firstCourtSession,
+                      },
+                      {
+                        value: 'oppositionSession',
+                        text: local.oppositionSession,
+                      },
+                      {
+                        value: 'misdemeanorAppealSession',
+                        text: local.misdemeanorAppealSession,
+                      },
+                      {
+                        value: 'oppositionAppealSession',
+                        text: local.oppositionAppealSession,
+                      },
+                      {
+                        value: 'financialManagerReview',
+                        text: local.financialManagerReview,
+                      },
+                    ],
+                    undefined,
+                    local.judgementStatus
                   )
                 }
                 if (searchKey === 'sme') {

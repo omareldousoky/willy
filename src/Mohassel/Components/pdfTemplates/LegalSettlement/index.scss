@@ -1,0 +1,32 @@
+@media screen, print {
+  tbody {
+    page-break-inside: avoid;
+  }
+
+  .headtitle {
+    font-size: 14px;
+    line-height: 2em;
+  }
+
+  table.procedure th {
+    border: 0.5px solid black;
+    background-color: lightgrey;
+    -webkit-print-color-adjust: exact;
+  }
+
+  table.procedure td {
+    border: 0.5px solid black;
+  }
+
+  .marginlineheight {
+    line-height: 3em;
+    margin-right: 2em;
+  }
+}
+
+@media screen {
+  .legal-settlement-container {
+    display: none;
+  }
+}
+

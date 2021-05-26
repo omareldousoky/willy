@@ -40,7 +40,15 @@ interface Review {
   notes: string
   userName: string
 }
-interface DefaultedCustomer {
+
+export interface ManagerReviews {
+  branchManagerReview?: Review
+  areaManagerReview?: Review
+  areaSupervisorReview?: Review
+  financialManagerReview?: Review
+}
+
+export interface DefaultedCustomer extends ManagerReviews {
   _id: string
   updated: { at: number; by: string }
   created: { at: number; by: string }
@@ -52,24 +60,7 @@ interface DefaultedCustomer {
   customerName: string
   customerId: string
   customerKey: number
-  branchManagerReview?: Review
-  areaManagerReview?: Review
-  areaSupervisorReview?: Review
-  financialManagerReview?: Review
-}
-interface Props extends RouteComponentProps {
-  data: DefaultedCustomer[]
-  error: string
-  totalCount: number
-  loading: boolean
-  searchFilters: {
-    reviewer?: string
-  }
-  search: (data) => Promise<void>
-  setLoading: (data) => void
-  setSearchFilters: (data) => void
-  branchId?: string
-  withHeader: boolean
+  customerBranchId?: string
 }
 interface State {
   size: number
