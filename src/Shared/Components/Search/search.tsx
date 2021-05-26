@@ -40,6 +40,7 @@ interface InitialFormikState {
   isDoubtful?: boolean;
   isWrittenOff?: boolean;
   printed?: boolean;
+  lastDates?: 'day' | 'week' | 'month' | ''
 }
 interface Props {
   size: number;
@@ -149,6 +150,24 @@ class Search extends Component<Props, State> {
     if (url === "supervisionsGroups") {
       obj.status = this.props.chosenStatus;
     }
+
+    if (obj.lastDates) {
+      const fromDate = new Date()
+
+      if (obj.lastDates === 'month') {
+        fromDate.setMonth(fromDate.getMonth() - 1)
+      } else {
+        const subtractBy = obj.lastDates === 'day' ? 1 : 7
+        fromDate.setDate(fromDate.getDate() - subtractBy)
+      }
+
+      obj.fromDate = fromDate.valueOf()
+      obj.toDate = new Date().valueOf()
+
+      console.log(new Date(obj.fromDate), new Date(obj.toDate));
+      
+    }
+
     obj = this.removeEmptyArg(obj);
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
@@ -222,6 +241,8 @@ class Search extends Component<Props, State> {
               : false;
         case "printed":
           initialState.printed = false;
+        case "lastDates":
+          initialState.lastDates = '';
       }
     });
     return initialState;
@@ -368,6 +389,7 @@ class Search extends Component<Props, State> {
                             if (e.currentTarget.value === "")
                               formikProps.setFieldValue("toDate", "");
                           }}
+                          disabled={!!formikProps.values.lastDates}
                         ></Form.Control>
                         <span className="mr-1">{local.to}</span>
                         <Form.Control
@@ -378,7 +400,7 @@ class Search extends Component<Props, State> {
                           value={formikProps.values.toDate}
                           min={formikProps.values.fromDate}
                           onChange={formikProps.handleChange}
-                          disabled={!Boolean(formikProps.values.fromDate)}
+                          disabled={!formikProps.values.fromDate || !!formikProps.values.lastDates}
                         ></Form.Control>
                       </div>
                     </Col>
@@ -497,6 +519,41 @@ class Search extends Component<Props, State> {
                       </div>
                     </Col>
                   );
+                }
+                if (searchKey === 'lastDates') {
+                  return (
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.lastDates}</p>
+                        <Form.Control
+                          as="select"
+                          className="dropdown-select"
+                          data-qc="lastDates"
+                          value={formikProps.values.lastDates}
+                          onChange={(e) => {
+                            formikProps.setFieldValue(
+                              'lastDates',
+                              e.currentTarget.value
+                            )
+
+                            formikProps.setFieldValue('fromDate', '')
+                            formikProps.setFieldValue('toDate', '')
+                          }}
+                        >
+                          {[
+                            { value: '', text: local.all },
+                            { value: 'day', text: local.lastDay },
+                            { value: 'week', text: local.lastWeek},
+                            { value: 'month', text: local.lastMonth },
+                          ].map(({ value, text }) => (
+                            <option value={value} data-qc={value}>
+                              {text}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </div>
+                    </Col>
+                  )
                 }
                 if (searchKey === "clearance-status") {
                   return this.statusDropdown(formikProps, index, [
