@@ -30,9 +30,13 @@ import { Application } from '../LoanApplication/loanApplicationStates'
 import {
   addCustomerToDefaultingList,
   deleteCustomerDefaultedLoan,
+  fetchReviewedDefaultingCustomers,
   reviewCustomerDefaultedLoan,
 } from '../../Services/APIs/LegalAffairs/defaultingCustomers'
 import ability from '../../config/ability'
+import ReportsModal from '../Reports/reportsModal'
+import { PDF } from '../Reports/reports'
+import DefaultingCustomersPdfTemplate from '../pdfTemplates/defaultingCustomers/DefaultingCustomers'
 
 interface Review {
   at: number
@@ -47,7 +51,6 @@ export interface ManagerReviews {
   areaSupervisorReview?: Review
   financialManagerReview?: Review
 }
-
 export interface DefaultedCustomer extends ManagerReviews {
   _id: string
   updated: { at: number; by: string }
@@ -63,6 +66,25 @@ export interface DefaultedCustomer extends ManagerReviews {
   customerBranchId?: string
 }
 
+export interface ReviewedDefaultingCustomer {
+  customerKey: string
+  customerName: string
+  customerType: string
+  loanKey: string
+  loanIssueDate: string
+  customerAddress: string
+  installmentAmount: number
+  overdueInstallmentCount: number
+  unpaidInstallmentCount: number
+  unpaidInstallmentAmount: number
+  branchName: string
+  branchId: string
+}
+
+export interface ReviewedDefaultingCustomersReq {
+  status: string
+  branches: string
+}
 interface Props extends RouteComponentProps {
   data: DefaultedCustomer[]
   error: string
@@ -77,7 +99,6 @@ interface Props extends RouteComponentProps {
   branchId?: string
   withHeader: boolean
 }
-
 interface State {
   size: number
   from: number
@@ -88,10 +109,12 @@ interface State {
   selectedEntries: DefaultedCustomer[]
   customerSearchResults: { results: Array<Customer>; empty: boolean }
   loanSearchResults: { application: Application; id: string }[]
+  defaultingCustomersReport: ReviewedDefaultingCustomer[]
   selectedCustomer: Customer
   modalLoader: boolean
   loading: boolean
   rowToView: DefaultedCustomer
+  showReportsModal: boolean
 }
 const rowToViewInit = {
   _id: '',
@@ -122,6 +145,13 @@ class DefaultingCustomersList extends Component<Props, State> {
     render: (data: { id: string; application: Application }) => void
   }[]
 
+  reportsPDF: PDF = {
+    key: 'defaultingCustomers',
+    local: 'تقرير العملاء المتأخرون',
+    inputs: ['defaultingCustomerStatus', 'branches'],
+    permission: '',
+  }
+
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -134,10 +164,12 @@ class DefaultingCustomersList extends Component<Props, State> {
       selectedEntries: [],
       customerSearchResults: { results: [], empty: false },
       loanSearchResults: [],
+      defaultingCustomersReport: [],
       selectedCustomer: {},
       modalLoader: false,
       loading: false,
       rowToView: rowToViewInit,
+      showReportsModal: false,
     }
     this.mappers = [
       {
@@ -307,6 +339,37 @@ class DefaultingCustomersList extends Component<Props, State> {
     } else {
       this.setState({ modalLoader: false })
       Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+    }
+  }
+
+  async handlePrintReport(values: any) {
+    const { defaultingCustomerStatus, branches } = values
+    const printReportReq: ReviewedDefaultingCustomersReq = {
+      status: defaultingCustomerStatus ?? '',
+      branches:
+        branches.length === 1 && branches[0]._id === ''
+          ? []
+          : branches.map((branch) => branch._id),
+    }
+
+    const printReportRes: {
+      status: string
+      body?: { result: ReviewedDefaultingCustomer[] }
+      error?: any
+    } = await fetchReviewedDefaultingCustomers(printReportReq)
+
+    const defaultingCustomersReport = printReportRes.body?.result ?? []
+
+    if (printReportRes.status === 'success') {
+      this.setState(
+        { defaultingCustomersReport, showReportsModal: false },
+        () => {
+          window.print()
+        }
+      )
+    } else {
+      this.setState({ showReportsModal: false })
+      Swal.fire('Error !', getErrorMessage(printReportRes.error.error), 'error')
     }
   }
 
@@ -541,9 +604,9 @@ class DefaultingCustomersList extends Component<Props, State> {
           data.areaSupervisorReview ||
           data.financialManagerReview) && (
           <img
-            alt="view"
             style={{ cursor: 'pointer', marginLeft: 20 }}
             title={local.logs}
+            alt={local.logs}
             src={require('../../Assets/view.svg')}
             onClick={() => {
               this.showLogs(data)
@@ -553,9 +616,9 @@ class DefaultingCustomersList extends Component<Props, State> {
         {daysSince < 3 && data.status === 'underReview' && (
           <Can I="branchManagerReview" a="legal">
             <img
-              alt="check"
               style={{ cursor: 'pointer', marginLeft: 20 }}
               title={local.branchManagerReview}
+              alt={local.branchManagerReview}
               src={require('../../Assets/check-circle.svg')}
               onClick={() => {
                 this.reviewDefaultedLoan([data._id], 'branchManagerReview')
@@ -577,9 +640,9 @@ class DefaultingCustomersList extends Component<Props, State> {
             (daysSince >= 3 && data.status === 'underReview')) && (
             <Can I="areaSupervisorReview" a="legal">
               <img
-                alt="check"
                 style={{ cursor: 'pointer', marginLeft: 20 }}
                 title={local.areaSupervisorReview}
+                alt={local.areaSupervisorReview}
                 src={require('../../Assets/check-circle.svg')}
                 onClick={() => {
                   this.reviewDefaultedLoan([data._id], 'areaSupervisorReview')
@@ -603,9 +666,9 @@ class DefaultingCustomersList extends Component<Props, State> {
                 data.status === 'underReview'))) && (
             <Can I="areaManagerReview" a="legal">
               <img
-                alt="check"
                 style={{ cursor: 'pointer', marginLeft: 20 }}
                 title={local.areaManagerReview}
+                alt={local.areaManagerReview}
                 src={require('../../Assets/check-circle.svg')}
                 onClick={() => {
                   this.reviewDefaultedLoan([data._id], 'areaManagerReview')
@@ -630,9 +693,9 @@ class DefaultingCustomersList extends Component<Props, State> {
                 data.status === 'underReview'))) && (
             <Can I="financialManagerReview" a="legal">
               <img
-                alt="check"
                 style={{ cursor: 'pointer', marginLeft: 20 }}
                 title={local.financialManagerReview}
+                alt={local.financialManagerReview}
                 src={require('../../Assets/check-circle.svg')}
                 onClick={() => {
                   this.reviewDefaultedLoan([data._id], 'financialManagerReview')
@@ -653,8 +716,8 @@ class DefaultingCustomersList extends Component<Props, State> {
           <Can I="deleteDefaultingCustomer" a="legal">
             <img
               style={{ cursor: 'pointer', marginLeft: 20 }}
-              alt={local.delete}
               title={local.delete}
+              alt={local.delete}
               src={require('../../../Shared/Assets/deleteIcon.svg')}
               onClick={() => {
                 this.deleteDefaultedLoanEntry([data._id])
@@ -668,184 +731,208 @@ class DefaultingCustomersList extends Component<Props, State> {
 
   render() {
     return (
-      <div>
-        <HeaderWithCards
-          header={local.legalAffairs}
-          array={this.state.manageLegalAffairsTabs}
-          active={this.state.manageLegalAffairsTabs
-            .map((item) => {
-              return item.icon
-            })
-            .indexOf('loanUses')}
-        />
-        <Card className="main-card">
-          <Loader
-            type="fullscreen"
-            open={this.props.loading || this.state.loading}
+      <>
+        <div className="print-none">
+          <HeaderWithCards
+            header={local.legalAffairs}
+            array={this.state.manageLegalAffairsTabs}
+            active={this.state.manageLegalAffairsTabs
+              .map((item) => {
+                return item.icon
+              })
+              .indexOf('loanUses')}
           />
-          <Card.Body style={{ padding: 0 }}>
-            <div className="custom-card-header">
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                  {local.lateCustomers}
-                </Card.Title>
-                <span className="text-muted">
-                  {local.noOfUsers +
-                    ` (${this.props.totalCount ? this.props.totalCount : 0})`}
-                </span>
-              </div>
-              <div className="d-flex w-50 justify-content-end">
-                <Can I="addDefaultingCustomer" a="legal">
-                  <Button
-                    className="big-button"
-                    style={{ marginLeft: 10 }}
-                    onClick={() =>
-                      this.setState({
-                        showModal: true,
-                      })
-                    }
-                  >
-                    {local.addCustomerToLateCustomers}
-                  </Button>
-                </Can>
-                {(ability.can('branchManagerReview', 'legal') ||
-                  ability.can('areaSupervisorReview', 'legal') ||
-                  ability.can('areaManagerReview', 'legal') ||
-                  ability.can('financialManagerReview', 'legal')) && (
-                  <>
+          <Card className="main-card">
+            <Loader
+              type="fullscreen"
+              open={this.props.loading || this.state.loading}
+            />
+            <Card.Body style={{ padding: 0 }}>
+              <div className="custom-card-header">
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
+                    {local.lateCustomers}
+                  </Card.Title>
+                  <span className="text-muted">
+                    {local.noOfUsers +
+                      ` (${this.props.totalCount ? this.props.totalCount : 0})`}
+                  </span>
+                </div>
+                <div className="d-flex w-50 justify-content-end">
+                  <Can I="addDefaultingCustomer" a="legal">
                     <Button
                       className="big-button"
                       style={{ marginLeft: 10 }}
-                      disabled={this.state.selectedEntries.length === 0}
-                      onClick={() => this.bulkAction('review')}
+                      onClick={() =>
+                        this.setState({
+                          showModal: true,
+                        })
+                      }
                     >
-                      {local.reviewAll}
+                      {local.addCustomerToLateCustomers}
                     </Button>
-                    <Button
-                      className="big-button"
-                      disabled={this.state.selectedEntries.length === 0}
-                      onClick={() => this.bulkAction('delete')}
-                    >
-                      {local.deleteAll}
-                    </Button>
-                  </>
-                )}
+                  </Can>
+                  {(ability.can('branchManagerReview', 'legal') ||
+                    ability.can('areaSupervisorReview', 'legal') ||
+                    ability.can('areaManagerReview', 'legal') ||
+                    ability.can('financialManagerReview', 'legal')) && (
+                    <>
+                      <Button
+                        className="big-button"
+                        style={{ marginLeft: 10 }}
+                        disabled={this.state.selectedEntries.length === 0}
+                        onClick={() => this.bulkAction('review')}
+                      >
+                        {local.reviewAll}
+                      </Button>
+                      <Button
+                        className="big-button"
+                        style={{ marginLeft: 10 }}
+                        disabled={this.state.selectedEntries.length === 0}
+                        onClick={() => this.bulkAction('delete')}
+                      >
+                        {local.deleteAll}
+                      </Button>
+                      <Can I="reviewedDefaultingCustomer" a="report">
+                        <Button
+                          className="big-button"
+                          onClick={() =>
+                            this.setState({ showReportsModal: true })
+                          }
+                        >
+                          {local.downloadPDF}
+                        </Button>
+                      </Can>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-            <hr className="dashed-line" />
-            <Search
-              searchKeys={['keyword', 'defaultingCustomerStatus']}
-              dropDownKeys={[
-                'name',
-                'key',
-                'customerKey',
-                'customerShortenedCode',
-              ]}
-              searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-              setFrom={(from) => this.setState({ from })}
-              url="defaultingCustomers"
-              from={this.state.from}
-              size={this.state.size}
-              hqBranchIdRequest={this.props.branchId}
-            />
+              <hr className="dashed-line" />
+              <Search
+                searchKeys={['keyword', 'defaultingCustomerStatus']}
+                dropDownKeys={[
+                  'name',
+                  'key',
+                  'customerKey',
+                  'customerShortenedCode',
+                ]}
+                searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+                setFrom={(from) => this.setState({ from })}
+                url="defaultingCustomers"
+                from={this.state.from}
+                size={this.state.size}
+                hqBranchIdRequest={this.props.branchId}
+              />
 
-            <DynamicTable
-              url="defaultingCustomers"
-              from={this.state.from}
-              size={this.state.size}
-              totalCount={this.props.totalCount}
-              mappers={this.mappers}
-              pagination
-              data={this.props.data}
-              changeNumber={(key: string, number: number) => {
-                this.setState({ [key]: number } as any, () =>
-                  this.getDefaultingCustomers()
-                )
-              }}
-            />
-          </Card.Body>
-        </Card>
-        <Modal show={this.state.showModal} size="lg">
-          <Modal.Header>
-            <Modal.Title>{local.addCustomerToLateCustomers}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Loader type="fullsection" open={this.state.modalLoader} />
-            {Object.keys(this.state.selectedCustomer).length === 0 ? (
-              <CustomerSearch
-                source="loanApplication"
-                style={{ width: '100%' }}
-                handleSearch={(key, query) => this.handleSearch(key, query)}
-                selectedCustomer={this.state.selectedCustomer}
-                searchResults={this.state.customerSearchResults}
-                selectCustomer={(customer) => this.findLoans(customer)}
-              />
-            ) : (
               <DynamicTable
-                totalCount={0}
-                pagination={false}
-                data={this.state.loanSearchResults}
-                mappers={this.loanMappers}
+                url="defaultingCustomers"
+                from={this.state.from}
+                size={this.state.size}
+                totalCount={this.props.totalCount}
+                mappers={this.mappers}
+                pagination
+                data={this.props.data}
+                changeNumber={(key: string, number: number) => {
+                  this.setState({ [key]: number } as any, () =>
+                    this.getDefaultingCustomers()
+                  )
+                }}
               />
-            )}
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.setState({
-                  showModal: false,
-                  selectedCustomer: {},
-                  customerSearchResults: { results: [], empty: false },
-                  loanSearchResults: [],
-                })
-              }
-            >
-              {local.cancel}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <Modal show={this.state.showLogs} size="lg">
-          <Modal.Header>
-            <Modal.Title>{local.logs}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Table>
-              <thead>
-                <tr>
-                  <th>{local.reviewDate}</th>
-                  <th>{local.reviewStatus}</th>
-                  <th>{local.doneBy}</th>
-                  <th>{local.comments}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.rowToView.branchManagerReview &&
-                  this.renderLogRow('branchManagerReview')}
-                {this.state.rowToView.areaManagerReview &&
-                  this.renderLogRow('areaManagerReview')}
-                {this.state.rowToView.areaSupervisorReview &&
-                  this.renderLogRow('areaSupervisorReview')}
-                {this.state.rowToView.financialManagerReview &&
-                  this.renderLogRow('financialManagerReview')}
-              </tbody>
-            </Table>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.setState({
-                  showLogs: false,
-                  rowToView: rowToViewInit,
-                })
-              }
-            >
-              {local.cancel}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
+            </Card.Body>
+          </Card>
+          <Modal show={this.state.showModal} size="lg">
+            <Modal.Header>
+              <Modal.Title>{local.addCustomerToLateCustomers}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Loader type="fullsection" open={this.state.modalLoader} />
+              {Object.keys(this.state.selectedCustomer).length === 0 ? (
+                <CustomerSearch
+                  source="loanApplication"
+                  style={{ width: '100%' }}
+                  handleSearch={(key, query) => this.handleSearch(key, query)}
+                  selectedCustomer={this.state.selectedCustomer}
+                  searchResults={this.state.customerSearchResults}
+                  selectCustomer={(customer) => this.findLoans(customer)}
+                />
+              ) : (
+                <DynamicTable
+                  totalCount={0}
+                  pagination={false}
+                  data={this.state.loanSearchResults}
+                  mappers={this.loanMappers}
+                />
+              )}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.setState({
+                    showModal: false,
+                    selectedCustomer: {},
+                    customerSearchResults: { results: [], empty: false },
+                    loanSearchResults: [],
+                  })
+                }
+              >
+                {local.cancel}
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          <Modal show={this.state.showLogs} size="lg">
+            <Modal.Header>
+              <Modal.Title>{local.logs}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>{local.reviewDate}</th>
+                    <th>{local.reviewStatus}</th>
+                    <th>{local.doneBy}</th>
+                    <th>{local.comments}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.rowToView.branchManagerReview &&
+                    this.renderLogRow('branchManagerReview')}
+                  {this.state.rowToView.areaManagerReview &&
+                    this.renderLogRow('areaManagerReview')}
+                  {this.state.rowToView.areaSupervisorReview &&
+                    this.renderLogRow('areaSupervisorReview')}
+                  {this.state.rowToView.financialManagerReview &&
+                    this.renderLogRow('financialManagerReview')}
+                </tbody>
+              </Table>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.setState({
+                    showLogs: false,
+                    rowToView: rowToViewInit,
+                  })
+                }
+              >
+                {local.cancel}
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          {this.state.showReportsModal && (
+            <ReportsModal
+              pdf={this.reportsPDF}
+              show={this.state.showReportsModal}
+              hideModal={() => this.setState({ showReportsModal: false })}
+              submit={(values) => this.handlePrintReport(values)}
+            />
+          )}
+        </div>
+        <DefaultingCustomersPdfTemplate
+          customers={this.state.defaultingCustomersReport}
+        />
+      </>
     )
   }
 }

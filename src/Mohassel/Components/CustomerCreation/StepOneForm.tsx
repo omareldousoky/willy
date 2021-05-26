@@ -1,11 +1,9 @@
-import React, { useState } from 'react'
-import Swal from 'sweetalert2'
-
-import Button from 'react-bootstrap/Button'
-import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
+import React, { useEffect, useState, BaseSyntheticEvent } from 'react'
 import Form from 'react-bootstrap/Form'
-
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
+import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
 import { checkIssueDate, getErrorMessage } from '../../../Shared/Services/utils'
 import {
@@ -17,6 +15,8 @@ import * as local from '../../../Shared/Assets/ar.json'
 import { checkDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup'
 import Can from '../../config/Can'
 import ability from '../../config/ability'
+import { getGovernorates } from '../../Services/APIs/configApis/config'
+import { Governorate, District } from './StepTwoForm'
 
 function calculateAge(dateOfBirth: number) {
   if (dateOfBirth) {
@@ -37,20 +37,50 @@ export const StepOneForm = (props: any) => {
     touched,
     setFieldValue,
   } = props
-  const [mapState, openCloseMap] = useState(false)
+
+  const [mapState, setMapState] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  const [governorates, setGovernorates] = useState<Governorate[]>([])
+  const policeStations: District[] =
+    governorates.find(
+      (governorate) =>
+        governorate.governorateName.ar === values.currHomeAddressGov
+    )?.districts || []
+
+  const fetchGovernorates = async () => {
+    setLoading(true)
+    const resGov = await getGovernorates()
+    setLoading(false)
+
+    if (resGov.status === 'success') {
+      setGovernorates(resGov.body.governorates)
+    } else {
+      Swal.fire('Error !', getErrorMessage(resGov.error.error), 'error')
+    }
+  }
+
+  useEffect(() => {
+    fetchGovernorates()
+  }, [])
+
+  const handleGovernorateChange = (event: BaseSyntheticEvent) => {
+    setFieldValue('policeStation', '')
+    handleChange(event)
+  }
+
   return (
     <Form onSubmit={handleSubmit}>
       {mapState && (
         <Map
           show={mapState}
-          handleClose={() => openCloseMap(false)}
+          handleClose={() => setMapState(false)}
           save={(customerAddressLatLong: { lat: number; lng: number }) => {
             setFieldValue(
               'customerAddressLatLongNumber',
               customerAddressLatLong
             )
-            openCloseMap(false)
+            setMapState(false)
           }}
           location={props.values.customerAddressLatLongNumber}
           header={local.customerHomeAddressLocationTitle}
@@ -279,6 +309,63 @@ export const StepOneForm = (props: any) => {
           </Form.Group>
         </Col>
       </Row>
+
+      <Row>
+        <Col sm={6}>
+          <Form.Group controlId="currHomeAddressGov">
+            <Form.Label className="customer-form-label">
+              {local.currHomeAddressGov}
+            </Form.Label>
+            <Form.Control
+              as="select"
+              type="select"
+              name="currHomeAddressGov"
+              data-qc="currHomeAddressGov"
+              defaultValue=""
+              value={values.currHomeAddressGov}
+              onChange={handleGovernorateChange}
+            >
+              <option value="" disabled />
+              {governorates.map(
+                ({ governorateName, governorateLegacyCode }) => (
+                  <option
+                    key={governorateLegacyCode}
+                    value={governorateName.ar}
+                  >
+                    {governorateName.ar}
+                  </option>
+                )
+              )}
+            </Form.Control>
+          </Form.Group>
+        </Col>
+
+        <Col sm={6}>
+          <Form.Group controlId="policeStation">
+            <Form.Label className="customer-form-label">
+              {local.legalPoliceStation}
+            </Form.Label>
+            <Form.Control
+              as="select"
+              type="select"
+              name="policeStation"
+              data-qc="policeStation"
+              defaultValue=""
+              value={values.policeStation}
+              onChange={handleChange}
+              disabled={!policeStations.length}
+            >
+              <option value="" disabled />
+              {policeStations.map(({ districtName, districtLegacyCode }) => (
+                <option key={districtLegacyCode} value={districtName.ar}>
+                  {districtName.ar}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+        </Col>
+      </Row>
+
       <Row>
         <Col sm={6}>
           <Form.Group controlId="customerHomeAddressLocation">
@@ -301,7 +388,7 @@ export const StepOneForm = (props: any) => {
                   : local.chooseCustomerAddress
               }
               // value={values.customerHomeAddressLocationTitle}
-              onClick={() => openCloseMap(true)}
+              onClick={() => setMapState(true)}
             />
           </Form.Group>
         </Col>

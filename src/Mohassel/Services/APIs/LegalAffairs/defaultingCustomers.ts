@@ -1,6 +1,9 @@
 import axios from '../axios-instance'
+import {
+  ReviewedDefaultingCustomersReq,
+  DefaultedCustomer,
+} from '../../../Components/ManageLegalAffairs/defaultingCustomersList'
 
-import { DefaultedCustomer } from '../../../Components/ManageLegalAffairs/defaultingCustomersList'
 import {
   LegalActionsForm,
   ReviewReqBody,
@@ -67,6 +70,20 @@ export const deleteCustomerDefaultedLoan = async (data: { ids: string[] }) => {
   const url = process.env.REACT_APP_BASE_URL + '/legal/delete-customer'
   try {
     const res = await axios.post(url, data)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
+}
+
+export const fetchReviewedDefaultingCustomers = async (
+  reqBody: ReviewedDefaultingCustomersReq
+) => {
+  const url =
+    process.env.REACT_APP_BASE_URL + '/report/reviewed-defaulting-customers'
+
+  try {
+    const res = await axios.post(url, reqBody)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }

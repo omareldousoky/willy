@@ -50,6 +50,7 @@ interface InitialFormikState {
   creationDateFrom?: string
   creationDateTo?: string
   loanApplicationKey?: string
+  defaultingCustomerStatus?: string
   managers?: Array<CurrentHierarchiesSingleResponse>
 }
 
@@ -66,6 +67,32 @@ const ReportsModal = (props: Props) => {
   const [customerDropDownValue, setCustomerDropDownValue] = useState(
     props.pdf.inputs?.includes('customerKey') ? 'customerKey' : undefined
   )
+  const defaultingCustomerStatuses = [
+    {
+      value: 'branchManagerReview',
+      text: local.branchManagerReview,
+      permission: 'branchManagerReview',
+      key: 'legal',
+    },
+    {
+      value: 'areaSupervisorReview',
+      text: local.areaSupervisorReview,
+      permission: 'areaSupervisorReview',
+      key: 'legal',
+    },
+    {
+      value: 'areaManagerReview',
+      text: local.areaManagerReview,
+      permission: 'areaManagerReview',
+      key: 'legal',
+    },
+    {
+      value: 'financialManagerReview',
+      text: local.financialManagerReview,
+      permission: 'financialManagerReview',
+      key: 'legal',
+    },
+  ]
   const getIds = (list: Record<string, string>[]): string[] =>
     list?.length ? list.map((item) => item._id || item.id) : []
   const getCustomerKey = (key?: string): string | undefined => {
@@ -125,6 +152,10 @@ const ReportsModal = (props: Props) => {
           break
         case 'applicationKey':
           initValues.loanApplicationKey = ''
+          break
+        case 'defaultingCustomerStatus':
+          initValues.defaultingCustomerStatus =
+            defaultingCustomerStatuses[0].value
           break
         case 'managers':
           initValues.managers = []
@@ -626,6 +657,35 @@ const ReportsModal = (props: Props) => {
                           <span className="text-danger">
                             {formikProps.errors.managers}
                           </span>
+                        </Col>
+                      )
+                    }
+                    if (input === 'defaultingCustomerStatus') {
+                      return (
+                        <Col key={input} sm={12}>
+                          <div className="dropdown-container">
+                            <p className="dropdown-label">{local.status}</p>
+                            <Form.Control
+                              as="select"
+                              className="dropdown-select"
+                              data-qc="status"
+                              name="defaultingCustomerStatus"
+                              value={
+                                formikProps.values.defaultingCustomerStatus
+                              }
+                              onChange={formikProps.handleChange}
+                            >
+                              {defaultingCustomerStatuses.map((option) => (
+                                <option
+                                  key={option.value}
+                                  value={option.value}
+                                  data-qc={option.text}
+                                >
+                                  {option.text}
+                                </option>
+                              ))}
+                            </Form.Control>
+                          </div>
                         </Col>
                       )
                     }
