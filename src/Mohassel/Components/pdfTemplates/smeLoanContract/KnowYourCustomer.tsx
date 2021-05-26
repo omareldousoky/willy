@@ -8,12 +8,8 @@ import {
   timeToArabicDate,
 } from "../../../../Shared/Services/utils";
 
-import { Application } from "../../../../Shared/Services/interfaces";
+import { KnowYourCustomerProps } from "./types";
 
-interface KnowYourCustomerProps {
-  application: Application;
-  loanUsage: string;
-}
 export const KnowYourCustomer = ({
   application,
   loanUsage,
@@ -97,9 +93,7 @@ export const KnowYourCustomer = ({
               رقــم التليفــــــون :-
               {person.homePhoneNumber ?? ""}
             </p>
-            <p>
-              الصفة في النشاط :-
-            </p>
+            <p>الصفة في النشاط :-</p>
           </div>
         ))}
         {application.guarantors?.map((person, index) => (
@@ -133,9 +127,7 @@ export const KnowYourCustomer = ({
               تليفون محمـــــــول :-
               {person.businessPhoneNumber ?? ""}
             </p>
-            <p>
-              الوظيفة الحاليــــــة :-
-            </p>
+            <p>الوظيفة الحاليــــــة :-</p>
             <p>
               عنوان جهة العمـل :-
               {person.businessAddress ?? ""}

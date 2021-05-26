@@ -1,7 +1,10 @@
 import React from "react";
 import { Header } from "../pdfTemplateCommon/header";
+import { AcknowledgmentAndPledgeProps } from "./types";
 
-export const AcknowledgmentAndPledge = ({ entitledToSign }) => {
+export const AcknowledgmentAndPledge = ({
+  entitledToSign,
+}: AcknowledgmentAndPledgeProps) => {
   return (
     <>
       <div className="contract-container" dir="rtl" lang="ar">
@@ -27,7 +30,7 @@ export const AcknowledgmentAndPledge = ({ entitledToSign }) => {
         <p className="text-center">المقرون بما فيه</p>
         {entitledToSign.map((entitledToSign, index) => (
           <div key={index} className="d-flex justify-content-between">
-            <span>الأسم / {entitledToSign.customerName ?? ''} </span>
+            <span>الأسم / {entitledToSign.customerName ?? ""} </span>
             <span> التوقيع :</span>
           </div>
         ))}

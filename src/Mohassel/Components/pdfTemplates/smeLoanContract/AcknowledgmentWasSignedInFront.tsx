@@ -1,16 +1,14 @@
 import React from "react";
-import { Application } from "../../../../Shared/Services/interfaces";
 import {
   guarantorOrderLocal,
   orderLocal,
 } from "../../../../Shared/Services/utils";
 import { Header } from "../pdfTemplateCommon/header";
+import { AcknowledgmentWasSignedInFrontProps } from "./types";
 
 export const AcknowledgmentWasSignedInFront = ({
   application,
-}: {
-  application: Application;
-}) => {
+}: AcknowledgmentWasSignedInFrontProps) => {
   return (
     <>
       <div className="contract-container" dir="rtl" lang="ar">
@@ -48,19 +46,17 @@ export const AcknowledgmentWasSignedInFront = ({
               <td></td>
             </tr>
             {application.entitledToSign?.map((person, index) => (
-              <tr key={index} >
+              <tr key={index}>
                 <td>
-                  {" "}
-               من له حق التوقيع والاقتراض     {orderLocal[index]} /{" "}
+                  من له حق التوقيع والاقتراض {orderLocal[index]} /{" "}
                   {person.customerName ?? ""}{" "}
                 </td>
                 <td></td>
               </tr>
             ))}
             {application.guarantors?.map((person, index) => (
-              <tr key={index} >
+              <tr key={index}>
                 <td>
-                  {" "}
                   {guarantorOrderLocal[index]}/ {person.customerName ?? ""}{" "}
                 </td>
                 <td></td>
@@ -68,7 +64,7 @@ export const AcknowledgmentWasSignedInFront = ({
             ))}
           </tbody>
         </table>
-        <br/>
+        <br />
         <p>القائم بالمراجعة</p>
         <p>الاسم /</p>
         <p>التوقيع /</p>

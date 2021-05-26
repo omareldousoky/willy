@@ -1,13 +1,11 @@
 import React from "react";
-import { Application } from "../../../../Shared/Services/interfaces";
 import { guarantorOrderLocal } from "../../../../Shared/Services/utils";
 import { Header } from "../pdfTemplateCommon/header";
+import { AcknowledgmentOfCommitmentProps } from "./types";
 
 export const AcknowledgmentOfCommitment = ({
   application,
-}: {
-  application: Application;
-}) => {
+}: AcknowledgmentOfCommitmentProps) => {
   return (
     <>
       <div className="contract-container" dir="rtl" lang="ar">
