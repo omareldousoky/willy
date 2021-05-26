@@ -1,5 +1,5 @@
 import axios from '../axios-instance';
-import { IReviewedDefaultingCustomersReq } from '../../../Components/ManageLegalAffairs/defaultingCustomersList';
+import { ReviewedDefaultingCustomersReq } from '../../../Components/ManageLegalAffairs/defaultingCustomersList';
 
 import { DefaultedCustomer } from '../../../Components/ManageLegalAffairs/defaultingCustomersList';
 import { LegalActionsForm, ReviewReqBody } from '../../../Components/ManageLegalAffairs/types';
@@ -69,7 +69,7 @@ export const deleteCustomerDefaultedLoan =  async (data: {ids: string[]}) => {
     }
 }
 
-export const fetchReviewedDefaultingCustomers = async (reqBody: IReviewedDefaultingCustomersReq) => {
+export const fetchReviewedDefaultingCustomers = async (reqBody: ReviewedDefaultingCustomersReq) => {
     const url = process.env.REACT_APP_BASE_URL + '/report/reviewed-defaulting-customers';
 
     try {

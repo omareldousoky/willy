@@ -1,15 +1,15 @@
 import React from 'react'
 
 import './style.scss'
-import { IReviewedDefaultingCustomer } from '../../ManageLegalAffairs/defaultingCustomersList'
+import { ReviewedDefaultingCustomer } from '../../ManageLegalAffairs/defaultingCustomersList'
 import { timeToArabicDate, timeToDate } from '../../../../Shared/Services/utils'
 import local from '../../../../Shared/Assets/ar.json'
 
-interface IDefaultingCustomersTempProps {
-  customers: IReviewedDefaultingCustomer[]
+interface DefaultingCustomersTempProps {
+  customers: ReviewedDefaultingCustomer[];
 }
 
-const DefaultingCustomers = ({ customers }: IDefaultingCustomersTempProps) => {
+const DefaultingCustomers = ({ customers }: DefaultingCustomersTempProps) => {
   const nowTimestamp = new Date().valueOf()
   const nowDate = timeToArabicDate(nowTimestamp, false)
 
@@ -44,7 +44,7 @@ const DefaultingCustomers = ({ customers }: IDefaultingCustomersTempProps) => {
       </p>
 
       {Object.keys(customerGroups).map((groupKey) => (
-        <table className="report-container mt-3">
+        <table key={groupKey} className="report-container mt-3">
           <thead className="report-header">
             <tr>فرع: {groupKey}</tr>
             <tr className="header">
@@ -61,7 +61,7 @@ const DefaultingCustomers = ({ customers }: IDefaultingCustomersTempProps) => {
 
           <tbody>
             {customerGroups[groupKey].map(
-              (customer: IReviewedDefaultingCustomer, index: number) => (
+              (customer: ReviewedDefaultingCustomer, index: number) => (
                 <>
                   <tr>
                     <td>{index + 1}</td>

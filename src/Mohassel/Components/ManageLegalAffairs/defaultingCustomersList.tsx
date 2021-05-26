@@ -59,24 +59,24 @@ export interface DefaultedCustomer extends ManagerReviews {
     customerKey: number;
     customerBranchId?: string;
 }
-export interface IReviewedDefaultingCustomer {
-  customerKey: string
-  customerName: string
-  customerType: string
-  loanKey: string
-  loanIssueDate: string
-  customerAddress: string
-  installmentAmount: number
-  overdueInstallmentCount: number
-  unpaidInstallmentCount: number
-  unpaidInstallmentAmount: number
-  branchName: string
-  branchId: string
+export interface ReviewedDefaultingCustomer {
+  customerKey: string;
+  customerName: string;
+  customerType: string;
+  loanKey: string;
+  loanIssueDate: string;
+  customerAddress: string;
+  installmentAmount: number;
+  overdueInstallmentCount: number;
+  unpaidInstallmentCount: number;
+  unpaidInstallmentAmount: number;
+  branchName: string;
+  branchId: string;
 }
 
-export interface IReviewedDefaultingCustomersReq {
-    status: string
-    branches: string
+export interface ReviewedDefaultingCustomersReq {
+    status: string;
+    branches: string;
 }
 
 interface Props {
@@ -104,7 +104,7 @@ interface State {
     selectedEntries: DefaultedCustomer[];
     customerSearchResults: { results: Array<Customer>; empty: boolean };
     loanSearchResults: { application: Application; id: string }[];
-    defaultingCustomersReport: IReviewedDefaultingCustomer[];
+    defaultingCustomersReport: ReviewedDefaultingCustomer[];
     selectedCustomer: Customer;
     modalLoader: boolean;
     loading: boolean;
@@ -420,7 +420,7 @@ class DefaultingCustomersList extends Component<Props, State> {
      }
      async handlePrintReport(values: any) {
         const { defaultingCustomerStatus, branches } = values
-        const printReportReq: IReviewedDefaultingCustomersReq = {
+        const printReportReq: ReviewedDefaultingCustomersReq = {
           status: defaultingCustomerStatus ?? '',
           branches:
             branches.length === 1 && branches[0]._id === ''
@@ -429,9 +429,9 @@ class DefaultingCustomersList extends Component<Props, State> {
         }
 
         const printReportRes: {
-          status: string
-          body?: {result: IReviewedDefaultingCustomer[]},
-          error?: any
+          status: string;
+          body?: {result: ReviewedDefaultingCustomer[]};
+          error?: any;
         } = await fetchReviewedDefaultingCustomers(printReportReq)
 
         const defaultingCustomersReport = printReportRes.body?.result ?? []
