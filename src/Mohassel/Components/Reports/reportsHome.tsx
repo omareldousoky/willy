@@ -9,6 +9,9 @@ import IscoreReports from "./iscoreReports";
 import Card from "react-bootstrap/Card";
 import OracleIntegration from "./oracleIntegration";
 import OperationsReports from "./operationsReports";
+import { TasaheelReports } from "./TasaheelReports/TasaheelReports";
+import LaundryReports from "./laundryReports";
+import OfficersProductivityReports from "./officersProductivityReports";
 interface State {
     id: string;
     activeTab: string;
@@ -41,16 +44,30 @@ class ReportsHome extends Component<{}, State> {
                     header: local.operationsReports,
                     stringKey: "operationsReports",
                 }, 
-                {
-                    header: local.oracleIntegration,
-                    stringKey: 'oracleIntegration',
-                    permission: 'summarizeTransactions',
-                    permissionKey: 'oracleIntegration'
-                }, 
+                // {
+                //     header: local.oracleIntegration,
+                //     stringKey: 'oracleIntegration',
+                //     permission: 'summarizeTransactions',
+                //     permissionKey: 'oracleIntegration'
+                // }, 
                 {
                     header: local.monthlyQuarterlyReports,
                     stringKey: 'monthlyQuarterlyReports',
-                }]
+                },
+                {
+                    header: local.tasaheelReports,
+                    stringKey: 'tasaheelReports',
+                },
+                {
+                    header: local.laundryReports,
+                    stringKey: 'laundryReports',
+                },
+                {
+                    header: local.officersProductivityReport,
+                    stringKey: 'officersProductivityReports',
+                    permission: 'officersProductivityReport',
+                },
+            ]
         }
     }
     handleOptionChange = (changeEvent) => {
@@ -72,6 +89,12 @@ class ReportsHome extends Component<{}, State> {
                 return <OperationsReports />;
             case "monthlyQuarterlyReports":
                 return <MonthlyQuarterlyReports/>
+            case "tasaheelReports":
+                return <TasaheelReports/>            
+            case "laundryReports":
+                return <LaundryReports />
+            case "officersProductivityReports":
+                return <OfficersProductivityReports/>
             default:
                 return null;
         }
@@ -81,7 +104,6 @@ class ReportsHome extends Component<{}, State> {
             <Card>
                 <div className="print-none">
                     <CardNavBar
-                        header={"here"}
                         array={this.state.tabsArray}
                         active={this.state.activeTab}
                         selectTab={(index: string) =>

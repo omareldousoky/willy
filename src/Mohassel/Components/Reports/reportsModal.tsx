@@ -10,6 +10,7 @@ import { PDF } from "./reports";
 import {
   AsyncBranchGeoAreasDropDown,
   AsyncLoanOfficersDropDown,
+	AsyncManagersDropDown,
   BranchesDropDown,
 } from "../dropDowns/allDropDowns";
 import * as local from "../../../Shared/Assets/ar.json";
@@ -20,6 +21,7 @@ import { DateFromToField } from "./Fields/dateFromTo";
 import TextField from "../Common/FormikFields/textField";
 import { Dropdown, DropdownButton, InputGroup } from "react-bootstrap";
 import { getFullCustomerKey } from "../../../Shared/Services/utils";
+import { CurrentHierarchiesSingleResponse } from "../../Models/OfficersProductivityReport";
 
 interface InitialFormikState {
   fromDate?: string;
@@ -37,7 +39,8 @@ interface InitialFormikState {
   creationDateFrom?: string;
   creationDateTo?: string;
   loanApplicationKey?: string;
-  defaultingCustomerStatus?: string
+  defaultingCustomerStatus?: string;
+	managers?: Array<CurrentHierarchiesSingleResponse>;
 }
 
 interface Props {
@@ -46,6 +49,7 @@ interface Props {
   hideModal: () => void;
   submit: (values) => void;
   getExcel?: (values) => void;
+  submitButtonText?: string;
 }
 
 const ReportsModal = (props: Props) => {
@@ -59,7 +63,7 @@ const ReportsModal = (props: Props) => {
     { value: "financialManagerReview", text: local.financialManagerReview, permission: 'financialManagerReview', key: 'legal' },
   ]
   const getIds = (list: Record<string, string>[]): string[] =>
-    list?.length ? list.map((item) => item._id) : [];
+    list?.length ? list.map((item) => item._id || item.id) : [];
   const getCustomerKey = (key?: string): string | undefined => {
     if (!customerDropDownValue || key === undefined) return undefined;
     return customerDropDownValue === "customerKey"
@@ -74,41 +78,55 @@ const ReportsModal = (props: Props) => {
       loanOfficerIds: getIds(values.representatives),
       geoAreas: getIds(values.geoAreas),
       key: getCustomerKey(values.customerKeyword),
+      managers: values.managers,
     });
   }
   function getInitialValues() {
     const initValues: InitialFormikState = { };
-
     props.pdf.inputs?.forEach((input) => {
       switch (input) {
         case "dateFromTo":
           initValues.fromDate = "";
           initValues.toDate = "";
+          break
         case "branches":
           initValues.branches = [];
+          break
         case "customerKey":
           initValues.customerKeyword = "";
+          break
         case "quarterYear":
           initValues.quarterYear = "";
+          break
         case "quarterNumber":
           initValues.quarterNumber = "01";
+          break
         case "date":
           initValues.date = "";
+          break
         case "representatives":
           initValues.representatives = [];
           initValues.loanOfficers = [];
           initValues.loanOfficerIds = [];
+          break
         case "gracePeriod":
           initValues.gracePeriod = 0;
+          break
         case "geoAreas":
           initValues.geoAreas = [];
+          break
         case "creationDateFromTo":
           initValues.creationDateFrom = "";
           initValues.creationDateTo = "";
+          break
         case "applicationKey":
           initValues.loanApplicationKey = "";
         case "defaultingCustomerStatus":
           initValues.defaultingCustomerStatus = defaultingCustomerStatuses[0].value;
+          break        
+				case "managers":
+          initValues.managers = [];
+          break
       }
     });
     return initValues;
@@ -549,70 +567,63 @@ const ReportsModal = (props: Props) => {
                     }
                     if (input === "monthComparisonDateFromTo") {
                       return (
-                        <Col sm={12} key={input}>
-                          <Form.Group controlId="monthComparisonFromToDate">
-                            <div
-                              className="dropdown-container"
-                              style={{ flex: 1, alignItems: "center" }}
-                            >
-                              <p
-                                className="dropdown-label"
-                                style={{
-                                  alignSelf: "normal",
-                                  marginLeft: 20,
-                                  width: 300,
-                                  textAlign: "center",
-                                }}
-                              >
-                                {local.date}
-                              </p>
-                              <span>{local.from}</span>
-                              <Form.Control
-                                style={{ marginLeft: 20, border: "none" }}
-                                type="date"
-                                name="fromDate"
-                                data-qc="fromDate"
-                                value={formikProps.values.fromDate}
-                                isInvalid={Boolean(
-                                  formikProps.errors.fromDate &&
-                                    formikProps.touched.fromDate
-                                )}
-                                onChange={(e) => {
-                                  formikProps.setFieldValue(
-                                    "fromDate",
-                                    e.currentTarget.value
-                                  );
-                                  if (e.currentTarget.value === "")
-                                    formikProps.setFieldValue("toDate", "");
-                                }}
-                                min="2021-02-01"
-                                required
-                              />
-                              <span>{local.to}</span>
-                              <Form.Control
-                                style={{ marginRight: 20, border: "none" }}
-                                type="date"
-                                name="toDate"
-                                data-qc="toDate"
-                                value={formikProps.values.toDate}
-                                min={formikProps.values.fromDate}
-                                max={getMaxToMonthComparison(
-                                  formikProps.values.fromDate
-                                )}
-                                onChange={formikProps.handleChange}
-                                isInvalid={Boolean(
-                                  formikProps.errors.toDate &&
-                                    formikProps.touched.toDate
-                                )}
-                                disabled={!Boolean(formikProps.values.fromDate)}
-                                required
-                              />
-                            </div>
-                            <span className="text-danger">
-                              {formikProps.errors.fromDate ||
-                                formikProps.errors.toDate}
-                            </span>
-                          </Form.Group>
+												<DateFromToField
+                          key={input}
+                          id={input}
+                          name={local.date}
+                          from={{
+                            name: "fromDate",
+														min: "2021-02-01",
+                            onChange: (e: ChangeEvent<HTMLInputElement>) => {
+                              formikProps.setFieldValue(
+                                "fromDate",
+                                e.currentTarget.value
+                              );
+                              if (e.currentTarget.value === "")
+                                formikProps.setFieldValue("toDate", "");
+                            },
+                            value: formikProps.values.fromDate,
+                            error: formikProps.errors.fromDate,
+														// to avoid Warning: Received `false` for a non-boolean attribute
+														touched: formikProps.touched.fromDate ? 1 : 0,
+                            isInvalid: !!(
+                              formikProps.errors.fromDate &&
+                              formikProps.touched.fromDate
+                            ),
+													validate: required
+                          }}
+                          to={{
+                            name: "toDate",
+                            min: formikProps.values.fromDate,
+														max: getMaxToMonthComparison(
+															formikProps.values.fromDate
+														),
+                            onChange: formikProps.handleChange,
+                            value: formikProps.values.toDate,
+                            error: formikProps.errors.toDate,
+														touched: formikProps.touched.toDate ? 1 : 0,
+                            isInvalid: !!(
+                              formikProps.errors.toDate &&
+                              formikProps.touched.toDate
+                            ),
+                            disabled: !formikProps.values.fromDate,
+														validate: required
+                          }}
+                        />
+                      );
+                    }
+										if (input === "managers") {
+                      return (
+                        <Col key={input} sm={12}>
+                          <AsyncManagersDropDown
+                            isMulti
+                            onSelectOption={(managers) => {
+                              formikProps.setFieldValue("managers", managers);
+                            }}
+                          />
+                          <span className="text-danger">
+                            {formikProps.errors.managers}
+                          </span>
                         </Col>
                       );
                     }
@@ -683,7 +694,7 @@ const ReportsModal = (props: Props) => {
                     </Button>
                   )}
                 <Button type="submit" variant="primary">
-                  {local.downloadPDF}
+                  {props.submitButtonText || local.downloadPDF}
                 </Button>
               </Modal.Footer>
             </Form>

@@ -42,8 +42,8 @@ const FollowUpStatementPDF = (props: Props) => {
                 <tbody>
                     <tr>
                         <td style={{ textAlign: "right" }}> العميل
-					<div className="frame">{numbersToArabic(getCustomerData('key'))}</div>
-                            <div className="frame">{getCustomerData('customerName')}</div>
+					                  <div className="frame">{numbersToArabic(getCustomerData('key'))}</div>
+                            <div className="frame">{getCustomerData(props.data.product.type === 'sme' ? 'businessName' : 'customerName')}</div>
                         </td>
 
                     </tr>

@@ -20,5 +20,6 @@ export const reportsModalValidation: ObjectSchema<
   loanOfficers: array().nullable(),
   representatives: array().nullable(),
   geoAreas: array().nullable(),
-  loanApplicationKey: string()
+  loanApplicationKey: string(),
+  managers: array().nullable().min(1, local.mustBeOneOrMore)
 });
