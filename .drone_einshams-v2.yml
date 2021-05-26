@@ -2,7 +2,6 @@ kind: pipeline
 type: kubernetes
 name: notify-pipeline-start
 
-
 steps:
 - name: notify-start
   image: plugins/slack
