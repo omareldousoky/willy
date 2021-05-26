@@ -1,5 +1,8 @@
 import React from 'react'
-import { Button, Col, Container, Row } from 'react-bootstrap'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 import { LtsIcon } from '..'
 

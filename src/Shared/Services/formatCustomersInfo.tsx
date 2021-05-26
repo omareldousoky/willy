@@ -1,5 +1,6 @@
 import React from 'react'
-import { Col, Form } from 'react-bootstrap'
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
 import { Customer } from './interfaces'
 
 import * as local from '../Assets/ar.json'

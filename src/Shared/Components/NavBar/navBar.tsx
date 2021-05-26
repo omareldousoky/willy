@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import {
-  Button,
-  Form,
-  InputGroup,
-  Nav,
-  Navbar,
-  NavDropdown,
-} from 'react-bootstrap'
+import InputGroup from 'react-bootstrap/InputGroup'
+import Nav from 'react-bootstrap/Nav'
+import Navbar from 'react-bootstrap/Navbar'
+import NavDropdown from 'react-bootstrap/NavDropdown'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+
 import * as local from '../../Assets/ar.json'
 import Can from '../../../Mohassel/config/Can'
 import { Loader } from '../Loader'

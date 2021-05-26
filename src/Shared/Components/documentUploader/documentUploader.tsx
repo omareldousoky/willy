@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import Spinner from 'react-bootstrap/Spinner'
 import { connect } from 'react-redux'
-import { Card, Row, Form } from 'react-bootstrap'
+import Card from 'react-bootstrap/Card'
+import Row from 'react-bootstrap/Row'
+import Form from 'react-bootstrap/Form'
 import { download, getErrorMessage } from '../../Services/utils'
 import {
   addToDocuments,

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import './documentPhoto.scss'
-import { Row, Image } from 'react-bootstrap'
+import Row from 'react-bootstrap/Row'
+import Image from 'react-bootstrap/Image'
 
 import local from '../../Assets/ar.json'
 

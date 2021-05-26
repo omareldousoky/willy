@@ -3,7 +3,7 @@ import Swal from 'sweetalert2'
 
 import { useHistory, useLocation } from 'react-router-dom'
 
-import { Container } from 'react-bootstrap'
+import Container from 'react-bootstrap/Container'
 
 import { InfoBox, Profile, ProfileActions } from '..'
 
