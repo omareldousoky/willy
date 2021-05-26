@@ -458,11 +458,7 @@ class TrackLoanApplications extends Component<Props, State> {
     ]
     if (ability.can('getSMEApplication', 'application')) {
       searchKeys.push('sme')
-      dropDownKeys.push(
-        'businessName',
-        'taxCardNumber',
-        'commercialRegisterNumber'
-      )
+      dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
     }
     return (
       <>

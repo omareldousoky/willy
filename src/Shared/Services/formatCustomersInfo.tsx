@@ -26,6 +26,8 @@ const {
   creationDate,
   customerCode,
   groupLeaderName,
+  oneBranch,
+  loanOfficer,
 } = local
 
 interface IscoreInfo {
@@ -118,6 +120,11 @@ export const getCompanyInfo = ({
       showFieldCondition: true,
     },
     {
+      fieldTitle: oneBranch,
+      fieldData: company.branchName || '',
+      showFieldCondition: true,
+    },
+    {
       fieldTitle: 'iScore',
       fieldData: iscoreField({
         score,
@@ -148,6 +155,11 @@ export const getCompanyInfo = ({
       fieldData: company.businessSector || '',
       showFieldCondition: true,
     },
+    {
+      fieldTitle: loanOfficer,
+      fieldData: company.representativeName || '',
+      showFieldCondition: true,
+    },
   ]
 }
 export const getCustomerInfo = ({
@@ -175,6 +187,8 @@ export const getCustomerInfo = ({
     homePhoneNumber,
     faxNumber,
     mobilePhoneNumber,
+    branchName,
+    representativeName,
   } = customerDetails
   const info: FieldProps[] = [
     {
@@ -185,6 +199,11 @@ export const getCustomerInfo = ({
     {
       fieldTitle: customerCode,
       fieldData: key || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: oneBranch,
+      fieldData: branchName || '',
       showFieldCondition: true,
     },
     {
@@ -272,6 +291,11 @@ export const getCustomerInfo = ({
     {
       fieldTitle: local.mobilePhoneNumber,
       fieldData: mobilePhoneNumber || local.na,
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: loanOfficer,
+      fieldData: representativeName || '',
       showFieldCondition: true,
     },
   ]

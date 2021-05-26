@@ -449,11 +449,7 @@ class BulkApplicationReview extends Component<Props, State> {
     this.state.branchId === 'hq' && searchKey.push('branch')
     if (ability.can('getSMEApplication', 'application')) {
       searchKey.push('sme')
-      dropDownKeys.push(
-        'businessName',
-        'taxCardNumber',
-        'commercialRegisterNumber'
-      )
+      dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
     }
 
     return (

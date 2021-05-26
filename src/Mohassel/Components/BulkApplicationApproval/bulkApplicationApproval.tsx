@@ -270,11 +270,7 @@ class BulkApplicationApproval extends Component<Props, State> {
     ]
     if (ability.can('getSMEApplication', 'application')) {
       searchKey.push('sme')
-      dropDownKeys.push(
-        'businessName',
-        'taxCardNumber',
-        'commercialRegisterNumber'
-      )
+      dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
     }
     const smePermission =
       ability.can('getSMEApplication', 'application') &&

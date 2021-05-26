@@ -267,11 +267,7 @@ class LoanList extends Component<Props, State> {
     ]
     if (ability.can('getIssuedSMELoan', 'application')) {
       searchKeys.push('sme')
-      dropDownKeys.push(
-        'businessName',
-        'taxCardNumber',
-        'commercialRegisterNumber'
-      )
+      dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
     }
     return (
       <>
