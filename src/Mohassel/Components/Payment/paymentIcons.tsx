@@ -14,6 +14,9 @@ interface Props {
   application: {
     status: string;
     writeOff: boolean;
+    product: {
+      type: string;
+    };
   };
   installments: Array<Installment>;
   changePaymentState: (data) => void;
@@ -62,7 +65,8 @@ class PaymentIcons extends Component<Props, {}> {
         ) : null}
         <div className="verticalLine"></div>
         <div className="payment-icons-container p-4">
-          {(ability.can("payInstallment", "application") || ability.can("payByInsurance", "application")) &&
+          {(ability.can("payInstallment", "application") || ability.can("payByInsurance", "application")) && 
+            this.props.application.product.type !== 'sme' &&
             <div className="payment-icon">
               <img
 								height="90"
@@ -106,7 +110,8 @@ class PaymentIcons extends Component<Props, {}> {
               </Can>
             </>
           ) : null}
-          {(this.props.paymentType === "normal" && !this.props.application.writeOff) ? (
+          {(this.props.paymentType === "normal" && !this.props.application.writeOff &&
+            this.props.application.product.type !== 'sme') ? (
             <Can I="payEarly" a="application">
               <div className="payment-icon">
                 <img height="90" alt="early-payment" src={require("../../Assets/earlyPayment.svg")} />
@@ -120,6 +125,19 @@ class PaymentIcons extends Component<Props, {}> {
               </div>
             </Can>
           ) : null}
+          {this.props.paymentType === "normal" && (ability.can("payInstallment", "application") || ability.can("payByInsurance", "application")) &&
+            this.props.application.product.type === 'sme' &&
+            <div className="payment-icon">
+              <img height="90" alt="pay-installment" src={require("../../Assets/payInstallment.svg")} />
+              <Button
+                disabled={this.props.application.status === "pending"}
+                onClick={() => this.props.changePaymentState(4)}
+                variant="primary"
+              >
+                {local.bankPayment}
+              </Button>
+            </div>
+          }
           {this.props.paymentType === "normal" && (ability.can("payInstallment", "application") || ability.can("payByInsurance", "application")) &&
             <div className="payment-icon">
               <img height="90" alt="pay-installment" src={require("../../Assets/payInstallment.svg")} />

@@ -9,7 +9,7 @@ import { checkIssueDate, getErrorMessage } from "../../../Shared/Services/utils"
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
-import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
+import { checkDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
 import Can from '../../config/Can';
 import ability from '../../config/ability';
 import { getGovernorates } from '../../Services/APIs/configApis/config';
@@ -106,7 +106,7 @@ export const StepOneForm = (props: any) => {
                   }
                   if (value.length === 14) {
                     setLoading(true);
-                    const res = await checkNationalIdDuplicates(value);
+                    const res = await checkDuplicates('nationalId', value);
                     if (res.status === 'success') {
                       setLoading(false);
                       setFieldValue('nationalIdChecker', res.body.Exists);
@@ -133,8 +133,8 @@ export const StepOneForm = (props: any) => {
         </Col>
         <Col sm={1} style={{ marginTop: 35 }}>
           <Loader type="inline" open={loading} />
-        </Col>
-        <Col sm={3}>
+       </Col>
+       <Col sm={3}>
           <Form.Group controlId="birthDate">
             <Form.Label className="customer-form-label">{`${local.birthDate}*`}</Form.Label>
             <Form.Control

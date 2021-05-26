@@ -4,6 +4,7 @@ import JsZip from "jszip";
 import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
 import { default as errorMessages } from "../../Shared/Assets/errorMessages.json";
+
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
     const date = new Date(timeStampe).toLocaleDateString();
@@ -42,6 +43,8 @@ export function beneficiaryType(val: string) {
       return local.individual;
     case "group":
       return local.group;
+    case 'company':
+      return local.company
     default:
       return "";
   }
@@ -570,6 +573,20 @@ export const guarantorOrderLocal = {
   default: "الضامن",
 };
 
+export const orderLocal = {
+  0: 'الاول',
+  1: 'الثاني',
+  2: 'الثالث',
+  3: 'الرابع',
+  4: 'الخامس',
+  5: 'السادس',
+  6: 'السابع',
+  7: 'الثامن',
+  8: 'التاسع',
+  9: 'العاشر',
+  default: 'العميل',
+}
+
 export const convertToTimestamp = (date?: string | number): number => {
   const today = new Date().valueOf();
   return date ? new Date(date).valueOf() || today : today;
@@ -698,3 +715,40 @@ export const iscoreBank = (bankId: string) => {
       return "not  found";
   }
 };
+
+export const arrayToPairs = <T extends unknown>(array: any[]): T[][] =>
+  array.reduce(
+    (result, value, index, sourceArray) =>
+      index % 2 === 0
+        ? [...result, sourceArray.slice(index, index + 2)]
+        : result,
+    []
+  )
+
+ export const extractLastChars = (str: string, numberOfChars: number) =>
+ str?.slice ? str.slice(str.length - numberOfChars, str.length) : str
+
+export const DateAsFileName = ()=>{
+  const today = new Date();
+  const date =today.getDate()+'-'+(today.getMonth()+1)+'-'+ today.getFullYear();
+  const time = today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
+  const dateTime = date+' '+time;
+  return dateTime;
+}
+
+ export const DownloadAsCsv = async(name: string, data: string) =>{
+  const blob = new Blob([data], {
+    type: 'data:text/csv;charset=utf-8,',
+  })
+  const blobURL = window.URL.createObjectURL(blob)
+  const anchor = document.createElement('a')
+  anchor.download = `${name} ${DateAsFileName()}.csv`
+  anchor.dir="rtl"
+  anchor.href = blobURL
+  anchor.dataset.downloadurl = [
+    'text/csv',
+    anchor.download,
+    anchor.href,
+  ].join(',')
+  anchor.click()
+ }

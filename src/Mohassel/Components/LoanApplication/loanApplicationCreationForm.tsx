@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json'
 import InputGroup from 'react-bootstrap/InputGroup';
 import GroupInfoBox from '../LoanProfile/groupInfoBox';
-import InfoBox from '../userInfoBox';
 import AsyncSelect from 'react-select/async';
 import { searchLoanOfficerAndManager } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { getCookie } from '../../../Shared/Services/getCookie';
@@ -14,10 +13,14 @@ import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils';
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
 import Swal from 'sweetalert2';
 import { theme } from '../../../theme';
+import { searchResearcher } from '../../Services/APIs/Researchers/searchResearcher';
+import { InfoBox } from '../../../Shared/Components';
+import { getCompanyInfo, getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
 
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
     const [options, setOptions] = useState<Array<any>>([]);
+    const [researcherOptions, setResearcherOptions] = useState<Array<any>>([]);
     const [employees, setEmployees] = useState<Array<any>>([]);
     const branchId = JSON.parse(getCookie('ltsbranch'))._id;
     const getOptions = async (inputValue: string) => {
@@ -25,6 +28,20 @@ export const LoanApplicationCreationForm = (props: any) => {
         if (res.status === "success") {
             setOptions(res.body.data);
             return res.body.data;
+        } else {
+            setOptions([]);
+            Swal.fire("error", getErrorMessage(res.error.error),"error");
+            return [];
+        }
+    }
+    const getResearcherOptions = async (inputValue: string) => {
+        const res = await searchResearcher({ from: 0, size: 100, name: inputValue, branchId: branchId });
+        if (res.status === "success") {
+          const activeResearchers = res.body.data.filter(
+            (researcher) => researcher.status === 'active'
+          )
+          setResearcherOptions(activeResearchers)
+          return activeResearchers
         } else {
             setOptions([]);
             Swal.fire("error", getErrorMessage(res.error.error),"error");
@@ -58,7 +75,7 @@ export const LoanApplicationCreationForm = (props: any) => {
         <>
             <Form style={{ textAlign: 'right', width: '90%', padding: 20 }} onSubmit={handleSubmit}>
                 <fieldset disabled={!(values.state === "edit" || values.state === "under_review")}>
-                    {props.customer && Object.keys(props.customer).includes('_id') ? <InfoBox values={props.customer} /> :
+                    {props.customer && Object.keys(props.customer).includes('_id') ? <InfoBox info={props.customer.customerType === 'company' ? [getCompanyInfo({ company: props.customer })] : [getCustomerInfo({customerDetails: props.customer})]} /> :
                         <GroupInfoBox group={{ individualsInGroup: values.individualDetails }} />
                     }
                     <div style={{ width: '100%', margin: '20px 0' }}>
@@ -81,7 +98,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         isInvalid={errors.productID && touched.productID}
                                     >
                                         <option value="" disabled></option>
-                                        {props.products.map((product, i) =>
+                                        {props.products.filter((product) => props.customer.customerType === 'company' ?  product.type === 'sme' : product.type !== 'sme').map((product, i) =>
                                             <option key={i} value={product._id}>{product.productName}</option>
                                         )}
                                     </Form.Control>
@@ -645,6 +662,31 @@ export const LoanApplicationCreationForm = (props: any) => {
                             </Col>
                         </Form.Group>}
                         <Row>
+                            {props.customer.customerType === 'company' ? 
+                                <Col sm={6}>
+                                <Form.Group controlId="researcherId">
+                                    <Form.Label>{local.researcher}</Form.Label>
+                                    <AsyncSelect
+                                        name="researcherId"
+                                        data-qc="researcherId"
+                                        value={researcherOptions.filter((researcher) => researcher._id === values.researcherId)}
+                                        onChange={(event: any) => { setFieldValue('researcherId', event._id) }}
+                                        type='text'
+                                        styles={theme.selectStyleWithBorder}
+                                        theme={theme.selectTheme}
+                                        getOptionLabel={(option) => option.name}
+                                        getOptionValue={(option) => option._id}
+                                        loadOptions={getResearcherOptions}
+                                        cacheOptions defaultOptions
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.researcherId}
+                                    </Form.Control.Feedback>
+                                    <div style={{ color: '#d51b1b', fontSize: '80%', margin: '10px' }}>
+                                        {errors.researcherId}
+                                    </div>
+                                </Form.Group>
+                            </Col> : 
                             <Col sm={6}>
                                 <Form.Group controlId="enquirorId">
                                     <Form.Label>{local.enquiror}</Form.Label>
@@ -669,6 +711,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     </div>
                                 </Form.Group>
                             </Col>
+                            }
                             <Col sm={6}>
                                 <Form.Group controlId="visitationDate">
                                     <Form.Label>{local.visitationDate}</Form.Label>

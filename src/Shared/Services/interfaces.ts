@@ -76,7 +76,12 @@ export interface Customer {
 	blocked?: {
 		isBlocked?: boolean;
 		reason?: string;
-	};
+    };
+    suspects?: { 
+        id?: string;
+        type?: string;
+    }[];
+    customerType?: string;
 }
 
 export interface Action {
@@ -106,6 +111,7 @@ export interface DocumentType {
     id?: string;
     pages: number;
     type: string;
+    customerType: string;
     paperType: string;
     name: string;
     active?: boolean;
@@ -371,4 +377,49 @@ export interface GroupsByBranch{
             id: string;
             name: string;
         }[];
+}
+export interface TerroristResponse {
+	id: string;
+	name: string;
+	nationality: string;
+	nationalId: string;
+	birthDate: string;
+	created: {
+		by: string;
+		at: number;
+		userName: string;
+	};
+	updated: {
+		by: string;
+		at: number;
+		userName: string;
+	};
+}
+export interface TerroristUnResponse {
+    id: string;
+    name: string;
+    firstName: string;
+    secondName: string;
+    thirdName: string;
+    fourthName: string;
+    otherConfirmedNames: string;
+    otherNonConfirmedNames: string;
+    nationality: string;
+    nationalId: string;
+    passportId: string;
+    birthDate: string;
+    placeOfBirth: string;
+    serial: string;
+    additionalInfo: string;
+    insertionDate: string;
+    created: {
+        by: string;
+        at: number;
+        userName: string;
+    };
+    updated: {
+        by: string;
+        at: number;
+        userName: string;
+    };
 }

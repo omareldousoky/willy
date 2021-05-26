@@ -9,16 +9,22 @@ import Swal from 'sweetalert2';
 import { Formik } from 'formik';
 import GroupInfoBox from '../LoanProfile/groupInfoBox';
 import { LoanDetailsTableView } from '../LoanProfile/applicationsDetails';
-import InfoBox from '../userInfoBox';
 import Table from 'react-bootstrap/Table';
 import { getRejectionReasons } from '../../Services/APIs/configApis/config';
 import { guarantorOrderLocal } from '../../../Shared/Services/utils';
+import { InfoBox } from '../../../Shared/Components';
+import {
+  getCompanyInfo,
+  getCustomerInfo,
+} from '../../../Shared/Services/formatCustomersInfo';
+import { Customer } from '../../../Shared/Services/interfaces';
 interface Props {
     status: string;
     application: any;
     id: string;
     handleStatusChange: Function;
     getGeoArea: Function;
+    branchName?: string;
 };
 
 interface State {
@@ -101,13 +107,31 @@ class StatusHelper extends Component<Props, State>{
         return new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
     }
     renderInternalContent() {
+        const individualGuarantors: { guarantor: Customer; index: number }[] = []
+        const companyGuarantors: { guarantor: Customer; index: number }[] = []
+        this.props.application.guarantors.forEach((guarantor, i) => {
+          const guarObj = { guarantor, index: i }
+          guarantor.customerType === 'company'
+            ? companyGuarantors.push(guarObj)
+            : individualGuarantors.push(guarObj)
+        })
         return (
             <div>
-                {this.props.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.props.application.customer} /> :
+                {this.props.application.product.beneficiaryType === 'individual' ? <InfoBox
+                    info={
+                    this.props.application.customer.customerType === 'company'
+                        ? [getCompanyInfo({ company: this.props.application.customer })]
+                        : [
+                            getCustomerInfo({
+                            customerDetails: this.props.application.customer,
+                            }),
+                        ]
+                    }
+                /> :
                     <GroupInfoBox group={this.props.application.group} />
                 }
-                <LoanDetailsTableView application={this.props.application} />
-                {this.props.application.product.beneficiaryType === 'individual' && this.props.application.guarantors.length > 0 && <Table>
+                <LoanDetailsTableView application={this.props.application} branchName={this.props.branchName} />
+                {this.props.application.product.beneficiaryType === 'individual' && individualGuarantors.length > 0 && <Table>
                     <thead>
                         <tr>
                             <th></th>
@@ -119,22 +143,68 @@ class StatusHelper extends Component<Props, State>{
                         </tr>
                     </thead>
                     <tbody>
-                        {this.props.application.guarantors.map((guarantor, i) => {
-                            const area = this.props.getGeoArea(guarantor.geoAreaId);
+                        {individualGuarantors.map((guarantor) => {
+                            const area = this.props.getGeoArea(guarantor.guarantor.geoAreaId);
                             return (
-                                <tr key={guarantor._id}>
-                                    <td>{guarantorOrderLocal[i && i > 10 ? "default" : i]}</td>
-                                    <td>{guarantor.code}</td>
-                                    <td>{guarantor.customerName}</td>
+                                <tr key={guarantor.guarantor._id}>
+                                    <td>{guarantorOrderLocal[guarantor.index && guarantor.index > 10 ? "default" : guarantor.index]}</td>
+                                    <td>{guarantor.guarantor.code}</td>
+                                    <td>{guarantor.guarantor.customerName}</td>
                                     <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name}</td>
-                                    <td>{guarantor.customerHomeAddress}</td>
-                                    <td>{guarantor.mobilePhoneNumber}</td>
+                                    <td>{guarantor.guarantor.customerHomeAddress}</td>
+                                    <td>{guarantor.guarantor.mobilePhoneNumber}</td>
                                 </tr>
                             )
                         }
                         )}
                     </tbody>
                 </Table>}
+                {this.props.application.customer.customerType === 'company' &&
+                    companyGuarantors.length > 0 && (
+                        <Table>
+                        <thead>
+                            <tr>
+                            <th />
+                            <th>{local.companyCode}</th>
+                            <th>{local.companyName}</th>
+                            <th>{local.taxCardNumber}</th>
+                            <th>{local.commercialRegisterNumber}</th>
+                            <th>{local.companyAddress}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {companyGuarantors.map((guarantor) => {
+                            // const area = this.props.getGeoArea(guarantor.geoAreaId)
+                            return (
+                                <tr key={guarantor.guarantor._id}>
+                                <td>
+                                    {
+                                    guarantorOrderLocal[
+                                        guarantor.index && guarantor.index > 10
+                                        ? 'default'
+                                        : guarantor.index
+                                    ]
+                                    }
+                                </td>
+                                <td>{guarantor.guarantor.key}</td>
+                                <td>{guarantor.guarantor.businessName}</td>
+                                {/* <td
+                                    style={{
+                                    color:
+                                        !area.active && area.name !== '-' ? 'red' : 'black',
+                                    }}
+                                >
+                                    {area.name}
+                                </td> */}
+                                <td>{guarantor.guarantor.taxCardNumber}</td>
+                                <td>{guarantor.guarantor.commercialRegisterNumber}</td>
+                                <td>{guarantor.guarantor.businessAddress}</td>
+                                </tr>
+                            )
+                            })}
+                        </tbody>
+                        </Table>
+                    )}
             </div>
         )
     }

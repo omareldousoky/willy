@@ -14,7 +14,7 @@ import { timeToDateyyymmdd, beneficiaryType, parseJwt, getErrorMessage, download
 import { getBranch } from '../../Services/APIs/Branch/getBranch';
 import { getCookie } from '../../../Shared/Services/getCookie';
 import Modal from 'react-bootstrap/Modal';
-import { getIscoreCached } from '../../Services/APIs/iScore/iScore';
+import { getIscoreCached, getSMECachedIscore } from '../../Services/APIs/iScore/iScore';
 import Swal from 'sweetalert2';
 import Table from 'react-bootstrap/Table';
 import { Score } from '../CustomerCreation/customerProfile';
@@ -22,6 +22,7 @@ import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApp
 import { manageApplicationsArray } from './manageApplicationInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { LoanApplicationReportRequest } from '../../Services/interfaces';
+import ability from '../../config/ability';
 
 interface Product {
   productName: string;
@@ -84,7 +85,7 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: local.customerType,
         key: "customerType",
-        render: data => beneficiaryType(data.application.product.beneficiaryType)
+        render: data => beneficiaryType(data.application.customer.customerType === 'company' ? 'company' : data.application.product.beneficiaryType)
       },
       {
         title: local.applicationCode,
@@ -95,7 +96,8 @@ class TrackLoanApplications extends Component<Props, State>{
         title: local.customerName,
         key: "name",
         sortable: true,
-        render: data => data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
+        render: data => data.application.product.beneficiaryType === 'individual' && data.application.product.type === 'micro' ? data.application.customer.customerName :
+        (data.application.product.beneficiaryType === 'individual' && data.application.product.type === 'sme') ? data.application.customer.businessName :
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
           </div>
@@ -141,12 +143,13 @@ class TrackLoanApplications extends Component<Props, State>{
     )
   }
   async getCachediScores(application) {
+    const smeCheck = this.props.searchFilters.type === 'sme'
     this.setState({ iScoreModal: true });
     const ids: string[] = []
     if (application.product.beneficiaryType === 'group') {
       application.group.individualsInGroup.forEach(member => ids.push(member.customer.nationalId))
     } else {
-      ids.push(application.customer.nationalId)
+      ids.push(smeCheck ? application.customer.commercialRegisterNumber : application.customer.nationalId)
     }
     const obj: { nationalIds: string[]; date?: Date } = {
       nationalIds: ids
@@ -160,14 +163,15 @@ class TrackLoanApplications extends Component<Props, State>{
       // paid & canceled => updated.at, pending,issued =>issuedDate
     }
     this.setState({ loading: true });
-    const iScores = await getIscoreCached(obj);
+    const iScores = smeCheck ? await getSMECachedIscore({ids, date: obj.date}) : await getIscoreCached(obj);
     if (iScores.status === "success") {
       const customers: Score[] = [];
       iScores.body.data.forEach((score: Score) => {
         const obj = {
-          customerName: (application.product.beneficiaryType === 'group') ? application.group.individualsInGroup.filter(member => member.customer.nationalId === score.nationalId)[0].customer.customerName : application.customer.customerName,
+          customerName: (application.product.beneficiaryType === 'group') ? application.group.individualsInGroup.filter(member => member.customer.nationalId === score.nationalId)[0].customer.customerName : application.customer.customerName || application.customer.businessName,
           iscore: score.iscore,
           nationalId: score.nationalId,
+          id: score.id,
           url: score.url,
           bankCodes: score.bankCodes || []
         }
@@ -179,7 +183,8 @@ class TrackLoanApplications extends Component<Props, State>{
     }
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId }).then(() => {
+    this.props.setSearchFilters({ type: 'micro' })
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId, type: 'micro'}).then(() => {
       if (this.props.error)
         Swal.fire("", getErrorMessage(this.props.error), "error")
     }
@@ -271,6 +276,39 @@ class TrackLoanApplications extends Component<Props, State>{
     return true
   }
   render() {
+    const searchKeys = [
+      "keyword",
+      "dateFromTo",
+      "branch",
+      "status-application",
+    ]
+    const smePermission = ( ability.can('getSMEApplication','application') && this.props.searchFilters.type === 'sme' )
+    const filteredMappers = ( smePermission ) ? this.mappers.filter(mapper => mapper.key !== 'nationalId') : this.mappers
+    if ( smePermission ) {
+      filteredMappers.splice(3, 0, {
+        title: local.commercialRegisterNumber,
+        key: "commercialRegisterNumber",
+        render: data => data.application.customer.commercialRegisterNumber
+      })
+      filteredMappers.splice(4, 0, {
+        title: local.taxCardNumber,
+        key: 'taxCardNumber',
+        render: (data) => data.application.customer.taxCardNumber,
+      })
+    }
+    const dropDownKeys = [
+      'name',
+      'nationalId',
+      'key',
+      'customerKey',
+      'customerCode',
+      'customerShortenedCode',
+    ]
+    ability.can('getSMEApplication','application') && searchKeys.push('sme'); dropDownKeys.push(
+      'businessName',
+      'taxCardNumber',
+      'commercialRegisterNumber'
+    )
     return (
       <>
         <div className="print-none">
@@ -294,20 +332,8 @@ class TrackLoanApplications extends Component<Props, State>{
               </div>
               <hr className="dashed-line" />
               <Search
-                searchKeys={[
-                  "keyword",
-                  "dateFromTo",
-                  "branch",
-                  "status-application",
-                ]}
-                dropDownKeys={[
-                  "name",
-                  "nationalId",
-                  "key",
-                  "customerKey",
-                  "customerCode",
-                  "customerShortenedCode",
-                ]}
+                searchKeys={searchKeys}
+                dropDownKeys={dropDownKeys}
                 url="application"
                 from={this.state.from}
                 size={this.state.size}
@@ -319,7 +345,7 @@ class TrackLoanApplications extends Component<Props, State>{
                 from={this.state.from}
                 size={this.state.size}
                 totalCount={this.props.totalCount}
-                mappers={this.mappers}
+                mappers={filteredMappers}
                 pagination={true}
                 data={this.props.data}
                 changeNumber={(key: string, number: number) => {
@@ -340,7 +366,7 @@ class TrackLoanApplications extends Component<Props, State>{
                 <thead>
                   <tr>
                     <td>{local.customer}</td>
-                    <td>{local.nationalId}</td>
+                    <td>{smePermission ? local.commercialRegisterNumber : local.nationalId}</td>
                     <td>{local.value}</td>
                     <td>{local.bankName}</td>
                     <td></td>
@@ -349,9 +375,9 @@ class TrackLoanApplications extends Component<Props, State>{
                 </thead>
                 <tbody>
                   {this.state.iScoreCustomers.map((customer: Score) =>
-                    <tr key={customer.nationalId}>
+                    <tr key={customer.nationalId || customer.id}>
                       <td>{customer.customerName}</td>
-                      <td>{customer.nationalId}</td>
+                      <td>{smePermission ? customer.id : customer.nationalId}</td>
                       <td style={{ color: iscoreStatusColor(customer.iscore).color }}>{customer.iscore}</td>
                       {customer.bankCodes && customer.bankCodes.length > 0 && customer.bankCodes.map(code => <td key={code}>{iscoreBank(code)}</td>)}
                       <td>{iscoreStatusColor(customer.iscore).status}</td>

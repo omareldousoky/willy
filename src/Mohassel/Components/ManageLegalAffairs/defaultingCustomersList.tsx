@@ -29,7 +29,15 @@ interface Review {
     notes: string;
     userName: string;
 }
-interface DefaultedCustomer {
+
+export interface ManagerReviews {
+    branchManagerReview?: Review;
+    areaManagerReview?: Review;
+    areaSupervisorReview?: Review;
+    financialManagerReview?: Review;
+}
+
+export interface DefaultedCustomer extends ManagerReviews {
     _id: string;
     updated: { at: number; by: string };
     created: { at: number; by: string };
@@ -41,10 +49,7 @@ interface DefaultedCustomer {
     customerName: string;
     customerId: string;
     customerKey: number;
-    branchManagerReview?: Review;
-    areaManagerReview?: Review;
-    areaSupervisorReview?: Review;
-    financialManagerReview?: Review;
+    customerBranchId?: string;
 }
 interface Props {
     history: any;
@@ -198,7 +203,7 @@ class DefaultingCustomersList extends Component<Props, State> {
     }
     handleSearch = async (key, query) => {
         this.setState({ modalLoader: true })
-        const results = await searchCustomer({ from: 0, size: 1000, [key]: query })
+        const results = await searchCustomer({ from: 0, size: 1000, [key]: query, customerType: 'individual' })
         if (results.status === 'success') {
             if (results.body.data.length > 0) {
                 this.setState({ modalLoader: false, customerSearchResults: { results: results.body.data, empty: false } });
@@ -222,7 +227,7 @@ class DefaultingCustomersList extends Component<Props, State> {
                 {(daysSince < 6 && (data.status === 'branchManagerReview' || ( daysSince >= 3 && data.status === 'underReview'))) && <Can I='areaSupervisorReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.areaSupervisorReview} src={require('../../Assets/check-circle.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'areaSupervisorReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.delete} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
                 {(daysSince < 9 && (data.status === 'areaSupervisorReview' || ( daysSince >= 6 && (data.status === 'branchManagerReview' || data.status === 'underReview')))) && <Can I='areaManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.areaManagerReview} src={require('../../Assets/check-circle.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'areaManagerReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.delete} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
                 {(daysSince < 15 && (data.status === 'areaManagerReview' || ( daysSince >= 9 && (data.status === 'areaSupervisorReview' || data.status === 'branchManagerReview' || data.status === 'underReview')))) && <Can I='financialManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.financialManagerReview} src={require('../../Assets/check-circle.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'financialManagerReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.delete} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
-                {daysSince >= 15 && <Can I='deleteDefaultingCustomer' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={local.delete} title={local.delete} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
+                {daysSince >= 15 && data.status !== 'financialManagerReview' && <Can I='deleteDefaultingCustomer' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={local.delete} title={local.delete} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
             </>
         );
     }
@@ -258,7 +263,7 @@ class DefaultingCustomersList extends Component<Props, State> {
     }
     async findLoans(customer: Customer) {
         this.setState({ modalLoader: true, selectedCustomer: customer })
-        const results = await searchLoan({ from: 0, size: 1000, customerKey: customer.key })
+        const results = await searchLoan({ from: 0, size: 1000, customerKey: customer.key, type: 'micro' })
         if (results.status === 'success') {
             this.setState({ modalLoader: false, loanSearchResults: results.body.applications.filter(loan => loan.application.status && ['pending', 'issued'].includes(loan.application.status)) });
         } else {

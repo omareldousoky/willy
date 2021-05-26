@@ -1,55 +1,45 @@
 import React, { Component } from 'react'
-import { Card } from 'react-bootstrap';
-import * as local from "../../../Shared/Assets/ar.json";
-import { CardNavBar, Tab } from "../HeaderWithCards/cardNavbar";
-import MonthlyClosing from './MonthlyClosing/monthlyClosing';
-import { Field, Formik, FormikProps } from "formik";
-import Form from "react-bootstrap/Form";
+import * as local from '../../../Shared/Assets/ar.json'
+import LtsClosing from './LtsClosing/ltsClosing'
+import HeaderWithCards,{Tab} from '../HeaderWithCards/headerWithCards'
+import { financialClosingArray } from './financialClosingInitials'
 
 interface State {
-    id: string;
-    activeTab: string;
-    tabsArray: Array<Tab>;
+  tabsArray: Array<Tab>;
 }
-enum TabsToRender {
-    MonthClosing = "monthClosing",
+interface Props {
+  withHeader: boolean;
+}
+class FinancialClosing extends Component<Props, State> {
+  constructor(props) {
+    super(props)
+    this.state = {
+      tabsArray: [],
+    }
+  }
+  componentDidMount() {
+    this.setState({
+      tabsArray: financialClosingArray(),
+    })
+  }
+  render() {
+    return (
+      <>
+        {this.props.withHeader && (
+          <HeaderWithCards
+            header={local.ltsClosing}
+            array={this.state.tabsArray}
+            active={this.state.tabsArray
+              .map((item) => {
+                return item.icon
+              })
+              .indexOf('assignProductToBranch')}
+          />
+        )}
 
+        <LtsClosing />
+      </>
+    )
+  }
 }
-class FinancialClosing extends Component<{}, State> {
-    constructor(props) {
-        super(props);
-        this.state = {
-            id: "",
-            activeTab: TabsToRender.MonthClosing,
-            tabsArray: [{
-                header: local.monthlyClosing,
-                stringKey: TabsToRender.MonthClosing,
-            },
-            ],
-        }
-    }
-    renderContent(){
-        switch (this.state.activeTab) {
-            case TabsToRender.MonthClosing:  
-                return <MonthlyClosing/> ;
-            default:
-                return null;
-        }
-    }
-    render() {
-        return (
-            <Card>
-                    <CardNavBar 
-                    header= {"here"}
-                    array= {this.state.tabsArray}
-                    active = {this.state.activeTab}
-                    selectTab={(index: string) => this.setState({activeTab: index})}
-                    />
-                    <div>
-                        {this.renderContent()}
-                    </div>
-            </Card>
-        )
-    }
-}
-export default FinancialClosing;
+export default FinancialClosing

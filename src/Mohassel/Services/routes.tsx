@@ -35,7 +35,7 @@ import ViewProduct from '../Components/LoanProductCreation/loanProductView';
 import LoanRollBack from '../Components/LoanProfile/loanRollBack';
 import EncodingFiles from '../Components/Tools/encodingFiles';
 import DocumentTypeCreation from '../Components/documentTypeCreation/documentTypeCreation';
-import CustomerProfile from '../Components/CustomerCreation/customerProfile';
+import { CustomerProfile } from '../Components/CustomerCreation/customerProfile';
 import ActionLogs from '../Components/ActionLogs/action-logs';
 import SourceOfFund from '../Components/SourceOfFund/sourceOfFund';
 import CIB from '../Components/CIB/cib';
@@ -57,8 +57,16 @@ import SupervisionsList from '../Components/managerHierarchy/supervisionsList';
 import BusinessActivities from '../Components/ManageLoanDetails/businessActivities';
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
+import TerrorismList from '../Components/ManageTerrorism/terrorismList';
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
+import TerrorismUnList from '../Components/ManageTerrorism/terrorismUnList'
+import FinancialBlocking from '../Components/FinancialClosing/financialBlocking'
 import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList';
+import LegalCustomersList from '../Components/ManageLegalAffairs/LegalCustomersList';
+import LegalActionsForm from '../Components/ManageLegalAffairs/LegalCustomerActionsForm';
+import FinancialReviewing from '../Components/FinancialClosing/FinancialReviewing'
+import { CompanyList, CompanyProfile } from "../../Shared/Components";
+import CompanyCreation from '../Components/CustomerCreation/companyCreation';
 
 const appRoutes = [
   {
@@ -100,6 +108,29 @@ const appRoutes = [
               <CreateClearance {...props} />
                </Can>
             
+          },
+        ]
+      },
+      {
+        path: "/company",
+        label: local.companies,
+        render: (props) => <Can I='getCustomer' a='customer'><CompanyList {...props} /></Can>,
+        routes: [
+          {
+            path: "/new-company",
+            label: local.newCompany,
+            render: (props) => <Can I='createCustomer' a='customer'><CompanyCreation {...props} edit={false} /></Can>,
+          },
+          {
+            path: "/edit-company",
+            label: local.editCompany,
+            render: (props) => <CompanyCreation {...props} edit={true} />,
+          }
+          ,
+          {
+            path: "/view-company",
+            label: local.viewCompany,
+            render: (props) => <CompanyProfile {...props} />,
           },
         ]
       },
@@ -471,9 +502,38 @@ const appRoutes = [
         render: (props) => <Can I='getOfficersGroups' a ='branch'> <SupervisionsList {...props}/> </Can>
       },{
         path: '/financial-closing',
-        label: local.financialClosing,
-        render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} /></Can>
+        label: local.manageFinancialTransaction,
+        render:(props) => <Can I= "getFinancialBlocking" a="application"><FinancialBlocking {...props} withHeader /> </Can>,
+         routes:[{
+          path: '/lts-closing',
+          label: local.ltsClosing,
+          render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} withHeader /></Can>
+        },{
+            path: '/lts-blocking',
+            label: local.financialBlocking,
+            render:(props) => <Can I= "getFinancialBlocking" a="application"><FinancialBlocking {...props} withHeader /> </Can>
+         },{
+            path: '/lts-review-oracle',
+            label: local.oracleReports,
+            render:(props) => <Can I="summarizeTransactions" a="oracleIntegration"><FinancialReviewing {...props} withHeader /> </Can>
+         }
+      ]
       },{
+				path: "/manage-anti-terrorism",
+				label: local.antiTerrorismMoneyLaundering,
+        render: (props) => <Can I="getTerrorist" a="customer"><TerrorismList {...props} /></Can>,
+				routes: [{
+					path: '/anti-terrorism',
+					label: local.antiTerrorism,
+					render: (props) => <Can I="getTerrorist" a="customer"><TerrorismList {...props} /></Can>
+				},{
+          path: '/anti-union-terrorism',
+          label: local.antiTerrorism,
+          render: (props) => <Can I="getTerrorist" a="customer"><TerrorismUnList {...props} /></Can>
+        },
+				]
+			},
+      {
         path: '/legal-affairs',
         label: local.legalAffairs,
         render: (props) => <Can I='getDefaultingCustomer' a='legal'><DefaultingCustomersList {...props} /></Can>,
@@ -482,6 +542,16 @@ const appRoutes = [
             path: '/late-list',
             label: local.lateList,
             render: (props) => <Can I='getDefaultingCustomer' a='legal'><DefaultingCustomersList {...props} /></Can>
+          },
+          {
+            path: '/legal-actions',
+            label: local.legalAffairs,
+            render: (props) => <Can I='getDefaultingCustomer' a='legal'><LegalCustomersList {...props} /></Can>
+          },
+          {
+            path: '/customer-actions',
+            label: local.legalAffairs,
+            render: (props) => <Can I='updateDefaultingCustomer' a='legal'><LegalActionsForm {...props} /></Can>
           }
         ]
       }
