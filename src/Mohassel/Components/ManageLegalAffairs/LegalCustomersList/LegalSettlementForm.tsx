@@ -120,8 +120,8 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
   )
 
   return (
-    <Card className="main-card hide-card-styles">
-      <Card.Body>
+    <Card className="m-0 border-0">
+      <Card.Body className="p-0">
         <Loader type="fullsection" open={isSubmitting} />
 
         {renderCustomerDetails()}

@@ -452,14 +452,7 @@ code {
 	font-weight: bold;
 	text-align: right;
 }
-.hide-card-styles{
-	border: none;
-	margin: 0 !important;
 
-	.card-body {
-		padding: 0;
-	}
-}
 @media print {
 	* {
 		font-size: 14px;
