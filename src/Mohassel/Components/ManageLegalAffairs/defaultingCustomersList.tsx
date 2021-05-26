@@ -62,6 +62,22 @@ export interface DefaultedCustomer extends ManagerReviews {
   customerKey: number
   customerBranchId?: string
 }
+
+interface Props extends RouteComponentProps {
+  data: DefaultedCustomer[]
+  error: string
+  totalCount: number
+  loading: boolean
+  searchFilters: {
+    reviewer?: string
+  }
+  search: (data) => Promise<void>
+  setLoading: (data) => void
+  setSearchFilters: (data) => void
+  branchId?: string
+  withHeader: boolean
+}
+
 interface State {
   size: number
   from: number

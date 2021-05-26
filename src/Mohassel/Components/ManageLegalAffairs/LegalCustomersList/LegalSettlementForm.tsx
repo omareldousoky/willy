@@ -1,6 +1,8 @@
 import React, { FunctionComponent, useState } from 'react'
 
-import { Card, Form } from 'react-bootstrap'
+import Card from 'react-bootstrap/Card'
+import Form from 'react-bootstrap/Form'
+
 import Swal from 'sweetalert2'
 
 import local from '../../../../Shared/Assets/ar.json'
