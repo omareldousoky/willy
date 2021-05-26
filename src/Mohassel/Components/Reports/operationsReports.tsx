@@ -232,7 +232,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       case Reports.ActiveWalletIndividual:
         return this.fetchActiveWalletIndividual(values)
       case Reports.ActiveWalletGroup:
-        return this.fetchActiveWalletGroup(values);  
+        return this.fetchActiveWalletGroup(values);
       default:
         return null;
     }
@@ -382,10 +382,10 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   async fetchMonthComparison(values) {
     // get timestamp in UTC
     const res = await fetchMonthComparisonReport({
-      startDate: new Date(new Date(values.fromDate).toUTCString()).valueOf(),
+      startDate: new Date(new Date(values.fromDate).toUTCString())
+				.setUTCHours(0,0,0,0),
       endDate: new Date(new Date(values.toDate).toUTCString())
-        .setUTCHours(23, 59, 59, 999)
-        .valueOf(),
+        .setUTCHours(23, 59, 59, 999),
       branches: values.branches,
     });
     this.handleFetchReport(res, Reports.MonthComparison);
@@ -401,14 +401,15 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     this.handleFetchReport(res, Reports.ActiveWalletIndividual)
   }
   async fetchActiveWalletGroup(values) {
-    const { date, branches, loanOfficers } = values;
+    const { date, branches, loanOfficerIds } = values;
     const res = await fetchActiveWalletGroupReport({
       date,
       branches,
-      loanOfficerIds: loanOfficers
+      loanOfficerIds
     } as ActiveWalletRequest)
     this.handleFetchReport(res, Reports.ActiveWalletGroup)
   }
+
   render() {
     return (
       <>

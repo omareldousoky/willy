@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { getDocumentsTypes } from '../../Services/APIs/encodingFiles/getDocumentsTypes';
 import Swal from 'sweetalert2';
-import * as local from '../../../Shared/Assets/ar.json';
+import local from '../../../Shared/Assets/ar.json';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
@@ -27,13 +27,7 @@ class EncodingFiles extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            documentTypes: [{
-                id: "",
-                pages: 0,
-                type: "",
-                paperType: "",
-                name: "",
-            }],
+            documentTypes: [],
             loading: false,
             manageToolsTabs: []
         }
@@ -77,9 +71,7 @@ class EncodingFiles extends Component<Props, State> {
 														<Button onClick={() => { this.props.history.push("/tools/encoding-files/create-encoding-files") }} className="big-button" style={{ marginLeft: 20, marginRight: "auto", width: "100px" }}>{local.create}</Button>
 													</Can>
                         </div>
-                        {
-
-                            this.state.documentTypes.map((documentType, index) => {
+                        {this.state.documentTypes.length > 0 ? this.state.documentTypes.map((documentType, index) => {
                                 return (
                                     <div key={index} style={{
                                         border: "solid 1px #e5e5e5", textAlign: "right", margin: "20px", padding: "20px"
@@ -104,6 +96,20 @@ class EncodingFiles extends Component<Props, State> {
                                                 <div style={{ fontSize: "12px", color: "#6e6e6e" }}>{local.documentFor}</div>
                                                 <div style={{ fontSize: "12px", color: "#2f2f2f", fontWeight: "bold" }}>{documentTypeLocalization(documentType.type)} </div>
                                             </Col>
+                                            <Col style={{ minWidth: '20%' }}>
+                                              <div style={{ fontSize: '12px', color: '#6e6e6e' }}>
+                                                {local.documentForCustomerOfType}
+                                              </div>
+                                              <div
+                                                style={{
+                                                  fontSize: '12px',
+                                                  color: '#2f2f2f',
+                                                  fontWeight: 'bold',
+                                                }}
+                                              >
+                                                {local[documentType.customerType]}{' '}
+                                              </div>
+                                            </Col>
                                             <Can I='documentTypes' a='config'><Col>
                                                 <span
                                                     onClick={() => { this.props.history.push({ pathname: "/tools/encoding-files/edit-encoding-files", state: { documentType: documentType } }) }}
@@ -115,14 +121,17 @@ class EncodingFiles extends Component<Props, State> {
                                 )
 
                             }
-
                             )
-
-                        }
+                         : (
+                            <div style={{ textAlign: 'center', marginBottom: 40 }}>
+                                <img alt='no-data-found' src={require('../../../Shared/Assets/no-results-found.svg')} />
+                                <h4>{local.noResultsFound}</h4>
+                            </div>
+                        )
+                    }
                     </Card.Body>
                 </Card >
             </div >
-
         )
     }
 }
