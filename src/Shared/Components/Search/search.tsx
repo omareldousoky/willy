@@ -73,12 +73,7 @@ class Search extends Component<Props, State> {
     super(props)
     this.state = {
       governorates: [],
-      dropDownValue:
-        this.props.url === 'actionLogs'
-          ? 'authorName'
-          : this.props.dropDownKeys?.includes('businessName')
-          ? 'businessName'
-          : 'name',
+      dropDownValue: this.props.url === 'actionLogs' ? 'authorName' : 'name',
       actionsList: [],
     }
   }
@@ -161,7 +156,7 @@ class Search extends Component<Props, State> {
   componentDidMount() {
     if (
       this.props.url === 'customer' &&
-      !this.props.dropDownKeys?.includes('businessName')
+      !this.props.dropDownKeys?.includes('commercialRegisterNumber')
     ) {
       this.getGov()
     } else if (this.props.url === 'actionLogs') {
@@ -268,7 +263,9 @@ class Search extends Component<Props, State> {
       obj.type = obj.type ? obj.type : 'micro'
     }
     if (url === 'customer')
-      obj.customerType = this.props.dropDownKeys?.includes('businessName')
+      obj.customerType = this.props.dropDownKeys?.includes(
+        'commercialRegisterNumber'
+      )
         ? 'company'
         : 'individual'
     obj = this.removeEmptyArg(obj)

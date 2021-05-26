@@ -52,6 +52,18 @@ const tabs: Array<Tab> = [
     header: local.documents,
     stringKey: 'documents',
   },
+  {
+    header: local.deathCertificate,
+    stringKey: 'deathCertificate',
+    permission: 'deathCertificate',
+    permissionKey: 'customer',
+  },
+  {
+    header: local.reports,
+    stringKey: 'reports',
+    permission: 'guaranteed',
+    permissionKey: 'report',
+  },
 ]
 
 const getCustomerCategorizationRating = async (
@@ -140,24 +152,6 @@ export const CustomerProfile = () => {
 
   useEffect(() => {
     getCustomerDetails()
-    if (ability.can('deathCertificate', 'customer')) {
-      if (!tabs.some((tab) => tab.stringKey === 'deathCertificate')) {
-        tabs.push({
-          header: local.deathCertificate,
-          stringKey: 'deathCertificate',
-        })
-      }
-    }
-    if (ability.can('guaranteed', 'report')) {
-      // eslint-disable-next-line no-empty
-      if (tabs.some((tab) => tab.stringKey === 'reports')) {
-      } else {
-        tabs.push({
-          header: local.reports,
-          stringKey: 'reports',
-        })
-      }
-    }
     getCustomerCategorizationRating(location.state.id, setRatings)
   }, [])
   function getArRuralUrban(ruralUrban: string | undefined) {

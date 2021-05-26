@@ -44,7 +44,7 @@ class CustomerSearch extends Component<Props, State> {
     super(props)
     this.state = {
       searchKey: '',
-      dropDownValue: props.sme ? 'businessName' : 'name',
+      dropDownValue: 'name',
     }
   }
 
@@ -67,8 +67,6 @@ class CustomerSearch extends Component<Props, State> {
         return local.partialCode
       case 'customerShortenedCode':
         return local.customerShortenedCode
-      case 'businessName':
-        return local.companyName
       case 'taxCardNumber':
         return local.taxCardNumber
       case 'commercialRegisterNumber':
@@ -118,7 +116,7 @@ class CustomerSearch extends Component<Props, State> {
           'key',
           'code',
           'customerShortenedCode',
-          'businessName',
+          'name',
           'taxCardNumber',
           'commercialRegisterNumber',
         ]
