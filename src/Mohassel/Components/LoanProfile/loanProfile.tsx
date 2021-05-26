@@ -50,12 +50,9 @@ import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 import { FollowUpStatementView } from './followupStatementView';
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares';
-import { Installment } from '../Payment/payInstallment';
 import { getWriteOffReasons } from '../../Services/APIs/configApis/config';
 
 import {InfoBox , ProfileActions } from '../../../Shared/Components'; 
-import { Col, Form } from 'react-bootstrap';
-import { arabicGender, timeToArabicDate, downloadFile, iscoreStatusColor, iscoreBank } from '../../../Shared/Services/utils';
 import { getCompanyInfo, getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
 import { FieldProps } from '../../../Shared/Components/Profile/types';
 import {
@@ -63,7 +60,10 @@ import {
   AcknowledgmentAndPledge,
   KnowYourCustomer,
   AcknowledgmentWasSignedInFront,
-  AcknowledgmentOfCommitment
+  AcknowledgmentOfCommitment,
+  SolidarityGuarantee,
+  AuthorizationToFillCheck,
+  PromissoryNote
 } from "../pdfTemplates/smeLoanContract";
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
 import * as Barcode from 'react-barcode';
@@ -941,6 +941,10 @@ class LoanProfile extends Component<Props, State>{
                             members={this.state.individualsWithInstallments} 
                         />
                         <AcknowledgmentOfCommitment application={this.state.application} />
+                        <SolidarityGuarantee />
+                        <AuthorizationToFillCheck />
+                        <PromissoryNote noteKind="شخصى" /> 
+                        <PromissoryNote noteKind="شركات" /> 
                         <SmeLoanContract
                             data={this.state.application}
                             branchDetails={this.state.branchDetails}
@@ -948,7 +952,6 @@ class LoanProfile extends Component<Props, State>{
                         <div className="text-center loan-contract" >
                             <Barcode  value={this.state.application.loanApplicationKey} />
                         </div>
-
                   </>
                 )}
                 {this.state.print === 'followUpStatement' && <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} members={this.state.individualsWithInstallments} />}
