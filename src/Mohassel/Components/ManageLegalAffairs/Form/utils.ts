@@ -39,8 +39,9 @@ export const createFormFieldsInitValue = (
     const { name, type } = formField
 
     const isEmptyPhoto =
-      !!defaultValues &&
       type === 'photo' &&
+      !!defaultValues &&
+      !!defaultValues[name] &&
       !Object.keys(defaultValues[name]).length
 
     const initValue =
