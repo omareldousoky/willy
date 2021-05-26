@@ -1,6 +1,9 @@
 import React, { FunctionComponent, useState } from 'react'
 import Swal from 'sweetalert2'
-import { Button, Card } from 'react-bootstrap'
+
+import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
+
 import { PDF } from './reports'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getErrorMessage } from '../../../Shared/Services/utils'

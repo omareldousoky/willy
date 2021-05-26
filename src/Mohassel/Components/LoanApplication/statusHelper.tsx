@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import { Formik } from 'formik'
+
 import Table from 'react-bootstrap/Table'
-import { Button, Col, Form, Row } from 'react-bootstrap'
+import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+
 import * as local from '../../../Shared/Assets/ar.json'
 import {
   ReviewLoanValidation,

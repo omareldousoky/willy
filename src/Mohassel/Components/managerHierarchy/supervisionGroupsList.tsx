@@ -2,7 +2,12 @@ import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
-import { Col, Form, Row, FormCheck } from 'react-bootstrap'
+
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+import FormCheck from 'react-bootstrap/FormCheck'
+import Row from 'react-bootstrap/Row'
+
 import Select from 'react-select'
 import { connect } from 'react-redux'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'

@@ -1,5 +1,10 @@
-import { Col, Row, Modal, Button } from 'react-bootstrap'
 import React, { Component } from 'react'
+
+import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Modal from 'react-bootstrap/Modal'
+import Col from 'react-bootstrap/Col'
+
 import { Formik, Field, Form } from 'formik'
 import * as Yup from 'yup'
 import Swal from 'sweetalert2'

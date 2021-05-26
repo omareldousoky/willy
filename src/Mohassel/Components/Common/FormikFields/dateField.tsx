@@ -1,6 +1,10 @@
 import React, { useRef } from 'react'
 import { FieldProps } from 'formik'
-import { Col, FormControl, InputGroup } from 'react-bootstrap'
+
+import Col from 'react-bootstrap/Col'
+import FormControl from 'react-bootstrap/FormControl'
+import InputGroup from 'react-bootstrap/InputGroup'
+
 import * as local from '../../../../Shared/Assets/ar.json'
 
 interface DateFieldProps {

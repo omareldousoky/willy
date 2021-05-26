@@ -1,7 +1,11 @@
 import './createBranch.scss'
 
 import React, { useState } from 'react'
-import { Button, Col, Form, Row } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
 
 import * as local from '../../../Shared/Assets/ar.json'
 import Governorates from '../Governorates/governorates'

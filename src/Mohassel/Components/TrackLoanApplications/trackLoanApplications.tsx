@@ -2,7 +2,12 @@ import React, { Component } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Swal from 'sweetalert2'
-import { Button, Card, Modal, Table } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import Modal from 'react-bootstrap/Modal'
+import Table from 'react-bootstrap/Table'
+
 import { Loader } from '../../../Shared/Components/Loader'
 import ReviewedApplicationsPDF from '../pdfTemplates/reviewedApplications/reviewedApplications'
 import Can from '../../config/Can'

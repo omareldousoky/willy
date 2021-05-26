@@ -2,7 +2,12 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import AsyncSelect from 'react-select/async'
 import Swal from 'sweetalert2'
-import { Button, Col, Form, Row } from 'react-bootstrap'
+
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { payment } from '../../../Shared/redux/payment/actions'

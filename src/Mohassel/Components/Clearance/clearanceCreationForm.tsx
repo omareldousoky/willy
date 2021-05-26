@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
-import { Button, Col, Form, Row } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
+
 import Select, { ValueType } from 'react-select'
 import { FormikProps } from 'formik'
 import * as local from '../../../Shared/Assets/ar.json'

@@ -1,6 +1,13 @@
 import React, { Component, CSSProperties } from 'react'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
-import { Button, Card, Container, Form, Row, Table } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import Row from 'react-bootstrap/Row'
+import Container from 'react-bootstrap/Container'
+import Form from 'react-bootstrap/Form'
+import Table from 'react-bootstrap/Table'
+
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'

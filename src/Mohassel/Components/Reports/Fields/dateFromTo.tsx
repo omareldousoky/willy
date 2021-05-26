@@ -1,6 +1,9 @@
 import { Field, FieldValidator } from 'formik'
 import React, { InputHTMLAttributes } from 'react'
-import { Col, InputGroup } from 'react-bootstrap'
+
+import Col from 'react-bootstrap/Col'
+import InputGroup from 'react-bootstrap/InputGroup'
+
 import * as local from '../../../../Shared/Assets/ar.json'
 import DateField from '../../Common/FormikFields/dateField'
 

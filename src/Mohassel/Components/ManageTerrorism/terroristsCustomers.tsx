@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { Button } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+
 import Swal from 'sweetalert2'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'

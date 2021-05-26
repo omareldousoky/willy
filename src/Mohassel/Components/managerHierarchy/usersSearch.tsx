@@ -1,5 +1,9 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { InputGroup, DropdownButton, Dropdown } from 'react-bootstrap'
+
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import InputGroup from 'react-bootstrap/InputGroup'
+
 import Select from 'react-select'
 import { theme } from '../../../Shared/theme'
 import * as local from '../../../Shared/Assets/ar.json'

@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
-import { Button, Form, Row } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Form from 'react-bootstrap/Form'
+
 import { connect } from 'react-redux'
 import * as local from '../../../Shared/Assets/ar.json'
 import DocumentUploader from '../../../Shared/Components/documentUploader/documentUploader'

@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
-import {
-  Button,
-  Dropdown,
-  DropdownButton,
-  FormControl,
-  InputGroup,
-} from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import FormControl from 'react-bootstrap/FormControl'
+import InputGroup from 'react-bootstrap/InputGroup'
+
 import { getRenderDate } from '../../Services/getRenderDate'
 import * as local from '../../../Shared/Assets/ar.json'
 

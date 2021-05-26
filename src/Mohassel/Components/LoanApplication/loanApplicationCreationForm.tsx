@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/async'
 import Swal from 'sweetalert2'
-import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import InputGroup from 'react-bootstrap/InputGroup'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+
 import * as local from '../../../Shared/Assets/ar.json'
 import GroupInfoBox from '../LoanProfile/groupInfoBox'
 import { searchLoanOfficerAndManager } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'

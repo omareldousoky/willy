@@ -1,5 +1,10 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { Button, Col, Form, Row } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+
 import * as local from '../../../Shared/Assets/ar.json'
 import { ManagerHierarchyUser } from '../../../Shared/Services/interfaces'
 import './managerHierarchy.scss'

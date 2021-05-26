@@ -10,7 +10,7 @@ module.exports = {
     'airbnb',
     'plugin:@typescript-eslint/recommended',
     'plugin:import/typescript',
-    'plugin:prettier/recommended',
+		'plugin:prettier/recommended',
   ],
   parserOptions: {
     project: './tsconfig.json',
@@ -19,8 +19,9 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'global-require': 'off',
-    'prefer-template': 'off',
+		'global-require': 'off',
+		'no-restricted-imports': ['error', 'react-bootstrap'],
+		'prefer-template': 'off',
     'no-underscore-dangle': 'off',
     'class-methods-use-this': 'off',
     'no-nested-ternary': 'off',
@@ -62,9 +63,6 @@ module.exports = {
     'import/no-unused-imports': 'off', // no-unused-vars rule is sufficient
     'import/prefer-default-export': 'off',
     'import/no-named-as-default': 'off',
-    // 'import/no-unused-modules': ['error', {
-    // 	'unusedExports': true
-    // }],
     'jsx-a11y/control-has-associated-label': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',

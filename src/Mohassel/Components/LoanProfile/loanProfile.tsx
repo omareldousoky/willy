@@ -3,7 +3,10 @@ import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Card, Container } from 'react-bootstrap'
+
+import Card from 'react-bootstrap/Card'
+import Container from 'react-bootstrap/Container'
+
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication'
 import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions'
 import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment'

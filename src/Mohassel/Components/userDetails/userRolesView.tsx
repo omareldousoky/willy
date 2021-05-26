@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card } from 'react-bootstrap'
+import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
 import Labels from '../Labels/labels'
 import './userDetails.scss'

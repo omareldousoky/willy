@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import './managerHierarchy.scss'
-import { Row, Form, Table, Button } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Table from 'react-bootstrap/Table'
+import Row from 'react-bootstrap/Row'
+
 import Swal from 'sweetalert2'
 import local from '../../../Shared/Assets/ar.json'
 import { getOfficersGroups } from '../../Services/APIs/ManagerHierarchy/getOfficersGroups'

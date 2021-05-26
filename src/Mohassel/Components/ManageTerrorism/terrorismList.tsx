@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Swal from 'sweetalert2'
+
 import Modal from 'react-bootstrap/Modal'
-import { Button, Card, Form, Row } from 'react-bootstrap'
+import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'

@@ -1,5 +1,10 @@
-import { Col, InputGroup, DropdownButton, Dropdown } from 'react-bootstrap'
 import React, { Component, useEffect } from 'react'
+
+import InputGroup from 'react-bootstrap/InputGroup'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import Col from 'react-bootstrap/Col'
+import Dropdown from 'react-bootstrap/Dropdown'
+
 import Select, { ValueType } from 'react-select'
 import { connect } from 'react-redux'
 import { Formik, Field, FormikValues, Form, useFormikContext } from 'formik'

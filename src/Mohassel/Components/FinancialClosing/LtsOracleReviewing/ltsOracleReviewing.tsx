@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import { Card } from 'react-bootstrap'
+
+import Card from 'react-bootstrap/Card'
+
 import Swal from 'sweetalert2'
 import { Loader } from '../../../../Shared/Components/Loader'
 import local from '../../../../Shared/Assets/ar.json'

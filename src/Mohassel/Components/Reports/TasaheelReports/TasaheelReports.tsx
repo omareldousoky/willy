@@ -1,7 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
 import Swal from 'sweetalert2'
-import { Button, Card } from 'react-bootstrap'
+
+import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
+
 import {
   getIscoreReportStatus,
   timeToArabicDate,

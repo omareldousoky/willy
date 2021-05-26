@@ -2,7 +2,11 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Swal from 'sweetalert2'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { Button, Card, FormCheck } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import FormCheck from 'react-bootstrap/FormCheck'
+
 import * as local from '../../../../Shared/Assets/ar.json'
 import { Loader } from '../../../../Shared/Components/Loader'
 import {

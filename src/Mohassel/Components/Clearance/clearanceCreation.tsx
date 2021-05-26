@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { Card, Container } from 'react-bootstrap'
+
+import Container from 'react-bootstrap/Container'
+import Card from 'react-bootstrap/Card'
+
 import { Formik } from 'formik'
 import Swal from 'sweetalert2'
 import CustomerBasicsCard from './basicInfoCustomer'

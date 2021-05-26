@@ -5,7 +5,14 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import Row from 'react-bootstrap/Row'
+import Modal from 'react-bootstrap/Modal'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+
 import Swal from 'sweetalert2'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'

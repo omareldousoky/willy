@@ -1,6 +1,9 @@
 import React from 'react'
 import { FieldProps } from 'formik'
-import { Col, FormControl, InputGroup } from 'react-bootstrap'
+
+import Col from 'react-bootstrap/Col'
+import FormControl from 'react-bootstrap/FormControl'
+import InputGroup from 'react-bootstrap/InputGroup'
 
 interface TextFieldProps {
   key: string

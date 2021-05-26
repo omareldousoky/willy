@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { Button, Card, Col, Row } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+
 import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../config/Can'
 import local from '../../../Shared/Assets/ar.json'

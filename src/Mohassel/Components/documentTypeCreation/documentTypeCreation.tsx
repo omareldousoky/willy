@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import { Card, Container } from 'react-bootstrap'
+
+import Card from 'react-bootstrap/Card'
+import Container from 'react-bootstrap/Container'
+
 import { Formik } from 'formik'
 import DocumentTypeCreationForm from './documentTypeCreationForm'
 

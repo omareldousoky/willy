@@ -1,5 +1,7 @@
 import React, { FunctionComponent } from 'react'
-import { Col } from 'react-bootstrap'
+
+import Col from 'react-bootstrap/Col'
+
 import Form from 'react-bootstrap/Form'
 import * as local from '../../../Shared/Assets/ar.json'
 import './managerHierarchy.scss'

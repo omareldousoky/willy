@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
+import FormCheck from 'react-bootstrap/FormCheck'
+
 import { connect } from 'react-redux'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import { FormCheck } from 'react-bootstrap'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import Can from '../../config/Can'
 import Search from '../../../Shared/Components/Search/search'

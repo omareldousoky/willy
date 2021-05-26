@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
-import { Table, Card } from 'react-bootstrap'
+
+import Table from 'react-bootstrap/Table'
+import Card from 'react-bootstrap/Card'
+
 import Swal from 'sweetalert2'
 import './managerHierarchy.scss'
 import { CardNavBar } from '../HeaderWithCards/cardNavbar'

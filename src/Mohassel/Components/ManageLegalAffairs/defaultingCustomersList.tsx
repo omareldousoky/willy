@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
-import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { connect } from 'react-redux'
-import { FormCheck, Modal, Table } from 'react-bootstrap'
+
+import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
+import FormCheck from 'react-bootstrap/FormCheck'
+import Modal from 'react-bootstrap/Modal'
+import Table from 'react-bootstrap/Table'
+
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'

@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { Formik } from 'formik'
 import Swal from 'sweetalert2'
-import { Card } from 'react-bootstrap'
+
+import Card from 'react-bootstrap/Card'
+
 import { UserDataForm } from './userDataForm'
 import * as local from '../../../Shared/Assets/ar.json'
 import Wizard from '../wizard/Wizard'

@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-import { Card, Col, Form } from 'react-bootstrap'
+import Form from 'react-bootstrap/Form'
+import Card from 'react-bootstrap/Card'
+import Col from 'react-bootstrap/Col'
+
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'

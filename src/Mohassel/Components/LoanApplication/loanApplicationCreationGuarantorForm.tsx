@@ -1,6 +1,11 @@
 import React from 'react'
 import { FieldArray } from 'formik'
-import { Button, Col, Form, Row } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+
 import * as local from '../../../Shared/Assets/ar.json'
 import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import GroupInfoBox from '../LoanProfile/groupInfoBox'

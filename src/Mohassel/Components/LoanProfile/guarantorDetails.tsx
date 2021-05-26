@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import Swal from 'sweetalert2'
-import { Button, Modal, Table } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
+import Table from 'react-bootstrap/Table'
+
 import * as local from '../../../Shared/Assets/ar.json'
 import {
   downloadFile,

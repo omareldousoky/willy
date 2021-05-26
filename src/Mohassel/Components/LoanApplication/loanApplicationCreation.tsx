@@ -4,7 +4,13 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Select from 'react-select'
 import produce from 'immer'
-import { Button, Card, Container, Form, Modal } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import Container from 'react-bootstrap/Container'
+import Modal from 'react-bootstrap/Modal'
+import Form from 'react-bootstrap/Form'
+
 import local from '../../../Shared/Assets/ar.json'
 import {
   Application,

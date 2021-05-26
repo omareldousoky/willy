@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
+
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+
 import Swal from 'sweetalert2'
-import { Form } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { RouteComponentProps, withRouter } from 'react-router-dom'

@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
-import { Col, Form, Row } from 'react-bootstrap'
+
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+
 import Select from 'react-select'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
