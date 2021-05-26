@@ -146,12 +146,14 @@ class TrackLoanApplications extends Component<Props, State> {
   }
 
   componentDidMount() {
+    this.props.setSearchFilters({ type: 'micro' })
     this.props
       .search({
         size: this.state.size,
         from: this.state.from,
         url: 'application',
         branchId: this.props.branchId,
+        type: 'micro',
       })
       .then(() => {
         if (this.props.error)

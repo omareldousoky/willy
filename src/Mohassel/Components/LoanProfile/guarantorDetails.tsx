@@ -560,7 +560,6 @@ export const GuarantorTableView = (props: Props) => {
                                     style={{ cursor: 'pointer', padding: 10 }}
                                     onClick={() => downloadFile(iScore.url)}
                                   >
-                                    {' '}
                                     <span
                                       className="fa fa-file-pdf-o"
                                       style={{ margin: '0px 0px 0px 5px' }}
@@ -588,7 +587,6 @@ export const GuarantorTableView = (props: Props) => {
                                       style={{ cursor: 'pointer', padding: 10 }}
                                       onClick={() => getIscore(guar.guarantor)}
                                     >
-                                      {' '}
                                       <span
                                         className="fa fa-refresh"
                                         style={{ margin: '0px 0px 0px 5px' }}
