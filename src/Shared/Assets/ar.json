@@ -991,6 +991,8 @@
   "rejectionDetails": "تفاصيل الإبلاغ عن العميل",
   "done": "تم",
   "viewRejectionReason": "عرض سبب الرفض",
+	"currHomeAddressGov": "اسم المحافظة التابع له العميل الخاص للشئون القانونية",
+	"legalPoliceStation": "قسم الشرطة التابع له العميل بالشئون القانونية",
   "legalSettlement": "تسوية قانونية",
   "isPaid": "تم سداد ",
   "thePenalty": "الغرامه",
