@@ -1,11 +1,5 @@
 import React from 'react'
 import './style.scss'
-import Tafgeet from 'tafgeetjs'
-import {
-  numbersToArabic,
-  timeToArabicDate,
-  dayToArabic,
-} from '../../../../Shared/Services/utils'
 
 export const SmeLoanContract = (props) => {
   return (
