@@ -23,7 +23,6 @@ const FormField: FunctionComponent<FormFieldProps> = ({
     handleBlur,
     touched,
     errors,
-    setFieldTouched,
   },
 }) => {
   const { defaultValues, onPhotoChange } = useContext(AppFormContext)
@@ -107,7 +106,6 @@ const FormField: FunctionComponent<FormFieldProps> = ({
             handleImageChange={(imageFile) => {
               setFieldValue(inputFieldProps.name, imageFile)
               onPhotoChange && onPhotoChange(inputFieldProps.name, imageFile)
-              setFieldTouched(inputFieldProps.name, true)
             }}
             handleBlur={inputFieldProps.onBlur}
             view={inputFieldProps.disabled}
