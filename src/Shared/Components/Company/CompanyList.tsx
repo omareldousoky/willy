@@ -188,7 +188,7 @@ const List = ({
           <Search
             searchKeys={["keyword", "dateFromTo"]}
             dropDownKeys={[
-              'businessName',
+              'name',
               'taxCardNumber',
               'commercialRegisterNumber',
               "key",

@@ -305,7 +305,6 @@ class TrackLoanApplications extends Component<Props, State>{
       'customerShortenedCode',
     ]
     ability.can('getSMEApplication','application') && searchKeys.push('sme'); dropDownKeys.push(
-      'businessName',
       'taxCardNumber',
       'commercialRegisterNumber'
     )

@@ -205,7 +205,7 @@ class BulkApplicationApproval extends Component<Props, State>{
       'customerCode',
       'customerShortenedCode',
     ]
-    ability.can('getSMEApplication','application') && searchKey.push('sme'); dropDownKeys.push('businessName',
+    ability.can('getSMEApplication','application') && searchKey.push('sme'); dropDownKeys.push(
     'taxCardNumber',
     'commercialRegisterNumber')
     const smePermission =
