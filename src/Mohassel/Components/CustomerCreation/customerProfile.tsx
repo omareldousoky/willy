@@ -64,6 +64,18 @@ const tabs: Array<Tab> = [
     permission: 'guaranteed',
     permissionKey: 'report',
   },
+  {
+    header: local.deathCertificate,
+    stringKey: 'deathCertificate',
+    permission: 'deathCertificate',
+    permissionKey: 'customer',
+  },
+  {
+    header: local.reports,
+    stringKey: 'reports',
+    permission: 'guaranteed',
+    permissionKey: 'report',
+  },
 ]
 
 const getCustomerCategorizationRating = async (

@@ -49,9 +49,9 @@ class CustomerSearch extends Component<Props, State> {
   }
 
   handleSearchChange(event) {
-    const fleldVal = event.target.value
+    const fieldVal = event.target.value
     this.setState({
-      searchKey: fleldVal,
+      searchKey: fieldVal,
     })
   }
 
