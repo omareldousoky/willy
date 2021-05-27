@@ -676,7 +676,10 @@ const LegalCustomersList: FunctionComponent = () => {
 
         <Modal
           show={isUploadModalOpen}
-          onHide={() => setIsUploadModalOpen(false)}
+          onHide={() => {
+            setIsUploadModalOpen(false)
+            getLegalCustomers()
+          }}
           size="lg"
         >
           <Modal.Header>
@@ -684,13 +687,14 @@ const LegalCustomersList: FunctionComponent = () => {
           </Modal.Header>
           <Modal.Body>
             <UploadLegalCustomers
-              onCancel={() => setIsUploadModalOpen(false)}
+              onCancel={() => {
+                setIsUploadModalOpen(false)
+                getLegalCustomers()
+              }}
               onSubmit={(areAllSucceeded) => {
                 if (areAllSucceeded) {
                   setIsUploadModalOpen(false)
                   handleUpdateCustomerSuccess()
-                } else {
-                  getLegalCustomers()
                 }
               }}
             />

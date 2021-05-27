@@ -155,6 +155,7 @@ class LoanList extends Component<Props, State> {
 			url: "loan",
 			sort: "issueDate",
 		};
+    if (query.key === '') delete query.key
     this.props.search(query).then(() => {
       if (error) Swal.fire("Error !", getErrorMessage(error), "error");
     });
@@ -185,7 +186,6 @@ class LoanList extends Component<Props, State> {
       'customerShortenedCode',
     ]
     ability.can('getIssuedSMELoan','application') && searchKeys.push('sme'); dropDownKeys.push(
-      'businessName',
       'taxCardNumber',
       'commercialRegisterNumber',
     )
