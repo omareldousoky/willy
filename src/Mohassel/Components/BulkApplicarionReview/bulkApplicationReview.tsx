@@ -317,7 +317,7 @@ class BulkApplicationReview extends Component<Props, State>{
       "customerShortenedCode",
     ]
     this.state.branchId === 'hq' && searchKey.push('branch')
-    ability.can('getSMEApplication','application') && searchKey.push('sme'); dropDownKeys.push('businessName',
+    ability.can('getSMEApplication','application') && searchKey.push('sme'); dropDownKeys.push(
     'taxCardNumber',
     'commercialRegisterNumber')
 
