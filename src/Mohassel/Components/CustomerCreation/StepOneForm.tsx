@@ -244,7 +244,13 @@ export const StepOneForm = (props: any) => {
             >
               <option value="" disabled />
               {governorates.map(({ governorateName, governorateLegacyCode }) => (
-                <option key={governorateLegacyCode} value={governorateName.ar}>{governorateName.ar}</option>
+                <option
+                  key={governorateLegacyCode}
+                  value={governorateName.ar}
+                  selected={values.currHomeAddressGov === governorateName.ar}
+                >
+                  {governorateName.ar}
+                </option>
               ))}
             </Form.Control>
           </Form.Group>
@@ -265,7 +271,13 @@ export const StepOneForm = (props: any) => {
             >
               <option value="" disabled />
               {policeStations.map(({ districtName, districtLegacyCode }) => (
-                <option key={districtLegacyCode} value={districtName.ar}>{districtName.ar}</option>
+                <option
+                  key={districtLegacyCode}
+                  value={districtName.ar}
+                  selected={values.policeStation === districtName.ar}
+                >
+                  {districtName.ar}
+                </option>
               ))}
             </Form.Control>
           </Form.Group>
