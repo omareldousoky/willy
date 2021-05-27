@@ -14,7 +14,7 @@ export const InfoBox = ({ info, title, boxColor }: InfoBoxProps) => {
 
   const typeOfInfoBox = info.length > 1 ? "multiTabs" : "oneTab";
 
-  useEffect(() => setCurrentTab(info[0]), [info]);
+  useEffect(() => setCurrentTab(info[Number(activeTabTitle)]), [info]);
 
   const getInfoRows = (info: FieldProps[], numberOfFieldsPerRow = 3) => {
     const infoRows = [
