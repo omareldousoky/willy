@@ -42,7 +42,7 @@ class DocumentTypeCreation extends Component<Props, State> {
   }
 
   getDocumentType() {
-    const documentTypeFromH: DocumentType = this.props.history.location.state
+    const documentTypeFromH: DocumentType = this.props.location.state
       .documentType
     this.setState({ documentType: documentTypeFromH })
   }

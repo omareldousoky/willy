@@ -82,7 +82,7 @@ class UserCreation extends Component<Props, State> {
   }
 
   async getUser() {
-    const _id = this.props.history.location.state.details
+    const _id = this.props.location.state.details
     const res = await getUserDetails(_id)
     if (res.status === 'success') {
       const step1Data: Values = {
@@ -283,7 +283,7 @@ class UserCreation extends Component<Props, State> {
   }
 
   async editUser(user) {
-    const id = this.props.history.location.state.details
+    const id = this.props.location.state.details
     this.setState({ loading: true })
     const res = await editUser(user, id)
     if (res.status === 'success') {
@@ -317,7 +317,7 @@ class UserCreation extends Component<Props, State> {
             {...formikProps}
             edit={this.props.edit}
             _id={
-              this.props.edit ? this.props.history.location.state.details : ''
+              this.props.edit ? this.props.location.state.details : ''
             }
             username={this.state.username}
             nationalId={this.state.nationalId}

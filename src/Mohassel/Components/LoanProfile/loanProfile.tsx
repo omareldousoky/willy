@@ -153,7 +153,7 @@ class LoanProfile extends Component<Props, State> {
   }
 
   componentDidMount() {
-    const appId = this.props.history.location.state.id
+    const appId = this.props.location.state.id
     this.getAppByID(appId)
   }
 
@@ -497,7 +497,7 @@ class LoanProfile extends Component<Props, State> {
           ability.can('splitFromGroup', 'application'),
         onActionClick: () =>
           this.props.history.push('/track-loan-applications/remove-member', {
-            id: this.props.history.location.state.id,
+            id: this.props.location.state.id,
           }),
       },
       {
@@ -525,7 +525,7 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () =>
           this.props.history.push(
             '/track-loan-applications/edit-loan-application',
-            { id: this.props.history.location.state.id, action: 'edit' }
+            { id: this.props.location.state.id, action: 'edit' }
           ),
       },
       {
@@ -537,7 +537,7 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () =>
           this.props.history.push(
             '/track-loan-applications/loan-status-change',
-            { id: this.props.history.location.state.id, action: 'review' }
+            { id: this.props.location.state.id, action: 'review' }
           ),
       },
       {
@@ -549,7 +549,7 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () =>
           this.props.history.push(
             '/track-loan-applications/loan-status-change',
-            { id: this.props.history.location.state.id, action: 'unreview' }
+            { id: this.props.location.state.id, action: 'unreview' }
           ),
       },
       {
@@ -561,7 +561,7 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () =>
           this.props.history.push(
             '/track-loan-applications/loan-status-change',
-            { id: this.props.history.location.state.id, action: 'reject' }
+            { id: this.props.location.state.id, action: 'reject' }
           ),
       },
       {
@@ -572,7 +572,7 @@ class LoanProfile extends Component<Props, State> {
           ability.can('issueLoan', 'application'),
         onActionClick: () =>
           this.props.history.push('/track-loan-applications/create-loan', {
-            id: this.props.history.location.state.id,
+            id: this.props.location.state.id,
             type: 'issue',
           }),
       },
@@ -584,7 +584,7 @@ class LoanProfile extends Component<Props, State> {
           ability.can('createLoan', 'application'),
         onActionClick: () =>
           this.props.history.push('/track-loan-applications/create-loan', {
-            id: this.props.history.location.state.id,
+            id: this.props.location.state.id,
             type: 'create',
           }),
       },
@@ -606,7 +606,7 @@ class LoanProfile extends Component<Props, State> {
           !['reviewed', 'underReview'].includes(this.state.application.status),
         onActionClick: () =>
           this.props.history.push('/track-loan-applications/loan-roll-back', {
-            id: this.props.history.location.state.id,
+            id: this.props.location.state.id,
             status: this.state.application.status,
           }),
       },

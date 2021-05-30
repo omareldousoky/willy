@@ -31,29 +31,6 @@ interface Props extends RouteComponentProps<{}, {}, { details: string }> {
   branch: any
 }
 
-// const tabs = [
-//   {
-//     eventKey: 1,
-//     title: local.basicInfo,
-//   },
-//   {
-//     eventKey: 2,
-//     title: local.users,
-//   },
-//   {
-//     eventKey: 3,
-//     title: local.customers,
-//   },
-//   {
-//     eventKey: 4,
-//     title: local.loanApplications,
-//   },
-//   {
-//     eventKey: 5,
-//     title: local.issuedLoans,
-//   },
-// ]
-
 interface State {
   data: BranchBasicsView
   _id: string
@@ -254,7 +231,7 @@ class BranchDetails extends Component<Props, State> {
   }
 
   renderEditIcon() {
-    const _id = this.props.history.location.state.details
+    const _id = this.props.location.state.details
     return (
       <div className="rowContainer">
         <span className="icon">

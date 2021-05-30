@@ -57,7 +57,7 @@ class GroupMemberSeperation extends Component<
   }
 
   componentDidMount() {
-    const appId = this.props.history.location.state.id
+    const appId = this.props.location.state.id
     this.getAppByID(appId)
     this.getReasons()
   }

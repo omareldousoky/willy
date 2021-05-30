@@ -33,7 +33,7 @@ class FormulaView extends Component<
   }
 
   componentDidMount() {
-    const { id } = this.props.history.location.state
+    const { id } = this.props.location.state
     this.getFomula(id)
   }
 

@@ -84,7 +84,7 @@ class UserDetails extends Component<
   }
 
   async handleActivationClick() {
-    const id = this.props.history.location.state.details
+    const id = this.props.location.state.details
     const req = {
       id,
       status: this.state.data.status === 'active' ? 'inactive' : 'active',
@@ -113,7 +113,7 @@ class UserDetails extends Component<
   }
 
   async getUserDetails() {
-    const _id = this.props.history.location.state.details
+    const _id = this.props.location.state.details
     const res = await getUserDetails(_id)
     const user = this.setUserDetails(res.body)
     if (res.status === 'success') {
@@ -207,7 +207,7 @@ class UserDetails extends Component<
         <div className="rowContainer">
           <BackButton
             title={
-              this.props.history.location?.pathname?.includes(
+              this.props.location?.pathname?.includes(
                 'loanOfficer-details'
               )
                 ? local.loanOfficerDetails

@@ -45,7 +45,7 @@ class LoanStatusChange extends Component<
   }
 
   componentDidMount() {
-    const appId = this.props.history.location.state.id
+    const appId = this.props.location.state.id
     this.getAppByID(appId)
   }
 
@@ -151,7 +151,7 @@ class LoanStatusChange extends Component<
         {Object.keys(this.state.application).length > 0 && (
           <div>
             <StatusHelper
-              status={this.props.history.location.state.action}
+              status={this.props.location.state.action}
               id={this.state.application._id}
               handleStatusChange={(values, status) => {
                 this.handleStatusChange(values, status)

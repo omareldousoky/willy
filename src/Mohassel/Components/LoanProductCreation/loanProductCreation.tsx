@@ -149,7 +149,7 @@ class LoanProductCreation extends Component<Props, State> {
   }
 
   async getProduct() {
-    const { id } = this.props.history.location.state
+    const { id } = this.props.location.state
     this.setState({ loading: true })
     const product = await getProduct(id)
     if (product.status === 'success') {
@@ -168,7 +168,7 @@ class LoanProductCreation extends Component<Props, State> {
 
   submit = async (values: any) => {
     if (this.props.edit) {
-      const { id } = this.props.history.location.state
+      const { id } = this.props.location.state
       this.setState({ loading: true })
       const res = await editProductsPrincipals(id, {
         maxPrincipal: values.maxPrincipal,

@@ -58,7 +58,7 @@ class RoleProfile extends Component<RouteComponentProps<{}, {}, Role>, State> {
   }
 
   componentDidMount() {
-    const role = this.props.history.location.state
+    const role = this.props.location.state
     this.setState(
       {
         role,

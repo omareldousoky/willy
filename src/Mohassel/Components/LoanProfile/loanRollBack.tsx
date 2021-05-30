@@ -52,7 +52,7 @@ class LoanRollBack extends Component<
   }
 
   componentDidMount() {
-    const appId = this.props.history.location.state.id
+    const appId = this.props.location.state.id
     this.getAppRollableActionsByID(appId)
   }
 
@@ -62,7 +62,7 @@ class LoanRollBack extends Component<
     if (application.status === 'success') {
       this.setState({
         actions: application.body.RollbackObjects
-          ? this.props.history.location.state.status === 'canceled'
+          ? this.props.location.state.status === 'canceled'
             ? this.filterForCancelled(application.body.RollbackObjects)
             : application.body.RollbackObjects
           : [],

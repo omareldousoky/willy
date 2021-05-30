@@ -116,8 +116,8 @@ class RoleCreation extends Component<Props, State> {
     if (res.status === 'success') {
       const sections = res.body.actions
       const rolePermissionsArray = []
-      const rolePermissions = this.props.history.location.state.permissions
-        ? this.props.history.location.state.permissions
+      const rolePermissions = this.props.location.state.permissions
+        ? this.props.location.state.permissions
         : {}
       Object.keys(rolePermissions).forEach((roleSection) => {
         const sectionObject = sections.find(
@@ -204,7 +204,7 @@ class RoleCreation extends Component<Props, State> {
           perms.push({ key, value: this.state.permissions[key] })
         )
         const obj = {
-          id: this.props.history.location.state._id,
+          id: this.props.location.state._id,
           permissions: perms,
         }
         const res = await editRole(obj)
