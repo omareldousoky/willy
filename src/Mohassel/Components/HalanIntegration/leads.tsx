@@ -330,7 +330,7 @@ class Leads extends Component<Props, State>{
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['keyword', 'dateFromTo', 'lastDates']}
+              searchKeys={['keyword', 'dateFromTo', 'lastDates', 'leads-status']}
               dropDownKeys={['name']}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               hqBranchIdRequest={this.state.branchId}
