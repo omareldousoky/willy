@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import Can from '../../config/Can';
 import ReportsModal from './reportsModal';
 import { cibTpayURL } from '../../Services/APIs/Reports/cibURL';
+import { LtsIcon } from '../../../Shared/Components';
 
 interface TPAYFile {
   created: {
@@ -119,7 +120,11 @@ class CIBReports extends Component<{}, State>{
                         onClick={() => this.getFileUrl(pdf.key)}
                         title="download"
                       >
-                        <span className="download-icon" aria-hidden="true" />
+                          <LtsIcon
+                            name="green-download"
+                            color="#7dc356"
+                            size="40px"
+                          />       
                       </Button>
                      }
                     </div>

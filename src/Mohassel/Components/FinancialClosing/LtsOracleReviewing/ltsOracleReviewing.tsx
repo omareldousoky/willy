@@ -7,6 +7,7 @@ import local from '../../../../Shared/Assets/ar.json'
 import { downloadOracleReviewFile, getOracleReviewFiles, ReviewFilesResponse } from '../../../Services/APIs/loanApplication/financialClosing'
 import { downloadFile, getErrorMessage, timeToArabicDate } from '../../../../Shared/Services/utils'
 import Swal from 'sweetalert2'
+import { LtsIcon } from '../../../../Shared/Components';
 interface State {
   loading: boolean;
   data: ReviewFilesResponse;
@@ -87,8 +88,12 @@ class LtsOracleReviewing extends Component<{}, State> {
                            onClick={() => this.getFileUrl(file._id)}
                            title="download"
                          >
-                           <span className="download-icon" aria-hidden="true" />
-                         </Button>
+                          <LtsIcon
+                              name="green-download"
+                              color="#7dc356"
+                              size="40px"
+                            />                         
+                          </Button>
                       )}
                     </div>
                   </Card.Body>

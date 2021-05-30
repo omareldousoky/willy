@@ -6,6 +6,8 @@ import Card from "react-bootstrap/Card";
 import local from "../../Assets/ar.json";
 import { getIscoreReportStatus, timeToArabicDate } from "../../Services/utils";
 
+import { LtsIcon } from "../LtsIcon";
+
 import { ReportsListProps } from "./types";
 
 export const ReportsList = ({ list, onClickDownload }: ReportsListProps) => {
@@ -53,7 +55,11 @@ export const ReportsList = ({ list, onClickDownload }: ReportsListProps) => {
                     onClick={() => onClickDownload(listItem._id)}
                     title="download"
                   >
-                    <span className="download-icon" aria-hidden="true" />
+                    <LtsIcon
+                      name="green-download"
+                      color="#7dc356"
+                      size="40px"
+                    />
                   </Button>
                 )}
               </div>

@@ -5,6 +5,7 @@ import Card from "react-bootstrap/Card";
 
 import local from "../../Assets/ar.json";
 import Can from "../../config/Can";
+import { LtsIcon } from "../LtsIcon";
 
 import { PDFListProps } from "./types";
 
@@ -27,7 +28,11 @@ export const PDFList = ({ list, onClickDownload }: PDFListProps) => {
                     onClick={() => onClickDownload(listItem)}
                     title="download"
                   >
-                    <span className="download-icon" aria-hidden="true" />
+                    <LtsIcon
+                      name="green-download"
+                      color="#7dc356"
+                      size="40px"
+                    />
                   </Button>
                 </div>
               </Card.Body>
