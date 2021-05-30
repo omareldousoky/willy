@@ -9,7 +9,6 @@ import Can from '../../config/Can'
 const ManualRandomPaymentsActions = (props) => {
   return (
     <>
-      {' '}
       {props.pendingActions.map((pendingAction, index) => {
         return (
           <div key={index} className="warning-container">
@@ -22,7 +21,6 @@ const ManualRandomPaymentsActions = (props) => {
             <div className="info">
               <span className="text-muted">{local.gender}</span>
               <span>
-                {' '}
                 {getRandomPaymentByKey(pendingAction.transactions[0].action)}
               </span>
             </div>

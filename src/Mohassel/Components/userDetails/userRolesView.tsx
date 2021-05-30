@@ -77,7 +77,7 @@ export default class UserRolesView extends Component<Props, State> {
             <div className="rowContainer">
               <div className="columnContianer">
                 <div className="subTitle">{local.roleName}</div>
-                <div>{this.state.selectedRole?.roleName}</div>{' '}
+                <div>{this.state.selectedRole?.roleName}</div>
               </div>
               <div className="columnContianer">
                 <div className="subTitle">{local.permissions} </div>
@@ -119,7 +119,7 @@ export default class UserRolesView extends Component<Props, State> {
               style={{ float: 'right', margin: '0px 5px' }}
               alt="search-icon"
               src={require('../../Assets/permissions-inactive.svg')}
-            />{' '}
+            />
             {local.permissions}
           </span>
         </div>

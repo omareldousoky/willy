@@ -168,7 +168,7 @@ class IscoreReports extends Component<{}, State> {
               })
             ) : (
               <div className="d-flex align-items-center justify-content-center">
-                {local.noResults}{' '}
+                {local.noResults}
               </div>
             )}
           </Card.Body>

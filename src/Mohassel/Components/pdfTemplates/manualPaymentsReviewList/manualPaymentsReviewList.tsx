@@ -77,7 +77,7 @@ const ManualPaymentsReviewList = () => {
           </tr>
           <tr>
             <th className="gray frame" colSpan={2}>
-              بنك / خرينه{' '}
+              بنك / خرينه
             </th>
             <th className="gray frame" colSpan={2}>
               خزينه 5 فرع ابوتيج - اسيوط - ابوتيج

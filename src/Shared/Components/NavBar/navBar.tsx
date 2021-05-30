@@ -248,13 +248,11 @@ class NavBar extends Component<Props, State> {
                 <div className="info-navbar">
                   <span>{local.currentPeriodStartsIn}</span>
                   <span className="text-primary mx-2 font-weight-bold">
-                    {' '}
-                    {this.getDaysOfMonth().firstDay}{' '}
+                    {this.getDaysOfMonth().firstDay}
                   </span>
                   <span>{local.andEndsIn}</span>
                   <span className="text-primary mx-2 font-weight-bold">
-                    {' '}
-                    {this.getDaysOfMonth().lastDay}{' '}
+                    {this.getDaysOfMonth().lastDay}
                   </span>
                 </div>
               </div>
@@ -497,7 +495,7 @@ class NavBar extends Component<Props, State> {
                     onClick={() => this.props.history.push('/encoding-files')}
                   >
                     {local.tools}
-                  </Nav.Link>{' '}
+                  </Nav.Link>
                 </Can>
               )}
               {ability.can('getIssuedLoan', 'application') ||
@@ -549,7 +547,7 @@ class NavBar extends Component<Props, State> {
                     onClick={() => this.props.history.push('/clearances')}
                   >
                     {local.clearances}
-                  </Nav.Link>{' '}
+                  </Nav.Link>
                 </Can>
               )}
               {!this.props.hide && (

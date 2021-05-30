@@ -101,7 +101,7 @@ export default class Wizard extends Component<Props, State> {
           {step.selected && (
             <>
               <div className="outer">
-                <div className="inner"> </div>{' '}
+                <div className="inner"> </div>
               </div>
             </>
           )}

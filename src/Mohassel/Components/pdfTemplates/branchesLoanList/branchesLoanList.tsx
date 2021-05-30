@@ -43,8 +43,8 @@ const BranchesLoanList = (props) => {
                       <th>شركة تساهيل للتمويل متناهي الصغر</th>
                       <td>{store.getState().auth.name}</td>
                       <th>
-                        القروض والحالات للفتره من :{' '}
-                        {timeToArabicDate(props.fromDate, false)} الي :{' '}
+                        القروض والحالات للفتره من :
+                        {timeToArabicDate(props.fromDate, false)} الي :
                         {timeToArabicDate(props.toDate, false)}
                       </th>
                       <th>1/1</th>

@@ -76,7 +76,7 @@ const ExecutedPaymentsList = () => {
           </tr>
           <tr>
             <th className="frame" colSpan={2}>
-              بنك / خرينه{' '}
+              بنك / خرينه
             </th>
             <th className="frame" colSpan={2}>
               خرينه 5 فرع أبوتيج - اسيوط - أبوتيج

@@ -39,13 +39,13 @@ const TotalWrittenChecks = (props) => {
             <div>والمقيم في: {props.data.customer.customerHomeAddress}</div>
             <div>من شركة تساهيل للتمويل متناهي الصغر &quot;تساهيل&quot;</div>
             <div>
-              مبلغاً وقدره{' '}
+              مبلغاً وقدره
               {`${numbersToArabic(
                 props.data.installmentsObject.totalInstallments.installmentSum
               )} جنيه = (${new Tafgeet(
                 props.data.installmentsObject.totalInstallments.installmentSum,
                 'EGP'
-              ).parse()})`}{' '}
+              ).parse()})`}
             </div>
             <div>
               وذلك علي سبيل الأمانه لأقوم بسداده الي حساب رقم: ٥٢٢٩٩٤ ببنك
@@ -88,14 +88,14 @@ const TotalWrittenChecks = (props) => {
                   من شركة تساهيل للتمويل متناهي الصغر &quot;تساهيل&quot;
                 </div>
                 <div>
-                  مبلغاً وقدره{' '}
+                  مبلغاً وقدره
                   {`${numbersToArabic(
                     props.data.installmentsObject.totalInstallments
                       .installmentSum
                   )} جنيه = (${new Tafgeet(
                     props.data.installmentsObject.totalInstallments.installmentSum,
                     'EGP'
-                  ).parse()})`}{' '}
+                  ).parse()})`}
                 </div>
                 <div>
                   وذلك علي سبيل الأمانه لأقوم بسداده الي حساب رقم: ٥٢٢٩٩٤ ببنك
@@ -134,11 +134,11 @@ const TotalWrittenChecks = (props) => {
                 إيصال استلام مبلغ نقدى علي سبيل الامانه
               </div>
               <div>
-                استلمت انا الموقع ادناه /{' '}
+                استلمت انا الموقع ادناه /
                 {individualInGroup.customer.customerName}
               </div>
               <div>
-                بطاقه رقم قومي:{' '}
+                بطاقه رقم قومي:
                 {numbersToArabic(individualInGroup.customer.nationalId)}
               </div>
               <div>
@@ -146,13 +146,13 @@ const TotalWrittenChecks = (props) => {
               </div>
               <div>من شركة تساهيل للتمويل متناهي الصغر &quot;تساهيل&quot;</div>
               <div>
-                مبلغاً وقدره{' '}
+                مبلغاً وقدره
                 {`${numbersToArabic(
                   props.data.installmentsObject.totalInstallments.installmentSum
                 )} جنيه = (${new Tafgeet(
                   props.data.installmentsObject.totalInstallments.installmentSum,
                   'EGP'
-                ).parse()})`}{' '}
+                ).parse()})`}
               </div>
               <div>
                 وذلك علي سبيل الأمانه لأقوم بسداده الي حساب رقم: ٥٢٢٩٩٤ ببنك

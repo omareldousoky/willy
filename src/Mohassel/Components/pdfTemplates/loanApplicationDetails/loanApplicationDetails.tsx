@@ -337,7 +337,7 @@ const LoanApplicationDetails = (props) => {
                   <tr>
                     <th>تكلفه التمويل الموزعه</th>
                     <td>
-                      {loan.productInterest}%{' '}
+                      {loan.productInterest}%
                       {interestPeriod(loan.interestPeriod)}
                     </td>
                     <th>تكلفه التمويل المقدمه</th>
@@ -519,7 +519,7 @@ const LoanApplicationDetails = (props) => {
         })
       ) : (
         <h1 style={{ textAlign: 'right' }}>هذا العميل ليس لديه قروض </h1>
-      )}{' '}
+      )}
     </div>
   )
 }

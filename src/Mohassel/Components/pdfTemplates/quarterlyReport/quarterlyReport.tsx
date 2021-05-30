@@ -57,7 +57,7 @@ const QuarterlyReport = (props: Props) => {
                 تلتزم الجمعية أو المؤسسة بناءً على نص المادة &quot; 42 &quot; من
                 قواعد ومعايير ممارسة نشاط التمويل متناهي الصغربإعداد التقارير
                 الرقابية المبينة فى الملحق (ب) وتسليمها للوحدة فى التوقيتات
-                المحددة قرين كل منها{' '}
+                المحددة قرين كل منها
               </li>
               <li>
                 على الجمعية أو المؤسسة السعى نحو توافق النماذج المستخدمة وتصميم
@@ -70,7 +70,7 @@ const QuarterlyReport = (props: Props) => {
               </li>
               <li>
                 وقد تم تصميم النموذج الإلكتروني المرفق لمساعدة الجمعيات و
-                المؤسسات الأهلية بإعداد التقارير الشهرية المطلوبة{' '}
+                المؤسسات الأهلية بإعداد التقارير الشهرية المطلوبة
               </li>
             </ul>
           </div>
@@ -137,7 +137,6 @@ const QuarterlyReport = (props: Props) => {
                   <td className="label"> من</td>
                   <td className="td-body"> {props.data.fromDate}</td>
                   <td className="label" style={{ paddingRight: 10 }}>
-                    {' '}
                     الي
                   </td>
                   <td className="td-body"> {props.data.toDate}</td>
@@ -160,7 +159,6 @@ const QuarterlyReport = (props: Props) => {
         <div className="page-three-container">
           <div className="inner-container">
             <h4>
-              {' '}
               تقرير (ج.م.ص. / 2) الأداء الربع سنوي لنشاط التمويل متناهى الصغر
             </h4>
             <table>
@@ -170,7 +168,6 @@ const QuarterlyReport = (props: Props) => {
                   <td className="td-body"> {props.data.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
-                    {' '}
                     إلى:
                   </td>
                   <td className="td-body">{props.data.toDate}</td>
@@ -333,7 +330,6 @@ const QuarterlyReport = (props: Props) => {
         <div className="page-three-container">
           <div className="inner-container">
             <h4>
-              {' '}
               تقرير (ج.م.ص. / 2) الأداء الربع سنوي لنشاط التمويل متناهى الصغر
             </h4>
             <table>
@@ -343,7 +339,6 @@ const QuarterlyReport = (props: Props) => {
                   <td className="td-body">{props.data.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
-                    {' '}
                     إلى:
                   </td>
                   <td className="td-body">{props.data.toDate}</td>
@@ -476,7 +471,6 @@ const QuarterlyReport = (props: Props) => {
         <div className="page-three-container">
           <div className="inner-container">
             <h4>
-              {' '}
               تقرير (ج.م.ص. / 2) الأداء الربع سنوي لنشاط التمويل متناهى الصغر
             </h4>
             <table>
@@ -486,7 +480,6 @@ const QuarterlyReport = (props: Props) => {
                   <td className="td-body">{props.data.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
-                    {' '}
                     إلى:
                   </td>
                   <td className="td-body">{props.data.toDate}</td>
@@ -543,7 +536,6 @@ const QuarterlyReport = (props: Props) => {
         <div className="page-three-container">
           <div className="inner-container">
             <h4>
-              {' '}
               تقرير (ج.م.ص. / 2) الأداء الربع سنوي لنشاط التمويل متناهى الصغر
             </h4>
             <table>
@@ -553,7 +545,6 @@ const QuarterlyReport = (props: Props) => {
                   <td className="td-body">{props.data.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
-                    {' '}
                     إلى:
                   </td>
                   <td className="td-body">{props.data.toDate}</td>
@@ -607,7 +598,6 @@ const QuarterlyReport = (props: Props) => {
         <div className="page-three-container">
           <div className="inner-container">
             <h4>
-              {' '}
               تقرير (ج.م.ص. / 2) الأداء الربع سنوي لنشاط التمويل متناهى الصغر
             </h4>
             <table>
@@ -617,7 +607,6 @@ const QuarterlyReport = (props: Props) => {
                   <td className="td-body">{props.data.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
-                    {' '}
                     إلى:
                   </td>
                   <td className="td-body">{props.data.toDate}</td>

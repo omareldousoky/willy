@@ -189,14 +189,13 @@ class UsersList extends Component<Props, State> {
             className="icon"
             onClick={() => this.handleActivationClick(data)}
           >
-            {' '}
             {data.status === 'active' && (
               <img
                 alt="deactive"
                 src={require('../../Assets/deactivate-user.svg')}
               />
-            )}{' '}
-            {data.status === 'inactive' && local.activate}{' '}
+            )}
+            {data.status === 'inactive' && local.activate}
           </span>
         </Can>
       </>

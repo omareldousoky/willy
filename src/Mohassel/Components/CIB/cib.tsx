@@ -246,13 +246,13 @@ class CIB extends Component<{}, State> {
                   {local.cib}
                 </Card.Title>
                 <span style={{ fontWeight: 'bold', marginLeft: 10 }}>
-                  {local.noOfSelectedLoans}{' '}
+                  {local.noOfSelectedLoans}
                   <span
                     style={{ fontWeight: 'bold', color: '#7dc356' }}
                   >{` (${this.state.selectedCustomers.length})`}</span>
                 </span>
                 <span style={{ fontWeight: 'bold' }}>
-                  {local.loansSelectedAmount}{' '}
+                  {local.loansSelectedAmount}
                   <span
                     style={{ fontWeight: 'bold', color: '#7dc356' }}
                   >{` (${this.state.principalSelectedSum})`}</span>
@@ -263,7 +263,6 @@ class CIB extends Component<{}, State> {
                 disabled={!this.state.selectedCustomers.length}
                 className="big-button"
               >
-                {' '}
                 {local.changeFund}
                 <span
                   className="fa fa-exchange-alt"

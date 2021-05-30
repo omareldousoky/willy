@@ -93,7 +93,7 @@ const LoanApplicationFees = (props: Props) => {
           <tr className="headtitle">
             <th colSpan={4}>المركز الرئيسي</th>
             <th colSpan={6}>
-              تاريخ الحركه من {timeToArabicDate(props.startDate, false)} الي{' '}
+              تاريخ الحركه من {timeToArabicDate(props.startDate, false)} الي
               {timeToArabicDate(props.endDate, false)}
             </th>
           </tr>

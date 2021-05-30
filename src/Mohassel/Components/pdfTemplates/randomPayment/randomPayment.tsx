@@ -95,8 +95,8 @@ const RandomPayment = (props: Props) => {
                     <tr className="head-title">
                       <th />
                       <th>
-                        الحركات الماليه من الفتره{' '}
-                        {timeToArabicDate(props.startDate, false)} الي{' '}
+                        الحركات الماليه من الفتره
+                        {timeToArabicDate(props.startDate, false)} الي
                         {timeToArabicDate(props.endDate, false)}
                       </th>
                     </tr>

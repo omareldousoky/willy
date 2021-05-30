@@ -305,7 +305,6 @@ class SourceOfFund extends Component<Props, State> {
                   className="big-button"
                   style={{ marginLeft: 20 }}
                 >
-                  {' '}
                   {local.downloadOldFiles}
                   <span
                     className="fa fa-download-alt"
@@ -319,7 +318,6 @@ class SourceOfFund extends Component<Props, State> {
                   disabled={!this.state.selectedCustomers.length}
                   className="big-button"
                 >
-                  {' '}
                   {local.changeFund}
                   <span
                     className="fa fa-exchange-alt"

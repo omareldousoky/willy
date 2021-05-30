@@ -287,7 +287,7 @@ class MoveCustomers extends Component<{}, State> {
                           disabled={!this.state.selectedCustomers.length}
                           className="big-btn"
                         >
-                          {local.changeRepresentative}{' '}
+                          {local.changeRepresentative}
                           <span className="fa fa-exchange-alt" />
                         </Button>
                       </Can>

@@ -102,7 +102,7 @@ class BranchesList extends Component<Props, State> {
                     state: { details: data._id },
                   })
                 }}
-              />{' '}
+              />
             </Can>
           </>
         ),

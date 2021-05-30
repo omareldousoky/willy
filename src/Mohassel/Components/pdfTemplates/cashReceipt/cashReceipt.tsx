@@ -56,7 +56,6 @@ const CashReceipt = (props) => {
                     ايصال استلام مبلغ نقدى
                   </div>
                   <div>
-                    {' '}
                     تحريرا في
                     <span>
                       {' ' +
@@ -65,13 +64,13 @@ const CashReceipt = (props) => {
                     </span>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    استلمت انا / {props.data.customer.customerName}، مبلغ{' '}
+                    استلمت انا / {props.data.customer.customerName}، مبلغ
                     {`${numbersToArabic(
                       props.data.principal
                     )} جنيه = (${new Tafgeet(
                       props.data.principal,
                       'EGP'
-                    ).parse()})`}{' '}
+                    ).parse()})`}
                     من شركة تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل
                     (القرض)
                   </div>
@@ -110,7 +109,6 @@ const CashReceipt = (props) => {
                           ايصال استلام مبلغ نقدى
                         </div>
                         <div>
-                          {' '}
                           تحريرا في
                           <span>
                             {' ' +
@@ -120,13 +118,13 @@ const CashReceipt = (props) => {
                         </div>
                         <div style={{ margin: '20px 0px', textAlign: 'right' }}>
                           استلمت انا / {individualInGroup.customer.customerName}
-                          ، مبلغ{' '}
+                          ، مبلغ
                           {`${numbersToArabic(
                             individualInGroup.amount
                           )} جنيه' (${new Tafgeet(
                             individualInGroup.amount,
                             'EGP'
-                          ).parse()})`}{' '}
+                          ).parse()})`}
                           من شركة تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل
                           (القرض)
                         </div>
@@ -136,7 +134,7 @@ const CashReceipt = (props) => {
                               <td className="sign">
                                 <div>توقيع المستلم</div>
                                 <div>
-                                  الاسم/{' '}
+                                  الاسم/
                                   {individualInGroup.customer.customerName}
                                 </div>
                               </td>
@@ -164,7 +162,6 @@ const CashReceipt = (props) => {
             <td>
               <div className="divFooter">
                 <div className="headtitle textcenter">
-                  {' '}
                   <u>إقرار</u>
                 </div>
                 <div>

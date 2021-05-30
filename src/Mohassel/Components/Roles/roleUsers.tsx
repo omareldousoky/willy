@@ -135,7 +135,7 @@ class RoleUsers extends Component<Props, State> {
                   {local.users}
                 </Card.Title>
                 <span className="text-muted">
-                  {local.noOfUsers}{' '}
+                  {local.noOfUsers}
                   {this.props.totalCount ? this.props.totalCount : 0}
                 </span>
               </div>

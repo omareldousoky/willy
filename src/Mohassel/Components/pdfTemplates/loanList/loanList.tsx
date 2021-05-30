@@ -78,7 +78,7 @@ const LoanList = () => {
         <tbody>
           <tr>
             <th className="gray frame" colSpan={2}>
-              بنك / خرينه{' '}
+              بنك / خرينه
             </th>
             <th className="gray frame" colSpan={2}>
               بنك 1 - الجيزه - الصف

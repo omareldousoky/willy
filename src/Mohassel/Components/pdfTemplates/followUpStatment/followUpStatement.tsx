@@ -53,7 +53,6 @@ const FollowUpStatementPDF = (props: Props) => {
         <tbody>
           <tr>
             <td style={{ textAlign: 'right' }}>
-              {' '}
               العميل
               <div className="frame">
                 {numbersToArabic(getCustomerData('key'))}

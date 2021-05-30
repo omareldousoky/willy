@@ -684,7 +684,7 @@ class Payment extends Component<Props, State> {
                 <span
                   className="fa fa-download"
                   style={{ margin: '0px 0px 0px 5px' }}
-                />{' '}
+                />
                 {local.downloadPDF}
               </span>
               <Formik

@@ -150,7 +150,7 @@ class UploadDocuments extends Component<Props, State> {
                 )
                 this.setState({ loading: false })
               }}
-            >{`${local.download}(${this.props.selectionArray.length})`}</Button>{' '}
+            >{`${local.download}(${this.props.selectionArray.length})`}</Button>
           </div>
         </Row>
         {this.state.documentTypes.map((documentType, index) => {

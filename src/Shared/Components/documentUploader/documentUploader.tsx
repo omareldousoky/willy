@@ -488,8 +488,7 @@ class DocumentUploader extends Component<Props, State> {
               fontWeight: 'bold',
             }}
           >
-            {' '}
-            {local.inactiveDocument}{' '}
+            {local.inactiveDocument}
           </span>
         </h4>
         <div
@@ -530,7 +529,7 @@ class DocumentUploader extends Component<Props, State> {
           }}
         >
           <div style={{ textAlign: 'right', fontWeight: 'bold' }}>
-            {this.props.documentType.name}{' '}
+            {this.props.documentType.name}
             <span
               style={{
                 margin: '0  10px',

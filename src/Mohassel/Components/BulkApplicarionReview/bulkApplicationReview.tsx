@@ -605,10 +605,9 @@ class BulkApplicationReview extends Component<Props, State> {
                               </Can>
                             )}
                             <Can I="thirdReview" a="application">
-                              {' '}
                               <option value="thirdReview">
                                 {local.thirdReview}
-                              </option>{' '}
+                              </option>
                             </Can>
                           </Form.Control>
                           <Form.Control.Feedback type="invalid">

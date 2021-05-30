@@ -196,7 +196,6 @@ class EditLead extends Component<
                             : ''
                         }`}
                       >
-                        {' '}
                         اقل من ٢١ سنه
                       </div>
                       <div
@@ -344,7 +343,6 @@ class EditLead extends Component<
                           formikProps.values.loanOwner ? 'active' : ''
                         }`}
                       >
-                        {' '}
                         {local.personal}
                       </div>
                       <div

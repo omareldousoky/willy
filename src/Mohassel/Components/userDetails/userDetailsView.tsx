@@ -39,7 +39,6 @@ const UserDetailsView = (props: Props) => {
           <tr>
             <td style={header}>{local.userRole}*</td>
             <td style={cell}>
-              {' '}
               <Labels
                 labelsTextArr={data.roles?.map((role) => {
                   return role.roleName

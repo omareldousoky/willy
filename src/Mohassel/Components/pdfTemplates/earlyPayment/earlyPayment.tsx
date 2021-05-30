@@ -158,7 +158,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
               </th>
               <td />
               <td className="title bold">
-                {this.props.branchDetails.name} -{' '}
+                {this.props.branchDetails.name} -
                 {this.props.branchDetails.governorate}
               </td>
             </tr>
@@ -175,7 +175,6 @@ class EarlyPaymentPDF extends Component<Props, State> {
           <tbody>
             <tr>
               <td>
-                {' '}
                 العميل
                 <div className="frame">
                   {this.props.data.product.beneficiaryType === 'individual'
@@ -195,12 +194,10 @@ class EarlyPaymentPDF extends Component<Props, State> {
                 </div>
               </td>
               <td>
-                {' '}
                 التاريخ
                 <div className="frame">{timeToArabicDateNow(false)}</div>
               </td>
               <td>
-                {' '}
                 المندوب
                 <div className="frame">
                   {this.props.data.product.beneficiaryType === 'group'
@@ -218,11 +215,11 @@ class EarlyPaymentPDF extends Component<Props, State> {
           <tbody>
             <tr>
               <td>
-                تاريخ الحساب{' '}
+                تاريخ الحساب
                 <div className="frame">{timeToArabicDateNow(false)}</div>
               </td>
               <td>
-                فترة السداد{' '}
+                فترة السداد
                 <div className="frame">
                   {this.props.data.product.periodType === 'days'
                     ? local.daily
@@ -230,7 +227,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                 </div>
               </td>
               <td>
-                عدد الاقساط{' '}
+                عدد الاقساط
                 <div className="frame">
                   {numbersToArabic(
                     this.props.data.installmentsObject.installments.length
@@ -268,7 +265,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                 </span>
               </td>
               <td>
-                غرامات معفاة :{' '}
+                غرامات معفاة :
                 <div className="frame">
                   {numbersToArabic(this.props.data.penaltiesCanceled)}
                 </div>

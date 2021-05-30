@@ -766,7 +766,7 @@ class LoanApplicationCreation extends Component<Props, State> {
     }
     return (
       <span>
-        {customerIsBlockerError} {customerIsBlockerError ? <br /> : null}{' '}
+        {customerIsBlockerError} {customerIsBlockerError ? <br /> : null}
         {groupAgeError}
       </span>
     )

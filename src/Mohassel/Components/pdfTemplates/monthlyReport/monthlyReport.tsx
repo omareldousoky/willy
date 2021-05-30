@@ -20,7 +20,6 @@ const MonthlyReport = (props: { data: MonthReport }) => {
           </div>
           <div className="text-list">
             <h4>
-              {' '}
               أولاً: تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر
             </h4>
             <ul>
@@ -28,7 +27,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                 تلتزم الجمعية أو المؤسسة بناءً على نص المادة &quot; 42 &quot; من
                 قواعد ومعايير ممارسة نشاط التمويل متناهي الصغربإعداد التقارير
                 الرقابية المبينة فى الملحق (ب) وتسليمها للوحدة فى التوقيتات
-                المحددة قرين كل منها{' '}
+                المحددة قرين كل منها
               </li>
               <li>
                 على الجمعية أو المؤسسة السعى نحو توافق النماذج المستخدمة وتصميم
@@ -41,7 +40,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
               </li>
               <li>
                 وقد تم تصميم النموذج الإلكتروني المرفق لمساعدة الجمعيات و
-                المؤسسات الأهلية بإعداد التقارير الشهرية المطلوبة{' '}
+                المؤسسات الأهلية بإعداد التقارير الشهرية المطلوبة
               </li>
             </ul>
           </div>
@@ -105,7 +104,6 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                   <td className="label"> من</td>
                   <td className="td-body">{props.data.fromDate}</td>
                   <td className="label" style={{ paddingRight: 10 }}>
-                    {' '}
                     الي
                   </td>
                   <td className="td-body">{props.data.toDate}</td>
@@ -138,7 +136,6 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                   <td className="td-body">{props.data.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
-                    {' '}
                     إلى:
                   </td>
                   <td className="td-body">{props.data.toDate}</td>
@@ -262,7 +259,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
           </div>
           <div className="inner-container">
             <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>
-              بناء على البيانات التي تم إدخالها في الجدول أعلاه{' '}
+              بناء على البيانات التي تم إدخالها في الجدول أعلاه
             </p>
             <div className="totals">
               <div className="lines">
@@ -305,7 +302,6 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                   <td className="td-body">{props.data.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
-                    {' '}
                     إلى:
                   </td>
                   <td className="td-body">{props.data.toDate}</td>
@@ -348,7 +344,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
           </div>
           <div className="inner-container">
             <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>
-              بناء على البيانات التي تم إدخالها في الجدول أعلاه{' '}
+              بناء على البيانات التي تم إدخالها في الجدول أعلاه
             </p>
             <div className="totals">
               <div className="lines">
@@ -363,7 +359,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
               <div className="lines">
                 <p>
                   مدى مطابقة &quot;إجمالي قيمة أرصدة التمويل القائمة&quot;
-                  بالجدول أعلاه ل&quot;إجمالي قيمة أرصدة{' '}
+                  بالجدول أعلاه ل&quot;إجمالي قيمة أرصدة
                 </p>
                 <p>
                   التمويل القائمة&quot; بالجدول رقم &quot;1&quot; الخاص بالعملاء
@@ -414,7 +410,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
           </div>
           <div className="inner-container">
             <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>
-              بناء على البيانات التي تم إدخالها في الجدول أعلاه{' '}
+              بناء على البيانات التي تم إدخالها في الجدول أعلاه
             </p>
             <div className="totals">
               <div className="lines">
@@ -432,7 +428,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
               <div className="lines">
                 <p>
                   مدى مطابقة &quot;إجمالي قيمة أرصدة التمويل القائمة&quot;
-                  بالجدول أعلاه ل&quot;إجمالي قيمة أرصدة{' '}
+                  بالجدول أعلاه ل&quot;إجمالي قيمة أرصدة
                 </p>
                 <p>
                   التمويل القائمة&quot; بالجدول رقم &quot;1&quot; الخاص بالعملاء
@@ -466,7 +462,6 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                   <td className="td-body"> {props.data.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
-                    {' '}
                     إلى:
                   </td>
                   <td className="td-body">{props.data.toDate}</td>
@@ -606,7 +601,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
           </div>
           <div className="inner-container">
             <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>
-              بناء على البيانات التي تم إدخالها في الجدول أعلاه{' '}
+              بناء على البيانات التي تم إدخالها في الجدول أعلاه
             </p>
             <div className="totals">
               <div className="lines">
@@ -615,7 +610,6 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                   يتجاوز أسبوع + حتى 30 يوم
                 </p>
                 <p>
-                  {' '}
                   + حتى 60 يوم + حتى 90 يوم + حتى 120 يوم + أكثر من 120 يوم )+
                   أقساط (مرحلة + معاد جدولتها)
                 </p>
@@ -642,7 +636,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
           </div>
           <div className="inner-container">
             <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>
-              بناء على البيانات التي تم إدخالها في الجدول أعلاه{' '}
+              بناء على البيانات التي تم إدخالها في الجدول أعلاه
             </p>
             <div className="totals">
               <div className="lines">
@@ -651,9 +645,8 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                   أسبوع + حتى 30 يوم
                 </p>
                 <p>
-                  {' '}
                   + حتى 60 يوم + حتى 90 يوم + حتى 120 يوم + أكثر من 120 يوم )+
-                  أقساط (مرحلة + معاد جدولتها){' '}
+                  أقساط (مرحلة + معاد جدولتها)
                 </p>
               </div>
               <div className="big-number">{props.data.totalArrears}</div>
@@ -662,7 +655,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
               <div className="lines">
                 <p>
                   مدى مطابقة &quot;إجمالي قيمة أرصدة التمويل المستحقة&quot;
-                  بالجدول أعلاه ل&quot;إجمالي قيمة أرصدة{' '}
+                  بالجدول أعلاه ل&quot;إجمالي قيمة أرصدة
                 </p>
                 <p>
                   التمويل القائمة&quot; بالجدول رقم &quot;1&quot; الخاص بالعملاء
@@ -696,7 +689,6 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                   <td className="td-body">{props.data.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
-                    {' '}
                     إلى:
                   </td>
                   <td className="td-body">{props.data.toDate}</td>
@@ -781,7 +773,6 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                   <td className="td-body">{props.data.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
-                    {' '}
                     إلى:
                   </td>
                   <td className="td-body">{props.data.toDate}</td>

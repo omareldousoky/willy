@@ -161,7 +161,7 @@ export const ClearanceCreationForm = (
       <Row className="px-2 py-3">
         <Form.Group as={Col} controlId="clearanceReason">
           <Form.Label className="clearance-label">
-            {local.clearanceReason}{' '}
+            {local.clearanceReason}
           </Form.Label>
           <Form.Control
             type="text"

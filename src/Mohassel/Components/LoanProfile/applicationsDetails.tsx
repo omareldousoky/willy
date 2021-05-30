@@ -60,7 +60,7 @@ export const LoanDetailsTableView = ({
         <tr>
           <td>{local.customerType}</td>
           <td>
-            {beneficiaryType(application.product.beneficiaryType)} -{' '}
+            {beneficiaryType(application.product.beneficiaryType)} -
             {application.product.type || ''}
           </td>
         </tr>
@@ -280,16 +280,14 @@ export const LoanDetailsBoxView = ({ application }: Props) => {
           <Form.Label style={{ color: '#6e6e6e' }}>
             {local.calculationFormulaId}
           </Form.Label>
-          <Form.Label>
-            {application.product.calculationFormula.name}{' '}
-          </Form.Label>
+          <Form.Label>{application.product.calculationFormula.name}</Form.Label>
         </Form.Group>
         <Form.Group as={Col} md="3" className="d-flex flex-column">
           <Form.Label style={{ color: '#6e6e6e' }}>{local.interest}</Form.Label>
           <Form.Label>
             {application.product.interest +
               ' ' +
-              interestPeriod(application.product.interestPeriod)}{' '}
+              interestPeriod(application.product.interestPeriod)}
           </Form.Label>
         </Form.Group>
       </Form.Row>
@@ -307,7 +305,7 @@ export const LoanDetailsBoxView = ({ application }: Props) => {
           <Form.Label>
             {application.product.periodLength +
               ' ' +
-              periodType(application.product.periodType)}{' '}
+              periodType(application.product.periodType)}
           </Form.Label>
         </Form.Group>
         <Form.Group as={Col} md="3" className="d-flex flex-column">

@@ -128,7 +128,7 @@ class UserManagerForm extends Component<Props, State> {
                   style={{ float: 'right' }}
                   alt="search-icon"
                   src={require('../../Assets/searchIcon.svg')}
-                />{' '}
+                />
                 {local.searchByUserRole}
               </span>
             }
@@ -186,7 +186,7 @@ class UserManagerForm extends Component<Props, State> {
                     style={{ float: 'right' }}
                     alt="search-icon"
                     src={require('../../Assets/searchIcon.svg')}
-                  />{' '}
+                  />
                   {local.searchByBranch}
                 </span>
               }
@@ -244,7 +244,7 @@ class UserManagerForm extends Component<Props, State> {
                       style={{ float: 'right' }}
                       alt="search-icon"
                       src={require('../../Assets/searchIcon.svg')}
-                    />{' '}
+                    />
                     {local.searchByName}
                   </span>
                 }

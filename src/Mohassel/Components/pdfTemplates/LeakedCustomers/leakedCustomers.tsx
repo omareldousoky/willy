@@ -23,11 +23,10 @@ const LeakedCustomersPDF = ({ data, fromDate, toDate }: Props) => {
                   شركة تساهيل للتمويل متناهي الصغر
                 </th>
                 <th colSpan={9} className="noborder">
-                  العملاء المتسربون عن الفتره من {timeToArabicDate(from, false)}{' '}
+                  العملاء المتسربون عن الفتره من {timeToArabicDate(from, false)}
                   الي {timeToArabicDate(to, false)}
                 </th>
                 <th colSpan={2} className="noborder">
-                  {' '}
                   فرع: {branchCustomers.branchName}
                 </th>
               </tr>

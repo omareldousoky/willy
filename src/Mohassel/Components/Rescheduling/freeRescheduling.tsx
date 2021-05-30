@@ -545,7 +545,7 @@ class FreeRescheduling extends Component<Props, State> {
                   >
                     <div className="d-flex flex-column">
                       <span>
-                        {local.totalPricipleInTable}{' '}
+                        {local.totalPricipleInTable}
                         {parseFloat(
                           this.getTotals(
                             formikProps.values
@@ -553,7 +553,7 @@ class FreeRescheduling extends Component<Props, State> {
                         )}
                       </span>
                       <span>
-                        {local.totalPricipleInLoan}{' '}
+                        {local.totalPricipleInLoan}
                         {
                           this.props.application.installmentsObject
                             .totalInstallments.principal
@@ -562,13 +562,13 @@ class FreeRescheduling extends Component<Props, State> {
                     </div>
                     <div className="d-flex flex-column">
                       <span>
-                        {local.totalFeesInTable}{' '}
+                        {local.totalFeesInTable}
                         {parseFloat(
                           this.getTotals(formikProps.values).feesSum.toFixed(2)
                         )}
                       </span>
                       <span>
-                        {local.totalFeesInLoan}{' '}
+                        {local.totalFeesInLoan}
                         {
                           this.props.application.installmentsObject
                             .totalInstallments.feesSum
@@ -603,12 +603,12 @@ class FreeRescheduling extends Component<Props, State> {
                   ) : (
                     <div>
                       <h1>
-                        {local.principalOfTotalInstallmentsMustBe}{' '}
+                        {local.principalOfTotalInstallmentsMustBe}
                         {
                           this.props.application.installmentsObject
                             .totalInstallments.principal
-                        }{' '}
-                        {local.itIs}{' '}
+                        }
+                        {local.itIs}
                         {this.getTotals(
                           formikProps.values
                         ).principleSum.toFixed(2)}

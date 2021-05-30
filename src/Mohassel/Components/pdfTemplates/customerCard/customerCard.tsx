@@ -118,7 +118,7 @@ class CustomerCardPDF extends Component<Props, State> {
               </td>
               <td style={{ width: '30%' }} />
               <td className="title bold">
-                {this.props.branchDetails.name} -{' '}
+                {this.props.branchDetails.name} -
                 {this.props.branchDetails.governorate}
               </td>
             </tr>
@@ -136,7 +136,6 @@ class CustomerCardPDF extends Component<Props, State> {
           </tbody>
         </table>
         <div style={{ marginBottom: '2px' }} className="bold title">
-          {' '}
           عميلنا العزيز، برجاء الالتزام بسداد الاقساط حسب الجدول المرفق
         </div>
 
@@ -144,7 +143,6 @@ class CustomerCardPDF extends Component<Props, State> {
           <tbody>
             <tr>
               <td>
-                {' '}
                 العميل
                 <div className="frame">{numbersToArabic(this.getCode())}</div>
                 <div className="frame">
@@ -154,17 +152,15 @@ class CustomerCardPDF extends Component<Props, State> {
                     : this.props.data.group.individualsInGroup.find(
                         (customer) => customer.type === 'leader'
                       ).customer.customerName}
-                </div>{' '}
+                </div>
               </td>
               <td>
-                {' '}
                 التاريخ
                 <div className="frame">
                   {timeToArabicDate(this.props.data.creationDate, false)}
                 </div>
               </td>
               <td>
-                {' '}
                 المندوب
                 <div className="frame">
                   {this.props.data.product.beneficiaryType === 'group'
@@ -182,13 +178,13 @@ class CustomerCardPDF extends Component<Props, State> {
           <tbody>
             <tr>
               <td>
-                قيمة التمويل{' '}
+                قيمة التمويل
                 <div className="frame">
                   {numbersToArabic(this.props.data.principal)}
                 </div>
               </td>
               <td>
-                فترة السداد{' '}
+                فترة السداد
                 <div className="frame">
                   {this.props.data.product.periodType === 'days'
                     ? local.daily
@@ -196,7 +192,7 @@ class CustomerCardPDF extends Component<Props, State> {
                 </div>
               </td>
               <td>
-                عدد الاقساط{' '}
+                عدد الاقساط
                 <div className="frame">
                   {numbersToArabic(
                     this.props.data.installmentsObject.installments.length
@@ -213,19 +209,19 @@ class CustomerCardPDF extends Component<Props, State> {
             </tr>
             <tr>
               <td>
-                غرامات مسددة{' '}
+                غرامات مسددة
                 <div className="frame">
                   {numbersToArabic(this.props.data.penaltiesPaid)}
                 </div>
               </td>
               <td>
-                غرامات مطلوبة{' '}
+                غرامات مطلوبة
                 <div className="frame">
                   {numbersToArabic(this.props.penalty)}
                 </div>
               </td>
               <td>
-                غرامات معفاة{' '}
+                غرامات معفاة
                 <div className="frame">
                   {numbersToArabic(this.props.data.penaltiesCanceled)}
                 </div>
@@ -493,7 +489,6 @@ class CustomerCardPDF extends Component<Props, State> {
                 يتم تحصيل ٥ ج عن كل يوم تاخير اذا كان قيمه القسط اقل من ٢٠٠٠ ج .
               </ul>
               <ul>
-                {' '}
                 ويتم تحصيل ٧٫٥ ج عن كل يوم تاخير اذا كان قيمه القسط يتراوح من
                 ٢٠٠٠ ج حتي ٣٠٠٠ ج .
               </ul>
@@ -513,7 +508,6 @@ class CustomerCardPDF extends Component<Props, State> {
                 يتم تحصيل ٢ ج عن كل يوم تأخير اذا كان قيمة القسط أقل من ١٥٠٠ ج
               </ul>
               <ul>
-                {' '}
                 يتم تحصيل ٣ ج عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ١٥٠٠
                 ج حتي٢٠٠٠ ج
               </ul>

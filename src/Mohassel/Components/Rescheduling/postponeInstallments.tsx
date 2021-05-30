@@ -326,7 +326,6 @@ class PostponeInstallments extends Component<Props, State> {
                         )
                         .map((inst) => (
                           <option key={inst.id} value={inst.id}>
-                            {' '}
                             {local.installment} {inst.id}
                           </option>
                         ))}

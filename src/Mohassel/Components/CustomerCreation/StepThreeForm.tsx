@@ -340,7 +340,7 @@ export const StepThreeForm = (props: any) => {
                           {errors.guarantorMaxLoans}
                         </Form.Control.Feedback>
                       </Form.Group>
-                    </Col>{' '}
+                    </Col>
                   </>
                 )}
               </Row>

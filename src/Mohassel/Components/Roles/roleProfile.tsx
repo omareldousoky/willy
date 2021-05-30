@@ -129,7 +129,7 @@ class RoleProfile extends Component<RouteComponentProps<{}, {}, Role>, State> {
                   style={{ float: 'right', margin: '0px 5px' }}
                   alt="search-icon"
                   src={require('../../Assets/permissions-inactive.svg')}
-                />{' '}
+                />
                 {local.permissions}
               </span>
             </div>
@@ -163,7 +163,7 @@ class RoleProfile extends Component<RouteComponentProps<{}, {}, Role>, State> {
                     })
                   }}
                 >
-                  <img alt="edit" src={require('../../Assets/editIcon.svg')} />{' '}
+                  <img alt="edit" src={require('../../Assets/editIcon.svg')} />
                   {local.edit}
                 </span>
               </div>

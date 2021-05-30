@@ -288,7 +288,7 @@ class CustomersForUser extends Component<Props, State> {
                 className="big-button"
                 style={{ marginLeft: 20 }}
               >
-                {local.changeRepresentative}{' '}
+                {local.changeRepresentative}
                 <span className="fa fa-exchange-alt" />
               </Button>
             </Can>

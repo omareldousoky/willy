@@ -992,7 +992,7 @@ export const LoanProductCreationForm = (props: any) => {
               <Col sm={6}>
                 <div className="d-flex">
                   <span style={{ width: '10%', color: '#7dc356' }}>
-                    {i + 1} -{' '}
+                    {i + 1} -
                   </span>
                   <span style={{ direction: 'rtl', width: '10%' }}>
                     {local.from}

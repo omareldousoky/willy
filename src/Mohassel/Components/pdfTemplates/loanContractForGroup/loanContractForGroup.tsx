@@ -85,8 +85,8 @@ const LoanContractForGroup = (props) => {
                     <u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u>
                   </div>
                   <div>
-                    انه في يوم{' '}
-                    {dayToArabic(new Date(props.data.creationDate).getDay())}{' '}
+                    انه في يوم
+                    {dayToArabic(new Date(props.data.creationDate).getDay())}
                     الموافق {timeToArabicDate(props.data.creationDate, false)}
                   </div>
                   <div>
@@ -127,8 +127,8 @@ const LoanContractForGroup = (props) => {
                               <td>
                                 <div>
                                   <span>
-                                    السيدة{' '}
-                                    {individualInGroup.customer.customerName}{' '}
+                                    السيدة
+                                    {individualInGroup.customer.customerName}
                                     {individualInGroup.type === 'leader'
                                       ? '(رئيس المجموعة)'
                                       : ''}
@@ -136,7 +136,7 @@ const LoanContractForGroup = (props) => {
                                 </div>
                               </td>
                               <td>
-                                السن:{' '}
+                                السن:
                                 {getAge(individualInGroup.customer.birthDate)}
                               </td>
                               <td style={{ width: '30%' }}>
@@ -209,13 +209,13 @@ const LoanContractForGroup = (props) => {
                     <div className="title">البند الثاني</div>
                     <div>
                       يقر أفراد الطرف الثاني (المقترضين) باستلامهم من الطرف
-                      الاول (المقرض) مبلغ وقدره{' '}
+                      الاول (المقرض) مبلغ وقدره
                       {`${numbersToArabic(
                         props.data.principal
                       )} جنيه = (${new Tafgeet(
                         props.data.principal,
                         'EGP'
-                      ).parse()})`}{' '}
+                      ).parse()})`}
                       نقداً موزع بينهم على النحو التالي:
                     </div>
                     <table className="stakeholders">
@@ -227,8 +227,8 @@ const LoanContractForGroup = (props) => {
                                 <td>
                                   <div>
                                     <span>
-                                      السيدة{' '}
-                                      {individualInGroup.customer.customerName}{' '}
+                                      السيدة
+                                      {individualInGroup.customer.customerName}
                                     </span>
                                   </div>
                                 </td>
@@ -276,19 +276,19 @@ const LoanContractForGroup = (props) => {
                     <div className="title">البند الثالث</div>
                     <div>
                       يلتزم الطرف الثاني ضامنين متضامنين فيما بينهم بسداد اجمالي
-                      قيمة القرض البالغة {numbersToArabic(props.data.principal)}{' '}
-                      جنيه وكافة المصروفات الإداريه البالغه{' '}
+                      قيمة القرض البالغة {numbersToArabic(props.data.principal)}
+                      جنيه وكافة المصروفات الإداريه البالغه
                       {numbersToArabic(props.data.applicationFeesRequired)} جنيه
-                      بواقع{' '}
+                      بواقع
                       {numbersToArabic(
                         props.data.applicationFeesRequired /
                           props.data.group.individualsInGroup.length
-                      )}{' '}
-                      جنيه لكل عضو وتكاليف التمويل البالغه{' '}
+                      )}
+                      جنيه لكل عضو وتكاليف التمويل البالغه
                       {numbersToArabic(
                         props.data.installmentsObject.totalInstallments.feesSum
-                      )}{' '}
-                      جنيه الي الطرف الأول وذلك بواقع مبلغ قدره{' '}
+                      )}
+                      جنيه الي الطرف الأول وذلك بواقع مبلغ قدره
                       {`${numbersToArabic(
                         props.data.installmentsObject.totalInstallments
                           .installmentSum +
@@ -302,16 +302,16 @@ const LoanContractForGroup = (props) => {
                             ? props.data.applicationFeesRequired
                             : 0),
                         'EGP'
-                      ).parse()})`}{' '}
-                      ، يتم سداده علي{' '}
+                      ).parse()})`}
+                      ، يتم سداده علي
                       {numbersToArabic(
                         props.data.installmentsObject.installments.length
-                      )}{' '}
-                      قسط كل {numbersToArabic(props.data.product.periodLength)}{' '}
+                      )}
+                      قسط كل {numbersToArabic(props.data.product.periodLength)}
                       {props.data.product.periodType === 'days'
                         ? local.day
                         : local.month}
-                      قيمة كل قسط{' '}
+                      قيمة كل قسط
                       {`${numbersToArabic(
                         props.data.installmentsObject.installments[0]
                           .installmentResponse
@@ -324,15 +324,15 @@ const LoanContractForGroup = (props) => {
                         props.data.installmentsObject.installments[0]
                           .dateOfPayment,
                         false
-                      )}{' '}
+                      )}
                       وينتهي في
                       {timeToArabicDate(
                         props.data.installmentsObject.installments[
                           props.data.installmentsObject.installments.length - 1
                         ].dateOfPayment,
                         false
-                      )}{' '}
-                      علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في{' '}
+                      )}
+                      علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في
                       {props.branchDetails.name}طرف الأول وذلك
                       {props.branchDetails.address} أو بأحدي وسائل الدفع
                       الإلكتروني المعتمده من هيئه الرقابه الماليه
@@ -364,7 +364,6 @@ const LoanContractForGroup = (props) => {
                       أقل من ١٥٠٠ ج
                     </div>
                     <div>
-                      {' '}
                       يتم تحصيل ٣ ج لكل عضوة عن كل يوم تأخير إذا كان قيمة القسط
                       يتراوح من ١٥٠٠ ج حتي أقل من ٢٠٠٠ ج
                     </div>
@@ -383,7 +382,7 @@ const LoanContractForGroup = (props) => {
                     <div>
                       تلتزم الشركه بقبول طلب العميل بالسداد المعجل، ويحق للشركه
                       خصم تكلفة التمويل للشهر الذى تم فيه السداد ويجوز لها إضافة
-                      عمولة سداد معجل بما لا يزيد عن{' '}
+                      عمولة سداد معجل بما لا يزيد عن
                       {numbersToArabic(props.data.product.earlyPaymentFees)}% من
                       باقي المبلغ المستحق (أصل) المراد تعجيل الوفاء به
                     </div>
@@ -505,7 +504,7 @@ const LoanContractForGroup = (props) => {
                               <td style={{ paddingBottom: 100 }}>
                                 <div>
                                   <b>
-                                    الأسم:{' '}
+                                    الأسم:
                                     {individualInGroup.customer.customerName}
                                   </b>
                                 </div>
@@ -610,10 +609,10 @@ const LoanContractForGroup = (props) => {
 
                   <div>نقر نحن الموقعون ادناه:</div>
                   <div>
-                    الاسم{' '}
-                    <div style={{ display: 'inline-block', width: '150px' }} />{' '}
+                    الاسم
+                    <div style={{ display: 'inline-block', width: '150px' }} />
                     الموظف بشركة تساهيل للتمويل المتناهي الصغر فرع:
-                    {props.branchDetails.name} -{' '}
+                    {props.branchDetails.name} -
                     {
                       props.data.group.individualsInGroup[0].customer
                         .governorate
@@ -621,10 +620,10 @@ const LoanContractForGroup = (props) => {
                   </div>
                   <div>بوظيفة</div>
                   <div>
-                    الاسم{' '}
-                    <div style={{ display: 'inline-block', width: '150px' }} />{' '}
+                    الاسم
+                    <div style={{ display: 'inline-block', width: '150px' }} />
                     الموظف بشركة تساهيل للتمويل المتناهي الصغر فرع:
-                    {props.branchDetails.name} -{' '}
+                    {props.branchDetails.name} -
                     {
                       props.data.group.individualsInGroup[0].customer
                         .governorate

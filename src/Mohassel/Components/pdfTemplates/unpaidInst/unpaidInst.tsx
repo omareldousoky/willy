@@ -38,8 +38,7 @@ const UnpaidInst = (props) => {
                 <tr>
                   <th />
                   <th style={{ fontSize: 18 }}>
-                    {' '}
-                    من {timeToArabicDate(startDate, false)} الي{' '}
+                    من {timeToArabicDate(startDate, false)} الي
                     {timeToArabicDate(endDate, false)}
                   </th>
                 </tr>
@@ -51,8 +50,7 @@ const UnpaidInst = (props) => {
                 className="grey-background frame"
                 style={{ padding: '5px 5px 5px 50px' }}
               >
-                {' '}
-                {branch.name}{' '}
+                {branch.name}
               </span>
             </div>
             {branch.areas.map((area, areaIndex) => {
@@ -64,8 +62,7 @@ const UnpaidInst = (props) => {
                       className="grey-background frame"
                       style={{ padding: '5px 5px 5px 50px' }}
                     >
-                      {' '}
-                      {area.name}{' '}
+                      {area.name}
                     </span>
                   </div>
                   <table className="repeated-table">
@@ -111,8 +108,7 @@ const UnpaidInst = (props) => {
                       className="grey-background frame"
                       style={{ padding: '5px 5px 5px 50px' }}
                     >
-                      {' '}
-                      {area.name}{' '}
+                      {area.name}
                     </span>
                     <span
                       className="frame"
@@ -121,8 +117,7 @@ const UnpaidInst = (props) => {
                         textAlign: 'center',
                       }}
                     >
-                      {' '}
-                      {area.count}{' '}
+                      {area.count}
                     </span>
                     <span
                       className="frame"
@@ -131,8 +126,7 @@ const UnpaidInst = (props) => {
                         textAlign: 'center',
                       }}
                     >
-                      {' '}
-                      {area.amount}{' '}
+                      {area.amount}
                     </span>
                   </div>
                   <div className="horizontal-line" />
@@ -146,22 +140,19 @@ const UnpaidInst = (props) => {
                 className="grey-background frame"
                 style={{ padding: '5px 5px 5px 80px' }}
               >
-                {' '}
-                {branch.name}{' '}
+                {branch.name}
               </span>
               <span
                 className="frame"
                 style={{ padding: '5px 5px 5px 50px', textAlign: 'center' }}
               >
-                {' '}
-                {branch.count}{' '}
+                {branch.count}
               </span>
               <span
                 className="frame"
                 style={{ padding: '5px 5px 5px 50px', textAlign: 'center' }}
               >
-                {' '}
-                {branch.amount}{' '}
+                {branch.amount}
               </span>
             </div>
             <div className="horizontal-line" />
@@ -174,15 +165,13 @@ const UnpaidInst = (props) => {
                     className="frame"
                     style={{ padding: '5px 5px 5px 50px', textAlign: 'center' }}
                   >
-                    {' '}
-                    {props.data?.count}{' '}
+                    {props.data?.count}
                   </span>
                   <span
                     className="frame"
                     style={{ padding: '5px 5px 5px 50px', textAlign: 'center' }}
                   >
-                    {' '}
-                    {props.data?.amount}{' '}
+                    {props.data?.amount}
                   </span>
                 </div>
                 <div className="horizontal-line" />

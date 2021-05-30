@@ -316,9 +316,7 @@ class UserCreation extends Component<Props, State> {
           <UserDataForm
             {...formikProps}
             edit={this.props.edit}
-            _id={
-              this.props.edit ? this.props.location.state.details : ''
-            }
+            _id={this.props.edit ? this.props.location.state.details : ''}
             username={this.state.username}
             nationalId={this.state.nationalId}
             cancel={() => this.cancel()}

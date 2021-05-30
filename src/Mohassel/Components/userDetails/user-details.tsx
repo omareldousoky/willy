@@ -182,7 +182,6 @@ class UserDetails extends Component<
       case 'userRoles':
         return (
           <Can I="getRoles" a="user">
-            {' '}
             <UserRolesView roles={this.state.data.roles} />
           </Can>
         )
@@ -207,9 +206,7 @@ class UserDetails extends Component<
         <div className="rowContainer">
           <BackButton
             title={
-              this.props.location?.pathname?.includes(
-                'loanOfficer-details'
-              )
+              this.props.location?.pathname?.includes('loanOfficer-details')
                 ? local.loanOfficerDetails
                 : local.userDetails
             }

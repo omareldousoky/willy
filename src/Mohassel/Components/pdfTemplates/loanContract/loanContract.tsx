@@ -137,8 +137,8 @@ const LoanContract = (props) => {
                     <u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u>
                   </div>
                   <div>
-                    انه في يوم{' '}
-                    {dayToArabic(new Date(props.data.creationDate).getDay())}{' '}
+                    انه في يوم
+                    {dayToArabic(new Date(props.data.creationDate).getDay())}
                     الموافق {timeToArabicDate(props.data.creationDate, false)}
                   </div>
                   <div>
@@ -278,8 +278,8 @@ const LoanContract = (props) => {
                       ١٤١ لسنه ٢٠١٤ الخاص بالتمويل متناهي الصغر ..
                     </div>
                     <div>
-                      وقد تقدم الطرف الثاني صاحب نشاط{' '}
-                      {props.data.customer.businessSector} -{' '}
+                      وقد تقدم الطرف الثاني صاحب نشاط
+                      {props.data.customer.businessSector} -
                       {props.data.customer.businessActivity} بطلب للحصول علي قرض
                       من فرع
                       {props.branchDetails.name} الكائن
@@ -306,13 +306,13 @@ const LoanContract = (props) => {
                     <div className="title">البند الثاني</div>
                     <div>
                       بموجب هذا العقد وافق الطرف الأول علي منح الطرف الثاني قرضا
-                      بمبلغ{' '}
+                      بمبلغ
                       {`${numbersToArabic(
                         props.data.principal
                       )} جنيه (${new Tafgeet(
                         props.data.principal,
                         'EGP'
-                      ).parse()})`}{' '}
+                      ).parse()})`}
                       ويقر الطرف الثاني بأن هذا المبلغ يمثل قرضا عليه يلتزم
                       بسداده للطرف الأول وفقا لما هو وارد بالبند الثالث من هذا
                       العقد
@@ -322,21 +322,21 @@ const LoanContract = (props) => {
                   <section>
                     <div className="title">البند الثالث</div>
                     <div>
-                      يلتزم الطرفان الثاني و{getNumbersOfGuarantor('and')}{' '}
-                      ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة القرض البالغة{' '}
+                      يلتزم الطرفان الثاني و{getNumbersOfGuarantor('and')}
+                      ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة القرض البالغة
                       {`${numbersToArabic(
                         props.data.principal
                       )} جنيه (${new Tafgeet(
                         props.data.principal,
                         'EGP'
                       ).parse()})`}
-                      وكافة المصروفات الادارية البالغه{' '}
+                      وكافة المصروفات الادارية البالغه
                       {numbersToArabic(props.data.applicationFeesRequired)} جنيه
-                      وتكاليف التمويل البالغه{' '}
+                      وتكاليف التمويل البالغه
                       {numbersToArabic(
                         props.data.installmentsObject.totalInstallments.feesSum
-                      )}{' '}
-                      جنيه الي الطرف الأول وذلك بواقع مبلغ قدره{' '}
+                      )}
+                      جنيه الي الطرف الأول وذلك بواقع مبلغ قدره
                       {`${numbersToArabic(
                         props.data.installmentsObject.totalInstallments
                           .installmentSum +
@@ -351,37 +351,37 @@ const LoanContract = (props) => {
                             : 0),
                         'EGP'
                       ).parse()})`}
-                      ، يتم سداده علي عدد{' '}
+                      ، يتم سداده علي عدد
                       {numbersToArabic(
                         props.data.installmentsObject.installments.length
-                      )}{' '}
-                      قسط كل {numbersToArabic(props.data.product.periodLength)}{' '}
+                      )}
+                      قسط كل {numbersToArabic(props.data.product.periodLength)}
                       {props.data.product.periodType === 'days'
                         ? local.day
                         : local.month}
-                      قيمة كل قسط{' '}
+                      قيمة كل قسط
                       {`${numbersToArabic(
                         props.data.installmentsObject.installments[0]
                           .installmentResponse
                       )} جنيه (${new Tafgeet(
                         props.data.installmentsObject.installments[0].installmentResponse,
                         'EGP'
-                      ).parse()})`}{' '}
+                      ).parse()})`}
                       ، تبدأ في
                       {timeToArabicDate(
                         props.data.installmentsObject.installments[0]
                           .dateOfPayment,
                         false
-                      )}{' '}
+                      )}
                       وينتهي في
                       {timeToArabicDate(
                         props.data.installmentsObject.installments[
                           props.data.installmentsObject.installments.length - 1
                         ].dateOfPayment,
                         false
-                      )}{' '}
-                      علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في{' '}
-                      {props.branchDetails.name} {props.branchDetails.address}{' '}
+                      )}
+                      علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في
+                      {props.branchDetails.name} {props.branchDetails.address}
                       أو بأحدي وسائل الدفع الإلكتروني المعتمده من هيئه الرقابه
                       الماليه
                     </div>
@@ -390,7 +390,7 @@ const LoanContract = (props) => {
                   <section>
                     <div className="title">البند الرابع</div>
                     <div>
-                      يقر الطرفان الثاني و{getNumbersOfGuarantor('and')}{' '}
+                      يقر الطرفان الثاني و{getNumbersOfGuarantor('and')}
                       متضامنين فيما بينهم بسداد كافة المبالغ الوارده بالبند
                       السابق وفقا للمواعيد المذكوره به وان هذه المبالغ تعد قيمة
                       القرض وكافة مصروفاته و تكاليف تمويله
@@ -400,7 +400,7 @@ const LoanContract = (props) => {
                   <section>
                     <div className="title">البند الخامس</div>
                     <div>
-                      يلتزم الأطراف الثاني و{getNumbersOfGuarantor('and')}{' '}
+                      يلتزم الأطراف الثاني و{getNumbersOfGuarantor('and')}
                       متضامنين فيما بينهم بسداد اقساط القرض وفقا لما هو وارد
                       بالبند الثالث من هذا العقد وفي حالة تأخرهم في سداد قيمة اي
                       قسط في تاريخ استحقاقه يلتزموا بسداد غرامة تأخير ٥% من قيمة
@@ -426,7 +426,7 @@ const LoanContract = (props) => {
                     <div>
                       تلتزم الشركه بقبول طلب العميل بالسداد المعجل، ويحق للشركه
                       خصم تكلفة التمويل للشهر الذى تم فيه السداد ويجوز لها إضافة
-                      عمولة سداد معجل بما لا يزيد عن{' '}
+                      عمولة سداد معجل بما لا يزيد عن
                       {numbersToArabic(props.data.product.earlyPaymentFees)}% من
                       باقي المبلغ المستحق (أصل) المراد تعجيل الوفاء به
                     </div>
@@ -438,12 +438,12 @@ const LoanContract = (props) => {
                       في حالة عدم التزام المقترض او الضامنين بأي من التزاماتهم
                       التعاقديه او القانونيه الوارده بهذا العقد وملحقاته
                       ومرفقاته الموقعه (ان وجدت) وبالقوانين الساريه في اي وقت من
-                      الأوقات يعد الأطراف الثاني و{getNumbersOfGuarantor('and')}{' '}
+                      الأوقات يعد الأطراف الثاني و{getNumbersOfGuarantor('and')}
                       مخفقين في الوفاء بالتزاماتهم التعاقديه والقانونيه ويعتبر
                       هذا العقد مفسوخا من تلقاء نفسه دون الحاجه للرجوع الي اعذار
                       او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة أى من
                       الطرفين الثاني أو {getNumbersOfGuarantor('and')} أو جميعهم
-                      بباقي قيمة القرض وكافة مصروفاته و تكاليف تمويله{' '}
+                      بباقي قيمة القرض وكافة مصروفاته و تكاليف تمويله
                     </div>
                     <div>
                       ومن حالات الاخفاق علي سبيل المثال وليس الحصر ما يلي:-
@@ -457,12 +457,12 @@ const LoanContract = (props) => {
                       أجله الوارد بهذا العقد
                     </div>
                     <div>
-                      ٧/٣ في حالة تقديم الطرف الثاني أو{' '}
+                      ٧/٣ في حالة تقديم الطرف الثاني أو
                       {getNumbersOfGuarantor('or')} بيانات أو معلومات مخالفه
                       للواقع او غير سليمه وذلك الي المقرض.
                     </div>
                     <div>
-                      ٧/٤ في حاله فقد الطرف الثاني أو{' '}
+                      ٧/٤ في حاله فقد الطرف الثاني أو
                       {getNumbersOfGuarantor('or')} اهليته أو اشهار افلاسه او
                       اعساره او وفاته او وضعه تحت الحراسه او توقيع الحجز علي
                       امواله او وضع امواله تحت التحفظ ومنعه من التصرف فيها او
@@ -475,7 +475,7 @@ const LoanContract = (props) => {
                       اذا تم تأجيره للغير.
                     </div>
                     <div>
-                      ٧/٦ في حالة عدم قدرة الطرف الثاني أو{' '}
+                      ٧/٦ في حالة عدم قدرة الطرف الثاني أو
                       {getNumbersOfGuarantor('or')} علي سداد الاقساط في مواعيدها
                       او توقف اعمال المشروع الممول لاي سبب من الاسباب
                     </div>
@@ -596,7 +596,7 @@ const LoanContract = (props) => {
                     <div>
                       نقر نحن الموقعين أدناه بإلتزامنا وتعهدنا بسداد وتسليم قيمة
                       الاقساط المستحقه في مواعيدها المحدده بموجب عقد القرض
-                      المؤرخ في{' '}
+                      المؤرخ في
                       {timeToArabicDate(props.data.creationDate, false)} وحتي
                       تمام سدادها بالكامل، وأن يكون السداد عن طريق العميل او من
                       ينوب عنه الي شركة تساهيل للتمويل متناهي الصغر ذاتها وبمقر
@@ -611,7 +611,7 @@ const LoanContract = (props) => {
                       فيه حاليا او مستقبلا.
                     </div>
                     <div>
-                      تحريرا في{' '}
+                      تحريرا في
                       {timeToArabicDate(props.data.creationDate, false)}
                     </div>
 
@@ -671,22 +671,22 @@ const LoanContract = (props) => {
 
                     <div>نقر نحن الموقعون ادناه:</div>
                     <div>
-                      الاسم{' '}
+                      الاسم
                       <div
                         style={{ display: 'inline-block', width: '150px' }}
-                      />{' '}
+                      />
                       الموظف بشركة تساهيل للتمويل المتناهي الصغر فرع:
-                      {props.branchDetails.name} -{' '}
+                      {props.branchDetails.name} -
                       {props.data.customer.governorate}
                     </div>
                     <div>بوظيفة</div>
                     <div>
-                      الاسم{' '}
+                      الاسم
                       <div
                         style={{ display: 'inline-block', width: '150px' }}
-                      />{' '}
+                      />
                       الموظف بشركة تساهيل للتمويل المتناهي الصغر فرع:
-                      {props.branchDetails.name} -{' '}
+                      {props.branchDetails.name} -
                       {props.data.customer.governorate}
                     </div>
                     <div>بوظيفة</div>
@@ -776,7 +776,7 @@ const LoanContract = (props) => {
                           </td>
                           <td>
                             <div>
-                              <b>الكود</b> &emsp;{' '}
+                              <b>الكود</b> &emsp;
                               {numbersToArabic(props.data.customer.key)}
                             </div>
                           </td>
@@ -786,8 +786,8 @@ const LoanContract = (props) => {
                             return (
                               <td key={index}>
                                 <div>
-                                  ضامن{' '}
-                                  {getIndexOfGuarantorInAr(index - 2).slice(2)}/{' '}
+                                  ضامن
+                                  {getIndexOfGuarantorInAr(index - 2).slice(2)}/
                                   {guarantor.customerName}
                                 </div>
                               </td>
@@ -802,7 +802,7 @@ const LoanContract = (props) => {
                           </td>
                           <td>
                             <div>
-                              الفرع/ {props.branchDetails.name} -{' '}
+                              الفرع/ {props.branchDetails.name} -
                               {props.data.customer.governorate}
                             </div>
                           </td>
@@ -810,7 +810,7 @@ const LoanContract = (props) => {
                       </tbody>
                     </table>
                     <div>
-                      بأنني قد استلمت تمويل قدره:{' '}
+                      بأنني قد استلمت تمويل قدره:
                       {`${numbersToArabic(props.data.principal)} جنيه `} من شركة
                       تساهيل للتمويل متناهي الصغر بتاريخ:
                       {timeToArabicDate(props.data.creationDate, false)}

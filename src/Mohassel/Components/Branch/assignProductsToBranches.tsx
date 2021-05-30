@@ -237,7 +237,7 @@ class AssignProductsToBranches extends Component<Props, State> {
                             style={{ float: 'right' }}
                             alt="search-icon"
                             src={require('../../Assets/searchIcon.svg')}
-                          />{' '}
+                          />
                           {local.searchByProductName}
                         </span>
                       }

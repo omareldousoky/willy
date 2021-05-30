@@ -323,7 +323,6 @@ class BulkApplicationCreation extends Component<Props, State> {
                 disabled={!this.state.selectedApplications.length}
                 className="big-button"
               >
-                {' '}
                 {local.bulkApplicationCreation}
               </Button>
             </div>

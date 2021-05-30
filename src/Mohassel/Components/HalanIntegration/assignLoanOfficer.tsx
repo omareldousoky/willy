@@ -142,7 +142,6 @@ class AssignLoanOfficer extends Component<Props, State> {
         key: 'actions',
         render: (data) => (
           <>
-            {' '}
             <img
               style={{ cursor: 'pointer', marginLeft: 20 }}
               alt="view"
@@ -284,7 +283,7 @@ class AssignLoanOfficer extends Component<Props, State> {
                   className="big-button"
                   style={{ marginLeft: 20 }}
                 >
-                  {local.assignOrChangeLoanOfficer}{' '}
+                  {local.assignOrChangeLoanOfficer}
                   <span className="fa fa-exchange-alt" />
                 </Button>
               </div>

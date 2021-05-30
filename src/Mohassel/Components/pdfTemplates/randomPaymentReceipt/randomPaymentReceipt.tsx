@@ -91,7 +91,7 @@ const randomPaymentReceipt = (props) => {
                   <span className="info">
                     <span style={{ direction: 'ltr' }}>
                       {numbersToArabic(receiptData.installmentAmount)}
-                    </span>{' '}
+                    </span>
                     {receiptData.installmentAmount
                       ? ` = (${new Tafgeet(
                           receiptData.installmentAmount,

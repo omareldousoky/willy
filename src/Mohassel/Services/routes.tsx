@@ -157,7 +157,7 @@ const appRoutes = [
         label: local.tools,
         render: (props) => (
           <Can I="documentTypes" a="config">
-            <EncodingFiles {...props} />{' '}
+            <EncodingFiles {...props} />
           </Can>
         ),
         routes: [
@@ -166,7 +166,7 @@ const appRoutes = [
             label: local.encodingFiles,
             render: (props) => (
               <Can I="documentTypes" a="config">
-                <EncodingFiles {...props} />{' '}
+                <EncodingFiles {...props} />
               </Can>
             ),
             routes: [
@@ -175,7 +175,7 @@ const appRoutes = [
                 label: local.createEncodingFiles,
                 render: (props) => (
                   <Can I="documentTypes" a="config">
-                    <DocumentTypeCreation {...props} edit={false} />{' '}
+                    <DocumentTypeCreation {...props} edit={false} />
                   </Can>
                 ),
               },
@@ -184,7 +184,7 @@ const appRoutes = [
                 label: local.createEncodingFiles,
                 render: (props) => (
                   <Can I="documentTypes" a="config">
-                    <DocumentTypeCreation {...props} edit />{' '}
+                    <DocumentTypeCreation {...props} edit />
                   </Can>
                 ),
               },
@@ -204,7 +204,7 @@ const appRoutes = [
             label: local.principalRange,
             render: (props) => (
               <Can I="createMaxPrincipal" a="config">
-                <PrincipleThreshold {...props} />{' '}
+                <PrincipleThreshold {...props} />
               </Can>
             ),
           },
@@ -274,7 +274,6 @@ const appRoutes = [
             label: local.bulkLoanApplicationsApproval,
             render: () => (
               <Can I="approveLoanApplication" a="application">
-                {' '}
                 <BulkApplicationApproval />
               </Can>
             ),
@@ -414,8 +413,7 @@ const appRoutes = [
             label: local.assignProductToBranch,
             render: (props) => (
               <Can I="assignProductToBranch" a="product">
-                {' '}
-                <AssignProductsToBranches {...props} />{' '}
+                <AssignProductsToBranches {...props} />
               </Can>
             ),
           },
@@ -435,7 +433,7 @@ const appRoutes = [
             label: local.roles,
             render: (props) => (
               <Can I="getRoles" a="user">
-                <RolesList {...props} withHeader />{' '}
+                <RolesList {...props} withHeader />
               </Can>
             ),
             routes: [
@@ -473,7 +471,6 @@ const appRoutes = [
             label: local.users,
             render: (props) => (
               <Can I="getUser" a="user">
-                {' '}
                 <UsersList {...props} withHeader />
               </Can>
             ),
@@ -512,8 +509,7 @@ const appRoutes = [
             label: local.branches,
             render: (props) => (
               <Can I="getBranch" a="branch">
-                {' '}
-                <BranchesList {...props} withHeader />{' '}
+                <BranchesList {...props} withHeader />
               </Can>
             ),
             routes: [
@@ -540,7 +536,7 @@ const appRoutes = [
                 label: local.branchDetails,
                 render: (props) => (
                   <Can I="getBranch" a="branch">
-                    <BranchDetails {...props} />{' '}
+                    <BranchDetails {...props} />
                   </Can>
                 ),
               },
@@ -651,7 +647,6 @@ const appRoutes = [
         label: local.clearances,
         render: (props) => (
           <Can I="getClearance" a="application">
-            {' '}
             <ClearancesList {...props} />
           </Can>
         ),
@@ -690,7 +685,7 @@ const appRoutes = [
         label: local.levelsOfSupervision,
         render: (props) => (
           <Can I="getOfficersGroups" a="branch">
-            <SupervisionGroupsList {...props} />{' '}
+            <SupervisionGroupsList {...props} />
           </Can>
         ),
       },
@@ -699,7 +694,7 @@ const appRoutes = [
         label: local.manageFinancialTransaction,
         render: (props) => (
           <Can I="getFinancialBlocking" a="application">
-            <FinancialBlocking {...props} withHeader />{' '}
+            <FinancialBlocking {...props} withHeader />
           </Can>
         ),
         routes: [
@@ -717,7 +712,7 @@ const appRoutes = [
             label: local.financialBlocking,
             render: (props) => (
               <Can I="getFinancialBlocking" a="application">
-                <FinancialBlocking {...props} withHeader />{' '}
+                <FinancialBlocking {...props} withHeader />
               </Can>
             ),
           },
@@ -726,7 +721,7 @@ const appRoutes = [
             label: local.oracleReports,
             render: (props) => (
               <Can I="summarizeTransactions" a="oracleIntegration">
-                <FinancialReviewing {...props} withHeader />{' '}
+                <FinancialReviewing {...props} withHeader />
               </Can>
             ),
           },

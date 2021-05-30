@@ -100,7 +100,7 @@ class EncodingFiles extends Component<{}, State> {
                           }}
                         >
                           {documentType.name}
-                        </div>{' '}
+                        </div>
                       </Col>
                       <Col>
                         <div style={{ fontSize: '12px', color: '#6e6e6e' }}>
@@ -113,7 +113,7 @@ class EncodingFiles extends Component<{}, State> {
                             fontWeight: 'bold',
                           }}
                         >
-                          {documentType.pages}{' '}
+                          {documentType.pages}
                         </div>
                       </Col>
                       <Col>
@@ -127,7 +127,7 @@ class EncodingFiles extends Component<{}, State> {
                             fontWeight: 'bold',
                           }}
                         >
-                          {documentType.updatable ? local.yes : local.no}{' '}
+                          {documentType.updatable ? local.yes : local.no}
                         </div>
                       </Col>
                       <Col>
@@ -143,7 +143,7 @@ class EncodingFiles extends Component<{}, State> {
                         >
                           {documentType.active
                             ? local.activated
-                            : local.deactivated}{' '}
+                            : local.deactivated}
                         </div>
                       </Col>
                       <Col style={{ minWidth: '20%' }}>
@@ -157,7 +157,7 @@ class EncodingFiles extends Component<{}, State> {
                             fontWeight: 'bold',
                           }}
                         >
-                          {documentTypeLocalization(documentType.type)}{' '}
+                          {documentTypeLocalization(documentType.type)}
                         </div>
                       </Col>
                       <Col style={{ minWidth: '20%' }}>

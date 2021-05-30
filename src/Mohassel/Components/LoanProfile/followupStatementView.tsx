@@ -85,11 +85,10 @@ export const FollowUpStatementView = ({
           }}
           onClick={() => print()}
         >
-          {' '}
           <span
             className="fa fa-download"
             style={{ margin: '0px 0px 0px 5px' }}
-          />{' '}
+          />
           {local.downloadPDF}
         </span>
         <DynamicTable

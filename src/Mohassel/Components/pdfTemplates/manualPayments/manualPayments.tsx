@@ -104,7 +104,7 @@ const ManualPayments = (props: Props) => {
         <thead>
           <tr className="headtitle">
             <th colSpan={6}>
-              تاريخ الحركه من {timeToArabicDate(props.fromDate, false)} الي{' '}
+              تاريخ الحركه من {timeToArabicDate(props.fromDate, false)} الي
               {timeToArabicDate(props.toDate, false)}
             </th>
           </tr>

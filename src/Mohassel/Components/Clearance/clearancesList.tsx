@@ -340,7 +340,6 @@ class ClearancesList extends Component<Props, State> {
                   className="big-button"
                   style={{ height: 70 }}
                 >
-                  {' '}
                   {local.downloadPDF}
                 </Button>
               </div>

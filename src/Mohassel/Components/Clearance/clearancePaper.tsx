@@ -27,20 +27,19 @@ export default class ClearancePaper extends Component<Props, {}> {
           <div className="rightText">الساده / {clearance.bankName}</div>
           <div className="rightText">تحيه طيبه وبعد ،،،،،</div>
           <div className="rightText">
-            {' '}
             الموضوع : التمويل السابق منحه للعميل / {clearance.customerName} .
           </div>
           <div className="rightText">
-            بالاشاره الي الموضوع بعاليه والي طلب العميل /{' '}
+            بالاشاره الي الموضوع بعاليه والي طلب العميل /
             {clearance.customerName} ، بشأن طلب موافاتكم بما يفيد موقف العميل
             طرفنا في تاريخه .
           </div>
           <div className="rightText">
             نتشرف بالافاده ان العميل / {clearance.customerName} ، قد قام بسداد
-            كافه المديونيات المستحقه عليه والناتجه من التمويل السابق منحه بتاريخ{' '}
+            كافه المديونيات المستحقه عليه والناتجه من التمويل السابق منحه بتاريخ
             {clearance.issuedDate
               ? timeToArabicDate(clearance.issuedDate, false)
-              : ''}{' '}
+              : ''}
             .
           </div>
           <div className="rightText">
@@ -86,18 +85,18 @@ export default class ClearancePaper extends Component<Props, {}> {
             تشهد شركه تساهيل للتمويل متناهي الصغر فرع {clearance.branchName}
           </div>
           <div className="rightText">
-            بان السيد / {clearance.customerName} قد قام بتاريخ{' '}
+            بان السيد / {clearance.customerName} قد قام بتاريخ
             {clearance.lastPaidInstDate
               ? timeToArabicDate(clearance.lastPaidInstDate, false)
-              : ''}{' '}
+              : ''}
             بسداد كامل قيمه التمويل الممنوح له.
           </div>
           <div className="rightText">
-            بتاريخ{' '}
+            بتاريخ
             {clearance.issuedDate
               ? timeToArabicDate(clearance.issuedDate, false)
-              : ''}{' '}
-            وملحقاته والبالغ قدره {clearance.principal} جنيه{' '}
+              : ''}
+            وملحقاته والبالغ قدره {clearance.principal} جنيه
             {clearance.principal
               ? `(${new Tafgeet(clearance.principal, 'EGP').parse()}))`
               : ''}
@@ -108,14 +107,14 @@ export default class ClearancePaper extends Component<Props, {}> {
             للشركه عن هذا التمويل الممنوح له.
           </div>
           <div className="rightText">
-            بتاريخ{' '}
+            بتاريخ
             {clearance.issuedDate
               ? timeToArabicDate(clearance.issuedDate, false)
               : ''}
-            حتي تاريخه{' '}
+            حتي تاريخه
           </div>
           <div className="rightText">
-            تحريرا في {timeToArabicDate(new Date().valueOf(), false)}{' '}
+            تحريرا في {timeToArabicDate(new Date().valueOf(), false)}
           </div>
           <div className="smallCenter">وتفضلوا بقبول فائق الاحترام ،،،،،،،</div>
           <div className="leftText">شركه تساهيل للتمويل متناهي الصغر</div>

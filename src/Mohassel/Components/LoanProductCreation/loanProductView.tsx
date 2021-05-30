@@ -90,7 +90,7 @@ class ViewProduct extends Component<
                   <tr>
                     <td>{local.periodLengthEvery}</td>
                     <td>
-                      {this.state.product.periodLength}{' '}
+                      {this.state.product.periodLength}
                       {periodType(this.state.product.periodType)}
                     </td>
                   </tr>
@@ -109,7 +109,7 @@ class ViewProduct extends Component<
                   <tr>
                     <td>{local.interest}</td>
                     <td>
-                      {this.state.product.interest}%{' '}
+                      {this.state.product.interest}%
                       {interestPeriod(this.state.product.interestPeriod)}
                     </td>
                   </tr>
@@ -124,7 +124,7 @@ class ViewProduct extends Component<
                   <tr>
                     <td>{local.inAdvanceFees}</td>
                     <td>
-                      {this.state.product.inAdvanceFees}{' '}
+                      {this.state.product.inAdvanceFees}
                       {inAdvanceFrom(this.state.product.inAdvanceFrom)}
                     </td>
                   </tr>
@@ -201,7 +201,7 @@ class ViewProduct extends Component<
                       <tr>
                         <td>{local.applicationFeePercent}</td>
                         <td>
-                          {this.state.product.applicationFeePercent}%{' '}
+                          {this.state.product.applicationFeePercent}%
                           {inAdvanceFrom(this.state.product.applicationFeeType)}
                         </td>
                       </tr>
@@ -216,7 +216,7 @@ class ViewProduct extends Component<
                       <tr>
                         <td>{local.applicationFeePercentPerPerson}</td>
                         <td>
-                          {this.state.product.applicationFeePercentPerPerson}%{' '}
+                          {this.state.product.applicationFeePercentPerPerson}%
                           {inAdvanceFrom(
                             this.state.product
                               .applicationFeePercentPerPersonType

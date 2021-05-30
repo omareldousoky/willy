@@ -74,10 +74,10 @@ class InfoBox extends Component<Props> {
                   <Form.Label
                     style={{ color: iscoreStatusColor(iscore.iscore).color }}
                   >
-                    {iscore.iscore}{' '}
+                    {iscore.iscore}
                   </Form.Label>
                   <Form.Label>
-                    {iscoreStatusColor(iscore.iscore).status}{' '}
+                    {iscoreStatusColor(iscore.iscore).status}
                   </Form.Label>
                   {iscore.bankCodes &&
                     iscore.bankCodes.map((code) => (
@@ -89,7 +89,6 @@ class InfoBox extends Component<Props> {
                         style={{ cursor: 'pointer', padding: 10 }}
                         onClick={() => downloadFile(iscore.url)}
                       >
-                        {' '}
                         <span
                           className="fa fa-file-pdf-o"
                           style={{ margin: '0px 0px 0px 5px' }}
@@ -115,7 +114,6 @@ class InfoBox extends Component<Props> {
                             style={{ cursor: 'pointer', padding: 10 }}
                             onClick={() => this.getIscore(this.props.values)}
                           >
-                            {' '}
                             <span
                               className="fa fa-refresh"
                               style={{ margin: '0px 0px 0px 5px' }}
@@ -140,9 +138,7 @@ class InfoBox extends Component<Props> {
             <Form.Label style={{ color: '#6e6e6e' }}>
               {local.birthDate}
             </Form.Label>
-            <Form.Label>
-              {timeToArabicDate(values.birthDate, false)}{' '}
-            </Form.Label>
+            <Form.Label>{timeToArabicDate(values.birthDate, false)}</Form.Label>
           </Form.Group>
           <Form.Group as={Col} md="4" className="d-flex flex-column">
             <Form.Label style={{ color: '#6e6e6e' }}>{local.gender}</Form.Label>
@@ -155,7 +151,7 @@ class InfoBox extends Component<Props> {
               {local.nationalIdIssueDate}
             </Form.Label>
             <Form.Label>
-              {timeToArabicDate(values.nationalIdIssueDate, false)}{' '}
+              {timeToArabicDate(values.nationalIdIssueDate, false)}
             </Form.Label>
           </Form.Group>
           <Form.Group as={Col} md="4" className="d-flex flex-column">
@@ -185,7 +181,7 @@ class InfoBox extends Component<Props> {
             <Form.Label>
               {values.permanentEmployeeCount
                 ? values.permanentEmployeeCount
-                : 0}{' '}
+                : 0}
             </Form.Label>
           </Form.Group>
           <Form.Group as={Col} md="4" className="d-flex flex-column">
@@ -193,7 +189,7 @@ class InfoBox extends Component<Props> {
               {local.partTimeEmployeeCount}
             </Form.Label>
             <Form.Label>
-              {values.partTimeEmployeeCount ? values.partTimeEmployeeCount : 0}{' '}
+              {values.partTimeEmployeeCount ? values.partTimeEmployeeCount : 0}
             </Form.Label>
           </Form.Group>
         </Form.Row>

@@ -95,7 +95,7 @@ const PaymentsDone = (props) => {
               <tbody key={i}>
                 <tr>
                   <th className="gray frame" colSpan={2}>
-                    بنك / خرينه{' '}
+                    بنك / خرينه
                   </th>
                   <th className="gray frame" colSpan={2}>
                     {branch.branchName}
