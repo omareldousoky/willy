@@ -163,9 +163,6 @@ class Search extends Component<Props, State> {
 
       obj.fromDate = fromDate.valueOf()
       obj.toDate = new Date().valueOf()
-
-      console.log(new Date(obj.fromDate), new Date(obj.toDate));
-      
     }
 
     obj = this.removeEmptyArg(obj);
