@@ -19,7 +19,6 @@ interface State {
   from: number
 }
 interface Props extends RouteComponentProps {
-  history: any
   data: any
   totalCount: number
   loading: boolean
