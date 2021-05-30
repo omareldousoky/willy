@@ -1,9 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import {
-  getIscoreReportStatus,
-  timeToArabicDate,
-} from "../../../../Shared/Services/utils";
 import Can from "../../../config/Can";
 import ability from "../../../config/ability";
 import * as local from "../../../../Shared/Assets/ar.json";
@@ -28,6 +24,7 @@ import {
 
 import { Report, ReportDetails } from "./types";
 import { Tab } from "../../HeaderWithCards/cardNavbar";
+import { ReportsList } from "../../../../Shared/Components/ReportsList";
 
 export const TasaheelReports = () => {
   const reportsRequests = {
@@ -180,57 +177,10 @@ export const TasaheelReports = () => {
                 </Can>
               </div>
             )}
-            {reports?.length > 0 ? (
-              reports.map((report, index) => (
-                <Card key={index} className="mx-0">
-                  <Card.Body>
-                    <div className="d-flex justify-content-between font-weight-bold">
-                      <div className="d-flex">
-                        <span className="mr-5 text-secondary">
-                          #{index + 1}
-                        </span>
-                        <span className="mr-5 d-flex flex-start flex-column">
-                          <span>{local.loanAppCreationDate}</span>
-                          {timeToArabicDate(report.created?.at, true)}
-                        </span>
-                        <span
-                          className={`mr-5  text-${
-                            report.status === "created"
-                              ? "success"
-                              : report.status === "queued"
-                              ? "warning"
-                              : "danger"
-                          } `}
-                        >
-                          {getIscoreReportStatus(report.status)}
-                        </span>
-
-                        {report.status === "created" && (
-                          <span className="mr-5 d-flex flex-start flex-column">
-                            <span>{local.creationDate}</span>
-                            {timeToArabicDate(report.generatedAt, true)}
-                          </span>
-                        )}
-                      </div>
-                      {report.status === "created" && (
-                        <Button
-                        type="button"
-                        variant="default"
-                        onClick={() => downloadGeneratedReport(report._id)}
-                        title="download"
-                      >
-                        <span className="download-icon" aria-hidden="true" />
-                      </Button>
-                      )}
-                    </div>
-                  </Card.Body>
-                </Card>
-              ))
-            ) : (
-              <div className="d-flex align-items-center justify-content-center">
-                {local.noResults}
-              </div>
-            )}
+            <ReportsList
+              list={reports}
+              onClickDownload={(itemId) => downloadGeneratedReport(itemId)}
+            />
           </Card.Body>
         </Card>
       </div>
