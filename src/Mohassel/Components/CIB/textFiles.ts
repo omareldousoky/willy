@@ -65,7 +65,7 @@ const sameDay = (paidAt: number, dateOfPay: number) => {
 const getTotalNumbersOfCustomers = (textData) => {
   let total = 0
   textData.forEach((loan) => {
-    if (Object.keys(loan.customer).length > 0) total = +1
+    if (Object.keys(loan.customer).length > 0) total += 1
     else total += loan.group.individualsInGroup.length
   })
   return total
