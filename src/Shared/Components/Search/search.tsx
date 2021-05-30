@@ -557,7 +557,7 @@ class Search extends Component<Props, State> {
                             { value: 'week', text: local.lastWeek},
                             { value: 'month', text: local.lastMonth },
                           ].map(({ value, text }) => (
-                            <option value={value} data-qc={value}>
+                            <option key={value} value={value} data-qc={value}>
                               {text}
                             </option>
                           ))}
