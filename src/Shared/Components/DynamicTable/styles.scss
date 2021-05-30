@@ -56,6 +56,9 @@
     & th:first-child,td:first-child{
     padding-right: 50px;
     }
+    td{
+        vertical-align: middle;
+    }
 }
 .table {
     & th,td{

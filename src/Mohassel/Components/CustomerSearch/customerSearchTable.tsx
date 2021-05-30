@@ -3,41 +3,14 @@ import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Swal from 'sweetalert2';
-import InfoBox from '../userInfoBox';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { getFullCustomerKey } from '../../../Shared/Services/utils';
-interface Customer {
-    birthDate?: any;
-    customerName?: string;
-    nationalIdIssueDate?: any;
-    homePostalCode?: string;
-    nationalId?: string;
-    customerHomeAddress?: string;
-    customerAddressLatLong?: string;
-    customerAddressLatLongNumber?: {
-        lat: number;
-        lng: number;
-    };
-    businessAddressLatLong?: string;
-    businessAddressLatLongNumber?: {
-        lat: number;
-        lng: number;
-    };
-    businessPostalCode?: any;
-    businessLicenseIssueDate?: any;
-    applicationDate?: any;
-    permanentEmployeeCount?: any;
-    partTimeEmployeeCount?: any;
-    customerID?: string;
-    customerCode?: string;
-    gender?: string;
-    businessSector?: string;
-    businessActivity?: string;
-    businessSpeciality?: string;
-}
+import { InfoBox } from '../../../Shared/Components'
+import { getCompanyInfo, getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
+import { Customer } from '../../../Shared/Services/interfaces';
 interface Results {
     results: Array<object>;
     empty: boolean;
@@ -51,12 +24,12 @@ interface Props {
     selectedCustomer: Customer;
     style?: object;
     header?: string;
-		className?: string;
+    className?: string;
+    sme?: boolean;
 };
 
 interface State {
     searchKey: string;
-    dropDownArray: Array<string>;
     dropDownValue: string;
 }
 class CustomerSearch extends Component<Props, State>{
@@ -64,7 +37,6 @@ class CustomerSearch extends Component<Props, State>{
         super(props);
         this.state = {
             searchKey: '',
-            dropDownArray: ['name', 'key', 'nationalId', 'code', 'customerShortenedCode'],
             dropDownValue: 'name'
         }
     }
@@ -86,6 +58,8 @@ class CustomerSearch extends Component<Props, State>{
             case 'key': return local.code;
             case 'code': return local.partialCode;
             case 'customerShortenedCode': return local.customerShortenedCode;
+            case 'taxCardNumber': return local.taxCardNumber;
+            case 'commercialRegisterNumber': return local.commercialRegisterNumber;
             default: return '';
         }
     }
@@ -97,7 +71,7 @@ class CustomerSearch extends Component<Props, State>{
 		const isCode = dropDownValue === "code";
 
     if (
-      (dropDownValue === "nationalId" || isKey || isCode) &&
+      (['nationalId', 'taxCardNumber', 'commercialRegisterNumber'].includes(dropDownValue) || isKey || isCode) &&
       isNaN(Number(searchKey))
     ) {
       Swal.fire("", local.SearchOnlyNumbers, "error");
@@ -113,25 +87,25 @@ class CustomerSearch extends Component<Props, State>{
     }
   };
     render() {
+        const dropDownArray: string[] = this.props.sme ? ['key', 'code', 'customerShortenedCode', 'name', 'taxCardNumber', 'commercialRegisterNumber'] : ['name', 'key', 'nationalId', 'code', 'customerShortenedCode'];
         return (
             <div style={{ display: 'flex', flexDirection: 'column', ...this.props.style }} className={this.props.className || ""}>
-
                 {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && <div style={{ width: '100%' }}>
                     <div style={{ width: '100%', justifyContent: 'flex-start', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <p style={{ margin: 'auto 20px' }}>{this.props.header ? this.props.header : local.search}</p>
                         <InputGroup>
-														<DropdownButton
+                            <DropdownButton
                                 as={InputGroup.Append}
                                 variant="outline-secondary"
                                 title={this.getArValue(this.state.dropDownValue)}
                                 id="input-group-dropdown-2"
                                 data-qc="search-dropdown"
                             >
-															{this.state.dropDownArray.map((key, index) =>
-																	<Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key, searchKey: '' })}>{this.getArValue(key)}</Dropdown.Item>
-															)}
+                                {dropDownArray.map((key, index) =>
+                                        <Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key, searchKey: '' })}>{this.getArValue(key)}</Dropdown.Item>
+                                )}
                             </DropdownButton>
-														<InputGroup.Append>
+                            <InputGroup.Append>
                                 <InputGroup.Text className="bg-white rounded-0"><span className="fa fa-search fa-rotate-90" /></InputGroup.Text>
                             </InputGroup.Append>
                             <FormControl
@@ -152,7 +126,7 @@ class CustomerSearch extends Component<Props, State>{
                     style={{ width: '50%', height: '200px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start', textAlign: 'right', overflow: 'scroll', padding: 10 }}>
                     {this.props.searchResults.results.map((element: any) =>
                         <div style={{ width: '100%', borderBottom: '0.5px solid black', cursor: 'all-scroll' }} key={element._id} onClick={() => this.props.selectCustomer(element)}>
-                            <p>{element.customerName}</p>
+                            <p>{(this.props.sme) ? element.businessName : element.customerName}</p>
                         </div>
                     )}
                 </div>
@@ -161,31 +135,74 @@ class CustomerSearch extends Component<Props, State>{
                 {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source !== 'loanApplication' && <div style={{ textAlign: 'right', width: '100%' }}>
                     <div className="d-flex flex-row justify-content-between">
                         <h5>{this.props.source}</h5>
-                        <Button onClick={() => this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>×</Button>
+                        <Button variant="danger" onClick={() => this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>×</Button>
                     </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.name}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.customerName}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.nationalId}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.nationalId}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.birthDate}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{getRenderDate(this.props.selectedCustomer.birthDate)}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.nationalIdIssueDate}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{getRenderDate(this.props.selectedCustomer.nationalIdIssueDate)}</p>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <p>{local.customerHomeAddress}</p>
-                        <p style={{ width: '60%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{this.props.selectedCustomer.customerHomeAddress}</p>
-                    </div>
+                    {this.props.selectedCustomer.customerType === 'individual' ? (
+                        <>
+                            <div className="d-flex flex-row">
+                                <p>{local.name}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.customerName}</p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.nationalId}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.nationalId}</p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.birthDate}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.birthDate && getRenderDate(this.props.selectedCustomer.birthDate)}</p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.nationalIdIssueDate}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.nationalIdIssueDate && getRenderDate(this.props.selectedCustomer.nationalIdIssueDate)}</p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.customerHomeAddress}</p>
+                                <p style={{ width: '60%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{this.props.selectedCustomer.customerHomeAddress}</p>
+                            </div>
+                            </>
+                    ) : (
+                        <>
+                            <div className="d-flex flex-row">
+                                <p>{local.companyName}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>
+                                {this.props.selectedCustomer.businessName}
+                                </p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.companyCode}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>
+                                {this.props.selectedCustomer.key}
+                                </p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.taxCardNumber}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>
+                                {this.props.selectedCustomer.taxCardNumber}
+                                </p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.commercialRegisterNumber}</p>
+                                <p style={{ margin: '0 10px 0 0' }}>
+                                {this.props.selectedCustomer.commercialRegisterNumber}
+                                </p>
+                            </div>
+                            <div className="d-flex flex-row">
+                                <p>{local.companyAddress}</p>
+                                <p
+                                style={{
+                                    width: '60%',
+                                    margin: '0 10px 0 0',
+                                    wordBreak: 'break-all',
+                                }}
+                                >
+                                {this.props.selectedCustomer.businessAddress}
+                                </p>
+                            </div>
+                        </>
+                    )}
                 </div>
                 }
-                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source === 'loanApplication' && <InfoBox values={this.props.selectedCustomer} />}
+                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source === 'loanApplication' && <InfoBox info={this.props.sme ? [getCompanyInfo({ company: this.props.selectedCustomer })] : [getCustomerInfo({customerDetails: this.props.selectedCustomer})]} />}
             </div>
         )
     }

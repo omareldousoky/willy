@@ -40,7 +40,8 @@ interface InitialFormikState {
   isDoubtful?: boolean;
   isWrittenOff?: boolean;
   printed?: boolean;
-  lastDates?: 'day' | 'week' | 'month' | ''
+  lastDates?: 'day' | 'week' | 'month' | '';
+  type?: string;
 }
 interface Props {
   size: number;
@@ -78,7 +79,7 @@ class Search extends Component<Props, State> {
     };
   }
   componentDidMount() {
-    if (this.props.url === "customer") {
+    if (this.props.url === "customer" && !this.props.dropDownKeys?.includes('commercialRegisterNumber')) {
       this.getGov();
     } else if (this.props.url === "actionLogs") {
       this.getActionsList();
@@ -165,6 +166,11 @@ class Search extends Component<Props, State> {
       obj.toDate = new Date().valueOf()
     }
 
+    if(!['application', 'loan'].includes(url)) { delete obj.type } else { obj.type = obj.type ?  obj.type : 'micro' }
+    if (url === 'customer')
+      obj.customerType = this.props.dropDownKeys?.includes('commercialRegisterNumber')
+        ? 'company'
+        : 'individual'
     obj = this.removeEmptyArg(obj);
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
@@ -240,6 +246,11 @@ class Search extends Component<Props, State> {
           initialState.printed = false;
         case "lastDates":
           initialState.lastDates = '';
+        case "sme":
+          initialState.type =
+            this.props.url === "loan"
+              ? this.props.issuedLoansSearchFilters.type
+              : 'micro';
       }
     });
     return initialState;
@@ -266,15 +277,18 @@ class Search extends Component<Props, State> {
       userName: local.username,
       hrCode: local.hrCode,
       customerShortenedCode: local.customerShortenedCode,
+      businessName: local.companyName,
+      taxCardNumber: local.taxCardNumber,
+      commercialRegisterNumber: local.commercialRegisterNumber,
       default: "",
     };
     return arDropDownValue[key];
   }
-  statusDropdown(formikProps: FormikProps<FormikValues>, index: number, array: { value: string; text: string; permission?: string; key?: string }[], field?: string) {
+  statusDropdown(formikProps: FormikProps<FormikValues>, index: number, array: { value: string; text: string; permission?: string; key?: string }[], field?: string, label?: string) {
     return (
       <Col key={index} sm={6} style={{ marginTop: (index < 2 ? 0 : 20) }}>
         <div className="dropdown-container">
-          <p className="dropdown-label">{local.status}</p>
+          <p className="dropdown-label">{label || local.status}</p>
           <Form.Control
             as="select"
             className="dropdown-select"
@@ -567,7 +581,7 @@ class Search extends Component<Props, State> {
                     { value: "areaSupervisorReview", text: local.areaSupervisorReview, permission: 'areaSupervisorReview', key: 'legal' },
                     { value: "areaManagerReview", text: local.areaManagerReview, permission: 'areaManagerReview', key: 'legal' },
                     { value: "financialManagerReview", text: local.financialManagerReview, permission: 'financialManagerReview', key: 'legal' },
-                  ], 'reviewer')
+                  ], 'reviewer', local.reviewStatus)
                 }
                 if (searchKey === "branch" && this.viewBranchDropdown()) {
                   return (
@@ -681,6 +695,52 @@ class Search extends Component<Props, State> {
                     </Col>
                   );
                 }
+                if (searchKey === 'legal-status') {
+                  return this.statusDropdown(formikProps, index, [
+                    { value: '', text: local.all },
+                    {
+                      value: 'firstCourtSession',
+                      text: local.firstCourtSession,
+                    },
+                    {
+                      value: 'oppositionSession',
+                      text: local.oppositionSession,
+                    },
+                    {
+                      value: 'misdemeanorAppealSession',
+                      text: local.misdemeanorAppealSession,
+                    },
+                    {
+                      value: 'oppositionAppealSession',
+                      text: local.oppositionAppealSession,
+                    },
+                    {
+                      value: 'financialManagerReview',
+                      text: local.financialManagerReview,
+                    },
+                  ], undefined, local.judgementStatus)
+                }
+                if (searchKey === "sme") {
+                  return (
+                    <Col key={index} sm={3} style={{ marginTop: 20 }}>
+                      <Form.Group className="row-nowrap" controlId="sme">
+                        <Form.Check
+                          type="checkbox"
+                          name="sme"
+                          data-qc="sme"
+                          checked={formikProps.values.type === 'sme'}
+                          onChange={(e) =>
+                            formikProps.setFieldValue(
+                              "type",
+                              e.currentTarget.checked ? 'sme' : 'micro'
+                            )
+                          }
+                          label='sme'
+                        />
+                      </Form.Group>
+                    </Col>
+                  );
+                }
               })}
 
               <Col className="d-flex">
@@ -718,7 +778,7 @@ const addSearchToProps = (dispatch) => {
     searchFilters: (data) => dispatch(searchFilters(data)),
     setLoading: (data) => dispatch(loading(data)),
     setIssuedLoansSearchFilters: (data) =>
-      dispatch(issuedLoansSearchFilters(data)),
+    dispatch(issuedLoansSearchFilters(data)),
   };
 };
 

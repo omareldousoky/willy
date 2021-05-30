@@ -4,7 +4,7 @@ import {
     OfficerPercentPaymentRow,
     OfficerPercentPaymentTotalRow,
 } from "../../../Services/interfaces";
-import OfficersPercentPaymentHeader from "./officerPercentPaymentHeader";
+import { Header } from "../pdfTemplateCommon/header";
 import "./officersPercentPayment.scss";
 import OfficersPercentPaymentFooter from "./officersPercentPaymentFooter";
 
@@ -102,7 +102,7 @@ const OfficerPercentPayment = (props: OfficerPercentPaymentProps) => {
     );
     return (
         <div className="officers-payment" lang="ar">
-            <OfficersPercentPaymentHeader toDate={toDate} fromDate={fromDate} />
+						<Header toDate={toDate} fromDate={fromDate} title="تقرير نسب السداد و الانتاجيه للمندوبين" />
             {data.response
                 ? data.response.map((branchData, i) => (
                       <>

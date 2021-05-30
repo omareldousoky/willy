@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, BaseSyntheticEvent } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import { checkIssueDate, getErrorMessage } from "../../../Shared/Services/utils";
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
-import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
+import { checkDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
 import Can from '../../config/Can';
-import Swal from 'sweetalert2';
 import ability from '../../config/ability';
+import { getGovernorates } from '../../Services/APIs/configApis/config';
+import { Governorate, District } from './StepTwoForm';
 
 function calculateAge(dateOfBirth: number) {
   if (dateOfBirth) {
@@ -24,8 +26,37 @@ function calculateAge(dateOfBirth: number) {
 
 export const StepOneForm = (props: any) => {
   const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setFieldError } = props;
+  
   const [mapState, openCloseMap] = useState(false);
   const [loading, setLoading] = useState(false);
+  
+  const [governorates, setGovernorates] = useState<Governorate[]>([])
+  const policeStations: District[] = governorates.find(
+    (governorate) =>
+      governorate.governorateName.ar === values.currHomeAddressGov
+  )?.districts || []
+
+  const fetchGovernorates = async () => {
+    setLoading(true)
+    const resGov = await getGovernorates()
+    setLoading(false)
+
+    if (resGov.status === 'success') {
+      setGovernorates(resGov.body.governorates)
+    } else {
+      Swal.fire('Error !', getErrorMessage(resGov.error.error), 'error')
+    }
+  }
+
+  useEffect(() => {
+    fetchGovernorates()
+  }, [])
+
+  const handleGovernorateChange = (event: BaseSyntheticEvent) => {
+    setFieldValue('policeStation', '')
+    handleChange(event)
+  }
+
   return (
     <Form onSubmit={handleSubmit}>
       {mapState && <Map show={mapState}
@@ -75,7 +106,7 @@ export const StepOneForm = (props: any) => {
                   }
                   if (value.length === 14) {
                     setLoading(true);
-                    const res = await checkNationalIdDuplicates(value);
+                    const res = await checkDuplicates('nationalId', value);
                     if (res.status === 'success') {
                       setLoading(false);
                       setFieldValue('nationalIdChecker', res.body.Exists);
@@ -102,8 +133,8 @@ export const StepOneForm = (props: any) => {
         </Col>
         <Col sm={1} style={{ marginTop: 35 }}>
           <Loader type="inline" open={loading} />
-        </Col>
-        <Col sm={3}>
+       </Col>
+       <Col sm={3}>
           <Form.Group controlId="birthDate">
             <Form.Label className="customer-form-label">{`${local.birthDate}*`}</Form.Label>
             <Form.Control
@@ -197,6 +228,62 @@ export const StepOneForm = (props: any) => {
           </Form.Group>
         </Col>
       </Row>
+
+      <Row>
+        <Col sm={6}>
+          <Form.Group controlId="currHomeAddressGov">
+            <Form.Label className="customer-form-label">{local.currHomeAddressGov}</Form.Label>
+            <Form.Control
+              as="select"
+              type="select"
+              name="currHomeAddressGov"
+              data-qc="currHomeAddressGov"
+              defaultValue=""
+              value={values.currHomeAddressGov}
+              onChange={handleGovernorateChange}
+            >
+              <option value="" disabled />
+              {governorates.map(({ governorateName, governorateLegacyCode }) => (
+                <option
+                  key={governorateLegacyCode}
+                  value={governorateName.ar}
+                  selected={values.currHomeAddressGov === governorateName.ar}
+                >
+                  {governorateName.ar}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+        </Col>
+
+        <Col sm={6}>
+          <Form.Group controlId="policeStation">
+            <Form.Label className="customer-form-label">{local.legalPoliceStation}</Form.Label>
+            <Form.Control
+              as="select"
+              type="select"
+              name="policeStation"
+              data-qc="policeStation"
+              defaultValue=""
+              value={values.policeStation}
+              onChange={handleChange}
+              disabled={!policeStations.length}
+            >
+              <option value="" disabled />
+              {policeStations.map(({ districtName, districtLegacyCode }) => (
+                <option
+                  key={districtLegacyCode}
+                  value={districtName.ar}
+                  selected={values.policeStation === districtName.ar}
+                >
+                  {districtName.ar}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+        </Col>
+      </Row>
+
       <Row>
         <Col sm={6}>
           <Form.Group controlId="customerHomeAddressLocation">

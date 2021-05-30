@@ -6,17 +6,25 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
-import InfoBox from '../userInfoBox';
 import GroupInfoBox from '../LoanProfile/groupInfoBox';
-import { guarantorOrderLocal } from '../../../Shared/Services/utils';
+import { guarantorOrderLocal, orderLocal } from '../../../Shared/Services/utils';
+import { InfoBox } from '../../../Shared/Components';
+import { getCompanyInfo, getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
 
 export const LoanApplicationCreationGuarantorForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
+    const companyCheck = props.customer.customerType === 'company'
     return (
         <>
             <Form style={{ width: '90%', padding: 20 }} onSubmit={handleSubmit}>
                 <fieldset disabled={!(values.state === "edit" || values.state === "under_review")}>
-                {props.customer && Object.keys(props.customer).includes('_id') ? <InfoBox values={props.customer} /> :
+                {props.customer && Object.keys(props.customer).includes('_id') ? <InfoBox
+                  info={
+                    props.customer.customerType === 'company'
+                      ? [getCompanyInfo({ company: props.customer })]
+                      : [getCustomerInfo({ customerDetails: props.customer })]
+                  }
+                /> :
                     <GroupInfoBox group={{individualsInGroup: values.individualDetails}} />
                 }
                     <div style={{ width: '100%', margin: '20px 0' }}>
@@ -26,30 +34,71 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                 const text = guarantorOrderLocal[i && i > 10 ? "default" : i]
                                 return (
                                     <Row key={i} className="col-12 text-nowrap">
+                                        {(i > values.noOfGuarantors - 1) && (
+                                            <div className="d-flex col-1 p-0">
+                                                <Button variant="danger" className="m-auto" onClick={() => props.removeGuar(guarantor, i, values)}>-</Button>
+                                            </div>
+                                        )}
                                         <CustomerSearch
                                             source={text}
                                             key={i}
                                             className="col-11 p-0"
-                                            handleSearch={(key, query) => props.handleSearch(key, query, i)}
+                                            handleSearch={(key, query) => props.handleSearch(key, query, i, guarantor.isCompany ?? false)}
                                             searchResults={guarantor.searchResults}
                                             selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, i, values) }}
                                             selectedCustomer={guarantor.guarantor}
                                             removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, i, values) }}
                                             header={text}
+                                            sme={guarantor.isCompany}
                                         />
-                                        {(i > values.noOfGuarantors - 1) && (
-																				<div className="d-flex col-1 p-0">
-																					<Button variant="primary" className="m-auto" onClick={() => props.removeGuar(guarantor, i, values)}>-</Button>
-																				</div>
-																				)}
                                     </Row>
                                 )
                             }
                             )}
-                            <Button onClick={() => props.addGuar()}>+</Button>
+                            <Button onClick={() => props.addGuar()}>+{companyCheck && ' ' + local.individual}</Button>
+                            {companyCheck && <Button className="ml-5" onClick={() => props.addGuar('company')}>+ {local.company}</Button>}
                         </Col>
                     </div>
+                    {companyCheck ? 
                     <div style={{ width: '100%', margin: '20px 0' }}>
+                        <h5>{local.SMEviceCustomersInfo}</h5>
+                        <Col style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+                            {values.entitledToSign.map((guarantor, i) => {
+                                const text = orderLocal[i && i > 10 ? "default" : i]
+                                return (
+                                    <Row key={i} className="col-12 text-nowrap">
+                                        {(i > values.noOfGuarantors - 1) && (
+                                            <div className="d-flex col-1 p-0">
+                                                <Button variant="danger" className="m-auto" onClick={() => props.removeEntitledToSignRow(guarantor, i, values)}>-</Button>
+                                            </div>
+                                        )}
+                                        <CustomerSearch
+                                            source={text}
+                                            key={i}
+                                            className="col-11 p-0"
+                                            handleSearch={(key, query) => props.handleSearchEntitledToSign(key, query, i)}
+                                            searchResults={guarantor.searchResults}
+                                            selectCustomer={(guarantor) => { props.selectEntitledToSign(guarantor, i, values) }}
+                                            selectedCustomer={guarantor.entitledToSign}
+                                            removeCustomer={(guarantor) => { props.removeEntitledToSign(guarantor, i, values) }}
+                                            header={text}
+                                        />
+                                    </Row>
+                                )
+                            }
+                            )}
+                            <Button onClick={() => props.addEntitledToSignRow()}>+</Button>
+                            {errors.entitledToSignIds && (
+                              <Form.Control.Feedback
+                                type="invalid"
+                                style={{ display: 'block' }}
+                              >
+                                {errors.entitledToSignIds}
+                              </Form.Control.Feedback>
+                            )}
+                        </Col>
+                    </div>
+                    : <div style={{ width: '100%', margin: '20px 0' }}>
                         <h5>{local.viceCustomersInfo}</h5>
                         <FieldArray
                             name="viceCustomers"
@@ -98,7 +147,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                 </div>
                             )}
                         />
-                    </div>
+                    </div>}
                 </fieldset>
 								<div className="d-flex justify-content-between py-4">
                     <Button

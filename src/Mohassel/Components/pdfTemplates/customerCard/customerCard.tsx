@@ -95,7 +95,7 @@ class CustomerCardPDF extends Component<Props, State> {
                             <tr>
                                 <td>  العميل
                             <div className="frame">{numbersToArabic(this.getCode())}</div>
-                                    <div className="frame">{this.props.data.product.beneficiaryType === "individual" ? this.props.data.customer.customerName : this.props.data.group.individualsInGroup.find(customer => customer.type === 'leader').customer.customerName}</div>
+                                    <div className="frame">{this.props.data.product.beneficiaryType === "individual" ? this.props.data.customer.customerName || this.props.data.customer.businessName : this.props.data.group.individualsInGroup.find(customer => customer.type === 'leader').customer.customerName}</div>
                                 </td>
                                 <td> التاريخ
 					<div className="frame">{timeToArabicDate(this.props.data.creationDate, false)}</div>
