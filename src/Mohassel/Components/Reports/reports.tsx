@@ -27,19 +27,15 @@ import RandomPayment from '../pdfTemplates/randomPayment/randomPayment';
 import { getLoanApplicationFees, postLoanApplicationFeesExcel, getLoanApplicationFeesExcel } from '../../Services/APIs/Reports/loanApplicationFees';
 import LoanApplicationFees from '../pdfTemplates/loanApplicationFees/loanApplicationFees';
 import Swal from 'sweetalert2';
-import ability from '../../config/ability';
-import Can from '../../config/Can';
 import { doubtfulLoans, postDoubtfulLoansExcel, getDoubtfulLoansExcel } from '../../Services/APIs/Reports/doubtfulLoans';
 import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport';
-import { downloadTxtFile } from '../CIB/textFiles';
 import ManualPayments from '../pdfTemplates/manualPayments/manualPayments';
 import { getManualPayments, postManualPaymentsExcel, getManualPaymentsExcel } from '../../Services/APIs/Reports/manualPayments';
-import { cibTPAYReport } from '../../Services/APIs/Reports/cibTPAYReport';
 import { downloadFile } from '../../../Shared/Services/utils';
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
 import CustomerTransactionReport from '../pdfTemplates/customerTransactionReport/customerTransactionReport';
 import { getCustomerTransactions } from '../../Services/APIs/Reports/customerTransactions';
-import { Button } from 'react-bootstrap';
+import { PDFList } from '../../../Shared/Components/PdfList';
 
 export interface PDF {
   key?: string;
@@ -51,7 +47,7 @@ export interface PDF {
 interface State {
   showModal?: boolean;
   print?: string;
-  pdfsArray?: Array<PDF>;
+  pdfsArray: Array<PDF>;
   selectedPdf: PDF;
   data: any;
   loading: boolean;
@@ -601,31 +597,10 @@ class Reports extends Component<{}, State> {
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.paymentsReports}</Card.Title>
               </div>
             </div>
-            {this.state.pdfsArray?.map((pdf, index) => {
-              return (
-                <Can I={pdf.permission} a='report' key={index}>
-                  <Card key={index}>
-                    <Card.Body>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0px 20px', fontWeight: 'bold', alignItems: 'center' }}>
-                        <div>
-                        <span className="mr-5 text-secondary">
-                          #{index + 1}
-                        </span>
-                          <span>{pdf.local}</span>
-                        </div>
-                        <Button
-                        type="button"
-                        variant="default"
-                        onClick={() => this.handlePrint(pdf)}
-                        title="download">
-                          <span className="download-icon" aria-hidden="true" />
-                          </Button>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                </Can>
-              )
-            })}
+            <PDFList
+              list={this.state.pdfsArray}
+              onClickDownload={(item) => this.handlePrint(item)}
+            />
           </Card.Body>
         </Card>
         {this.state.showModal && <ReportsModal pdf={this.state.selectedPdf} show={this.state.showModal} hideModal={() => this.setState({ showModal: false })} submit={(values) => this.handleSubmit(values)} getExcel={(values) => this.getExcel(values)} />}

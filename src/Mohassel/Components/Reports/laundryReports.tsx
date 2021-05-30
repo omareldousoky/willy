@@ -9,11 +9,10 @@ import { LaundryReportRequest } from '../../Models/LaundryReports';
 import { fetchFalteringPaymentsReport } from '../../Services/APIs/Reports/falteringPayments';
 import { Loader } from '../../../Shared/Components/Loader';
 import ReportsModal from './reportsModal';
-import Can from "../../config/Can";
 import { FalteringPayments } from '../pdfTemplates/falteringPayments/falteringPayments';
-import { Button } from 'react-bootstrap';
 import { fetchEarlyPaymentsReport } from '../../Services/APIs/Reports/earlyPayments';
 import { EarlyPayments } from '../pdfTemplates/earlyPayments/earlyPayments';
+import { PDFList } from '../../../Shared/Components/PdfList';
 
 enum ReportEnum {
   FalteringPayments = "falteringPayments",
@@ -127,32 +126,10 @@ const LaundryReports: FunctionComponent = () => {
 							</Card.Title>
 						</div>
 					</div>
-						{laundryPdfs.map((pdf, index) => {
-              return (
-                <Can I={pdf.permission} a="report" key={index}>
-                  <Card key={index}>
-                    <Card.Body>
-                      <div className="d-flex justify-content-between align-items-center px-2">
-                        <div className="font-weight-bold">
-                          <span className="mr-4 text-secondary">
-                            #{index + 1}
-                          </span>
-                          <span>{pdf.local}</span>
-                        </div>
-                        <Button
-                          type="button"
-                          variant="default"
-                          onClick={() => handlePrint(pdf)}
-                          title="download"
-                        >
-                          <span className="download-icon" aria-hidden="true" />
-                        </Button>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                </Can>
-              );
-            })}
+					<PDFList
+						list={laundryPdfs}
+						onClickDownload={(item) => handlePrint(item)}
+						/>
 				</Card.Body>
 			</Card>
 			{showModal && selectedPdf && (

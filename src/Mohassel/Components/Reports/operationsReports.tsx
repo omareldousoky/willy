@@ -3,7 +3,6 @@ import Card from "react-bootstrap/Card";
 import { Loader } from "../../../Shared/Components/Loader";
 import ReportsModal from "./reportsModal";
 import * as local from "../../../Shared/Assets/ar.json";
-import Can from "../../config/Can";
 import { fetchLoansBriefingReport } from "../../Services/APIs/Reports/loansBriefingReport";
 import { installmentsDuePerOfficerCustomerCard } from "../../Services/APIs/Reports/installmentsDuePerOfficerCustomerCard";
 import { unpaidInstallmentsByOfficer } from "../../Services/APIs/Reports/unpaidInstallmentsByOfficer";
@@ -44,19 +43,15 @@ import MonthComparison from "../pdfTemplates/monthComparison/monthComparison";
 import ActiveWalletIndividual from "../pdfTemplates/activeWalletIndividual/activeWalletIndividual";
 import { ActiveWalletRequest, fetchActiveWalletGroupReport, fetchActiveWalletIndividualReport } from "../../Services/APIs/Reports/activeWallet";
 import ActiveWalletGroup from "../pdfTemplates/activeWalletGroup/activeWalletGroup";
-import { Button } from "react-bootstrap";
+import { PDFList } from "../../../Shared/Components/PdfList";
+import { PDF } from "./reports";
 
-export interface PDF {
-  key?: string;
-  local?: string;
-  inputs?: Array<string>;
-  permission: string;
-}
+
 
 interface OperationsReportsState {
   showModal?: boolean;
   print?: string;
-  pdfsArray?: Array<PDF>;
+  pdfsArray: Array<PDF>;
   selectedPdf: PDF;
   data: any; // TODO: Handle type
   loading: boolean;
@@ -423,32 +418,10 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                 </Card.Title>
               </div>
             </div>
-            {this.state.pdfsArray?.map((pdf, index) => {
-              return (
-                <Can I={pdf.permission} a="report" key={index}>
-                  <Card key={index}>
-                    <Card.Body>
-                      <div className="d-flex justify-content-between font-weight-bold">
-                        <div>
-                          <span className="mr-5 text-secondary">
-                            #{index + 1}
-                          </span>
-                          <span>{pdf.local}</span>
-                        </div>
-                        <Button
-                          type="button"
-                          variant="default"
-                          onClick={() => this.handlePrint(pdf)}
-                          title="download"
-                        >
-                          <span className="download-icon" aria-hidden="true" />
-                        </Button>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                </Can>
-              );
-            })}
+            <PDFList
+              list={this.state.pdfsArray}
+              onClickDownload={(item) => this.handlePrint(item)}
+            />
           </Card.Body>
         </Card>
         {this.state.showModal && (
