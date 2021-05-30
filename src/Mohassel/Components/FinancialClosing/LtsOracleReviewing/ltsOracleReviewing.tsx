@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import { Button, Card } from 'react-bootstrap'
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+
 import { Loader } from '../../../../Shared/Components/Loader'
 import local from '../../../../Shared/Assets/ar.json'
 import { downloadOracleReviewFile, getOracleReviewFiles, ReviewFilesResponse } from '../../../Services/APIs/loanApplication/financialClosing'
