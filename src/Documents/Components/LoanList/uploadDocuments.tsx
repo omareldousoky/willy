@@ -48,7 +48,6 @@ class UploadDocuments extends Component<Props, State> {
   async componentDidMount() {
     const appId = this.props.location.state.id
     this.getAppByID(appId)
-    this.getDocumentTypes()
   }
 
   componentWillUnmount() {
@@ -89,7 +88,7 @@ class UploadDocuments extends Component<Props, State> {
           loading: false,
           application: application.body,
         },
-        () =>
+        () => {
           this.props.getDocuments({
             applicationId: this.state.application._id,
             docType:
@@ -97,6 +96,8 @@ class UploadDocuments extends Component<Props, State> {
                 ? 'issuedLoan'
                 : 'loanApplication',
           })
+          this.getDocumentTypes()
+        }
       )
     } else {
       this.setState({ loading: false }, () =>
