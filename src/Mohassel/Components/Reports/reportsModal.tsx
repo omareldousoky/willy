@@ -701,13 +701,9 @@ const ReportsModal = (props: Props) => {
                               as="select"
                               className="dropdown-select"
                               data-qc="loanType"
+                              name="loanType"
                               value={formikProps.values.loanType}
-                              onChange={(e) => {
-                                formikProps.setFieldValue(
-                                  'loanType',
-                                  e.currentTarget.value
-                                )
-                              }}
+                              onChange={formikProps.handleChange}
                             >
                               {[
                                 { value: 'all', text: local.all },
