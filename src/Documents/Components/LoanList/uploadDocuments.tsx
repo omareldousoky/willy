@@ -48,6 +48,7 @@ class UploadDocuments extends Component<Props, State> {
   async componentDidMount() {
     const appId = this.props.location.state.id
     this.getAppByID(appId)
+    this.getDocumentTypes()
   }
 
   componentWillUnmount() {
