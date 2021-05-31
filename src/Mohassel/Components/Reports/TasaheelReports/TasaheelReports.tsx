@@ -16,15 +16,23 @@ import { DebtsAgingReport } from "./DebtsAgingReport";
 import {
   getAllLoanAge,
   getAllTasaheelRisks,
+  getAllMonthlyReport,
+  getAllQuarterlyReport,
   generateTasaheelRisksReport,
   generateLoanAgeReport,
+  generateMonthlyReport,
+  generateQuarterlyReport,
   getTasaheelRisksReport,
   getLoanAgeReport,
+  getMonthlyReport,
+  getQuarterlyReport,
 } from "../../../Services/APIs/Reports/tasaheelRisksReports";
 
 import { Report, ReportDetails } from "./types";
 import { Tab } from "../../HeaderWithCards/cardNavbar";
 import { ReportsList } from "../../../../Shared/Components/ReportsList";
+import MonthlyReport from "../../pdfTemplates/monthlyReport/monthlyReport";
+import QuarterlyReport from "../../pdfTemplates/quarterlyReport/quarterlyReport";
 
 export const TasaheelReports = () => {
   const reportsRequests = {
@@ -39,6 +47,18 @@ export const TasaheelReports = () => {
       requestReport: generateLoanAgeReport,
       getReportDetails: getLoanAgeReport,
       printComponent: DebtsAgingReport,
+    },
+    monthlyReport: {
+      getAll: getAllMonthlyReport,
+      requestReport: generateMonthlyReport,
+      getReportDetails: getMonthlyReport,
+      printComponent: MonthlyReport,
+    },
+    quarterlyReport: {
+      getAll: getAllQuarterlyReport,
+      requestReport: generateQuarterlyReport,
+      getReportDetails: getQuarterlyReport,
+      printComponent: QuarterlyReport,
     },
   };
   const [tabs, setTabs] = useState<any[]>([]);
@@ -62,6 +82,23 @@ export const TasaheelReports = () => {
         permission: "debtsAging",
         permissionKey: "report",
       });
+
+    ability.can("monthlyReport", "report") &&
+      allowedTabs.push({
+        header: local.monthlyReport,
+        stringKey: "monthlyReport",
+        permission: "monthlyReport",
+        permissionKey: "report",
+      });
+
+    ability.can("quarterlyReport", "report") &&
+      allowedTabs.push({
+        header: local.quarterReport,
+        stringKey: "quarterlyReport",
+        permission: "quarterlyReport",
+        permissionKey: "report",
+      });
+
     setTabs(allowedTabs);
     setActiveTabKey(allowedTabs[0]?.stringKey || "");
   }, []);
@@ -86,7 +123,7 @@ export const TasaheelReports = () => {
 
     if (res.status === "success") {
       setIsLoading(false);
-      setReports(res.body.files);
+      setReports(res.body.files || res.body.reportFiles);
     } else {
       setIsLoading(false);
       Swal.fire("error", local.searchError, "error");
@@ -96,12 +133,15 @@ export const TasaheelReports = () => {
 
   useEffect(() => {
     tabs.length > 0 && activeTabKey && getAllReports();
+    setReports([]);
   }, [tabs, activeTabKey]);
 
   const requestReport = async (values) => {
     setIsLoading(true);
+    let date: null | {} = null;
+    if (values) date = { date: values.date };
     const res = await reportsRequests[activeTabKey].requestReport({
-      date: values.date,
+      date,
     });
 
     if (res.status === "success") {
@@ -170,7 +210,16 @@ export const TasaheelReports = () => {
                   <Button
                     type="button"
                     variant="primary"
-                    onClick={() => setModalIsOpen(true)}
+                    onClick={() => {
+                      if (
+                        tabs[activeTabIndex()].stringKey !== "monthlyReportt" &&
+                        tabs[activeTabIndex()].stringKey !== "quarterlyReport"
+                      )
+                        setModalIsOpen(true);
+                      else {
+                        requestReport("");
+                      }
+                    }}
                   >
                     {local.requestNewreport}
                   </Button>
