@@ -1,12 +1,11 @@
-import axios from '../axios-instance';
+import axios from '../axios-instance'
 
 export const addLoanUsage = async (data: object) => {
-    const url = process.env.REACT_APP_BASE_URL + `/config/usage`;
-    try {
-        const res = await axios.post(url, data);
-        return { status: "success", body: res.data }
-    }
-    catch (error) {
-        return { status: "error", error: error.response.data }
-    }
+  const url = process.env.REACT_APP_BASE_URL + `/config/usage`
+  try {
+    const res = await axios.post(url, data)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
 }
