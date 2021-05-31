@@ -156,8 +156,8 @@ class Search extends Component<Props, State> {
     if (obj.lastDates) {
       const fromDate = dayjs().subtract(1, obj.lastDates)
 
-      obj.fromDate = fromDate.valueOf()
-      obj.toDate = dayjs().valueOf()
+      obj.fromDate = fromDate.startOf('day').valueOf()
+      obj.toDate = dayjs().startOf('day').valueOf()
     }
 
     if(!['application', 'loan'].includes(url)) { delete obj.type } else { obj.type = obj.type ?  obj.type : 'micro' }
