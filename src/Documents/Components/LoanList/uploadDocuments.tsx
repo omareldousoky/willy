@@ -55,12 +55,7 @@ class UploadDocuments extends Component<Props, State> {
   }
 
   async getDocumentTypes() {
-    const query =
-      this.state.application.status === 'issued'
-        ? 'loanApplication,issuedLoan'
-        : 'loanApplication'
-
-    const response = await getDocumentsTypes(query, true)
+    const response = await getDocumentsTypes('loanApplication,issuedLoan', true)
     if (response.status === 'success') {
       this.setState({
         documentTypes: response.body.documentTypes,
@@ -88,7 +83,7 @@ class UploadDocuments extends Component<Props, State> {
           loading: false,
           application: application.body,
         },
-        () => {
+        () =>
           this.props.getDocuments({
             applicationId: this.state.application._id,
             docType:
@@ -96,8 +91,6 @@ class UploadDocuments extends Component<Props, State> {
                 ? 'issuedLoan'
                 : 'loanApplication',
           })
-          this.getDocumentTypes()
-        }
       )
     } else {
       this.setState({ loading: false }, () =>
