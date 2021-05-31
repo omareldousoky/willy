@@ -10,6 +10,7 @@ import Button from "react-bootstrap/Button";
 import FormControl from "react-bootstrap/FormControl";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
+import dayjs from 'dayjs'
 import {
   search,
   searchFilters,
@@ -153,17 +154,10 @@ class Search extends Component<Props, State> {
     }
 
     if (obj.lastDates) {
-      const fromDate = new Date()
-
-      if (obj.lastDates === 'month') {
-        fromDate.setMonth(fromDate.getMonth() - 1)
-      } else {
-        const subtractBy = obj.lastDates === 'day' ? 1 : 7
-        fromDate.setDate(fromDate.getDate() - subtractBy)
-      }
+      const fromDate = dayjs().subtract(1, obj.lastDates)
 
       obj.fromDate = fromDate.valueOf()
-      obj.toDate = new Date().valueOf()
+      obj.toDate = dayjs().valueOf()
     }
 
     if(!['application', 'loan'].includes(url)) { delete obj.type } else { obj.type = obj.type ?  obj.type : 'micro' }
