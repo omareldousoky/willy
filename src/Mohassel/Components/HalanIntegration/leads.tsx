@@ -94,36 +94,44 @@ class Leads extends Component<Props, State>{
       selectedLeadNumber: "",
       viewRejectionModal: false,
     }
+
+    const getRowClassName = (data) =>
+      data.status === 'approved'
+        ? 'text-success'
+        : data.status === 'rejected'
+        ? 'text-danger'
+        : ''
+        
     this.mappers = [
       {
         title: local.leadName,
         key: "name",
-        render: data => <span className={data.status === 'approved' ? 'text-success' : data.status === 'rejected' ? 'text-danger' : ''}>{ data.customerName }</span>
+        render: data => <span className={getRowClassName(data)}>{ data.customerName }</span>
       },
       {
         title: local.governorate,
         key: "governorate",
-        render: data => <span className={data.status === 'approved' ? 'text-success' : data.status === 'rejected' ? 'text-danger' : ''}>{ data.businessGovernate }</span>
+        render: data => <span className={getRowClassName(data)}>{ data.businessGovernate }</span>
       },
       {
         title: local.branchName,
         key: "branch",
-        render: data => <span className={data.status === 'approved' ? 'text-success' : data.status === 'rejected' ? 'text-danger' : ''}>{ data.branchName }</span>
+        render: data => <span className={getRowClassName(data)}>{ data.branchName }</span>
       },
       {
         title: local.status,
         key: "status",
-        render: data => <span className={data.status === 'approved' ? 'text-success' : data.status === 'rejected' ? 'text-danger' : ''}>{ this.getLeadStatus(data.status) }</span>
+        render: data => <span className={getRowClassName(data)}>{ this.getLeadStatus(data.status) }</span>
       },
       {
         title: local.creationDate,
         key: "createdAt",
-        render: data => <span className={data.status === 'approved' ? 'text-success' : data.status === 'rejected' ? 'text-danger' : ''}> {data.createdAt ? getDateAndTime(data.createdAt) : '' }</span>
+        render: data => <span className={getRowClassName(data)}> {data.createdAt ? getDateAndTime(data.createdAt) : '' }</span>
       },
       {
         title: () => local.loanOfficer,
         key: "loanOfficer",
-        render: data => <span className={data.status === 'approved' ? 'text-success' : data.status === 'rejected' ? 'text-danger' : ''}> {data.loanOfficerName }</span>
+        render: data => <span className={getRowClassName(data)}> {data.loanOfficerName }</span>
       },
       {
         title: () => <Can I="assignLead" a="halanuser">{local.chooseLoanOfficer}</Can>,

@@ -244,8 +244,6 @@ class Search extends Component<Props, State> {
               : false;
         case "printed":
           initialState.printed = false;
-        case "lastDates":
-          initialState.lastDates = '';
         case "sme":
           initialState.type =
             this.props.url === "loan"
