@@ -33,7 +33,7 @@ const List = ({
   totalCount,
 }: CompanyListProps) => {
   const [openActionsId, setOpenActionsId] = useState<string>("");
-  const [manageCompaniesTab, setManageCompaniesTab] = useState<CardType[]>([]);
+  const [manageCompaniesTab, setManageCompaniesTab] = useState<CardType[]>(manageCustomersArray);
   const [from, setFrom] = useState<number>(0);
   const [size, setSize] = useState<number>(10);
   const {
@@ -154,11 +154,11 @@ const List = ({
 
   return (
     <>
-      {/* <HeaderWithCards
+      <HeaderWithCards
         header={companies}
         array={manageCompaniesTab}
         active={1}
-      /> */}
+      />
       <Card className="main-card">
         <Loader type="fullsection" open={loading} />
         <Card.Body style={{ padding: 0 }}>
