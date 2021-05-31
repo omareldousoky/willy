@@ -130,7 +130,7 @@ class Reports extends Component<{}, State> {
         {
           key: 'CollectionStatement',
           local: 'كشف التحصيل',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'collectionReport',
         },
         {
@@ -628,6 +628,7 @@ class Reports extends Component<{}, State> {
       branchList: values.branches.some((branch) => branch._id === '')
         ? []
         : values.branches.map((branch) => branch._id),
+      loanType: values.loanType,
     })
     if (res.status === 'success') {
       if (!res.body) {
