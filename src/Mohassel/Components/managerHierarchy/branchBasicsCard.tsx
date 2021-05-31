@@ -1,54 +1,56 @@
-import React, { Component } from 'react'
-import { Col, Row } from 'react-bootstrap';
-import Form from 'react-bootstrap/Form';
-import * as local from '../../../Shared/Assets/ar.json';
-import './managerHierarchy.scss';
-interface Props {
-    name: string;
-    branchCode: number;
-    createdAt: string;
-    status: string;
+import React, { FunctionComponent } from 'react'
 
-}
-export interface Managers {
-    branchId?: string;
-    operationsManager: { id: string; name: string };
-    areaManager: { id: string; name: string };
-    areaSupervisor: { id: string; name: string };
-    centerManager: { id: string; name: string };
-    branchManager: { id: string; name: string };
-}
-export interface UserOfBranch {
-    name: string;
-    _id: string;
-}
-export default function BranchBasicsCard(props: Props) {
-    return (
-        <div className="branch-basics-card">
-            <div className="row-nowrap">
-                <span className="basic-info">
-                <img src={require('../../Assets/basicInfo.svg')} />
-                <Form.Label>{local.basicInfo}</Form.Label>
-                </span>
-            </div>
-            <div className="branch-basics-container">
-            <Col>
-                <Row><Form.Label className="basic-info-label">{local.oneBranch}</Form.Label></Row>
-                <Row><Form.Label className="basic-info-data">{props.name}</Form.Label></Row>
-            </Col>
-            <Col>
-                <Row><Form.Label className="basic-info-label">{local.branchCode}</Form.Label></Row>
-                <Row><Form.Label className="basic-info-data">{props.branchCode}</Form.Label></Row>
-            </Col>
-            <Col>
-                <Row><Form.Label className="basic-info-label">{local.creationDate}</Form.Label></Row>
-                <Row><Form.Label className="basic-info-data" >{props.createdAt}</Form.Label></Row>
-            </Col>
-            <Col>
-                <Row><Form.Label className="basic-info-label">{local.status}</Form.Label></Row>
-                <Row><Form.Label className="basic-info-data">{props.status === "active" ? local.activeBranch : local.inActiveBranch}</Form.Label></Row>
-            </Col>
-            </div>
-        </div>
-    );
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
+
+import * as local from '../../../Shared/Assets/ar.json'
+import './managerHierarchy.scss'
+import { BranchBasicsCardProps } from './types'
+
+export const BranchBasicsCard: FunctionComponent<BranchBasicsCardProps> = ({
+  name,
+  createdAt,
+  branchCode,
+  status,
+}) => {
+  return (
+    <div className="branch-basics-card">
+      <div className="row-nowrap">
+        <span className="basic-info">
+          <img
+            className="pr-3"
+            alt="basic-info"
+            src={require('../../Assets/basicInfo.svg')}
+          />
+          <Form.Label>{local.basicInfo}</Form.Label>
+        </span>
+      </div>
+      <div className="branch-basics-container">
+        <Col className="d-flex flex-column">
+          <Form.Label className="basic-info-label">
+            {local.oneBranch}
+          </Form.Label>
+          <Form.Label className="basic-info-data">{name}</Form.Label>
+        </Col>
+        <Col className="d-flex flex-column">
+          <Form.Label className="basic-info-label">
+            {local.branchCode}
+          </Form.Label>
+          <Form.Label className="basic-info-data">{branchCode}</Form.Label>
+        </Col>
+        <Col className="d-flex flex-column">
+          <Form.Label className="basic-info-label">
+            {local.creationDate}
+          </Form.Label>
+          <Form.Label className="basic-info-data">{createdAt}</Form.Label>
+        </Col>
+        <Col className="d-flex flex-column">
+          <Form.Label className="basic-info-label">{local.status}</Form.Label>
+          <Form.Label className="basic-info-data">
+            {status === 'active' ? local.activeBranch : local.inActiveBranch}
+          </Form.Label>
+        </Col>
+      </div>
+    </div>
+  )
 }

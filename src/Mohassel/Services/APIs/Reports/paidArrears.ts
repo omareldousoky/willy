@@ -1,13 +1,13 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse } from 'axios'
 import {
   ApiResponse,
   PaidArrearsRequest,
   PaidArrearsResponse,
-} from "../../interfaces";
-import axios from "../axios-instance";
+} from '../../interfaces'
+import axios from '../axios-instance'
 
-const { REACT_APP_BASE_URL } = process.env;
-const fetchPaidArrears = `${REACT_APP_BASE_URL}/report/paid-arrears`;
+const { REACT_APP_BASE_URL } = process.env
+const fetchPaidArrears = `${REACT_APP_BASE_URL}/report/paid-arrears`
 
 export const fetchPaidArrearsReport = async (
   request: PaidArrearsRequest
@@ -16,9 +16,9 @@ export const fetchPaidArrearsReport = async (
     const res: AxiosResponse<PaidArrearsResponse> = await axios.post(
       fetchPaidArrears,
       request
-    );
-    return { status: "success", body: res.data };
+    )
+    return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: "error", error: error.response.data };
+    return { status: 'error', error: error.response.data }
   }
-};
+}

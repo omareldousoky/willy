@@ -1,69 +1,109 @@
-import React, { Component } from 'react'
-import { Col, Form, Row } from 'react-bootstrap';
-import * as local from '../../../Shared/Assets/ar.json';
-import {LoanOfficer, OfficersGroup } from '../../../Shared/Services/interfaces';
-import './managerHierarchy.scss';
-import UsersSearch from './usersSearch';
-interface Props {
-    seqNo: number;
-    deleteGroup: any;
-    group: OfficersGroup;
-    branchId: string;
-    mode: string;
-    users: Array<LoanOfficer>;
-    loanOfficers: Array<LoanOfficer>;
-}
-interface State {
-    officers: {id: string; name: string}[];
-}
-export class SupervisionGroup extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state={
-            officers: this.props.group.officers,
-        }
-    }
+import React, { FunctionComponent, useEffect, useState } from 'react'
 
-    render() {
-        return (
-            <div className='supervision-group-container'>
-                <div className={'group-supervisor-row'}>
-                    <Col sm={6}>
-                        <Form.Label className="supervision-label" as={Col}>{`${local.groupManager} ( ${this.props.seqNo} )`}</Form.Label>
-                        {<Row><UsersSearch usersInitial={this.props.users} objectKey={'leader'} item={this.props.group} /></Row> }
-                    </Col> 
-                 {(this.props.mode ==='create') &&  <div onClick={this.props.deleteGroup}>
-                        <img src={require('../../../Shared/Assets/deleteIcon.svg')} />
-                    </div>}
-                </div>
-                <Row className={'officers-container'}>
-                {
-                    this.state.officers.map((officer , index) => {   
-                        return (
-                            <Col key={index} sm={6}>
-                                <Form.Label className={'supervision-label'}><img onClick={()=>{
-                                    const newOfficers = this.state.officers;
-                                    newOfficers.splice(index,1);
-                                    this.props.group.officers = newOfficers;
-                                    this.setState({officers: newOfficers});
-                                }} alt="removeIcon"  src ={require('../../Assets/removeIcon.svg')}/> {local.loanOfficerOrCoordinator}</Form.Label>
-                               <Row className="row-nowrap"><UsersSearch usersInitial={this.props.loanOfficers} isLoanOfficer objectKey={index} item={this.props.group.officers} branchId={this.props.branchId} /></Row>
-                            </Col>
-                        )
-                    })
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+
+import * as local from '../../../Shared/Assets/ar.json'
+import { ManagerHierarchyUser } from '../../../Shared/Services/interfaces'
+import './managerHierarchy.scss'
+import { SupervisionGroupProps } from './types'
+import { UsersSearch } from './usersSearch'
+
+export const SupervisionGroup: FunctionComponent<SupervisionGroupProps> = ({
+  seqNo,
+  deleteGroup,
+  group,
+  branchId,
+  mode,
+  users,
+  loanOfficers,
+  updateGroupLeader,
+  updateGroupOfficers,
+}) => {
+  const [officers, setOfficers] = useState<ManagerHierarchyUser[]>(
+    group.officers
+  )
+
+  useEffect(() => {
+    updateGroupOfficers(officers)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [officers])
+
+  return (
+    <div className="supervision-group-container">
+      <div className="group-supervisor-row m-0">
+        <Col sm={6}>
+          <Form.Label
+            className="supervision-label"
+            as={Col}
+          >{`${local.groupManager} ( ${seqNo} )`}</Form.Label>
+          <UsersSearch
+            usersInitial={users}
+            objectKey="leader"
+            item={group.leader}
+            updateItem={updateGroupLeader}
+          />
+        </Col>
+        {mode === 'create' && (
+          <Button type="button" variant="default" onClick={deleteGroup}>
+            <span className="trash-icon" aria-hidden="true" />
+          </Button>
+        )}
+      </div>
+      <Row className="officers-container">
+        {officers.map((officer, index) => {
+          return (
+            <Col key={index} sm={6}>
+              <Form.Label className="supervision-label">
+                <Button
+                  type="button"
+                  variant="default"
+                  onClick={() => {
+                    setOfficers(officers.filter((_, i) => index !== i))
+                  }}
+                >
+                  <span className="remove-red-icon" aria-hidden="true" />
+                </Button>
+                {local.loanOfficerOrCoordinator}
+              </Form.Label>
+              <UsersSearch
+                isLoanOfficer
+                usersInitial={loanOfficers}
+                objectKey={index}
+                item={officer}
+                updateItem={(newOfficer) =>
+                  setOfficers(
+                    officers
+                      .map((officerItem, i) =>
+                        i === index ? newOfficer : officerItem
+                      )
+                      .filter((v) => !!v) as ManagerHierarchyUser[]
+                  )
                 }
-                </Row>
-            { (this.props.mode ==='create' || this.props.mode ==='edit') &&  <Row className="add-member-container">
-                    <span className={'add-member'} onClick={()=>{
-                        const newOfficers = this.props.group.officers;
-                        newOfficers.push({id:'', name:''})
-                        this.props.group.officers = newOfficers;
-                       this.setState({
-                           officers : newOfficers,
-                       })
-                    }} ><img className={'green-add-icon'} src={require('../../Assets/greenAdd.svg')} />{local.addLoanOfficer}</span>
-                </Row>}
-            </div>
-        )
-    }
+                branchId={branchId}
+              />
+            </Col>
+          )
+        })}
+      </Row>
+      {(mode === 'create' || mode === 'edit') && (
+        <Button
+          type="button"
+          variant="link"
+          disabled={!!officers.filter((officer) => !officer.id).length}
+          onClick={() => {
+            if (officers.filter((officer) => !officer.id).length) return
+            setOfficers(officers.concat({ id: '', name: '' }))
+          }}
+        >
+          <span className="plus-green-icon align-middle" aria-hidden="true" />
+          <span className="text-success pl-2 font-weight-bold">
+            {local.addLoanOfficer}
+          </span>
+        </Button>
+      )}
+    </div>
+  )
 }

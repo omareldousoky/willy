@@ -411,14 +411,17 @@ code {
 	background-color: #f7fff2;
 	border-radius: 0;
 	border: 1px solid lightgrey;
+
 	& .row {
 		justify-content: space-around;
 		padding: 1.2rem 0 .2rem;
 	}
+
 	& .item {
 		display: flex;
 		flex-direction: column;
 		text-align: right;
+
 		& .label {
 			font-size: .82rem;
 			color: #6e6e6e;
@@ -443,19 +446,13 @@ code {
 	flex-direction:column;
 	align-items: flex-start;
 }
+
 .small-text {
 	font-size: .79rem;
 	font-weight: bold;
 	text-align: right;
 }
-.hide-card-styles{
-	border: none;
-	margin: 0 !important;
 
-	.card-body {
-		padding: 0;
-	}
-}
 @media print {
 	* {
 		font-size: 14px;
@@ -491,4 +488,30 @@ code {
 	&:focus {
 		box-shadow: none;	
 	}
+}
+
+// this will be replaced later by icon font, but now to avoid redundant requests
+.icon-base {
+	width: 20px;
+	height: 20px;
+	background-size: 20px !important; // so property not overridden on extend
+	background-repeat: no-repeat !important; // so property not overridden on extend
+	background-position: center;
+	display: inline-block;
+}
+
+.remove-red-icon {
+	background: url(./Assets/remove-red.svg);
+	@extend .icon-base;
+	background-repeat: no-repeat;
+}
+
+.trash-icon {
+	background: url(../Shared/Assets/deleteIcon.svg);
+	@extend .icon-base;
+}
+
+.plus-green-icon {
+	background: url(./Assets/greenAdd.svg);
+	@extend .icon-base;
 }

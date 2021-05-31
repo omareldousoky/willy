@@ -1,13 +1,12 @@
-import React from "react";
+import React from 'react'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
-import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import { LtsIcon } from '..'
 
-import { LtsIcon } from "../../Components";
-
-import { ActionsIconGroupProps } from "./types";
+import { ActionsIconGroupProps } from './types'
 
 export const ActionsIconGroup = ({
   currentCustomerId,
@@ -34,5 +33,5 @@ export const ActionsIconGroup = ({
         )}
       </Row>
     </Container>
-  );
-};
+  )
+}
