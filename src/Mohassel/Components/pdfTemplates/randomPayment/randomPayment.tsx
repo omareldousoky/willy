@@ -16,6 +16,7 @@ interface Props {
       trxAmount: string
       trxAction: string
       canceled: string
+      loanType?: string
     }[]
     trxCount: string
     trxSum: string
@@ -132,6 +133,7 @@ const RandomPayment = (props: Props) => {
                 <th>قيمة الحركه</th>
                 <th>نوع الحركه الماليه</th>
                 <th>حالة الحركة</th>
+                <th>نوع القرض</th>
               </tr>
               <tr>
                 <td colSpan={10} className="border" />
@@ -149,6 +151,7 @@ const RandomPayment = (props: Props) => {
                     <td>{row.trxAmount}</td>
                     <td>{actionsLocalization(row.trxAction)}</td>
                     <td>{row.canceled === '1' ? 'الحركة ملغاه' : ''}</td>
+                    <td>{row?.loanType || ''}</td>
                   </tr>
                   <tr>
                     <td colSpan={4} />

@@ -190,7 +190,7 @@ class Reports extends Component<{}, State> {
         {
           key: 'manualPayments',
           local: 'مراجعه حركات السداد اليدوي',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'manualPayments',
         },
         {
@@ -796,6 +796,7 @@ class Reports extends Component<{}, State> {
       enddate: values.toDate,
       branchList: branches.includes('') ? [''] : branches,
       all: branches.includes('') || branches === [] ? '1' : '0',
+      loanType: values.loanType,
     }
     const res = await getManualPayments(obj)
     if (res.status === 'success') {

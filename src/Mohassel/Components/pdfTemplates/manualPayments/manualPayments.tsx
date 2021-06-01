@@ -25,6 +25,7 @@ interface Props {
             transactionPrincipal: string
             transactionInterest: string
             transactionAmount: string
+            loanType?: string
           }
         ]
         branchName: string
@@ -117,7 +118,7 @@ const ManualPayments = (props: Props) => {
           return (
             <>
               <tr>
-                <th colSpan={12} className="border" />
+                <th colSpan={13} className="border" />
               </tr>
               <thead>
                 <tr>
@@ -130,9 +131,10 @@ const ManualPayments = (props: Props) => {
                   <th>أصل</th>
                   <th>القيمه المسدده تكلفه تمويل </th>
                   <th>إجمالي</th>
+                  <th>نوع القرض</th>
                 </tr>
                 <tr>
-                  <th colSpan={12} className="border" />
+                  <th colSpan={13} className="border" />
                 </tr>
               </thead>
               {day.branches.map((branch) => {
@@ -163,9 +165,10 @@ const ManualPayments = (props: Props) => {
                               <td>{row.transactionPrincipal}</td>
                               <td>{row.transactionInterest}</td>
                               <td>{row.transactionAmount}</td>
+                              <td>{row?.loanType || ''}</td>
                             </tr>
                             <tr>
-                              <th colSpan={12} className="border" />
+                              <th colSpan={13} className="border" />
                             </tr>
                           </tbody>
                         </>
@@ -192,7 +195,7 @@ const ManualPayments = (props: Props) => {
                       </tr>
 
                       <tr>
-                        <th colSpan={12} className="border" />
+                        <th colSpan={13} className="border" />
                       </tr>
                     </tbody>
                   </>
