@@ -76,6 +76,7 @@ const IssuedLoanList = (props) => {
             <th colSpan={2}>قيمة تكلفه التمويل</th>
             <th colSpan={2}>إجمالي</th>
             <th>حالة الحركة</th>
+            <th>نوع القرض</th>
           </tr>
           <tr>
             <th colSpan={100} className="horizontal-line" />
@@ -120,6 +121,7 @@ const IssuedLoanList = (props) => {
                       <td>
                         {transaction.canceled === 1 ? 'الحركة ملغاه' : ''}
                       </td>
+                      <td>{transaction?.loanType || ''}</td>
                     </tr>
                   ))}
                   <tr>
