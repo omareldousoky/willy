@@ -362,6 +362,8 @@ export const getIscoreReportStatus = (status: string) => {
       return local.created;
     case "failed":
       return local.failed;
+    case "emptyResponse":
+      return local.noResults;
     default:
       return "";
   }
