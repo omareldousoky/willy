@@ -1,6 +1,5 @@
 import { timeToDateyyymmdd } from "../../../Shared/Services/utils";
 import CIBReports from './cibReports';
-import MonthlyQuarterlyReports from './monthlyQuarterlyReports';
 import React, { Component } from "react";
 import * as local from "../../../Shared/Assets/ar.json";
 import { CardNavBar, Tab } from "../HeaderWithCards/cardNavbar";
@@ -51,10 +50,6 @@ class ReportsHome extends Component<{}, State> {
                 //     permissionKey: 'oracleIntegration'
                 // }, 
                 {
-                    header: local.monthlyQuarterlyReports,
-                    stringKey: 'monthlyQuarterlyReports',
-                },
-                {
                     header: local.tasaheelReports,
                     stringKey: 'tasaheelReports',
                 },
@@ -87,8 +82,6 @@ class ReportsHome extends Component<{}, State> {
                 return <OracleIntegration />;
             case "operationsReports":
                 return <OperationsReports />;
-            case "monthlyQuarterlyReports":
-                return <MonthlyQuarterlyReports/>
             case "tasaheelReports":
                 return <TasaheelReports/>            
             case "laundryReports":
