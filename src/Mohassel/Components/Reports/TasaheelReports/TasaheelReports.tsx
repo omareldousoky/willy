@@ -4,6 +4,7 @@ import Can from "../../../config/Can";
 import ability from "../../../config/ability";
 import * as local from "../../../../Shared/Assets/ar.json";
 import Swal from "sweetalert2";
+import { downloadFile } from "../../../../Shared/Services/utils";
 
 import { Button, Card } from "react-bootstrap";
 
@@ -31,8 +32,6 @@ import {
 import { Report, ReportDetails } from "./types";
 import { Tab } from "../../HeaderWithCards/cardNavbar";
 import { ReportsList } from "../../../../Shared/Components/ReportsList";
-import MonthlyReport from "../../pdfTemplates/monthlyReport/monthlyReport";
-import QuarterlyReport from "../../pdfTemplates/quarterlyReport/quarterlyReport";
 
 export const TasaheelReports = () => {
   const reportsRequests = {
@@ -52,13 +51,11 @@ export const TasaheelReports = () => {
       getAll: getAllMonthlyReport,
       requestReport: generateMonthlyReport,
       getReportDetails: getMonthlyReport,
-      printComponent: MonthlyReport,
     },
     quarterlyReport: {
       getAll: getAllQuarterlyReport,
       requestReport: generateQuarterlyReport,
       getReportDetails: getQuarterlyReport,
-      printComponent: QuarterlyReport,
     },
   };
   const [tabs, setTabs] = useState<any[]>([]);
@@ -134,12 +131,13 @@ export const TasaheelReports = () => {
   useEffect(() => {
     tabs.length > 0 && activeTabKey && getAllReports();
     setReports([]);
+    setPrint(false);
   }, [tabs, activeTabKey]);
 
   const requestReport = async (values) => {
     setIsLoading(true);
-    let date: null | {} = null;
-    if (values) date = { date: values.date };
+    let date = "";
+    if (values) date = values.date;
     const res = await reportsRequests[activeTabKey].requestReport({
       date,
     });
@@ -160,9 +158,17 @@ export const TasaheelReports = () => {
     const res = await reportsRequests[activeTabKey].getReportDetails(id);
 
     if (res.status === "success") {
-      setReportDetails(res.body);
-      setPrint(true);
-      window.print();
+      if (
+        tabs[activeTabIndex()].stringKey === "monthlyReport" ||
+        tabs[activeTabIndex()].stringKey === "quarterlyReport"
+      ) {
+        downloadFile(res.body.url);
+      } else {
+        setReportDetails(res.body);
+        setPrint(true);
+        window.print();
+      }
+
       setIsLoading(false);
     } else {
       setIsLoading(false);
@@ -212,12 +218,12 @@ export const TasaheelReports = () => {
                     variant="primary"
                     onClick={() => {
                       if (
-                        tabs[activeTabIndex()].stringKey !== "monthlyReportt" &&
-                        tabs[activeTabIndex()].stringKey !== "quarterlyReport"
-                      )
-                        setModalIsOpen(true);
-                      else {
+                        tabs[activeTabIndex()].stringKey === "monthlyReport" ||
+                        tabs[activeTabIndex()].stringKey === "quarterlyReport"
+                      ) {
                         requestReport("");
+                      } else {
+                        setModalIsOpen(true);
                       }
                     }}
                   >
@@ -235,6 +241,7 @@ export const TasaheelReports = () => {
       </div>
       {activeTabKey &&
         print &&
+        reportsRequests[activeTabKey].printComponent &&
         reportsRequests[activeTabKey].printComponent(reportDetails)}
     </>
   );
