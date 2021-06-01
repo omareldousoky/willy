@@ -24,6 +24,7 @@ interface Props {
   issuedLoansSearchFilters: any;
   search: (data) => Promise<void>;
   setIssuedLoanSearchFilters: (data) => void;
+  setSearchFilters: (data) => void;
 };
 interface State {
   size: number;
@@ -159,6 +160,9 @@ class LoanList extends Component<Props, State> {
       if (error) Swal.fire("Error !", getErrorMessage(error), "error");
     });
   }
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
   render() {
     const array = manageLoansArray();
     const smePermission = ( ability.can('getIssuedSMELoan','application') && this.props.issuedLoansSearchFilters.type === 'sme' )
@@ -241,6 +245,7 @@ const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
     setIssuedLoanSearchFilters: data => dispatch(issuedLoansSearchFilters(data)),
+    setSearchFilters: data => dispatch(searchFilters(data)),
   };
 };
 const mapStateToProps = state => {
