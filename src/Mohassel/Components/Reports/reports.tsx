@@ -136,7 +136,7 @@ class Reports extends Component<{}, State> {
         {
           key: 'Penalties',
           local: 'الغرامات',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'penalties',
         },
         {
@@ -664,6 +664,7 @@ class Reports extends Component<{}, State> {
       endDate: values.toDate,
       all: branches.includes('') || branches === [] ? '1' : '0',
       branchList: branches.includes('') ? [''] : branches,
+      loanType: values.loanType,
     })
     if (res.status === 'success') {
       if (!res.body) {
