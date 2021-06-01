@@ -345,7 +345,7 @@ class TrackLoanApplications extends Component<Props, State> {
     const res = await getBranch(id)
     if (res.status === 'success') {
       this.setState({ branchDetails: res.body?.data })
-    } else console.log('error getting branch data')
+    } else console.log('Error getting branch data')
   }
 
   async getReviewedData() {
