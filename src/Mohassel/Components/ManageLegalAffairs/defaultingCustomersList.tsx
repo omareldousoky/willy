@@ -196,7 +196,7 @@ class DefaultingCustomersList extends Component<Props, State> {
             {
                 title: local.date,
                 key: 'creationDate',
-                render: data => data.created.at ? timeToArabicDate(data.created.at, true) : ''
+                render: data => data.created?.at ? timeToArabicDate(data.created.at, true) : ''
             },
             {
                 title: local.status,
@@ -258,7 +258,7 @@ class DefaultingCustomersList extends Component<Props, State> {
         return ((new Date().getTime() - new Date(date).getTime()) / (1000 * 60 * 60 * 24))
     }
     renderIcons(data: DefaultedCustomer) {
-        const daysSince = this.getRecordAgeInDays(data.created.at)
+        const daysSince = this.getRecordAgeInDays(data.created?.at)
         return (
             <>
                 {(data.branchManagerReview || data.areaManagerReview || data.areaSupervisorReview || data.financialManagerReview) && <img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.logs} src={require('../../Assets/view.svg')} onClick={() => { this.showLogs(data) }} ></img>}
