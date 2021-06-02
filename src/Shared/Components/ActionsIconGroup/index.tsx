@@ -14,7 +14,7 @@ export const ActionsIconGroup = ({
 }: ActionsIconGroupProps) => {
   return (
     <Container>
-      <Row lg="4" md="2" sm="1" >
+      <Row lg="4" md="2" sm="1">
         {actions.map(
           (action, index) =>
             action.actionPermission && (
