@@ -529,7 +529,7 @@ class DocumentUploader extends Component<Props, State> {
           }}
         >
           <div style={{ textAlign: 'right', fontWeight: 'bold' }}>
-            {this.props.documentType.name}
+            <span>{this.props.documentType.name}&nbsp;</span>
             <span
               style={{
                 margin: '0  10px',
