@@ -3,10 +3,10 @@ import './doubtfulPayments.scss'
 import {
   timeToArabicDate,
   getTimestamp,
-  getLoanStatus,
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
 import * as local from '../../../../Shared/Assets/ar.json'
+import { loanStatusLocal } from '../pdfTemplateCommon/reportLocal'
 
 const DoubtfulPayments = (props) => {
   const tempData = props.data.data
@@ -117,7 +117,7 @@ const DoubtfulPayments = (props) => {
                         )}
                       </td>
                       <td colSpan={1}>
-                        {getLoanStatus(transaction.stateFlags)}
+                        {loanStatusLocal[transaction.stateFlags || 'default']}{' '}
                       </td>
                       <td>{transaction.transactionPrincipal}</td>
                       <td colSpan={1}>{transaction.transactionInterest}</td>

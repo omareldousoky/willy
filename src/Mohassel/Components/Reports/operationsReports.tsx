@@ -405,11 +405,11 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   async fetchActiveWalletIndividual(values) {
-    const { date, branches, loanOfficers } = values
+    const { date, branches, loanOfficerIds } = values
     const res = await fetchActiveWalletIndividualReport({
       date,
       branches,
-      loanOfficerIds: loanOfficers,
+      loanOfficerIds,
     } as ActiveWalletRequest)
     this.handleFetchReport(res, Reports.ActiveWalletIndividual)
   }

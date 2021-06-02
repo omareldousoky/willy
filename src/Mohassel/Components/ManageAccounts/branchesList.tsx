@@ -15,7 +15,10 @@ import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageAccountsArray } from './manageAccountsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { getCookie } from '../../../Shared/Services/getCookie'
-import { getBranch } from '../../Services/APIs/Branch/getBranch'
+import {
+  BranchDetailsResponse,
+  getBranch,
+} from '../../Services/APIs/Branch/getBranch'
 
 interface State {
   size: number
@@ -149,7 +152,8 @@ class BranchesList extends Component<Props, State> {
   async getBranchByID() {
     const res = await getBranch(this.state.branchId)
     if (res.status === 'success') {
-      if (res.body?.data) this.setState({ branch: res.body.data })
+      if ((res.body as BranchDetailsResponse)?.data)
+        this.setState({ branch: (res.body as BranchDetailsResponse).data })
     }
   }
 

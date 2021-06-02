@@ -1,5 +1,6 @@
 import React from 'react'
 import './unpaidInst.scss'
+import Table from 'react-bootstrap/Table'
 import local from '../../../../Shared/Assets/ar.json'
 import {
   numbersToArabic,
@@ -65,7 +66,7 @@ const UnpaidInst = (props) => {
                       {area.name}
                     </span>
                   </div>
-                  <table className="repeated-table">
+                  <Table className="repeated-table">
                     <thead>
                       <tr>
                         <th>اسم العميل</th>
@@ -100,7 +101,7 @@ const UnpaidInst = (props) => {
                         )
                       })}
                     </tbody>
-                  </table>
+                  </Table>
                   <div className="horizontal-line" />
                   <div>
                     <span>إجمالى: منطقة العمل : </span>
@@ -163,13 +164,19 @@ const UnpaidInst = (props) => {
                   <span>الإجمالى العام: </span>
                   <span
                     className="frame"
-                    style={{ padding: '5px 5px 5px 50px', textAlign: 'center' }}
+                    style={{
+                      padding: '5px 5px 5px 50px',
+                      textAlign: 'center',
+                    }}
                   >
                     {props.data?.count}
                   </span>
                   <span
                     className="frame"
-                    style={{ padding: '5px 5px 5px 50px', textAlign: 'center' }}
+                    style={{
+                      padding: '5px 5px 5px 50px',
+                      textAlign: 'center',
+                    }}
                   >
                     {props.data?.amount}
                   </span>

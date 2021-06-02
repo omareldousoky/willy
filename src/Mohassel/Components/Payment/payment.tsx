@@ -750,7 +750,9 @@ class Payment extends Component<Props, State> {
                   paymentType: this.props.paymentType,
                 }}
                 onSubmit={this.handleSubmit}
-                validationSchema={manualPaymentValidation}
+                validationSchema={() =>
+                  manualPaymentValidation(this.state.penalty)
+                }
                 validateOnBlur
                 validateOnChange
               >
