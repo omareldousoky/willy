@@ -11,7 +11,22 @@ import AppForm from './Form'
 import { FormField } from './Form/types'
 import { defaultValidationSchema } from './validations'
 
-const JudgeLegalCustomersForm = ({ onSubmit, onCancel }) => {
+interface JudgeCustomersFormValues {
+  gov: string
+  policeStation: string
+  dateRange: {
+    from: string
+    to: string
+  }
+}
+
+const JudgeLegalCustomersForm = ({
+  onSubmit,
+  onCancel,
+}: {
+  onSubmit: (values: JudgeCustomersFormValues) => void
+  onCancel: () => void
+}) => {
   const [selectedGovernorate, setSelectedGovernorate] = useState<
     Governorate | undefined
   >(undefined)
@@ -55,7 +70,7 @@ const JudgeLegalCustomersForm = ({ onSubmit, onCancel }) => {
     },
     {
       type: 'group',
-      name: 'dateRanges',
+      name: 'dateRange',
       fields: [
         {
           type: 'date',
@@ -66,7 +81,7 @@ const JudgeLegalCustomersForm = ({ onSubmit, onCancel }) => {
             .when(
               'to',
               (to: Date, schema: Yup.DateSchema) =>
-                to && schema.max(to, 'From should be less than to')
+                to && schema.max(to, local.dateRangeErrorMessage)
             ),
         },
         {
@@ -78,7 +93,7 @@ const JudgeLegalCustomersForm = ({ onSubmit, onCancel }) => {
             .when(
               'from',
               (from: Date, schema: Yup.DateSchema) =>
-                from && schema.min(from, 'To should be more than from')
+                from && schema.min(from, local.dateRangeErrorMessage)
             ),
         },
       ],
@@ -107,15 +122,15 @@ const JudgeLegalCustomersForm = ({ onSubmit, onCancel }) => {
     setSelectedGovernorate(currentSelectedGov)
   }
 
-  const handleSubmit = (values) => {
+  const handleSubmit = (values: JudgeCustomersFormValues) => {
     console.log({ submit: values })
-    onSubmit()
+    onSubmit(values)
   }
 
   return (
     <AppForm
       formFields={formFields}
-      onSubmit={(values) => handleSubmit(values)}
+      onSubmit={handleSubmit}
       onCancel={onCancel}
       onChange={handleChange}
       options={{

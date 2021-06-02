@@ -1,0 +1,19 @@
+.template-container {
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-print-color-adjust: exact;
+  page-break-after: always;
+
+  table {
+    border-collapse: collapse;
+
+    tr:first-of-type {
+      background: #ddd;
+    }
+
+    td,
+    th {
+      padding: 5px;
+      text-align: right;
+    }
+  }
+}

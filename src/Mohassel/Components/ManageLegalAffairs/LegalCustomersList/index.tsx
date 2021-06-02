@@ -53,8 +53,13 @@ import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
 import { Branch } from '../../../../Shared/Services/interfaces'
 import { getBranch } from '../../../Services/APIs/Branch/getBranch'
 import managerTypes from '../configs/managerTypes'
-import { handleUpdateSuccess } from '../utils'
+import {
+  handleUpdateSuccess,
+  hasCourtSession,
+  renderCourtField,
+} from '../utils'
 import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
+import LegalJudgePdfTemp from '../../pdfTemplates/LegalJudge.tsx'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -141,15 +146,16 @@ const LegalCustomersList: FunctionComponent = () => {
   }, [customerForPrint])
 
   useEffect(() => {
-    if (branchForPrint) {
+    if (branchForPrint || !!customersForJudge.length) {
       window.print()
     }
 
     window.onafterprint = () => {
       setCustomerForPrint(null)
       setBranchForPrint(null)
+      setCustomersForJudge([])
     }
-  }, [branchForPrint])
+  }, [branchForPrint, customersForJudge])
 
   useEffect(() => {
     const fetchSettlementFees = async () => {
@@ -199,18 +205,6 @@ const LegalCustomersList: FunctionComponent = () => {
       Swal.fire('error', getErrorMessage(error), 'error')
     }
   }, [error])
-
-  const hasCourtSession = (customer: SettledCustomer) =>
-    customer.status !== ManagerReviewEnum.FinancialManager &&
-    customer[customer.status]
-
-  const renderCourtField = (customer: SettledCustomer, name: string) => {
-    if (!hasCourtSession(customer)) {
-      return ''
-    }
-
-    return customer[customer.status][name]
-  }
 
   const toggleCustomerForSettlement = (customer: SettledCustomer) => {
     setCustomerForSettlement((previousValue) =>
@@ -365,7 +359,7 @@ const LegalCustomersList: FunctionComponent = () => {
       title: local.creationDate,
       key: 'creationDate',
       render: (customer: SettledCustomer) =>
-        customer.created.at ? timeToArabicDate(customer.created.at, true) : '',
+        customer.created?.at ? timeToArabicDate(customer.created.at, true) : '',
     },
     {
       title: local.caseNumber,
@@ -499,6 +493,15 @@ const LegalCustomersList: FunctionComponent = () => {
     },
   ]
 
+  const policeStation = 'الزيتون' // TODO: Replace with selected police station
+  const governorate = 'القاهرة' // TODO: Replace with selected governorate
+  const judgeActors = [
+    'مدير الادارة العامة لتنفيذ الاحكام – قطاع الامن العام',
+    'مدير الادارة العامة لتنفيذ الاحكام – مديرية امن القاهرة',
+    `رئيس مباحث قسم شرطة ${policeStation} – وحدة تنفيذ الاحكام`,
+    'مدير المكتب الفني لوزير الداخلية',
+  ]
+
   const renderLogRow = (key: string) =>
     !!customerForView?.settlement &&
     !!customerForView.settlement[key] && (
@@ -559,7 +562,7 @@ const LegalCustomersList: FunctionComponent = () => {
                   className="big-button ml-2"
                   onClick={() => setIsJudgeModalOpen(true)}
                 >
-                  Judge
+                  {local.judgeList}
                 </Button>
               </div>
             </div>
@@ -720,14 +723,24 @@ const LegalCustomersList: FunctionComponent = () => {
           size="lg"
         >
           <Modal.Header>
-            <Modal.Title>Judge Customers</Modal.Title>
+            <Modal.Title>{local.judgeList}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <JudgeLegalCustomersForm
               onSubmit={() => {
                 setIsJudgeModalOpen(false)
+                // remove this
+                setCustomersForJudge([...data])
+                // remove this END
               }}
-              onCancel={() => setIsJudgeModalOpen(false)}
+              onCancel={() => {
+                setIsJudgeModalOpen(false)
+                // remove this
+                setTimeout(() => {
+                  setCustomersForJudge([...data])
+                }, 100)
+                // remove this END
+              }}
             />
           </Modal.Body>
         </Modal>
@@ -739,6 +752,17 @@ const LegalCustomersList: FunctionComponent = () => {
           customer={customerForPrint}
         />
       )}
+
+      {!!customersForJudge.length &&
+        judgeActors.map((actor, index) => (
+          <LegalJudgePdfTemp
+            key={index}
+            actor={actor}
+            customers={customersForJudge}
+            policeStation={policeStation}
+            governorate={governorate}
+          />
+        ))}
     </>
   )
 }
