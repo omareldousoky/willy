@@ -39,7 +39,7 @@ import {
   SettlementInfo,
   TableMapperItem,
 } from '../types'
-import { ManagerReviews } from '../defaultingCustomersList'
+import { DefaultedCustomer, ManagerReviews } from '../defaultingCustomersList'
 import LegalSettlementForm from './LegalSettlementForm'
 import {
   getSettlementFees,
@@ -54,6 +54,7 @@ import { Branch } from '../../../../Shared/Services/interfaces'
 import { getBranch } from '../../../Services/APIs/Branch/getBranch'
 import managerTypes from '../configs/managerTypes'
 import { handleUpdateSuccess } from '../utils'
+import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -86,8 +87,13 @@ const LegalCustomersList: FunctionComponent = () => {
   ] = useState<SettledCustomer | null>(null)
   const [branchForPrint, setBranchForPrint] = useState<Branch | null>(null)
 
+  const [customersForJudge, setCustomersForJudge] = useState<
+    DefaultedCustomer[]
+  >([])
+
   const [isSettlementLoading, setIsSettlementLoading] = useState(false)
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
+  const [isJudgeModalOpen, setIsJudgeModalOpen] = useState(false)
 
   const data: SettledCustomer[] =
     useSelector((state: any) => state.search.data) || []
@@ -548,6 +554,13 @@ const LegalCustomersList: FunctionComponent = () => {
                     {local.uploadDefaultingCustomers}
                   </Button>
                 </Can>
+
+                <Button
+                  className="big-button ml-2"
+                  onClick={() => setIsJudgeModalOpen(true)}
+                >
+                  Judge
+                </Button>
               </div>
             </div>
             <hr className="dashed-line" />
@@ -697,6 +710,24 @@ const LegalCustomersList: FunctionComponent = () => {
                   handleUpdateCustomerSuccess()
                 }
               }}
+            />
+          </Modal.Body>
+        </Modal>
+
+        <Modal
+          show={isJudgeModalOpen}
+          onHide={() => setIsJudgeModalOpen(false)}
+          size="lg"
+        >
+          <Modal.Header>
+            <Modal.Title>Judge Customers</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <JudgeLegalCustomersForm
+              onSubmit={() => {
+                setIsJudgeModalOpen(false)
+              }}
+              onCancel={() => setIsJudgeModalOpen(false)}
             />
           </Modal.Body>
         </Modal>
