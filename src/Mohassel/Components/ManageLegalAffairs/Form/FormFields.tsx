@@ -1,12 +1,13 @@
 import React, { FunctionComponent } from 'react'
 
-import { Row, Col } from 'react-bootstrap'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 import { arrayToPairs } from '../../../../Shared/Services/utils'
 import FormField from './FormField'
 import {
   FormField as FormFieldInterface,
-  GroupField,
+  GroupField as GroupFieldInterface,
   Field,
   FormFieldsProps,
   GroupFieldProps,
@@ -18,10 +19,10 @@ const GroupField: FunctionComponent<GroupFieldProps> = ({
   formikProps,
   pairs = false,
 }) => {
-  const groupField = field as GroupField
-  const fields = groupField.fields.map((field) => ({
-    ...field,
-    name: `${groupField.name}.${field.name}`,
+  const groupField = field as GroupFieldInterface
+  const fields = groupField.fields.map((groupFieldItem) => ({
+    ...groupFieldItem,
+    name: `${groupField.name}.${groupFieldItem.name}`,
   }))
 
   const fieldProps = {
@@ -40,7 +41,7 @@ export const FormFieldPairs: FunctionComponent<FormFieldsProps> = ({
   formFields,
   formikProps,
 }) => {
-  const formFieldPairs = arrayToPairs<FormFieldInterface | GroupField>(
+  const formFieldPairs = arrayToPairs<FormFieldInterface | GroupFieldInterface>(
     formFields
   )
 
@@ -50,14 +51,14 @@ export const FormFieldPairs: FunctionComponent<FormFieldsProps> = ({
         const isPair = !!fieldPairs[1]
 
         const renderPairsField = (
-          field: FormFieldInterface | GroupField,
+          field: FormFieldInterface | GroupFieldInterface,
           index: number
         ) =>
           isGroupField(field) ? (
             <Col>
               <GroupField
                 key={field.name}
-                field={field as GroupField}
+                field={field as GroupFieldInterface}
                 formikProps={formikProps}
                 pairs
               />
@@ -86,12 +87,12 @@ const FormFields: FunctionComponent<FormFieldsProps> = ({
 }) => {
   return (
     <>
-      {formFields.map((field: FormFieldInterface | GroupField) => {
+      {formFields.map((field: FormFieldInterface | GroupFieldInterface) => {
         if (isGroupField(field)) {
           return (
             <GroupField
               key={field.name}
-              field={field as GroupField}
+              field={field as GroupFieldInterface}
               formikProps={formikProps}
               pairs
             />

@@ -6,7 +6,7 @@ import { timeToArabicDate, timeToDate } from '../../../../Shared/Services/utils'
 import local from '../../../../Shared/Assets/ar.json'
 
 interface DefaultingCustomersTempProps {
-  customers: ReviewedDefaultingCustomer[];
+  customers: ReviewedDefaultingCustomer[]
 }
 
 const DefaultingCustomers = ({ customers }: DefaultingCustomersTempProps) => {
@@ -26,7 +26,7 @@ const DefaultingCustomers = ({ customers }: DefaultingCustomersTempProps) => {
     <div className="defaulting-customers__container">
       <div className="d-flex justify-content-between align-items-center">
         <p className="headtitle text-center">
-          <div className="logo-print mb-3"></div>
+          <div className="logo-print mb-3" />
           <span>شركة تساهيل للتمويل متناهي الصغر</span>
           <br />
           <span>تحريرا في: {nowDate}</span>

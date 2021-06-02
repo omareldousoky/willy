@@ -1,13 +1,13 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse } from 'axios'
 import {
   ApiResponse,
   LeakedCustomersReportRequest,
   LeakedCustomersReportResponse,
-} from "../../interfaces";
-import axios from "../axios-instance";
+} from '../../interfaces'
+import axios from '../axios-instance'
 
-const { REACT_APP_BASE_URL } = process.env;
-const fetchLeakedCustomersURL = `${REACT_APP_BASE_URL}/report/churned-customers`;
+const { REACT_APP_BASE_URL } = process.env
+const fetchLeakedCustomersURL = `${REACT_APP_BASE_URL}/report/churned-customers`
 
 export const fetchLeakedCustomersReport = async (
   request: LeakedCustomersReportRequest
@@ -16,9 +16,9 @@ export const fetchLeakedCustomersReport = async (
     const res: AxiosResponse<LeakedCustomersReportResponse> = await axios.post(
       fetchLeakedCustomersURL,
       request
-    );
-    return { status: "success", body: res.data };
+    )
+    return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: "error", error: error.response.data };
+    return { status: 'error', error: error.response.data }
   }
-};
+}

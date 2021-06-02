@@ -1,28 +1,24 @@
-import {
-    createStore,
-    applyMiddleware,
+import { createStore, applyMiddleware } from 'redux'
 
-} from 'redux'
-
-import thunkMiddleware from "redux-thunk"
-import rootReducer from './rootReducer'
+import thunkMiddleware from 'redux-thunk'
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { composeWithDevTools } from 'redux-devtools-extension'
+import rootReducer from './rootReducer'
 
 function configureStore() {
-    const middlewares = [thunkMiddleware];
-    const middleWareEnhancer = applyMiddleware(...middlewares);
+  const middlewares = [thunkMiddleware]
+  const middleWareEnhancer = applyMiddleware(...middlewares)
 
-    const store = createStore(
-        rootReducer,
-        composeWithDevTools(middleWareEnhancer)
-    );
+  const store = createStore(
+    rootReducer,
+    composeWithDevTools(middleWareEnhancer)
+  )
 
-    return store;
+  return store
 }
-const store = configureStore();
+const store = configureStore()
 
-export type AppState = ReturnType<typeof rootReducer>;
-export type AppDispatch = typeof store.dispatch;
+export type AppState = ReturnType<typeof rootReducer>
+export type AppDispatch = typeof store.dispatch
 
-export default store;
-
+export default store
