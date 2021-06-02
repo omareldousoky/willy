@@ -5,7 +5,12 @@ import React, {
   ChangeEvent,
 } from 'react'
 
-import { Button, Card, Form, FormCheck, Modal, Table } from 'react-bootstrap'
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import FormCheck from 'react-bootstrap/FormCheck'
+import Modal from 'react-bootstrap/Modal'
+import Table from 'react-bootstrap/Table'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import Swal from 'sweetalert2'
@@ -27,14 +32,14 @@ import Search from '../../../../Shared/Components/Search/search'
 import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from '../manageLegalAffairsInitials'
 import {
-  ManagerReveiwEnum,
+  ManagerReviewEnum,
   ReviewReqBody,
   SettledCustomer,
   SettlementFormValues,
   SettlementInfo,
   TableMapperItem,
 } from '../types'
-import { DefaultedCustomer, ManagerReviews } from '../defaultingCustomersList'
+import { ManagerReviews } from '../defaultingCustomersList'
 import LegalSettlementForm from './LegalSettlementForm'
 import {
   getSettlementFees,
@@ -189,10 +194,11 @@ const LegalCustomersList: FunctionComponent = () => {
     }
   }, [error])
 
-  const hasCourtSession = (data: DefaultedCustomer) =>
-    data.status !== ManagerReveiwEnum.FinancialManager && data[data.status]
+  const hasCourtSession = (customer: SettledCustomer) =>
+    customer.status !== ManagerReviewEnum.FinancialManager &&
+    customer[customer.status]
 
-  const renderCourtField = (customer: DefaultedCustomer, name: string) => {
+  const renderCourtField = (customer: SettledCustomer, name: string) => {
     if (!hasCourtSession(customer)) {
       return ''
     }
@@ -270,8 +276,8 @@ const LegalCustomersList: FunctionComponent = () => {
   }
 
   const handleReviewCustomerSubmit = async (values: {
-    type: ManagerReveiwEnum;
-    notes: string;
+    type: ManagerReviewEnum
+    notes: string
   }) => {
     if (!customersForReview?.length) {
       return
@@ -295,42 +301,38 @@ const LegalCustomersList: FunctionComponent = () => {
 
   const tableMapper: TableMapperItem[] = [
     {
-      title: function renderTitle() {
-        return (
-          <FormCheck
-            type="checkbox"
-            onChange={toggleSelectAllCustomers}
-            checked={
-              !!customersForBulkAction.length &&
-              customersForBulkAction.length === data.length
-            }
-            disabled={!searchFilters.reviewer}
-          />
-        )
-      },
+      title: () => (
+        <FormCheck
+          type="checkbox"
+          onChange={toggleSelectAllCustomers}
+          checked={
+            !!customersForBulkAction.length &&
+            customersForBulkAction.length === data.length
+          }
+          disabled={!searchFilters.reviewer}
+        />
+      ),
       key: 'selected',
-      render: function render(data: SettledCustomer) {
-        return (
-          <FormCheck
-            type="checkbox"
-            checked={
-              !!customersForBulkAction.find(
-                (customer) => customer._id === data._id
-              )
-            }
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              toggleSelectCustomer(e, data)
-            }
-            disabled={!searchFilters.reviewer}
-          />
-        )
-      },
+      render: (customer: SettledCustomer) => (
+        <FormCheck
+          type="checkbox"
+          checked={
+            !!customersForBulkAction.find(
+              (selectedCustomer) => selectedCustomer._id === customer._id
+            )
+          }
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            toggleSelectCustomer(e, customer)
+          }
+          disabled={!searchFilters.reviewer}
+        />
+      ),
     },
     {
       title: local.customerId,
       key: 'customerKey',
-      render: function render(data) {
-        return ability.can('getCustomer', 'customer') ? (
+      render: (customer: SettledCustomer) =>
+        ability.can('getCustomer', 'customer') ? (
           <Button
             type="button"
             variant="default"
@@ -338,54 +340,57 @@ const LegalCustomersList: FunctionComponent = () => {
             className="p-0"
             onClick={() =>
               history.push('/customers/view-customer', {
-                id: data.customerId,
+                id: customer.customerId,
               })
             }
           >
-            {data.customerKey}
+            {customer.customerKey}
           </Button>
         ) : (
-          data.customerKey
-        )
-      },
+          customer.customerKey
+        ),
     },
     {
       title: local.customerName,
       key: 'customerName',
-      render: (data) => data.customerName,
+      render: (customer: SettledCustomer) => customer.customerName,
     },
     {
       title: local.creationDate,
       key: 'creationDate',
-      render: (data) =>
-        data.created.at ? timeToArabicDate(data.created.at, true) : '',
+      render: (customer: SettledCustomer) =>
+        customer.created.at ? timeToArabicDate(customer.created.at, true) : '',
     },
     {
       title: local.caseNumber,
       key: 'caseNumber',
-      render: (data) => data.caseNumber,
+      render: (customer: SettledCustomer & SettlementFormValues) =>
+        customer.caseNumber,
     },
     {
       title: local.court,
       key: 'court',
-      render: (data) => data.court,
+      render: (customer: SettledCustomer & SettlementFormValues) =>
+        customer.court,
     },
     {
       title: local.confinementNumber,
       key: 'confinementNumber',
-      render: (data) => renderCourtField(data, 'confinementNumber'),
+      render: (customer: SettledCustomer) =>
+        renderCourtField(customer, 'confinementNumber'),
     },
     {
       title: local.judgementStatus,
       key: 'courtSessionType',
-      render: (data) => (hasCourtSession(data) ? local[data.status] : ''),
+      render: (customer: SettledCustomer) =>
+        hasCourtSession(customer) ? local[customer.status] : '',
     },
     {
       title: local.settlementStatus,
       key: 'settlementStatus',
-      render: (data) =>
-        data.settlement
-          ? local[data.settlement.settlementStatus]
+      render: (customer: SettledCustomer) =>
+        customer.settlement
+          ? local[customer.settlement.settlementStatus]
           : local.notDone,
     },
   ]
@@ -400,96 +405,91 @@ const LegalCustomersList: FunctionComponent = () => {
     {
       title: '',
       key: 'view',
-      render: function render(data: SettledCustomer) {
-        return (
-          data.settlement &&
-          hasReviews(data.settlement) && (
-            <Button
-              type="button"
-              variant="default"
-              onClick={() => setCustomerForView(data)}
-              className="p-0"
-              title={local.logs}
-            >
-              <img alt={local.logs} src={require('../../../Assets/view.svg')} />
-            </Button>
-          )
-        )
-      },
+      render: (customer: SettledCustomer) =>
+        customer.settlement &&
+        hasReviews(customer.settlement) && (
+          <Button
+            type="button"
+            variant="default"
+            onClick={() => setCustomerForView(customer)}
+            className="p-0"
+            title={local.logs}
+          >
+            <img alt={local.logs} src={require('../../../Assets/view.svg')} />
+          </Button>
+        ),
     },
     {
       title: '',
       key: 'actions',
-      render: function render(data) {
-        return (
-          <Can I="updateDefaultingCustomer" a="legal">
-            <button
-              className="btn clickable-action rounded-0 p-0 font-weight-normal"
-              style={{ color: '#2f2f2f', fontSize: '.9rem' }}
-              onClick={() =>
-                history.push({
-                  pathname: '/legal-affairs/customer-actions',
-                  state: { customer: data },
-                })
-              }
-            >
-              {local.registerLegalAction}
-            </button>
-          </Can>
-        )
-      },
+      render: (customer: SettledCustomer) => (
+        <Can I="updateDefaultingCustomer" a="legal">
+          <button
+            className="btn clickable-action rounded-0 p-0 font-weight-normal"
+            style={{ color: '#2f2f2f', fontSize: '.9rem' }}
+            type="button"
+            onClick={() =>
+              history.push({
+                pathname: '/legal-affairs/customer-actions',
+                state: { customer },
+              })
+            }
+          >
+            {local.registerLegalAction}
+          </button>
+        </Can>
+      ),
     },
     {
       title: '',
       key: 'legalSettlement',
-      render: function render(data: SettledCustomer) {
-        return (
-          <div className="d-flex align-items-center p-1">
-            <Can I="updateSettlement" a="legal">
-              <button
-                className="btn clickable-action rounded-0 p-0 font-weight-normal mr-2"
-                style={{ color: '#2f2f2f', fontSize: '.9rem' }}
-                onClick={() => toggleCustomerForSettlement(data)}
-              >
-                {local.registerSettlement}
-              </button>
-            </Can>
+      render: (customer: SettledCustomer) => (
+        <div className="d-flex align-items-center p-1">
+          <Can I="updateSettlement" a="legal">
+            <button
+              className="btn clickable-action rounded-0 p-0 font-weight-normal mr-2"
+              style={{ color: '#2f2f2f', fontSize: '.9rem' }}
+              onClick={() => toggleCustomerForSettlement(customer)}
+              type="button"
+            >
+              {local.registerSettlement}
+            </button>
+          </Can>
 
-            {isCurrentUserManager &&
-              data.settlement?.settlementStatus === 'reviewed' &&
-              !!availableManagerReview([data]).length && (
-                <Button
-                  type="button"
-                  variant="default"
-                  className="mr-2 p-0"
-                  onClick={() => setCustomersForReview([data])}
-                  title={local.read}
-                >
-                  <img
-                    alt={local.read}
-                    src={require('../../../Assets/check-circle.svg')}
-                  />
-                </Button>
-              )}
-
-            {data.settlement?.financialManagerReview && (
+          {isCurrentUserManager &&
+            customer.settlement?.settlementStatus === 'reviewed' &&
+            !!availableManagerReview([customer]).length && (
               <Button
                 type="button"
                 variant="default"
                 className="mr-2 p-0"
-                onClick={() => setCustomerForPrint(data)}
-                title={local.print}
+                onClick={() => setCustomersForReview([customer])}
+                title={local.read}
               >
                 <img
-                  alt={local.print}
-                  style={{ maxWidth: 18 }}
-                  src={require('../../../Assets/green-download.svg')}
+                  alt={local.read}
+                  src={require('../../../Assets/check-circle.svg')}
                 />
               </Button>
             )}
-          </div>
-        )
-      },
+
+          {customer.settlement?.financialManagerReview && (
+            <Button
+              type="button"
+              variant="default"
+              className="mr-2 p-0"
+              onClick={() => setCustomerForPrint(customer)}
+              title={local.print}
+            >
+              <img
+                alt={local.print}
+                style={{ maxWidth: 18 }}
+                src={require('../../../Assets/green-download.svg')}
+              />
+            </Button>
+          )}
+        </div>
+      ),
     },
   ]
 

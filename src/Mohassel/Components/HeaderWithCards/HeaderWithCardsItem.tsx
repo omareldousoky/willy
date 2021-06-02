@@ -4,10 +4,10 @@ import { Tab } from './headerWithCards'
 export type CardSize = 'lg' | 'sm'
 
 type CardItemProps = {
-  item: Tab;
-  onClick?: () => void;
-  size?: CardSize;
-  isActive: boolean;
+  item: Tab
+  onClick?: () => void
+  size?: CardSize
+  isActive: boolean
 }
 
 const getSizeClassName = (size: CardSize) => {
@@ -27,10 +27,7 @@ const CardItem: FunctionComponent<CardItemProps> = ({
   size = 'lg',
   isActive,
 }) => (
-  <div
-    onClick={onClick}
-    className={`card-item ${isActive ? 'active' : ''}`}
-  >
+  <div onClick={onClick} className={`card-item ${isActive ? 'active' : ''}`}>
     {icon && (
       <img
         alt="icon"
