@@ -130,8 +130,8 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
           onSubmit={handleSubmit}
           defaultValues={{
             ...defaultValues,
-            ...settlementInfo,
             ...customerSettlement,
+            ...settlementInfo,
           }}
           options={{
             renderPairs: true,
