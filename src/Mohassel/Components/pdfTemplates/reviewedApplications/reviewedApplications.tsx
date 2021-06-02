@@ -2,10 +2,10 @@ import React from 'react'
 import './reviewedApplications.scss'
 import {
   beneficiaryType,
-  getLoanStatus,
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
 import store from '../../../../Shared/redux/store'
+import { loanStatusLocal } from '../pdfTemplateCommon/reportLocal'
 
 const ReviewedApplicationsPDF = (props) => {
   function getTotal() {
@@ -107,7 +107,7 @@ const ReviewedApplicationsPDF = (props) => {
               <td>{application.nationalId}</td>
               <td>{application.principal}</td>
               <td>{application.noOfInstallments}</td>
-              <td>{getLoanStatus(application.loanStatus)}</td>
+              <td>{loanStatusLocal[application.loanStatus]}</td>
               {/* <td>فقط عشرة آلاف جنيه لاغير</td> */}
             </tr>
           ))}

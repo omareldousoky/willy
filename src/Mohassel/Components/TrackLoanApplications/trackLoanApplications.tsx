@@ -25,7 +25,10 @@ import {
   getFullCustomerKey,
   iscoreBank,
 } from '../../../Shared/Services/utils'
-import { getBranch } from '../../Services/APIs/Branch/getBranch'
+import {
+  BranchDetailsResponse,
+  getBranch,
+} from '../../Services/APIs/Branch/getBranch'
 import { getCookie } from '../../../Shared/Services/getCookie'
 import {
   getIscoreCached,
@@ -344,7 +347,9 @@ class TrackLoanApplications extends Component<Props, State> {
   async getBranchData(id) {
     const res = await getBranch(id)
     if (res.status === 'success') {
-      this.setState({ branchDetails: res.body?.data })
+      this.setState({
+        branchDetails: (res.body as BranchDetailsResponse)?.data,
+      })
     } else console.log('Error getting branch data')
   }
 
