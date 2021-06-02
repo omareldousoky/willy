@@ -1,7 +1,7 @@
 import React, { createContext, FunctionComponent } from 'react'
 
 import { Form, Formik, FormikProps } from 'formik'
-import { Button } from 'react-bootstrap'
+import Button from 'react-bootstrap/Button'
 
 import './style.scss'
 
@@ -11,8 +11,8 @@ import local from '../../../../Shared/Assets/ar.json'
 import { createFormFieldsInitValue, createValidationSchema } from './utils'
 
 interface FormContext {
-  defaultValues: {};
-  onPhotoChange?: (name: string, value: string | File) => void;
+  defaultValues: {}
+  onPhotoChange?: (name: string, value: string | File) => void
 }
 
 export const AppFormContext = createContext<FormContext>({

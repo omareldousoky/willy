@@ -1,22 +1,22 @@
-import React from "react";
-import { Customer } from "./interfaces";
+import React from 'react'
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
+import { Customer } from './interfaces'
 
-import * as local from "../Assets/ar.json";
-import ability from "../../Mohassel/config/ability";
+import * as local from '../Assets/ar.json'
+import ability from '../../Mohassel/config/ability'
 import {
   arabicGender,
   downloadFile,
-  getErrorMessage,
   iscoreBank,
   iscoreStatusColor,
   timeToArabicDate,
   timeToDateyyymmdd,
-} from "./utils";
-import { Score } from "../../Mohassel/Components/CustomerCreation/customerProfile";
-import { getDateAndTime } from "../../Mohassel/Services/getRenderDate";
-import { Col, Form } from "react-bootstrap";
-import Can from "../../Mohassel/config/Can";
-import { FieldProps } from "../Components/Profile/types";
+} from './utils'
+import { Score } from '../../Mohassel/Components/CustomerCreation/customerProfile'
+import { getDateAndTime } from '../../Mohassel/Services/getRenderDate'
+import Can from '../../Mohassel/config/Can'
+import { FieldProps } from '../Components/Profile/types'
 
 const {
   companyName,
@@ -24,34 +24,34 @@ const {
   taxCardNumber,
   commercialRegisterNumber,
   creationDate,
-  businessSector,
-  businessSpeciality,
-  male,
-  female,
-  customerName,
   customerCode,
-  gender,
-  nationalId,
   groupLeaderName,
-} = local;
+  oneBranch,
+  loanOfficer,
+} = local
 
 interface IscoreInfo {
-  score?: Score;
-  getIscore?(customer: Customer): void;
-  applicationStatus?: any;
+  score?: Score
+  getIscore?(customer: Customer): void
+  applicationStatus?: any
 }
 interface CustomerInfo extends IscoreInfo {
-  isLeader?: boolean;
-  customerDetails: Customer;
+  isLeader?: boolean
+  customerDetails: Customer
 }
 interface CompanyInfo extends IscoreInfo {
-  company: Customer;
+  company: Customer
 }
-const iscoreField = ({score, getIscore, applicationStatus, customerDetails}) => { 
+const iscoreField = ({
+  score,
+  getIscore,
+  applicationStatus,
+  customerDetails,
+}) => {
   return (
     <>
       <Form.Label style={{ color: iscoreStatusColor(score?.iscore).color }}>
-        {score?.iscore}{" "}
+        {score?.iscore}
       </Form.Label>
       <Form.Label>{iscoreStatusColor(score?.iscore).status} </Form.Label>
       {score?.bankCodes &&
@@ -61,48 +61,47 @@ const iscoreField = ({score, getIscore, applicationStatus, customerDetails}) => 
       {score?.url && (
         <Col>
           <span
-            style={{ cursor: "pointer", padding: 10 }}
+            style={{ cursor: 'pointer', padding: 10 }}
             onClick={() => downloadFile(score?.url)}
           >
-            {" "}
             <span
               className="fa fa-file-pdf-o"
-              style={{ margin: "0px 0px 0px 5px" }}
-            ></span>
+              style={{ margin: '0px 0px 0px 5px' }}
+            />
             iScore
           </span>
         </Col>
       )}
       {applicationStatus &&
-        ability.can("viewIscore", "customer") &&
+        ability.can('viewIscore', 'customer') &&
         ![
-          "approved",
-          "created",
-          "issued",
-          "rejected",
-          "paid",
-          "pending",
-          "canceled",
+          'approved',
+          'created',
+          'issued',
+          'rejected',
+          'paid',
+          'pending',
+          'canceled',
         ].includes(applicationStatus) &&
         getIscore && (
           <Col>
             <Can I="getIscore" a="customer">
               <span
-                style={{ cursor: "pointer", padding: 10 }}
+                style={{ cursor: 'pointer', padding: 10 }}
                 onClick={() => getIscore(customerDetails)}
               >
-                {" "}
                 <span
                   className="fa fa-refresh"
-                  style={{ margin: "0px 0px 0px 5px" }}
-                ></span>
+                  style={{ margin: '0px 0px 0px 5px' }}
+                />
                 iscore
               </span>
             </Can>
           </Col>
-        )} 
+        )}
     </>
-)}
+  )
+}
 export const getCompanyInfo = ({
   company,
   score,
@@ -110,44 +109,59 @@ export const getCompanyInfo = ({
   applicationStatus,
 }: CompanyInfo) => {
   return [
-      {
-        fieldTitle: companyName,
-        fieldData: company.businessName || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: companyCode,
-        fieldData: company.key || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: "iScore",
-        fieldData: iscoreField({score: score, getIscore: getIscore, applicationStatus: applicationStatus, customerDetails: company}),
-        showFieldCondition: !!score,
-      },
-      {
-        fieldTitle: taxCardNumber,
-        fieldData: company.taxCardNumber || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: commercialRegisterNumber,
-        fieldData: company.commercialRegisterNumber || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: creationDate,
-        fieldData:
-          (company.created?.at && getDateAndTime(company.created?.at)) || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: businessSector,
-        fieldData: company.businessSector || "",
-        showFieldCondition: true,
-      },
-  ];
-};
+    {
+      fieldTitle: companyName,
+      fieldData: company.businessName || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: companyCode,
+      fieldData: company.key || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: oneBranch,
+      fieldData: company.branchName || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: 'iScore',
+      fieldData: iscoreField({
+        score,
+        getIscore,
+        applicationStatus,
+        customerDetails: company,
+      }),
+      showFieldCondition: !!score,
+    },
+    {
+      fieldTitle: taxCardNumber,
+      fieldData: company.taxCardNumber || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: commercialRegisterNumber,
+      fieldData: company.commercialRegisterNumber || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: creationDate,
+      fieldData:
+        (company.created?.at && getDateAndTime(company.created?.at)) || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.businessSector,
+      fieldData: company.businessSector || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: loanOfficer,
+      fieldData: company.representativeName || '',
+      showFieldCondition: true,
+    },
+  ]
+}
 export const getCustomerInfo = ({
   customerDetails,
   score,
@@ -173,48 +187,60 @@ export const getCustomerInfo = ({
     homePhoneNumber,
     faxNumber,
     mobilePhoneNumber,
-  } = customerDetails;
+    branchName,
+    representativeName,
+  } = customerDetails
   const info: FieldProps[] = [
     {
       fieldTitle: isLeader ? groupLeaderName : local.name,
-      fieldData: customerName || "",
+      fieldData: customerName || '',
       showFieldCondition: true,
     },
     {
       fieldTitle: customerCode,
-      fieldData: key || "",
+      fieldData: key || '',
       showFieldCondition: true,
     },
     {
-      fieldTitle: "iScore",
-      fieldData: iscoreField({ score: score, getIscore: getIscore, applicationStatus: applicationStatus, customerDetails: customerDetails}),
+      fieldTitle: oneBranch,
+      fieldData: branchName || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: 'iScore',
+      fieldData: iscoreField({
+        score,
+        getIscore,
+        applicationStatus,
+        customerDetails,
+      }),
       showFieldCondition: !!score,
     },
     {
       fieldTitle: local.nationalId,
-      fieldData: nationalId || "",
+      fieldData: nationalId || '',
       showFieldCondition: true,
     },
     {
       fieldTitle: local.birthDate,
-      fieldData: (birthDate && timeToArabicDate(birthDate, false)) || "",
+      fieldData: (birthDate && timeToArabicDate(birthDate, false)) || '',
       showFieldCondition: true,
     },
     {
       fieldTitle: creationDate,
-      fieldData: created?.at ? timeToDateyyymmdd(created.at) : "",
+      fieldData: created?.at ? timeToDateyyymmdd(created.at) : '',
       showFieldCondition: true,
     },
     {
       fieldTitle: local.gender,
-      fieldData: (gender && arabicGender(gender)) || "",
+      fieldData: (gender && arabicGender(gender)) || '',
       showFieldCondition: true,
     },
     {
       fieldTitle: local.nationalIdIssueDate,
       fieldData:
         (nationalIdIssueDate && timeToArabicDate(nationalIdIssueDate, false)) ||
-        "",
+        '',
       showFieldCondition: true,
     },
     {
@@ -267,7 +293,12 @@ export const getCustomerInfo = ({
       fieldData: mobilePhoneNumber || local.na,
       showFieldCondition: true,
     },
-  ];
+    {
+      fieldTitle: loanOfficer,
+      fieldData: representativeName || '',
+      showFieldCondition: true,
+    },
+  ]
 
-  return info;
-};
+  return info
+}

@@ -1,10 +1,13 @@
-import { AxiosResponse } from "axios";
-import axios from '../axios-instance';
-import { FalteringPaymentsResponse, LaundryReportRequest } from "../../../Models/LaundryReports";
-import { ApiResponse } from "../../interfaces";
+import { AxiosResponse } from 'axios'
+import axios from '../axios-instance'
+import {
+  FalteringPaymentsResponse,
+  LaundryReportRequest,
+} from '../../../Models/LaundryReports'
+import { ApiResponse } from '../../../Models/common'
 
-const { REACT_APP_BASE_URL } = process.env;
-const fetchFalteringPaymentsUrl = `${REACT_APP_BASE_URL}/report/faltering-payments`;
+const { REACT_APP_BASE_URL } = process.env
+const fetchFalteringPaymentsUrl = `${REACT_APP_BASE_URL}/report/faltering-payments`
 
 export const fetchFalteringPaymentsReport = async (
   request: LaundryReportRequest
@@ -13,9 +16,9 @@ export const fetchFalteringPaymentsReport = async (
     const res: AxiosResponse<FalteringPaymentsResponse> = await axios.post(
       fetchFalteringPaymentsUrl,
       request
-    );
-    return { status: "success", body: res.data };
+    )
+    return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: "error", error: error.response.data };
+    return { status: 'error', error: error.response.data }
   }
-};
+}

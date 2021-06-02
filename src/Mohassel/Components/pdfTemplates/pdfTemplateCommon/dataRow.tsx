@@ -10,11 +10,11 @@ import {
 } from './reportLocal'
 
 interface DataRowProps {
-  type: 'string' | 'money' | 'number' | 'date';
-  value?: string | number;
-  placeholderType?: 'string' | 'money' | 'number';
-  className?: string;
-  meta?: Record<string, string>;
+  type: 'string' | 'money' | 'number' | 'date'
+  value?: string | number
+  placeholderType?: 'string' | 'money' | 'number'
+  className?: string
+  meta?: Record<string, string>
 }
 
 const placeHolders = {
@@ -43,7 +43,7 @@ const DataRow = ({
       {isDate && (
         <td className={className || ''} {...meta}>
           {value
-            ? timeToArabicDate(Number(new Date (value).valueOf()) || 0, false)
+            ? timeToArabicDate(Number(new Date(value).valueOf()) || 0, false)
             : stringPlaceholder}
         </td>
       )}

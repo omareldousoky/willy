@@ -1,6 +1,9 @@
 import local from '../../../../Shared/Assets/ar.json'
 import { FormField } from '../Form/types'
-import { defaultValidationSchema, phoneNumberValidationSchema } from '../validations'
+import {
+  defaultValidationSchema,
+  phoneNumberValidationSchema,
+} from '../validations'
 
 const settlementForm: FormField[] = [
   {
