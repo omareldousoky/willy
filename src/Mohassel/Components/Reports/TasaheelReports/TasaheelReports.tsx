@@ -136,8 +136,7 @@ export const TasaheelReports = () => {
 
   const requestReport = async (values) => {
     setIsLoading(true);
-    let date = "";
-    if (values) date = values.date;
+    const date = values ? values.date : ''
     const res = await reportsRequests[activeTabKey].requestReport({
       date,
     });
@@ -221,7 +220,7 @@ export const TasaheelReports = () => {
                         tabs[activeTabIndex()].stringKey === "monthlyReport" ||
                         tabs[activeTabIndex()].stringKey === "quarterlyReport"
                       ) {
-                        requestReport("");
+                        requestReport('');
                       } else {
                         setModalIsOpen(true);
                       }
