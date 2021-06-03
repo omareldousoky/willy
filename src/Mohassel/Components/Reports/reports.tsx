@@ -190,7 +190,7 @@ class Reports extends Component<{}, State> {
         {
           key: 'manualPayments',
           local: 'مراجعه حركات السداد اليدوي',
-          inputs: ['dateFromTo', 'branches', 'loanType', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'manualPayments',
         },
         {
@@ -403,6 +403,7 @@ class Reports extends Component<{}, State> {
       branches: values.branches.some((branch) => branch._id === '')
         ? []
         : values.branches.map((branch) => branch._id),
+      loanType: values.loanType,
     }
     const res = await getBranchLoanList(obj)
     if (res.status === 'success') {
@@ -434,6 +435,7 @@ class Reports extends Component<{}, State> {
       enddate: values.toDate,
       branches: branches.includes('') ? [''] : branches,
       all: branches.includes('') || branches === [] ? '1' : '0',
+      loanType: values.loanType,
     }
     const res = await installments(obj)
     if (res.status === 'success') {
@@ -463,6 +465,7 @@ class Reports extends Component<{}, State> {
       showModal: false,
       fromDate: values.fromDate,
       toDate: values.toDate,
+      loanType: values.loanType,
     })
     const branches = values.branches.map((branch) => branch._id)
     const obj = {
@@ -500,6 +503,7 @@ class Reports extends Component<{}, State> {
       startdate: values.fromDate,
       enddate: values.toDate,
       branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
     }
     const res = await getIssuedLoanList(obj)
     if (res.status === 'success') {
@@ -530,6 +534,7 @@ class Reports extends Component<{}, State> {
       startdate: values.fromDate,
       enddate: values.toDate,
       branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
     }
     const res = await getCreatedLoanList(obj)
     if (res.status === 'success') {
@@ -560,6 +565,7 @@ class Reports extends Component<{}, State> {
       startdate: values.fromDate,
       enddate: values.toDate,
       branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
     }
     const res = await getRescheduledLoanList(obj)
     if (res.status === 'success') {
@@ -596,6 +602,7 @@ class Reports extends Component<{}, State> {
       branches: values.branches
         .filter((branch) => branch._id !== '')
         .map((branch) => branch._id),
+      loanType: values.loanType,
     }
     const res = await getLoanApplicationFees(obj)
     if (res.status === 'success') {
@@ -704,6 +711,7 @@ class Reports extends Component<{}, State> {
       branchList: values.branches
         .filter((branch) => branch._id !== '')
         .map((branch) => branch._id),
+      loanType: values.loanType,
     })
     if (res.status === 'success') {
       if (!res.body) {
@@ -740,6 +748,7 @@ class Reports extends Component<{}, State> {
       branchList: values.branches
         .filter((branch) => branch._id !== '')
         .map((branch) => branch._id),
+      loanType: values.loanType,
     })
     if (res.status === 'success') {
       if (!res.body) {
