@@ -124,7 +124,7 @@ class Reports extends Component<{}, State> {
         {
           key: 'branchLoanList',
           local: 'ملخص الحالات والقروض',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'branchIssuedLoans',
         },
         {
@@ -142,55 +142,55 @@ class Reports extends Component<{}, State> {
         {
           key: 'CrossedOutLoans',
           local: 'قائمة حركات إعدام ديون القروض المنفذة',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'writeOffs',
         },
         {
           key: 'DoubtfulLoans',
           local: 'قائمة حركة القروض المشكوك في سدادها',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'loanDoubts',
         },
         {
           key: 'issuedLoanList',
           local: 'القروض المصدره',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'loansIssued',
         },
         {
           key: 'createdLoanList',
           local: 'انشاء القروض',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'loansCreated',
         },
         {
           key: 'rescheduledLoanList',
           local: 'قائمة حركات جدولة القروض المنفذه',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'loanRescheduling',
         },
         {
           key: 'paymentsDoneList',
           local: 'حركات الاقساط',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'installments',
         },
         {
           key: 'randomPayments',
           local: 'الحركات المالية',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'randomPayments',
         },
         {
           key: 'loanApplicationFees',
           local: 'حركات رسوم طلب القرض',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'loanFees',
         },
         {
           key: 'manualPayments',
           local: 'مراجعه حركات السداد اليدوي',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'loanType'],
           permission: 'manualPayments',
         },
         {
