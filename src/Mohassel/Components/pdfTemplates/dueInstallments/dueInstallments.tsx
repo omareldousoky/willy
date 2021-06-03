@@ -44,7 +44,7 @@ const DueInstallments = (props: DueInstallmentsProps) => {
             <th colSpan={3}>المستحق</th>
             <th colSpan={3}>إجمالى المسدد</th>
             <th className="empty" />
-            <th colSpan={3}>المتبقى من المسدد جزئى</th>
+            <th colSpan={2}>المتبقى من المسدد جزئى</th>
             <th colSpan={3}>إجمالى الاقساط الغير مسددة</th>
           </tr>
           <tr>
@@ -127,7 +127,7 @@ const DueInstallments = (props: DueInstallmentsProps) => {
               إجمالى المسدد
             </td>
             <td className="empty" />
-            <td colSpan={3} className="bg-grey">
+            <td colSpan={2} className="bg-grey">
               المتبقى من المسدد جزئى
             </td>
             <td colSpan={3} className="bg-grey">

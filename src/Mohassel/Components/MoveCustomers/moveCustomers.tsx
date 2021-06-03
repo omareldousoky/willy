@@ -338,7 +338,14 @@ class MoveCustomers extends Component<{}, State> {
                       <tbody>
                         {this.state.customers.map((customer, index) => {
                           return (
-                            <tr key={index}>
+                            <tr
+                              key={index}
+                              className={
+                                customer?.blocked?.isBlocked
+                                  ? 'text-danger'
+                                  : ''
+                              }
+                            >
                               <td>
                                 <FormCheck
                                   type="checkbox"
@@ -348,11 +355,17 @@ class MoveCustomers extends Component<{}, State> {
                                   onChange={() =>
                                     this.addRemoveItemFromChecked(customer)
                                   }
+                                  disabled={customer.blocked?.isBlocked}
                                 />
                               </td>
                               <td>{customer.key}</td>
                               <td>{customer.customerName}</td>
                               <td>{this.state.selectedLO?.name}</td>
+                              <td>
+                                {customer.blocked?.isBlocked
+                                  ? local.theCustomerIsBlocked
+                                  : ''}
+                              </td>
                             </tr>
                           )
                         })}
