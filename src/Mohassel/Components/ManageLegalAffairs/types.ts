@@ -22,6 +22,9 @@ export interface LegalActionsForm {
   misdemeanorAppealNumber: string
   caseStatus: string
   caseStatusSummary: string
+
+  finalVerdictDate: string
+  finalVerdict: string
 }
 
 export interface SearchFilters {
