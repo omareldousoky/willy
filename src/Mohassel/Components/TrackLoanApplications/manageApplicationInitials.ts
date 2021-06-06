@@ -1,10 +1,9 @@
-import * as local from '../../../Shared/Assets/ar.json';
-import { Card } from '../ManageAccounts/manageAccountsInitials';
+import * as local from '../../../Shared/Assets/ar.json'
+import { Card } from '../ManageAccounts/manageAccountsInitials'
 import ability from '../../config/ability'
 
-
 export const manageApplicationsArray = (): Card[] => {
-  const manageLoanArr: Card[] = [];
+  const manageLoanArr: Card[] = []
   if (ability.can('getLoanApplication', 'application')) {
     manageLoanArr.push({
       icon: 'applications',
@@ -13,12 +12,15 @@ export const manageApplicationsArray = (): Card[] => {
       path: '/track-loan-applications',
     })
   }
-  if(ability.can('secondReview','application') || ability.can('thirdReview','application')){
+  if (
+    ability.can('secondReview', 'application') ||
+    ability.can('thirdReview', 'application')
+  ) {
     manageLoanArr.push({
       icon: 'bulkLoanApplicationsReview',
       header: local.bulkLoanApplicationReviews,
       desc: local.bulkLoanApplicationReviews,
-      path: '/track-loan-applications/bulk-reviews'
+      path: '/track-loan-applications/bulk-reviews',
     })
   }
   if (ability.can('approveLoanApplication', 'application')) {
@@ -37,5 +39,5 @@ export const manageApplicationsArray = (): Card[] => {
       path: '/track-loan-applications/bulk-creation',
     })
   }
-  return manageLoanArr;
+  return manageLoanArr
 }

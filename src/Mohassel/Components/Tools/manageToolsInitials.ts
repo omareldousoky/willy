@@ -1,10 +1,9 @@
-import * as local from '../../../Shared/Assets/ar.json';
-import { Card } from '../ManageAccounts/manageAccountsInitials';
+import * as local from '../../../Shared/Assets/ar.json'
+import { Card } from '../ManageAccounts/manageAccountsInitials'
 import ability from '../../config/ability'
 
-
 export const manageToolsArray = (): Card[] => {
-  const manageLoanArr: Card[] = [];
+  const manageLoanArr: Card[] = []
   if (ability.can('documentTypes', 'config')) {
     manageLoanArr.push({
       icon: 'encodingFiles',
@@ -26,8 +25,8 @@ export const manageToolsArray = (): Card[] => {
       icon: 'principalRange',
       header: local.principalRange,
       desc: local.principalRange,
-      path: '/tools/principalRange'
+      path: '/tools/principalRange',
     })
   }
-  return manageLoanArr;
+  return manageLoanArr
 }

@@ -46,7 +46,6 @@ steps:
   - npm run build
 
 
-
 trigger:
   branch:
   - master
