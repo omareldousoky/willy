@@ -67,8 +67,8 @@ const LegalActionsForm: FunctionComponent = () => {
   }
 
   const handleSubmit = async (values: LegalActionsFormType) => {
-    const actionReqBody: LegalActionsFormType & DefaultedCustomer =
-      formValuesToActionReq(values)
+    const actionReqBody: LegalActionsFormType &
+      DefaultedCustomer = formValuesToActionReq(values)
 
     setIsSubmitting(true)
 

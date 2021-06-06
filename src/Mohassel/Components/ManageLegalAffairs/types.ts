@@ -23,7 +23,7 @@ export interface LegalActionsForm {
   caseStatus: string
   caseStatusSummary: string
 
-  finalVerdictDate: string
+  finalVerdictDate: number
   finalVerdict: string
 }
 
