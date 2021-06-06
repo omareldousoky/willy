@@ -2,6 +2,7 @@ import React from 'react'
 import './CollectionStatement.scss'
 import Table from 'react-bootstrap/Table'
 import { timeToArabicDate } from '../../../../Shared/Services/utils'
+import Orientation from '../../Common/orientation'
 
 const CollectionStatement = (props) => {
   const { branches } = props.data.data
@@ -62,61 +63,66 @@ const CollectionStatement = (props) => {
   }
 
   return (
-    <div className="CollectionStatement">
-      <table
-        style={{
-          fontSize: '12px',
-          margin: '10px 0px',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
-        <tr style={{ height: '10px' }} />
-        <tr
+    <>
+      <Orientation size="portrait" />
+      <div className="CollectionStatement">
+        <table
           style={{
+            fontSize: '12px',
+            margin: '10px 0px',
+            textAlign: 'center',
             width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
           }}
         >
-          <th colSpan={6} style={{ backgroundColor: 'white' }}>
-            <div className="logo-print-tb" />
-          </th>
-          <th colSpan={6} style={{ backgroundColor: 'white' }}>
-            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-          </th>
-        </tr>
-        <tr style={{ height: '10px' }} />
-      </table>
-      <table style={{ width: '100%' }}>
-        <thead className="report-header">
-          <tr className="headtitle">
-            <th colSpan={2}>شركة تساهيل للتمويل متناهي الصغر</th>
-            <th colSpan={5}>
-              حركات السداد باليوم عن الفتره من {startDate} الي {endDate}
-            </th>
-          </tr>
-        </thead>
-      </table>
-      <Table style={{ width: '100%' }} striped bordered hover>
-        <tbody>
-          {branches.map((branch, idx) => (
-            <BranchComponent key={idx} branch={branch} />
-          ))}
-          <tr style={{ fontSize: 16 }}>
-            <td>إجمالى عام</td>
-            <td>{trimmedValue(total.fees)}</td>
-            <td>{trimmedValue(total.installmentsPrincipal)}</td>
-            <td>{trimmedValue(total.installmentsInterest)}</td>
-            <td>{trimmedValue(total.installmentsTotal)}</td>
-            <td>{trimmedValue(total.penalties)}</td>
-            <td>{trimmedValue(total.otherIncome)}</td>
-            <td>{trimmedValue(total.totalCollected)}</td>
-          </tr>
-        </tbody>
-      </Table>
-    </div>
+          <tbody>
+            <tr style={{ height: '10px' }} />
+            <tr
+              style={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+            >
+              <th colSpan={6} style={{ backgroundColor: 'white' }}>
+                <div className="logo-print-tb" />
+              </th>
+              <th colSpan={6} style={{ backgroundColor: 'white' }}>
+                ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+              </th>
+            </tr>
+            <tr style={{ height: '10px' }} />
+          </tbody>
+        </table>
+        <table style={{ width: '100%' }}>
+          <thead className="report-header">
+            <tr className="headtitle">
+              <th colSpan={2}>شركة تساهيل للتمويل متناهي الصغر</th>
+              <th colSpan={5}>
+                حركات السداد باليوم عن الفتره من {startDate} الي {endDate}
+              </th>
+            </tr>
+          </thead>
+        </table>
+        <Table style={{ width: '100%' }} striped bordered hover>
+          <tbody>
+            {branches.map((branch, idx) => (
+              <BranchComponent key={idx} branch={branch} />
+            ))}
+            <tr style={{ fontSize: 16 }}>
+              <td>إجمالى عام</td>
+              <td>{trimmedValue(total.fees)}</td>
+              <td>{trimmedValue(total.installmentsPrincipal)}</td>
+              <td>{trimmedValue(total.installmentsInterest)}</td>
+              <td>{trimmedValue(total.installmentsTotal)}</td>
+              <td>{trimmedValue(total.penalties)}</td>
+              <td>{trimmedValue(total.otherIncome)}</td>
+              <td>{trimmedValue(total.totalCollected)}</td>
+            </tr>
+          </tbody>
+        </Table>
+      </div>
+    </>
   )
 }
 

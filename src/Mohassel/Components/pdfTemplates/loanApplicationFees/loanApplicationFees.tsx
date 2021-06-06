@@ -21,6 +21,7 @@ interface Props {
         transactionInterest: number
         transactionAmount: number
         canceled: number
+        loanType?: string
       }[]
       total: number[]
       canceled: number[]
@@ -66,23 +67,25 @@ const LoanApplicationFees = (props: Props) => {
           width: '100%',
         }}
       >
-        <tr style={{ height: '10px' }} />
-        <tr
-          style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <th colSpan={6}>
-            <div className="logo-print-tb" />
-          </th>
-          <th colSpan={6}>
-            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-          </th>
-        </tr>
-        <tr style={{ height: '10px' }} />
+        <tbody>
+          <tr style={{ height: '10px' }} />
+          <tr
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            <th colSpan={6}>
+              <div className="logo-print-tb" />
+            </th>
+            <th colSpan={6}>
+              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+            </th>
+          </tr>
+          <tr style={{ height: '10px' }} />
+        </tbody>
       </table>
       <table className="report-container">
         <thead className="report-header">
@@ -126,6 +129,7 @@ const LoanApplicationFees = (props: Props) => {
                         <th colSpan={2}>قيمة تكلفه التمويل</th>
                         <th colSpan={2}>إجمالي</th>
                         <th>حالة الحركة</th>
+                        <th>نوع القرض</th>
                       </tr>
                       <tr>
                         <th colSpan={100} className="horizontal-line" />
@@ -165,6 +169,7 @@ const LoanApplicationFees = (props: Props) => {
                               <td>
                                 {row.canceled === 1 ? 'الحركة ملغاه' : ''}
                               </td>
+                              <td>{row?.loanType || ''}</td>
                             </tr>
                             <tr>
                               <th colSpan={100} className="horizontal-line" />

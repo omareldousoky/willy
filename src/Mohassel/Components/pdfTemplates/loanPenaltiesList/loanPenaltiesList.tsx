@@ -2,6 +2,7 @@ import React from 'react'
 import './loanPenaltiesList.scss'
 import * as local from '../../../../Shared/Assets/ar.json'
 import { timeToArabicDate } from '../../../../Shared/Services/utils'
+import Orientation from '../../Common/orientation'
 
 const LoanPenaltiesList = (props) => {
   const { data } = props
@@ -43,9 +44,8 @@ const LoanPenaltiesList = (props) => {
           <BranchComponent key={idx} branch={branch} />
         ))}
 
-        <tr style={{ height: '1em' }} />
-
         <tbody className="tbodyborder">
+          <tr style={{ height: '1em' }} />
           <tr>
             <td />
             <td className="gray horizontal-line" colSpan={2}>
@@ -87,7 +87,7 @@ const LoanPenaltiesList = (props) => {
         </tr>
 
         {branch.rows.map((row, idx) => (
-          <tr key={row.loanId}>
+          <tr key={idx + row.loanId}>
             <td>{idx + 1}</td>
             {/* <td>{row.transactionCode}</td> */}
             <td colSpan={2}>{row.customerKey}</td>
@@ -102,11 +102,12 @@ const LoanPenaltiesList = (props) => {
             <td colSpan={2}>
               {row.canceled === '1' ? local.cancelledTransaction : null}
             </td>
+            <td>{row?.loanType || ''}</td>
           </tr>
         ))}
 
         <tr>
-          <th colSpan={15} className="border-line" />
+          <th colSpan={16} className="border-line" />
         </tr>
 
         <tr>
@@ -125,7 +126,6 @@ const LoanPenaltiesList = (props) => {
           <td className="horizontal-line">إجمالي المبلغ</td>
           <td className="horizontal-line">{branch.transactionAmount}</td>
         </tr>
-
         <tr>
           <td colSpan={8} />
           <td className="horizontal-line">القيمة الملغاه</td>
@@ -137,112 +137,117 @@ const LoanPenaltiesList = (props) => {
           <td className="horizontal-line">{branch.netAmount}</td>
         </tr>
         <tr>
-          <th colSpan={15} className="border-line" />
+          <th colSpan={16} className="border-line" />
         </tr>
       </tbody>
     )
   }
 
   return (
-    <div className="loan-penalties-list" dir="rtl" lang="ar">
-      <table
-        style={{
-          fontSize: '12px',
-          margin: '10px 0px',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
-        <tr style={{ height: '10px' }} />
-        <tr
+    <>
+      <Orientation size="portrait" />
+      <div className="loan-penalties-list" dir="rtl" lang="ar">
+        <table
           style={{
+            fontSize: '12px',
+            margin: '10px 0px',
+            textAlign: 'center',
             width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
           }}
         >
-          <th colSpan={6} style={{ backgroundColor: 'red' }}>
-            <div className="logo-print-tb" />
-          </th>
-          <th colSpan={6} style={{ backgroundColor: 'blue' }}>
-            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-          </th>
-        </tr>
-        <tr style={{ height: '10px' }} />
-      </table>
-      <table className="report-container">
-        <thead className="report-header">
-          <tr className="headtitle">
-            <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
-            <th colSpan={6}>قائمة حركة غرامات القروض المنفذة</th>
-          </tr>
-          <tr className="headtitle">
-            <th colSpan={4}>المركز الرئيسي</th>
-            <th colSpan={6}>
-              تاريخ الحركه من {startDate} الي {endDate}
-            </th>
-          </tr>
-          {/* <tr className="headtitle">
+          <tbody>
+            <tr style={{ height: '10px' }} />
+            <tr
+              style={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+            >
+              <th colSpan={6} style={{ backgroundColor: 'red' }}>
+                <div className="logo-print-tb" />
+              </th>
+              <th colSpan={6} style={{ backgroundColor: 'blue' }}>
+                ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+              </th>
+            </tr>
+            <tr style={{ height: '10px' }} />
+          </tbody>
+        </table>
+        <table className="report-container">
+          <thead className="report-header">
+            <tr className="headtitle">
+              <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
+              <th colSpan={6}>قائمة حركة غرامات القروض المنفذة</th>
+            </tr>
+            <tr className="headtitle">
+              <th colSpan={4}>المركز الرئيسي</th>
+              <th colSpan={6}>
+                تاريخ الحركه من {startDate} الي {endDate}
+              </th>
+            </tr>
+            {/* <tr className="headtitle">
             <th colSpan={4}>12:17:26 &emsp; 2020/07/05</th>
             <th colSpan={6}>جنيه مصري</th>
           </tr> */}
-          <tr>
-            <th colSpan={15} className="border-line" />
-          </tr>
-          <tr>
-            <th>رقم مسلسل</th>
-            {/* <th>كود الحركه</th> */}
-            <th colSpan={2}>كود العميل</th>
-            <th colSpan={2}>أسم العميل</th>
-            <th colSpan={1}>مسلسل القرض</th>
-            {/* <th>رقم الشيك</th> */}
-            <th>قيمة</th>
-            <th colSpan={2}>تاريخ القرض</th>
-            <th colSpan={1}>حالة القرض</th>
-            <th colSpan={1}>مستند الحركة</th>
-            <th colSpan={2}>قيمة الغرامة</th>
-            <th colSpan={2}>حالة الحركة</th>
-          </tr>
-          <tr>
-            <th colSpan={15} className="border-line" />
-          </tr>
-        </thead>
+            <tr>
+              <th colSpan={16} className="border-line" />
+            </tr>
+            <tr>
+              <th>رقم مسلسل</th>
+              {/* <th>كود الحركه</th> */}
+              <th colSpan={2}>كود العميل</th>
+              <th colSpan={2}>أسم العميل</th>
+              <th colSpan={1}>مسلسل القرض</th>
+              {/* <th>رقم الشيك</th> */}
+              <th>قيمة</th>
+              <th colSpan={2}>تاريخ القرض</th>
+              <th colSpan={1}>حالة القرض</th>
+              <th colSpan={1}>مستند الحركة</th>
+              <th colSpan={2}>قيمة الغرامة</th>
+              <th colSpan={2}>حالة الحركة</th>
+              <th>نوع القرض</th>
+            </tr>
+            <tr>
+              <th colSpan={16} className="border-line" />
+            </tr>
+          </thead>
 
-        {days.map((day, idx) => (
-          <DayComponent key={idx} day={day} />
-        ))}
+          {days.map((day, idx) => (
+            <DayComponent key={idx} day={day} />
+          ))}
 
-        <tr style={{ height: '1em' }} />
+          <tbody className="tbodyborder">
+            <tr style={{ height: '1em' }} />
+            <tr>
+              <td />
+              <td className="gray horizontal-line" colSpan={2}>
+                إجمالي بالعمله
+              </td>
+              <td className="gray horizontal-line">جنيه مصري</td>
+              <td />
+              <td className="horizontal-line">إجمالي عدد الحركات</td>
+              <td className="horizontal-line">{totalNumberOfTransactions}</td>
+              <td />
+              <td className="horizontal-line">إجمالي المبلغ</td>
+              <td className="horizontal-line">{totalTransactionAmount}</td>
+            </tr>
 
-        <tbody className="tbodyborder">
-          <tr>
-            <td />
-            <td className="gray horizontal-line" colSpan={2}>
-              إجمالي بالعمله
-            </td>
-            <td className="gray horizontal-line">جنيه مصري</td>
-            <td />
-            <td className="horizontal-line">إجمالي عدد الحركات</td>
-            <td className="horizontal-line">{totalNumberOfTransactions}</td>
-            <td />
-            <td className="horizontal-line">إجمالي المبلغ</td>
-            <td className="horizontal-line">{totalTransactionAmount}</td>
-          </tr>
-
-          <tr>
-            <td colSpan={8} />
-            <td className="horizontal-line">القيمة الملغاه</td>
-            <td className="horizontal-line">{data.rbAmount}</td>
-          </tr>
-          <tr>
-            <td colSpan={8} />
-            <td className="horizontal-line">القيمة المسدده</td>
-            <td className="horizontal-line">{data.netAmount}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+            <tr>
+              <td colSpan={8} />
+              <td className="horizontal-line">القيمة الملغاه</td>
+              <td className="horizontal-line">{data.rbAmount}</td>
+            </tr>
+            <tr>
+              <td colSpan={8} />
+              <td className="horizontal-line">القيمة المسدده</td>
+              <td className="horizontal-line">{data.netAmount}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </>
   )
 }
 

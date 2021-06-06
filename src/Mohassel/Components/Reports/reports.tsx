@@ -465,7 +465,6 @@ class Reports extends Component<{}, State> {
       showModal: false,
       fromDate: values.fromDate,
       toDate: values.toDate,
-      loanType: values.loanType,
     })
     const branches = values.branches.map((branch) => branch._id)
     const obj = {
@@ -473,6 +472,7 @@ class Reports extends Component<{}, State> {
       enddate: values.toDate,
       branches: branches.includes('') ? [''] : branches,
       all: branches.includes('') ? '1' : '0',
+      loanType: values.loanType,
     }
     const res = await getRandomPayments(obj)
     if (res.status === 'success') {

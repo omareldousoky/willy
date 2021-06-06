@@ -27,23 +27,25 @@ const LoanCreationList = (props) => {
           width: '100%',
         }}
       >
-        <tr style={{ height: '10px' }} />
-        <tr
-          style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <th colSpan={6}>
-            <div className="logo-print-tb" />
-          </th>
-          <th colSpan={6}>
-            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-          </th>
-        </tr>
-        <tr style={{ height: '10px' }} />
+        <tbody>
+          <tr style={{ height: '10px' }} />
+          <tr
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            <th colSpan={6}>
+              <div className="logo-print-tb" />
+            </th>
+            <th colSpan={6}>
+              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+            </th>
+          </tr>
+          <tr style={{ height: '10px' }} />
+        </tbody>
       </table>
       <table className="report-container">
         <thead className="report-header">
@@ -74,6 +76,7 @@ const LoanCreationList = (props) => {
             <th colSpan={2}>قيمة تكلفه التمويل</th>
             <th colSpan={2}>إجمالي</th>
             <th>حالة الحركة</th>
+            <th>نوع القرض</th>
           </tr>
           <tr>
             <th colSpan={100} className="horizontal-line" />
@@ -122,6 +125,7 @@ const LoanCreationList = (props) => {
                       <td>
                         {transaction.canceled === 1 ? 'الحركة ملغاه' : ''}
                       </td>
+                      <td>{transaction?.loanType || ''}</td>
                     </tr>
                   ))}
                   <tr>
