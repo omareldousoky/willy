@@ -1103,5 +1103,6 @@
     "Usedalllegalwaysofcollectingthemoney": "إستنفاذ الطرق الودية والقانونية للتحصيل",
     "maxLength20": "لا يمكن ان يكون اكثر من 20",
     "lengthShouldBe9": "رقم البطاقة يجب ان يكون 9 ارقام",
-    "duplicateCompanyNumberMessage": "رقم البطاقة موجود بالفعل لشركة اخرى"
+    "duplicateCompanyNumberMessage": "رقم البطاقة موجود بالفعل لشركة اخرى",
+    "moveCompanies": "نقل الشركات"
 }
