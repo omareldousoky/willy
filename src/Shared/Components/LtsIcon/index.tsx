@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react'
 
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Tooltip from 'react-bootstrap/Tooltip'
 
-import { LtsIconProps } from "./types";
+import { LtsIconProps } from './types'
 
 export const LtsIcon = ({
   name,
@@ -22,10 +22,10 @@ export const LtsIcon = ({
     </OverlayTrigger>
   ) : (
     <span className={`lts lts-${name}`} />
-  );
-};
+  )
+}
 
 LtsIcon.defaultProps = {
-  tooltipText: "",
-  tooltipPlacement: "bottom",
-};
+  tooltipText: '',
+  tooltipPlacement: 'bottom',
+}
