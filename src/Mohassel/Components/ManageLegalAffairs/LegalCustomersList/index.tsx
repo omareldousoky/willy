@@ -488,6 +488,14 @@ const LegalCustomersList: FunctionComponent = () => {
               />
             </Button>
           )}
+          <Button
+            type="button"
+            variant="default"
+            className="btn clickable-action rounded-0 p-0 font-weight-normal text-dark"
+            title={local.logs}
+          >
+            {local.downloadHistory}
+          </Button>
         </div>
       ),
     },
