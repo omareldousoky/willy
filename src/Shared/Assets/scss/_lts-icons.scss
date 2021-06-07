@@ -1,11 +1,11 @@
 @font-face {
-  font-family: "lts-icons";
-  src: url("../fonts/lts-icons/lts-icons.woff") format("woff");
+  font-family: 'lts-icons';
+  src: url('../fonts/lts-icons/lts-icons.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 
-	/* Better Font Rendering =========== */
+  /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -38,64 +38,69 @@
 }
 .lts-editIcon {
   &:before {
-    content: "\e904"; 
+    content: '\e904';
   }
 }
 .lts-view {
   &:before {
-    content: "\e905"; 
+    content: '\e905';
   }
 }
-.lts-changeOfficer-inactive {
+.lts-changeOfficer {
   &:before {
-    content: "\e906";
+    content: '\e906';
   }
 }
-.lts-customers-inactive {
+.lts-customers {
   &:before {
-    content: "\e907";
+    content: '\e907';
   }
 }
 .lts-minus {
   &:before {
-    content: "\e908"; 
+    content: '\e908';
   }
 }
 .lts-closeIcon {
   &:before {
-    content: "\e909"; 
+    content: '\e909';
   }
 }
 .lts-deactivate-user {
   &:before {
-    content: "\e90a"; 
+    content: '\e90a';
   }
 }
 .lts-removeIcon .path1 {
   &:before {
-    content: "\e90b";  
+    content: '\e90b';
     color: rgb(47, 47, 47);
   }
 }
 .lts-removeIcon .path2 {
   &:before {
-    content: "\e90c";  
-    margin-left: -1em;  
+    content: '\e90c';
+    margin-left: -1em;
   }
 }
 .lts-removeIcon .path3 {
   &:before {
-    content: "\e90d";  
-    margin-left: -1em;  
+    content: '\e90d';
+    margin-left: -1em;
   }
 }
 .lts-reschedule {
   &:before {
-    content: "\e90e"; 
+    content: '\e90e';
   }
 }
-.lts-green-download {
+.lts-download {
   &:before {
-    content:"\e90f";     
+    content: '\e90f';
+  }
+}
+.lts-company {
+  &:before {
+    content: '\e910';
   }
 }
