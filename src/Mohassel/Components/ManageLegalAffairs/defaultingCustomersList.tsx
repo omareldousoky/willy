@@ -84,6 +84,8 @@ export interface ReviewedDefaultingCustomer {
 export interface ReviewedDefaultingCustomersReq {
   status: string
   branches: string
+  startDate: number
+  endDate: number
 }
 interface Props extends RouteComponentProps {
   data: DefaultedCustomer[]
@@ -148,7 +150,7 @@ class DefaultingCustomersList extends Component<Props, State> {
   reportsPDF: PDF = {
     key: 'defaultingCustomers',
     local: 'تقرير العملاء المتأخرون',
-    inputs: ['defaultingCustomerStatus', 'branches'],
+    inputs: ['defaultingCustomerStatus', 'branches', 'dateFromTo'],
     permission: '',
   }
 
@@ -254,7 +256,7 @@ class DefaultingCustomersList extends Component<Props, State> {
         title: local.date,
         key: 'creationDate',
         render: (data) =>
-          data.created.at ? timeToArabicDate(data.created.at, true) : '',
+          data.created?.at ? timeToArabicDate(data.created.at, true) : '',
       },
       {
         title: local.status,
@@ -343,13 +345,15 @@ class DefaultingCustomersList extends Component<Props, State> {
   }
 
   async handlePrintReport(values: any) {
-    const { defaultingCustomerStatus, branches } = values
+    const { defaultingCustomerStatus, branches, fromDate, toDate } = values
     const printReportReq: ReviewedDefaultingCustomersReq = {
       status: defaultingCustomerStatus ?? '',
       branches:
         branches.length === 1 && branches[0]._id === ''
           ? []
           : branches.map((branch) => branch._id),
+      startDate: new Date(fromDate).setHours(0, 0, 0, 0).valueOf(),
+      endDate: new Date(toDate).setHours(23, 59, 59, 999).valueOf(),
     }
 
     const printReportRes: {
@@ -596,7 +600,7 @@ class DefaultingCustomersList extends Component<Props, State> {
   }
 
   renderIcons(data: DefaultedCustomer) {
-    const daysSince = this.getRecordAgeInDays(data.created.at)
+    const daysSince = this.getRecordAgeInDays(data.created?.at)
     return (
       <>
         {(data.branchManagerReview ||

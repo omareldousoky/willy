@@ -523,6 +523,14 @@
     "en": "entitled to sign number should be at least one",
     "ar": " عدد من له حق التوقيع يجب ان يكون واحد على الاقل"
   },
+  "invalid_close_date_pending_manual_actions": {
+    "en": "There are manual pending actions before that date, please close them first",
+    "ar": "يوجد حركات يدوية معلقة قبل هذا التاريخ، برجاء إغلاقها أولاً"
+  },
+  "customer_has_death_certificate": {
+    "en": "customer has a death certificate",
+    "ar": "العميل لديه شهادة وفاة"
+  },
   "invalid_close_date_manual_pending_actions": {
     "en": "There are manual pending actions before that date, please close them first",
     "ar": "يوجد حركات يدوية معلقة قبل هذا التاريخ، برجاء إغلاقها أولاً"
