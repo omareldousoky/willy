@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
-import { withRouter } from 'react-router-dom'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
+import Swal from 'sweetalert2'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import Search from '../../../Shared/Components/Search/search'
-import { connect } from 'react-redux'
 import {
   issuedLoansSearchFilters,
   search,
@@ -14,16 +15,14 @@ import {
 import {
   timeToDateyyymmdd,
   beneficiaryType,
-  iscoreDate,
   getErrorMessage,
   getFullCustomerKey,
 } from '../../../Shared/Services/utils'
 import { manageLoansArray } from './manageLoansInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
-import Swal from 'sweetalert2'
 import ability from '../../config/ability'
-interface Props {
-  history: Array<any>
+
+interface Props extends RouteComponentProps {
   data: any
   error: string
   branchId: string
@@ -176,6 +175,10 @@ class LoanList extends Component<Props, State> {
     })
   }
 
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
+
   getStatus(status: string) {
     switch (status) {
       case 'paid':
@@ -232,9 +235,7 @@ class LoanList extends Component<Props, State> {
       </>
     )
   }
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
-  }
+
   render() {
     const array = manageLoansArray()
     const smePermission =
