@@ -4,7 +4,6 @@ import ability from '../../config/ability'
 
 export const manageLegalAffairsArray = (): Card[] => {
   const mangeLegalAffairsArr: Card[] = []
-
   if (ability.can('getDefaultingCustomer', 'legal')) {
     mangeLegalAffairsArr.push({
       icon: 'loanUses',

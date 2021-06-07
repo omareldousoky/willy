@@ -1,6 +1,7 @@
 import * as local from '../../../Shared/Assets/ar.json'
 import ability from '../../config/ability'
 import { Tab } from '../HeaderWithCards/headerWithCards'
+
 export const financialClosingArray = (): Tab[] => {
   const financialClosingArr: Tab[] = []
   if (

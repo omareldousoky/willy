@@ -1,14 +1,18 @@
 import React, { FunctionComponent, useState } from 'react'
 
-import { Card } from 'react-bootstrap'
-import { useHistory, useLocation } from 'react-router'
+import Card from 'react-bootstrap/Card'
+import { useHistory, useLocation } from 'react-router-dom'
 
+import Swal from 'sweetalert2'
 import local from '../../../Shared/Assets/ar.json'
 import { DefaultedCustomer } from './defaultingCustomersList'
-import { CourtSession, LegalActionsForm, SettledCustomer } from './types'
+import {
+  CourtSession,
+  LegalActionsForm as LegalActionsFormType,
+  SettledCustomer,
+} from './types'
 import AppForm from './Form'
 import { updateLegalAffairsCustomers } from '../../Services/APIs/LegalAffairs/defaultingCustomers'
-import Swal from 'sweetalert2'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import customerActionsFields from './configs/CustomerActionsForm'
 import {
@@ -19,10 +23,10 @@ import {
 import { Loader } from '../../../Shared/Components/Loader'
 
 const LegalActionsForm: FunctionComponent = () => {
-  const [isSubmiting, setIsSubmiting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const location = useLocation<{ customer: SettledCustomer }>()
-  const customer = location.state.customer
+  const { customer } = location.state
 
   const history = useHistory()
 
@@ -46,7 +50,7 @@ const LegalActionsForm: FunctionComponent = () => {
       : court
   }
 
-  const formValuesToActionReq = (values: LegalActionsForm) => ({
+  const formValuesToActionReq = (values: LegalActionsFormType) => ({
     ...customer,
     ...values,
     firstCourtSession: formatCourt(values.firstCourtSession),
@@ -55,17 +59,17 @@ const LegalActionsForm: FunctionComponent = () => {
     misdemeanorAppealSession: formatCourt(values.misdemeanorAppealSession),
   })
 
-  const handleSubmit = async (values: LegalActionsForm) => {
-    const actionReqBody: LegalActionsForm &
+  const handleSubmit = async (values: LegalActionsFormType) => {
+    const actionReqBody: LegalActionsFormType &
       DefaultedCustomer = formValuesToActionReq(values)
 
-    setIsSubmiting(true)
+    setIsSubmitting(true)
 
     const response = await updateLegalAffairsCustomers(actionReqBody)
 
-    setIsSubmiting(false)
+    setIsSubmitting(false)
 
-    if (response.status == 'success') {
+    if (response.status === 'success') {
       handleUpdateSuccess(() => history.push('/legal-affairs/legal-actions'))
     } else {
       Swal.fire('error', getErrorMessage(response.error.error), 'error')
@@ -78,7 +82,7 @@ const LegalActionsForm: FunctionComponent = () => {
         <Card.Header>{local.legalAffairs}</Card.Header>
 
         <Card.Body>
-          <Loader type="fullsection" open={isSubmiting} />
+          <Loader type="fullsection" open={isSubmitting} />
 
           <AppForm
             formFields={
@@ -89,7 +93,7 @@ const LegalActionsForm: FunctionComponent = () => {
             onSubmit={handleSubmit}
             defaultValues={customer}
             options={{
-              disabled: !customer._id || isSubmiting || isReviewed,
+              disabled: !customer._id || isSubmitting || isReviewed,
               renderPairs: true,
               wideBtns: true,
             }}

@@ -5,10 +5,10 @@ import { financialClosingArray } from './financialClosingInitials'
 import LtsBlocking from './LtsBlocking/ltsBlocking'
 
 interface State {
-  tabsArray: Array<Tab>;
+  tabsArray: Array<Tab>
 }
 interface Props {
-  withHeader: boolean;
+  withHeader: boolean
 }
 class FinancialBlocking extends Component<Props, State> {
   constructor(props) {
@@ -17,11 +17,13 @@ class FinancialBlocking extends Component<Props, State> {
       tabsArray: [],
     }
   }
+
   componentDidMount() {
     this.setState({
       tabsArray: financialClosingArray(),
     })
   }
+
   render() {
     return (
       <>
@@ -36,7 +38,7 @@ class FinancialBlocking extends Component<Props, State> {
               .indexOf('blocking')}
           />
         )}
-        <LtsBlocking/>
+        <LtsBlocking />
       </>
     )
   }

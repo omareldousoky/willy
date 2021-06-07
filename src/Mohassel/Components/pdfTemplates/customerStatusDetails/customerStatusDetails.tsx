@@ -1,6 +1,5 @@
-import React from "react";
-import "./customerStatusDetails.scss";
-
+import React from 'react'
+import './customerStatusDetails.scss'
 import {
   timeToArabicDate,
   currency,
@@ -12,8 +11,8 @@ import {
   arabicGender,
   timeToArabicDateNow,
   guarantorOrderLocal,
-} from "../../../../Shared/Services/utils";
-import { CustomerIsBlocked, CustomerStatusLocal } from "./types";
+} from '../../../../Shared/Services/utils'
+import { CustomerIsBlocked, CustomerStatusLocal } from './types'
 
 const CustomerStatusDetails = (props) => {
   const {
@@ -31,42 +30,42 @@ const CustomerStatusDetails = (props) => {
     nationalId,
     nationalIdIssueDate,
     officerName,
-  } = props.data;
+  } = props.data
 
-  const checkLoanLegalStatus = (loan) =>{
-    const {isWrittenOff,isDoubtful } = loan
+  const checkLoanLegalStatus = (loan) => {
+    const { isWrittenOff, isDoubtful } = loan
 
-    return isWrittenOff ? "- معدوم" : isDoubtful ? "- مشكوك فيه" : "";
+    return isWrittenOff ? '- معدوم' : isDoubtful ? '- مشكوك فيه' : ''
   }
 
   return (
     <div className="customer-status-details" lang="ar">
       <table
         style={{
-          fontSize: "12px",
-          margin: "10px 0px",
-          textAlign: "center",
-          width: "100%",
+          fontSize: '12px',
+          margin: '10px 0px',
+          textAlign: 'center',
+          width: '100%',
         }}
       >
         <thead>
-          <tr style={{ height: "10px" }}></tr>
+          <tr style={{ height: '10px' }} />
           <tr
             style={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
             }}
           >
-            <th colSpan={6} style={{ backgroundColor: "white" }}>
-              <div className={"logo-print"}></div>{" "}
+            <th colSpan={6} style={{ backgroundColor: 'white' }}>
+              <div className="logo-print-tb" />
             </th>
-            <th style={{ backgroundColor: "white" }} colSpan={6}>
+            <th style={{ backgroundColor: 'white' }} colSpan={6}>
               ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
             </th>
           </tr>
-          <tr style={{ height: "10px" }}></tr>
+          <tr style={{ height: '10px' }} />
         </thead>
       </table>
       <table>
@@ -84,7 +83,7 @@ const CustomerStatusDetails = (props) => {
             <th colSpan={3}>{timeToArabicDateNow(true)}</th>
           </tr>
           <tr>
-            <th colSpan={100} className="horizontal-line"></th>
+            <th colSpan={100} className="horizontal-line" />
           </tr>
           <tr>
             <th className="gray frame">الأسم</th>
@@ -92,16 +91,18 @@ const CustomerStatusDetails = (props) => {
             <th className="gray frame">الكود</th>
             <td className="frame">{numbersToArabic(props.customerKey)}</td>
             <th className="gray frame">الحاله</th>
-            <td className="frame">{CustomerStatusLocal[customerStatus || "default"]}</td>
+            <td className="frame">
+              {CustomerStatusLocal[customerStatus || 'default']}
+            </td>
             <th className="gray frame">حالة التعامل مع العميل</th>
             <td className="frame">
               {CustomerIsBlocked[customerLegalStatus] ||
-                CustomerIsBlocked["false"]}
+                CustomerIsBlocked.false}
             </td>
-            <td className="frame"></td>
+            <td className="frame" />
           </tr>
           <tr>
-            <th colSpan={100} className="horizontal-line"></th>
+            <th colSpan={100} className="horizontal-line" />
           </tr>
         </thead>
         <tbody>
@@ -110,7 +111,7 @@ const CustomerStatusDetails = (props) => {
               {Loans && Loans.length > 0 ? (
                 Loans.map((loan, index) => {
                   return (
-                    <div key={index} style={{ pageBreakAfter: "always" }}>
+                    <div key={index} style={{ pageBreakAfter: 'always' }}>
                       <table>
                         <tbody>
                           <tr>
@@ -142,24 +143,24 @@ const CustomerStatusDetails = (props) => {
                             <th>البطاقه</th>
                             <td>{numbersToArabic(nationalId)}</td>
                             <th>صادره من</th>
-                            <td></td>
+                            <td />
                           </tr>
                           <tr>
                             <th>الموبيل</th>
-                            <td>{numbersToArabic(MobilePhoneNumber) || ""}</td>
+                            <td>{numbersToArabic(MobilePhoneNumber) || ''}</td>
                             <th>تليفون المنزل</th>
-                            <td>{numbersToArabic(HomePhoneNumber) || ""}</td>
+                            <td>{numbersToArabic(HomePhoneNumber) || ''}</td>
                             <th>تليفون العمل</th>
                             <td>
-                              {numbersToArabic(BusinessPhoneNumber) || ""}
+                              {numbersToArabic(BusinessPhoneNumber) || ''}
                             </td>
                           </tr>
                           <tr>
                             <th>ملاحظات</th>
-                            <td colSpan={3}>{Comments || ""}</td>
+                            <td colSpan={3}>{Comments || ''}</td>
                           </tr>
                           <tr>
-                            <td colSpan={100} className="horizontal-line"></td>
+                            <td colSpan={100} className="horizontal-line" />
                           </tr>
                         </tbody>
                       </table>
@@ -218,27 +219,29 @@ const CustomerStatusDetails = (props) => {
                           </tr>
                           <tr>
                             <th>حالة القرض</th>
-                            <td>{`${getLoanStatus(loan.status)} ${checkLoanLegalStatus(loan)}`}</td>
+                            <td>{`${getLoanStatus(
+                              loan.status
+                            )} ${checkLoanLegalStatus(loan)}`}</td>
                             <th>غرامات مسدده</th>
                             <td>
-                              {loan.penaltiesPaid === "None"
-                                ? ""
+                              {loan.penaltiesPaid === 'None'
+                                ? ''
                                 : numbersToArabic(loan.penaltiesPaid)}
                             </td>
                             <th>غرامات معفاه</th>
                             <td>
-                              {loan.penaltiesCanceled === "None"
-                                ? ""
+                              {loan.penaltiesCanceled === 'None'
+                                ? ''
                                 : numbersToArabic(loan.penaltiesCanceled)}
                             </td>
                             <th>غرامات مستحقه</th>
                             <td>
-                              {loan.penalties === "None"
-                                ? ""
+                              {loan.penalties === 'None'
+                                ? ''
                                 : numbersToArabic(loan.penalties)}
                             </td>
                           </tr>
-                          {loan.rejectionReason !== "None" ? (
+                          {loan.rejectionReason !== 'None' ? (
                             <tr>
                               <th>سبب الإلغاء</th>
                               <td>{loan.rejectionReason}</td>
@@ -248,7 +251,7 @@ const CustomerStatusDetails = (props) => {
                                   ? loan.prevRepName
                                   : loan.representativeName
                                   ? loan.representativeName
-                                  : ""}
+                                  : ''}
                               </td>
                             </tr>
                           ) : null}
@@ -257,114 +260,115 @@ const CustomerStatusDetails = (props) => {
                             <td>{loan.calculationFormulaName}</td>
                           </tr>
                           <tr>
-                            <td colSpan={100} className="horizontal-line"></td>
+                            <td colSpan={100} className="horizontal-line" />
                           </tr>
                         </tbody>
                       </table>
 
-                      {loan.beneficiaryType === "individual" && (
+                      {loan.beneficiaryType === 'individual' && (
                         <table>
                           <tbody>
                             <tr>
                               {loan.guarantors.length > 0 &&
-                                loan.guarantors.map((guarantor, index) => {
-                                  return (
-                                    <td key={index}>
-                                      <table>
-                                        <thead>
-                                          <tr>
-                                            <th
-                                              className="frame gray"
-                                              colSpan={100}
-                                            >
-                                              {
-                                                guarantorOrderLocal[
-                                                  index > 10 ? "default" : index
-                                                ]
-                                              }
-                                            </th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <tr>
-                                            <th>الأسم</th>
-                                            <td>{guarantor.customerName}</td>
-                                            <th>النوع</th>
-                                            <td>
-                                              {arabicGender(guarantor.gender)}
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>الرقم القومي</th>
-                                            <td>
-                                              {numbersToArabic(
-                                                guarantor.nationalId
-                                              )}
-                                            </td>
-                                            <th>تاريخ الأصدار</th>
-                                            <td>
-                                              {guarantor.nationalIdIssueDate
-                                                ? timeToArabicDate(
-                                                    guarantor.nationalIdIssueDate,
-                                                    false
-                                                  )
-                                                : ""}
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>تاريخ الميلاد</th>
-                                            <td>
-                                              {guarantor.birthDate
-                                                ? timeToArabicDate(
-                                                    guarantor.birthDate,
-                                                    false
-                                                  )
-                                                : ""}
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>العنوان</th>
-                                            <td>
-                                              {guarantor.customerHomeAddress}
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>التليفون</th>
-                                            <td>
-                                              {numbersToArabic(
-                                                guarantor.mobilePhoneNumber
-                                              )}
-                                            </td>
-                                            <th>الرقم البريدي</th>
-                                            <td>
-                                              {numbersToArabic(
-                                                guarantor.homePostalCode
-                                              )}
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>البطاقه صادره من</th>
-                                            <td></td>
-                                            <th>الرقم المطبوع</th>
-                                            <td></td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  );
-                                })}
+                                loan.guarantors.map(
+                                  (guarantor, guarantorIndex) => {
+                                    return (
+                                      <td key={guarantorIndex}>
+                                        <table>
+                                          <thead>
+                                            <tr>
+                                              <th
+                                                className="frame gray"
+                                                colSpan={100}
+                                              >
+                                                {
+                                                  guarantorOrderLocal[
+                                                    index > 10
+                                                      ? 'default'
+                                                      : index
+                                                  ]
+                                                }
+                                              </th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                              <th>الأسم</th>
+                                              <td>{guarantor.customerName}</td>
+                                              <th>النوع</th>
+                                              <td>
+                                                {arabicGender(guarantor.gender)}
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <th>الرقم القومي</th>
+                                              <td>
+                                                {numbersToArabic(
+                                                  guarantor.nationalId
+                                                )}
+                                              </td>
+                                              <th>تاريخ الأصدار</th>
+                                              <td>
+                                                {guarantor.nationalIdIssueDate
+                                                  ? timeToArabicDate(
+                                                      guarantor.nationalIdIssueDate,
+                                                      false
+                                                    )
+                                                  : ''}
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <th>تاريخ الميلاد</th>
+                                              <td>
+                                                {guarantor.birthDate
+                                                  ? timeToArabicDate(
+                                                      guarantor.birthDate,
+                                                      false
+                                                    )
+                                                  : ''}
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <th>العنوان</th>
+                                              <td>
+                                                {guarantor.customerHomeAddress}
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <th>التليفون</th>
+                                              <td>
+                                                {numbersToArabic(
+                                                  guarantor.mobilePhoneNumber
+                                                )}
+                                              </td>
+                                              <th>الرقم البريدي</th>
+                                              <td>
+                                                {numbersToArabic(
+                                                  guarantor.homePostalCode
+                                                )}
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <th>البطاقه صادره من</th>
+                                              <td />
+                                              <th>الرقم المطبوع</th>
+                                              <td />
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </td>
+                                    )
+                                  }
+                                )}
                             </tr>
                             <tr>
-                              <td
-                                colSpan={100}
-                                className="horizontal-line"
-                              ></td>
+                              <td colSpan={100} className="horizontal-line" />
                             </tr>
                           </tbody>
                         </table>
                       )}
 
-                      {loan.beneficiaryType === "group" && (
+                      {loan.beneficiaryType === 'group' && (
                         <table>
                           <tbody>
                             <tr>
@@ -376,25 +380,22 @@ const CustomerStatusDetails = (props) => {
                               <th>كود العضو</th>
                               <th>أسم العضو</th>
                               <th>حصة العضو من القرض</th>
-                              <th></th>
+                              <th />
                             </tr>
-                            {loan.groupMembers.map((member, index) => {
+                            {loan.groupMembers.map((member, memberIndex) => {
                               return (
-                                <tr key={index}>
+                                <tr key={memberIndex}>
                                   <td>{numbersToArabic(member.key)}</td>
                                   <td>{member.customerName}</td>
                                   <td>{numbersToArabic(member.amount)}</td>
-                                  {member.type === "leader" ? (
+                                  {member.type === 'leader' ? (
                                     <td>رئيس المجموعه</td>
                                   ) : null}
                                 </tr>
-                              );
+                              )
                             })}
                             <tr>
-                              <td
-                                colSpan={100}
-                                className="horizontal-line"
-                              ></td>
+                              <td colSpan={100} className="horizontal-line" />
                             </tr>
                           </tbody>
                         </table>
@@ -412,60 +413,64 @@ const CustomerStatusDetails = (props) => {
                             <th>تاريخ الحاله</th>
                             <th>عدد أيام التأخير / التبكير</th>
                           </tr>
-                          {loan.installments.map((installment, index) => {
-                            if (installment.instTotal)
-                              return (
-                                <tr key={index}>
-                                  <td>{numbersToArabic(installment.idx)} </td>
-                                  <td>
-                                    {installment.dateOfPayment
-                                      ? timeToArabicDate(
-                                          new Date(
-                                            installment.dateOfPayment
-                                          ).valueOf(),
-                                          false
-                                        )
-                                      : ""}
-                                  </td>
-                                  <td>
-                                    {numbersToArabic(installment.instTotal)}
-                                  </td>
-                                  <td>
-                                    {numbersToArabic(
-                                      installment.feesInstallment
-                                    )}
-                                  </td>
-                                  <td>
-                                    {numbersToArabic(installment.totalPaid)}
-                                  </td>
-                                  <td>
-                                    {numbersToArabic(installment.feesPaid)}
-                                  </td>
-                                  <td>{getStatus(installment)}</td>
-                                  <td>
-                                    {installment.paidAt
-                                      ? timeToArabicDate(
-                                          new Date(
-                                            installment.paidAt
-                                          ).valueOf(),
-                                          false
-                                        )
-                                      : ""}
-                                  </td>
-                                  <td>{numbersToArabic(installment.delay)}</td>
-                                </tr>
-                              );
-                          })}
+                          {loan.installments.map(
+                            (installment, installmentIndex) => {
+                              if (installment.instTotal)
+                                return (
+                                  <tr key={installmentIndex}>
+                                    <td>{numbersToArabic(installment.idx)} </td>
+                                    <td>
+                                      {installment.dateOfPayment
+                                        ? timeToArabicDate(
+                                            new Date(
+                                              installment.dateOfPayment
+                                            ).valueOf(),
+                                            false
+                                          )
+                                        : ''}
+                                    </td>
+                                    <td>
+                                      {numbersToArabic(installment.instTotal)}
+                                    </td>
+                                    <td>
+                                      {numbersToArabic(
+                                        installment.feesInstallment
+                                      )}
+                                    </td>
+                                    <td>
+                                      {numbersToArabic(installment.totalPaid)}
+                                    </td>
+                                    <td>
+                                      {numbersToArabic(installment.feesPaid)}
+                                    </td>
+                                    <td>{getStatus(installment)}</td>
+                                    <td>
+                                      {installment.paidAt
+                                        ? timeToArabicDate(
+                                            new Date(
+                                              installment.paidAt
+                                            ).valueOf(),
+                                            false
+                                          )
+                                        : ''}
+                                    </td>
+                                    <td>
+                                      {numbersToArabic(installment.delay)}
+                                    </td>
+                                  </tr>
+                                )
+                            }
+                          )}
                           <tr>
-                            <td className="borderless" colSpan={2}></td>
+                            <td className="borderless" colSpan={2} />
                             <td>{numbersToArabic(loan.instTotalDue)}</td>
                             <td>{numbersToArabic(loan.feesInstallmentDue)}</td>
                             <td>{numbersToArabic(loan.totalPaid)}</td>
                             <td>{numbersToArabic(loan.totalFeesPaid)}</td>
                             <th>رصيد العميل</th>
                             <td>
-                              {loan.status === "pending" ||
-                              loan.status === "issued"
+                              {loan.status === 'pending' ||
+                              loan.status === 'issued'
                                 ? numbersToArabic(props.data.remainingTotal)
                                 : 0}
                             </td>
@@ -477,7 +482,7 @@ const CustomerStatusDetails = (props) => {
                         </tbody>
                       </table>
                     </div>
-                  );
+                  )
                 })
               ) : (
                 <table>
@@ -507,19 +512,19 @@ const CustomerStatusDetails = (props) => {
                       <th>البطاقه</th>
                       <td>{numbersToArabic(nationalId)}</td>
                       <th>صادره من</th>
-                      <td></td>
+                      <td />
                     </tr>
                     <tr>
                       <th>الموبيل</th>
-                      <td>{numbersToArabic(MobilePhoneNumber) || ""}</td>
+                      <td>{numbersToArabic(MobilePhoneNumber) || ''}</td>
                       <th>تليفون المنزل</th>
-                      <td>{numbersToArabic(HomePhoneNumber) || ""}</td>
+                      <td>{numbersToArabic(HomePhoneNumber) || ''}</td>
                       <th>تليفون العمل</th>
-                      <td>{numbersToArabic(BusinessPhoneNumber) || ""}</td>
+                      <td>{numbersToArabic(BusinessPhoneNumber) || ''}</td>
                     </tr>
                     <tr>
                       <th>ملاحظات</th>
-                      <td colSpan={3}>{Comments || ""}</td>
+                      <td colSpan={3}>{Comments || ''}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -529,7 +534,7 @@ const CustomerStatusDetails = (props) => {
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
-export default CustomerStatusDetails;
+export default CustomerStatusDetails
