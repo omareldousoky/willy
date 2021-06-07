@@ -3,10 +3,10 @@ import * as local from '../../../Shared/Assets/ar.json'
 import ability from '../../config/ability'
 
 export interface Card {
-  icon: string;
-  header: string;
-  desc: string;
-  path: string;
+  icon: string
+  header: string
+  desc: string
+  path: string
 }
 export const manageAccountsArray = (): Card[] => {
   const mangeAccountArr: Card[] = []

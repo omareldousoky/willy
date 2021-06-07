@@ -5,7 +5,9 @@ import React, {
   useRef,
 } from 'react'
 
-import { Form, FormControlProps } from 'react-bootstrap'
+import Form from 'react-bootstrap/Form'
+import { FormControlProps } from 'react-bootstrap/FormControl'
+
 import { Schema } from 'yup'
 
 import { getDateString } from '../../../../Shared/Services/utils'
@@ -29,9 +31,9 @@ const FormField: FunctionComponent<FormFieldProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const fieldErrors = getNestedByStringKey(errors, field.name)
-  const isToucehd = !!getNestedByStringKey(touched, field.name)
+  const isTouched = !!getNestedByStringKey(touched, field.name)
 
-  const fieldValue = getNestedByStringKey(
+  const value = getNestedByStringKey(
     values,
     field.name
   ) as FormControlProps['value']
@@ -57,11 +59,11 @@ const FormField: FunctionComponent<FormFieldProps> = ({
           }
         : handleBlur,
     name: field.name,
-    value: fieldValue,
+    value,
     onChange: handleChange,
     readOnly: field.readOnly ?? false,
     disabled: field.disabled ?? field.readOnly ?? false,
-    isInvalid: !!fieldErrors && isToucehd,
+    isInvalid: !!fieldErrors && isTouched,
     'data-qc': field.name,
   }
 
@@ -86,10 +88,10 @@ const FormField: FunctionComponent<FormFieldProps> = ({
             className="dropdown-select"
             defaultValue=""
           >
-            <option disabled value=""></option>
-            {field.options.map(({ label, value }) => (
-              <option key={value} value={value} data-qc={value}>
-                {label}
+            <option disabled value="" />
+            {field.options.map(({ label: fieldLabel, value: fieldValue }) => (
+              <option key={fieldValue} value={fieldValue} data-qc={fieldValue}>
+                {fieldLabel}
               </option>
             ))}
           </Form.Control>
@@ -110,10 +112,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
             handleBlur={inputFieldProps.onBlur}
             view={inputFieldProps.disabled}
             edit={!inputFieldProps.disabled}
-            photoObject={{
-              photoURL: defaultValues[field.name + 'URL'] ?? '',
-              photoFile: '',
-            }}
+            photoURL={defaultValues[field.name + 'URL'] ?? ''}
           />
         )
 

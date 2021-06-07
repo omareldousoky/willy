@@ -1,24 +1,27 @@
-import React ,{useRef} from "react";
-import { FieldProps } from "formik";
-import {Col, FormControl, InputGroup } from "react-bootstrap";
-import * as local from "../../../../Shared/Assets/ar.json";
+import React, { useRef } from 'react'
+import { FieldProps } from 'formik'
+
+import Col from 'react-bootstrap/Col'
+import FormControl from 'react-bootstrap/FormControl'
+import InputGroup from 'react-bootstrap/InputGroup'
+
+import * as local from '../../../../Shared/Assets/ar.json'
 
 interface DateFieldProps {
-  key: string;
-  id: string;
-  smSize?: number;
-  className?: string;
-  onlyField?: boolean;
-  fieldClassName?: string;
-  label?: string;
-  isClearable?: boolean;
-  onClear?: () => void;
+  key: string
+  id: string
+  smSize?: number
+  className?: string
+  onlyField?: boolean
+  fieldClassName?: string
+  label?: string
+  isClearable?: boolean
+  onClear?: () => void
 }
 const DateField = (props: DateFieldProps & FieldProps<string>) => {
   const {
     field,
     form,
-    meta,
     key,
     id,
     smSize,
@@ -29,16 +32,16 @@ const DateField = (props: DateFieldProps & FieldProps<string>) => {
     isClearable,
     onClear,
     ...restProps
-  } = props;
-  const { touched, errors } = form;
-  const inputRef = useRef<HTMLInputElement>(null);
+  } = props
+  const { touched, errors } = form
+  const inputRef = useRef<HTMLInputElement>(null)
 
   return (
     <>
       {!onlyField && (
         <Col
           sm={smSize || 12}
-          className={`d-flex flex-column ${className || ""}`}
+          className={`d-flex flex-column ${className || ''}`}
         >
           <InputGroup key={key}>
             <InputGroup.Prepend>
@@ -54,20 +57,24 @@ const DateField = (props: DateFieldProps & FieldProps<string>) => {
               id={id || field.name}
               className="mr-0"
             />
-            {isClearable &&
-            <InputGroup.Append>
-            <InputGroup.Text
-               onClick={
-                 ()=>{
-                  if(null !== inputRef?.current && inputRef.current.value){
-                    inputRef.current.value='';
-                 }
-                 if(onClear)
-                    onClear();
-                 }
-               }><img  alt= "clear" className="w-75 h-75" src={require('../../../Assets/clear.svg')}/>
-               </InputGroup.Text></InputGroup.Append>
-            }
+            {isClearable && (
+              <InputGroup.Append>
+                <InputGroup.Text
+                  onClick={() => {
+                    if (inputRef?.current !== null && inputRef.current.value) {
+                      inputRef.current.value = ''
+                    }
+                    if (onClear) onClear()
+                  }}
+                >
+                  <img
+                    alt="clear"
+                    className="w-75 h-75"
+                    src={require('../../../Assets/clear.svg')}
+                  />
+                </InputGroup.Text>
+              </InputGroup.Append>
+            )}
           </InputGroup>
           {touched[field.name] && errors[field.name] && (
             <small className="text-danger ml-auto mb-2">
@@ -82,11 +89,11 @@ const DateField = (props: DateFieldProps & FieldProps<string>) => {
           {...field}
           {...restProps}
           id={id || field.name}
-          className={`mr-0 ${fieldClassName || ""}`}
+          className={`mr-0 ${fieldClassName || ''}`}
         />
       )}
     </>
-  );
-};
+  )
+}
 
-export default DateField;
+export default DateField

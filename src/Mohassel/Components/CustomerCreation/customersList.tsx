@@ -1,126 +1,122 @@
-import React, { Component } from "react";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import DynamicTable from "../../../Shared/Components/DynamicTable/dynamicTable";
-import Can from "../../config/Can";
-import Search from "../../../Shared/Components/Search/search";
-import { connect } from "react-redux";
-import { search, searchFilters } from "../../../Shared/redux/search/actions";
-import { getDateAndTime } from "../../Services/getRenderDate";
-import { Loader } from "../../../Shared/Components/Loader";
-import * as local from "../../../Shared/Assets/ar.json";
-import { withRouter } from "react-router-dom";
-import ability from "../../config/ability";
-import { manageCustomersArray } from "./manageCustomersInitial";
-import HeaderWithCards from "../HeaderWithCards/headerWithCards";
-import Swal from "sweetalert2";
+import React, { Component } from 'react'
+import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
+import { connect } from 'react-redux'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
+import Can from '../../config/Can'
+import Search from '../../../Shared/Components/Search/search'
+import { search, searchFilters } from '../../../Shared/redux/search/actions'
+import { getDateAndTime } from '../../Services/getRenderDate'
+import { Loader } from '../../../Shared/Components/Loader'
+import * as local from '../../../Shared/Assets/ar.json'
+import ability from '../../config/ability'
+import { manageCustomersArray } from './manageCustomersInitial'
+import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import {
   getErrorMessage,
   getFullCustomerKey,
-} from "../../../Shared/Services/utils";
-import { ActionsIconGroup } from "../../../Shared/Components";
-import { Actions } from "../../../Shared/Components/ActionsIconGroup/types";
+} from '../../../Shared/Services/utils'
+import { ActionsIconGroup } from '../../../Shared/Components'
+import { Actions } from '../../../Shared/Components/ActionsIconGroup/types'
 
 interface State {
-  size: number;
-  from: number;
-  loading: boolean;
-  manageCustomersTabs: any[];
-  showHalanLinkageModal?: boolean;
-  openActionsId: string;
+  size: number
+  from: number
+  manageCustomersTabs: any[]
 }
 
 interface SearchFilters {
-  governorate?: string;
-  name?: string;
-  nationalId?: string;
-  key?: number;
-  code?: number;
-  customerShortenedCode?: string; // For FE only
+  governorate?: string
+  name?: string
+  nationalId?: string
+  key?: number
+  code?: number
+  customerShortenedCode?: string // For FE only
 }
 
-interface Props {
-  history: any;
-  data: any;
-  totalCount: number;
-  loading: boolean;
-  searchFilters: SearchFilters;
-  error: string;
-  branchId: string;
-  search: (data) => Promise<void>;
-  setSearchFilters: (data) => void;
+interface Props extends RouteComponentProps {
+  data: any
+  totalCount: number
+  loading: boolean
+  searchFilters: SearchFilters
+  error: string
+  branchId: string
+  search: (data) => Promise<void>
+  setSearchFilters: (data) => void
 }
 class CustomersList extends Component<Props, State> {
   mappers: {
-    title: string;
-    key: string;
-    sortable?: boolean;
-    render: (data: any) => void;
-  }[];
-  customerActions: Actions[];
+    title: string
+    key: string
+    sortable?: boolean
+    render: (data: any) => void
+  }[]
+
+  customerActions: Actions[]
+
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       size: 10,
       from: 0,
-      loading: false,
       manageCustomersTabs: [],
-      openActionsId: "",
-    };
+    }
     this.customerActions = [
       {
         actionTitle: local.editCustomer,
         actionIcon: 'editIcon',
 
         actionPermission:
-          ability.can("updateCustomer", "customer") ||
-          ability.can("updateNationalId", "customer"),
+          ability.can('updateCustomer', 'customer') ||
+          ability.can('updateNationalId', 'customer'),
         actionOnClick: (id) =>
-          this.props.history.push("/customers/edit-customer", { id }),
+          this.props.history.push('/customers/edit-customer', { id }),
       },
       {
         actionTitle: local.viewCustomer,
         actionIcon: 'view',
 
-        actionPermission: ability.can("getCustomer", "customer"),
+        actionPermission: ability.can('getCustomer', 'customer'),
         actionOnClick: (id) =>
-          this.props.history.push("/customers/view-customer", { id }),
+          this.props.history.push('/customers/view-customer', { id }),
       },
-    ];
+    ]
 
     this.mappers = [
       {
         title: local.customerCode,
-        key: "customerCode",
+        key: 'customerCode',
         render: (data) => data.key,
       },
       {
         title: local.customerName,
         sortable: true,
-        key: "name",
+        key: 'name',
         render: (data) => data.customerName,
       },
       {
         title: local.nationalId,
-        key: "nationalId",
+        key: 'nationalId',
         render: (data) => data.nationalId,
       },
       {
         title: local.governorate,
         sortable: true,
-        key: "governorate",
+        key: 'governorate',
         render: (data) => data.governorate,
       },
       {
         title: local.creationDate,
         sortable: true,
-        key: "createdAt",
+        key: 'createdAt',
         render: (data) =>
-          data.created?.at ? getDateAndTime(data.created?.at) : "",
+          data.created?.at ? getDateAndTime(data.created?.at) : '',
       },
       {
         title: local.actions,
-        key: "actions",
+        key: 'actions',
         render: (data) => (
           <ActionsIconGroup
             currentCustomerId={data._id}
@@ -128,45 +124,53 @@ class CustomersList extends Component<Props, State> {
           />
         ),
       },
-    ];
+    ]
   }
+
   componentDidMount() {
     this.props
       .search({
         size: this.state.size,
         from: this.state.from,
-        url: "customer",
+        url: 'customer',
         branchId: this.props.branchId,
-        customerType: 'individual'
+        customerType: 'individual',
       })
       .then(() => {
         if (this.props.error) {
-          Swal.fire("error", getErrorMessage(this.props.error), "error");
+          Swal.fire('error', getErrorMessage(this.props.error), 'error')
         }
-      });
-    this.setState({ manageCustomersTabs: manageCustomersArray() });
+      })
+    this.setState({ manageCustomersTabs: manageCustomersArray() })
+  }
+
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
   }
 
   getCustomers() {
-    const { searchFilters, search, error, branchId } = this.props;
-    const { customerShortenedCode, key } = searchFilters;
-    const { size, from } = this.state;
-    search({
-      ...searchFilters,
-      key: !!customerShortenedCode
-        ? getFullCustomerKey(customerShortenedCode)
-        : key || undefined,
-      size,
-      from,
-      url: "customer",
-      branchId,
-      customerType: 'individual'
-    }).then(() => {
-      if (error) {
-        Swal.fire("error", getErrorMessage(error), "error");
-      }
-    });
+    const { error, branchId } = this.props
+    const { customerShortenedCode, key } = this.props.searchFilters
+    const { size, from } = this.state
+    this.props
+      .search({
+        ...this.props.searchFilters,
+        key: customerShortenedCode
+          ? getFullCustomerKey(customerShortenedCode)
+          : key || undefined,
+        size,
+        from,
+        url: 'customer',
+        branchId,
+        customerType: 'individual',
+      })
+      .then(() => {
+        if (error) {
+          Swal.fire('error', getErrorMessage(error), 'error')
+        }
+      })
   }
+
   render() {
     return (
       <>
@@ -175,15 +179,15 @@ class CustomersList extends Component<Props, State> {
           array={this.state.manageCustomersTabs}
           active={this.state.manageCustomersTabs
             .map((item) => {
-              return item.icon;
+              return item.icon
             })
-            .indexOf("customers")}
+            .indexOf('customers')}
         />
         <Card className="main-card">
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
                   {local.customers}
                 </Card.Title>
@@ -196,7 +200,7 @@ class CustomersList extends Component<Props, State> {
                 <Can I="createCustomer" a="customer">
                   <Button
                     onClick={() => {
-                      this.props.history.push("/customers/new-customer");
+                      this.props.history.push('/customers/new-customer')
                     }}
                     className="big-button"
                   >
@@ -208,19 +212,19 @@ class CustomersList extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={["keyword", "dateFromTo", "governorate"]}
+              searchKeys={['keyword', 'dateFromTo', 'governorate']}
               dropDownKeys={[
-                "name",
-                "nationalId",
-                "key",
-                "code",
-                "customerShortenedCode",
+                'name',
+                'nationalId',
+                'key',
+                'code',
+                'customerShortenedCode',
               ]}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               url="customer"
               from={this.state.from}
               size={this.state.size}
-              setFrom={(from) => this.setState({ from: from })}
+              setFrom={(from) => this.setState({ from })}
               hqBranchIdRequest={this.props.branchId}
             />
             {this.props.data && (
@@ -229,32 +233,28 @@ class CustomersList extends Component<Props, State> {
                 size={this.state.size}
                 totalCount={this.props.totalCount}
                 mappers={this.mappers}
-                pagination={true}
+                pagination
                 data={this.props.data}
                 url="customer"
                 changeNumber={(key: string, number: number) => {
-                  this.setState(
-                    { [key]: number, openActionsId: "" } as any,
-                    () => this.getCustomers()
-                  );
+                  this.setState({ [key]: number } as any, () =>
+                    this.getCustomers()
+                  )
                 }}
               />
             )}
           </Card.Body>
         </Card>
       </>
-    );
-  }
-  componentWillUnmount() {
-    this.props.setSearchFilters({});
+    )
   }
 }
 const addSearchToProps = (dispatch) => {
   return {
     search: (data) => dispatch(search(data)),
     setSearchFilters: (data) => dispatch(searchFilters(data)),
-  };
-};
+  }
+}
 const mapStateToProps = (state) => {
   return {
     data: state.search.data,
@@ -262,10 +262,10 @@ const mapStateToProps = (state) => {
     totalCount: state.search.totalCount,
     loading: state.loading,
     searchFilters: state.searchFilters,
-  };
-};
+  }
+}
 
 export default connect(
   mapStateToProps,
   addSearchToProps
-)(withRouter(CustomersList));
+)(withRouter(CustomersList))
