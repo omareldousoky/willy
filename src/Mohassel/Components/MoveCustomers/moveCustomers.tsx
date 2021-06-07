@@ -269,11 +269,15 @@ class MoveCustomers extends Component<{ isCompany?: false }, State> {
                     <Loader open={this.state.loading} type="fullsection" />
                     <Col className="p-0 d-flex align-items-center">
                       <Card.Title className="mb-0">
-                        {local.customers}
+                        {this.props.isCompany
+                          ? local.companies
+                          : local.customers}
                       </Card.Title>
                       <span className="text-muted pl-4">
-                        {local.noOfCustomers +
-                          ` (${this.state.totalCustomers})`}
+                        {this.props.isCompany
+                          ? local.noOfCompanies
+                          : local.noOfCustomers}
+                        {` (${this.state.totalCustomers})`}
                       </span>
                     </Col>
                     <div>
