@@ -10,6 +10,7 @@ import Search from '../../../Shared/Components/Search/search'
 import {
   issuedLoansSearchFilters,
   search,
+  searchFilters,
 } from '../../../Shared/redux/search/actions'
 import {
   timeToDateyyymmdd,
@@ -32,6 +33,7 @@ interface Props extends RouteComponentProps {
   issuedLoansSearchFilters: any
   search: (data) => Promise<void>
   setIssuedLoanSearchFilters: (data) => void
+  setSearchFilters: (data) => void
 }
 interface State {
   size: number
@@ -171,6 +173,10 @@ class LoanList extends Component<Props, State> {
       if (this.props.error)
         Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
     })
+  }
+
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
   }
 
   getStatus(status: string) {
@@ -332,6 +338,7 @@ const addSearchToProps = (dispatch) => {
     search: (data) => dispatch(search(data)),
     setIssuedLoanSearchFilters: (data) =>
       dispatch(issuedLoansSearchFilters(data)),
+    setSearchFilters: (data) => dispatch(searchFilters(data)),
   }
 }
 const mapStateToProps = (state) => {
