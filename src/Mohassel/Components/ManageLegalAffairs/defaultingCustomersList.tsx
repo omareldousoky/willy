@@ -346,15 +346,14 @@ class DefaultingCustomersList extends Component<Props, State> {
 
   async handlePrintReport(values: any) {
     const { defaultingCustomerStatus, branches, fromDate, toDate } = values
-        const printReportReq: ReviewedDefaultingCustomersReq = {
-          status: defaultingCustomerStatus ?? '',
-          branches:
-            branches.length === 1 && branches[0]._id === ''
-              ? []
-              : branches.map((branch) => branch._id),
-           startDate: new Date(fromDate).setHours(0, 0, 0, 0).valueOf(),
-           endDate: new Date(toDate).setHours(23, 59, 59, 999).valueOf(),
-        }
+    const printReportReq: ReviewedDefaultingCustomersReq = {
+      status: defaultingCustomerStatus ?? '',
+      branches:
+        branches.length === 1 && branches[0]._id === ''
+          ? []
+          : branches.map((branch) => branch._id),
+      startDate: new Date(fromDate).setHours(0, 0, 0, 0).valueOf(),
+      endDate: new Date(toDate).setHours(23, 59, 59, 999).valueOf(),
     }
 
     const printReportRes: {
