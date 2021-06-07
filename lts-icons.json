@@ -64,7 +64,7 @@
       },
       "attrs": [{ "fill": "rgb(125, 195, 86)" }],
       "properties": {
-        "order": 20,
+        "order": 25,
         "id": 14,
         "name": "download",
         "prevSize": 32,
@@ -249,9 +249,9 @@
       },
       "attrs": [{}, {}],
       "properties": {
-        "order": 9,
+        "order": 26,
         "id": 7,
-        "name": "changeOfficer-inactive",
+        "name": "changeOfficer",
         "prevSize": 32,
         "code": 59654
       },
@@ -275,7 +275,7 @@
       "properties": {
         "order": 10,
         "id": 5,
-        "name": "customers-inactive",
+        "name": "customers",
         "prevSize": 32,
         "code": 59655
       },
@@ -383,7 +383,7 @@
   "height": 1024,
   "metadata": { "name": "lts-icons" },
   "preferences": {
-    "showGlyphs": false,
+    "showGlyphs": true,
     "showCodes": true,
     "showQuickUse": false,
     "showQuickUse2": false,
