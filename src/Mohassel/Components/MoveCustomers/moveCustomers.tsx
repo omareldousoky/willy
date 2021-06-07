@@ -11,7 +11,11 @@ import Button from 'react-bootstrap/Button'
 import { ValueType } from 'react-select'
 import { getCookie } from '../../../Shared/Services/getCookie'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
-import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils'
+import {
+  beneficiaryType,
+  getErrorMessage,
+  parseJwt,
+} from '../../../Shared/Services/utils'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import { DropDownOption, LoanOfficersDropDown } from '../dropDowns/allDropDowns'
@@ -19,19 +23,13 @@ import Pagination from '../pagination/pagination'
 import Can from '../../config/Can'
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer'
 import { moveCustomerToOfficer } from '../../Services/APIs/Customer-Creation/moveCustomerToOfficer'
-import { manageCustomersArray } from '../CustomerCreation/manageCustomersInitial'
+import {
+  manageCustomersArray,
+  manageCompaniesArray,
+} from '../CustomerCreation/manageCustomersInitial'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import { Customer } from '../../../Shared/Services/interfaces'
 
-interface Customer {
-  customerName?: string
-  key?: number
-  _id?: string
-  branchId?: string
-  blocked?: {
-    isBlocked: boolean
-    reason?: string
-  }
-}
 interface State {
   customers: Array<Customer>
   selectedCustomers: Array<Customer>
@@ -50,7 +48,7 @@ interface State {
   manageCustomersTabs: any[]
 }
 
-class MoveCustomers extends Component<{}, State> {
+class MoveCustomers extends Component<{ isCompany?: false }, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -73,7 +71,11 @@ class MoveCustomers extends Component<{}, State> {
   componentDidMount() {
     this.setState({ LoanOfficerSelectLoader: true })
     this.getLoanOfficers('')
-    this.setState({ manageCustomersTabs: manageCustomersArray() })
+    if (this.props.isCompany) {
+      this.setState({ manageCustomersTabs: manageCompaniesArray() })
+    } else {
+      this.setState({ manageCustomersTabs: manageCustomersArray() })
+    }
   }
 
   async getLoanOfficers(searchKeyWord: string) {
@@ -128,7 +130,7 @@ class MoveCustomers extends Component<{}, State> {
       size: this.state.size,
       from: this.state.from,
       representativeId: this.state.selectedLO?._id,
-      customerType: 'individual',
+      customerType: this.props.isCompany ? 'company' : 'individual',
     })
     if (res.status === 'success') {
       this.setState({
@@ -235,13 +237,9 @@ class MoveCustomers extends Component<{}, State> {
     return (
       <>
         <HeaderWithCards
-          header={local.customers}
+          header={this.props.isCompany ? local.companies : local.customers}
           array={this.state.manageCustomersTabs}
-          active={this.state.manageCustomersTabs
-            .map((item) => {
-              return item.icon
-            })
-            .indexOf('changeOfficer')}
+          active={1}
         />
         <Card className="main-card">
           <Card.Body>
@@ -333,6 +331,8 @@ class MoveCustomers extends Component<{}, State> {
                           <th>{local.customerCode}</th>
                           <th>{local.customerName}</th>
                           <th>{local.representative}</th>
+                          <th />
+                          <th>{local.customerType}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -365,6 +365,10 @@ class MoveCustomers extends Component<{}, State> {
                                 {customer.blocked?.isBlocked
                                   ? local.theCustomerIsBlocked
                                   : ''}
+                              </td>
+                              <td>
+                                {customer.customerType &&
+                                  beneficiaryType(customer.customerType)}
                               </td>
                             </tr>
                           )
