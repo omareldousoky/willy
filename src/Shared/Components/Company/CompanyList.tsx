@@ -13,10 +13,12 @@ import DynamicTable from '../DynamicTable/dynamicTable'
 import Can from '../../../Mohassel/config/Can'
 import Search from '../Search/search'
 import { Loader } from '../Loader'
+import { ActionsIconGroup } from '..'
+import HeaderWithCards from '../../../Mohassel/Components/HeaderWithCards/headerWithCards'
 
 import { CompanyListProps, TableMapperItem } from './types'
 import { Actions } from '../ActionsIconGroup/types'
-import { ActionsIconGroup } from '..'
+import { manageCompaniesArray } from '../../../Mohassel/Components/CustomerCreation/manageCustomersInitial'
 
 const List = ({
   branchId,
@@ -142,11 +144,11 @@ const List = ({
 
   return (
     <>
-      {/* <HeaderWithCards
+      <HeaderWithCards
         header={companies}
-        array={manageCompaniesTab}
-        active={1}
-      /> */}
+        array={manageCompaniesArray()}
+        active={0}
+      />
       <Card className="main-card">
         <Loader type="fullsection" open={loading} />
         <Card.Body style={{ padding: 0 }}>

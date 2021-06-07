@@ -7,6 +7,8 @@ import { LtsIconProps } from './types'
 
 export const LtsIcon = ({
   name,
+  size,
+  color,
   tooltipText,
   tooltipPlacement,
 }: LtsIconProps) => {
@@ -18,14 +20,16 @@ export const LtsIcon = ({
         <Tooltip id={`tooltip-${tooltipPlacement}`}>{tooltipText}</Tooltip>
       }
     >
-      <span className={`lts lts-${name}`} />
+      <span className={`lts lts-${name}`} style={{ fontSize: size, color }} />
     </OverlayTrigger>
   ) : (
-    <span className={`lts lts-${name}`} />
+    <span className={`lts lts-${name}`} style={{ fontSize: size, color }} />
   )
 }
 
 LtsIcon.defaultProps = {
   tooltipText: '',
   tooltipPlacement: 'bottom',
+  size: '20px',
+  color: 'unset',
 }
