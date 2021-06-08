@@ -109,42 +109,34 @@ class Leads extends Component<Props, State> {
       viewRejectionModal: false,
     }
 
-    const getRowClassName = (data) =>
-      data.status === 'approved'
-        ? 'text-success'
-        : data.status === 'rejected'
-        ? 'text-danger'
-        : ''
+    const statusClasses = {
+      approved: 'paid',
+      rejected: 'late',
+      'in-review': 'under-review',
+      submitted: 'rescheduled',
+    }
 
     this.mappers = [
       {
         title: local.leadName,
         key: 'name',
-        render: (data) => (
-          <span className={getRowClassName(data)}>{data.customerName}</span>
-        ),
+        render: (data) => data.customerName,
       },
       {
         title: local.governorate,
         key: 'governorate',
-        render: (data) => (
-          <span className={getRowClassName(data)}>
-            {data.businessGovernate}
-          </span>
-        ),
+        render: (data) => data.businessGovernate,
       },
       {
         title: local.branchName,
         key: 'branch',
-        render: (data) => (
-          <span className={getRowClassName(data)}>{data.branchName}</span>
-        ),
+        render: (data) => data.branchName,
       },
       {
         title: local.status,
         key: 'status',
         render: (data) => (
-          <span className={getRowClassName(data)}>
+          <span className={`status-chip ${statusClasses[data.status]}`}>
             {this.getLeadStatus(data.status)}
           </span>
         ),
@@ -152,19 +144,13 @@ class Leads extends Component<Props, State> {
       {
         title: local.creationDate,
         key: 'createdAt',
-        render: (data) => (
-          <span className={getRowClassName(data)}>
-            {' '}
-            {data.createdAt ? getDateAndTime(data.createdAt) : ''}
-          </span>
-        ),
+        render: (data) =>
+          data.createdAt ? getDateAndTime(data.createdAt) : '',
       },
       {
         title: () => local.loanOfficer,
         key: 'loanOfficer',
-        render: (data) => (
-          <span className={getRowClassName(data)}> {data.loanOfficerName}</span>
-        ),
+        render: (data) => data.loanOfficerName,
       },
       {
         title: () => (
