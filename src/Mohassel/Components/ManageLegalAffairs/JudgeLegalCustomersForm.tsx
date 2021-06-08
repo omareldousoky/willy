@@ -9,16 +9,8 @@ import { getGovernorates } from '../../Services/APIs/configApis/config'
 import { District, Governorate } from '../CustomerCreation/StepTwoForm'
 import AppForm from './Form'
 import { FormField } from './Form/types'
+import { JudgeCustomersFormValues } from './types'
 import { defaultValidationSchema } from './validations'
-
-interface JudgeCustomersFormValues {
-  gov: string
-  policeStation: string
-  dateRange: {
-    from: string
-    to: string
-  }
-}
 
 const JudgeLegalCustomersForm = ({
   onSubmit,
@@ -36,8 +28,8 @@ const JudgeLegalCustomersForm = ({
   const policeStations: District[] =
     governorates.find(
       (governorate) =>
-        governorate.governorateLegacyCode ===
-        selectedGovernorate?.governorateLegacyCode
+        governorate.governorateName.ar ===
+        selectedGovernorate?.governorateName.ar
     )?.districts || []
 
   useEffect(() => {
@@ -47,12 +39,12 @@ const JudgeLegalCustomersForm = ({
   const formFields: FormField[] = [
     {
       type: 'select',
-      name: 'gov',
+      name: 'governorate',
       label: local.currHomeAddressGov,
       validation: defaultValidationSchema.required(local.required),
       options: governorates.map((governorate) => ({
         label: governorate.governorateName.ar,
-        value: governorate.governorateLegacyCode,
+        value: governorate.governorateName.ar,
       })),
       disabled: governorates.length === 0,
       clearFieldOnChange: 'policeStation',
@@ -64,7 +56,7 @@ const JudgeLegalCustomersForm = ({
       validation: defaultValidationSchema.required(local.required),
       options: policeStations.map((policeStation) => ({
         label: policeStation.districtName.ar,
-        value: policeStation.districtLegacyCode,
+        value: policeStation.districtName.ar,
       })),
       disabled: policeStations.length === 0 || !selectedGovernorate,
     },
@@ -111,19 +103,18 @@ const JudgeLegalCustomersForm = ({
   }
 
   const handleChange = (e: FormEvent<HTMLFormElement>) => {
-    const value = +e.currentTarget.gov.value
+    const value = e.currentTarget.governorate.value
 
-    if (value === selectedGovernorate?.governorateLegacyCode) return
+    if (value === selectedGovernorate?.governorateName.ar) return
 
     const currentSelectedGov = governorates.find(
-      (governorate) => governorate.governorateLegacyCode === value
+      (governorate) => governorate.governorateName.ar === value
     )
 
     setSelectedGovernorate(currentSelectedGov)
   }
 
   const handleSubmit = (values: JudgeCustomersFormValues) => {
-    console.log({ submit: values })
     onSubmit(values)
   }
 

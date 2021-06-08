@@ -32,6 +32,8 @@ import Search from '../../../../Shared/Components/Search/search'
 import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from '../manageLegalAffairsInitials'
 import {
+  ConvictedReportReqBody,
+  JudgeCustomersFormValues,
   ManagerReviewEnum,
   ReviewReqBody,
   SettledCustomer,
@@ -42,6 +44,7 @@ import {
 import { DefaultedCustomer, ManagerReviews } from '../defaultingCustomersList'
 import LegalSettlementForm from './LegalSettlementForm'
 import {
+  getConvictedReport,
   getSettlementFees,
   reviewLegalCustomer,
 } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
@@ -92,9 +95,15 @@ const LegalCustomersList: FunctionComponent = () => {
   ] = useState<SettledCustomer | null>(null)
   const [branchForPrint, setBranchForPrint] = useState<Branch | null>(null)
 
-  const [customersForJudge, setCustomersForJudge] = useState<
-    DefaultedCustomer[]
-  >([])
+  const [
+    customersForConvictedReport,
+    setCustomersForConvictedReport,
+  ] = useState<DefaultedCustomer[] | null>(null)
+
+  const [convictedReportInfo, setConvictedReportInfo] = useState({
+    policeStation: '',
+    governorate: '',
+  })
 
   const [isSettlementLoading, setIsSettlementLoading] = useState(false)
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
@@ -146,16 +155,17 @@ const LegalCustomersList: FunctionComponent = () => {
   }, [customerForPrint])
 
   useEffect(() => {
-    if (branchForPrint || !!customersForJudge.length) {
+    if (branchForPrint || !!customersForConvictedReport) {
       window.print()
     }
 
     window.onafterprint = () => {
       setCustomerForPrint(null)
       setBranchForPrint(null)
-      setCustomersForJudge([])
+      setCustomersForConvictedReport(null)
+      setConvictedReportInfo({ policeStation: '', governorate: '' })
     }
-  }, [branchForPrint, customersForJudge])
+  }, [branchForPrint, customersForConvictedReport])
 
   useEffect(() => {
     const fetchSettlementFees = async () => {
@@ -252,6 +262,7 @@ const LegalCustomersList: FunctionComponent = () => {
           (customer) => customer.settlement && customer.settlement[type.value]
         )
     )
+
   const reviewFormFields: FormField[] = [
     {
       name: 'type',
@@ -297,6 +308,31 @@ const LegalCustomersList: FunctionComponent = () => {
     }
 
     setCustomersForReview(null)
+  }
+
+  const handleJudgeReport = async (values: JudgeCustomersFormValues) => {
+    setConvictedReportInfo({
+      governorate: values.governorate,
+      policeStation: values.policeStation,
+    })
+
+    const { from, to } = values.dateRange
+
+    const reqBody: ConvictedReportReqBody = {
+      governorate: values.governorate,
+      policeStation: values.policeStation,
+      startDate: from ? new Date(from).valueOf() : 0,
+      endDate: to ? new Date(to).valueOf() : 0,
+    }
+
+    const response = await getConvictedReport(reqBody)
+
+    if (response.status === 'success') {
+      setIsJudgeModalOpen(false)
+      setCustomersForConvictedReport(response.body?.result ?? [])
+    } else {
+      Swal.fire('error', getErrorMessage(response.error.error), 'error')
+    }
   }
 
   const tableMapper: TableMapperItem[] = [
@@ -493,12 +529,10 @@ const LegalCustomersList: FunctionComponent = () => {
     },
   ]
 
-  const policeStation = 'الزيتون' // TODO: Replace with selected police station
-  const governorate = 'القاهرة' // TODO: Replace with selected governorate
   const judgeActors = [
     'مدير الادارة العامة لتنفيذ الاحكام – قطاع الامن العام',
     'مدير الادارة العامة لتنفيذ الاحكام – مديرية امن القاهرة',
-    `رئيس مباحث قسم شرطة ${policeStation} – وحدة تنفيذ الاحكام`,
+    `رئيس مباحث قسم شرطة ${convictedReportInfo.policeStation} – وحدة تنفيذ الاحكام`,
     'مدير المكتب الفني لوزير الداخلية',
   ]
 
@@ -558,12 +592,14 @@ const LegalCustomersList: FunctionComponent = () => {
                   </Button>
                 </Can>
 
-                <Button
-                  className="big-button ml-2"
-                  onClick={() => setIsJudgeModalOpen(true)}
-                >
-                  {local.judgeList}
-                </Button>
+                <Can I="convictedClients" a="report">
+                  <Button
+                    className="big-button ml-2"
+                    onClick={() => setIsJudgeModalOpen(true)}
+                  >
+                    {local.judgeList}
+                  </Button>
+                </Can>
               </div>
             </div>
             <hr className="dashed-line" />
@@ -727,19 +763,11 @@ const LegalCustomersList: FunctionComponent = () => {
           </Modal.Header>
           <Modal.Body>
             <JudgeLegalCustomersForm
-              onSubmit={() => {
-                setIsJudgeModalOpen(false)
-                // remove this
-                setCustomersForJudge([...data])
-                // remove this END
+              onSubmit={(values) => {
+                handleJudgeReport(values)
               }}
               onCancel={() => {
                 setIsJudgeModalOpen(false)
-                // remove this
-                setTimeout(() => {
-                  setCustomersForJudge([...data])
-                }, 100)
-                // remove this END
               }}
             />
           </Modal.Body>
@@ -753,14 +781,16 @@ const LegalCustomersList: FunctionComponent = () => {
         />
       )}
 
-      {!!customersForJudge.length &&
+      {!!customersForConvictedReport &&
+        !!convictedReportInfo.governorate &&
+        !!convictedReportInfo.policeStation &&
         judgeActors.map((actor, index) => (
           <LegalJudgePdfTemp
             key={index}
             actor={actor}
-            customers={customersForJudge}
-            policeStation={policeStation}
-            governorate={governorate}
+            customers={customersForConvictedReport}
+            governorate={convictedReportInfo.governorate}
+            policeStation={convictedReportInfo.policeStation}
           />
         ))}
     </>

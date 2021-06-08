@@ -32,13 +32,13 @@ const LegalJudge = ({
     },
     {
       key: 'caseNumber',
-      title: local.legalCaseNumber,
+      title: local.caseNumber,
       render: (customer: SettledCustomer & SettlementFormValues) =>
         customer.caseNumber,
     },
     {
-      key: 'judgement', // TODO: Change to meaningful key
-      title: 'الحكم',
+      key: 'finalVerdict',
+      title: local.finalVerdict,
     },
     {
       key: 'confinementNumber',
@@ -47,10 +47,12 @@ const LegalJudge = ({
         renderCourtField(customer, 'confinementNumber'),
     },
     {
-      key: 'address', // TODO: Change to meaningful key
-      title: 'العنوان',
+      key: 'customerAddress',
+      title: local.address,
     },
   ]
+
+  console.log({ customers })
 
   return (
     <div className="min-vh-100 w-75 mx-auto p-2 font-weight-bold template-container">
@@ -71,7 +73,9 @@ const LegalJudge = ({
         </section>
 
         <section>
-          <p className="text-center font-weight-bold mb-1">اتشرف بعرض الاتي ,,,</p>
+          <p className="text-center font-weight-bold mb-1">
+            اتشرف بعرض الاتي ,,,
+          </p>
           <p>
             اقامت الشركه عدة بلاغات قسم شرطة {policeStation} – محافظة{' '}
             {governorate} بشأن قيام المشكو في حقهم الاتي اسماءهم بارتكابهم جريمه

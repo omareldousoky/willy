@@ -1106,5 +1106,6 @@
   "duplicateCompanyNumberMessage": "رقم البطاقة موجود بالفعل لشركة اخرى",
   "accusedName": "اسم المتهم",
   "judgeList": "قائمة الأحكام",
-  "dateRangeErrorMessage": "تاريخ الي يجب ان يكون بعد تاريخ من"
+  "dateRangeErrorMessage": "تاريخ الي يجب ان يكون بعد تاريخ من",
+  "finalVerdict": "الحكم"
 }

@@ -76,6 +76,13 @@ export interface ReviewReqBody {
   ids: string[]
 }
 
+export interface ConvictedReportReqBody {
+  startDate: number
+  endDate: number
+  governorate: string
+  policeStation: string
+}
+
 export type Settlement = SettlementFormValues & ManagerReviews
 
 export interface SettledCustomer extends DefaultedCustomer {
@@ -136,3 +143,13 @@ export interface UploadLegalCustomersProps {
   onSubmit: (areAllSucceeded: boolean) => void
   onCancel: () => void
 }
+
+export interface JudgeCustomersFormValues {
+  governorate: string
+  policeStation: string
+  dateRange: {
+    from: string
+    to: string
+  }
+}
+
