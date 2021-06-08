@@ -21,6 +21,7 @@ export interface LegalActionsForm {
 
   misdemeanorAppealNumber: string
   caseStatus: string
+  finalConfinementNumber
   caseStatusSummary: string
 }
 

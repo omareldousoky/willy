@@ -1108,5 +1108,6 @@
   "judgeList": "قائمة الأحكام",
   "dateRangeErrorMessage": "تاريخ الي يجب ان يكون بعد تاريخ من",
   "finalVerdict": "الحكم",
-  "moveCompanies": "نقل الشركات"
+  "moveCompanies": "نقل الشركات",
+  "finalConfinementNumber": "اخر حصر"
 }

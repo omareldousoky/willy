@@ -3,10 +3,10 @@ import React, { ReactNode } from 'react'
 import local from '../../../../Shared/Assets/ar.json'
 import { DefaultedCustomer } from '../../ManageLegalAffairs/defaultingCustomersList'
 import {
+  LegalActionsForm,
   SettledCustomer,
   SettlementFormValues,
 } from '../../ManageLegalAffairs/types'
-import { renderCourtField } from '../../ManageLegalAffairs/utils'
 
 import './style.scss'
 
@@ -41,10 +41,10 @@ const LegalJudge = ({
       title: local.finalVerdict,
     },
     {
-      key: 'confinementNumber',
+      key: 'finalConfinementNumber',
       title: local.confinementNumber,
-      render: (customer: SettledCustomer) =>
-        renderCourtField(customer, 'confinementNumber'),
+      render: (customer: SettledCustomer & LegalActionsForm) =>
+        customer.finalConfinementNumber,
     },
     {
       key: 'customerAddress',

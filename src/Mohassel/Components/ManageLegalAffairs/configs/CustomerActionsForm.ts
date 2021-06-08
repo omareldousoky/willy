@@ -81,6 +81,12 @@ const customerActionsFields: FormField[] = [
     validation: defaultValidationSchema,
   },
   {
+    name: 'finalConfinementNumber',
+    type: 'text',
+    label: local.finalConfinementNumber,
+    validation: defaultValidationSchema,
+  },
+  {
     name: 'caseStatusSummary',
     type: 'text',
     label: local.caseStatusSummary,
