@@ -52,8 +52,6 @@ const LegalJudge = ({
     },
   ]
 
-  console.log({ customers })
-
   return (
     <div className="min-vh-100 w-75 mx-auto p-2 font-weight-bold template-container">
       <header>
