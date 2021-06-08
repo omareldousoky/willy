@@ -70,7 +70,7 @@ export interface Customer {
   socialStatus?: string
   qualification?: string
   currentHomeAddress?: string
-  customerType?: string
+  customerType?: 'individual' | 'group' | 'company'
   legalStructure?: string
   commercialRegisterExpiryDate?: number
   businessCharacteristic?: string

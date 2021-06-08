@@ -15,6 +15,7 @@ interface EarlyPaymentPDFProps {
   earlyPaymentPdfData: EarlyPaymentPdfData
   branchDetails: any
 }
+
 const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
   data,
   earlyPaymentPdfData,
@@ -34,14 +35,7 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
 
   return (
     <div className="early-payment-print" lang="ar">
-      <table
-        style={{
-          fontSize: '12px',
-          margin: '10px 0px',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
+      <table className="text-center my-3 mx-0 w-100">
         <tbody>
           <tr style={{ height: '10px' }} />
           <tr

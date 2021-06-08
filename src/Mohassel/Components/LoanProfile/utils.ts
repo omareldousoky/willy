@@ -10,13 +10,10 @@ export const DAY_IN_MS = 1000 * 60 * 60 * 24
 export const getInstallmentKeySum = (
   key: string,
   installments?: SingleInstallmentRow[]
-) => {
-  let max = 0
-  installments?.forEach((installment) => {
-    max += installment[key]
-  })
-  return max
-}
+) =>
+  installments
+    ?.map((installment) => installment[key])
+    .reduce((acc, current) => acc + current, 0)
 
 export const getEarlyPaymentPdfData = (
   application: ApplicationResponse,
