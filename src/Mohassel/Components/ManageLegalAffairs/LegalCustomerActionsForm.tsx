@@ -50,14 +50,21 @@ const LegalActionsForm: FunctionComponent = () => {
       : court
   }
 
-  const formValuesToActionReq = (values: LegalActionsFormType) => ({
-    ...customer,
-    ...values,
-    firstCourtSession: formatCourt(values.firstCourtSession),
-    oppositionSession: formatCourt(values.oppositionSession),
-    oppositionAppealSession: formatCourt(values.oppositionAppealSession),
-    misdemeanorAppealSession: formatCourt(values.misdemeanorAppealSession),
-  })
+  const formValuesToActionReq = (values: LegalActionsFormType) => {
+    const finalVerdictDate = values.finalVerdictDate
+      ? new Date(values.finalVerdictDate).valueOf()
+      : values.finalVerdictDate
+
+    return {
+      ...customer,
+      ...values,
+      finalVerdictDate,
+      firstCourtSession: formatCourt(values.firstCourtSession),
+      oppositionSession: formatCourt(values.oppositionSession),
+      oppositionAppealSession: formatCourt(values.oppositionAppealSession),
+      misdemeanorAppealSession: formatCourt(values.misdemeanorAppealSession),
+    }
+  }
 
   const handleSubmit = async (values: LegalActionsFormType) => {
     const actionReqBody: LegalActionsFormType &

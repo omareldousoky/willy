@@ -1108,5 +1108,7 @@
   "lastDates": "المواعيد الأخيرة",
   "lastDay": "الأمس",
   "lastWeek": "الاسبوع الماضى",
-  "lastMonth": "الشهر الماضي"
+  "lastMonth": "الشهر الماضي",
+  "finalVerdict": "حكم نهائي",
+  "finalVerdictDate": "تاريخ حكم نهائي"
 }
