@@ -1,0 +1,17 @@
+@media screen, print {
+  .legal-history {
+    font-size: 10px;
+    font-weight: bold;
+    text-align: right;
+    direction: rtl;
+    color: red;
+    page-break-after: always;
+    width: 100%;
+  }
+}
+@media screen {
+  .legal-history {
+    width: 700px;
+    display: none;
+  }
+}

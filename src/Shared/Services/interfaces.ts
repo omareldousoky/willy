@@ -422,3 +422,98 @@ export interface TerroristUnResponse {
     userName: string
   }
 }
+export interface LegalHistoryResponse {
+  _id: string
+  customerId: string
+  loanId: string
+  customerName: string
+  nationalId: string
+  customerKey: number
+  customerBranchId: string
+  status: string
+  customerType: string
+  created?: {
+    by?: string
+    at?: number
+    userName?: string
+  }
+  updated?: {
+    by?: string
+    at?: number
+    userName?: string
+  }
+  branchManagerReview?: {
+    by?: string
+    at?: number
+    userName?: string
+    notes?: string
+  }
+  areaSupervisorReview?: {
+    by?: string
+    at?: number
+    userName: string
+    notes?: string
+  }
+  areaManagerReview?: {
+    by?: string
+    at?: number
+    userName: string
+    notes?: string
+  }
+  financialManagerReview?: {
+    by?: string
+    at?: number
+    userName: string
+    notes?: string
+  }
+  active: true
+  loanKey: 114470007535001
+  settlement?: {
+    created: {
+      by?: string
+      at?: number
+      userName?: string
+    }
+    caseNumber?: string
+    caseYear?: string
+    court?: string
+    courtDetails?: string
+    lawyerName?: string
+    lawyerPhoneNumberOne?: string
+    settlementType?: string
+    settlementStatus?: string
+    penaltyFees?: number
+    courtFees?: number
+    penaltiesPaid?: boolean
+    courtFeesPaid?: boolean
+    updated?: {
+      by?: string
+      at?: number
+      userName: string
+    }
+    financialManagerReview?: {
+      by?: string
+      at?: number
+      userName: string
+      notes?: string
+    }
+    managerHierarchy?: {
+      areaManager?: {
+        id?: string
+        name?: string
+      }
+      areaSupervisor?: {
+        id?: string
+        name?: string
+      }
+      branchManager?: {
+        id?: string
+        name?: string
+      }
+      operationsManager?: {
+        id?: string
+        name?: string
+      }
+    }
+  }
+}

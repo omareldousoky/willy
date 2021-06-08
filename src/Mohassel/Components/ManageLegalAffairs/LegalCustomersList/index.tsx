@@ -44,16 +44,21 @@ import LegalSettlementForm from './LegalSettlementForm'
 import {
   getSettlementFees,
   reviewLegalCustomer,
+  getLegalHistory,
 } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import { FormField } from '../Form/types'
 import { defaultValidationSchema } from '../validations'
 import AppForm from '../Form'
 import UploadLegalCustomers from './UploadCustomersForm'
 import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
-import { Branch } from '../../../../Shared/Services/interfaces'
+import {
+  Branch,
+  LegalHistoryResponse,
+} from '../../../../Shared/Services/interfaces'
 import { getBranch } from '../../../Services/APIs/Branch/getBranch'
 import managerTypes from '../configs/managerTypes'
 import { handleUpdateSuccess } from '../utils'
+import LegalHistory from './legalHistory'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -88,6 +93,10 @@ const LegalCustomersList: FunctionComponent = () => {
 
   const [isSettlementLoading, setIsSettlementLoading] = useState(false)
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
+  const [printHistory, setPrintHistory] = useState(false)
+  const [historyData, setHistoryData] = useState<LegalHistoryResponse | null>(
+    null
+  )
 
   const data: SettledCustomer[] =
     useSelector((state: any) => state.search.data) || []
@@ -135,15 +144,15 @@ const LegalCustomersList: FunctionComponent = () => {
   }, [customerForPrint])
 
   useEffect(() => {
-    if (branchForPrint) {
+    if (branchForPrint || printHistory) {
       window.print()
     }
-
     window.onafterprint = () => {
       setCustomerForPrint(null)
       setBranchForPrint(null)
+      setPrintHistory(false)
     }
-  }, [branchForPrint])
+  }, [branchForPrint, printHistory])
 
   useEffect(() => {
     const fetchSettlementFees = async () => {
@@ -297,6 +306,25 @@ const LegalCustomersList: FunctionComponent = () => {
     }
 
     setCustomersForReview(null)
+  }
+  const handleDownloadHistory = async (legalId: string) => {
+    const response = await getLegalHistory(legalId)
+    setIsSettlementLoading(true)
+    if (response.status === 'success') {
+      if (response.body && response.body !== {}) {
+        setPrintHistory(true)
+        setHistoryData(response.body as LegalHistoryResponse)
+      } else {
+        Swal.fire('', local.noLogsFound, 'info')
+      }
+    } else {
+      Swal.fire(
+        'error',
+        getErrorMessage((response.error as Record<string, string>).error),
+        'error'
+      )
+    }
+    setIsSettlementLoading(false)
   }
 
   const tableMapper: TableMapperItem[] = [
@@ -488,14 +516,19 @@ const LegalCustomersList: FunctionComponent = () => {
               />
             </Button>
           )}
-          <Button
-            type="button"
-            variant="default"
-            className="btn clickable-action rounded-0 p-0 font-weight-normal text-dark"
-            title={local.logs}
-          >
-            {local.downloadHistory}
-          </Button>
+          <Can I="getDefaultingCustomer" a="legal">
+            <Button
+              type="button"
+              variant="default"
+              className="btn clickable-action rounded-0 p-0 font-weight-normal text-dark"
+              title={local.logs}
+              onClick={async () => {
+                handleDownloadHistory(customer._id)
+              }}
+            >
+              {local.downloadHistory}
+            </Button>
+          </Can>
         </div>
       ),
     },
@@ -716,6 +749,7 @@ const LegalCustomersList: FunctionComponent = () => {
           customer={customerForPrint}
         />
       )}
+      {printHistory && <LegalHistory />}
     </>
   )
 }
