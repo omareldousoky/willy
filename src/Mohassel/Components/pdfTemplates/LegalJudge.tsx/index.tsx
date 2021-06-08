@@ -32,7 +32,7 @@ const LegalJudge = ({
     },
     {
       key: 'caseNumber',
-      title: local.caseNumber,
+      title: local.courtCaseNumber,
       render: (customer: SettledCustomer & SettlementFormValues) =>
         customer.caseNumber,
     },
@@ -42,7 +42,7 @@ const LegalJudge = ({
     },
     {
       key: 'finalConfinementNumber',
-      title: local.finalConfinementNumber,
+      title: local.theConfinement,
       render: (customer: SettledCustomer & LegalActionsForm) =>
         customer.finalConfinementNumber,
     },
