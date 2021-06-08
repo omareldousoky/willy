@@ -1108,6 +1108,6 @@
   "accusedName": "اسم المتهم",
   "judgeList": "قائمة الأحكام",
   "dateRangeErrorMessage": "تاريخ الي يجب ان يكون بعد تاريخ من",
-  "finalVerdict": "الحكم",
+  "theVerdict": "الحكم",
   "finalConfinementNumber": "اخر حصر"
 }

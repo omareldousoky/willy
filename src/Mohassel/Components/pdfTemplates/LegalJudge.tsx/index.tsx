@@ -38,7 +38,7 @@ const LegalJudge = ({
     },
     {
       key: 'finalVerdict',
-      title: local.finalVerdict,
+      title: local.theVerdict,
     },
     {
       key: 'finalConfinementNumber',
