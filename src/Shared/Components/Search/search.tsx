@@ -267,8 +267,8 @@ class Search extends Component<Props, State> {
     if (obj.lastDates) {
       const fromDate = dayjs().subtract(1, obj.lastDates)
 
-      obj.fromDate = fromDate.startOf('day').valueOf()
-      obj.toDate = dayjs().startOf('day').valueOf()
+      obj.fromDate = fromDate.startOf(obj.lastDates).valueOf()
+      obj.toDate = fromDate.endOf(obj.lastDates).valueOf()
     }
 
     if (url === 'customer')
