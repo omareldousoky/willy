@@ -22,3 +22,24 @@ export const manageCustomersArray = (): Card[] => {
   }
   return manageLoanArr
 }
+
+export const manageCompaniesArray = (): Card[] => {
+  const manageLoanArr: Card[] = []
+  if (ability.can('getCompany', 'customer')) {
+    manageLoanArr.push({
+      icon: 'company',
+      header: local.companies,
+      desc: local.companies,
+      path: '/company',
+    })
+  }
+  if (ability.can('changeOfficer', 'customer')) {
+    manageLoanArr.push({
+      icon: 'changeOfficer',
+      header: local.moveCompanies,
+      desc: local.moveCompanies,
+      path: '/company/move-company',
+    })
+  }
+  return manageLoanArr
+}
