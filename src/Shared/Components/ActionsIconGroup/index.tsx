@@ -14,12 +14,13 @@ export const ActionsIconGroup = ({
 }: ActionsIconGroupProps) => {
   return (
     <Container>
-      <Row lg="4">
+      <Row lg="4" md="2" sm="1">
         {actions.map(
           (action, index) =>
             action.actionPermission && (
-              <Col key={index}>
+              <Col key={index} className="m-1">
                 <Button
+                  size="sm"
                   variant="outline-primary"
                   onClick={() => action.actionOnClick(currentCustomerId)}
                 >

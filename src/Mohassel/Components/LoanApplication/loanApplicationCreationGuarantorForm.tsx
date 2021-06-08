@@ -87,17 +87,6 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                       header={text}
                       sme={guarantor.isCompany}
                     />
-                    {i > values.noOfGuarantors - 1 && (
-                      <div className="d-flex col-1 p-0">
-                        <Button
-                          variant="primary"
-                          className="m-auto"
-                          onClick={() => props.removeGuar(guarantor, i, values)}
-                        >
-                          -
-                        </Button>
-                      </div>
-                    )}
                   </Row>
                 )
               })}
