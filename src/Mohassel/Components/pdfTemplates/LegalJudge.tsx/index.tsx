@@ -42,7 +42,7 @@ const LegalJudge = ({
     },
     {
       key: 'finalConfinementNumber',
-      title: local.confinementNumber,
+      title: local.finalConfinementNumber,
       render: (customer: SettledCustomer & LegalActionsForm) =>
         customer.finalConfinementNumber,
     },
