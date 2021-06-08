@@ -9,7 +9,7 @@ export interface FieldDefaultProps {
   disabled?: boolean
   // Field name to clear if this field changed
   // used for related fields like: Governorate and District (police station)
-  clearFieldOnChange?: string 
+  clearFieldOnChange?: string
 }
 
 export interface Field extends FieldDefaultProps {

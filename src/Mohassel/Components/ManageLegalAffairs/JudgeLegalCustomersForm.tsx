@@ -33,6 +33,16 @@ const JudgeLegalCustomersForm = ({
     )?.districts || []
 
   useEffect(() => {
+    const fetchGovernorates = async () => {
+      const response = await getGovernorates()
+
+      if (response.status === 'success') {
+        setGovernorates(response.body.governorates)
+      } else {
+        Swal.fire(local.error, getErrorMessage(response.error.error), 'error')
+      }
+    }
+
     fetchGovernorates()
   }, [])
 
@@ -92,18 +102,12 @@ const JudgeLegalCustomersForm = ({
     },
   ]
 
-  const fetchGovernorates = async () => {
-    const response = await getGovernorates()
-
-    if (response.status === 'success') {
-      setGovernorates(response.body.governorates)
-    } else {
-      Swal.fire(local.error, getErrorMessage(response.error.error), 'error')
-    }
-  }
-
   const handleChange = (e: FormEvent<HTMLFormElement>) => {
-    const value = e.currentTarget.governorate.value
+    const {
+      currentTarget: {
+        governorate: { value },
+      },
+    } = e
 
     if (value === selectedGovernorate?.governorateName.ar) return
 

@@ -316,13 +316,17 @@ const LegalCustomersList: FunctionComponent = () => {
       policeStation: values.policeStation,
     })
 
-    const { from, to } = values.dateRange
+    const {
+      governorate,
+      policeStation,
+      dateRange: { from: startDate, to: endDate },
+    } = values
 
     const reqBody: ConvictedReportReqBody = {
-      governorate: values.governorate,
-      policeStation: values.policeStation,
-      startDate: from ? new Date(from).valueOf() : 0,
-      endDate: to ? new Date(to).valueOf() : 0,
+      governorate,
+      policeStation,
+      startDate: startDate ? new Date(startDate).valueOf() : 0,
+      endDate: endDate ? new Date(endDate).valueOf() : 0,
     }
 
     const response = await getConvictedReport(reqBody)

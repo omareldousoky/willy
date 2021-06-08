@@ -153,4 +153,3 @@ export interface JudgeCustomersFormValues {
     to: string
   }
 }
-
