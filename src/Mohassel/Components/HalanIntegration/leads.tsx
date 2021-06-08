@@ -115,37 +115,56 @@ class Leads extends Component<Props, State> {
         : data.status === 'rejected'
         ? 'text-danger'
         : ''
-        
+
     this.mappers = [
       {
         title: local.leadName,
-        key: "name",
-        render: data => <span className={getRowClassName(data)}>{ data.customerName }</span>
+        key: 'name',
+        render: (data) => (
+          <span className={getRowClassName(data)}>{data.customerName}</span>
+        ),
       },
       {
         title: local.governorate,
-        key: "governorate",
-        render: data => <span className={getRowClassName(data)}>{ data.businessGovernate }</span>
+        key: 'governorate',
+        render: (data) => (
+          <span className={getRowClassName(data)}>
+            {data.businessGovernate}
+          </span>
+        ),
       },
       {
         title: local.branchName,
-        key: "branch",
-        render: data => <span className={getRowClassName(data)}>{ data.branchName }</span>
+        key: 'branch',
+        render: (data) => (
+          <span className={getRowClassName(data)}>{data.branchName}</span>
+        ),
       },
       {
         title: local.status,
-        key: "status",
-        render: data => <span className={getRowClassName(data)}>{ this.getLeadStatus(data.status) }</span>
+        key: 'status',
+        render: (data) => (
+          <span className={getRowClassName(data)}>
+            {this.getLeadStatus(data.status)}
+          </span>
+        ),
       },
       {
         title: local.creationDate,
-        key: "createdAt",
-        render: data => <span className={getRowClassName(data)}> {data.createdAt ? getDateAndTime(data.createdAt) : '' }</span>
+        key: 'createdAt',
+        render: (data) => (
+          <span className={getRowClassName(data)}>
+            {' '}
+            {data.createdAt ? getDateAndTime(data.createdAt) : ''}
+          </span>
+        ),
       },
       {
         title: () => local.loanOfficer,
-        key: "loanOfficer",
-        render: data => <span className={getRowClassName(data)}> {data.loanOfficerName }</span>
+        key: 'loanOfficer',
+        render: (data) => (
+          <span className={getRowClassName(data)}> {data.loanOfficerName}</span>
+        ),
       },
       {
         title: () => (
@@ -582,7 +601,12 @@ class Leads extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['keyword', 'dateFromTo', 'leads-status', 'lastDates']}
+              searchKeys={[
+                'keyword',
+                'dateFromTo',
+                'leads-status',
+                'lastDates',
+              ]}
               dropDownKeys={['name']}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               hqBranchIdRequest={this.state.branchId}
