@@ -1,10 +1,9 @@
-import * as local from '../../../Shared/Assets/ar.json';
-import { Card } from '../ManageAccounts/manageAccountsInitials';
+import * as local from '../../../Shared/Assets/ar.json'
+import { Card } from '../ManageAccounts/manageAccountsInitials'
 import ability from '../../config/ability'
 
-
 export const manageCustomersArray = (): Card[] => {
-  const manageLoanArr: Card[] = [];
+  const manageLoanArr: Card[] = []
   if (ability.can('getCustomer', 'customer')) {
     manageLoanArr.push({
       icon: 'customers',
@@ -21,5 +20,26 @@ export const manageCustomersArray = (): Card[] => {
       path: '/customers/move-customers',
     })
   }
-  return manageLoanArr;
+  return manageLoanArr
+}
+
+export const manageCompaniesArray = (): Card[] => {
+  const manageLoanArr: Card[] = []
+  if (ability.can('getCompany', 'customer')) {
+    manageLoanArr.push({
+      icon: 'company',
+      header: local.companies,
+      desc: local.companies,
+      path: '/company',
+    })
+  }
+  if (ability.can('changeOfficer', 'customer')) {
+    manageLoanArr.push({
+      icon: 'changeOfficer',
+      header: local.moveCompanies,
+      desc: local.moveCompanies,
+      path: '/company/move-company',
+    })
+  }
+  return manageLoanArr
 }

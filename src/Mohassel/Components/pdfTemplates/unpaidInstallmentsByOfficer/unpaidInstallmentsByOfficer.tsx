@@ -1,25 +1,26 @@
-import React, { Component, Fragment } from "react";
-import "./unpaidInstallmentsByOfficer.scss";
+import React from 'react'
+import './unpaidInstallmentsByOfficer.scss'
 
 const numbersToArabic = (input) => {
   if (input || input === 0) {
-    const id = ["۰", "۱", "۲", "۳", "٤", "۵", "٦", "۷", "۸", "۹"];
-    const inputStr = input.toString();
+    const id = ['۰', '۱', '۲', '۳', '٤', '۵', '٦', '۷', '۸', '۹']
+    const inputStr = input.toString()
     return inputStr.replace(/[0-9]/g, (number) => {
-      return id[number];
-    });
-  } else return "";
-};
+      return id[number]
+    })
+  }
+  return ''
+}
 const installmentStatuses = {
-  unpaid: "غير مسدد",
-  partiallyPaid: "مدفوع جزئيا",
-  pending: "قيد التحقيق",
-};
+  unpaid: 'غير مسدد',
+  partiallyPaid: 'مدفوع جزئيا',
+  pending: 'قيد التحقيق',
+}
 
 interface UnpaidInstallmentsByOfficerProps {
-  fromDate: string;
-  toDate: string;
-  data: any;
+  fromDate: string
+  toDate: string
+  data: any
 }
 
 const UnpaidInstallmentsByOfficer = (
@@ -27,56 +28,56 @@ const UnpaidInstallmentsByOfficer = (
 ) => {
   const renderHeader = (fromDate, toDate) => {
     return (
-      <div style={{ display: "flex" }}>
+      <div style={{ display: 'flex' }}>
         <div
           style={{
             flex: 1,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <div
             style={{
-              backgroundColor: "darkgrey",
-              border: "1px solid black",
-              width: "50%",
-              textAlign: "center",
+              backgroundColor: 'darkgrey',
+              border: '1px solid black',
+              width: '50%',
+              textAlign: 'center',
               marginBottom: 5,
             }}
           >
-            {"شركة تساهيل"}
+            شركة تساهيل
           </div>
         </div>
         <div style={{ flex: 1 }}>
-          <p style={{ margin: 0 }}>{"قائمة الإقساط المستحقة بالمندوب"}</p>
+          <p style={{ margin: 0 }}>قائمة الإقساط المستحقة بالمندوب</p>
           <p style={{ margin: 0 }}>
-            <span>{"من "}</span>
+            <span>{'من '}</span>
             <span>{` ${fromDate} `}</span>
-            <span>{"إلى "}</span>
+            <span>{'إلى '}</span>
             <span>{toDate}</span>
           </p>
         </div>
         <div style={{ flex: 1 }}>
-          <p style={{ margin: 0 }}>{"1/1"}</p>
+          <p style={{ margin: 0 }}>1/1</p>
           <p style={{ margin: 0 }}>{new Date().toDateString()}</p>
         </div>
       </div>
-    );
-  };
-  const renderCommissaryDetailsDiv = (CommissaryName = "", representativeCode = '') => (
-    <div style={{ display: "flex", margin: "5px 0" }}>
-      <div style={{ width: "70%" }}>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <p style={{ margin: 0, marginRight: "15%", minWidth: 80 }}>
-            {"أسم المندوب :"}
+    )
+  }
+  const renderCommissaryDetailsDiv = (CommissaryName = '') => (
+    <div style={{ display: 'flex', margin: '5px 0' }}>
+      <div style={{ width: '70%' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <p style={{ margin: 0, marginRight: '15%', minWidth: 80 }}>
+            أسم المندوب :
           </p>
           <div
             style={{
-              backgroundColor: "darkgrey",
-              border: "1px solid black",
+              backgroundColor: 'darkgrey',
+              border: '1px solid black',
               minWidth: 320,
-              textAlign: "right",
+              textAlign: 'right',
               paddingRight: 5,
               marginRight: 2,
             }}
@@ -97,9 +98,9 @@ const UnpaidInstallmentsByOfficer = (
           </div> */}
         </div>
       </div>
-      <div style={{ width: "30%" }} />
+      <div style={{ width: '30%' }} />
     </div>
-  );
+  )
   const renderSummary = (
     type,
     name,
@@ -109,31 +110,31 @@ const UnpaidInstallmentsByOfficer = (
     totalrequiredAmount
   ) => {
     return (
-      <div style={{ margin: "2px 0" }}>
+      <div style={{ margin: '2px 0' }}>
         <div className="lineStroke" />
-        <div style={{ display: "flex", margin: "4px 0" }}>
-          <div style={{ flex: 1, display: "flex", alignItems: "center" }}>
-            {type === "Total" ? (
+        <div style={{ display: 'flex', margin: '4px 0' }}>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+            {type === 'Total' ? (
               <span style={{ marginLeft: 4, minWidth: 130 }}>
-                {"الإجمالي العام : "}
+                {'الإجمالي العام : '}
               </span>
             ) : (
-              <Fragment>
+              <>
                 <span style={{ marginLeft: 4, minWidth: 60 }}>
-                  {"إجمالي : "}
+                  {'إجمالي : '}
                 </span>
                 <span style={{ marginLeft: 4, minWidth: 70 }}>
-                  {"المندوب : "}
+                  {'المندوب : '}
                 </span>
-              </Fragment>
+              </>
             )}
 
             <div
               style={{
-                backgroundColor: "darkgrey",
-                border: "1px solid black",
+                backgroundColor: 'darkgrey',
+                border: '1px solid black',
                 minWidth: 330,
-                textAlign: "right",
+                textAlign: 'right',
                 paddingRight: 2,
                 marginLeft: 4,
               }}
@@ -142,8 +143,8 @@ const UnpaidInstallmentsByOfficer = (
             </div>
             <div
               style={{
-                border: "1px solid black",
-                textAlign: "center",
+                border: '1px solid black',
+                textAlign: 'center',
                 minWidth: 80,
                 marginLeft: 4,
               }}
@@ -152,8 +153,8 @@ const UnpaidInstallmentsByOfficer = (
             </div>
             <div
               style={{
-                border: "1px solid black",
-                textAlign: "center",
+                border: '1px solid black',
+                textAlign: 'center',
                 minWidth: 80,
                 marginLeft: 4,
               }}
@@ -162,18 +163,18 @@ const UnpaidInstallmentsByOfficer = (
             </div>
             <div
               style={{
-                border: "1px solid black",
-                textAlign: "center",
+                border: '1px solid black',
+                textAlign: 'center',
                 minWidth: 80,
                 marginLeft: 4,
               }}
             >
-              {paidAmounts ? paidAmounts : 0}
+              {paidAmounts || 0}
             </div>
             <div
               style={{
-                border: "1px solid black",
-                textAlign: "center",
+                border: '1px solid black',
+                textAlign: 'center',
                 minWidth: 80,
               }}
             >
@@ -184,8 +185,8 @@ const UnpaidInstallmentsByOfficer = (
         </div>
         <div className="lineStroke" />
       </div>
-    );
-  };
+    )
+  }
   const renderTableBody = (array) => {
     return (
       <tbody>
@@ -201,44 +202,44 @@ const UnpaidInstallmentsByOfficer = (
               <td>{el.requiredAmount}</td>
               <td>{el.branchName}</td>
             </tr>
-          );
+          )
         })}
       </tbody>
-    );
-  };
+    )
+  }
   const renderTable = (data) => {
     return (
       <table className="table">
         <thead>
           <tr>
-            <th>{"أسم العميل"}</th>
-            <th>{"ت الإستحقاق"}</th>
-            <th>{"رقم القسط"}</th>
-            <th>{"حالة القسط"}</th>
-            <th>{"قيمة القسط"}</th>
-            <th>{"مسدد"}</th>
-            <th>{"المستحق"}</th>
-            <th>{"إسم الفرع"}</th>
+            <th>أسم العميل</th>
+            <th>ت الإستحقاق</th>
+            <th>رقم القسط</th>
+            <th>حالة القسط</th>
+            <th>قيمة القسط</th>
+            <th>مسدد</th>
+            <th>المستحق</th>
+            <th>إسم الفرع</th>
           </tr>
         </thead>
         {renderTableBody(data)}
       </table>
-    );
-  };
+    )
+  }
   const renderCommissaryData = (offficer) => {
     return (
       <div className="CommissaryDiv">
         {renderCommissaryDetailsDiv(
           offficer.unpaidInstallmentsByOfficerTotal.representativeName
             ? offficer.unpaidInstallmentsByOfficerTotal.representativeName
-            : "--"
+            : '--'
         )}
         {renderTable(offficer.unpaidInstallmentsByOfficerRows)}
         {renderSummary(
-          "offficer",
+          'offficer',
           offficer.unpaidInstallmentsByOfficerTotal.representativeName
             ? offficer.unpaidInstallmentsByOfficerTotal.representativeName
-            : "--",
+            : '--',
           offficer.unpaidInstallmentsByOfficerTotal.count,
           offficer.unpaidInstallmentsByOfficerTotal.installmentAmounts,
           offficer.unpaidInstallmentsByOfficerTotal.paidAmounts
@@ -247,37 +248,37 @@ const UnpaidInstallmentsByOfficer = (
           offficer.unpaidInstallmentsByOfficerTotal.requiredAmounts
         )}
       </div>
-    );
-  };
+    )
+  }
   const calculateTotal = (data, key) => {
-    let total = 0;
-    if(data){
+    let total = 0
+    if (data) {
       data.forEach((el) => {
         if (el.unpaidInstallmentsByOfficerTotal[key]) {
-          total += el.unpaidInstallmentsByOfficerTotal[key];
+          total += el.unpaidInstallmentsByOfficerTotal[key]
         }
-      });
+      })
     }
-    return total;
-  };
+    return total
+  }
   const renderData = ({ data, fromDate, toDate }) => {
-    const _data = data.response;
+    const _data = data.response
     return (
       <div className="unpaidInstallmentsByOfficer" dir="rtl" lang="ar">
         {renderHeader(fromDate, toDate)}
         {_data ? _data.map((offficer) => renderCommissaryData(offficer)) : null}
         {renderSummary(
-          "Total",
+          'Total',
           null,
-          calculateTotal(_data, "count"),
-          calculateTotal(_data, "installmentAmounts"),
-          calculateTotal(_data, "paidAmounts"),
-          calculateTotal(_data, "requiredAmounts")
+          calculateTotal(_data, 'count'),
+          calculateTotal(_data, 'installmentAmounts'),
+          calculateTotal(_data, 'paidAmounts'),
+          calculateTotal(_data, 'requiredAmounts')
         )}
       </div>
-    );
-  };
-  return renderData(props);
-};
+    )
+  }
+  return renderData(props)
+}
 
-export default UnpaidInstallmentsByOfficer;
+export default UnpaidInstallmentsByOfficer

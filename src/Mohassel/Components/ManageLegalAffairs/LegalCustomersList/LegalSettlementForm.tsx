@@ -1,6 +1,8 @@
 import React, { FunctionComponent, useState } from 'react'
 
-import { Card, Form } from 'react-bootstrap'
+import Card from 'react-bootstrap/Card'
+import Form from 'react-bootstrap/Form'
+
 import Swal from 'sweetalert2'
 
 import local from '../../../../Shared/Assets/ar.json'
@@ -118,8 +120,8 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
   )
 
   return (
-    <Card className="main-card hide-card-styles">
-      <Card.Body>
+    <Card className="m-0 border-0">
+      <Card.Body className="p-0">
         <Loader type="fullsection" open={isSubmitting} />
 
         {renderCustomerDetails()}
@@ -130,8 +132,8 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
           onSubmit={handleSubmit}
           defaultValues={{
             ...defaultValues,
-            ...settlementInfo,
             ...customerSettlement,
+            ...settlementInfo,
           }}
           options={{
             renderPairs: true,

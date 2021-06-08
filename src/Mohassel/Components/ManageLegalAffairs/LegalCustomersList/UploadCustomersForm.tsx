@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 
 import * as Yup from 'yup'
 
+import Swal from 'sweetalert2'
 import local from '../../../../Shared/Assets/ar.json'
 import { uploadDefaultingCustomer } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
-import Swal from 'sweetalert2'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
 import {
   UploadLegalCustomerResponse,

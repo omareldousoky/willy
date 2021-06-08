@@ -10,14 +10,14 @@ import {
 
 import { SettledCustomer } from '../../ManageLegalAffairs/types'
 import { Header } from '../pdfTemplateCommon/header'
-import { Managers } from '../../managerHierarchy/branchBasicsCard'
+import { Managers } from '../../managerHierarchy/types'
 
 const LegalSettlement = ({
   customer,
   branchName,
 }: {
-  customer: SettledCustomer;
-  branchName: string;
+  customer: SettledCustomer
+  branchName: string
 }) => {
   const customerSettlement = customer.settlement
   const managers = customer.managerHierarchy ?? ({} as Managers)
@@ -117,7 +117,7 @@ const LegalSettlement = ({
         </div>
       </div>
 
-      <div style={{ height: '10em' }}></div>
+      <div style={{ height: '10em' }} />
 
       <table className="w-100">
         <thead>
@@ -129,7 +129,7 @@ const LegalSettlement = ({
           </tr>
         </thead>
 
-        <div style={{ height: '1.5em' }}></div>
+        <div style={{ height: '1.5em' }} />
 
         <tbody>
           <tr className="text-center">
@@ -141,7 +141,7 @@ const LegalSettlement = ({
         </tbody>
       </table>
 
-      <div style={{ height: '10em' }}></div>
+      <div style={{ height: '10em' }} />
 
       <footer className="d-flex">
         <span className="mr-3">** يجب إرفاق الاتى :</span>

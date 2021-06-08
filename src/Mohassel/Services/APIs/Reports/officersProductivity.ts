@@ -1,9 +1,9 @@
 import { AxiosResponse } from 'axios'
 import { ApiResponse } from '../../../Models/common'
-import { 
-	CurrentHierarchiesResponse, 
-	OfficersProductivityRequest, 
-	OfficersProductivityResponse 
+import {
+  CurrentHierarchiesResponse,
+  OfficersProductivityRequest,
+  OfficersProductivityResponse,
 } from '../../../Models/OfficersProductivityReport'
 import axios from '../axios-instance'
 
@@ -32,7 +32,7 @@ export const getOfficersProductivityReportById = async (
   try {
     const res: AxiosResponse<OfficersProductivityResponse> = await axios.get(
       fetchOfficersProductivityUrl + `/${id}`
-      )
+    )
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
@@ -41,9 +41,7 @@ export const getOfficersProductivityReportById = async (
 
 export const getOfficersProductivityReports = async () => {
   try {
-    const res: AxiosResponse = await axios.get(
-      fetchOfficersProductivityUrl
-    )
+    const res: AxiosResponse = await axios.get(fetchOfficersProductivityUrl)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
