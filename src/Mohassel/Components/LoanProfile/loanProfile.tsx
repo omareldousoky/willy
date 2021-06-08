@@ -76,12 +76,8 @@ import {
 import { FieldProps } from '../../../Shared/Components/Profile/types'
 import SmeLoanContract from '../pdfTemplates/smeLoanContract'
 import { Score } from '../CustomerCreation/customerProfile'
-
-interface EarlyPayment {
-  remainingPrincipal?: number
-  requiredAmount?: number
-  earlyPaymentFees?: number
-}
+import { EarlyPayment } from '../../Models/Payment'
+import { getEarlyPaymentPdfData } from './utils'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -1449,7 +1445,10 @@ class LoanProfile extends Component<Props, State> {
         {this.state.print === 'earlyPayment' && (
           <EarlyPaymentPDF
             data={this.state.application}
-            earlyPaymentData={this.state.earlyPaymentData}
+            earlyPaymentPdfData={getEarlyPaymentPdfData(
+              this.state.application,
+              this.state.earlyPaymentData?.remainingPrincipal
+            )}
             branchDetails={this.state.branchDetails}
           />
         )}
