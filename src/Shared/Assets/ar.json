@@ -1104,10 +1104,10 @@
   "maxLength20": "لا يمكن ان يكون اكثر من 20",
   "lengthShouldBe9": "رقم البطاقة يجب ان يكون 9 ارقام",
   "duplicateCompanyNumberMessage": "رقم البطاقة موجود بالفعل لشركة اخرى",
+  "moveCompanies": "نقل الشركات",
   "accusedName": "اسم المتهم",
   "judgeList": "قائمة الأحكام",
   "dateRangeErrorMessage": "تاريخ الي يجب ان يكون بعد تاريخ من",
   "finalVerdict": "الحكم",
-  "moveCompanies": "نقل الشركات",
   "finalConfinementNumber": "اخر حصر"
 }
