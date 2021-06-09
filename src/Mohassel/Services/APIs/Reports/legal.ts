@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../axios-instance'
 import { ConvictedReportRequest } from '../../../Components/ManageLegalAffairs/types'
 
 export const getConvictedReport = async (reqBody: ConvictedReportRequest) => {
