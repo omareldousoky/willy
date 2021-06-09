@@ -54,7 +54,7 @@ const LegalJudge = ({
   ]
 
   return (
-    <div className="min-vh-100 w-75 mx-auto p-2 font-weight-bold template-container">
+    <div className="min-vh-100 w-75 mx-auto p-2 font-weight-bold legal-judge-container">
       <header>
         <Header title="" showCurrentUser={false} showCurrentTime={false} />
         <h1 className="mb-4 font-weight-bold">
