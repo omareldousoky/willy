@@ -81,6 +81,12 @@ const customerActionsFields: FormField[] = [
     validation: defaultValidationSchema,
   },
   {
+    name: 'caseStatusSummary',
+    type: 'text',
+    label: local.caseStatusSummary,
+    validation: defaultValidationSchema,
+  },
+  {
     name: 'finalConfinementNumber',
     type: 'text',
     label: local.finalConfinementNumber,
@@ -96,12 +102,6 @@ const customerActionsFields: FormField[] = [
     name: 'finalVerdictDate',
     type: 'date',
     label: local.finalVerdictDate,
-    validation: defaultValidationSchema,
-  },
-  {
-    name: 'caseStatusSummary',
-    type: 'text',
-    label: local.caseStatusSummary,
     validation: defaultValidationSchema,
   },
 ]
