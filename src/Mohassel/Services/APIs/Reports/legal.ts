@@ -1,7 +1,7 @@
 import axios from "axios"
-import { ConvictedReportReqBody } from "../../../Components/ManageLegalAffairs/types"
+import { ConvictedReportRequest } from "../../../Components/ManageLegalAffairs/types"
 
-export const getConvictedReport = async (reqBody: ConvictedReportReqBody) => {
+export const getConvictedReport = async (reqBody: ConvictedReportRequest) => {
   const url = process.env.REACT_APP_BASE_URL + '/report/convicted-clients'
 
   try {

@@ -32,7 +32,7 @@ import Search from '../../../../Shared/Components/Search/search'
 import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from '../manageLegalAffairsInitials'
 import {
-  ConvictedReportReqBody,
+  ConvictedReportRequest,
   JudgeCustomersFormValues,
   ManagerReviewEnum,
   ReviewReqBody,
@@ -322,7 +322,7 @@ const LegalCustomersList: FunctionComponent = () => {
       dateRange: { from: startDate, to: endDate },
     } = values
 
-    const reqBody: ConvictedReportReqBody = {
+    const reqBody: ConvictedReportRequest = {
       governorate,
       policeStation,
       startDate: startDate ? new Date(startDate).valueOf() : 0,

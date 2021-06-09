@@ -5,7 +5,7 @@ import {
 } from '../../../Components/ManageLegalAffairs/defaultingCustomersList'
 
 import {
-  ConvictedReportReqBody,
+  ConvictedReportRequest,
   LegalActionsForm,
   ReviewReqBody,
 } from '../../../Components/ManageLegalAffairs/types'

@@ -80,7 +80,7 @@ export interface ReviewReqBody {
   ids: string[]
 }
 
-export interface ConvictedReportReqBody {
+export interface ConvictedReportRequest {
   startDate: number
   endDate: number
   governorate: string
