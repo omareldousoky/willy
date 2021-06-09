@@ -501,7 +501,7 @@ class LoanProfile extends Component<Props, State> {
           }),
       },
       {
-        icon: 'green-download',
+        icon: 'download',
         title: local.downloadPDF,
         permission: this.state.application.status === 'created',
         onActionClick: () => {
@@ -602,7 +602,8 @@ class LoanProfile extends Component<Props, State> {
         permission:
           (ability.can('rollback', 'application') ||
             ability.can('rollbackCancelPenalities', 'application') ||
-            ability.can('rollbackPayment', 'application')) &&
+            ability.can('rollbackPayment', 'application') ||
+            ability.can('rollbackIssueLoan', 'application')) &&
           !['reviewed', 'underReview'].includes(this.state.application.status),
         onActionClick: () =>
           this.props.history.push('/track-loan-applications/loan-roll-back', {

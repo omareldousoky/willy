@@ -127,10 +127,10 @@ const LoanContractForGroup = (props) => {
                               <td>
                                 <div>
                                   <span>
-                                    السيدة
+                                    السيدة&nbsp;
                                     {individualInGroup.customer.customerName}
                                     {individualInGroup.type === 'leader'
-                                      ? '(رئيس المجموعة)'
+                                      ? ' (رئيس المجموعة)'
                                       : ''}
                                   </span>
                                 </div>
@@ -141,7 +141,7 @@ const LoanContractForGroup = (props) => {
                               </td>
                               <td style={{ width: '30%' }}>
                                 <div>
-                                  <b>عنوان المنزل:</b>
+                                  <b>عنوان المنزل:&nbsp;</b>
                                   <span>
                                     {
                                       individualInGroup.customer
@@ -227,7 +227,7 @@ const LoanContractForGroup = (props) => {
                                 <td>
                                   <div>
                                     <span>
-                                      السيدة
+                                      السيدة&nbsp;
                                       {individualInGroup.customer.customerName}
                                     </span>
                                   </div>
