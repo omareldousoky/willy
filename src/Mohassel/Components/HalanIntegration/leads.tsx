@@ -252,24 +252,6 @@ class Leads extends Component<Props, State> {
                     </div>
                   </Can>
                 )}
-                {data.status === 'submitted' && (
-                  <Can I="reviewLead" a="halanuser">
-                    <div
-                      className="item"
-                      onClick={() =>
-                        this.changeLeadState(
-                          data.phoneNumber,
-                          data.status,
-                          data.inReviewStatus,
-                          'in-review',
-                          'secondApproval'
-                        )
-                      }
-                    >
-                      {local.acceptSecondVisit}
-                    </div>
-                  </Can>
-                )}
                 <Can I="leadInReviewStatus" a="halanuser">
                   <div
                     className="item"
