@@ -44,7 +44,6 @@ import {
 import { DefaultedCustomer, ManagerReviews } from '../defaultingCustomersList'
 import LegalSettlementForm from './LegalSettlementForm'
 import {
-  getConvictedReport,
   getSettlementFees,
   reviewLegalCustomer,
 } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
@@ -63,6 +62,7 @@ import {
 } from '../utils'
 import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
 import LegalJudgePdfTemp from '../../pdfTemplates/LegalJudge.tsx'
+import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
