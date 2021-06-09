@@ -61,7 +61,7 @@ import {
   renderCourtField,
 } from '../utils'
 import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
-import LegalJudgePdfTemp from '../../pdfTemplates/LegalJudge'
+import LegalJudgePdf from '../../pdfTemplates/LegalJudge'
 import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
 
 const LegalCustomersList: FunctionComponent = () => {
@@ -789,7 +789,7 @@ const LegalCustomersList: FunctionComponent = () => {
         !!convictedReportInfo.governorate &&
         !!convictedReportInfo.policeStation &&
         judgeActors.map((actor, index) => (
-          <LegalJudgePdfTemp
+          <LegalJudgePdf
             key={index}
             actor={actor}
             customers={customersForConvictedReport}
