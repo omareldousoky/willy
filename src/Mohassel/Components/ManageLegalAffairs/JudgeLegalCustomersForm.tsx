@@ -77,7 +77,7 @@ const JudgeLegalCustomersForm = ({
         {
           type: 'date',
           name: 'from',
-          label: local.from,
+          label: `${local.from} ${local.finalVerdictDate}`,
           validation: Yup.date()
             .required(local.required)
             .when(
@@ -89,7 +89,7 @@ const JudgeLegalCustomersForm = ({
         {
           type: 'date',
           name: 'to',
-          label: local.to,
+          label: `${local.to} ${local.finalVerdictDate}`,
           validation: Yup.date()
             .required(local.required)
             .when(

@@ -1111,7 +1111,7 @@
   "judgeList": "قائمة الأحكام",
   "dateRangeErrorMessage": "تاريخ الي يجب ان يكون بعد تاريخ من",
   "theVerdict": "الحكم",
-  "finalConfinementNumber": "اخر حصر",
+  "finalConfinementNumber": "رقم الحصر النهائي",
   "theConfinement": "الحصر",
   "courtCaseNumber":"رقم الجنحه"
 }
