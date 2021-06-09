@@ -497,7 +497,7 @@ class LoanProfile extends Component<Props, State> {
           }),
       },
       {
-        icon: 'green-download',
+        icon: 'download',
         title: local.downloadPDF,
         permission: this.state.application.status === 'created',
         onActionClick: () => {

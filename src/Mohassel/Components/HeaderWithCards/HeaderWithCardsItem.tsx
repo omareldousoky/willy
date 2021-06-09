@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react'
+import { LtsIcon } from '../../../Shared/Components'
 import { Tab } from './headerWithCards'
 
 export type CardSize = 'lg' | 'sm'
@@ -29,14 +30,13 @@ const CardItem: FunctionComponent<CardItemProps> = ({
 }) => (
   <div onClick={onClick} className={`card-item ${isActive ? 'active' : ''}`}>
     {icon && (
-      <img
-        alt="icon"
-        src={
-          isActive
-            ? require(`../../Assets/${icon}-active.svg`)
-            : require(`../../Assets/${icon}-inactive.svg`)
-        }
-      />
+      <div className="mx-3">
+        <LtsIcon
+          name={icon}
+          size="35px"
+          color={isActive ? '#7dc356' : '#2f2f2f'}
+        />
+      </div>
     )}
     <div>
       <h5 className={getSizeClassName(size)}>{header}</h5>
