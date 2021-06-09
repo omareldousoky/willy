@@ -1105,6 +1105,8 @@
   "lengthShouldBe9": "رقم البطاقة يجب ان يكون 9 ارقام",
   "duplicateCompanyNumberMessage": "رقم البطاقة موجود بالفعل لشركة اخرى",
   "moveCompanies": "نقل الشركات",
+  "finalVerdict": "حكم نهائي",
+  "finalVerdictDate": "تاريخ حكم نهائي",
   "accusedName": "اسم المتهم",
   "judgeList": "قائمة الأحكام",
   "dateRangeErrorMessage": "تاريخ الي يجب ان يكون بعد تاريخ من",

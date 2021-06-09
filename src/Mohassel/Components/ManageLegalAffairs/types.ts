@@ -23,6 +23,9 @@ export interface LegalActionsForm {
   caseStatus: string
   finalConfinementNumber
   caseStatusSummary: string
+
+  finalVerdictDate: number
+  finalVerdict: string
 }
 
 export interface SearchFilters {
