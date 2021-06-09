@@ -7,6 +7,7 @@ import {
   SettledCustomer,
   SettlementFormValues,
 } from '../../ManageLegalAffairs/types'
+import { Header } from '../pdfTemplateCommon/header'
 
 import './style.scss'
 
@@ -55,6 +56,7 @@ const LegalJudge = ({
   return (
     <div className="min-vh-100 w-75 mx-auto p-2 font-weight-bold template-container">
       <header>
+        <Header title="" showCurrentUser={false} showCurrentTime={false} />
         <h1 className="mb-4 font-weight-bold">
           <u>السيد / {actor}</u>
         </h1>
