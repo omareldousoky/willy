@@ -633,6 +633,7 @@ class Search extends Component<Props, State> {
                 if (searchKey === 'leads-status') {
                   return this.statusDropdown(formikProps, index, [
                     { value: '', text: local.all },
+                    { value: 'in-review', text: local.underReview },
                     { value: 'submitted', text: local.submitted },
                     { value: 'approved', text: local.approved },
                     { value: 'rejected', text: local.rejected },
