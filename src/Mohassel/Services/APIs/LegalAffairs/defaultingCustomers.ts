@@ -5,7 +5,6 @@ import {
 } from '../../../Components/ManageLegalAffairs/defaultingCustomersList'
 
 import {
-  ConvictedReportRequest,
   LegalActionsForm,
   ReviewReqBody,
 } from '../../../Components/ManageLegalAffairs/types'
@@ -157,4 +156,3 @@ export const deleteSettlementDocument = async (
     return { status: 'error', error: error.response.data }
   }
 }
-
