@@ -61,7 +61,7 @@ import {
   renderCourtField,
 } from '../utils'
 import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
-import LegalJudgePdfTemp from '../../pdfTemplates/LegalJudge.tsx'
+import LegalJudgePdfTemp from '../../pdfTemplates/LegalJudge'
 import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
 
 const LegalCustomersList: FunctionComponent = () => {
