@@ -58,7 +58,7 @@ import {
 import { getBranch } from '../../../Services/APIs/Branch/getBranch'
 import managerTypes from '../configs/managerTypes'
 import { handleUpdateSuccess } from '../utils'
-import LegalHistory from './legalHistory'
+import LegalHistory from './LegalHistory'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
