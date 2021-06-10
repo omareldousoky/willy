@@ -21,7 +21,11 @@ export interface LegalActionsForm {
 
   misdemeanorAppealNumber: string
   caseStatus: string
+  finalConfinementNumber
   caseStatusSummary: string
+
+  finalVerdictDate: number
+  finalVerdict: string
 }
 
 export interface SearchFilters {
@@ -74,6 +78,13 @@ export interface ReviewReqBody {
   type: ManagerReviewEnum
   notes: string
   ids: string[]
+}
+
+export interface ConvictedReportRequest {
+  startDate: number
+  endDate: number
+  governorate: string
+  policeStation: string
 }
 
 export type Settlement = SettlementFormValues & ManagerReviews
@@ -135,4 +146,13 @@ export interface UploadLegalCustomerResponse {
 export interface UploadLegalCustomersProps {
   onSubmit: (areAllSucceeded: boolean) => void
   onCancel: () => void
+}
+
+export interface JudgeCustomersFormValues {
+  governorate: string
+  policeStation: string
+  dateRange: {
+    from: string
+    to: string
+  }
 }
