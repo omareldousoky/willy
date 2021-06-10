@@ -1107,6 +1107,6 @@
   "downloadHistory":"تنزيل السجلات",
   "finalVerdict":"الحكم النهائي",
   "finalVerdictDate":"تاريخ الحكم النهائي",
-  "finalConfinementNumber":"أخر حصر",
+  "finalConfinementNumber": "رقم الحصر النهائي",
   "managerReviews":"مراجعات الميديرين"
 }

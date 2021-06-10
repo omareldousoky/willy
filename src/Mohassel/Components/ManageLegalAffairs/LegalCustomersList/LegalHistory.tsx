@@ -56,7 +56,23 @@ const LegalHistory = (props: Props) => {
                       <td>{log.loanKey}</td>
                     </tr>
                     <tr>
-                      <th className="w-25">{local.settlementStatus}</th>
+                      <th className="w-25">{local.court}</th>
+                      <td>{log.court}</td>
+                    </tr>
+                    <tr>
+                      <th className="w-25">{local.finalVerdict}</th>
+                      <td>{log.finalVerdict}</td>
+                    </tr>
+                    <tr>
+                      <th className="w-25">{local.finalVerdictDate}</th>
+                      <td>
+                        {log.finalVerdictDate
+                          ? timeToArabicDate(log.finalVerdictDate, false)
+                          : ''}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th className="w-25">{local.judgementStatus}</th>
                       <td>{local[log.status]}</td>
                     </tr>
                     <tr>
@@ -103,7 +119,7 @@ const LegalHistory = (props: Props) => {
                       <th>{local.firstCourtSession}</th>
                       <td>
                         {log.firstCourtSession?.date
-                          ? timeToArabicDate(log.firstCourtSession?.date, true)
+                          ? timeToArabicDate(log.firstCourtSession?.date, false)
                           : ''}
                       </td>
                       <td>{log.firstCourtSession?.decision}</td>
@@ -113,7 +129,7 @@ const LegalHistory = (props: Props) => {
                       <th>{local.oppositionSession}</th>
                       <td>
                         {log.oppositionSession?.date
-                          ? timeToArabicDate(log.oppositionSession?.date, true)
+                          ? timeToArabicDate(log.oppositionSession?.date, false)
                           : ''}
                       </td>
                       <td>{log.oppositionSession?.decision}</td>
@@ -125,7 +141,7 @@ const LegalHistory = (props: Props) => {
                         {log.oppositionAppealSession?.date
                           ? timeToArabicDate(
                               log.oppositionAppealSession?.date,
-                              true
+                              false
                             )
                           : ''}
                       </td>
@@ -138,7 +154,7 @@ const LegalHistory = (props: Props) => {
                         {log.misdemeanorAppealSession?.date
                           ? timeToArabicDate(
                               log.misdemeanorAppealSession?.date,
-                              true
+                              false
                             )
                           : ' '}
                       </td>
@@ -200,29 +216,6 @@ const LegalHistory = (props: Props) => {
                           : ''}
                       </td>
                       <td>{log.financialManagerReview?.notes}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <table title="current-managers">
-                  <thead>
-                    <th>{local.managers}</th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th className="w-25">{local.branchManager}</th>
-                      <td>{log.managerHierarchy?.branchManager}</td>
-                    </tr>
-                    <tr>
-                      <th className="w-25">{local.districtManager}</th>
-                      <td>{log.managerHierarchy?.areaManager}</td>
-                    </tr>
-                    <tr>
-                      <th className="w-25">{local.districtSupervisor}</th>
-                      <td>{log.managerHierarchy?.areaSupervisor}</td>
-                    </tr>
-                    <tr>
-                      <th className="w-25">{local.operationsManager}</th>
-                      <td>{log.managerHierarchy?.operationsManager}</td>
                     </tr>
                   </tbody>
                 </table>
