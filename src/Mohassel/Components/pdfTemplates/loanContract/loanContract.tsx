@@ -169,13 +169,13 @@ const LoanContract = (props) => {
                       <tr>
                         <td>
                           <div>
-                            <b>ثانيا:- السيد :-</b>
+                            <b>ثانيا:- السيد :-&nbsp;</b>
                             <span>{props.data.customer.customerName}</span>
                           </div>
                         </td>
                         <td style={{ width: '30%' }}>
                           <div>
-                            <b>الكائن:</b>
+                            <b>الكائن:&nbsp;</b>
                             <span>
                               {props.data.customer.customerHomeAddress}
                             </span>
@@ -220,13 +220,16 @@ const LoanContract = (props) => {
                             <tr>
                               <td>
                                 <div>
-                                  <b>{getIndexInArabic(index)[0]}:- السيد :-</b>
+                                  <b>
+                                    {getIndexInArabic(index)[0]}:- السيد
+                                    :-&nbsp;
+                                  </b>
                                   <span>{guarantor.customerName}</span>
                                 </div>
                               </td>
                               <td>
                                 <div>
-                                  <b>الكائن:</b>
+                                  <b>الكائن:&nbsp;</b>
                                   <span>{guarantor.customerHomeAddress}</span>
                                 </div>
                               </td>

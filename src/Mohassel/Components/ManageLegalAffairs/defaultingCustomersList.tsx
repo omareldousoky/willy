@@ -256,7 +256,7 @@ class DefaultingCustomersList extends Component<Props, State> {
         title: local.date,
         key: 'creationDate',
         render: (data) =>
-          data.created.at ? timeToArabicDate(data.created.at, true) : '',
+          data.created?.at ? timeToArabicDate(data.created.at, true) : '',
       },
       {
         title: local.status,
@@ -600,7 +600,7 @@ class DefaultingCustomersList extends Component<Props, State> {
   }
 
   renderIcons(data: DefaultedCustomer) {
-    const daysSince = this.getRecordAgeInDays(data.created.at)
+    const daysSince = this.getRecordAgeInDays(data.created?.at)
     return (
       <>
         {(data.branchManagerReview ||

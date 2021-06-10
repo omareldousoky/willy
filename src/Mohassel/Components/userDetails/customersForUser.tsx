@@ -20,24 +20,17 @@ import * as local from '../../../Shared/Assets/ar.json'
 import Can from '../../config/Can'
 import { UserDateValues } from './userDetailsInterfaces'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
-import { LoanOfficer } from '../../../Shared/Services/interfaces'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import { Customer, LoanOfficer } from '../../../Shared/Services/interfaces'
+import {
+  beneficiaryType,
+  getErrorMessage,
+} from '../../../Shared/Services/utils'
 import { theme } from '../../../Shared/theme'
 
 interface Props {
   id: string
   name: string
   user: UserDateValues
-}
-interface Customer {
-  customerName?: string
-  key?: number
-  _id?: string
-  branchId?: string
-  blocked?: {
-    isBlocked: boolean
-    reason?: string
-  }
 }
 
 interface Branch {
@@ -358,6 +351,7 @@ class CustomersForUser extends Component<Props, State> {
                 <th>{local.customerCode}</th>
                 <th>{local.customerName}</th>
                 <th>{local.representative}</th>
+                <th>{local.customerType}</th>
               </tr>
             </thead>
             <tbody>
@@ -386,6 +380,10 @@ class CustomersForUser extends Component<Props, State> {
                     <td>{customer.key}</td>
                     <td>{customer.customerName}</td>
                     <td>{this.props.name}</td>
+                    <td>
+                      {customer.customerType &&
+                        beneficiaryType(customer.customerType)}
+                    </td>
                   </tr>
                 )
               })}
