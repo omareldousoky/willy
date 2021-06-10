@@ -499,23 +499,5 @@ export interface LegalHistoryResponse {
       date: number
       decision: string
     }
-    managerHierarchy?: {
-      areaManager?: {
-        id?: string
-        name?: string
-      }
-      areaSupervisor?: {
-        id?: string
-        name?: string
-      }
-      branchManager?: {
-        id?: string
-        name?: string
-      }
-      operationsManager?: {
-        id?: string
-        name?: string
-      }
-    }
   }[]
 }
