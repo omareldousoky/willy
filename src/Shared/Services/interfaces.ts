@@ -423,79 +423,81 @@ export interface TerroristUnResponse {
   }
 }
 export interface LegalHistoryResponse {
-  _id: string
-  customerId: string
-  loanId: string
-  customerName: string
-  nationalId: string
-  customerKey: number
-  customerBranchId: string
-  status: string
-  customerType: string
-  created?: {
-    by?: string
-    at?: number
-    userName?: string
-  }
-  updated?: {
-    by?: string
-    at?: number
-    userName?: string
-  }
-  branchManagerReview?: {
-    by?: string
-    at?: number
-    userName?: string
-    notes?: string
-  }
-  areaSupervisorReview?: {
-    by?: string
-    at?: number
-    userName: string
-    notes?: string
-  }
-  areaManagerReview?: {
-    by?: string
-    at?: number
-    userName: string
-    notes?: string
-  }
-  financialManagerReview?: {
-    by?: string
-    at?: number
-    userName: string
-    notes?: string
-  }
-  active: true
-  loanKey: 114470007535001
-  settlement?: {
-    created: {
+  history: {
+    _id: string
+    customerId: string
+    loanId: string
+    customerName: string
+    nationalId: string
+    customerKey: number
+    customerBranchId: string
+    statementOfClaim: string
+    status: string
+    statusNumber: string
+    customerType: string
+    created?: {
       by?: string
       at?: number
       userName?: string
     }
-    caseNumber?: string
-    caseYear?: string
-    court?: string
-    courtDetails?: string
-    lawyerName?: string
-    lawyerPhoneNumberOne?: string
-    settlementType?: string
-    settlementStatus?: string
-    penaltyFees?: number
-    courtFees?: number
-    penaltiesPaid?: boolean
-    courtFeesPaid?: boolean
     updated?: {
       by?: string
       at?: number
+      userName?: string
+    }
+    branchManagerReview?: {
+      by?: string
+      at?: number
+      userName?: string
+      notes?: string
+    }
+    areaSupervisorReview?: {
+      by?: string
+      at?: number
       userName: string
+      notes?: string
+    }
+    areaManagerReview?: {
+      by?: string
+      at?: number
+      userName: string
+      notes?: string
     }
     financialManagerReview?: {
       by?: string
       at?: number
       userName: string
       notes?: string
+    }
+    caseNumber: string
+    caseStatus: string
+    caseStatusSummary: string
+    court: string
+    active: true
+    loanKey: number
+    finalConfinementNumber: string
+    finalVerdict: string
+    finalVerdictDate: number
+    misdemeanorAppealNumber: string
+    firstCourtSession?: {
+      date: number
+      decision: string
+      confinementNumber: string
+    }
+    misdemeanorAppealSession: {
+      confinementNumber: string
+      date: number
+      decision: string
+    }
+    oppositionSession?: {
+      confinementNumber: string
+      date: number
+      decision: string
+    }
+    oppositionAppealSession?: {
+      confinementNumber: string
+      date: number
+      decision: string
     }
     managerHierarchy?: {
       areaManager?: {
@@ -515,5 +517,5 @@ export interface LegalHistoryResponse {
         name?: string
       }
     }
-  }
+  }[]
 }

@@ -93,7 +93,6 @@ const LegalCustomersList: FunctionComponent = () => {
 
   const [isSettlementLoading, setIsSettlementLoading] = useState(false)
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
-  const [printHistory, setPrintHistory] = useState(false)
   const [historyData, setHistoryData] = useState<LegalHistoryResponse | null>(
     null
   )
@@ -144,15 +143,15 @@ const LegalCustomersList: FunctionComponent = () => {
   }, [customerForPrint])
 
   useEffect(() => {
-    if (branchForPrint || printHistory) {
+    if (branchForPrint || historyData) {
       window.print()
     }
     window.onafterprint = () => {
       setCustomerForPrint(null)
       setBranchForPrint(null)
-      setPrintHistory(false)
+      setHistoryData(null)
     }
-  }, [branchForPrint, printHistory])
+  }, [branchForPrint, historyData])
 
   useEffect(() => {
     const fetchSettlementFees = async () => {
@@ -311,10 +310,11 @@ const LegalCustomersList: FunctionComponent = () => {
     const response = await getLegalHistory(legalId)
     setIsSettlementLoading(true)
     if (response.status === 'success') {
-      if (response.body && response.body !== {}) {
-        setPrintHistory(true)
+      const resBody: LegalHistoryResponse = response.body as LegalHistoryResponse
+      if (resBody.history && resBody?.history.length > 0) {
         setHistoryData(response.body as LegalHistoryResponse)
       } else {
+        setHistoryData(null)
         Swal.fire('', local.noLogsFound, 'info')
       }
     } else {
@@ -523,7 +523,7 @@ const LegalCustomersList: FunctionComponent = () => {
               className="btn clickable-action rounded-0 p-0 font-weight-normal text-dark"
               title={local.logs}
               onClick={async () => {
-                handleDownloadHistory(customer._id)
+                await handleDownloadHistory(customer._id)
               }}
             >
               {local.downloadHistory}
@@ -749,7 +749,7 @@ const LegalCustomersList: FunctionComponent = () => {
           customer={customerForPrint}
         />
       )}
-      {printHistory && <LegalHistory />}
+      {historyData && <LegalHistory data={historyData} />}
     </>
   )
 }

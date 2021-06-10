@@ -1104,5 +1104,9 @@
   "maxLength20": "لا يمكن ان يكون اكثر من 20",
   "lengthShouldBe9": "رقم البطاقة يجب ان يكون 9 ارقام",
   "duplicateCompanyNumberMessage": "رقم البطاقة موجود بالفعل لشركة اخرى",
-  "downloadHistory":"تنزيل السجلات"
+  "downloadHistory":"تنزيل السجلات",
+  "finalVerdict":"الحكم النهائي",
+  "finalVerdictDate":"تاريخ الحكم النهائي",
+  "finalConfinementNumber":"أخر حصر",
+  "managerReviews":"مراجعات الميديرين"
 }

@@ -1,12 +1,84 @@
 @media screen, print {
   .legal-history {
-    font-size: 10px;
-    font-weight: bold;
-    text-align: right;
     direction: rtl;
-    color: red;
     page-break-after: always;
     width: 100%;
+    padding: 0.3rem;
+    -webkit-print-color-adjust: exact;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: right;
+    & .header-wrapper {
+      display: flex;
+      margin: 10px;
+      justify-content: space-between;
+    }
+    & table {
+      width: 100vw;
+      margin: 10px auto;
+      margin-top: 1rem;
+      border-collapse: collapse;
+      page-break-inside: avoid;
+
+      & tbody {
+        page-break-inside: avoid;
+        line-height: 1.5em;
+      }
+
+      & thead {
+        display: table-row-group;
+        margin: 10px auto;
+      }
+
+      & tbody tr {
+        page-break-inside: avoid;
+      }
+
+      & tbody tr td,
+      tbody tr th {
+        font-size: 0.8rem;
+        border: 0.5px solid lightblue;
+        page-break-inside: avoid;
+        text-align: center;
+        white-space: nowrap;
+      }
+      & tbody tr th {
+        background-color: #e2ebec;
+      }
+    }
+    & p {
+      white-space: nowrap;
+    }
+    & .box {
+      border: 1px solid lightgray;
+      background-color: #f1ecec;
+      min-width: 200px;
+      height: 40px;
+      margin-right: 10px;
+      page-break-inside: avoid;
+      page-break-after: avoid;
+      -webkit-print-color-adjust: exact;
+      padding: 5px;
+    }
+    & .blue-box {
+      border: 1px solid #b8e2f3;
+      background-color: #bde0ee;
+      width: 30px;
+      height: 30px;
+      page-break-inside: avoid;
+      page-break-after: avoid;
+      -webkit-print-color-adjust: exact;
+      text-align: center;
+      font-size: 13px;
+    }
+    & .horizontal-line {
+      border-bottom: 1px solid black;
+      margin: 0.5rem auto;
+      width: 50%;
+    }
   }
 }
 @media screen {
