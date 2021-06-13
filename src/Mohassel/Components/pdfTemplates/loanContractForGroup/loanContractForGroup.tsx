@@ -433,6 +433,10 @@ const LoanContractForGroup = (props) => {
                       الاقساط في مواعيدها او توقف اعمال المشروع الممول لاي سبب
                       من الاسباب
                     </div>
+                    <div>
+                      ٧/٧ يلتزم الطرف الثاني بسداد كافة المصروفات و المصاريف
+                      القضائية بكافة انواعها
+                    </div>
                   </section>
 
                   <section style={{ pageBreakAfter: 'always' }}>
