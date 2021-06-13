@@ -49,7 +49,7 @@ export const KnowYourCustomer = ({
         </p>
         <p>
           نشـــــــــــاط الشــركـــــــــــة :-
-          {application.customer?.businessActivity ?? ""}
+          {application.customer?.businessSector ?? ""}
         </p>
         <p>
           عنــوان النشــاط تفصيلـــــي :-
@@ -91,7 +91,7 @@ export const KnowYourCustomer = ({
             </p>
             <p>
               رقــم التليفــــــون :-
-              {person.homePhoneNumber ?? ""}
+              {person.homePhoneNumber ? person.homePhoneNumber : person.businessPhoneNumber || ""}
             </p>
             <p>الصفة في النشاط :-</p>
           </div>
@@ -138,9 +138,9 @@ export const KnowYourCustomer = ({
         <h3 className="text-center my-5">إقرار بصحة البيانات</h3>
         <p>
           أقر أنا الموقع أدناه بتحمل المسئوليه القانونية عن صحة البيانات في
-          النموذج عاليه والمستندات ( وصورها ) المقدمة للشركة إقر بحق الشركة في
+          النموذج عاليه والمستندات ( وصورها ) المقدمة لشركة تساهيل للتمويل إقر بحق الشركة في
           الاتصال بالسلطات المختصة للتحقق منها في أي وقت . كما أتعهد بأنني
-          النستفيد الحقيقي من التعامل كما أتعهد بتحديث البيانات فور حدوث أي
+          المستفيد الحقيقي من التعامل كما أتعهد بتحديث البيانات فور حدوث أي
           تغيرات بها أو عند طلب الشركة ذلك .
         </p>
         <p>

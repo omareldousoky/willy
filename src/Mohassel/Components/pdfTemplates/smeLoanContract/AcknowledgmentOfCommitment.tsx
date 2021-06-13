@@ -2,6 +2,7 @@ import React from "react";
 import { guarantorOrderLocal } from "../../../../Shared/Services/utils";
 import { Header } from "../pdfTemplateCommon/header";
 import { AcknowledgmentOfCommitmentProps } from "./types";
+import Tafgeet from 'tafgeetjs';
 
 export const AcknowledgmentOfCommitment = ({
   application,
@@ -25,13 +26,13 @@ export const AcknowledgmentOfCommitment = ({
         ))}
         <div className="d-flex justify-content-between">
           <span>
-            نوع النشاط/ {application.customer?.businessActivity ?? ""}{" "}
+            نوع النشاط/ {application.customer?.businessSector ?? ""}{" "}
           </span>
           <span> فرع التعامل/ </span>
         </div>
         <p>
           بأنني قد تسلمت تمويل قدره {application.principal} جم
-          (_______________________________________________)
+          ({ new Tafgeet(application.principal, 'EGP').parse()})
         </p>
         <p>
           من شركة تساهيل للتمويل بتاريخ &emsp;/&emsp;/ &emsp; &emsp; &emsp; وذلك
