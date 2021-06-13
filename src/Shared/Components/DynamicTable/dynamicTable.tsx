@@ -144,10 +144,7 @@ const DynamicTable = (props: Props) => {
                 <tr key={index}>
                   {props.mappers?.map((mapper, i: number) => {
                     return (
-                      <td
-                        key={i}
-                        style={{ width: 'fit-content', maxWidth: '300px' }}
-                      >
+                      <td key={i}>
                         {(mapper.render || ((data) => data[mapper.key]))(
                           item,
                           i

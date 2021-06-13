@@ -29,7 +29,7 @@ export const createValidationSchema = (
 }
 
 export const getNestedByStringKey = (obj: {}, key: string) =>
-  key.split('.').reduce((p, c) => (p && p[c]) ?? undefined, obj)
+  key.split('.').reduce((p, c) => (p && p[c]) || undefined, obj)
 
 export const createFormFieldsInitValue = (
   formFields: (FormField | GroupField)[],

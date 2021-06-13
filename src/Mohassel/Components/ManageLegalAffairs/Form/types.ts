@@ -7,9 +7,6 @@ export interface FieldDefaultProps {
   type: string
   readOnly?: boolean
   disabled?: boolean
-  // Field name to clear if this field changed
-  // used for related fields like: Governorate and District (police station)
-  clearFieldOnChange?: string
 }
 
 export interface Field extends FieldDefaultProps {
@@ -35,7 +32,7 @@ export interface SelectField extends FieldDefaultProps {
   label: string
   validation: Yup.Schema<any>
   options: {
-    value: string | number
+    value: string
     label: string
   }[]
 }
@@ -71,7 +68,7 @@ export type AppFormProps = {
   formFields: FormField[]
   onSubmit: (values: any, formikHelpers: FormikHelpers<any>) => void
   onCancel?: () => void
-  onChange?: (event: FormEvent<HTMLFormElement>) => void
+  onChange?: (event: FormEvent<unknown>) => void
   onPhotoChange?: (name: string, value: File | string) => void
   defaultValues?: any
   options?: {

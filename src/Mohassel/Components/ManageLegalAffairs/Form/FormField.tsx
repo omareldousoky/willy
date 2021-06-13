@@ -60,10 +60,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
         : handleBlur,
     name: field.name,
     value,
-    onChange: (e: ChangeEvent<any>) => {
-      field.clearFieldOnChange && setFieldValue(field.clearFieldOnChange, '')
-      handleChange(e)
-    },
+    onChange: handleChange,
     readOnly: field.readOnly ?? false,
     disabled: field.disabled ?? field.readOnly ?? false,
     isInvalid: !!fieldErrors && isTouched,

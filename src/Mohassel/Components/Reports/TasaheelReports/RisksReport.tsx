@@ -39,7 +39,7 @@ export const RisksReport = (report) => {
               <div>{timeToArabicDateNow(true)}</div>
             </td>
             <td colSpan={6}>
-              <div className="logo-print-tb" />
+              <div className="logo-print" />
             </td>
           </tr>
         </thead>

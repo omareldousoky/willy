@@ -134,7 +134,7 @@ const TotalWrittenChecks = (props) => {
                 إيصال استلام مبلغ نقدى علي سبيل الامانه
               </div>
               <div>
-                استلمت انا الموقع ادناه /&nbsp;
+                استلمت انا الموقع ادناه /
                 {individualInGroup.customer.customerName}
               </div>
               <div>

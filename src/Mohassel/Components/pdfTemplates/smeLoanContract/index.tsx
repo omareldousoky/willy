@@ -34,7 +34,7 @@ const SmeLoanContract = (props) => {
                                   }}
                                 >
                                   <th colSpan={6}>
-                                    <div className="logo-print-tb" />
+                                    <div className="logo-print" />
                                   </th>
                                   <th colSpan={6}>
                                     ترخيص ممارسه نشاط التمويل متناهي الصغر رقم
