@@ -1447,7 +1447,7 @@ class LoanProfile extends Component<Props, State> {
             data={this.state.application}
             earlyPaymentPdfData={getEarlyPaymentPdfData(
               this.state.application,
-              this.state.earlyPaymentData?.remainingPrincipal
+              this.state.earlyPaymentData
             )}
             branchDetails={this.state.branchDetails}
           />

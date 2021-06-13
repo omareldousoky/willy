@@ -17,7 +17,7 @@ export const getInstallmentKeySum = (
 
 export const getEarlyPaymentPdfData = (
   application: ApplicationResponse,
-  remainingPrincipal?: number
+  earlyPayment?: EarlyPayment
 ): EarlyPaymentPdfData => {
   let totalDaysLate = 0
   let totalDaysEarly = 0
@@ -32,11 +32,7 @@ export const getEarlyPaymentPdfData = (
           new Date().getFullYear() &&
         getStatus(installment) === local.unpaid) ||
       getStatus(installment) === local.late ||
-      (new Date(installment.dateOfPayment).getMonth() <=
-        new Date().getMonth() &&
-        new Date(installment.dateOfPayment).getFullYear() <=
-          new Date().getFullYear() &&
-        getStatus(installment) === local.partiallyPaid)
+      getStatus(installment) === local.partiallyPaid
     ) {
       latePrincipal +=
         Number(installment?.principalInstallment) -
