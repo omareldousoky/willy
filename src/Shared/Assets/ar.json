@@ -1106,8 +1106,14 @@
   "duplicateCompanyNumberMessage": "رقم البطاقة موجود بالفعل لشركة اخرى",
   "moveCompanies": "نقل الشركات",
   "downloadHistory":"تنزيل السجلات",
-  "finalVerdict":"الحكم النهائي",
-  "finalVerdictDate":"تاريخ الحكم النهائي",
+  "managerReviews":"مراجعات الميديرين",
+  "finalVerdict": "حكم نهائي",
+  "finalVerdictDate": "تاريخ حكم نهائي",
+  "accusedName": "اسم المتهم",
+  "judgeList": "قائمة الأحكام",
+  "dateRangeErrorMessage": "تاريخ الي يجب ان يكون بعد تاريخ من",
+  "theVerdict": "الحكم",
   "finalConfinementNumber": "رقم الحصر النهائي",
-  "managerReviews":"مراجعات الميديرين"
+  "theConfinement": "الحصر",
+  "courtCaseNumber":"رقم الجنحه"
 }
