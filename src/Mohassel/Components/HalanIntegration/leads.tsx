@@ -216,7 +216,8 @@ class Leads extends Component<Props, State> {
             </p>
             {this.state.openActionsId === data.uuid && (
               <div className="actions-list">
-                {data.status === 'in-review' && (
+                {(data.status === 'in-review' ||
+                  data.status === 'submitted') && (
                   <Can I="reviewLead" a="halanuser">
                     <div
                       className="item"
@@ -234,7 +235,8 @@ class Leads extends Component<Props, State> {
                     </div>
                   </Can>
                 )}
-                {data.status === 'in-review' && (
+                {(data.status === 'in-review' ||
+                  data.status === 'submitted') && (
                   <Can I="reviewLead" a="halanuser">
                     <div
                       className="item"
