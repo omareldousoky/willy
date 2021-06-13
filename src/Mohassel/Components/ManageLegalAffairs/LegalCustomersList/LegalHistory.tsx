@@ -8,7 +8,7 @@ import DataRow from '../../pdfTemplates/pdfTemplateCommon/dataRow'
 interface Props {
   data: LegalHistoryResponse
 }
-const LegalHistory = (props: Props) => {
+export const LegalHistory = (props: Props) => {
   return (
     <div className="legal-history">
       <Orientation size="landscape" />
@@ -255,5 +255,3 @@ const LegalHistory = (props: Props) => {
     </div>
   )
 }
-
-export default LegalHistory

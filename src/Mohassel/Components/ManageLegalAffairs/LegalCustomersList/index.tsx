@@ -56,7 +56,7 @@ import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
 import { Branch } from '../../../../Shared/Services/interfaces'
 import { getBranch } from '../../../Services/APIs/Branch/getBranch'
 import managerTypes from '../configs/managerTypes'
-import LegalHistory from './LegalHistory'
+import { LegalHistory } from './LegalHistory'
 import {
   handleUpdateSuccess,
   hasCourtSession,
