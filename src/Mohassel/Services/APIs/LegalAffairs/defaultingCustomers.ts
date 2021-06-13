@@ -162,12 +162,10 @@ export const deleteSettlementDocument = async (
 
 export const getLegalHistory = async (
   legalId: string
-): Promise<ApiResponse<LegalHistoryResponse | unknown>> => {
+): Promise<ApiResponse<LegalHistoryResponse>> => {
   const url = process.env.REACT_APP_BASE_URL + `/legal/history/${legalId}`
   try {
-    const res: AxiosResponse<LegalHistoryResponse | unknown> = await axios.get(
-      url
-    )
+    const res: AxiosResponse<LegalHistoryResponse> = await axios.get(url)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }

@@ -321,7 +321,7 @@ const LegalCustomersList: FunctionComponent = () => {
     if (response.status === 'success') {
       const resBody: LegalHistoryResponse = response.body as LegalHistoryResponse
       if (resBody.history && resBody?.history.length > 0) {
-        setHistoryData(response.body as LegalHistoryResponse)
+        setHistoryData(resBody)
       } else {
         setHistoryData(null)
         Swal.fire('', local.noLogsFound, 'info')
