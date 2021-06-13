@@ -3,7 +3,7 @@ import { Signature } from './common'
 interface SignatureWithNote extends Signature {
   notes?: string
 }
-interface Session {
+interface CourtSession {
   confinementNumber: string
   date: number
   decision: string
@@ -37,9 +37,9 @@ export interface LegalHistoryResponse {
     finalVerdict: string
     finalVerdictDate: number
     misdemeanorAppealNumber: string
-    firstCourtSession?: Session
-    misdemeanorAppealSession: Session
-    oppositionSession?: Session
-    oppositionAppealSession?: Session
+    firstCourtSession?: CourtSession
+    misdemeanorAppealSession: CourtSession
+    oppositionSession?: CourtSession
+    oppositionAppealSession?: CourtSession
   }[]
 }
