@@ -121,7 +121,7 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
 
   return (
     <>
-      <Card className="print-none">
+      <Card>
         <Loader type="fullscreen" open={isLoading} />
         <Card.Body className="p-0">
           <div className="custom-card-header">

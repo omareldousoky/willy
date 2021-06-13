@@ -18,7 +18,7 @@ const App = (props) => {
   }
   return (
     <BrowserRouter>
-      <div style={{ backgroundColor: '#fafafa' }}>
+      <div style={{ backgroundColor: '#fafafa' }} className="app-container">
         <NavBar />
         <Switch>
           {routes.map((route) => (
