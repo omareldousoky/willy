@@ -558,7 +558,7 @@ const LegalCustomersList: FunctionComponent = () => {
             <Button
               type="button"
               variant="default"
-              className="btn clickable-action rounded-0 p-0 font-weight-normal text-dark"
+              className="clickable-action font-weight-normal text-dark"
               title={local.logs}
               onClick={async () => {
                 await handleDownloadHistory(customer._id)
