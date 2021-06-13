@@ -1109,5 +1109,12 @@
   "lastWeek": "الاسبوع الماضى",
   "lastMonth": "الشهر الماضي",
   "finalVerdict": "حكم نهائي",
-  "finalVerdictDate": "تاريخ حكم نهائي"
+  "finalVerdictDate": "تاريخ حكم نهائي",
+  "accusedName": "اسم المتهم",
+  "judgeList": "قائمة الأحكام",
+  "dateRangeErrorMessage": "تاريخ الي يجب ان يكون بعد تاريخ من",
+  "theVerdict": "الحكم",
+  "finalConfinementNumber": "رقم الحصر النهائي",
+  "theConfinement": "الحصر",
+  "courtCaseNumber":"رقم الجنحه"
 }
