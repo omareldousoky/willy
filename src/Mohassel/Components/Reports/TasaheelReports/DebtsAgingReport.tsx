@@ -41,7 +41,7 @@ export const DebtsAgingReport = (report) => {
               <div>{timeToArabicDateNow(true)}</div>
             </td>
             <td colSpan={6}>
-              <div className="logo-print" />
+              <div className="logo-print-tb" />
             </td>
           </tr>
         </thead>
