@@ -9,7 +9,7 @@ import {
   LegalActionsForm,
   ReviewReqBody,
 } from '../../../Components/ManageLegalAffairs/types'
-import { LegalHistoryResponse } from '../../../../Shared/Services/interfaces'
+import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
 import { ApiResponse } from '../../../Models/common'
 
 export const searchDefaultingCustomers = async (data: object) => {

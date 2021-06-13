@@ -53,10 +53,7 @@ import { defaultValidationSchema } from '../validations'
 import AppForm from '../Form'
 import UploadLegalCustomers from './UploadCustomersForm'
 import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
-import {
-  Branch,
-  LegalHistoryResponse,
-} from '../../../../Shared/Services/interfaces'
+import { Branch } from '../../../../Shared/Services/interfaces'
 import { getBranch } from '../../../Services/APIs/Branch/getBranch'
 import managerTypes from '../configs/managerTypes'
 import LegalHistory from './LegalHistory'
@@ -68,6 +65,7 @@ import {
 import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
 import LegalJudgePdf from '../../pdfTemplates/LegalJudge'
 import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
+import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
