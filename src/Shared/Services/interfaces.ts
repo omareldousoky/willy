@@ -1,3 +1,5 @@
+import { Signature } from '../../Mohassel/Models/common'
+
 export interface Branch {
   longitude?: number
   latitude?: number
@@ -175,17 +177,6 @@ export interface Clearance {
   status: string
   transactionKey?: number
   manualReceipt?: string
-}
-
-interface Signature {
-  by?: string
-  at?: number
-  userName?: string
-}
-
-export interface Trace {
-  created: Signature
-  updated: Signature
 }
 
 export interface QuarterReport {
@@ -421,83 +412,4 @@ export interface TerroristUnResponse {
     at: number
     userName: string
   }
-}
-export interface LegalHistoryResponse {
-  history: {
-    _id: string
-    customerId: string
-    loanId: string
-    customerName: string
-    nationalId: string
-    customerKey: number
-    customerBranchId: string
-    statementOfClaim: string
-    status: string
-    statusNumber: string
-    customerType: string
-    created?: {
-      by?: string
-      at?: number
-      userName?: string
-    }
-    updated?: {
-      by?: string
-      at?: number
-      userName?: string
-    }
-    branchManagerReview?: {
-      by?: string
-      at?: number
-      userName?: string
-      notes?: string
-    }
-    areaSupervisorReview?: {
-      by?: string
-      at?: number
-      userName: string
-      notes?: string
-    }
-    areaManagerReview?: {
-      by?: string
-      at?: number
-      userName: string
-      notes?: string
-    }
-    financialManagerReview?: {
-      by?: string
-      at?: number
-      userName: string
-      notes?: string
-    }
-    caseNumber: string
-    caseStatus: string
-    caseStatusSummary: string
-    court: string
-    active: true
-    loanKey: number
-    finalConfinementNumber: string
-    finalVerdict: string
-    finalVerdictDate: number
-    misdemeanorAppealNumber: string
-    firstCourtSession?: {
-      date: number
-      decision: string
-      confinementNumber: string
-    }
-    misdemeanorAppealSession: {
-      confinementNumber: string
-      date: number
-      decision: string
-    }
-    oppositionSession?: {
-      confinementNumber: string
-      date: number
-      decision: string
-    }
-    oppositionAppealSession?: {
-      confinementNumber: string
-      date: number
-      decision: string
-    }
-  }[]
 }
