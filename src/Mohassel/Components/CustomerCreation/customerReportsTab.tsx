@@ -45,14 +45,14 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
   const [pdfData, setPdfData] = useState()
 
   // TODO: Redesign with generics
-  const apiHandler = (res: any, successHandler?: (res: any) => void) => {
+  const apiHandler = (res: any, successHandler?: () => void) => {
     if (res.status === 'success') {
       if (!res.body) {
         setIsLoading(false)
         Swal.fire('error', local.noResults)
         setPrintPdfKey(undefined)
       } else {
-        if (successHandler) successHandler(res)
+        if (successHandler) successHandler()
         else setPdfData(res.body)
         setIsLoading(false)
       }
@@ -64,14 +64,19 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
   }
 
   const getCustomerDetailsReport = async (customerKeyValue: string) => {
-    const res = await getCustomerDetails(customerKeyValue)
-    const successHandler = async (customerDetails) => {
-      const remainingTotal = await remainingLoan(res.body.customerID)
-      if (remainingTotal.status === 'success') {
-        setPdfData({ ...customerDetails.body, remainingTotal })
-      } else errorResponseHandler(res.error.error)
+    const customerDetailsResponse = await getCustomerDetails(customerKeyValue)
+    const successHandler = async () => {
+      const remainingTotalResponse = await remainingLoan(
+        customerDetailsResponse.body.customerID
+      )
+      if (remainingTotalResponse.status === 'success') {
+        setPdfData({
+          ...customerDetailsResponse.body,
+          ...remainingTotalResponse.body,
+        })
+      } else errorResponseHandler(remainingTotalResponse.error.error)
     }
-    apiHandler(res, successHandler)
+    apiHandler(customerDetailsResponse, successHandler)
   }
 
   const getGuaranteedLoansReport = async (customerKeyValue: string) => {
@@ -110,6 +115,7 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
 
   useEffect(() => {
     if (pdfData && printPdfKey) {
+      console.log(pdfData)
       window.print()
       setPrintPdfKey(undefined)
     }
