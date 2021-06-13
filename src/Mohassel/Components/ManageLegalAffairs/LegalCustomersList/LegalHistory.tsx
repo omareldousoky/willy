@@ -1,9 +1,9 @@
 import React from 'react'
 import local from '../../../../Shared/Assets/ar.json'
-import { LegalHistoryResponse } from '../../../../Shared/Services/interfaces'
-import { timeToArabicDate } from '../../../../Shared/Services/utils'
+import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
 import Orientation from '../../Common/orientation'
 import './legalHistory.scss'
+import DataRow from '../../pdfTemplates/pdfTemplateCommon/dataRow'
 
 interface Props {
   data: LegalHistoryResponse
@@ -29,79 +29,79 @@ const LegalHistory = (props: Props) => {
                     <p className="blue-box mx-3 pt-2">{index + 1}</p>
                     <p className="mt-2">{local.creationDate}</p>
                     <p className="box">
-                      {log.created?.at
-                        ? timeToArabicDate(log.created.at, true)
-                        : ' '}
+                      <DataRow value={log.created?.at} isFullDate type="date" />
                     </p>
                   </div>
                   <tbody>
                     <tr>
                       <th className="w-25">{local.customerName}</th>
-                      <td>{log.customerName}</td>
+                      <DataRow value={log.customerName} type="string" />
                     </tr>
                     <tr>
                       <th className="w-25">{local.customerCode}</th>
-                      <td> {log.customerKey} </td>
+                      <DataRow value={log.customerKey} type="string" />
                     </tr>
                     <tr>
                       <th className="w-25">{local.nationalId}</th>{' '}
-                      <td>{log.nationalId}</td>
+                      <DataRow value={log.nationalId} type="string" />
                     </tr>
                     <tr>
                       <th className="w-25">{local.customerType}</th>
-                      <td>{local[log.customerType]}</td>
+                      <DataRow value={local[log.customerType]} type="string" />
                     </tr>
                     <tr>
                       <th className="w-25">{local.loanCode}</th>
-                      <td>{log.loanKey}</td>
+                      <DataRow value={log.loanKey} type="string" />
                     </tr>
                     <tr>
                       <th className="w-25">{local.court}</th>
-                      <td>{log.court}</td>
+                      <DataRow value={log.court} type="string" />
                     </tr>
                     <tr>
                       <th className="w-25">{local.finalVerdict}</th>
-                      <td>{log.finalVerdict}</td>
+                      <DataRow value={log.finalVerdict} type="string" />
                     </tr>
                     <tr>
                       <th className="w-25">{local.finalVerdictDate}</th>
-                      <td>
-                        {log.finalVerdictDate
-                          ? timeToArabicDate(log.finalVerdictDate, false)
-                          : ''}
-                      </td>
+                      <DataRow value={log.finalVerdictDate} type="date" />
                     </tr>
                     <tr>
                       <th className="w-25">{local.judgementStatus}</th>
-                      <td>{local[log.status]}</td>
+                      <DataRow value={local[log.status]} type="string" />
                     </tr>
                     <tr>
                       <th className="w-25">{local.statusNumber}</th>
-                      <td>{log.statusNumber}</td>
+                      <DataRow value={log.statusNumber} type="string" />
                     </tr>
                     <tr>
                       <th className="w-25">{local.caseNumber}</th>
-                      <td>{log.caseNumber}</td>
+                      <DataRow value={log.caseNumber} type="string" />
                     </tr>
                     <tr>
                       <th className="w-25">{local.caseStatus} </th>
-                      <td>{log.caseStatus}</td>
+                      <DataRow value={log.caseStatus} type="string" />
                     </tr>
                     <tr>
                       <th className="w-25">{local.caseStatusSummary}</th>
-                      <td>{log.caseStatusSummary}</td>
+                      <DataRow value={log.caseStatusSummary} type="string" />
                     </tr>
                     <tr>
                       <th className="w-25">{local.statementOfClaim}</th>
-                      <td>{log.statementOfClaim}</td>
+                      <DataRow value={log.statementOfClaim} type="string" />
                     </tr>
                     <tr>
                       <th className="w-25">{local.misdemeanorAppealNumber}</th>
-                      <td>{log.misdemeanorAppealNumber}</td>
+                      <DataRow
+                        value={log.misdemeanorAppealNumber}
+                        type="string"
+                      />
                     </tr>
                     <tr>
                       <th className="w-25">{local.finalConfinementNumber}</th>
-                      <td>{log.finalConfinementNumber}</td>
+                      <DataRow
+                        value={log.finalConfinementNumber}
+                        type="string"
+                      />
                     </tr>
                   </tbody>
                 </table>
@@ -117,49 +117,63 @@ const LegalHistory = (props: Props) => {
                   <tbody>
                     <tr>
                       <th>{local.firstCourtSession}</th>
-                      <td>
-                        {log.firstCourtSession?.date
-                          ? timeToArabicDate(log.firstCourtSession?.date, false)
-                          : ''}
-                      </td>
-                      <td>{log.firstCourtSession?.decision}</td>
-                      <td>{log.firstCourtSession?.confinementNumber}</td>
+                      <DataRow
+                        value={log.firstCourtSession?.date}
+                        type="date"
+                      />
+                      <DataRow
+                        value={log.firstCourtSession?.decision}
+                        type="string"
+                      />
+                      <DataRow
+                        value={log.firstCourtSession?.confinementNumber}
+                        type="string"
+                      />
                     </tr>
                     <tr>
                       <th>{local.oppositionSession}</th>
-                      <td>
-                        {log.oppositionSession?.date
-                          ? timeToArabicDate(log.oppositionSession?.date, false)
-                          : ''}
-                      </td>
-                      <td>{log.oppositionSession?.decision}</td>
-                      <td>{log.oppositionSession?.confinementNumber}</td>
+                      <DataRow
+                        value={log.oppositionSession?.date}
+                        type="date"
+                      />
+                      <DataRow
+                        value={log.oppositionSession?.decision}
+                        type="string"
+                      />
+                      <DataRow
+                        value={log.oppositionSession?.confinementNumber}
+                        type="string"
+                      />
                     </tr>
                     <tr>
                       <th>{local.oppositionAppealSession}</th>
-                      <td>
-                        {log.oppositionAppealSession?.date
-                          ? timeToArabicDate(
-                              log.oppositionAppealSession?.date,
-                              false
-                            )
-                          : ''}
-                      </td>
-                      <td>{log.oppositionAppealSession?.decision}</td>
-                      <td>{log.oppositionAppealSession?.confinementNumber}</td>
+                      <DataRow
+                        value={log.oppositionAppealSession?.date}
+                        type="date"
+                      />
+                      <DataRow
+                        value={log.oppositionAppealSession?.decision}
+                        type="string"
+                      />
+                      <DataRow
+                        value={log.oppositionAppealSession?.confinementNumber}
+                        type="string"
+                      />
                     </tr>
                     <tr>
                       <th>{local.misdemeanorAppealSession}</th>
-                      <td>
-                        {log.misdemeanorAppealSession?.date
-                          ? timeToArabicDate(
-                              log.misdemeanorAppealSession?.date,
-                              false
-                            )
-                          : ' '}
-                      </td>
-                      <td>{log.misdemeanorAppealSession?.decision}</td>
-                      <td>{log.misdemeanorAppealSession?.confinementNumber}</td>
+                      <DataRow
+                        value={log.misdemeanorAppealSession?.date}
+                        type="date"
+                      />
+                      <DataRow
+                        value={log.misdemeanorAppealSession?.decision}
+                        type="string"
+                      />
+                      <DataRow
+                        value={log.misdemeanorAppealSession?.confinementNumber}
+                        type="string"
+                      />
                     </tr>
                   </tbody>
                 </table>
@@ -176,46 +190,60 @@ const LegalHistory = (props: Props) => {
                   <tbody>
                     <tr>
                       <th>{local.branchManagerReview}</th>
-                      <td>{log.branchManagerReview?.userName}</td>
-                      <td>
-                        {log.branchManagerReview?.at
-                          ? timeToArabicDate(log.branchManagerReview?.at, true)
-                          : ''}
-                      </td>
-                      <td>{log.branchManagerReview?.notes}</td>
+                      <DataRow
+                        value={log.branchManagerReview?.userName}
+                        type="string"
+                      />
+                      <DataRow
+                        value={log.branchManagerReview?.at}
+                        type="date"
+                      />
+                      <DataRow
+                        value={log.branchManagerReview?.notes}
+                        type="string"
+                      />
                     </tr>
                     <tr>
                       <th>{local.areaManagerReview}</th>
-                      <td>{log.areaManagerReview?.userName}</td>
-                      <td>
-                        {log.areaManagerReview?.at
-                          ? timeToArabicDate(log.areaManagerReview?.at, true)
-                          : ''}
-                      </td>
-                      <td>{log.areaManagerReview?.notes}</td>
+                      <DataRow
+                        value={log.areaManagerReview?.userName}
+                        type="string"
+                      />
+                      <DataRow value={log.areaManagerReview?.at} type="date" />
+                      <DataRow
+                        value={log.areaManagerReview?.notes}
+                        type="string"
+                      />
                     </tr>
                     <tr>
                       <th>{local.areaSupervisorReview}</th>
-                      <td>{log.areaSupervisorReview?.userName}</td>
-                      <td>
-                        {log.areaSupervisorReview?.at
-                          ? timeToArabicDate(log.areaSupervisorReview?.at, true)
-                          : ''}
-                      </td>
-                      <td>{log.areaSupervisorReview?.notes}</td>
+                      <DataRow
+                        value={log.areaSupervisorReview?.userName}
+                        type="string"
+                      />
+                      <DataRow
+                        value={log.areaSupervisorReview?.at}
+                        type="date"
+                      />
+                      <DataRow
+                        value={log.areaSupervisorReview?.notes}
+                        type="string"
+                      />
                     </tr>
                     <tr>
                       <th>{local.financialManagerReview}</th>
-                      <td>{log.financialManagerReview?.userName}</td>
-                      <td>
-                        {log.financialManagerReview?.at
-                          ? timeToArabicDate(
-                              log.financialManagerReview?.at,
-                              true
-                            )
-                          : ''}
-                      </td>
-                      <td>{log.financialManagerReview?.notes}</td>
+                      <DataRow
+                        value={log.financialManagerReview?.userName}
+                        type="string"
+                      />
+                      <DataRow
+                        value={log.financialManagerReview?.at}
+                        type="date"
+                      />
+                      <DataRow
+                        value={log.financialManagerReview?.notes}
+                        type="string"
+                      />
                     </tr>
                   </tbody>
                 </table>
