@@ -115,7 +115,6 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
 
   useEffect(() => {
     if (pdfData && printPdfKey) {
-      console.log(pdfData)
       window.print()
       setPrintPdfKey(undefined)
     }
