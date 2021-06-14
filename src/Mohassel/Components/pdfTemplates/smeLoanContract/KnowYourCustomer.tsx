@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react'
 
-import { Header } from "../pdfTemplateCommon/header";
+import { Header } from '../pdfTemplateCommon/header'
 
 import {
   guarantorOrderLocal,
   orderLocal,
   timeToArabicDate,
-} from "../../../../Shared/Services/utils";
+} from '../../../../Shared/Services/utils'
 
-import { KnowYourCustomerProps } from "./types";
+import { KnowYourCustomerProps } from './types'
 
 export const KnowYourCustomer = ({
   application,
@@ -25,39 +25,39 @@ export const KnowYourCustomer = ({
         <p className="font-weight-bolder border-bottom w-25">بيانات الشركة:-</p>
         <p>
           إســـــــــــم الشــــركـــــــــة :-
-          {application.customer?.businessName ?? ""}
+          {application.customer?.businessName ?? ''}
         </p>
         <p>
           السمــــــــــه التجاريـــــــــه :-
-          {application.customer?.businessCharacteristic ?? ""}
+          {application.customer?.businessCharacteristic ?? ''}
         </p>
         <p>
           الشكـــــــــل القانونــــــــــي :-
-          {application.customer?.legalStructure ?? ""}
+          {application.customer?.legalStructure ?? ''}
         </p>
         <p>
           رقــــــم السجــــــل التجاري :-
-          {application.customer?.commercialRegisterNumber ?? ""}
+          {application.customer?.commercialRegisterNumber ?? ''}
         </p>
         <p>
           رقــــم البطاقــــة الضريبيـــة :-
-          {application.customer?.taxCardNumber ?? ""}
+          {application.customer?.taxCardNumber ?? ''}
         </p>
         <p>
           ترخيــص مزاولـــة النشـــاط :-
-          {application.customer?.businessLicenseNumber ?? ""}
+          {application.customer?.businessLicenseNumber ?? ''}
         </p>
         <p>
           نشـــــــــــاط الشــركـــــــــــة :-
-          {application.customer?.businessSector ?? ""}
+          {application.customer?.businessSector ?? ''}
         </p>
         <p>
           عنــوان النشــاط تفصيلـــــي :-
-          {application.customer?.businessAddress ?? ""}
+          {application.customer?.businessAddress ?? ''}
         </p>
         <p>
           حجــم التمويــل المطلــــــوب :-
-          {application.principal ?? ""}
+          {application.principal ?? ''}
         </p>
         <p>
           الغـــرض مـــن التمــويـــــل :-
@@ -73,25 +73,27 @@ export const KnowYourCustomer = ({
             </p>
             <p>
               الأســـــــــــــــــــم :-
-              {person.customerName ?? ""}
+              {person.customerName ?? ''}
             </p>
             <p>
               بطاقة رقم قومــي :-
-              {person.nationalId ?? ""}
+              {person.nationalId ?? ''}
             </p>
             <p>
               صادرة بتاريــــــخ :-
               {(person.nationalIdIssueDate &&
                 timeToArabicDate(person.nationalIdIssueDate, false)) ??
-                ""}
+                ''}
             </p>
             <p>
               عنوان سكنــــــــه :-
-              {person.customerHomeAddress ?? ""}
+              {person.customerHomeAddress ?? ''}
             </p>
             <p>
               رقــم التليفــــــون :-
-              {person.homePhoneNumber ? person.homePhoneNumber : person.businessPhoneNumber || ""}
+              {person.homePhoneNumber
+                ? person.homePhoneNumber
+                : person.businessPhoneNumber || ''}
             </p>
             <p>الصفة في النشاط :-</p>
           </div>
@@ -103,34 +105,34 @@ export const KnowYourCustomer = ({
             </p>
             <p>
               إسم الضامـــــــــــن :-
-              {person.customerName ?? ""}
+              {person.customerName ?? ''}
             </p>
             <p>
               بطاقة رقم قومــي :-
-              {person.nationalId ?? ""}
+              {person.nationalId ?? ''}
             </p>
             <p>
               صادرة بتاريــــــخ :-
               {(person.nationalIdIssueDate &&
                 timeToArabicDate(person.nationalIdIssueDate, false)) ??
-                ""}
+                ''}
             </p>
             <p>
               عنوان سكنــــــــه :-
-              {person.customerHomeAddress ?? ""}
+              {person.customerHomeAddress ?? ''}
             </p>
             <p>
               تليفون المنــــــــزل :-
-              {person.homePhoneNumber ?? ""}
+              {person.homePhoneNumber ?? ''}
             </p>
             <p>
               تليفون محمـــــــول :-
-              {person.businessPhoneNumber ?? ""}
+              {person.businessPhoneNumber ?? ''}
             </p>
             <p>الوظيفة الحاليــــــة :-</p>
             <p>
               عنوان جهة العمـل :-
-              {person.businessAddress ?? ""}
+              {person.businessAddress ?? ''}
             </p>
           </div>
         ))}
@@ -138,20 +140,20 @@ export const KnowYourCustomer = ({
         <h3 className="text-center my-5">إقرار بصحة البيانات</h3>
         <p>
           أقر أنا الموقع أدناه بتحمل المسئوليه القانونية عن صحة البيانات في
-          النموذج عاليه والمستندات ( وصورها ) المقدمة لشركة تساهيل للتمويل إقر بحق الشركة في
-          الاتصال بالسلطات المختصة للتحقق منها في أي وقت . كما أتعهد بأنني
-          المستفيد الحقيقي من التعامل كما أتعهد بتحديث البيانات فور حدوث أي
-          تغيرات بها أو عند طلب الشركة ذلك .
+          النموذج عاليه والمستندات ( وصورها ) المقدمة لشركة تساهيل للتمويل إقر
+          بحق الشركة في الاتصال بالسلطات المختصة للتحقق منها في أي وقت . كما
+          أتعهد بأنني المستفيد الحقيقي من التعامل كما أتعهد بتحديث البيانات فور
+          حدوث أي تغيرات بها أو عند طلب الشركة ذلك .
         </p>
         <p>
           أسم الشركة المدينة :-
-          {application.customer?.businessName ?? ""}
+          {application.customer?.businessName ?? ''}
         </p>
         {application.entitledToSign?.map((person, index) => (
           <div key={index}>
             <p>
               إسم من له حق التوقيع والاقتراض :-
-              {person.customerName ?? ""}
+              {person.customerName ?? ''}
             </p>
             <p>التوقيع /</p>
             <p>التاريخ &emsp;/&emsp;/ &emsp; &emsp; &emsp;</p>
@@ -169,8 +171,8 @@ export const KnowYourCustomer = ({
         <p>توقيع مدير الفرع :-</p>
       </div>
     </>
-  );
-};
+  )
+}
 KnowYourCustomer.defaultProps = {
   application: {},
-};
+}

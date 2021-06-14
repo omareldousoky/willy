@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react'
 import {
   guarantorOrderLocal,
   orderLocal,
-} from "../../../../Shared/Services/utils";
-import { Header } from "../pdfTemplateCommon/header";
-import { AcknowledgmentWasSignedInFrontProps } from "./types";
+} from '../../../../Shared/Services/utils'
+import { Header } from '../pdfTemplateCommon/header'
+import { AcknowledgmentWasSignedInFrontProps } from './types'
 
 export const AcknowledgmentWasSignedInFront = ({
   application,
@@ -30,10 +30,10 @@ export const AcknowledgmentWasSignedInFront = ({
         <p>الوظيفة /</p>
         <p>
           بأن توقيع كل من من له حق التوقيع عن النشاط والضامنين المدرجين بالجدول
-          تم أمامي وأن جميع بيانات الشيكات وايصالات الامانة والسندات الأذنية الخاصة بهم صحيحة
-          وتحت مسئوليتي وإنني قمت بمطابقة أصول بطاقات الرقم القومي لهم مع الصور
-          المرفقة بطلب التمويل ( وش وظهر ) وإنني قمت بمطابقتها مع الاشخاص
-          الحقيقيين والتأكد منهم وأتحمل مسئولية ذلك .
+          تم أمامي وأن جميع بيانات الشيكات وايصالات الامانة والسندات الأذنية
+          الخاصة بهم صحيحة وتحت مسئوليتي وإنني قمت بمطابقة أصول بطاقات الرقم
+          القومي لهم مع الصور المرفقة بطلب التمويل ( وش وظهر ) وإنني قمت
+          بمطابقتها مع الاشخاص الحقيقيين والتأكد منهم وأتحمل مسئولية ذلك .
         </p>
         <table className="w-100">
           <tbody>
@@ -42,24 +42,24 @@ export const AcknowledgmentWasSignedInFront = ({
               <th className="w-25">الكود</th>
             </tr>
             <tr>
-              <td>أسم الشركة / {application.customer?.businessName ?? ""}</td>
-              <td></td>
+              <td>أسم الشركة / {application.customer?.businessName ?? ''}</td>
+              <td />
             </tr>
             {application.entitledToSign?.map((person, index) => (
               <tr key={index}>
                 <td>
-                  من له حق التوقيع والاقتراض {orderLocal[index]} /{" "}
-                  {person.customerName ?? ""}{" "}
+                  من له حق التوقيع والاقتراض {orderLocal[index]} /{' '}
+                  {person.customerName ?? ''}{' '}
                 </td>
-                <td></td>
+                <td />
               </tr>
             ))}
             {application.guarantors?.map((person, index) => (
               <tr key={index}>
                 <td>
-                  {guarantorOrderLocal[index]}/ {person.customerName ?? ""}{" "}
+                  {guarantorOrderLocal[index]}/ {person.customerName ?? ''}{' '}
                 </td>
-                <td></td>
+                <td />
               </tr>
             ))}
           </tbody>
@@ -72,8 +72,8 @@ export const AcknowledgmentWasSignedInFront = ({
         <p>التوقيع /</p>
       </div>
     </>
-  );
-};
+  )
+}
 AcknowledgmentWasSignedInFront.defaultProps = {
   application: {},
-};
+}

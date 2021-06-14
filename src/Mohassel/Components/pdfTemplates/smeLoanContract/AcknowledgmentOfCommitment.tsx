@@ -1,8 +1,8 @@
-import React from "react";
-import { guarantorOrderLocal } from "../../../../Shared/Services/utils";
-import { Header } from "../pdfTemplateCommon/header";
-import { AcknowledgmentOfCommitmentProps } from "./types";
-import Tafgeet from 'tafgeetjs';
+import React from 'react'
+import Tafgeet from 'tafgeetjs'
+import { guarantorOrderLocal } from '../../../../Shared/Services/utils'
+import { Header } from '../pdfTemplateCommon/header'
+import { AcknowledgmentOfCommitmentProps } from './types'
 
 export const AcknowledgmentOfCommitment = ({
   application,
@@ -15,24 +15,27 @@ export const AcknowledgmentOfCommitment = ({
           showCurrentUser={false}
           showCurrentTime={false}
         />
-        <p>أقر أنا / -</p>
+        {application.entitledToSign?.map((person, index) => (
+          <p key={index}>
+            أقر أنا /{' '}
+            {!index ? person.customerName : `و ${person.customerName}`}
+          </p>
+        ))}
         <p>الممثل القانوني لشركة / {application.customer?.businessName}</p>
         {application.guarantors?.map((person, index) => (
           <div key={index} className="d-flex justify-content-between">
             <span>
-              {guarantorOrderLocal[index]}/ {person.customerName ?? ""}{" "}
+              {guarantorOrderLocal[index]}/ {person.customerName ?? ''}{' '}
             </span>
           </div>
         ))}
         <div className="d-flex justify-content-between">
-          <span>
-            نوع النشاط/ {application.customer?.businessSector ?? ""}{" "}
-          </span>
+          <span>نوع النشاط/ {application.customer?.businessSector ?? ''} </span>
           <span> فرع التعامل/ </span>
         </div>
         <p>
-          بأنني قد تسلمت تمويل قدره {application.principal} جم
-          ({ new Tafgeet(application.principal, 'EGP').parse()})
+          بأنني قد تسلمت تمويل قدره {application.principal} جم (
+          {new Tafgeet(application.principal, 'EGP').parse()})
         </p>
         <p>
           من شركة تساهيل للتمويل بتاريخ &emsp;/&emsp;/ &emsp; &emsp; &emsp; وذلك
@@ -51,13 +54,13 @@ export const AcknowledgmentOfCommitment = ({
 
         {application.guarantors?.map((person, index) => (
           <p key={index}>
-            {guarantorOrderLocal[index]}/ {person.customerName ?? ""}{" "}
+            {guarantorOrderLocal[index]}/ {person.customerName ?? ''}{' '}
           </p>
         ))}
       </div>
     </>
-  );
-};
+  )
+}
 AcknowledgmentOfCommitment.defaultProps = {
   application: {},
-};
+}

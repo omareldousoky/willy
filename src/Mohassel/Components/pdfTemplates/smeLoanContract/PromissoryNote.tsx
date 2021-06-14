@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
-import { Header } from "../pdfTemplateCommon/header";
-import { PromissoryNoteProps } from "./types";
+import { Header } from '../pdfTemplateCommon/header'
+import { PromissoryNoteProps } from './types'
 
 export const PromissoryNote = ({ noteKind }: PromissoryNoteProps) => (
   <>
@@ -34,12 +34,12 @@ export const PromissoryNote = ({ noteKind }: PromissoryNoteProps) => (
       <p>
         والدفع والتقاضى يكون امام محاكم ( الجيزه ) على اختلاف درجاتها وانواعها.
       </p>
-      <p>{noteKind === 'شركات'?  'الشركة :' :   'الاسم :' }</p>
-      {noteKind ==='شركات' && <p>من له حق التوقيع عن الشركة :</p>}
+      <p>{noteKind === 'شركات' ? 'الشركة :' : 'الاسم :'}</p>
+      {noteKind === 'شركات' && <p>من له حق التوقيع عن الشركة :</p>}
       <p>الصفة : </p>
       <p>بطاقة الرقم القومى :</p>
       <p>العنوان:</p>
       <p>التوقيع :</p>
     </div>
   </>
-);
+)
