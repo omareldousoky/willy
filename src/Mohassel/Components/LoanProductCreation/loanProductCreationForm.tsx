@@ -1,9 +1,11 @@
 import React from 'react'
-import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
+
 import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
 import InputGroup from 'react-bootstrap/InputGroup'
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
+
 import * as local from '../../../Shared/Assets/ar.json'
 
 export const LoanProductCreationForm = (props: any) => {
@@ -52,8 +54,8 @@ export const LoanProductCreationForm = (props: any) => {
                 if (val === 'group') {
                   setFieldValue('type', 'micro')
                 }
-                  setFieldValue('beneficiaryType', val)
-                }}
+                setFieldValue('beneficiaryType', val)
+              }}
               isInvalid={errors.beneficiaryType && touched.beneficiaryType}
               disabled={edit}
             >
@@ -990,7 +992,7 @@ export const LoanProductCreationForm = (props: any) => {
               <Col sm={6}>
                 <div className="d-flex">
                   <span style={{ width: '10%', color: '#7dc356' }}>
-                    {i + 1} -{' '}
+                    {i + 1} -
                   </span>
                   <span style={{ direction: 'rtl', width: '10%' }}>
                     {local.from}

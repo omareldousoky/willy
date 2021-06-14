@@ -1,7 +1,7 @@
-import { FieldProps } from "../Profile/types";
+import { FieldProps } from '../Profile/types'
 
 export interface InfoBoxProps {
-    info: FieldProps[][];
-    boxColor?: string;
-    title?: string;
-  }
+  info: FieldProps[][]
+  boxColor?: string
+  title?: string
+}

@@ -11,6 +11,7 @@ ARG REACT_APP_LTS_SUBDOMAIN
 ARG REACT_APP_DOCUMENTS_URL
 
 
+
 RUN npm run build-documents
 
 FROM nginx:1.14.1-alpine
