@@ -1,18 +1,18 @@
-import { Application, Customer } from "../../../../Shared/Services/interfaces";
+import { Application, Customer } from '../../../../Shared/Services/interfaces'
 
 export interface AcknowledgmentAndPledgeProps {
-  entitledToSign: Customer[];
+  entitledToSign: Customer[]
 }
 export interface AcknowledgmentOfCommitmentProps {
-  application: Application;
+  application: Application
 }
 export interface AcknowledgmentWasSignedInFrontProps {
-  application: Application;
+  application: Application
 }
 export interface KnowYourCustomerProps {
-  application: Application;
-  loanUsage: string;
+  application: Application
+  loanUsage: string
 }
 export interface PromissoryNoteProps {
-  noteKind: "شركات" | "شخصى";
+  noteKind: 'شركات' | 'شخصى'
 }
