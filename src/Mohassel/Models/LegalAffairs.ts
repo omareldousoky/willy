@@ -4,9 +4,9 @@ interface SignatureWithNote extends Signature {
   notes?: string
 }
 export interface CourtSession {
-  confinementNumber: string
-  date: number
-  decision: string
+  confinementNumber?: string
+  date?: number
+  decision?: string
 }
 export interface LegalHistoryResponse {
   history: {
