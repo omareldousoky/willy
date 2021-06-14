@@ -3,7 +3,7 @@ import { Signature } from './common'
 interface SignatureWithNote extends Signature {
   notes?: string
 }
-interface CourtSession {
+export interface CourtSession {
   confinementNumber: string
   date: number
   decision: string
