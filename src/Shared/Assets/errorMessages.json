@@ -534,5 +534,9 @@
   "invalid_close_date_manual_pending_actions": {
     "en": "There are manual pending actions before that date, please close them first",
     "ar": "يوجد حركات يدوية معلقة قبل هذا التاريخ، برجاء إغلاقها أولاً"
+  },
+  "product_has_applications": {
+    "en": "product has applications, please cancel them first",
+    "ar": "هذه القائمة لديها طلبات قروض من فضلك الغيهم اولا "
   }
 }
