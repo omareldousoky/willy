@@ -1,14 +1,11 @@
 import React from 'react'
 import local from '../../../../Shared/Assets/ar.json'
-import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
 import Orientation from '../../Common/orientation'
 import './legalHistory.scss'
 import DataRow from '../../pdfTemplates/pdfTemplateCommon/dataRow'
+import { LegalHistoryProps } from '../types'
 
-interface Props {
-  data: LegalHistoryResponse
-}
-export const LegalHistory = (props: Props) => {
+export const LegalHistory = (props: LegalHistoryProps) => {
   return (
     <div className="legal-history">
       <Orientation size="landscape" />
