@@ -1,7 +1,17 @@
 import React from 'react'
+
 import './style.scss'
 
-export const SmeLoanContract = (props) => {
+import Tafgeet from 'tafgeetjs'
+
+import {
+  dayToArabic,
+  numbersToArabic,
+  timeToArabicDate,
+} from '../../../../Shared/Services/utils'
+import * as local from '../../../../Shared/Assets/ar.json'
+
+export const SmeLoanContract = ({ data, branchDetails }) => {
   return (
     <>
       <div className="loan-contract" dir="rtl" lang="ar">
@@ -72,12 +82,14 @@ export const SmeLoanContract = (props) => {
                       <u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u>
                     </div>
                     <div>
-                      انه في يوم ___________________________ الموافق
-                      ______/_______/____
+                      انه في يوم{' '}
+                      {dayToArabic(new Date(data.creationDate).getDay())}{' '}
+                      الموافق {timeToArabicDate(data.creationDate, false)}
                     </div>
+
                     <div>
-                      حرر هذا العقد في فرع ___________________________ الكائن
-                      في: &nbsp;&nbsp; ___________________________
+                      حرر هذا العقد في فرع {branchDetails.name} الكائن في:
+                      {branchDetails.address}
                       <br />
                       بين كلا من:-
                     </div>
@@ -86,12 +98,12 @@ export const SmeLoanContract = (props) => {
                         <tr>
                           <td colSpan={4}>
                             <div>
-                              <b>أولا:</b> شركة ________________________________
-                              - شركه مساهمه مصريه - مقيده بسجل تجاري استثمار
-                              القاهره تحت رقم ___________________ والكائن مقرها
-                              ________________________________ والمقيده تحت رقم
-                              _____ بهيئة الرقابه الماليه ويمثلها في هذا العقد
-                              السيد/ ___________________________ بصفته
+                              <b>أولا:</b> شركة تساهيل للتمويل - شركه مساهمه
+                              مصريه - مقيده بسجل تجاري استثمار القاهره تحت رقم
+                              ___________________ والكائن مقرها ٣ شارع الزهور
+                              بالمهندسين والمقيده تحت رقم _____ بهيئة الرقابه
+                              الماليه ويمثلها في هذا العقد السيد/
+                              ___________________________ بصفته
                               ________________________________
                             </div>
                           </td>
@@ -105,44 +117,44 @@ export const SmeLoanContract = (props) => {
                           <td>
                             <div>
                               <b>ثانيا:- السادة/شركة :-</b>
-                              <span> ________________________________ </span>
+                              <span>{data.customer.customerName} </span>
                             </div>
                           </td>
                           <td style={{ width: '30%' }}>
                             <div>
                               <b> سجل تجاري رقم :</b>
-                              <span>________________________________</span>
+                              <span>
+                                {data.customer.commercialRegisterNumber}
+                              </span>
                             </div>
                           </td>
                           <td style={{ width: '30%' }}>
                             <div>
                               <b>والكائن مقرها الرئيسي في:</b>
-                              <span>________________________________</span>
+                              <span>{data.customer.businessAddress}</span>
                             </div>
                           </td>
                         </tr>
-                        {props.data.entitledToSign.map(
-                          (entitledToSign, index) => (
-                            <tr key={index}>
-                              <td>
-                                <div>
-                                  <b className="word-break">
-                                    ويمثلها في التوقيع السيد :
-                                  </b>
-                                  <span>________________________________</span>
-                                </div>
-                              </td>
-                              <td>
-                                <div>
-                                  <b className="word-break">
-                                    ويحمل بطاقه رقم قومى
-                                  </b>
-                                  <span>________________________________</span>
-                                </div>
-                              </td>
-                            </tr>
-                          )
-                        )}
+                        {data.entitledToSign.map((entitledToSign, index) => (
+                          <tr key={index}>
+                            <td>
+                              <div>
+                                <b className="word-break">
+                                  ويمثلها في التوقيع السيد :
+                                </b>
+                                <span>{entitledToSign.customerName}</span>
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <b className="word-break">
+                                  ويحمل بطاقه رقم قومى
+                                </b>
+                                <span>{entitledToSign.nationalId}</span>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
                         <tr style={{ textAlign: 'left', lineHeight: '5' }}>
                           <td colSpan={4}>&quot;طرف ثان - مقترض&quot;</td>
                         </tr>
@@ -153,16 +165,17 @@ export const SmeLoanContract = (props) => {
                       <div className="title">تمهيد</div>
                       <div>
                         لما كانت الشركه الطرف الأول (المقرض) مرخصا لها بممارسة
-                        نشاط تمويل المشروعات المتوسطة والصغيرةومتناهية الصغر والمقيده لدي الهيئه العامه
-                        للرقابه الماليه تحت رقم ٢ وذلك اعمالا لاحكام القانون رقم
-                        ١٤١ لسنه ٢٠١٤ الخاص بالتمويل و المشروعات الصغيرة والمتوسطة والمتناهية الصغر ..
+                        نشاط تمويل المشروعات المتوسطة والصغيرةومتناهية الصغر
+                        والمقيده لدي الهيئه العامه للرقابه الماليه تحت رقم ٢
+                        وذلك اعمالا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤ الخاص
+                        بالتمويل و المشروعات الصغيرة والمتوسطة والمتناهية الصغر
+                        ..
                       </div>
                       <div>
                         وقد تقدم الطرف الثانى بطلب للحصول على قرض من فرع الطرف
-                        الاول الكائن _______________________________________
-                        لحاجته للسيوله النقديه يخصص استخدامه فى تمويل نشاطه
-                        الجاري وذلك وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤ المشار
-                        اليه .
+                        الاول الكائن ٣ شارع الزهور المهندسين لحاجته للسيوله
+                        النقديه يخصص استخدامه فى تمويل نشاطه الجاري وذلك وفقا
+                        لاحكام القانون رقم ١٤١ لسنه ٢٠١٤ المشار اليه .
                       </div>
                       <div>
                         وقد وافق الطرف الاول على ذلك وفقا للشروط والضوابط
@@ -186,10 +199,15 @@ export const SmeLoanContract = (props) => {
                       <div className="title">البند الثاني</div>
                       <div>
                         يقر الطرف الثانى ( المقترض ) باستلامه من الطرف الاول (
-                        المقرض ) مبلغ وقدره جنية
-                        ________________________________ نقدا . ويعتبر توقيع
-                        الطرف الثانى على هذا العقد بمثابه اقرارا نهائيا منه
-                        باستلام كامل مبلغ القرض.
+                        المقرض ) مبلغ وقدره
+                        {`${numbersToArabic(
+                          data.principal
+                        )} جنيه (${new Tafgeet(
+                          data.principal,
+                          'EGP'
+                        ).parse()})`}
+                        نقدا . ويعتبر توقيع الطرف الثانى على هذا العقد بمثابه
+                        اقرارا نهائيا منه باستلام كامل مبلغ القرض.
                       </div>
                     </section>
 
@@ -205,18 +223,67 @@ export const SmeLoanContract = (props) => {
                     <section>
                       <div className="title">البند الرابع</div>
                       <div>
-                        يلتزم الطرفان الثانى والضامنين متضامنين فيما بينهم بسداد
-                        اجمالى قيمه القرض وكافه المصروفات وتكاليف التمويل الى
-                        الطرف الاول وذلك بواقع مبلغ اجمالي قدره جنية
-                        ________________________________ يتم سداده علي ( مدة
-                        السداد ) وذلك علي النحو التالي : ـ بواقع
-                        _____________________________ قسط ( اسبوعيه او كل خمسة
-                        عشر يوما او كل شهر ) قيمة كل قسط
-                        ____________________________ يبدأ في
-                        ________________________________ وينتهي في
-                        ________________________________ علي ان يتم السداد نقدي
-                        بمقر فرع الطرف الاول الكائن في
-                        ____________________________
+                        يلتزم الطرفان الثاني و ضامنين متضامنين فيما بينهم بسداد
+                        اجمالي قيمة القرض البالغة
+                        {`${numbersToArabic(
+                          data.principal
+                        )} جنيه (${new Tafgeet(
+                          data.principal,
+                          'EGP'
+                        ).parse()})`}
+                        وكافة المصروفات الادارية البالغه
+                        {numbersToArabic(data.applicationFeesRequired)} جنيه
+                        وتكاليف التمويل البالغه
+                        {numbersToArabic(
+                          data.installmentsObject.totalInstallments.feesSum
+                        )}
+                        جنيه الي الطرف الأول وذلك بواقع مبلغ قدره
+                        {`${numbersToArabic(
+                          data.installmentsObject.totalInstallments
+                            .installmentSum +
+                            (data.applicationFeesRequired
+                              ? data.applicationFeesRequired
+                              : 0)
+                        )} جنيه (${new Tafgeet(
+                          data.installmentsObject.totalInstallments
+                            .installmentSum +
+                            (data.applicationFeesRequired
+                              ? data.applicationFeesRequired
+                              : 0),
+                          'EGP'
+                        ).parse()})`}
+                        ، يتم سداده علي عدد
+                        {numbersToArabic(
+                          data.installmentsObject.installments.length
+                        )}
+                        قسط كل {numbersToArabic(data.product.periodLength)}
+                        {data.product.periodType === 'days'
+                          ? local.day
+                          : local.month}
+                        قيمة كل قسط
+                        {`${numbersToArabic(
+                          data.installmentsObject.installments[0]
+                            .installmentResponse
+                        )} جنيه (${new Tafgeet(
+                          data.installmentsObject.installments[0].installmentResponse,
+                          'EGP'
+                        ).parse()})`}
+                        ، تبدأ في
+                        {timeToArabicDate(
+                          data.installmentsObject.installments[0].dateOfPayment,
+                          false
+                        )}
+                        وينتهي في
+                        {timeToArabicDate(
+                          data.installmentsObject.installments[
+                            data.installmentsObject.installments.length - 1
+                          ].dateOfPayment,
+                          false
+                        )}
+                        _____________________ علي ان يتم السداد بموجب مويل بنكي
+                        لحساب شركه تساهيل للتمويل و رقم الحساب
+                        _____________________ بنك _____________________ فرع
+                        ......
                       </div>
                     </section>
 
@@ -359,7 +426,7 @@ export const SmeLoanContract = (props) => {
                                 المحكمة التي وافق عليها مقدما .
                               </div>
                               <div>
-                                تحريرا في ________________________________
+                                {timeToArabicDate(data.creationDate, false)}
                               </div>
                             </section>
                           </td>
@@ -408,4 +475,3 @@ export const SmeLoanContract = (props) => {
     </>
   )
 }
-

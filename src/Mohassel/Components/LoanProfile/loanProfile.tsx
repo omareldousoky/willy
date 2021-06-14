@@ -74,7 +74,7 @@ import {
   getCustomerInfo,
 } from '../../../Shared/Services/formatCustomersInfo'
 import { FieldProps } from '../../../Shared/Components/Profile/types'
-import SmeLoanContract from '../pdfTemplates/smeLoanContract'
+import { SmeLoanContract } from '../pdfTemplates/smeLoanContract'
 import { Score } from '../CustomerCreation/customerProfile'
 
 interface EarlyPayment {
