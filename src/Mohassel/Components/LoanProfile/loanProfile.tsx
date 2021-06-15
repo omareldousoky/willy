@@ -1388,7 +1388,7 @@ class LoanProfile extends Component<Props, State> {
           <>
             <CashReceiptPDF
               data={this.state.application}
-              remainingTotal={this.state.remainingLoan?.remainingTotal}
+              remainingTotal={this.state.remainingLoan?.remainingTotal || 0}
             />
             <CustomerCardPDF
               data={this.state.application}
