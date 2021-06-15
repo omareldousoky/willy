@@ -62,6 +62,7 @@ interface Props {
   setIssuedLoansSearchFilters: (data) => void
   setLoading: (data) => void
   submitClassName?: string
+  sme?: boolean
 }
 interface State {
   governorates: Array<any>
@@ -260,7 +261,7 @@ class Search extends Component<Props, State> {
     if (!['application', 'loan'].includes(url)) {
       delete obj.type
     } else {
-      obj.type = obj.type ? obj.type : 'micro'
+      obj.type = this.props.sme ? 'sme' : 'micro'
     }
     if (url === 'customer')
       obj.customerType = this.props.dropDownKeys?.includes(

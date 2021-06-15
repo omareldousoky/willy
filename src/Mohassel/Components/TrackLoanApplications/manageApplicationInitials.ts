@@ -9,7 +9,7 @@ export const manageApplicationsArray = (): Card[] => {
       icon: 'applications',
       header: local.loanApplications,
       desc: local.individuals,
-      path: { pathname: '/track-loan-applications', state: { sme: false } },
+      path: '/track-loan-applications',
     })
   }
   if (
@@ -60,7 +60,10 @@ export const manageSMEApplicationsArray = (): Card[] => {
       icon: 'bulkLoanApplicationsReview',
       header: local.bulkLoanApplicationReviews,
       desc: local.companies,
-      path: '/track-loan-applications/bulk-reviews',
+      path: {
+        pathname: '/track-loan-applications/bulk-reviews',
+        state: { sme: true },
+      },
     })
   }
   if (ability.can('approveLoanApplication', 'application')) {
@@ -68,7 +71,10 @@ export const manageSMEApplicationsArray = (): Card[] => {
       icon: 'bulkLoanApplicationsApproval',
       header: local.bulkLoanApplicationsApproval,
       desc: local.companies,
-      path: '/track-loan-applications/bulk-approvals',
+      path: {
+        pathname: '/track-loan-applications/bulk-approvals',
+        state: { sme: true },
+      },
     })
   }
   if (ability.can('createLoan', 'application')) {
@@ -76,7 +82,10 @@ export const manageSMEApplicationsArray = (): Card[] => {
       icon: 'bulkApplicationCreation',
       header: local.bulkApplicationCreation,
       desc: local.companies,
-      path: '/track-loan-applications/bulk-creation',
+      path: {
+        pathname: '/track-loan-applications/bulk-creation',
+        state: { sme: true },
+      },
     })
   }
   return manageLoanArr

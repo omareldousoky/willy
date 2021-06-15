@@ -381,13 +381,6 @@ class NavBar extends Component<Props, State> {
                 </Nav.Link>
               ) : null}
               {ability.can('getLoanApplication', 'application') ? (
-                // <Nav.Link
-                //   onClick={() =>
-                //     this.props.history.push('/track-loan-applications')
-                //   }
-                // >
-                //   {local.loanApplications}
-                // </Nav.Link>
                 <NavDropdown
                   title={local.loanApplications}
                   id="basic-nav-dropdown"
@@ -415,26 +408,68 @@ class NavBar extends Component<Props, State> {
                 </NavDropdown>
               ) : !this.props.hide &&
                 ability.can('approveLoanApplication', 'application') ? (
-                <Nav.Link
-                  onClick={() =>
-                    this.props.history.push(
-                      '/track-loan-applications/bulk-approvals'
-                    )
-                  }
+                <NavDropdown
+                  title={local.loanApplications}
+                  id="basic-nav-dropdown"
                 >
-                  {local.loanApplications}
-                </Nav.Link>
+                  <NavDropdown.Item
+                    className="primary"
+                    onClick={() =>
+                      this.props.history.push(
+                        '/track-loan-applications/bulk-approvals'
+                      )
+                    }
+                  >
+                    {local.persons}
+                  </NavDropdown.Item>
+                  <Can I="getSMEApplication" a="application">
+                    <NavDropdown.Item
+                      className="primary"
+                      onClick={() =>
+                        this.props.history.push(
+                          '/track-loan-applications/bulk-approvals',
+                          {
+                            sme: true,
+                          }
+                        )
+                      }
+                    >
+                      {local.companies}
+                    </NavDropdown.Item>
+                  </Can>
+                </NavDropdown>
               ) : !this.props.hide &&
                 ability.can('createLoan', 'application') ? (
-                <Nav.Link
-                  onClick={() =>
-                    this.props.history.push(
-                      '/track-loan-applications/bulk-creation'
-                    )
-                  }
+                <NavDropdown
+                  title={local.loanApplications}
+                  id="basic-nav-dropdown"
                 >
-                  {local.loanApplications}
-                </Nav.Link>
+                  <NavDropdown.Item
+                    className="primary"
+                    onClick={() =>
+                      this.props.history.push(
+                        '/track-loan-applications/bulk-creation'
+                      )
+                    }
+                  >
+                    {local.persons}
+                  </NavDropdown.Item>
+                  <Can I="getSMEApplication" a="application">
+                    <NavDropdown.Item
+                      className="primary"
+                      onClick={() =>
+                        this.props.history.push(
+                          '/track-loan-applications/bulk-creation',
+                          {
+                            sme: true,
+                          }
+                        )
+                      }
+                    >
+                      {local.companies}
+                    </NavDropdown.Item>
+                  </Can>
+                </NavDropdown>
               ) : null}
               {!this.props.hide && ability.can('loanUsage', 'config') ? (
                 <Nav.Link
