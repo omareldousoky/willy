@@ -25,8 +25,10 @@ import { bulkCreation } from '../../Services/APIs/loanApplication/bulkCreation'
 import { bulkApplicationCreationValidation } from './bulkApplicationCreationValidation'
 import Search from '../../../Shared/Components/Search/search'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
-import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicationInitials'
-import ability from '../../config/ability'
+import {
+  manageApplicationsArray,
+  manageSMEApplicationsArray,
+} from '../TrackLoanApplications/manageApplicationInitials'
 
 interface Product {
   productName: string
@@ -67,9 +69,9 @@ interface State {
   size: number
   from: number
   checkAll: boolean
-  manageApplicationsTabs: any[]
 }
-interface Props extends RouteComponentProps {
+interface Props
+  extends RouteComponentProps<{}, {}, { sme?: boolean; id?: string }> {
   data: any
   error: string
   branchId: string
@@ -97,7 +99,6 @@ class BulkApplicationCreation extends Component<Props, State> {
       size: 10,
       from: 0,
       checkAll: false,
-      manageApplicationsTabs: [],
     }
     this.mappers = [
       {
@@ -199,20 +200,27 @@ class BulkApplicationCreation extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.props.setSearchFilters({ type: 'micro' })
+    this.props.setSearchFilters({
+      type:
+        this.props.location.state && this.props.location.state.sme
+          ? 'sme'
+          : 'micro',
+    })
     this.props
       .search({
         size: this.state.size,
         from: this.state.from,
         url: 'application',
         status: 'approved',
-        type: 'micro',
+        type:
+          this.props.location.state && this.props.location.state.sme
+            ? 'sme'
+            : 'micro',
       })
       .then(() => {
         if (this.props.error)
           Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
       })
-    this.setState({ manageApplicationsTabs: manageApplicationsArray() })
   }
 
   getApplications() {
@@ -286,15 +294,17 @@ class BulkApplicationCreation extends Component<Props, State> {
   }
 
   render() {
-    const searchKey = ability.can('getSMEApplication', 'application')
-      ? ['dateFromTo', 'sme']
-      : ['dateFromTo']
+    const smePermission =
+      (this.props.location.state && this.props.location.state.sme) || false
+    const manageApplicationsTabs = smePermission
+      ? manageSMEApplicationsArray()
+      : manageApplicationsArray()
     return (
       <>
         <HeaderWithCards
           header={local.bulkApplicationCreation}
-          array={this.state.manageApplicationsTabs}
-          active={this.state.manageApplicationsTabs
+          array={manageApplicationsTabs}
+          active={manageApplicationsTabs
             .map((item) => {
               return item.icon
             })
@@ -328,7 +338,7 @@ class BulkApplicationCreation extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={searchKey}
+              searchKeys={['dateFromTo']}
               datePlaceholder={local.entryDate}
               url="application"
               from={this.state.from}
@@ -336,6 +346,7 @@ class BulkApplicationCreation extends Component<Props, State> {
               status="approved"
               submitClassName="mt-0"
               hqBranchIdRequest={this.props.branchId}
+              sme={this.props.location.state && this.props.location.state.sme}
             />
             <DynamicTable
               from={this.state.from}
