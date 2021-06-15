@@ -759,3 +759,6 @@ export const DownloadAsCsv = async (name: string, data: string) => {
   )
   anchor.click()
 }
+
+export const errorResponseHandler = (error: string) =>
+  Swal.fire('Error !', getErrorMessage(error), 'error')

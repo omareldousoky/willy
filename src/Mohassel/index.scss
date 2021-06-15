@@ -483,6 +483,12 @@ code {
   }
 }
 
+@media only screen {
+	#print {
+		display: none;
+	}
+}
+
 .download-icon {
 	background: url(./Assets/green-download.svg);
 	width: 40px;
