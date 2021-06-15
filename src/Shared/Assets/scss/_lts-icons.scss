@@ -124,3 +124,18 @@
     content: '\e914'; 
   }
 }
+.lts-issuedLoans {
+  &:before {
+    content: '\e915'; 
+  }
+}
+.lts-cib {
+  &:before {
+    content: '\e916'; 
+  }
+}
+.lts-changeSourceOfFund {
+  &:before {
+    content: '\e917'; 
+  }
+}
