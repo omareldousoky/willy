@@ -4,7 +4,7 @@ import * as local from '../../../../Shared/Assets/ar.json'
 import { timeToArabicDate } from '../../../../Shared/Services/utils'
 import Orientation from '../../Common/orientation'
 
-const CrossedOutLoansList = (props) => {
+export const CrossedOutLoansList = (props) => {
   const { data } = props.data
   const { days } = data
   const totalNumberOfTransactions = Number(data.numTrx)
@@ -56,7 +56,9 @@ const CrossedOutLoansList = (props) => {
             <td className="gray frame" colSpan={2}>
               إجمالي تاريخ الحركه
             </td>
-            <td className="gray frame">{day.truthDate.substring(0, 10)}</td>
+            <td className="gray frame text-nowrap">
+              {day.truthDate.substring(0, 10)}
+            </td>
             <td />
             <td className="frame">إجمالي عدد الحركات</td>
             <td className="frame">{day.numTrx}</td>
@@ -103,7 +105,9 @@ const CrossedOutLoansList = (props) => {
             <td>{row.customerName}</td>
             <td>{row.loanSerial}</td>
             <td colSpan={1}>{row.loanPrincipal}</td>
-            <td colSpan={3}>{row.issueDate}</td>
+            <td colSpan={3} className="text-nowrap">
+              {row.issueDate}
+            </td>
             <td>{getStatus(row.loanStatus)}</td>
             <td>{row.transactionPrincipal}</td>
             <td>{row.transactionInterest}</td>
@@ -127,7 +131,7 @@ const CrossedOutLoansList = (props) => {
           <td className="frame" colSpan={2}>
             {branch.branchName}
           </td>
-          <td className="frame" colSpan={1}>
+          <td className="frame text-nowrap" colSpan={1}>
             {branch.truthDate.substring(0, 10)}
           </td>
           <td className="frame">{branch.numTrx}</td>
@@ -162,29 +166,16 @@ const CrossedOutLoansList = (props) => {
   return (
     <>
       <Orientation size="portrait" />
-      <div
-        className="crossed-out-loans-list"
-        style={{ direction: 'rtl' }}
-        lang="ar"
-      >
+      <div className="crossed-out-loans-list" lang="ar">
         <table
+          className="w-100 text-center"
           style={{
-            fontSize: '12px',
             margin: '10px 0px',
-            textAlign: 'center',
-            width: '100%',
           }}
         >
           <tbody>
             <tr style={{ height: '10px' }} />
-            <tr
-              style={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}
-            >
+            <tr className="w-100 d-flex flex-row justify-content-between">
               <th colSpan={6}>
                 <div className="logo-print-tb" />
               </th>
@@ -284,5 +275,3 @@ const CrossedOutLoansList = (props) => {
     </>
   )
 }
-
-export default CrossedOutLoansList

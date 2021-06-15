@@ -5,6 +5,7 @@ import {
   timeToArabicDate,
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
+import Orientation from '../../Common/orientation'
 
 interface HeaderProps {
   title: string
@@ -29,7 +30,7 @@ export const Header = ({
       <div className="d-flex justify-content-between m-2">
         <span className="logo-print" role="img" />
         <p className="m-0 ml-3 text-right text-sm">
-          ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+          ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنة 2015
         </p>
       </div>
       <div className="d-flex mb-3">

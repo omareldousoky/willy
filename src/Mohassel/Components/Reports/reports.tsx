@@ -4,20 +4,20 @@ import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
 import ReportsModal from './reportsModal'
 import * as local from '../../../Shared/Assets/ar.json'
-import CustomerStatusDetails from '../pdfTemplates/customerStatusDetails/customerStatusDetails'
+import { CustomerStatusDetails } from '../pdfTemplates/customerStatusDetails'
 import { getCustomerDetails } from '../../Services/APIs/Reports/customerDetails'
 import { getLoanDetails } from '../../Services/APIs/Reports/loanDetails'
-import LoanApplicationDetails from '../pdfTemplates/loanApplicationDetails/loanApplicationDetails'
+import { LoanApplicationDetails } from '../pdfTemplates/loanApplicationDetails'
 import { BranchesLoanList } from '../pdfTemplates/branchesLoanList'
 import {
   getBranchLoanList,
   postBranchLoanListExcel,
   getBranchLoanListExcel,
 } from '../../Services/APIs/Reports/branchLoanList'
-import CollectionStatement from '../pdfTemplates/CollectionStatement/CollectionStatement'
-import LoanPenaltiesList from '../pdfTemplates/loanPenaltiesList/loanPenaltiesList'
-import CrossedOutLoansList from '../pdfTemplates/crossedOutLoansList/crossedOutLoansList'
-import DoubtfulPayments from '../pdfTemplates/doubtfulPayments/doubtfulPayments'
+import { CollectionStatement } from '../pdfTemplates/CollectionStatement'
+import { LoanPenaltiesList } from '../pdfTemplates/loanPenaltiesList'
+import { CrossedOutLoansList } from '../pdfTemplates/crossedOutLoansList'
+import { DoubtfulPayments } from '../pdfTemplates/doubtfulPayments'
 import {
   collectionReport,
   penalties,
@@ -34,8 +34,8 @@ import {
   postInstallmentsExcel,
   getInstallmentsExcel,
 } from '../../Services/APIs/Reports/installments'
-import PaymentsDone from '../pdfTemplates/paymentsDone/paymentsDone'
-import IssuedLoanList from '../pdfTemplates/issuedLoanList/issuedLoanList'
+import { PaymentsDone } from '../pdfTemplates/paymentsDone'
+import { IssuedLoanList } from '../pdfTemplates/issuedLoanList'
 import {
   getIssuedLoanList,
   postIssuedLoansExcel,
@@ -51,20 +51,20 @@ import {
   postRescheduledLoanExcel,
   getRescheduledLoanExcel,
 } from '../../Services/APIs/Reports/rescheduledLoansList'
-import LoanCreationList from '../pdfTemplates/loanCreationList/loanCreationList'
-import RescheduledLoanList from '../pdfTemplates/rescheduledLoanList/rescheduledLoanList'
+import { LoanCreationList } from '../pdfTemplates/loanCreationList'
+import { RescheduledLoanList } from '../pdfTemplates/rescheduledLoanList'
 import {
   getRandomPayments,
   postRandomPaymentsExcel,
   getRandomPaymentsExcel,
 } from '../../Services/APIs/Reports/randomPayment'
-import RandomPayment from '../pdfTemplates/randomPayment/randomPayment'
+import { RandomPayment } from '../pdfTemplates/randomPayment'
 import {
   getLoanApplicationFees,
   postLoanApplicationFeesExcel,
   getLoanApplicationFeesExcel,
 } from '../../Services/APIs/Reports/loanApplicationFees'
-import LoanApplicationFees from '../pdfTemplates/loanApplicationFees/loanApplicationFees'
+import { LoanApplicationFees } from '../pdfTemplates/loanApplicationFees'
 import Can from '../../config/Can'
 import {
   doubtfulLoans,
@@ -72,7 +72,7 @@ import {
   getDoubtfulLoansExcel,
 } from '../../Services/APIs/Reports/doubtfulLoans'
 import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport'
-import ManualPayments from '../pdfTemplates/manualPayments/manualPayments'
+import { ManualPayments } from '../pdfTemplates/manualPayments'
 import {
   getManualPayments,
   postManualPaymentsExcel,
@@ -80,7 +80,7 @@ import {
 } from '../../Services/APIs/Reports/manualPayments'
 import { downloadFile } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
-import CustomerTransactionReport from '../pdfTemplates/customerTransactionReport/customerTransactionReport'
+import { CustomerTransactionReport } from '../pdfTemplates/customerTransactionReport'
 import { getCustomerTransactions } from '../../Services/APIs/Reports/customerTransactions'
 
 export interface PDF {
@@ -98,8 +98,8 @@ interface State {
   data: any
   loading: boolean
   customerKey: string
-  fromDate: string
-  toDate: string
+  fromDate: number
+  toDate: number
 }
 
 class Reports extends Component<{}, State> {
@@ -153,7 +153,7 @@ class Reports extends Component<{}, State> {
         },
         {
           key: 'issuedLoanList',
-          local: 'القروض المصدره',
+          local: 'القروض المصدرة',
           inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'loansIssued',
         },
@@ -204,8 +204,8 @@ class Reports extends Component<{}, State> {
       data: {},
       loading: false,
       customerKey: '',
-      fromDate: '',
-      toDate: '',
+      fromDate: 0,
+      toDate: 0,
     }
   }
 

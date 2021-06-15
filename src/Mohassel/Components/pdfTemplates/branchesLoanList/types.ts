@@ -6,8 +6,8 @@ import {
 
 export interface BranchesLoanListProps {
   data: LoansIssuedByBranchResponse
-  fromDate: string
-  toDate: string
+  fromDate: number
+  toDate: number
 }
 
 export interface LoanTypeSectionProps {

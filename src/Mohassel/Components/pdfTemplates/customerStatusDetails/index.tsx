@@ -14,7 +14,7 @@ import {
 } from '../../../../Shared/Services/utils'
 import { CustomerIsBlocked, CustomerStatusLocal } from './types'
 
-const CustomerStatusDetails = (props) => {
+export const CustomerStatusDetails = (props) => {
   const {
     BusinessPhoneNumber,
     Comments,
@@ -536,5 +536,3 @@ const CustomerStatusDetails = (props) => {
     </div>
   )
 }
-
-export default CustomerStatusDetails

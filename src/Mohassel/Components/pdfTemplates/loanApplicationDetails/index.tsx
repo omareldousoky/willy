@@ -11,7 +11,7 @@ import {
   guarantorOrderLocal,
 } from '../../../../Shared/Services/utils'
 
-const LoanApplicationDetails = (props) => {
+export const LoanApplicationDetails = (props) => {
   const getStatus = (status: string) => {
     switch (status) {
       case 'unpaid':
@@ -523,5 +523,3 @@ const LoanApplicationDetails = (props) => {
     </div>
   )
 }
-
-export default LoanApplicationDetails

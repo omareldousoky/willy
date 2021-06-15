@@ -8,7 +8,7 @@ import {
 import * as local from '../../../../Shared/Assets/ar.json'
 import Orientation from '../../Common/orientation'
 
-const PaymentsDone = (props) => {
+export const PaymentsDone = (props) => {
   const tempData = props.data.data
   const reportDate =
     props.data.from === props.data.to
@@ -19,26 +19,17 @@ const PaymentsDone = (props) => {
         )}`
   return (
     <>
-      <Orientation size="landscape" />
+      <Orientation size="portrait" />
       <div className="payments-done" lang="ar">
         <table
+          className="w-100 text-center"
           style={{
-            fontSize: '12px',
             margin: '10px 0px',
-            textAlign: 'center',
-            width: '100%',
           }}
         >
           <tbody>
             <tr style={{ height: '10px' }} />
-            <tr
-              style={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}
-            >
+            <tr className="w-100 d-flex flex-row justify-content-between">
               <th colSpan={6}>
                 <div className="logo-print-tb" />
               </th>
@@ -252,5 +243,3 @@ const PaymentsDone = (props) => {
     </>
   )
 }
-
-export default PaymentsDone

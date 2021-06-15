@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react'
+import DataRow from '../pdfTemplateCommon/dataRow'
 
 import './branchesLoanList.scss'
 import { LoanTypeRowProps } from './types'
@@ -18,20 +19,20 @@ export const LoanTypeRow: FunctionComponent<LoanTypeRowProps> = ({
           <td>{row.branchName}</td>
         </>
       )}
-      <td>{row.createdCount}</td>
-      <td>{row.createdSum}</td>
-      <td>{row.issuedCount}</td>
-      <td>{row.issuedSum}</td>
-      <th>{row.totalCreatedIssuedCount}</th>
-      <th>{row.totalCreatedIssuedSum}</th>
-      <td>{row.reviewedCount}</td>
-      <td>{row.reviewedSum}</td>
-      <td>{row.approvedCount}</td>
-      <td>{row.approvedSum}</td>
-      <th>{row.totalReviewedApprovedCount}</th>
-      <th>{row.totalReviewedApprovedSum}</th>
-      <th>{row.totalAllCount}</th>
-      <th>{row.totalAllSum}</th>
+      <DataRow value={row.createdCount} type="number" />
+      <DataRow value={row.createdSum} type="number" />
+      <DataRow value={row.issuedCount} type="number" />
+      <DataRow value={row.issuedSum} type="number" />
+      <DataRow value={row.totalCreatedIssuedCount} type="number" />
+      <DataRow value={row.totalCreatedIssuedSum} type="number" />
+      <DataRow value={row.reviewedCount} type="number" />
+      <DataRow value={row.reviewedSum} type="number" />
+      <DataRow value={row.approvedCount} type="number" />
+      <DataRow value={row.approvedSum} type="number" />
+      <DataRow value={row.totalReviewedApprovedCount} type="number" />
+      <DataRow value={row.totalReviewedApprovedSum} type="number" />
+      <DataRow value={row.totalAllCount} type="number" />
+      <DataRow value={row.totalAllSum} type="number" />
     </tr>
   )
 }

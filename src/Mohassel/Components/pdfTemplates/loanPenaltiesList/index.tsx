@@ -4,7 +4,7 @@ import * as local from '../../../../Shared/Assets/ar.json'
 import { timeToArabicDate } from '../../../../Shared/Services/utils'
 import Orientation from '../../Common/orientation'
 
-const LoanPenaltiesList = (props) => {
+export const LoanPenaltiesList = (props) => {
   const { data } = props
   const { days } = data
   const totalNumberOfTransactions = Number(data.totalNumberOfTransactions)
@@ -148,27 +148,18 @@ const LoanPenaltiesList = (props) => {
       <Orientation size="portrait" />
       <div className="loan-penalties-list" dir="rtl" lang="ar">
         <table
+          className="w-100 text-center"
           style={{
-            fontSize: '12px',
             margin: '10px 0px',
-            textAlign: 'center',
-            width: '100%',
           }}
         >
           <tbody>
             <tr style={{ height: '10px' }} />
-            <tr
-              style={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}
-            >
-              <th colSpan={6} style={{ backgroundColor: 'red' }}>
+            <tr className="w-100 d-flex flex-row justify-content-between">
+              <th colSpan={6}>
                 <div className="logo-print-tb" />
               </th>
-              <th colSpan={6} style={{ backgroundColor: 'blue' }}>
+              <th colSpan={6}>
                 ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
               </th>
             </tr>
@@ -250,5 +241,3 @@ const LoanPenaltiesList = (props) => {
     </>
   )
 }
-
-export default LoanPenaltiesList
