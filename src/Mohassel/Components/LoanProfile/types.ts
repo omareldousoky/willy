@@ -1,11 +1,13 @@
-interface EarlyPaymentPdfData {
+export interface EarlyPaymentPdfData {
   totalDaysLate: number
   totalDaysEarly: number
   installmentsDue: number[]
   remainingInstallments: number
   applicationFees: number
-  totalLoanAmount: number // egamli l raseed
-  totalEarlyPaymentAmount: number // egmali l sdad l mo3agal
-  earlyPaymentBaseAmount: number // raseed l asl
+  remainingTotal: number // egamli l raseed
+  remainingInterest?: number
   remainingPrincipal?: number
+  earlyPaymentPrincipal: number
+  earlyPaymentInterest: number
+  earlyPaymentTotal: number // egmali l sdad l mo3agal
 }

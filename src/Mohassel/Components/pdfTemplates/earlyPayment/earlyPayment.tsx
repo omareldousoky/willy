@@ -2,35 +2,30 @@ import React, { FunctionComponent } from 'react'
 import './earlyPayment.scss'
 import * as local from '../../../../Shared/Assets/ar.json'
 import {
-  timeToArabicDate,
   numbersToArabic,
-  getStatus,
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
-import { ApplicationResponse } from '../../../Models/Application'
-import { DAY_IN_MS, getInstallmentKeySum } from '../../LoanProfile/utils'
-
-interface EarlyPaymentPDFProps {
-  data: ApplicationResponse
-  earlyPaymentPdfData: EarlyPaymentPdfData
-  branchDetails: any
-}
+import DataRow from '../pdfTemplateCommon/dataRow'
+import { EarlyPaymentPDFProps } from './types'
+import { EarlyPaymentInstallment } from './EarlyPaymentInstallment'
 
 const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
-  data,
+  application,
   earlyPaymentPdfData,
   branchDetails,
 }) => {
   const {
-    totalDaysEarly,
     totalDaysLate,
-    totalEarlyPaymentAmount,
-    totalLoanAmount,
+    totalDaysEarly,
     applicationFees,
     installmentsDue,
     remainingInstallments,
-    earlyPaymentBaseAmount,
     remainingPrincipal,
+    earlyPaymentPrincipal,
+    remainingInterest,
+    remainingTotal,
+    earlyPaymentInterest,
+    earlyPaymentTotal,
   } = earlyPaymentPdfData
 
   return (
@@ -38,14 +33,7 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
       <table className="text-center my-3 mx-0 w-100">
         <tbody>
           <tr style={{ height: '10px' }} />
-          <tr
-            style={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}
-          >
+          <tr className="w-100 d-flex flex-row justify-content-between">
             <th colSpan={6} style={{ backgroundColor: 'white' }}>
               <div className="logo-print-tb" />
             </th>
@@ -69,9 +57,7 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
           </tr>
           <tr>
             <td>{timeToArabicDateNow(true)}</td>
-            <td className="title2 bold">
-              <u>السداد المعجل</u>
-            </td>
+            <td className="title2 bold">السداد المعجل</td>
             <td>1/1</td>
           </tr>
         </tbody>
@@ -82,18 +68,18 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
             <td>
               العميل
               <div className="frame">
-                {data?.product?.beneficiaryType === 'individual'
-                  ? numbersToArabic(data?.customer?.key)
-                  : numbersToArabic(
-                      data?.group?.individualsInGroup.find(
+                {numbersToArabic(
+                  application?.product?.beneficiaryType === 'individual'
+                    ? application?.customer?.key
+                    : application?.group?.individualsInGroup.find(
                         (member) => member.type === 'leader'
                       )?.customer.key
-                    )}
+                )}
               </div>
               <div className="frame">
-                {data?.product?.beneficiaryType === 'individual'
-                  ? data?.customer?.customerName
-                  : data?.group?.individualsInGroup.find(
+                {application?.product?.beneficiaryType === 'individual'
+                  ? application?.customer?.customerName
+                  : application?.group?.individualsInGroup.find(
                       (member) => member.type === 'leader'
                     )?.customer.customerName}
               </div>
@@ -105,11 +91,11 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
             <td>
               المندوب
               <div className="frame">
-                {data?.product?.beneficiaryType === 'group'
-                  ? data?.group?.individualsInGroup.find(
+                {application?.product?.beneficiaryType === 'group'
+                  ? application?.group?.individualsInGroup.find(
                       (member) => member.type === 'leader'
                     )?.customer.representativeName
-                  : data?.customer?.representativeName}
+                  : application?.customer?.representativeName}
               </div>
             </td>
           </tr>
@@ -126,7 +112,7 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
             <td>
               فترة السداد
               <div className="frame">
-                {data?.product?.periodType === 'days'
+                {application?.product?.periodType === 'days'
                   ? local.daily
                   : local.inAdvanceFromMonthly}
               </div>
@@ -134,17 +120,19 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
             <td>
               عدد الاقساط
               <div className="frame">
-                {numbersToArabic(data?.installmentsObject?.installments.length)}
+                {numbersToArabic(
+                  application?.installmentsObject?.installments.length
+                )}
               </div>
             </td>
             <td>
               فترة السماح
               <div className="frame">
-                {numbersToArabic(data?.product?.gracePeriod)}
+                {numbersToArabic(application?.product?.gracePeriod)}
               </div>
               <div className="frame">
-                {data?.product?.beneficiaryType === 'individual'
-                  ? data?.customer?.businessActivity
+                {application?.product?.beneficiaryType === 'individual'
+                  ? application?.customer?.businessActivity
                   : 'تمويل رأس المال'}
               </div>
             </td>
@@ -160,15 +148,15 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
               <span className="frame">{numbersToArabic(totalDaysLate)}</span>
             </td>
             <td>
-              غرامات المسدده :
+              غرامات مسددة :
               <span className="frame">
-                {numbersToArabic(data.penaltiesPaid)}
+                {numbersToArabic(application?.penaltiesPaid)}
               </span>
             </td>
             <td>
               غرامات معفاة :
               <div className="frame">
-                {numbersToArabic(data.penaltiesCanceled)}
+                {numbersToArabic(application?.penaltiesCanceled)}
               </div>
             </td>
             <td>
@@ -179,129 +167,13 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
         </tbody>
       </table>
 
-      <table className="tablestyle">
-        <tbody>
-          <tr>
-            <th className="border">القسط</th>
-            <th className="border">تاريخ الآستحقاق</th>
-            <th className="border"> اصل القسط</th>
-            <th className="border">تكلفه التمويل</th>
-            <th className="border">اجمالي القيمة</th>
-            <th className="border">قيمه مسدده</th>
-            <th className="border">تكلفه التمويل مسدده</th>
-            <th className="border">الحاله</th>
-            <th className="border">تاريخ الحاله</th>
-            <th className="border">ايام التأخير</th>
-            <th className="border">الملاحظات</th>
-          </tr>
-          {data?.installmentsObject?.installments.map((installment, index) => {
-            const installmentDateOfPayment = new Date(
-              installment?.dateOfPayment
-            ).setHours(23, 59, 59, 59)
-
-            const installmentPaidAt = new Date(installment.paidAt).setHours(
-              23,
-              59,
-              59,
-              59
-            )
-            return (
-              <tr key={index}>
-                <td>
-                  {numbersToArabic(data.applicationKey) +
-                    '/' +
-                    numbersToArabic(installment.id)}
-                </td>
-                <td
-                  className={
-                    installmentsDue.includes(installment.id) ? 'due' : ''
-                  }
-                >
-                  {timeToArabicDate(installment.dateOfPayment, false)}
-                </td>
-                <td>{numbersToArabic(installment.principalInstallment)}</td>
-                <td>{numbersToArabic(installment.feesInstallment)}</td>
-                <td>{numbersToArabic(installment.installmentResponse)}</td>
-                <td>{numbersToArabic(installment.principalPaid)}</td>
-                <td>{numbersToArabic(installment.feesPaid)}</td>
-                <td>{getStatus(installment)}</td>
-                <td>
-                  {installment.paidAt
-                    ? timeToArabicDate(installment.paidAt, false)
-                    : ''}
-                </td>
-                <td>
-                  {installment.paidAt
-                    ? numbersToArabic(
-                        Math.round(
-                          installmentPaidAt - installmentDateOfPayment
-                        ) / DAY_IN_MS
-                      )
-                    : new Date().setHours(23, 59, 59, 59).valueOf() >
-                        installmentDateOfPayment &&
-                      installment.status !== 'rescheduled'
-                    ? numbersToArabic(
-                        Math.round(
-                          (new Date().setHours(23, 59, 59, 59).valueOf() -
-                            installmentDateOfPayment) /
-                            DAY_IN_MS
-                        )
-                      )
-                    : ''}
-                </td>
-                <td />
-              </tr>
-            )
-          })}
-          <tr>
-            <td />
-            <th>الإجمالي</th>
-            <td className="border">
-              {numbersToArabic(
-                data?.installmentsObject?.totalInstallments.principal
-              )}
-            </td>
-            <td className="border">
-              {numbersToArabic(
-                data?.installmentsObject?.totalInstallments.feesSum
-              )}
-            </td>
-            <td className="border">
-              {numbersToArabic(
-                data?.installmentsObject?.totalInstallments.installmentSum
-              )}
-            </td>
-            <td className="border">
-              {numbersToArabic(
-                getInstallmentKeySum(
-                  'principalPaid',
-                  data?.installmentsObject?.installments
-                )
-              )}
-            </td>
-            <td className="border">
-              {numbersToArabic(
-                getInstallmentKeySum(
-                  'feesPaid',
-                  data?.installmentsObject?.installments
-                )
-              )}
-            </td>
-            <th className="border">ايام التأخير</th>
-            <td className="border">
-              {totalDaysLate > 0
-                ? numbersToArabic(totalDaysLate)
-                : numbersToArabic(0)}
-            </td>
-            <th className="border">ايام التبكير</th>
-            <td className="border">
-              {numbersToArabic(
-                totalDaysEarly < 0 ? totalDaysEarly * -1 : totalDaysEarly
-              )}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <EarlyPaymentInstallment
+        applicationKey={application.applicationKey}
+        installmentsObject={application?.installmentsObject}
+        installmentsDue={installmentsDue}
+        totalDaysEarly={totalDaysEarly}
+        totalDaysLate={totalDaysLate}
+      />
 
       <div style={{ border: '1px solid black' }} />
 
@@ -319,31 +191,33 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
           </tr>
           <tr>
             <th>الرصيد</th>
-            <td className="border">{numbersToArabic(totalLoanAmount)}</td>
-            <td className="border">
-              {numbersToArabic(
-                Number(data?.installmentsObject?.totalInstallments?.feesSum) -
-                  getInstallmentKeySum(
-                    'feesPaid',
-                    data?.installmentsObject?.installments
-                  )
-              )}
-            </td>
-            <td className="border">{numbersToArabic(remainingPrincipal)}</td>
+            <DataRow value={remainingTotal} type="money" className="border" />
+            <DataRow
+              value={remainingInterest}
+              type="money"
+              className="border"
+            />
+            <DataRow
+              value={remainingPrincipal}
+              type="money"
+              className="border"
+            />
             <td />
             <td />
             <th className="border">الخصم</th>
-            <td className="border">
-              {numbersToArabic(totalLoanAmount - totalEarlyPaymentAmount)}
-            </td>
+            <DataRow
+              value={remainingTotal - earlyPaymentTotal}
+              type="money"
+              className="border"
+            />
           </tr>
           <tr>
             <td />
             <th className="border">اقساط يجب سدادها</th>
             <th className="border">الرصيد الأصل</th>
             <th className="border">
-              {numbersToArabic(data?.product?.earlyPaymentFees)}% (تكلفه تمويل
-              الترحيل)
+              {numbersToArabic(application?.product?.earlyPaymentFees)}% (تكلفه
+              تمويل الترحيل)
             </th>
             <th className="border">إجمالي السداد المعجل</th>
             <td />
@@ -352,20 +226,26 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
           </tr>
           <tr>
             <th>السداد المعجل</th>
-            <td className="border">{numbersToArabic(remainingInstallments)}</td>
-            <td className="border">
-              {numbersToArabic(earlyPaymentBaseAmount)}
-            </td>
-            <td className="border">
-              {numbersToArabic(
-                (Number(data?.product?.earlyPaymentFees) *
-                  earlyPaymentBaseAmount) /
-                  100
-              )}
-            </td>
-            <td className="border">
-              {numbersToArabic(totalEarlyPaymentAmount)}
-            </td>
+            <DataRow
+              value={remainingInstallments}
+              type="money"
+              className="border"
+            />
+            <DataRow
+              value={earlyPaymentPrincipal}
+              type="money"
+              className="border"
+            />
+            <DataRow
+              value={earlyPaymentInterest}
+              type="money"
+              className="border"
+            />
+            <DataRow
+              value={earlyPaymentTotal}
+              type="money"
+              className="border"
+            />
             <td />
             <td />
             <td />

@@ -1,9 +1,12 @@
+import dayjs from 'dayjs'
 import { getStatus } from '../../../Shared/Services/utils'
 import {
   ApplicationResponse,
   SingleInstallmentRow,
 } from '../../Models/Application'
 import local from '../../../Shared/Assets/ar.json'
+import { RemainingLoanResponse } from '../../Models/Payment'
+import { EarlyPaymentPdfData } from './types'
 
 export const DAY_IN_MS = 1000 * 60 * 60 * 24
 
@@ -17,7 +20,7 @@ export const getInstallmentKeySum = (
 
 export const getEarlyPaymentPdfData = (
   application: ApplicationResponse,
-  earlyPayment?: EarlyPayment
+  remainingLoan?: RemainingLoanResponse
 ): EarlyPaymentPdfData => {
   let totalDaysLate = 0
   let totalDaysEarly = 0
@@ -25,11 +28,11 @@ export const getEarlyPaymentPdfData = (
   const installmentsDue: number[] = []
 
   application?.installmentsObject?.installments.forEach((installment) => {
+    const dateOfPayment = dayjs(installment.dateOfPayment)
+    const paidAt = dayjs(installment.paidAt)
     if (
-      (new Date(installment.dateOfPayment).getMonth() ===
-        new Date().getMonth() &&
-        new Date(installment.dateOfPayment).getFullYear() ===
-          new Date().getFullYear() &&
+      (dateOfPayment.month() === dayjs().month() &&
+        dateOfPayment.year() === dayjs().year() &&
         getStatus(installment) === local.unpaid) ||
       getStatus(installment) === local.late ||
       getStatus(installment) === local.partiallyPaid
@@ -43,17 +46,19 @@ export const getEarlyPaymentPdfData = (
     if (installment.status !== 'rescheduled') {
       if (installment.paidAt) {
         const number = Math.round(
-          (new Date(installment.paidAt).setHours(23, 59, 59, 59) -
-            new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) /
+          (paidAt.endOf('day').valueOf() -
+            dateOfPayment.endOf('day').valueOf()) /
             DAY_IN_MS
         )
         if (number > 0) {
           totalDaysLate += number
-        } else totalDaysEarly += number
+        } else {
+          totalDaysEarly += number
+        }
       } else {
         const number = Math.round(
-          (new Date().setHours(23, 59, 59, 59).valueOf() -
-            new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) /
+          (dayjs().endOf('day').valueOf() -
+            dateOfPayment.endOf('day').valueOf()) /
             DAY_IN_MS
         )
         if (number > 0) totalDaysLate += number
@@ -77,46 +82,44 @@ export const getEarlyPaymentPdfData = (
     return 0
   }
 
-  const calculateRemainingInstallments = (): number => {
-    let total = 0
-    application?.installmentsObject?.installments.forEach((installment) => {
-      if (installmentsDue.includes(installment.id)) {
-        total += Number(installment?.installmentResponse)
-      }
-    })
-    return total
-  }
-
-  // egamli l raseed
-  const totalLoanAmount: number =
-    Number(application?.installmentsObject?.totalInstallments?.feesSum) -
-    getInstallmentKeySum(
-      'feesPaid',
-      application?.installmentsObject?.installments
-    ) +
-    Number(remainingPrincipal)
-
-  // egmali l sdad l mo3agal
-  const totalEarlyPaymentAmount: number =
-    Number(remainingPrincipal) +
-    calculateRemainingInstallments() +
-    (Number(application?.product?.earlyPaymentFees) *
-      Number(remainingPrincipal)) /
-      100
+  // aksat yageb sdadha
+  const remainingInstallments: number = Math.ceil(
+    application?.installmentsObject?.installments
+      .map((installment) =>
+        installmentsDue.includes(installment.id)
+          ? Number(installment?.installmentResponse)
+          : 0
+      )
+      .reduce((acc, current) => acc + current, 0) || 0
+  )
 
   // raseed l asl
-  const earlyPaymentBaseAmount: number =
-    Number(remainingPrincipal) - latePrincipal
+  const earlyPaymentPrincipal: number = Math.ceil(
+    Number(remainingLoan?.remainingPrincipal) - latePrincipal
+  )
+
+  // takleft tmweel l tar7eel
+  const earlyPaymentInterest: number = Math.ceil(
+    (Number(application?.product?.earlyPaymentFees) / 100) *
+      earlyPaymentPrincipal
+  )
+
+  // egmali l sdad l mo3agal
+  const earlyPaymentTotal: number = Math.ceil(
+    earlyPaymentPrincipal + earlyPaymentInterest + remainingInstallments
+  )
 
   return {
     totalDaysLate,
     totalDaysEarly,
     installmentsDue,
-    totalEarlyPaymentAmount,
-    totalLoanAmount,
-    remainingPrincipal,
     applicationFees: getApplicationFee(),
-    remainingInstallments: calculateRemainingInstallments(),
-    earlyPaymentBaseAmount,
+    remainingInstallments,
+    remainingTotal: remainingLoan?.remainingTotal || 0,
+    remainingPrincipal: remainingLoan?.remainingPrincipal,
+    remainingInterest: remainingLoan?.remainingInterest,
+    earlyPaymentInterest,
+    earlyPaymentPrincipal,
+    earlyPaymentTotal,
   }
 }
