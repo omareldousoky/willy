@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Container from 'react-bootstrap/Container'
-import { Customer, GuaranteedLoans } from '../../../Shared/Services/interfaces'
+import { Customer } from '../../../Shared/Services/interfaces'
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { Tab } from '../HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getIscoreCached } from '../../Services/APIs/iScore/iScore'
-import { guaranteed } from '../../Services/APIs/Reports'
-import ClientGuaranteedLoans from '../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans'
 import ability from '../../config/ability'
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
 import {
@@ -18,7 +16,6 @@ import {
 } from '../../Services/APIs/Customer-Creation/customerCategorization'
 import { Profile, InfoBox, ProfileActions } from '../../../Shared/Components'
 import { TabDataProps } from '../../../Shared/Components/Profile/types'
-import { CustomerReportsTab } from './customerReportsTab'
 import HalanLinkageModal from './halanLinkageModal'
 import { blockCustomer } from '../../Services/APIs/blockCustomer/blockCustomer'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
@@ -79,10 +76,10 @@ const getCustomerCategorizationRating = async (
 }
 
 export const CustomerProfile = () => {
-  const [loading, changeLoading] = useState(false)
-  const [customerDetails, changeCustomerDetails] = useState<Customer>()
-  const [iScoreDetails, changeiScoreDetails] = useState<Score>()
-  const [activeTab, changeActiveTab] = useState('workInfo')
+  const [loading, setLoading] = useState(false)
+  const [customerDetails, setCustomerDetails] = useState<Customer>()
+  const [iScoreDetails, setIScoreDetails] = useState<Score>()
+  const [activeTab, setActiveTab] = useState('workInfo')
   const [ratings, setRatings] = useState<Array<CustomerScore>>([])
   const [showHalanLinkageModal, setShowHalanLinkageModal] = useState<boolean>(
     false
@@ -91,61 +88,43 @@ export const CustomerProfile = () => {
   const history = useHistory()
 
   async function getCachediScores(id) {
-    changeLoading(true)
+    setLoading(true)
     const iScores = await getIscoreCached({ nationalIds: [id] })
     if (iScores.status === 'success') {
-      changeiScoreDetails(iScores.body.data[0])
-      changeLoading(false)
+      setIScoreDetails(iScores.body.data[0])
+      setLoading(false)
     } else {
-      changeLoading(false)
+      setLoading(false)
       Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
     }
   }
-  const [print, _changePrint] = useState<any>()
-  const [dataToBePrinted, changeDataToBePrinted] = useState<any>()
-  const [
-    guaranteeedLoansData,
-    changeGuaranteeedLoansData,
-  ] = useState<GuaranteedLoans>()
-  const [geoArea, setgeoArea] = useState<any>()
-  const getGuaranteeedLoans = async (customer) => {
-    changeLoading(true)
-    const res = await guaranteed(customer?.key)
-    if (res.status === 'success') {
-      await changeGuaranteeedLoansData(res.body)
-      changeLoading(false)
-    } else {
-      changeLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    }
-  }
+  const [geoArea, setGeoArea] = useState<any>()
   const getGeoArea = async (geoAreaId, branch) => {
-    changeLoading(true)
+    setLoading(true)
     const resGeo = await getGeoAreasByBranch(branch)
     if (resGeo.status === 'success') {
-      changeLoading(false)
+      setLoading(false)
       const geoAreaObject = resGeo.body.data.filter(
         (area) => area._id === geoAreaId
       )
       if (geoAreaObject.length === 1) {
-        setgeoArea(geoAreaObject[0])
-      } else setgeoArea({ name: '-', active: false })
+        setGeoArea(geoAreaObject[0])
+      } else setGeoArea({ name: '-', active: false })
     } else {
-      changeLoading(false)
+      setLoading(false)
       Swal.fire('Error !', getErrorMessage(resGeo.error.error), 'error')
     }
   }
   async function getCustomerDetails() {
-    changeLoading(true)
+    setLoading(true)
     const res = await getCustomerByID(location.state.id)
     if (res.status === 'success') {
-      await changeCustomerDetails(res.body)
+      await setCustomerDetails(res.body)
       if (ability.can('viewIscore', 'customer'))
         await getCachediScores(res.body.nationalId)
-      await getGuaranteeedLoans(res.body)
       await getGeoArea(res.body.geoAreaId, res.body.branchId)
     } else {
-      changeLoading(false)
+      setLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
   }
@@ -196,13 +175,13 @@ export const CustomerProfile = () => {
         cancelButtonText: local.cancel,
       }).then(async (result) => {
         if (result.value) {
-          changeLoading(true)
+          setLoading(true)
           const res = await blockCustomer(id, {
             toBeBlocked: blocked?.isBlocked !== true,
             reason: text,
           })
           if (res.status === 'success') {
-            changeLoading(false)
+            setLoading(false)
             Swal.fire(
               '',
               blocked?.isBlocked === true
@@ -211,7 +190,7 @@ export const CustomerProfile = () => {
               'success'
             ).then(() => window.location.reload())
           } else {
-            changeLoading(false)
+            setLoading(false)
             Swal.fire('', local.searchError, 'error')
           }
         }
@@ -445,24 +424,7 @@ export const CustomerProfile = () => {
     reports: [
       {
         fieldTitle: 'reports',
-        fieldData: (
-          <CustomerReportsTab
-            changePrint={async (pdf) => {
-              await changeDataToBePrinted(pdf.data)
-              await _changePrint(pdf.key)
-              window.print()
-            }}
-            PDFsArray={[
-              {
-                key: 'ClientGuaranteedLoans',
-                local: local.ClientGuaranteedLoans,
-                //   inputs: ["dateFromTo", "branches"],
-                data: guaranteeedLoansData,
-                permission: 'guaranteed',
-              },
-            ]}
-          />
-        ),
+        fieldData: customerDetails?.key?.toString() || '',
         showFieldCondition: ability.can('guaranteed', 'report'),
       },
     ],
@@ -529,7 +491,7 @@ export const CustomerProfile = () => {
           loading={loading}
           tabs={tabs}
           activeTab={activeTab}
-          setActiveTab={(stringKey) => changeActiveTab(stringKey)}
+          setActiveTab={(stringKey) => setActiveTab(stringKey)}
           tabsData={tabsData}
         />
         {showHalanLinkageModal && (
@@ -540,9 +502,6 @@ export const CustomerProfile = () => {
           />
         )}
       </Container>
-      {print === 'ClientGuaranteedLoans' && dataToBePrinted && (
-        <ClientGuaranteedLoans data={dataToBePrinted} />
-      )}
     </>
   )
 }

@@ -12,6 +12,7 @@ import { CustomerCategorization } from '../../../Mohassel/Components/CustomerCre
 
 // Bootstrap Components
 import { ProfileProps } from './types'
+import { CustomerReportsTab } from '../../../Mohassel/Components/CustomerCreation/customerReportsTab'
 
 export const Profile = ({
   source,
@@ -113,12 +114,15 @@ export const Profile = ({
               )
             })}
           {activeTab === 'reports' &&
-            tabsData[activeTab].map((field) => {
+            tabsData[activeTab].map((field, index) => {
               const { fieldData, showFieldCondition } = field
               return (
-                showFieldCondition &&
-                React.isValidElement(fieldData) &&
-                fieldData
+                showFieldCondition && (
+                  <CustomerReportsTab
+                    customerKey={fieldData as string}
+                    key={index}
+                  />
+                )
               )
             })}
           {activeTab === 'deathCertificate' &&
