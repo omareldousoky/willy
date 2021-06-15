@@ -481,7 +481,6 @@ class TrackLoanApplications extends Component<Props, State> {
   render() {
     const smePermission =
       (this.props.location.state && this.props.location.state.sme) || false
-    console.log(this.props.location)
     const searchKeys = ['keyword', 'dateFromTo', 'branch', 'status-application']
     const filteredMappers = smePermission
       ? this.mappers.filter((mapper) => mapper.key !== 'nationalId')
