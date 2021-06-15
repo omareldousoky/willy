@@ -736,7 +736,6 @@
   "actions": "العمليات",
   "rejectApplication": "رفض الطلب",
   "acceptApplication": "قبول الطلب",
-  "acceptSecondVisit": "تم الاستعلام الميداني",
   "viewCustomerLead": "عرض المتقدم",
   "editLoanProduct": "تعديل نوع القرض",
   "updateLoanProductPrincipalsSuccess": "تم تعديل قيمة القرض المسموحة بنجاح",
@@ -1113,5 +1112,9 @@
   "theVerdict": "الحكم",
   "finalConfinementNumber": "رقم الحصر النهائي",
   "theConfinement": "الحصر",
-  "courtCaseNumber":"رقم الجنحه"
+  "courtCaseNumber":"رقم الجنحه",
+  "lastDates": "المواعيد الأخيرة",
+  "lastDay": "الأمس",
+  "lastWeek": "الاسبوع الماضى",
+  "lastMonth": "الشهر الماضي"
 }
