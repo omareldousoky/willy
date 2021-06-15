@@ -73,7 +73,7 @@ export const LoanApplicationFees = (props: LoanApplicationFeesProps) => {
             <React.Fragment key={index}>
               {res.branches.map((branch, branchIndex) => {
                 return (
-									<React.Fragment key={branchIndex}>
+                  <React.Fragment key={branchIndex}>
                     <thead>
                       <tr>
                         <th>رقم مسلسل</th>

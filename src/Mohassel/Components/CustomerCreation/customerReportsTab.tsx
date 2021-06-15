@@ -13,8 +13,8 @@ import { getCustomerDetails, guaranteed } from '../../Services/APIs/Reports'
 import { getLoanDetails } from '../../Services/APIs/Reports/loanDetails'
 import { PdfPortal } from '../Common/PdfPortal'
 import ClientGuaranteedLoans from '../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans'
-import CustomerStatusDetails from '../pdfTemplates/customerStatusDetails/customerStatusDetails'
-import LoanApplicationDetails from '../pdfTemplates/loanApplicationDetails/loanApplicationDetails'
+import { CustomerStatusDetails } from '../pdfTemplates/customerStatusDetails'
+import { LoanApplicationDetails } from '../pdfTemplates/loanApplicationDetails'
 
 const PDF_LIST = [
   {

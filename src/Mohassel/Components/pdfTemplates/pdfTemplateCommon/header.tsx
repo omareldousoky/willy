@@ -5,7 +5,6 @@ import {
   timeToArabicDate,
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
-import Orientation from '../../Common/orientation'
 
 interface HeaderProps {
   title: string
