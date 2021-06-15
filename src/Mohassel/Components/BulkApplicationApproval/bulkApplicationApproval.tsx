@@ -24,9 +24,11 @@ import {
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import local from '../../../Shared/Assets/ar.json'
-import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicationInitials'
+import {
+  manageApplicationsArray,
+  manageSMEApplicationsArray,
+} from '../TrackLoanApplications/manageApplicationInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
-import ability from '../../config/ability'
 
 interface Product {
   productName: string
@@ -67,9 +69,9 @@ interface State {
   checkAll: boolean
   from: number
   size: number
-  manageApplicationsTabs: any[]
 }
-interface Props extends RouteComponentProps {
+interface Props
+  extends RouteComponentProps<{}, {}, { sme?: boolean; id?: string }> {
   loading: boolean
   totalCount: number
   data: any
@@ -95,7 +97,6 @@ class BulkApplicationApproval extends Component<Props, State> {
       checkAll: false,
       from: 0,
       size: 10,
-      manageApplicationsTabs: [],
     }
     this.mappers = [
       {
@@ -185,7 +186,6 @@ class BulkApplicationApproval extends Component<Props, State> {
     if (this.props.data?.length > 0) {
       this.props.search({ url: 'clearData' })
     }
-    this.setState({ manageApplicationsTabs: manageApplicationsArray() })
   }
 
   componentWillUnmount() {
@@ -199,6 +199,10 @@ class BulkApplicationApproval extends Component<Props, State> {
       from: this.state.from,
       url: 'application',
       status: 'thirdReview',
+      type:
+        this.props.location.state && this.props.location.state.sme
+          ? 'sme'
+          : 'micro',
     }
     this.props.search(query).then(() => {
       if (this.props.error)
@@ -262,19 +266,13 @@ class BulkApplicationApproval extends Component<Props, State> {
     const searchKey = ['keyword', 'dateFromTo', 'branch']
     const dropDownKeys = [
       'name',
-      'nationalId',
       'key',
       'customerKey',
       'customerCode',
       'customerShortenedCode',
     ]
-    if (ability.can('getSMEApplication', 'application')) {
-      searchKey.push('sme')
-      dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
-    }
     const smePermission =
-      ability.can('getSMEApplication', 'application') &&
-      this.props.searchFilters.type === 'sme'
+      (this.props.location.state && this.props.location.state.sme) || false
     const filteredMappers = [...this.mappers]
     if (smePermission) {
       filteredMappers.splice(3, 0, {
@@ -287,13 +285,19 @@ class BulkApplicationApproval extends Component<Props, State> {
         key: 'taxCardNumber',
         render: (data) => data.application.customer.taxCardNumber,
       })
+      dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
+    } else {
+      dropDownKeys.push('nationalId')
     }
+    const manageApplicationsTabs = smePermission
+      ? manageSMEApplicationsArray()
+      : manageApplicationsArray()
     return (
       <>
         <HeaderWithCards
           header={local.bulkLoanApplicationsApproval}
-          array={this.state.manageApplicationsTabs}
-          active={this.state.manageApplicationsTabs
+          array={manageApplicationsTabs}
+          active={manageApplicationsTabs
             .map((item) => {
               return item.icon
             })
@@ -334,6 +338,7 @@ class BulkApplicationApproval extends Component<Props, State> {
               from={this.state.from}
               size={this.state.size}
               status="thirdReview"
+              sme={this.props.location.state && this.props.location.state.sme}
             />
             <DynamicTable
               from={this.state.from}
