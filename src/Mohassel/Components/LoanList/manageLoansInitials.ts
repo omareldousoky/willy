@@ -30,3 +30,16 @@ export const manageLoansArray = (): Card[] => {
   }
   return manageLoanArr
 }
+
+export const manageSMELoansArray = (): Card[] => {
+  const manageLoanArr: Card[] = []
+  if (ability.can('getIssuedSMELoan', 'application')) {
+    manageLoanArr.push({
+      icon: 'issuedLoans',
+      header: local.issuedLoans,
+      desc: local.companies,
+      path: '/loans',
+    })
+  }
+  return manageLoanArr
+}

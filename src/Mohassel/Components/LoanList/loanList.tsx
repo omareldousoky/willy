@@ -18,11 +18,12 @@ import {
   getErrorMessage,
   getFullCustomerKey,
 } from '../../../Shared/Services/utils'
-import { manageLoansArray } from './manageLoansInitials'
+import { manageLoansArray, manageSMELoansArray } from './manageLoansInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
-import ability from '../../config/ability'
+import { ActionsIconGroup } from '../../../Shared/Components'
 
-interface Props extends RouteComponentProps {
+interface Props
+  extends RouteComponentProps<{}, {}, { sme?: boolean; id?: string }> {
   data: any
   error: string
   branchId: string
@@ -154,25 +155,67 @@ class LoanList extends Component<Props, State> {
       {
         title: '',
         key: 'action',
-        render: (data) => this.renderIcons(data),
+        render: (data) => (
+          <ActionsIconGroup
+            currentCustomerId={data._id}
+            actions={this.renderActions(data)}
+          />
+        ),
       },
     ]
   }
 
   componentDidMount() {
+    this.props.setIssuedLoanSearchFilters({
+      type:
+        this.props.location.state && this.props.location.state.sme
+          ? 'sme'
+          : 'micro',
+    })
     const query = {
       ...this.props.issuedLoansSearchFilters,
       size: this.state.size,
       from: this.state.from,
       url: 'loan',
       sort: 'issueDate',
+      type:
+        this.props.location.state && this.props.location.state.sme
+          ? 'sme'
+          : 'micro',
     }
-    !Object.keys(query).includes('type') ? (query.type = 'micro') : null
-    this.props.setIssuedLoanSearchFilters({ type: query.type })
     this.props.search(query).then(() => {
       if (this.props.error)
         Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
     })
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (
+      (prevProps.location.state && prevProps.location.state.sme) !==
+      (this.props.location.state && this.props.location.state.sme)
+    ) {
+      this.props.setIssuedLoanSearchFilters({
+        type:
+          this.props.location.state && this.props.location.state.sme
+            ? 'sme'
+            : 'micro',
+      })
+      const query = {
+        ...this.props.issuedLoansSearchFilters,
+        size: this.state.size,
+        from: this.state.from,
+        url: 'loan',
+        sort: 'issueDate',
+        type:
+          this.props.location.state && this.props.location.state.sme
+            ? 'sme'
+            : 'micro',
+      }
+      this.props.search(query).then(() => {
+        if (this.props.error)
+          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -219,28 +262,27 @@ class LoanList extends Component<Props, State> {
     })
   }
 
-  renderIcons(data) {
-    return (
-      <>
-        <img
-          style={{ cursor: 'pointer', marginLeft: 20 }}
-          alt="view"
-          src={require('../../Assets/view.svg')}
-          onClick={() =>
-            this.props.history.push('/loans/loan-profile', {
-              id: data.application._id,
-            })
-          }
-        />
-      </>
-    )
+  renderActions(data) {
+    return [
+      {
+        actionTitle: local.view,
+        actionIcon: 'view',
+
+        actionPermission: true,
+        actionOnClick: () =>
+          this.props.history.push('/loans/loan-profile', {
+            id: data.application._id,
+          }),
+      },
+    ]
   }
 
   render() {
-    const array = manageLoansArray()
     const smePermission =
-      ability.can('getIssuedSMELoan', 'application') &&
-      this.props.issuedLoansSearchFilters.type === 'sme'
+      (this.props.location.state && this.props.location.state.sme) || false
+    const manageLoansTabs = smePermission
+      ? manageSMELoansArray()
+      : manageLoansArray()
     const searchKeys = [
       'keyword',
       'dateFromTo',
@@ -248,6 +290,13 @@ class LoanList extends Component<Props, State> {
       'branch',
       'doubtful',
       'writtenOff',
+    ]
+    const dropDownKeys = [
+      'name',
+      'key',
+      'customerKey',
+      'customerCode',
+      'customerShortenedCode',
     ]
     const filteredMappers = smePermission
       ? this.mappers.filter((mapper) => mapper.key !== 'nationalId')
@@ -263,25 +312,16 @@ class LoanList extends Component<Props, State> {
         key: 'taxCardNumber',
         render: (data) => data.application.customer.taxCardNumber,
       })
-    }
-    const dropDownKeys = [
-      'name',
-      'nationalId',
-      'key',
-      'customerKey',
-      'customerCode',
-      'customerShortenedCode',
-    ]
-    if (ability.can('getIssuedSMELoan', 'application')) {
-      searchKeys.push('sme')
       dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
+    } else {
+      dropDownKeys.push('nationalId')
     }
     return (
       <>
         <HeaderWithCards
           header={local.issuedLoans}
-          array={array}
-          active={array
+          array={manageLoansTabs}
+          active={manageLoansTabs
             .map((item) => {
               return item.icon
             })
@@ -313,6 +353,7 @@ class LoanList extends Component<Props, State> {
               size={this.state.size}
               submitClassName="mt-0"
               hqBranchIdRequest={this.props.branchId}
+              sme={this.props.location.state && this.props.location.state.sme}
             />
             <DynamicTable
               from={this.state.from}
