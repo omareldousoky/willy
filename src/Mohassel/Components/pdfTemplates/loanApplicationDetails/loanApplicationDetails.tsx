@@ -57,23 +57,25 @@ const LoanApplicationDetails = (props) => {
           width: '100%',
         }}
       >
-        <tr style={{ height: '10px' }} />
-        <tr
-          style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <th colSpan={6}>
-            <div className="logo-print-tb" />
-          </th>
-          <th colSpan={6}>
-            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-          </th>
-        </tr>
-        <tr style={{ height: '10px' }} />
+        <tbody>
+          <tr style={{ height: '10px' }} />
+          <tr
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            <th colSpan={6}>
+              <div className="logo-print-tb" />
+            </th>
+            <th colSpan={6}>
+              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+            </th>
+          </tr>
+          <tr style={{ height: '10px' }} />
+        </tbody>
       </table>
       {props.data.loans ? (
         props.data.loans.map((loan, index) => {
