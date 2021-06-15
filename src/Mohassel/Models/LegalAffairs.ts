@@ -1,8 +1,5 @@
 import { Signature } from './common'
 
-interface SignatureWithNote extends Signature {
-  notes?: string
-}
 export interface CourtSession {
   confinementNumber?: string
   date?: number
@@ -23,10 +20,6 @@ export interface LegalHistoryResponse {
     customerType: string
     created?: Signature
     updated?: Signature
-    branchManagerReview?: SignatureWithNote
-    areaSupervisorReview?: SignatureWithNote
-    areaManagerReview?: SignatureWithNote
-    financialManagerReview?: SignatureWithNote
     caseNumber: string
     caseStatus: string
     caseStatusSummary: string
