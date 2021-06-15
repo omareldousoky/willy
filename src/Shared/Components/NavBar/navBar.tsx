@@ -400,11 +400,13 @@ class NavBar extends Component<Props, State> {
                   >
                     {local.persons}
                   </NavDropdown.Item>
-                  <Can I="getCompany" a="customer">
+                  <Can I="getSMEApplication" a="application">
                     <NavDropdown.Item
                       className="primary"
                       onClick={() =>
-                        this.props.history.push('/track-sme-loan-applications')
+                        this.props.history.push('/track-loan-applications', {
+                          sme: true,
+                        })
                       }
                     >
                       {local.companies}
