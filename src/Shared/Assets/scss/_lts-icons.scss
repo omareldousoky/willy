@@ -104,3 +104,23 @@
     content: '\e910';
   }
 }
+.lts-applications {
+  &:before {
+    content: '\e911'; 
+  }
+}
+.lts-bulkLoanApplicationsReview {
+  &:before {
+    content: '\e912'; 
+  }
+}
+.lts-bulkLoanApplicationsApproval {
+  &:before {
+    content: '\e913'; 
+  }
+}
+.lts-bulkApplicationCreation {
+  &:before {
+    content: '\e914'; 
+  }
+}
