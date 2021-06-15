@@ -1104,6 +1104,15 @@
   "maxLength20": "لا يمكن ان يكون اكثر من 20",
   "lengthShouldBe9": "رقم البطاقة يجب ان يكون 9 ارقام",
   "duplicateCompanyNumberMessage": "رقم البطاقة موجود بالفعل لشركة اخرى",
-	"loanType": "نوع القرض",
-  "moveCompanies": "نقل الشركات"
+  "moveCompanies": "نقل الشركات",
+  "finalVerdict": "حكم نهائي",
+  "finalVerdictDate": "تاريخ حكم نهائي",
+  "accusedName": "اسم المتهم",
+  "judgeList": "قائمة الأحكام",
+  "dateRangeErrorMessage": "تاريخ الي يجب ان يكون بعد تاريخ من",
+  "theVerdict": "الحكم",
+  "finalConfinementNumber": "رقم الحصر النهائي",
+  "theConfinement": "الحصر",
+  "courtCaseNumber":"رقم الجنحه",	
+	"loanType": "نوع القرض"
 }
