@@ -381,13 +381,36 @@ class NavBar extends Component<Props, State> {
                 </Nav.Link>
               ) : null}
               {ability.can('getLoanApplication', 'application') ? (
-                <Nav.Link
-                  onClick={() =>
-                    this.props.history.push('/track-loan-applications')
-                  }
+                // <Nav.Link
+                //   onClick={() =>
+                //     this.props.history.push('/track-loan-applications')
+                //   }
+                // >
+                //   {local.loanApplications}
+                // </Nav.Link>
+                <NavDropdown
+                  title={local.loanApplications}
+                  id="basic-nav-dropdown"
                 >
-                  {local.loanApplications}
-                </Nav.Link>
+                  <NavDropdown.Item
+                    className="primary"
+                    onClick={() =>
+                      this.props.history.push('/track-loan-applications')
+                    }
+                  >
+                    {local.persons}
+                  </NavDropdown.Item>
+                  <Can I="getCompany" a="customer">
+                    <NavDropdown.Item
+                      className="primary"
+                      onClick={() =>
+                        this.props.history.push('/track-sme-loan-applications')
+                      }
+                    >
+                      {local.companies}
+                    </NavDropdown.Item>
+                  </Can>
+                </NavDropdown>
               ) : !this.props.hide &&
                 ability.can('approveLoanApplication', 'application') ? (
                 <Nav.Link

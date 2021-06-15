@@ -39,7 +39,7 @@ import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApp
 import { manageApplicationsArray } from './manageApplicationInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { LoanApplicationReportRequest } from '../../Services/interfaces'
-import ability from '../../config/ability'
+// import ability from '../../config/ability'
 
 interface Product {
   productName: string
@@ -81,6 +81,7 @@ interface Props extends RouteComponentProps {
   search: (data) => Promise<void>
   setSearchFilters: (data) => void
   branchId?: string
+  sme?: boolean
 }
 class TrackLoanApplications extends Component<Props, State> {
   mappers: {
@@ -186,14 +187,15 @@ class TrackLoanApplications extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.props.setSearchFilters({ type: 'micro' })
+    console.log(this.props.sme)
+    this.props.setSearchFilters({ type: this.props.sme ? 'sme' : 'micro' })
     this.props
       .search({
         size: this.state.size,
         from: this.state.from,
         url: 'application',
         branchId: this.props.branchId,
-        type: 'micro',
+        type: this.props.sme ? 'sme' : 'micro',
       })
       .then(() => {
         if (this.props.error)
@@ -435,9 +437,7 @@ class TrackLoanApplications extends Component<Props, State> {
 
   render() {
     const searchKeys = ['keyword', 'dateFromTo', 'branch', 'status-application']
-    const smePermission =
-      ability.can('getSMEApplication', 'application') &&
-      this.props.searchFilters.type === 'sme'
+    const smePermission = this.props.sme
     const filteredMappers = smePermission
       ? this.mappers.filter((mapper) => mapper.key !== 'nationalId')
       : this.mappers
@@ -455,15 +455,17 @@ class TrackLoanApplications extends Component<Props, State> {
     }
     const dropDownKeys = [
       'name',
-      'nationalId',
+      // 'nationalId',
       'key',
       'customerKey',
       'customerCode',
       'customerShortenedCode',
     ]
-    if (ability.can('getSMEApplication', 'application')) {
-      searchKeys.push('sme')
+    if (smePermission) {
+      // searchKeys.push('sme')
       dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
+    } else {
+      dropDownKeys.push('nationalId')
     }
     return (
       <>

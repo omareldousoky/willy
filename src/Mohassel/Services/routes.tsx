@@ -220,6 +220,15 @@ const appRoutes = [
         ],
       },
       {
+        path: '/track-sme-loan-applications',
+        label: local.loanApplications,
+        render: () => (
+          <Can I="getLoanApplication" a="application">
+            <TrackLoanApplications sme />
+          </Can>
+        ),
+      },
+      {
         path: '/track-loan-applications',
         label: local.loanApplications,
         render: () => (
