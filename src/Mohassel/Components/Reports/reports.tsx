@@ -8,7 +8,7 @@ import CustomerStatusDetails from '../pdfTemplates/customerStatusDetails/custome
 import { getCustomerDetails } from '../../Services/APIs/Reports/customerDetails'
 import { getLoanDetails } from '../../Services/APIs/Reports/loanDetails'
 import LoanApplicationDetails from '../pdfTemplates/loanApplicationDetails/loanApplicationDetails'
-import BranchesLoanList from '../pdfTemplates/branchesLoanList/branchesLoanList'
+import { BranchesLoanList } from '../pdfTemplates/branchesLoanList'
 import {
   getBranchLoanList,
   postBranchLoanListExcel,
