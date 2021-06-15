@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import * as Barcode from 'react-barcode'
 
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
@@ -74,8 +75,18 @@ import {
   getCustomerInfo,
 } from '../../../Shared/Services/formatCustomersInfo'
 import { FieldProps } from '../../../Shared/Components/Profile/types'
-import { SmeLoanContract } from '../pdfTemplates/smeLoanContract'
+import {
+  AcknowledgmentAndPledge,
+  AcknowledgmentOfCommitment,
+  AcknowledgmentWasSignedInFront,
+  AuthorizationToFillCheck,
+  KnowYourCustomer,
+  PromissoryNote,
+  SmeLoanContract,
+  SolidarityGuarantee,
+} from '../pdfTemplates/smeLoanContract'
 import { Score } from '../CustomerCreation/customerProfile'
+import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
 
 interface EarlyPayment {
   remainingPrincipal?: number
@@ -115,6 +126,7 @@ interface State {
   geoAreas: Array<any>
   remainingTotal: number
   individualsWithInstallments: IndividualWithInstallments
+  loanUsage: string
 }
 
 interface LoanProfileRouteState {
@@ -149,12 +161,28 @@ class LoanProfile extends Component<Props, State> {
       individualsWithInstallments: {
         installmentTable: [],
       },
+      loanUsage: '',
     }
   }
 
   componentDidMount() {
     const appId = this.props.location.state.id
     this.getAppByID(appId)
+  }
+
+  async getLoanUsages() {
+    this.setState({ loading: true })
+    const res = await getLoanUsage()
+    if (res.status === 'success') {
+      const uses = res.body.usages
+      const value = uses.find((use) => use.id === this.state.application.usage)
+        ?.name
+      this.setState({ loanUsage: value, loading: false })
+      return value
+    }
+    Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    this.setState({ loading: false })
+    return ''
   }
 
   async getManualOtherPayments(appId) {
@@ -200,6 +228,7 @@ class LoanProfile extends Component<Props, State> {
       } else this.setTabsToRender(application)
       if (ability.can('viewIscore', 'customer'))
         this.getCachediScores(application.body)
+      await this.getLoanUsages()
     } else {
       this.setState({ loading: false }, () =>
         Swal.fire('Error !', getErrorMessage(application.error.error), 'error')
@@ -1424,10 +1453,38 @@ class LoanProfile extends Component<Props, State> {
           </>
         )}
         {this.state.print === 'allSME' && (
-          <SmeLoanContract
-            data={this.state.application}
-            branchDetails={this.state.branchDetails}
-          />
+          <>
+            <AcknowledgmentAndPledge
+              entitledToSign={this.state.application.entitledToSign}
+            />
+            <KnowYourCustomer
+              application={this.state.application}
+              loanUsage={this.state.loanUsage}
+            />
+            <AcknowledgmentWasSignedInFront
+              application={this.state.application}
+            />
+            <CustomerCardPDF
+              data={this.state.application}
+              getGeoArea={(area) => this.getCustomerGeoArea(area)}
+              penalty={this.state.penalty}
+              branchDetails={this.state.branchDetails}
+              remainingTotal={this.state.remainingTotal}
+              members={this.state.individualsWithInstallments}
+            />
+            <AcknowledgmentOfCommitment application={this.state.application} />
+            <SolidarityGuarantee />
+            <AuthorizationToFillCheck />
+            <PromissoryNote noteKind="شخصى" />
+            <PromissoryNote noteKind="شركات" />
+            <SmeLoanContract
+              data={this.state.application}
+              branchDetails={this.state.branchDetails}
+            />
+            <div className="text-center loan-contract">
+              <Barcode value={this.state.application.loanApplicationKey} />
+            </div>
+          </>
         )}
         {this.state.print === 'followUpStatement' && (
           <FollowUpStatementPDF
