@@ -46,6 +46,7 @@ import LegalSettlementForm from './LegalSettlementForm'
 import {
   getSettlementFees,
   reviewLegalCustomer,
+  getLegalHistory,
 } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import { FormField } from '../Form/types'
 import { defaultValidationSchema } from '../validations'
@@ -55,6 +56,7 @@ import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
 import { Branch } from '../../../../Shared/Services/interfaces'
 import { getBranch } from '../../../Services/APIs/Branch/getBranch'
 import managerTypes from '../configs/managerTypes'
+import { LegalHistory } from './LegalHistory'
 import {
   handleUpdateSuccess,
   hasCourtSession,
@@ -63,6 +65,7 @@ import {
 import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
 import LegalJudgePdf from '../../pdfTemplates/LegalJudge'
 import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
+import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -107,6 +110,9 @@ const LegalCustomersList: FunctionComponent = () => {
 
   const [isSettlementLoading, setIsSettlementLoading] = useState(false)
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
+  const [historyData, setHistoryData] = useState<LegalHistoryResponse | null>(
+    null
+  )
   const [isJudgeModalOpen, setIsJudgeModalOpen] = useState(false)
 
   const data: SettledCustomer[] =
@@ -155,17 +161,17 @@ const LegalCustomersList: FunctionComponent = () => {
   }, [customerForPrint])
 
   useEffect(() => {
-    if (branchForPrint || !!customersForConvictedReport) {
+    if (branchForPrint || historyData || !!customersForConvictedReport) {
       window.print()
     }
-
     window.onafterprint = () => {
       setCustomerForPrint(null)
       setBranchForPrint(null)
       setCustomersForConvictedReport(null)
       setConvictedReportInfo({ policeStation: '', governorate: '' })
+      setHistoryData(null)
     }
-  }, [branchForPrint, customersForConvictedReport])
+  }, [branchForPrint, customersForConvictedReport, historyData])
 
   useEffect(() => {
     const fetchSettlementFees = async () => {
@@ -308,6 +314,26 @@ const LegalCustomersList: FunctionComponent = () => {
     }
 
     setCustomersForReview(null)
+  }
+  const handleDownloadHistory = async (legalId: string) => {
+    const response = await getLegalHistory(legalId)
+    setIsSettlementLoading(true)
+    if (response.status === 'success') {
+      const resBody: LegalHistoryResponse = response.body as LegalHistoryResponse
+      if (resBody.history && resBody?.history.length > 0) {
+        setHistoryData(resBody)
+      } else {
+        setHistoryData(null)
+        Swal.fire('', local.noLogsFound, 'info')
+      }
+    } else {
+      Swal.fire(
+        'error',
+        getErrorMessage((response.error as Record<string, string>).error),
+        'error'
+      )
+    }
+    setIsSettlementLoading(false)
   }
 
   const handleJudgeReport = async (values: JudgeCustomersFormValues) => {
@@ -528,6 +554,19 @@ const LegalCustomersList: FunctionComponent = () => {
               />
             </Button>
           )}
+          <Can I="getDefaultingCustomer" a="legal">
+            <Button
+              type="button"
+              variant="default"
+              className="clickable-action font-weight-normal text-dark"
+              title={local.logs}
+              onClick={async () => {
+                await handleDownloadHistory(customer._id)
+              }}
+            >
+              {local.downloadHistory}
+            </Button>
+          </Can>
         </div>
       ),
     },
@@ -784,6 +823,7 @@ const LegalCustomersList: FunctionComponent = () => {
           customer={customerForPrint}
         />
       )}
+      {historyData && <LegalHistory data={historyData} />}
 
       {!!customersForConvictedReport &&
         !!convictedReportInfo.governorate &&

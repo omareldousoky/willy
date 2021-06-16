@@ -3,7 +3,6 @@ export interface ApiResponse<T> {
   body?: T
   error?: unknown
 }
-
 export interface Signature {
   by?: string
   at?: number

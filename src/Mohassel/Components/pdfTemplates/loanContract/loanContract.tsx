@@ -482,6 +482,13 @@ const LoanContract = (props) => {
                       {getNumbersOfGuarantor('or')} علي سداد الاقساط في مواعيدها
                       او توقف اعمال المشروع الممول لاي سبب من الاسباب
                     </div>
+                    <div>
+                      ٧/٧ يلتزم{' '}
+                      {props.data.guarantors.length > 0
+                        ? `الاطراف الثاني و${getNumbersOfGuarantor('and')} `
+                        : 'الطرف الثاني '}
+                      بسداد كافة المصروفات و المصاريف القضائية بكافة انواعها
+                    </div>
                   </section>
 
                   <section style={{ pageBreakAfter: 'always' }}>
