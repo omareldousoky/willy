@@ -99,8 +99,6 @@ class TrackLoanApplications extends Component<Props, State> {
     render: (data: any) => void
   }[]
 
-  isSME: boolean
-
   constructor(props) {
     super(props)
     this.state = {
@@ -198,13 +196,14 @@ class TrackLoanApplications extends Component<Props, State> {
         ),
       },
     ]
-    this.isSME =
-      (this.props.location.state && this.props.location.state.sme) || false
   }
 
   componentDidMount() {
     this.props.setSearchFilters({
-      type: this.isSME ? 'sme' : 'micro',
+      type:
+        this.props.location.state && this.props.location.state.sme
+          ? 'sme'
+          : 'micro',
     })
     this.props
       .search({
@@ -212,7 +211,10 @@ class TrackLoanApplications extends Component<Props, State> {
         from: this.state.from,
         url: 'application',
         branchId: this.props.branchId,
-        type: this.isSME ? 'sme' : 'micro',
+        type:
+          this.props.location.state && this.props.location.state.sme
+            ? 'sme'
+            : 'micro',
       })
       .then(() => {
         if (this.props.error)
@@ -226,7 +228,10 @@ class TrackLoanApplications extends Component<Props, State> {
       (this.props.location.state && this.props.location.state.sme)
     ) {
       this.props.setSearchFilters({
-        type: this.isSME ? 'sme' : 'micro',
+        type:
+          this.props.location.state && this.props.location.state.sme
+            ? 'sme'
+            : 'micro',
       })
       this.props
         .search({
@@ -234,7 +239,10 @@ class TrackLoanApplications extends Component<Props, State> {
           from: this.state.from,
           url: 'application',
           branchId: this.props.branchId,
-          type: this.isSME ? 'sme' : 'micro',
+          type:
+            this.props.location.state && this.props.location.state.sme
+              ? 'sme'
+              : 'micro',
         })
         .then(() => {
           if (this.props.error)
@@ -471,8 +479,10 @@ class TrackLoanApplications extends Component<Props, State> {
   }
 
   render() {
+    const smePermission =
+      (this.props.location.state && this.props.location.state.sme) || false
     const searchKeys = ['keyword', 'dateFromTo', 'branch', 'status-application']
-    const filteredMappers = this.isSME
+    const filteredMappers = smePermission
       ? this.mappers.filter((mapper) => mapper.key !== 'nationalId')
       : this.mappers
     const dropDownKeys = [
@@ -482,10 +492,10 @@ class TrackLoanApplications extends Component<Props, State> {
       'customerCode',
       'customerShortenedCode',
     ]
-    const manageApplicationsTabs = this.isSME
+    const manageApplicationsTabs = smePermission
       ? manageSMEApplicationsArray()
       : manageApplicationsArray()
-    if (this.isSME) {
+    if (smePermission) {
       filteredMappers.splice(3, 0, {
         title: local.commercialRegisterNumber,
         key: 'commercialRegisterNumber',
@@ -593,7 +603,7 @@ class TrackLoanApplications extends Component<Props, State> {
                   <tr>
                     <td>{local.customer}</td>
                     <td>
-                      {this.isSME
+                      {smePermission
                         ? local.commercialRegisterNumber
                         : local.nationalId}
                     </td>
@@ -607,7 +617,9 @@ class TrackLoanApplications extends Component<Props, State> {
                   {this.state.iScoreCustomers.map((customer: Score) => (
                     <tr key={customer.nationalId || customer.id}>
                       <td>{customer.customerName}</td>
-                      <td>{this.isSME ? customer.id : customer.nationalId}</td>
+                      <td>
+                        {smePermission ? customer.id : customer.nationalId}
+                      </td>
                       <td
                         style={{
                           color: iscoreStatusColor(customer.iscore).color,
