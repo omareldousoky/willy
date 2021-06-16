@@ -92,6 +92,8 @@ class BulkApplicationReview extends Component<Props, State> {
     render: (data: any) => void
   }[]
 
+  isSME: boolean
+
   constructor(props) {
     super(props)
     this.state = {
@@ -219,6 +221,8 @@ class BulkApplicationReview extends Component<Props, State> {
         render: (data) => timeToDateyyymmdd(data.application.reviewedDate),
       },
     ]
+    this.isSME =
+      (this.props.location.state && this.props.location.state.sme) || false
   }
 
   componentDidMount() {
@@ -229,10 +233,7 @@ class BulkApplicationReview extends Component<Props, State> {
         url: 'application',
         status: 'reviewed',
         branchId: this.state.branchId !== 'hq' ? this.state.branchId : '',
-        type:
-          this.props.location.state && this.props.location.state.sme
-            ? 'sme'
-            : 'micro',
+        type: this.isSME ? 'sme' : 'micro',
       })
       .then(() => {
         if (this.props.error)
@@ -244,10 +245,7 @@ class BulkApplicationReview extends Component<Props, State> {
       url: 'application',
       status: 'reviewed',
       branchId: this.state.branchId !== 'hq' ? this.state.branchId : '',
-      type:
-        this.props.location.state && this.props.location.state.sme
-          ? 'sme'
-          : 'micro',
+      type: this.isSME ? 'sme' : 'micro',
     })
   }
 
@@ -410,9 +408,7 @@ class BulkApplicationReview extends Component<Props, State> {
 
   render() {
     const searchKey = ['keyword', 'dateFromTo', 'review-application']
-    const smePermission =
-      (this.props.location.state && this.props.location.state.sme) || false
-    const filteredMappers = smePermission
+    const filteredMappers = this.isSME
       ? this.mappers.filter(
           (mapper) =>
             !['nationalId', 'age', 'businessActivity'].includes(mapper.key)
@@ -425,7 +421,7 @@ class BulkApplicationReview extends Component<Props, State> {
       'customerCode',
       'customerShortenedCode',
     ]
-    if (smePermission) {
+    if (this.isSME) {
       filteredMappers.splice(3, 0, {
         title: local.commercialRegisterNumber,
         key: 'commercialRegisterNumber',
@@ -446,7 +442,7 @@ class BulkApplicationReview extends Component<Props, State> {
       dropDownKeys.push('nationalId')
     }
     this.state.branchId === 'hq' && searchKey.push('branch')
-    const manageApplicationsTabs = smePermission
+    const manageApplicationsTabs = this.isSME
       ? manageSMEApplicationsArray()
       : manageApplicationsArray()
 
