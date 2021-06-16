@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Swal from 'sweetalert2'
-import * as local from '../../../Shared/Assets/ar.json'
+import local from '../../../Shared/Assets/ar.json'
 import { getRenderDate } from '../../Services/getRenderDate'
 import { englishToArabic } from '../../Services/statusLanguage'
 import { GuarantorTableView } from './guarantorDetails'
@@ -63,6 +63,10 @@ export const LoanDetailsTableView = ({
             {beneficiaryType(application.product.beneficiaryType)} -
             {application.product.type || ''}
           </td>
+        </tr>
+        <tr>
+          <td>{local.contractType}</td>
+          <td>{local[application.product.contractType]}</td>
         </tr>
         <tr>
           <td>{local.currency}</td>
