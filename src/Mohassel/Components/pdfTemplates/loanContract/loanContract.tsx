@@ -10,6 +10,13 @@ import {
 } from '../../../../Shared/Services/utils'
 
 const LoanContract = (props) => {
+  const {
+    data: {
+      product: { contractType },
+    },
+    branchDetails,
+  } = props
+
   function getNumbersOfGuarantor(str: string) {
     let modifiedStr = str
     if (modifiedStr === 'and') modifiedStr = 'و'
@@ -280,21 +287,38 @@ const LoanContract = (props) => {
                       للرقابه الماليه تحت رقم ٢ وذلك اعمالا لاحكام القانون رقم
                       ١٤١ لسنه ٢٠١٤ الخاص بالتمويل متناهي الصغر ..
                     </div>
-                    <div>
-                      وقد تقدم الطرف الثاني صاحب نشاط
-                      {props.data.customer.businessSector} -
-                      {props.data.customer.businessActivity} بطلب للحصول علي قرض
-                      من فرع
-                      {props.branchDetails.name} الكائن
-                      {props.branchDetails.address} لحاجته للسيوله النقديه يخصص
-                      استخدامه في تمويل رأس المال العامل وذلك وفقا لاحكام
-                      القانون رقم ١٤١ لسنة ٢٠١٤ المشار اليه وذلك بضمان وتضامن
-                      الطرف
-                      {getNumbersOfGuarantor('and')} وقد وافقه الطرف الأول علي
-                      ذلك وفقا للشروط والضوابط الوارده بهذا العقد وبعد ان اقر
-                      الأطراف بأهليتهم القانونيه للتصرف والتعاقد فقد اتفقوا علي
-                      بنود العقد التاليه
-                    </div>
+                    {contractType === 'masterGas' ? (
+                      <div>
+                        وقد تقدم الطرف الثاني صاحب سياره اجره وتحمل رقم لوحات
+                        معدنيه : &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        وشاسيه رقم : &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; وماتور
+                        رقم : &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; بطلب
+                        الحصول على تمويل من فرع {branchDetails.name} – مساره
+                        الكائن {branchDetails.address} – محافظة{' '}
+                        {branchDetails.governorate} وذلك وفقا لاحكام القانون رقم
+                        141 لسنه 2014 المشار اليه وذلك بضمان وتضامن الطرف الثالث
+                        وقد وافقه الطرف الاول علئ ذلك وفقا للشروط والضوابط
+                        الوارده بهذا العقد وبعد ان اقر الاطراف باهليتهم
+                        القانونيه للتصرف والتعاقد فقد اتفقوا علي بنود العقد
+                        التاليه
+                      </div>
+                    ) : (
+                      <div>
+                        وقد تقدم الطرف الثاني صاحب نشاط
+                        {props.data.customer.businessSector} -
+                        {props.data.customer.businessActivity} بطلب للحصول علي
+                        قرض من فرع
+                        {props.branchDetails.name} الكائن
+                        {props.branchDetails.address} لحاجته للسيوله النقديه
+                        يخصص استخدامه في تمويل رأس المال العامل وذلك وفقا لاحكام
+                        القانون رقم ١٤١ لسنة ٢٠١٤ المشار اليه وذلك بضمان وتضامن
+                        الطرف
+                        {getNumbersOfGuarantor('and')} وقد وافقه الطرف الأول علي
+                        ذلك وفقا للشروط والضوابط الوارده بهذا العقد وبعد ان اقر
+                        الأطراف بأهليتهم القانونيه للتصرف والتعاقد فقد اتفقوا
+                        علي بنود العقد التاليه
+                      </div>
+                    )}
                   </section>
 
                   <section>
@@ -307,53 +331,85 @@ const LoanContract = (props) => {
 
                   <section>
                     <div className="title">البند الثاني</div>
-                    <div>
-                      بموجب هذا العقد وافق الطرف الأول علي منح الطرف الثاني قرضا
-                      بمبلغ
-                      {`${numbersToArabic(
-                        props.data.principal
-                      )} جنيه (${new Tafgeet(
-                        props.data.principal,
-                        'EGP'
-                      ).parse()})`}
-                      ويقر الطرف الثاني بأن هذا المبلغ يمثل قرضا عليه يلتزم
-                      بسداده للطرف الأول وفقا لما هو وارد بالبند الثالث من هذا
-                      العقد
-                    </div>
+                    {contractType === 'masterGas' ? (
+                      <div>
+                        بموجب هذا العقد وافق الطرف الاول عل منح الطرف الثاني
+                        تمويلاُ من الشركة ( الطرف الاول ) نظير خدمه تحويل
+                        السياره من بنزين الي غاز طبيعي علي ان يتم تحويل هذا
+                        التمويل لشركه ماستر جاس نظير تقديم الخدمه ) استناداً الي
+                        العقد المؤرخ بتاريخ{' '}
+                        {timeToArabicDate(props.data.creationDate, false)} بين
+                        الطرف الاول وشركه ماستر جاس وذلك تمويلا للخدمه المقدمه
+                        منها للعميل ( الطرف الثاني ) وفقا للوارد تفصيلا بالبند
+                        التمهيدي <br />
+                        ويقر الطرف الثاني بان هذا المبلغ يمثل تمويلاُ له علي ان
+                        يلتزم الطرف الثاني بسداد هذا التمويل للطرف الاول وفقا
+                        لما هو وارد بالبند الثالث من هذا العقد
+                      </div>
+                    ) : (
+                      <div>
+                        بموجب هذا العقد وافق الطرف الأول علي منح الطرف الثاني
+                        قرضا بمبلغ
+                        {`${numbersToArabic(
+                          props.data.principal
+                        )} جنيه (${new Tafgeet(
+                          props.data.principal,
+                          'EGP'
+                        ).parse()})`}
+                        ويقر الطرف الثاني بأن هذا المبلغ يمثل قرضا عليه يلتزم
+                        بسداده للطرف الأول وفقا لما هو وارد بالبند الثالث من هذا
+                        العقد
+                      </div>
+                    )}
                   </section>
 
                   <section>
                     <div className="title">البند الثالث</div>
                     <div>
                       يلتزم الطرفان الثاني و{getNumbersOfGuarantor('and')}
-                      ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة القرض البالغة
+                      ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة{' '}
+                      <span>
+                        {contractType === 'masterGas' ? 'التمويل' : 'القرض'}
+                      </span>{' '}
+                      البالغة
                       {`${numbersToArabic(
                         props.data.principal
                       )} جنيه (${new Tafgeet(
                         props.data.principal,
                         'EGP'
-                      ).parse()})`}
-                      وكافة المصروفات الادارية البالغه
-                      {numbersToArabic(props.data.applicationFeesRequired)} جنيه
-                      وتكاليف التمويل البالغه
-                      {numbersToArabic(
-                        props.data.installmentsObject.totalInstallments.feesSum
+                      ).parse()})`}{' '}
+                      {contractType === 'masterGas' ? (
+                        <>
+                          <span>وكافه المصروفات الاخري</span> <br />
+                        </>
+                      ) : (
+                        <span>
+                          وكافة المصروفات الادارية البالغه
+                          {numbersToArabic(
+                            props.data.applicationFeesRequired
+                          )}{' '}
+                          جنيه وتكاليف التمويل البالغه
+                          {numbersToArabic(
+                            props.data.installmentsObject.totalInstallments
+                              .feesSum
+                          )}
+                          جنيه الي الطرف الأول وذلك بواقع مبلغ قدره
+                          {`${numbersToArabic(
+                            props.data.installmentsObject.totalInstallments
+                              .installmentSum +
+                              (props.data.applicationFeesRequired
+                                ? props.data.applicationFeesRequired
+                                : 0)
+                          )} جنيه (${new Tafgeet(
+                            props.data.installmentsObject.totalInstallments
+                              .installmentSum +
+                              (props.data.applicationFeesRequired
+                                ? props.data.applicationFeesRequired
+                                : 0),
+                            'EGP'
+                          ).parse()})`}
+                        </span>
                       )}
-                      جنيه الي الطرف الأول وذلك بواقع مبلغ قدره
-                      {`${numbersToArabic(
-                        props.data.installmentsObject.totalInstallments
-                          .installmentSum +
-                          (props.data.applicationFeesRequired
-                            ? props.data.applicationFeesRequired
-                            : 0)
-                      )} جنيه (${new Tafgeet(
-                        props.data.installmentsObject.totalInstallments
-                          .installmentSum +
-                          (props.data.applicationFeesRequired
-                            ? props.data.applicationFeesRequired
-                            : 0),
-                        'EGP'
-                      ).parse()})`}
                       ، يتم سداده علي عدد
                       {numbersToArabic(
                         props.data.installmentsObject.installments.length
@@ -388,6 +444,19 @@ const LoanContract = (props) => {
                       أو بأحدي وسائل الدفع الإلكتروني المعتمده من هيئه الرقابه
                       الماليه
                     </div>
+
+                    {contractType === 'masterGas' && (
+                      <div>
+                        واتفق الطرفين الاول والثاني بان السنه الاولي لتكاليف
+                        التمويل وقيمتها{' '}
+                        {numbersToArabic(
+                          props.data.installmentsObject.totalInstallments
+                            .feesSum
+                        )}{' '}
+                        سوف تتحملها شركه ماستر جاس وفقا للعقد المبرم بين لطرف
+                        الاول وماستر جاس
+                      </div>
+                    )}
                   </section>
 
                   <section>
@@ -424,19 +493,23 @@ const LoanContract = (props) => {
                     </div>
                   </section>
 
-                  <section>
-                    <div className="title">البند السادس</div>
-                    <div>
-                      تلتزم الشركه بقبول طلب العميل بالسداد المعجل، ويحق للشركه
-                      خصم تكلفة التمويل للشهر الذى تم فيه السداد ويجوز لها إضافة
-                      عمولة سداد معجل بما لا يزيد عن
-                      {numbersToArabic(props.data.product.earlyPaymentFees)}% من
-                      باقي المبلغ المستحق (أصل) المراد تعجيل الوفاء به
-                    </div>
-                  </section>
+                  {contractType !== 'masterGas' && (
+                    <section>
+                      <div className="title">البند السادس</div>
+                      <div>
+                        تلتزم الشركه بقبول طلب العميل بالسداد المعجل، ويحق
+                        للشركه خصم تكلفة التمويل للشهر الذى تم فيه السداد ويجوز
+                        لها إضافة عمولة سداد معجل بما لا يزيد عن
+                        {numbersToArabic(props.data.product.earlyPaymentFees)}%
+                        من باقي المبلغ المستحق (أصل) المراد تعجيل الوفاء به
+                      </div>
+                    </section>
+                  )}
 
                   <section>
-                    <div className="title">البند السابع</div>
+                    <div className="title">
+                      البند {contractType === 'masterGas' ? 'السادس' : 'السابع'}
+                    </div>
                     <div>
                       في حالة عدم التزام المقترض او الضامنين بأي من التزاماتهم
                       التعاقديه او القانونيه الوارده بهذا العقد وملحقاته
@@ -485,7 +558,9 @@ const LoanContract = (props) => {
                   </section>
 
                   <section style={{ pageBreakAfter: 'always' }}>
-                    <div className="title">البند الثامن</div>
+                    <div className="title">
+                      البند {contractType === 'masterGas' ? 'السابع' : 'الثامن'}
+                    </div>
                     <div>
                       يلتزم كل طرف من أطراف هذا العقد بسداد الضريبه المستحقه
                       عليه وفقا لاحكام القانون
@@ -493,7 +568,10 @@ const LoanContract = (props) => {
                   </section>
                   <tbody>
                     <section>
-                      <div className="title">البند التاسع</div>
+                      <div className="title">
+                        البند{' '}
+                        {contractType === 'masterGas' ? 'الثامن' : 'التاسع'}
+                      </div>
                       <div>
                         يقر الطرف {getNumbersOfGuarantor('and')} الضامنين
                         المتضامنين بأنها يكفلا علي سبيل التضامن الطرف الثاني
@@ -503,12 +581,22 @@ const LoanContract = (props) => {
                         القرض، ولا يحق للطرف {getNumbersOfGuarantor('or')} الدفع
                         بالتجريد أو التقسيم أو اي دفوع اخرى في مواجهة المقرض
                         ويحق للمقرض الرجوع عليه وحده او الرجوع عليه وعلي المقترض
-                        منفردا او مجتمعين معا بكامل قيمة المديونيات المستحقه له.
+                        منفردا او مجتمعين معا بكامل قيمة المديونيات المستحقه له
+                        {contractType === 'masterGas' && (
+                          <span>
+                            {' '}
+                            مع مرعاه ما جاء بالفقرة الثانيه من البند الثالث
+                            المشار اليه
+                          </span>
+                        )}
                       </div>
                     </section>
 
                     <section>
-                      <div className="title">البند العاشر</div>
+                      <div className="title">
+                        البند{' '}
+                        {contractType === 'masterGas' ? 'التاسع' : 'العاشر'}
+                      </div>
                       <div>
                         اطلع العميل علي كافة الشروط الوارده بالعقد وتم شرحها له،
                         وتم تسليمه نسخه من بيان شروط التمويل موضحا به كافة
@@ -517,7 +605,10 @@ const LoanContract = (props) => {
                     </section>
 
                     <section>
-                      <div className="title">البند الحادي عشر</div>
+                      <div className="title">
+                        البند{' '}
+                        {contractType === 'masterGas' ? 'العاشر' : 'الحادي عشر'}
+                      </div>
                       <div>
                         تسرى احكام القانون رقم ١٤١ لسنة ٢٠١٤ بشأن التمويل متناهي
                         الصغر ولائحته التنفيذيه وتعديلاته (ان وجد) علي هذا العقد
@@ -533,7 +624,12 @@ const LoanContract = (props) => {
                     </section>
 
                     <section>
-                      <div className="title">البند الثاني عشر</div>
+                      <div className="title">
+                        البند{' '}
+                        {contractType === 'masterGas'
+                          ? 'الحادي عشر'
+                          : 'الثاني عشر'}
+                      </div>
                       <div>
                         اتخذ كل طرف العنوان المبين قرين كل منهما بصدر هذا العقد
                         محلا مختار له وفي حالة تغيير ايا منهم لعنوانه يلتزم
