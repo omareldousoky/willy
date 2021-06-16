@@ -31,6 +31,6 @@ export interface LoanApplicationFeesProps {
   canceled: number[]
   net: number[]
   trx: number
-  startDate: any
-  endDate: any
+  startDate: number
+  endDate: number
 }
