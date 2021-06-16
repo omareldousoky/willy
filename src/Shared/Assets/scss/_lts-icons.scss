@@ -109,33 +109,36 @@
     content: '\e911'; 
   }
 }
-.lts-bulkLoanApplicationsReview {
+.lts-bulk-loan-applications-review {
   &:before {
     content: '\e912'; 
   }
 }
-.lts-bulkLoanApplicationsApproval {
+.lts-bulk-loan-applications-approval {
   &:before {
     content: '\e913'; 
   }
 }
-.lts-bulkApplicationCreation {
+.lts-bulk-application-creation {
   &:before {
     content: '\e914'; 
   }
 }
-.lts-issuedLoans {
+.lts-issued-loans {
   &:before {
-    content: '\e915'; 
+    content: '\e915
+    '; 
   }
 }
 .lts-cib {
   &:before {
-    content: '\e916'; 
+    content: '\e916
+    '; 
   }
 }
-.lts-changeSourceOfFund {
+.lts-change-source-of-fund {
   &:before {
-    content: '\e917'; 
+    content: '\e917
+    '; 
   }
 }
