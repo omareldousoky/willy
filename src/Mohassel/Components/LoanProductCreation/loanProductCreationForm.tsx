@@ -53,6 +53,7 @@ export const LoanProductCreationForm = (props: any) => {
                 const val = e.currentTarget.value
                 if (val === 'group') {
                   setFieldValue('type', 'micro')
+                  setFieldValue('contractType', 'standard')
                 }
                 setFieldValue('beneficiaryType', val)
               }}
@@ -65,6 +66,30 @@ export const LoanProductCreationForm = (props: any) => {
             </Form.Control>
             <Form.Control.Feedback type="invalid">
               {errors.beneficiaryType}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Form.Group controlId="type">
+            <Form.Label className="data-label">{local.contractType}</Form.Label>
+            <Form.Control
+              as="select"
+              name="contractType"
+              data-qc="contractType"
+              value={values.contractType}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              isInvalid={errors.contractType && touched.contractType}
+            >
+              <option value="standard">{local.standard}</option>
+              {values.beneficiaryType !== 'group' && (
+                <option value="masterGas">{local.masterGas}</option>
+              )}
+            </Form.Control>
+            <Form.Control.Feedback type="invalid">
+              {errors.contractType}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>

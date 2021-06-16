@@ -1113,5 +1113,8 @@
   "theVerdict": "الحكم",
   "finalConfinementNumber": "رقم الحصر النهائي",
   "theConfinement": "الحصر",
-  "courtCaseNumber":"رقم الجنحه"
+  "courtCaseNumber": "رقم الجنحه",
+  "contractType": "نوع العقد",
+  "standard": "اساسي",
+  "masterGas": "خاص بقرض ماستر جاس"
 }
