@@ -11,7 +11,7 @@ interface Props {
   branchName: string
   customerKey: string
   customerName: string
-  customerType: 'company' | 'group' | 'individual'
+  customerType: string
 }
 export default function CustomerBasicsCard(props: Props) {
   return (
