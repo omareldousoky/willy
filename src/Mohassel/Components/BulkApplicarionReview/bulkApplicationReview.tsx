@@ -459,7 +459,7 @@ class BulkApplicationReview extends Component<Props, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('bulkLoanApplicationsReview')}
+            .indexOf('bulk-loan-applications-review')}
         />
         <Card className="main-card">
           <Loader type="fullscreen" open={this.props.loading} />

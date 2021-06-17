@@ -327,7 +327,7 @@ class LoanList extends Component<Props, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('issuedLoans')}
+            .indexOf('issued-loans')}
         />
         <Card className="main-card">
           <Loader type="fullsection" open={this.props.loading} />

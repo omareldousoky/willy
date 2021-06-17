@@ -308,7 +308,7 @@ class BulkApplicationCreation extends Component<Props, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('bulkApplicationCreation')}
+            .indexOf('bulk-application-creation')}
         />
         <Card className="main-card">
           <Loader type="fullscreen" open={this.props.loading} />
