@@ -2,65 +2,31 @@ import React from 'react'
 import './randomPaymentReceipt.scss'
 import Tafgeet from 'tafgeetjs'
 import {
-  timeToArabicDate,
   numbersToArabic,
+  extractGMTDate,
 } from '../../../../Shared/Services/utils'
-import * as local from '../../../../Shared/Assets/ar.json'
+import local from '../../../../Shared/Assets/ar.json'
 
 const randomPaymentReceipt = (props) => {
-  // function getPurpose(installmentSerial: number) {
-  //   switch (installmentSerial) {
-  //     case 0:
-  //       return local.stamps
-  //     case 1:
-  //       return local.representativeFees
-  //     case 2:
-  //       return local.applicationFee
-  //     default:
-  //       return ''
-  //   }
-  // }
-  const getValueFromLocalizationFileByKey = (key) => {
-    if (key === 'reissuingFees') return local.reissuingFees
-    if (key === 'legalFees') return local.legalFees
-    if (key === 'clearanceFees') return local.clearanceFees
-    if (key === 'toktokStamp') return local.toktokStamp
-    if (key === 'tricycleStamp') return local.tricycleStamp
-    return ''
-  }
   return (
     <div className="random-payment-receipt">
       {props.receiptData.map((receiptData, index) => {
         return (
-          <div
-            key={index}
-            className="random-payment-receipt"
-            dir="rtl"
-            lang="ar"
-          >
+          <div key={index} className="random-payment-receipt" lang="ar">
             <div className="receipt-container">
               <table
+                className="w-100 text-center"
                 style={{
-                  fontSize: '12px',
                   margin: '10px 0px',
-                  textAlign: 'center',
-                  width: '100%',
                 }}
               >
                 <tr style={{ height: '10px' }} />
-                <tr
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}
-                >
+                <tr className="w-100 d-flex flex-row justify-content-between">
                   <th colSpan={6}>
                     <div className="logo-print-tb" />
                   </th>
                   <th colSpan={6}>
-                    ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+                    ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنة 2015
                   </th>
                 </tr>
                 <tr style={{ height: '10px' }} />
@@ -73,7 +39,7 @@ const randomPaymentReceipt = (props) => {
                 <div>
                   <span className="title">{local.date}</span>
                   <span className="info">
-                    {timeToArabicDate(receiptData.date, false)}
+                    {extractGMTDate(receiptData.date)}
                   </span>
                 </div>
                 <div>
@@ -106,9 +72,7 @@ const randomPaymentReceipt = (props) => {
                     {receiptData.type === 'penalty'
                       ? local.payPenalty
                       : receiptData.type === 'randomPayment'
-                      ? getValueFromLocalizationFileByKey(
-                          receiptData.randomPaymentType
-                        )
+                      ? local[receiptData.randomPaymentType]
                       : ''}
                   </span>
                 </div>
