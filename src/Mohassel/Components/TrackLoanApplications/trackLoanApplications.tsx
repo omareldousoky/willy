@@ -544,7 +544,7 @@ class TrackLoanApplications extends Component<Props, State> {
                       onClick={() =>
                         this.props.history.push(
                           '/track-loan-applications/new-loan-application',
-                          { id: '', action: 'under_review' }
+                          { id: '', action: 'under_review', sme: smePermission }
                         )
                       }
                     >

@@ -8,7 +8,7 @@ export const manageLoansArray = (): Card[] => {
     manageLoanArr.push({
       icon: 'issued-loans',
       header: local.issuedLoans,
-      desc: local.issuedLoans,
+      desc: local.individuals,
       path: '/loans',
     })
   }
