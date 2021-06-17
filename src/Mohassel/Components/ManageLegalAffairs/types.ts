@@ -1,12 +1,7 @@
 import { ReactNode } from 'react'
 import { Managers } from '../managerHierarchy/types'
 import { DefaultedCustomer, ManagerReviews } from './defaultingCustomersList'
-
-export interface CourtSession {
-  date?: number
-  decision?: string
-  confinementNumber?: string
-}
+import { CourtSession, LegalHistoryResponse } from '../../Models/LegalAffairs'
 
 export interface LegalActionsForm {
   statusNumber: string
@@ -155,4 +150,7 @@ export interface JudgeCustomersFormValues {
     from: string
     to: string
   }
+}
+export interface LegalHistoryProps {
+  data: LegalHistoryResponse
 }

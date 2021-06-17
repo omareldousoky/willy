@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios'
 import axios from '../axios-instance'
 import {
   ReviewedDefaultingCustomersReq,
@@ -8,6 +9,8 @@ import {
   LegalActionsForm,
   ReviewReqBody,
 } from '../../../Components/ManageLegalAffairs/types'
+import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
+import { ApiResponse } from '../../../Models/common'
 
 export const searchDefaultingCustomers = async (data: object) => {
   const url = process.env.REACT_APP_BASE_URL + '/search/defaulting-customer'
@@ -151,6 +154,18 @@ export const deleteSettlementDocument = async (
         type,
       },
     })
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
+}
+
+export const getLegalHistory = async (
+  legalId: string
+): Promise<ApiResponse<LegalHistoryResponse>> => {
+  const url = process.env.REACT_APP_BASE_URL + `/legal/history/${legalId}`
+  try {
+    const res: AxiosResponse<LegalHistoryResponse> = await axios.get(url)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
