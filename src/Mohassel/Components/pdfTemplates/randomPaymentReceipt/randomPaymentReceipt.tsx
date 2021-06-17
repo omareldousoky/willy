@@ -20,16 +20,18 @@ const randomPaymentReceipt = (props) => {
                   margin: '10px 0px',
                 }}
               >
-                <tr style={{ height: '10px' }} />
-                <tr className="w-100 d-flex flex-row justify-content-between">
-                  <th colSpan={6}>
-                    <div className="logo-print-tb" />
-                  </th>
-                  <th colSpan={6}>
-                    ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنة 2015
-                  </th>
-                </tr>
-                <tr style={{ height: '10px' }} />
+                <tbody>
+                  <tr style={{ height: '10px' }} />
+                  <tr className="w-100 d-flex flex-row justify-content-between">
+                    <th colSpan={6}>
+                      <div className="logo-print-tb" />
+                    </th>
+                    <th colSpan={6}>
+                      ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنة 2015
+                    </th>
+                  </tr>
+                  <tr style={{ height: '10px' }} />
+                </tbody>
               </table>
               <div className="receipt-header">
                 <h5>{local.tasaheelName}</h5>
