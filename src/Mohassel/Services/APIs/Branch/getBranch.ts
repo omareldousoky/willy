@@ -1,5 +1,5 @@
-import { Trace } from '../../../../Shared/Services/interfaces'
-import { ApiResponse } from '../../../Models/common'
+import { Trace, ApiResponse } from '../../../Models/common'
+
 import axios from '../axios-instance'
 
 export interface BranchDetails {

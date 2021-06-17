@@ -9,7 +9,7 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import FormControl from 'react-bootstrap/FormControl'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Col from 'react-bootstrap/Col'
-
+import dayjs from 'dayjs'
 import * as local from '../../Assets/ar.json'
 import {
   search,
@@ -41,6 +41,7 @@ interface InitialFormikState {
   isDoubtful?: boolean
   isWrittenOff?: boolean
   printed?: boolean
+  lastDates?: 'day' | 'week' | 'month' | ''
   type?: string
 }
 interface Props {
@@ -264,6 +265,14 @@ class Search extends Component<Props, State> {
     } else {
       obj.type = this.props.sme ? 'sme' : 'micro'
     }
+
+    if (obj.lastDates) {
+      const fromDate = dayjs().subtract(1, obj.lastDates)
+
+      obj.fromDate = fromDate.startOf(obj.lastDates).valueOf()
+      obj.toDate = fromDate.endOf(obj.lastDates).valueOf()
+    }
+
     if (url === 'customer')
       obj.customerType = this.props.dropDownKeys?.includes(
         'commercialRegisterNumber'
@@ -437,6 +446,7 @@ class Search extends Component<Props, State> {
                             if (e.currentTarget.value === '')
                               formikProps.setFieldValue('toDate', '')
                           }}
+                          disabled={!!formikProps.values.lastDates}
                         />
                         <span className="mr-1">{local.to}</span>
                         <Form.Control
@@ -447,7 +457,10 @@ class Search extends Component<Props, State> {
                           value={formikProps.values.toDate}
                           min={formikProps.values.fromDate}
                           onChange={formikProps.handleChange}
-                          disabled={!formikProps.values.fromDate}
+                          disabled={
+                            !formikProps.values.fromDate ||
+                            !!formikProps.values.lastDates
+                          }
                         />
                       </div>
                     </Col>
@@ -567,10 +580,54 @@ class Search extends Component<Props, State> {
                     </Col>
                   )
                 }
+                if (searchKey === 'lastDates') {
+                  return (
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.lastDates}</p>
+                        <Form.Control
+                          as="select"
+                          className="dropdown-select"
+                          data-qc="lastDates"
+                          value={formikProps.values.lastDates}
+                          onChange={(e) => {
+                            formikProps.setFieldValue(
+                              'lastDates',
+                              e.currentTarget.value
+                            )
+
+                            formikProps.setFieldValue('fromDate', '')
+                            formikProps.setFieldValue('toDate', '')
+                          }}
+                        >
+                          {[
+                            { value: '', text: local.all },
+                            { value: 'day', text: local.lastDay },
+                            { value: 'week', text: local.lastWeek },
+                            { value: 'month', text: local.lastMonth },
+                          ].map(({ value, text }) => (
+                            <option key={value} value={value} data-qc={value}>
+                              {text}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </div>
+                    </Col>
+                  )
+                }
                 if (searchKey === 'clearance-status') {
                   return this.statusDropdown(formikProps, index, [
                     { value: '', text: local.all },
                     { value: 'underReview', text: local.underReview },
+                    { value: 'approved', text: local.approved },
+                    { value: 'rejected', text: local.rejected },
+                  ])
+                }
+                if (searchKey === 'leads-status') {
+                  return this.statusDropdown(formikProps, index, [
+                    { value: '', text: local.all },
+                    { value: 'in-review', text: local.underReview },
+                    { value: 'submitted', text: local.submitted },
                     { value: 'approved', text: local.approved },
                     { value: 'rejected', text: local.rejected },
                   ])

@@ -760,6 +760,9 @@ export const DownloadAsCsv = async (name: string, data: string) => {
   anchor.click()
 }
 
+export const errorResponseHandler = (error: string) =>
+  Swal.fire('Error !', getErrorMessage(error), 'error')
+
 export const removeEmptyArg = (obj) => {
   Object.keys(obj).forEach((el) => {
     if (obj[el] === '' || obj[el] === undefined) {
