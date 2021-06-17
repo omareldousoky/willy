@@ -748,7 +748,11 @@ const ReportsModal = (props: Props) => {
                   ].includes(props.pdf.key) &&
                   props.getExcel && (
                     <Button
-                      disabled={!!formikProps.errors.quarterYear}
+                      disabled={
+                        !!formikProps.errors.quarterYear ||
+                        (formikProps.values.loanType &&
+                          formikProps.values.loanType !== 'micro')
+                      }
                       variant="primary"
                       onClick={async () => {
                         // Manual revalidate formik: https://github.com/formium/formik/issues/2734
