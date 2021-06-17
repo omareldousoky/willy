@@ -1,5 +1,4 @@
-import { Trace, ApiResponse } from '../../../Models/common'
-
+import { ApiResponse, Trace } from '../../../Models/common'
 import axios from '../axios-instance'
 
 export interface BranchDetails {
