@@ -222,6 +222,7 @@ const appRoutes = [
       {
         path: '/track-loan-applications',
         label: local.loanApplications,
+        disableLink: true,
         render: () => (
           <Can I="getLoanApplication" a="application">
             <TrackLoanApplications />
@@ -581,6 +582,7 @@ const appRoutes = [
       {
         path: '/loans',
         label: local.issuedLoans,
+        disableLink: true,
         render: (props) => <LoanList {...props} />,
         routes: [
           {
