@@ -20,6 +20,7 @@ import { BranchesDropDown } from '../../../Mohassel/Components/dropDowns/allDrop
 import {
   getFullCustomerKey,
   parseJwt,
+  removeEmptyArg,
   timeToDateyyymmdd,
 } from '../../Services/utils'
 import { getCookie } from '../../Services/getCookie'
@@ -269,7 +270,7 @@ class Search extends Component<Props, State> {
       )
         ? 'company'
         : 'individual'
-    obj = this.removeEmptyArg(obj)
+    obj = removeEmptyArg(obj)
     this.props.setFrom ? this.props.setFrom(0) : null
     this.props.searchFilters(obj)
     this.props.search({
@@ -281,15 +282,6 @@ class Search extends Component<Props, State> {
         ? this.props.hqBranchIdRequest
         : values.branchId,
     })
-  }
-
-  removeEmptyArg(obj) {
-    Object.keys(obj).forEach((el) => {
-      if (obj[el] === '' || obj[el] === undefined) {
-        delete obj[el]
-      }
-    })
-    return obj
   }
 
   viewBranchDropdown() {

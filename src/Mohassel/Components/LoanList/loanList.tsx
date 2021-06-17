@@ -17,6 +17,7 @@ import {
   beneficiaryType,
   getErrorMessage,
   getFullCustomerKey,
+  removeEmptyArg,
 } from '../../../Shared/Services/utils'
 import { manageLoansArray, manageSMELoansArray } from './manageLoansInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
@@ -172,7 +173,7 @@ class LoanList extends Component<Props, State> {
           ? 'sme'
           : 'micro',
     })
-    const query = {
+    let query = {
       ...this.props.issuedLoansSearchFilters,
       size: this.state.size,
       from: this.state.from,
@@ -183,6 +184,7 @@ class LoanList extends Component<Props, State> {
           ? 'sme'
           : 'micro',
     }
+    query = removeEmptyArg(query)
     this.props.search(query).then(() => {
       if (this.props.error)
         Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
@@ -200,8 +202,7 @@ class LoanList extends Component<Props, State> {
             ? 'sme'
             : 'micro',
       })
-      const query = {
-        ...this.props.issuedLoansSearchFilters,
+      let query = {
         size: this.state.size,
         from: this.state.from,
         url: 'loan',
@@ -211,6 +212,7 @@ class LoanList extends Component<Props, State> {
             ? 'sme'
             : 'micro',
       }
+      query = removeEmptyArg(query)
       this.props.search(query).then(() => {
         if (this.props.error)
           Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
