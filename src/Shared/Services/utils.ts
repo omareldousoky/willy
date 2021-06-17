@@ -766,7 +766,7 @@ export const errorResponseHandler = (error: string) =>
 // Extract GMT date from a timestamp
 export const extractGMTDate = (date: number) => {
   const dateInstance = new Date(date)
-  if (Number.isNaN(dateInstance)) return date
+  if (!(dateInstance instanceof Date)) return date
   return numbersToArabic(
     dateInstance.toISOString().split('T')[0].replace(/-/g, '/'),
     true
