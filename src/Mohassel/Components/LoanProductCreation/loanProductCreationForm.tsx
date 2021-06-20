@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
@@ -80,8 +80,15 @@ export const LoanProductCreationForm = (props: any) => {
               data-qc="contractType"
               value={values.contractType}
               onBlur={handleBlur}
-              onChange={handleChange}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                const val = e.currentTarget.value
+                if (val === 'masterGas') {
+                  setFieldValue('type', 'micro')
+                }
+                handleChange(e)
+              }}
               isInvalid={errors.contractType && touched.contractType}
+              disabled={edit}
             >
               <option value="standard">{local.standard}</option>
               {values.beneficiaryType !== 'group' && (
@@ -139,7 +146,9 @@ export const LoanProductCreationForm = (props: any) => {
                 disabled={edit}
               >
                 <option value="micro">Micro</option>
-                <option value="sme">SME</option>
+                {values.contractType !== 'masterGas' && (
+                  <option value="sme">SME</option>
+                )}
               </Form.Control>
               <Form.Control.Feedback type="invalid">
                 {errors.type}
