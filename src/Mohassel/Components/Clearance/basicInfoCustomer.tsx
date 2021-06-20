@@ -11,6 +11,7 @@ interface Props {
   branchName: string
   customerKey: string
   customerName: string
+  customerType: string
 }
 export default function CustomerBasicsCard(props: Props) {
   return (
@@ -25,7 +26,9 @@ export default function CustomerBasicsCard(props: Props) {
         <Col className="ml-5">
           <Row>
             <Form.Label className="basic-info-label">
-              {local.customerName}
+              {props.customerType === 'company'
+                ? local.companyName
+                : local.customerName}
             </Form.Label>
           </Row>
           <Row>
@@ -37,7 +40,9 @@ export default function CustomerBasicsCard(props: Props) {
         <Col>
           <Row>
             <Form.Label className="basic-info-label">
-              {local.customerCode}
+              {props.customerType === 'company'
+                ? local.companyCode
+                : local.customerCode}
             </Form.Label>
           </Row>
           <Row>

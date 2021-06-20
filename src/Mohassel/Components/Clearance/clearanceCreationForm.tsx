@@ -20,6 +20,7 @@ interface Props {
   paidLoans: PaidLoan[]
   edit: boolean
   customerKey: string
+  customerType: string
   penalty: number
   cancel: (e?: React.FormEvent<HTMLFormElement> | undefined) => void
 }
@@ -61,7 +62,9 @@ export const ClearanceCreationForm = (
         </Form.Group>
         <Form.Group as={Col} controlId="customerKey">
           <Form.Label className="clearance-label">
-            {local.customerCode}
+            {props.customerType === 'company'
+              ? local.companyCode
+              : local.customerCode}
           </Form.Label>
           <Form.Control
             type="text"
