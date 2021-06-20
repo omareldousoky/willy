@@ -13,9 +13,14 @@ const LoanContract = (props) => {
   const {
     data: {
       product: { contractType },
+      installmentsObject,
     },
     branchDetails,
   } = props
+
+  const installments = installmentsObject?.installments?.filter(
+    (installment) => installment.id !== 0
+  )
 
   function getNumbersOfGuarantor(str: string) {
     let modifiedStr = str
@@ -293,9 +298,8 @@ const LoanContract = (props) => {
                         معدنيه : &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         وشاسيه رقم : &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; وماتور
                         رقم : &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; بطلب
-                        الحصول على تمويل من فرع {branchDetails.name} – مساره
-                        الكائن {branchDetails.address} – محافظة{' '}
-                        {branchDetails.governorate} وذلك وفقا لاحكام القانون رقم
+                        الحصول على تمويل من فرع {branchDetails.name} – الكائن{' '}
+                        {branchDetails.address} – وذلك وفقا لاحكام القانون رقم
                         141 لسنه 2014 المشار اليه وذلك بضمان وتضامن الطرف الثالث
                         وقد وافقه الطرف الاول علئ ذلك وفقا للشروط والضوابط
                         الوارده بهذا العقد وبعد ان اقر الاطراف باهليتهم
@@ -371,7 +375,7 @@ const LoanContract = (props) => {
                       <span>
                         {contractType === 'masterGas' ? 'التمويل' : 'القرض'}
                       </span>{' '}
-                      البالغة
+                      البالغة{' '}
                       {`${numbersToArabic(
                         props.data.principal
                       )} جنيه (${new Tafgeet(
@@ -390,18 +394,17 @@ const LoanContract = (props) => {
                           )}{' '}
                           جنيه وتكاليف التمويل البالغه
                           {numbersToArabic(
-                            props.data.installmentsObject.totalInstallments
-                              .feesSum
+                            installmentsObject.totalInstallments.feesSum
                           )}
                           جنيه الي الطرف الأول وذلك بواقع مبلغ قدره
                           {`${numbersToArabic(
-                            props.data.installmentsObject.totalInstallments
+                            installmentsObject.totalInstallments
                               .installmentSum +
                               (props.data.applicationFeesRequired
                                 ? props.data.applicationFeesRequired
                                 : 0)
                           )} جنيه (${new Tafgeet(
-                            props.data.installmentsObject.totalInstallments
+                            installmentsObject.totalInstallments
                               .installmentSum +
                               (props.data.applicationFeesRequired
                                 ? props.data.applicationFeesRequired
@@ -410,37 +413,27 @@ const LoanContract = (props) => {
                           ).parse()})`}
                         </span>
                       )}
-                      ، يتم سداده علي عدد
-                      {numbersToArabic(
-                        props.data.installmentsObject.installments.length
-                      )}
-                      قسط كل {numbersToArabic(props.data.product.periodLength)}
+                      ، يتم سداده علي عدد {numbersToArabic(installments.length)}{' '}
+                      قسط كل {numbersToArabic(props.data.product.periodLength)}{' '}
                       {props.data.product.periodType === 'days'
                         ? local.day
-                        : local.month}
-                      قيمة كل قسط
+                        : local.month}{' '}
+                      قيمة كل قسط{' '}
                       {`${numbersToArabic(
-                        props.data.installmentsObject.installments[0]
-                          .installmentResponse
+                        installments[0].installmentResponse
                       )} جنيه (${new Tafgeet(
-                        props.data.installmentsObject.installments[0].installmentResponse,
+                        installments[0].installmentResponse,
                         'EGP'
                       ).parse()})`}
-                      ، تبدأ في
+                      ، تبدأ في{' '}
+                      {timeToArabicDate(installments[0].dateOfPayment, false)}{' '}
+                      وينتهي في{' '}
                       {timeToArabicDate(
-                        props.data.installmentsObject.installments[0]
-                          .dateOfPayment,
+                        installments[installments.length - 1].dateOfPayment,
                         false
-                      )}
-                      وينتهي في
-                      {timeToArabicDate(
-                        props.data.installmentsObject.installments[
-                          props.data.installmentsObject.installments.length - 1
-                        ].dateOfPayment,
-                        false
-                      )}
+                      )}{' '}
                       علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في
-                      {props.branchDetails.name} {props.branchDetails.address}
+                      {props.branchDetails.name} {props.branchDetails.address}{' '}
                       أو بأحدي وسائل الدفع الإلكتروني المعتمده من هيئه الرقابه
                       الماليه
                     </div>
@@ -450,11 +443,10 @@ const LoanContract = (props) => {
                         واتفق الطرفين الاول والثاني بان السنه الاولي لتكاليف
                         التمويل وقيمتها{' '}
                         {numbersToArabic(
-                          props.data.installmentsObject.totalInstallments
-                            .feesSum
+                          installmentsObject.totalInstallments.feesSum
                         )}{' '}
-                        سوف تتحملها شركه ماستر جاس وفقا للعقد المبرم بين لطرف
-                        الاول وماستر جاس
+                        جنيه سوف تتحملها شركه ماستر جاس وفقا للعقد المبرم بين
+                        لطرف الاول وماستر جاس
                       </div>
                     )}
                   </section>
