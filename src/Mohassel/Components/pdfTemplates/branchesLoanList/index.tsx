@@ -21,9 +21,17 @@ export const BranchesLoanList = ({
         {data.result[1] && (
           <LoanTypeSection data={data.result[1]} loanTypeName="فردي" />
         )}
-        {data.result[2] && (
-          <LoanTypeSection data={data.result[2]} loanTypeName="sme" />
-        )}
+        {data.result[3]
+          ? data.result[2] && (
+              <LoanTypeSection data={data.result[2]} loanTypeName="sme" />
+            )
+          : data.result[2] && (
+              <LoanTypeSection
+                data={data.result[2]}
+                loanTypeName="ﺷرﻛﺔ ﺗﺳﺎھﯾل ﻟﻠﺗﻣوﯾل ﻣﺗﻧﺎھﻰ اﻟﺻﻐر"
+                withHeader={false}
+              />
+            )}
         {data.result[3] && (
           <LoanTypeSection
             data={data.result[3]}
