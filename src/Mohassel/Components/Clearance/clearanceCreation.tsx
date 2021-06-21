@@ -47,6 +47,7 @@ interface State {
     key: string
     branchName: string
     customerName: string
+    customerType: string
   }
   step: number
   loading: boolean
@@ -66,6 +67,7 @@ class ClearanceCreation extends Component<Props, State> {
         key: '',
         branchName: '',
         customerName: '',
+        customerType: '',
       },
       step: 1,
       step1: clearanceData,
@@ -125,6 +127,7 @@ class ClearanceCreation extends Component<Props, State> {
             key: res.body.data.customerKey,
             customerName: res.body.data.customerName,
             branchName: res.body.data.branchName,
+            customerType: res.body.data.beneficiaryType,
           },
         })
         await this.getCustomerPaidLoans(res.body.data.customerId)
@@ -161,6 +164,7 @@ class ClearanceCreation extends Component<Props, State> {
           key: res.body.key,
           branchName: res.body.branchName,
           customerName: res.body.customerName,
+          customerType: res.body.customerType,
         },
       })
     } else {
@@ -272,6 +276,7 @@ class ClearanceCreation extends Component<Props, State> {
             cancel={() => this.cancel()}
             edit={this.props.edit}
             customerKey={this.state.customer.key}
+            customerType={this.state.customer.customerType}
             paidLoans={this.state.paidLoans}
             penalty={this.state.penalty}
           />
@@ -329,6 +334,7 @@ class ClearanceCreation extends Component<Props, State> {
             customerKey={this.state.customer.key}
             branchName={this.state.customer.branchName}
             customerName={this.state.customer.customerName}
+            customerType={this.state.customer.customerType}
           />
         </Card.Title>
         <div className="container">

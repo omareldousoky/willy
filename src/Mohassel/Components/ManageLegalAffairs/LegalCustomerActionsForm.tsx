@@ -7,7 +7,6 @@ import Swal from 'sweetalert2'
 import local from '../../../Shared/Assets/ar.json'
 import { DefaultedCustomer } from './defaultingCustomersList'
 import {
-  CourtSession,
   LegalActionsForm as LegalActionsFormType,
   SettledCustomer,
 } from './types'
@@ -21,6 +20,7 @@ import {
   isSettlementReviewed,
 } from './utils'
 import { Loader } from '../../../Shared/Components/Loader'
+import { CourtSession } from '../../Models/LegalAffairs'
 
 const LegalActionsForm: FunctionComponent = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
