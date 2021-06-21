@@ -470,7 +470,7 @@ class TrackLoanApplications extends Component<Props, State> {
       },
       {
         actionTitle: `${local.view} iScore`,
-        actionIcon: 'view',
+        actionIcon: 'i-score',
 
         actionPermission: ability.can('viewIscore', 'customer'),
         actionOnClick: () => this.getCachediScores(data.application),
