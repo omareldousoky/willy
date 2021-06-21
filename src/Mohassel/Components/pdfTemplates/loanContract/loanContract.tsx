@@ -446,7 +446,7 @@ const LoanContract = (props) => {
                           installmentsObject.totalInstallments.feesSum
                         )}{' '}
                         جنيه سوف تتحملها شركه ماستر جاس وفقا للعقد المبرم بين
-                        لطرف الاول وماستر جاس
+                        الطرف الاول وماستر جاس
                       </div>
                     )}
                   </section>
