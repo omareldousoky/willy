@@ -8,6 +8,8 @@ import { payment } from '../../../Shared/redux/payment/actions'
 import * as local from '../../../Shared/Assets/ar.json'
 import ability from '../../config/ability'
 
+type ContractType = 'standard' | 'masterGas'
+
 interface Props {
   paymentType: string
   penalty: number
@@ -16,6 +18,7 @@ interface Props {
     writeOff: boolean
     product: {
       type: string
+      contractType: ContractType
     }
   }
   installments: Array<Installment>
@@ -142,7 +145,8 @@ class PaymentIcons extends Component<Props, {}> {
           ) : null}
           {this.props.paymentType === 'normal' &&
           !this.props.application.writeOff &&
-          this.props.application.product.type !== 'sme' ? (
+          this.props.application.product.type !== 'sme' &&
+          this.props.application.product.contractType === 'standard' ? (
             <Can I="payEarly" a="application">
               <div className="payment-icon">
                 <img

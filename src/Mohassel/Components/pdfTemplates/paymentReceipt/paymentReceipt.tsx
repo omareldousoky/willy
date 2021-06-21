@@ -3,8 +3,8 @@ import './paymentReceipt.scss'
 import Tafgeet from 'tafgeetjs'
 import * as local from '../../../../Shared/Assets/ar.json'
 import {
-  timeToArabicDate,
   numbersToArabic,
+  extractGMTDate,
 } from '../../../../Shared/Services/utils'
 
 const PaymentReceipt = (props) => {
@@ -20,35 +20,27 @@ const PaymentReceipt = (props) => {
         return ''
     }
   }
+
   return (
     <>
       {props.receiptData.map((receiptData, index) => {
         return (
-          <div key={index} className="payment-receipt" dir="rtl" lang="ar">
+          <div key={index} className="payment-receipt" lang="ar">
             <div className="receipt-container">
               <table
+                className="w-100 text-center"
                 style={{
-                  fontSize: '12px',
                   margin: '10px 0px',
-                  textAlign: 'center',
-                  width: '100%',
                 }}
               >
                 <tbody>
                   <tr style={{ height: '10px' }} />
-                  <tr
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}
-                  >
+                  <tr className="w-100 d-flex flex-row justify-content-between">
                     <th colSpan={6}>
                       <div className="logo-print-tb" />
                     </th>
                     <th colSpan={6}>
-                      ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+                      ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنة 2015
                     </th>
                   </tr>
                   <tr style={{ height: '10px' }} />
@@ -62,7 +54,7 @@ const PaymentReceipt = (props) => {
                 <div>
                   <span className="title">{local.date}</span>
                   <span className="info">
-                    {timeToArabicDate(receiptData.date, false)}
+                    {extractGMTDate(receiptData.date)}
                   </span>
                 </div>
                 <div>
