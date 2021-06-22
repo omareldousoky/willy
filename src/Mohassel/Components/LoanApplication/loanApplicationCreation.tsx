@@ -1010,7 +1010,8 @@ class LoanApplicationCreation extends Component<Props, State> {
       const entitledToSignIds: EntitledToSignIds[] = obj.entitledToSignIds.map(
         ({ customerId }) => {
           const entitledToSign = values.entitledToSign.find(
-            ({ entitledToSign }) => entitledToSign._id === customerId
+            ({ entitledToSign: entitledToSignItem }) =>
+              entitledToSignItem._id === customerId
           )
 
           return {

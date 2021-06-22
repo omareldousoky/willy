@@ -265,19 +265,6 @@ class LoanProfile extends Component<Props, State> {
     return []
   }
 
-  mapEntitledToSignToCustomer({
-    customer,
-    position,
-  }: {
-    customer: Customer
-    position: string
-  }) {
-    return {
-      ...customer,
-      position,
-    }
-  }
-
   async getCachediScores(application) {
     const ids: string[] = []
     const commercialRegisterNumbers: string[] = []
@@ -787,6 +774,19 @@ class LoanProfile extends Component<Props, State> {
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     )
     return {}
+  }
+
+  mapEntitledToSignToCustomer({
+    customer,
+    position,
+  }: {
+    customer: Customer
+    position: string
+  }) {
+    return {
+      ...customer,
+      position,
+    }
   }
 
   async writeOffApplication() {
