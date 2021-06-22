@@ -134,10 +134,7 @@ const List = ({
       key: 'actions',
       // eslint-disable-next-line react/display-name
       render: (row) => (
-        <ActionsIconGroup
-          currentCustomerId={row._id}
-          actions={companyActions}
-        />
+        <ActionsIconGroup currentId={row._id} actions={companyActions} />
       ),
     },
   ]

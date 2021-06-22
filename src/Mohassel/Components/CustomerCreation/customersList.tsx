@@ -119,7 +119,7 @@ class CustomersList extends Component<Props, State> {
         key: 'actions',
         render: (data) => (
           <ActionsIconGroup
-            currentCustomerId={data._id}
+            currentId={data._id}
             actions={this.customerActions}
           />
         ),

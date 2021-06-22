@@ -1,10 +1,10 @@
 export interface ActionsIconGroupProps {
-  currentCustomerId: string
+  currentId: string
   actions: Actions[]
 }
 export interface Actions {
   actionTitle: string
   actionPermission: boolean
   actionIcon: string
-  actionOnClick(currentCustomerId: string): void
+  actionOnClick(currentId: string): void
 }
