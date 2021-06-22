@@ -153,6 +153,14 @@ export const CompanyProfile = () => {
           }),
       },
       {
+        title: local.createClearance,
+        permission: ability.can('newClearance', 'application'),
+        onActionClick: () =>
+          history.push('/company/create-clearance', {
+            customerId: location.state.id,
+          }),
+      },
+      {
         icon: 'deactivate-user',
         title: company?.blocked?.isBlocked
           ? local.unblockCompany
