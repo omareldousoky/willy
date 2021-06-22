@@ -116,7 +116,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                 {values.entitledToSign.map((customer, i) => {
                   const text = orderLocal[i && i > 10 ? 'default' : i]
                   return (
-                    <Row key={i} className="col-12 text-nowrap">
+                    <Row key={i} className="col-12 text-nowrap mb-4">
                       {i > values.noOfGuarantors - 1 && (
                         <div className="d-flex col-1 p-0">
                           <Button
@@ -130,23 +130,42 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                           </Button>
                         </div>
                       )}
-                      <CustomerSearch
-                        source={text}
-                        key={i}
-                        className="col-11 p-0"
-                        handleSearch={(key, query) =>
-                          props.handleSearchEntitledToSign(key, query, i)
-                        }
-                        searchResults={customer.searchResults}
-                        selectCustomer={(cust) => {
-                          props.selectEntitledToSign(cust, i, values)
-                        }}
-                        selectedCustomer={customer.entitledToSign}
-                        removeCustomer={(cust) => {
-                          props.removeEntitledToSign(cust, i, values)
-                        }}
-                        header={text}
-                      />
+                      <div>
+                        <CustomerSearch
+                          source={text}
+                          key={i}
+                          className="col-11 p-0"
+                          handleSearch={(key, query) =>
+                            props.handleSearchEntitledToSign(key, query, i)
+                          }
+                          searchResults={customer.searchResults}
+                          selectCustomer={(cust) => {
+                            props.selectEntitledToSign(cust, i, values)
+                          }}
+                          selectedCustomer={customer.entitledToSign}
+                          removeCustomer={(cust) => {
+                            props.removeEntitledToSign(cust, i, values)
+                          }}
+                          header={text}
+                        />
+
+                        {values.entitledToSign[i]?.entitledToSign?._id && (
+                          <div className="d-flex align-items-center">
+                            <Form.Label className="font-weight-bold mr-2 mb-0">
+                              {local.position}
+                            </Form.Label>
+                            <Form.Control
+                              type="text"
+                              name={`entitledToSign[${i}].position`}
+                              data-qc={`entitledToSign[${i}].position`}
+                              value={values.entitledToSign[i]?.position}
+                              defaultValue={customer.entitledToSign.position}
+                              onBlur={handleBlur}
+                              onChange={handleChange}
+                            />
+                          </div>
+                        )}
+                      </div>
                     </Row>
                   )
                 })}
