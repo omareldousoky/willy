@@ -26,6 +26,13 @@ export function roundTo2(value: number) {
   return Math.round(value * 100) / 100
 }
 class CustomerCardPDF extends Component<Props, State> {
+  hasFeesInstallment = this.props.data.installmentsObject?.installments.some(
+    (installment) => installment.id === 0
+  )
+
+  installmentsLength =
+    this.props.data.installmentsObject?.installments?.length ?? 0
+
   constructor(props) {
     super(props)
     this.state = {
@@ -195,7 +202,9 @@ class CustomerCardPDF extends Component<Props, State> {
                 عدد الاقساط
                 <div className="frame">
                   {numbersToArabic(
-                    this.props.data.installmentsObject.installments.length
+                    this.hasFeesInstallment
+                      ? this.installmentsLength - 1
+                      : this.installmentsLength
                   )}
                 </div>
               </td>

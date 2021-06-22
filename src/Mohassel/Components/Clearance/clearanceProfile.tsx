@@ -140,6 +140,14 @@ class ClearanceProfile extends Component<
       <Table striped bordered hover>
         <tbody className="px-0 py-2">
           <tr>
+            <td style={header}>{local.customerType}</td>
+            <td style={cell}>
+              {this.state.data.beneficiaryType
+                ? local[this.state.data.beneficiaryType]
+                : ''}
+            </td>
+          </tr>
+          <tr>
             <td style={header}>{local.registrationDate}</td>
             <td style={cell}>{timeToDate(this.state.data.registrationDate)}</td>
           </tr>
@@ -306,6 +314,7 @@ class ClearanceProfile extends Component<
               customerKey={this.state.data.customerKey}
               branchName={this.state.data.bankName}
               customerName={this.state.data.customerName}
+              customerType={this.state.data.beneficiaryType}
             />
           </Card.Title>
           <Card.Body>{this.renderContent()}</Card.Body>

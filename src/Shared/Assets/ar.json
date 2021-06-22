@@ -1119,5 +1119,8 @@
   "lastDay": "الأمس",
   "lastWeek": "الاسبوع الماضى",
   "lastMonth": "الشهر الماضي",
+  "contractType": "نوع العقد",
+  "standard": "اساسي",
+  "masterGas": "خاص بقرض ماستر جاس",
   "position": "الصفة في النشاط"
 }
