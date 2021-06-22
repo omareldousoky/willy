@@ -139,9 +139,13 @@
     content: '\e917';
   }
 }
-
-.lts-download-big-file {
+.lts-i-score {
   &:before {
     content: '\e918';
+  }
+}
+.lts-download-big-file {
+  &:before {
+    content: '\e919';
   }
 }
