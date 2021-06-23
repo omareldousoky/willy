@@ -67,7 +67,9 @@ export const Calendar = ({
                             id="popover-basic"
                             style={{ minWidth: '377px', minHeight: '377px' }}
                           >
-                            <EventDetails event={currentEvent} />
+                            {currentEvent && (
+                              <EventDetails event={currentEvent} />
+                            )}
                           </Popover>
                         }
                         rootClose
