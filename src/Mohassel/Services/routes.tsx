@@ -160,6 +160,15 @@ const appRoutes = [
               </Can>
             ),
           },
+          {
+            path: '/create-clearance',
+            label: local.createClearance,
+            render: (props) => (
+              <Can I="newClearance" a="application">
+                <ClearanceCreation {...props} />
+              </Can>
+            ),
+          },
         ],
       },
       {

@@ -759,3 +759,16 @@ export const DownloadAsCsv = async (name: string, data: string) => {
   )
   anchor.click()
 }
+
+export const errorResponseHandler = (error: string) =>
+  Swal.fire('Error !', getErrorMessage(error), 'error')
+
+// Extract GMT date from a timestamp
+export const extractGMTDate = (date: number) => {
+  const dateInstance = new Date(date)
+  if (!(dateInstance instanceof Date)) return date
+  return numbersToArabic(
+    dateInstance.toISOString().split('T')[0].replace(/-/g, '/'),
+    true
+  )
+}

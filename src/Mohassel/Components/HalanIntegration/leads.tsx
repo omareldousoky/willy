@@ -108,6 +108,14 @@ class Leads extends Component<Props, State> {
       selectedLeadNumber: '',
       viewRejectionModal: false,
     }
+
+    const statusClasses = {
+      approved: 'paid',
+      rejected: 'late',
+      'in-review': 'under-review',
+      submitted: 'rescheduled',
+    }
+
     this.mappers = [
       {
         title: local.leadName,
@@ -125,14 +133,13 @@ class Leads extends Component<Props, State> {
         render: (data) => data.branchName,
       },
       {
-        title: local.phoneNumber,
-        key: 'phoneNumber',
-        render: (data) => data.phoneNumber,
-      },
-      {
         title: local.status,
         key: 'status',
-        render: (data) => this.getLeadStatus(data.status),
+        render: (data) => (
+          <span className={`status-chip ${statusClasses[data.status]}`}>
+            {this.getLeadStatus(data.status)}
+          </span>
+        ),
       },
       {
         title: local.creationDate,
@@ -209,7 +216,8 @@ class Leads extends Component<Props, State> {
             </p>
             {this.state.openActionsId === data.uuid && (
               <div className="actions-list">
-                {data.status === 'in-review' && (
+                {(data.status === 'in-review' ||
+                  data.status === 'submitted') && (
                   <Can I="reviewLead" a="halanuser">
                     <div
                       className="item"
@@ -227,7 +235,8 @@ class Leads extends Component<Props, State> {
                     </div>
                   </Can>
                 )}
-                {data.status === 'in-review' && (
+                {(data.status === 'in-review' ||
+                  data.status === 'submitted') && (
                   <Can I="reviewLead" a="halanuser">
                     <div
                       className="item"
@@ -245,33 +254,15 @@ class Leads extends Component<Props, State> {
                     </div>
                   </Can>
                 )}
-                {data.status === 'submitted' && (
-                  <Can I="reviewLead" a="halanuser">
-                    <div
-                      className="item"
-                      onClick={() =>
-                        this.changeLeadState(
-                          data.phoneNumber,
-                          data.status,
-                          data.inReviewStatus,
-                          'in-review',
-                          'secondApproval'
-                        )
-                      }
-                    >
-                      {local.acceptSecondVisit}
-                    </div>
-                  </Can>
-                )}
                 <Can I="leadInReviewStatus" a="halanuser">
                   <div
                     className="item"
                     onClick={() => {
-                      this.changeMainState(
-                        data.phoneNumber,
-                        'in-review',
-                        'view',
-                        data
+                      this.props.history.push(
+                        '/halan-integration/leads/view-lead',
+                        {
+                          leadDetails: data,
+                        }
                       )
                     }}
                   >
@@ -298,11 +289,11 @@ class Leads extends Component<Props, State> {
                     <div
                       className="item"
                       onClick={() =>
-                        this.changeMainState(
-                          data.phoneNumber,
-                          'in-review',
-                          'edit',
-                          data
+                        this.props.history.push(
+                          '/halan-integration/leads/edit-lead',
+                          {
+                            leadDetails: data,
+                          }
                         )
                       }
                     >
@@ -404,8 +395,6 @@ class Leads extends Component<Props, State> {
     this.changeMainState(
       this.state.selectedLeadNumber,
       'rejected',
-      '',
-      null,
       values.rejectionReason,
       values.rejectionDetails
     )
@@ -451,7 +440,7 @@ class Leads extends Component<Props, State> {
               }
             }
           } else {
-            this.changeMainState(phoneNumber, newState, '', null)
+            this.changeMainState(phoneNumber, newState)
           }
         }
       })
@@ -461,46 +450,27 @@ class Leads extends Component<Props, State> {
   async changeMainState(
     phoneNumber: string,
     newState: string,
-    action: string,
-    data,
     rejectionReason?: string,
     rejectionDetails?: string
   ) {
     this.props.setLoading(true)
-    if (action && data.status !== 'submitted') {
-      action === 'view'
-        ? this.props.history.push('/halan-integration/leads/view-lead', {
-            leadDetails: data,
-          })
-        : this.props.history.push('/halan-integration/leads/edit-lead', {
-            leadDetails: data,
-          })
-    } else {
-      const res = await changeLeadState(
-        phoneNumber,
-        newState,
-        rejectionReason,
-        rejectionDetails
+
+    const res = await changeLeadState(
+      phoneNumber,
+      newState,
+      rejectionReason,
+      rejectionDetails
+    )
+    if (res.status === 'success') {
+      this.props.setLoading(false)
+      this.setState({ openActionsId: '', rejectLeadModal: false })
+
+      Swal.fire('', local.changeState, 'success').then(() =>
+        this.getLeadsCustomers()
       )
-      if (res.status === 'success') {
-        this.props.setLoading(false)
-        this.setState({ openActionsId: '', rejectLeadModal: false })
-        if (action === 'view') {
-          this.props.history.push('/halan-integration/leads/view-lead', {
-            leadDetails: data,
-          })
-        } else if (action === 'edit') {
-          this.props.history.push('/halan-integration/leads/edit-lead', {
-            leadDetails: data,
-          })
-        } else
-          Swal.fire('', local.changeState, 'success').then(() =>
-            this.getLeadsCustomers()
-          )
-      } else {
-        this.props.setLoading(false)
-        Swal.fire('', local.userRoleEditError, 'error')
-      }
+    } else {
+      this.props.setLoading(false)
+      Swal.fire('', local.userRoleEditError, 'error')
     }
   }
 
@@ -580,7 +550,12 @@ class Leads extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['keyword', 'dateFromTo']}
+              searchKeys={[
+                'keyword',
+                'dateFromTo',
+                'leads-status',
+                'lastDates',
+              ]}
               dropDownKeys={['name']}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               hqBranchIdRequest={this.state.branchId}

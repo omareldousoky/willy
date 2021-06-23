@@ -7,7 +7,6 @@ import Swal from 'sweetalert2'
 import local from '../../../Shared/Assets/ar.json'
 import { DefaultedCustomer } from './defaultingCustomersList'
 import {
-  CourtSession,
   LegalActionsForm as LegalActionsFormType,
   SettledCustomer,
 } from './types'
@@ -21,6 +20,7 @@ import {
   isSettlementReviewed,
 } from './utils'
 import { Loader } from '../../../Shared/Components/Loader'
+import { CourtSession } from '../../Models/LegalAffairs'
 
 const LegalActionsForm: FunctionComponent = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -50,14 +50,21 @@ const LegalActionsForm: FunctionComponent = () => {
       : court
   }
 
-  const formValuesToActionReq = (values: LegalActionsFormType) => ({
-    ...customer,
-    ...values,
-    firstCourtSession: formatCourt(values.firstCourtSession),
-    oppositionSession: formatCourt(values.oppositionSession),
-    oppositionAppealSession: formatCourt(values.oppositionAppealSession),
-    misdemeanorAppealSession: formatCourt(values.misdemeanorAppealSession),
-  })
+  const formValuesToActionReq = (values: LegalActionsFormType) => {
+    const finalVerdictDate = values.finalVerdictDate
+      ? new Date(values.finalVerdictDate).valueOf()
+      : values.finalVerdictDate
+
+    return {
+      ...customer,
+      ...values,
+      finalVerdictDate,
+      firstCourtSession: formatCourt(values.firstCourtSession),
+      oppositionSession: formatCourt(values.oppositionSession),
+      oppositionAppealSession: formatCourt(values.oppositionAppealSession),
+      misdemeanorAppealSession: formatCourt(values.misdemeanorAppealSession),
+    }
+  }
 
   const handleSubmit = async (values: LegalActionsFormType) => {
     const actionReqBody: LegalActionsFormType &

@@ -32,6 +32,8 @@ import Search from '../../../../Shared/Components/Search/search'
 import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from '../manageLegalAffairsInitials'
 import {
+  ConvictedReportRequest,
+  JudgeCustomersFormValues,
   ManagerReviewEnum,
   ReviewReqBody,
   SettledCustomer,
@@ -39,11 +41,12 @@ import {
   SettlementInfo,
   TableMapperItem,
 } from '../types'
-import { ManagerReviews } from '../defaultingCustomersList'
+import { DefaultedCustomer, ManagerReviews } from '../defaultingCustomersList'
 import LegalSettlementForm from './LegalSettlementForm'
 import {
   getSettlementFees,
   reviewLegalCustomer,
+  getLegalHistory,
 } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import { FormField } from '../Form/types'
 import { defaultValidationSchema } from '../validations'
@@ -53,7 +56,16 @@ import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
 import { Branch } from '../../../../Shared/Services/interfaces'
 import { getBranch } from '../../../Services/APIs/Branch/getBranch'
 import managerTypes from '../configs/managerTypes'
-import { handleUpdateSuccess } from '../utils'
+import { LegalHistory } from './LegalHistory'
+import {
+  handleUpdateSuccess,
+  hasCourtSession,
+  renderCourtField,
+} from '../utils'
+import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
+import LegalJudgePdf from '../../pdfTemplates/LegalJudge'
+import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
+import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -86,8 +98,22 @@ const LegalCustomersList: FunctionComponent = () => {
   ] = useState<SettledCustomer | null>(null)
   const [branchForPrint, setBranchForPrint] = useState<Branch | null>(null)
 
+  const [
+    customersForConvictedReport,
+    setCustomersForConvictedReport,
+  ] = useState<DefaultedCustomer[] | null>(null)
+
+  const [convictedReportInfo, setConvictedReportInfo] = useState({
+    policeStation: '',
+    governorate: '',
+  })
+
   const [isSettlementLoading, setIsSettlementLoading] = useState(false)
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
+  const [historyData, setHistoryData] = useState<LegalHistoryResponse | null>(
+    null
+  )
+  const [isJudgeModalOpen, setIsJudgeModalOpen] = useState(false)
 
   const data: SettledCustomer[] =
     useSelector((state: any) => state.search.data) || []
@@ -135,15 +161,17 @@ const LegalCustomersList: FunctionComponent = () => {
   }, [customerForPrint])
 
   useEffect(() => {
-    if (branchForPrint) {
+    if (branchForPrint || historyData || !!customersForConvictedReport) {
       window.print()
     }
-
     window.onafterprint = () => {
       setCustomerForPrint(null)
       setBranchForPrint(null)
+      setCustomersForConvictedReport(null)
+      setConvictedReportInfo({ policeStation: '', governorate: '' })
+      setHistoryData(null)
     }
-  }, [branchForPrint])
+  }, [branchForPrint, customersForConvictedReport, historyData])
 
   useEffect(() => {
     const fetchSettlementFees = async () => {
@@ -194,18 +222,6 @@ const LegalCustomersList: FunctionComponent = () => {
     }
   }, [error])
 
-  const hasCourtSession = (customer: SettledCustomer) =>
-    customer.status !== ManagerReviewEnum.FinancialManager &&
-    customer[customer.status]
-
-  const renderCourtField = (customer: SettledCustomer, name: string) => {
-    if (!hasCourtSession(customer)) {
-      return ''
-    }
-
-    return customer[customer.status][name]
-  }
-
   const toggleCustomerForSettlement = (customer: SettledCustomer) => {
     setCustomerForSettlement((previousValue) =>
       previousValue?._id === customer._id ? null : customer
@@ -252,6 +268,7 @@ const LegalCustomersList: FunctionComponent = () => {
           (customer) => customer.settlement && customer.settlement[type.value]
         )
     )
+
   const reviewFormFields: FormField[] = [
     {
       name: 'type',
@@ -297,6 +314,55 @@ const LegalCustomersList: FunctionComponent = () => {
     }
 
     setCustomersForReview(null)
+  }
+  const handleDownloadHistory = async (legalId: string) => {
+    const response = await getLegalHistory(legalId)
+    setIsSettlementLoading(true)
+    if (response.status === 'success') {
+      const resBody: LegalHistoryResponse = response.body as LegalHistoryResponse
+      if (resBody.history && resBody?.history.length > 0) {
+        setHistoryData(resBody)
+      } else {
+        setHistoryData(null)
+        Swal.fire('', local.noLogsFound, 'info')
+      }
+    } else {
+      Swal.fire(
+        'error',
+        getErrorMessage((response.error as Record<string, string>).error),
+        'error'
+      )
+    }
+    setIsSettlementLoading(false)
+  }
+
+  const handleJudgeReport = async (values: JudgeCustomersFormValues) => {
+    setConvictedReportInfo({
+      governorate: values.governorate,
+      policeStation: values.policeStation,
+    })
+
+    const {
+      governorate,
+      policeStation,
+      dateRange: { from: startDate, to: endDate },
+    } = values
+
+    const reqBody: ConvictedReportRequest = {
+      governorate,
+      policeStation,
+      startDate: startDate ? new Date(startDate).valueOf() : 0,
+      endDate: endDate ? new Date(endDate).valueOf() : 0,
+    }
+
+    const response = await getConvictedReport(reqBody)
+
+    if (response.status === 'success') {
+      setIsJudgeModalOpen(false)
+      setCustomersForConvictedReport(response.body?.result ?? [])
+    } else {
+      Swal.fire('error', getErrorMessage(response.error.error), 'error')
+    }
   }
 
   const tableMapper: TableMapperItem[] = [
@@ -359,7 +425,7 @@ const LegalCustomersList: FunctionComponent = () => {
       title: local.creationDate,
       key: 'creationDate',
       render: (customer: SettledCustomer) =>
-        customer.created.at ? timeToArabicDate(customer.created.at, true) : '',
+        customer.created?.at ? timeToArabicDate(customer.created.at, true) : '',
     },
     {
       title: local.caseNumber,
@@ -488,9 +554,29 @@ const LegalCustomersList: FunctionComponent = () => {
               />
             </Button>
           )}
+          <Can I="getDefaultingCustomer" a="legal">
+            <Button
+              type="button"
+              variant="default"
+              className="clickable-action font-weight-normal text-dark"
+              title={local.logs}
+              onClick={async () => {
+                await handleDownloadHistory(customer._id)
+              }}
+            >
+              {local.downloadHistory}
+            </Button>
+          </Can>
         </div>
       ),
     },
+  ]
+
+  const judgeActors = [
+    'مدير الادارة العامة لتنفيذ الاحكام – قطاع الامن العام',
+    'مدير الادارة العامة لتنفيذ الاحكام – مديرية امن القاهرة',
+    `رئيس مباحث قسم شرطة ${convictedReportInfo.policeStation} – وحدة تنفيذ الاحكام`,
+    'مدير المكتب الفني لوزير الداخلية',
   ]
 
   const renderLogRow = (key: string) =>
@@ -546,6 +632,15 @@ const LegalCustomersList: FunctionComponent = () => {
                     onClick={() => setIsUploadModalOpen(true)}
                   >
                     {local.uploadDefaultingCustomers}
+                  </Button>
+                </Can>
+
+                <Can I="convictedClients" a="report">
+                  <Button
+                    className="big-button ml-2"
+                    onClick={() => setIsJudgeModalOpen(true)}
+                  >
+                    {local.judgeList}
                   </Button>
                 </Can>
               </div>
@@ -700,6 +795,26 @@ const LegalCustomersList: FunctionComponent = () => {
             />
           </Modal.Body>
         </Modal>
+
+        <Modal
+          show={isJudgeModalOpen}
+          onHide={() => setIsJudgeModalOpen(false)}
+          size="lg"
+        >
+          <Modal.Header>
+            <Modal.Title>{local.judgeList}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <JudgeLegalCustomersForm
+              onSubmit={(values) => {
+                handleJudgeReport(values)
+              }}
+              onCancel={() => {
+                setIsJudgeModalOpen(false)
+              }}
+            />
+          </Modal.Body>
+        </Modal>
       </div>
 
       {customerForPrint && branchForPrint && (
@@ -708,6 +823,20 @@ const LegalCustomersList: FunctionComponent = () => {
           customer={customerForPrint}
         />
       )}
+      {historyData && <LegalHistory data={historyData} />}
+
+      {!!customersForConvictedReport &&
+        !!convictedReportInfo.governorate &&
+        !!convictedReportInfo.policeStation &&
+        judgeActors.map((actor, index) => (
+          <LegalJudgePdf
+            key={index}
+            actor={actor}
+            customers={customersForConvictedReport}
+            governorate={convictedReportInfo.governorate}
+            policeStation={convictedReportInfo.policeStation}
+          />
+        ))}
     </>
   )
 }

@@ -256,36 +256,64 @@ class CustomerSearch extends Component<Props, State> {
               </div>
               {this.props.selectedCustomer.customerType === 'individual' ? (
                 <>
-                  <div className="d-flex flex-row">
-                    <p>{local.name}</p>
-                    <p style={{ margin: '0 10px 0 0' }}>
+                  <div className="d-flex flex-row my-2">
+                    <p className="font-weight-bold">{local.name}</p>
+                    <p
+                      style={{
+                        marginRight: '10px',
+                        whiteSpace: 'normal',
+                        maxWidth: '400px',
+                      }}
+                    >
                       {this.props.selectedCustomer.customerName}
                     </p>
                   </div>
-                  <div className="d-flex flex-row">
-                    <p>{local.nationalId}</p>
-                    <p style={{ margin: '0 10px 0 0' }}>
+                  <div className="d-flex flex-row my-2">
+                    <p className="font-weight-bold">{local.nationalId}</p>
+                    <p
+                      style={{
+                        marginRight: '10px',
+                        whiteSpace: 'normal',
+                        maxWidth: '400px',
+                      }}
+                    >
                       {this.props.selectedCustomer.nationalId}
                     </p>
                   </div>
-                  <div className="d-flex flex-row">
-                    <p>{local.birthDate}</p>
-                    <p style={{ margin: '0 10px 0 0' }}>
+                  <div className="d-flex flex-row my-2">
+                    <p className="font-weight-bold">{local.birthDate}</p>
+                    <p
+                      style={{
+                        marginRight: '10px',
+                        whiteSpace: 'normal',
+                        maxWidth: '400px',
+                      }}
+                    >
                       {this.props.selectedCustomer.birthDate &&
                         getRenderDate(this.props.selectedCustomer.birthDate)}
                     </p>
                   </div>
-                  <div className="d-flex flex-row">
-                    <p>{local.nationalIdIssueDate}</p>
-                    <p style={{ margin: '0 10px 0 0' }}>
+                  <div className="d-flex flex-row my-2">
+                    <p className="font-weight-bold">
+                      {local.nationalIdIssueDate}
+                    </p>
+                    <p
+                      style={{
+                        marginRight: '10px',
+                        whiteSpace: 'normal',
+                        maxWidth: '400px',
+                      }}
+                    >
                       {this.props.selectedCustomer.nationalIdIssueDate &&
                         getRenderDate(
                           this.props.selectedCustomer.nationalIdIssueDate
                         )}
                     </p>
                   </div>
-                  <div className="d-flex flex-row">
-                    <p>{local.customerHomeAddress}</p>
+                  <div className="d-flex flex-row my-2">
+                    <p className="font-weight-bold">
+                      {local.customerHomeAddress}
+                    </p>
                     <p
                       style={{
                         width: '60%',
@@ -299,32 +327,58 @@ class CustomerSearch extends Component<Props, State> {
                 </>
               ) : (
                 <>
-                  <div className="d-flex flex-row">
-                    <p>{local.companyName}</p>
-                    <p style={{ margin: '0 10px 0 0' }}>
+                  <div className="d-flex flex-row my-2">
+                    <p className="font-weight-bold">{local.companyName}</p>
+                    <p
+                      style={{
+                        marginRight: '10px',
+                        whiteSpace: 'normal',
+                        maxWidth: '400px',
+                      }}
+                    >
                       {this.props.selectedCustomer.businessName}
                     </p>
                   </div>
-                  <div className="d-flex flex-row">
-                    <p>{local.companyCode}</p>
-                    <p style={{ margin: '0 10px 0 0' }}>
+                  <div className="d-flex flex-row my-2">
+                    <p className="font-weight-bold">{local.companyCode}</p>
+                    <p
+                      style={{
+                        marginRight: '10px',
+                        whiteSpace: 'normal',
+                        maxWidth: '400px',
+                      }}
+                    >
                       {this.props.selectedCustomer.key}
                     </p>
                   </div>
-                  <div className="d-flex flex-row">
-                    <p>{local.taxCardNumber}</p>
-                    <p style={{ margin: '0 10px 0 0' }}>
+                  <div className="d-flex flex-row my-2">
+                    <p className="font-weight-bold">{local.taxCardNumber}</p>
+                    <p
+                      style={{
+                        marginRight: '10px',
+                        whiteSpace: 'normal',
+                        maxWidth: '400px',
+                      }}
+                    >
                       {this.props.selectedCustomer.taxCardNumber}
                     </p>
                   </div>
-                  <div className="d-flex flex-row">
-                    <p>{local.commercialRegisterNumber}</p>
-                    <p style={{ margin: '0 10px 0 0' }}>
+                  <div className="d-flex flex-row my-2">
+                    <p className="font-weight-bold">
+                      {local.commercialRegisterNumber}
+                    </p>
+                    <p
+                      style={{
+                        marginRight: '10px',
+                        whiteSpace: 'normal',
+                        maxWidth: '400px',
+                      }}
+                    >
                       {this.props.selectedCustomer.commercialRegisterNumber}
                     </p>
                   </div>
-                  <div className="d-flex flex-row">
-                    <p>{local.companyAddress}</p>
+                  <div className="d-flex flex-row my-2">
+                    <p className="font-weight-bold">{local.companyAddress}</p>
                     <p
                       style={{
                         width: '60%',

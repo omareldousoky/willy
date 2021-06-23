@@ -103,7 +103,7 @@ class CustomersList extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error) {
-          Swal.fire('error', getErrorMessage(this.props.error), 'error')
+          Swal.fire('Error', getErrorMessage(this.props.error), 'error')
         }
       })
   }

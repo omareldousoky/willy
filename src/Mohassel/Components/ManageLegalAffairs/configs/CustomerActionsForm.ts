@@ -86,6 +86,24 @@ const customerActionsFields: FormField[] = [
     label: local.caseStatusSummary,
     validation: defaultValidationSchema,
   },
+  {
+    name: 'finalConfinementNumber',
+    type: 'text',
+    label: local.finalConfinementNumber,
+    validation: defaultValidationSchema,
+  },
+  {
+    name: 'finalVerdict',
+    type: 'text',
+    label: local.finalVerdict,
+    validation: defaultValidationSchema,
+  },
+  {
+    name: 'finalVerdictDate',
+    type: 'date',
+    label: local.finalVerdictDate,
+    validation: defaultValidationSchema,
+  },
 ]
 
 export default customerActionsFields

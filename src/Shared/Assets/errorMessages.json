@@ -534,5 +534,9 @@
   "invalid_close_date_manual_pending_actions": {
     "en": "There are manual pending actions before that date, please close them first",
     "ar": "يوجد حركات يدوية معلقة قبل هذا التاريخ، برجاء إغلاقها أولاً"
+  },
+  "earlypayment_blocked_loan_product": {
+    "en": "Can't pay early payment for this loan product",
+    "ar": "لا يسمح بالسداد المعجل في نوع القرض هذا"
   }
 }
