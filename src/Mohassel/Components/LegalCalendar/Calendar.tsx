@@ -75,7 +75,7 @@ export const Calendar = ({
                         rootClose
                       >
                         {currentEvent ? (
-                          <div>
+                          <div style={{ width: '100%' }}>
                             <p>{currentEvent.customerName}</p>
                             <p className="font-weight-light">
                               {local[currentEvent.sessionType]}
