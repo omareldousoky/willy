@@ -67,6 +67,7 @@ import LegalActionsForm from '../Components/ManageLegalAffairs/LegalCustomerActi
 import FinancialReviewing from '../Components/FinancialClosing/FinancialReviewing'
 import { CompanyList, CompanyProfile } from '../../Shared/Components'
 import CompanyCreation from '../Components/CustomerCreation/companyCreation'
+import { LegalCalendar } from '../Components/LegalCalendar'
 
 const appRoutes = [
   {
@@ -798,6 +799,15 @@ const appRoutes = [
             render: (props) => (
               <Can I="updateDefaultingCustomer" a="legal">
                 <LegalActionsForm {...props} />
+              </Can>
+            ),
+          },
+          {
+            path: '/legal-calendar',
+            label: local.legalCalendar,
+            render: (props) => (
+              <Can I="updateDefaultingCustomer" a="legal">
+                <LegalCalendar {...props} />
               </Can>
             ),
           },
