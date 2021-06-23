@@ -1003,6 +1003,7 @@ class LoanApplicationCreation extends Component<Props, State> {
       if (obj.beneficiaryType !== 'group') {
         principalToSend = obj.principal
       }
+
       const viceCustomers = obj.viceCustomers.filter(
         (item) => item !== undefined
       )
