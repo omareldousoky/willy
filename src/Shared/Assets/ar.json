@@ -1121,5 +1121,6 @@
   "lastMonth": "الشهر الماضي",
   "contractType": "نوع العقد",
   "standard": "اساسي",
-  "masterGas": "خاص بقرض ماستر جاس"
+  "masterGas": "خاص بقرض ماستر جاس",
+  "position": "الصفة في النشاط"
 }

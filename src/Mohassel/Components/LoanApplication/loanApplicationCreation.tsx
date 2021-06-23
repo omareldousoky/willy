@@ -18,6 +18,7 @@ import {
   SMELoanApplicationValidation,
   SMELoanApplicationStep2Validation,
   EntitledToSign,
+  EntitledToSignIds,
 } from './loanApplicationStates'
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm'
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
@@ -278,7 +279,9 @@ class LoanApplicationCreation extends Component<Props, State> {
       size: 1000,
       excludedIds: [
         this.state.application.customerID,
-        ...this.state.application.entitledToSignIds,
+        ...this.state.application.entitledToSignIds.map(
+          ({ customerId }) => customerId
+        ),
       ],
       customerType: 'individual',
     }
@@ -544,17 +547,21 @@ class LoanApplicationCreation extends Component<Props, State> {
 
       const entitledArr: Array<EntitledToSign> = []
       if (application.body.entitledToSign?.length > 0) {
-        application.body.entitledToSign.forEach((customer) => {
+        application.body.entitledToSign.forEach(({ customer, position }) => {
           entitledArr.push({
             searchResults: {
               results: [],
               empty: false,
             },
             entitledToSign: customer,
+            position,
           })
           this.setState(
             produce<State>((draftState) => {
-              draftState.application.entitledToSignIds.push(customer._id)
+              draftState.application.entitledToSignIds.push({
+                customerId: customer._id,
+                position,
+              })
             })
           )
         })
@@ -952,7 +959,7 @@ class LoanApplicationCreation extends Component<Props, State> {
             ...selectedGuarantor.body,
             id: obj._id,
           }
-          draftApp.entitledToSignIds.push(obj._id)
+          draftApp.entitledToSignIds.push({ customerId: obj._id })
           draftApp.entitledToSign[index] = defaultCustomer
         })
         this.setState({ application, loading: false })
@@ -996,9 +1003,25 @@ class LoanApplicationCreation extends Component<Props, State> {
       if (obj.beneficiaryType !== 'group') {
         principalToSend = obj.principal
       }
+
       const viceCustomers = obj.viceCustomers.filter(
         (item) => item !== undefined
       )
+
+      const entitledToSignIds: EntitledToSignIds[] = obj.entitledToSignIds.map(
+        ({ customerId }) => {
+          const entitledToSign = values.entitledToSign.find(
+            ({ entitledToSign: entitledToSignItem }) =>
+              entitledToSignItem._id === customerId
+          )
+
+          return {
+            customerId,
+            position: entitledToSign?.position,
+          }
+        }
+      )
+
       const objToSubmit = {
         customerId: obj.customerID,
         guarantorIds: obj.guarantorIds,
@@ -1031,7 +1054,7 @@ class LoanApplicationCreation extends Component<Props, State> {
         managerVisitDate: values.managerVisitDate
           ? new Date(values.managerVisitDate).valueOf()
           : 0,
-        entitledToSignIds: obj.entitledToSignIds,
+        entitledToSignIds,
       }
       if (
         this.state.application.guarantorIds.length <
@@ -1079,7 +1102,7 @@ class LoanApplicationCreation extends Component<Props, State> {
       const defaultEntitledToSign = { ...draftApp.entitledToSign }
       const defaultCustomer = { ...defaultEntitledToSign[index] }
       draftApp.entitledToSignIds = draftApp.entitledToSignIds.filter(
-        (id) => obj._id !== id
+        ({ customerId }) => obj._id !== customerId
       )
       defaultCustomer.entitledToSign = {}
       defaultCustomer.searchResults.results = []
@@ -1234,7 +1257,7 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const application = produce(values as Application, (draftApp) => {
       draftApp.entitledToSignIds = draftApp.entitledToSignIds.filter(
-        (id) => obj.entitledToSign._id !== id
+        ({ customerId }) => obj.entitledToSign._id !== customerId
       )
       draftApp.entitledToSign.splice(index, 1)
     })
