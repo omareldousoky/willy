@@ -3,10 +3,10 @@ import format from 'date-fns/format'
 
 export const DAYS_OF_WEEK = [
   'السبت',
-  'الاحد',
-  'الأثنين',
+  'الأحد',
+  'الإثنين',
   'الثلاثاء',
-  'الاربعاء',
+  'الأربعاء',
   'الخميس',
 ]
 export enum WEEKS {
