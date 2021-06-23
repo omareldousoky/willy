@@ -1,0 +1,42 @@
+.time {
+  vertical-align: middle !important;
+}
+.arrow {
+  font-size: 25px;
+  cursor: pointer;
+  &:hover {
+    color: #7dc356 !important;
+  }
+}
+.week-number {
+  min-width: 120px;
+  display: inline-block;
+  text-align: center;
+}
+.dotted {
+  background-image: linear-gradient(to right, white 33%, #e5e5e5 0%);
+  background-position: bottom;
+  background-size: 9px 1px;
+  background-repeat: repeat-x;
+}
+.calendar {
+  .active-day {
+    color: white;
+    border-radius: 15px;
+    width: 30px;
+    height: 30px;
+    background-color: #7dc356;
+    padding: 2px;
+    margin: auto;
+  }
+  .event-cell {
+    height: 62px;
+    width: 170px;
+    background-color: white;
+  }
+  .event-cell--active {
+    border-right: 4px solid #7dc356 !important;
+    background-color: #2a3390;
+    cursor: pointer;
+  }
+}
