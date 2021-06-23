@@ -18,7 +18,7 @@ export const ActionsIconGroup = ({
         {actions.map(
           (action, index) =>
             action.actionPermission && (
-              <Col key={index} className="m-1">
+              <Col key={index} className="m-2">
                 <Button
                   size="sm"
                   variant="outline-primary"
