@@ -10,7 +10,7 @@ import local from '../../../Shared/Assets/ar.json'
 import { CalendarEvent } from './types'
 import { formatWrapper } from './utils'
 
-export const EventDetails = ({ event }: { event: CalendarEvent }) => {
+export const EventDetails = ({ ...event }: CalendarEvent) => {
   const {
     sessionDate,
     sessionType,
