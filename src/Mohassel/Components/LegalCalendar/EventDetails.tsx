@@ -24,7 +24,10 @@ export const EventDetails = ({ event }: { event: CalendarEvent }) => {
   return (
     <Card className="border-0">
       <Card.Body className="p-2">
-        <Card.Title style={{ color: '#2a3390' }} className="font-weight-bolder">
+        <Card.Title
+          style={{ color: '#2a3390' }}
+          className="font-weight-bolder py-2"
+        >
           {customerName}
         </Card.Title>
         <p className="mb-2  text-primary font-weight-bold">
@@ -32,7 +35,7 @@ export const EventDetails = ({ event }: { event: CalendarEvent }) => {
             local[sessionType]
           } `}
         </p>
-        <Container style={{ fontSize: '18px' }}>
+        <Container className="py-2">
           <Row>
             <Col>
               <p className="text-secondary font-weight-bold mb-0">
