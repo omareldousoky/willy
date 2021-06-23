@@ -49,7 +49,7 @@ export const Calendar = ({
               <td />
 
               {events &&
-                Array.from({ length: 6 }).map((_, dayIndex) => {
+                Array.from({ length: 6 }).map((__, dayIndex) => {
                   const currentEvent = events[dayIndex][cellIndex]
 
                   return (
