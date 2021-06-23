@@ -10,6 +10,7 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import Table from 'react-bootstrap/Table'
 import Swal from 'sweetalert2'
+import produce from 'immer'
 import { BranchesDropDown } from '../dropDowns/allDropDowns'
 import { cibReport } from '../../Services/APIs/loanApplication/cibReport'
 import { downloadTxtFile } from './textFiles'
@@ -19,6 +20,9 @@ import { Loader } from '../../../Shared/Components/Loader'
 import { manageLoansArray } from '../LoanList/manageLoansInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { getErrorMessage } from '../../../Shared/Services/utils'
+import { Pagination } from '../Common/Pagination'
+import { SearchForm } from './searchForm'
+import { SearchFormValues } from './types'
 
 interface CibLoan {
   loanId: string
@@ -38,14 +42,15 @@ interface State {
   from: number
   selectedCustomers: Array<string>
   loading: boolean
-  fromDate: string
-  toDate: string
-  keyword: string
+  // fromDate: string
+  // toDate: string
+  // keyword: string
   data: Array<CibLoan>
-  filteredData: Array<CibLoan>
-  filteredBranch: string
+  // filteredData: Array<CibLoan>
+  // filteredBranch: string
   principalSelectedSum: number
   manageLoansTabs: any[]
+  searchFormValues: SearchFormValues
 }
 
 class CIB extends Component<{}, State> {
@@ -63,12 +68,12 @@ class CIB extends Component<{}, State> {
       from: 0,
       selectedCustomers: [],
       loading: false,
-      fromDate: '',
-      toDate: '',
-      keyword: '',
+      searchFormValues: {
+        fromDate: 0,
+        toDate: 0,
+        branchId: '',
+      },
       data: [],
-      filteredData: [],
-      filteredBranch: '',
       principalSelectedSum: 0,
       manageLoansTabs: [],
     }
@@ -112,31 +117,22 @@ class CIB extends Component<{}, State> {
     this.setState({ manageLoansTabs: manageLoansArray() })
   }
 
-  getStatus(status: string) {
-    switch (status) {
-      case 'paid':
-        return <div className="status-chip paid">{local.paid}</div>
-      case 'issued':
-        return <div className="status-chip unpaid">{local.issued}</div>
-      case 'pending':
-        return <div className="status-chip pending">{local.pending}</div>
-      case 'canceled':
-        return <div className="status-chip canceled">{local.cancelled}</div>
-      default:
-        return null
-    }
-  }
-
-  handleSearch = async (values) => {
+  handleSearch = async (values: SearchFormValues) => {
     this.setState({ loading: true })
+    console.log({ ...values })
+    const { fromDate, toDate, branchId, customerName } = values
+    const name = (customerName || '').trim()
     const res = await cibReport({
-      startDate: new Date(values.fromDate).setHours(0, 0, 0, 0).valueOf(),
-      endDate: new Date(values.toDate).setHours(23, 59, 59, 59).valueOf(),
+      startDate: new Date(fromDate).setHours(0, 0, 0, 0).valueOf(),
+      endDate: new Date(toDate).setHours(23, 59, 59, 59).valueOf(),
+      offset: this.state.from,
+      size: this.state.size,
+      branchId,
+      customerName: name || undefined,
     })
     if (res.status === 'success') {
       this.setState({
-        data: res.body.loans ? res.body.loans : [],
-        filteredData: res.body.loans ? res.body.loans : [],
+        data: res.body.loans || [],
         loading: false,
       })
     } else {
@@ -144,25 +140,6 @@ class CIB extends Component<{}, State> {
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
       )
     }
-  }
-
-  getArrayOfNumbers() {
-    const totalPages: Array<number> = []
-    for (
-      let index = 0;
-      index <
-      Math.ceil(
-        this.state[
-          this.state.keyword || this.state.filteredBranch
-            ? 'filteredData'
-            : 'data'
-        ].length / this.state.size
-      );
-      index = +1
-    ) {
-      totalPages.push(index)
-    }
-    return totalPages
   }
 
   addRemoveItemFromChecked(loan: CibLoan) {
@@ -202,7 +179,6 @@ class CIB extends Component<{}, State> {
         loading: false,
         principalSelectedSum: 0,
         data: [],
-        filteredData: [],
       })
       Swal.fire('', local.changeSourceFundSuccess, 'success').then(() =>
         downloadTxtFile(res.body.loans, false, 0)
@@ -239,22 +215,24 @@ class CIB extends Component<{}, State> {
         />
         <Card className="main-card">
           <Loader type="fullsection" open={this.state.loading} />
-          <Card.Body style={{ padding: 0 }}>
-            <div className="custom-card-header">
-              <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Card.Body>
+            <div className="d-flex justify-content-between">
+              <div className="d-flex align-items-center">
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
                   {local.cib}
                 </Card.Title>
-                <span style={{ fontWeight: 'bold', marginLeft: 10 }}>
+                <span className="font-weight-bold" style={{ marginLeft: 10 }}>
                   {local.noOfSelectedLoans}
                   <span
-                    style={{ fontWeight: 'bold', color: '#7dc356' }}
+                    className="font-weight-bold"
+                    style={{ color: '#7dc356' }}
                   >{` (${this.state.selectedCustomers.length})`}</span>
                 </span>
-                <span style={{ fontWeight: 'bold' }}>
+                <span className="font-weight-bold">
                   {local.loansSelectedAmount}
                   <span
-                    style={{ fontWeight: 'bold', color: '#7dc356' }}
+                    className="font-weight-bold"
+                    style={{ color: '#7dc356' }}
                   >{` (${this.state.principalSelectedSum})`}</span>
                 </span>
               </div>
@@ -271,19 +249,40 @@ class CIB extends Component<{}, State> {
               </Button>
             </div>
             <hr className="dashed-line" />
-            <Formik
+            <SearchForm
+              handleSearch={this.handleSearch}
+              initialValues={this.state.searchFormValues}
+              setSearchFormValues={(newValues: Partial<SearchFormValues>) =>
+                this.setState(
+                  produce<State>((draftState) => {
+                    draftState.searchFormValues = {
+                      ...draftState.searchFormValues,
+                      ...newValues,
+                    }
+                  })
+                )
+              }
+            />
+            {/* <Formik<{
+              customerName?: string
+              fromDate?: number
+              toDate?: number
+              branchId: string
+            }>
               enableReinitialize
-              initialValues={this.state}
+              // initialValues={{
+              //   customerName: undefined,
+              //   fromDate: undefined,
+              //   toDate: undefined,
+              //   branchId: '',
+              // }}
               onSubmit={this.handleSearch}
               // validationSchema={}
               validateOnBlur
               validateOnChange
             >
               {(formikProps) => (
-                <Form
-                  onSubmit={formikProps.handleSubmit}
-                  style={{ padding: '10px 30px 26px 30px' }}
-                >
+                <Form onSubmit={formikProps.handleSubmit}>
                   <Row>
                     <Col sm={6}>
                       <InputGroup>
@@ -294,23 +293,23 @@ class CIB extends Component<{}, State> {
                         </InputGroup.Append>
                         <FormControl
                           type="text"
-                          name="keyword"
-                          data-qc="searchKeyword"
+                          name="customerName"
+                          data-qc="customerName"
                           className="border-right-0"
                           onChange={(e) => {
-                            this.setState((prevState) => ({
-                              keyword: e.currentTarget.value,
-                              filteredData: prevState.data.filter((el) =>
-                                el.customerName.includes(e.currentTarget.value)
-                              ),
-                            }))
+                            // this.setState((prevState) => ({
+                            //   keyword: e.currentTarget.value,
+                            //   // filteredData: prevState.data.filter((el) =>
+                            //   //   el.customerName.includes(e.currentTarget.value)
+                            //   // ),
+                            // }))
                             formikProps.setFieldValue(
-                              'keyword',
+                              'customerName',
                               e.currentTarget.value
                             )
                           }}
                           placeholder={local.name}
-                          value={formikProps.values.keyword}
+                          value={formikProps.values.customerName}
                         />
                       </InputGroup>
                     </Col>
@@ -364,16 +363,15 @@ class CIB extends Component<{}, State> {
                       <BranchesDropDown
                         onSelectBranch={(branch) => {
                           formikProps.setFieldValue('branchId', branch._id)
-                          this.setState((prevState) => ({
-                            filteredBranch: branch._id,
-                            filteredData: prevState.data.filter(
-                              (item) => item.loanBranch === branch._id
-                            ),
-                          }))
+                          // this.setState((prevState) => ({
+                          //   filteredBranch: branch._id,
+                          //   filteredData: prevState.data.filter(
+                          //     (item) => item.loanBranch === branch._id
+                          //   ),
+                          // }))
                         }}
                       />
                     </Col>
-
                     <Col className="d-flex">
                       <Button
                         className="ml-auto"
@@ -386,9 +384,9 @@ class CIB extends Component<{}, State> {
                   </Row>
                 </Form>
               )}
-            </Formik>
+            </Formik> */}
             {this.state.data.length ? (
-              <Table striped hover style={{ textAlign: 'right' }}>
+              <Table striped hover>
                 <thead>
                   <tr>
                     {this.mappers?.map((mapper, index: number) => {
@@ -404,139 +402,39 @@ class CIB extends Component<{}, State> {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state[
-                    this.state.keyword || this.state.filteredBranch
-                      ? 'filteredData'
-                      : 'data'
-                  ]
-                    .slice(
-                      this.state.from * this.state.size,
-                      this.state.from * this.state.size + this.state.size
+                  {this.state.data.map((item, index: number) => {
+                    return (
+                      <tr key={index}>
+                        {this.mappers?.map((mapper, mapperIndex: number) => {
+                          return (
+                            <td key={mapperIndex}>{mapper.render(item)}</td>
+                          )
+                        })}
+                      </tr>
                     )
-                    .map((item, index: number) => {
-                      return (
-                        <tr key={index}>
-                          {this.mappers?.map((mapper, mapperIndex: number) => {
-                            return (
-                              <td key={mapperIndex}>{mapper.render(item)}</td>
-                            )
-                          })}
-                        </tr>
-                      )
-                    })}
+                  })}
                 </tbody>
               </Table>
             ) : (
-              <div style={{ textAlign: 'center', marginBottom: 40 }}>
+              <div className="text-center">
                 <img
                   alt="no-data-found"
                   src={require('../../../Shared/Assets/no-results-found.svg')}
                 />
-                <h4>{local.noResultsFound}</h4>
+                <p className="img-title">{local.noResultsFound}</p>
               </div>
             )}
-            {this.state[
-              this.state.keyword || this.state.filteredBranch
-                ? 'filteredData'
-                : 'data'
-            ].length ? (
-              <div
-                className="footer-container"
-                style={{ marginBottom: 20, marginRight: 30 }}
-              >
-                <div className="dropdown-container">
-                  <p className="dropdown-label">{local.show}</p>
-                  <Form.Control
-                    as="select"
-                    className="dropdown-select"
-                    onChange={(event) => {
-                      this.setState({ size: Number(event.currentTarget.value) })
-                    }}
-                  >
-                    <option value={10} data-qc={10}>
-                      10
-                    </option>
-                    <option value={25} data-qc={25}>
-                      25
-                    </option>
-                    <option value={50} data-qc={50}>
-                      50
-                    </option>
-                    <option value={100} data-qc={100}>
-                      100
-                    </option>
-                  </Form.Control>
-                </div>
-                <div className="pagination-container">
-                  <div
-                    className={
-                      this.state.from === 0
-                        ? 'pagination-next-prev-disabled'
-                        : 'pagination-next-prev-enabled'
-                    }
-                    onClick={() => {
-                      if (this.state.from !== 0) {
-                        this.setState((prevState) => ({
-                          from: prevState.from - 1,
-                        }))
-                      }
-                    }}
-                  >
-                    {local.previous}
-                  </div>
-                  <div className="pagination-numbers">
-                    {this.getArrayOfNumbers().map((number) => {
-                      return (
-                        <div
-                          key={number}
-                          className={
-                            this.state.from === number
-                              ? 'pagination-number-active'
-                              : 'pagination-number-inactive'
-                          }
-                          onClick={() => {
-                            this.setState({ from: number })
-                          }}
-                        >
-                          <p>{number + 1}</p>
-                        </div>
-                      )
-                    })}
-                  </div>
-                  <div
-                    className={
-                      this.state.from + 1 !==
-                      Math.ceil(
-                        this.state[
-                          this.state.keyword || this.state.filteredBranch
-                            ? 'filteredData'
-                            : 'data'
-                        ].length / this.state.size
-                      )
-                        ? 'pagination-next-prev-enabled'
-                        : 'pagination-next-prev-disabled'
-                    }
-                    onClick={() => {
-                      if (
-                        this.state.from + 1 !==
-                        Math.ceil(
-                          this.state[
-                            this.state.keyword || this.state.filteredBranch
-                              ? 'filteredData'
-                              : 'data'
-                          ].length / this.state.size
-                        )
-                      ) {
-                        this.setState((prevState) => ({
-                          from: prevState.from + 1,
-                        }))
-                      }
-                    }}
-                  >
-                    {local.next}
-                  </div>
-                </div>
-              </div>
+            {this.state.data.length ? (
+              <Pagination
+                totalCount={23}
+                updatePagination={(key: string, number: number) => {
+                  this.setState(
+                    ({ [key]: number } as unknown) as Pick<State, keyof State>,
+                    () => this.handleSearch(this.state.searchFormValues)
+                  )
+                }}
+                fromKeyName="offset"
+              />
             ) : null}
           </Card.Body>
         </Card>

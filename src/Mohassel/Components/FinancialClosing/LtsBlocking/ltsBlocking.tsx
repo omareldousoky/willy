@@ -20,7 +20,7 @@ import { search, searchFilters } from '../../../../Shared/redux/search/actions'
 import { loading } from '../../../../Shared/redux/loading/actions'
 import LtsBlockingModal from './ltsBlockingModal'
 import { financialUnlBlocking } from '../../../Services/APIs/loanApplication/financialClosing'
-import Pagination from '../../pagination/pagination'
+import { Pagination } from '../../Common/Pagination'
 
 interface Props extends RouteComponentProps {
   data: Branch[]
@@ -283,10 +283,9 @@ class LtsBlocking extends Component<Props, State> {
               />
               <Pagination
                 totalCount={this.props.totalCount}
-                pagination
                 dataLength={this.props.data.length}
                 paginationArr={[10, 100, 500, 1000]}
-                changeNumber={(key: string, number: number) => {
+                updatePagination={(key: string, number: number) => {
                   this.setState(
                     ({ [key]: number } as unknown) as Pick<State, keyof State>,
                     () => this.getBranchBlockingState()
