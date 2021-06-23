@@ -66,6 +66,7 @@ import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
 import LegalJudgePdf from '../../pdfTemplates/LegalJudge'
 import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
 import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
+import { ActionsIconGroup } from '../../../../Shared/Components'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -365,6 +366,71 @@ const LegalCustomersList: FunctionComponent = () => {
     }
   }
 
+  const hasReviews = (settlement: SettlementFormValues & ManagerReviews) =>
+    settlement.branchManagerReview ||
+    settlement.areaManagerReview ||
+    settlement.areaSupervisorReview ||
+    settlement.financialManagerReview
+  const renderActions = (customer: SettledCustomer) => {
+    return [
+      {
+        actionTitle: local.reviewLogs,
+        actionIcon: 'view',
+        actionPermission: !!(
+          customer.settlement && hasReviews(customer.settlement)
+        ),
+        actionOnClick: () => {
+          setCustomerForView(customer)
+        },
+      },
+      {
+        actionTitle: local.registerLegalAction,
+        actionIcon: 'bulk-application-creation',
+        actionPermission: ability.can('updateDefaultingCustomer', 'legal'),
+        actionOnClick: () => {
+          history.push({
+            pathname: '/legal-affairs/customer-actions',
+            state: { customer },
+          })
+        },
+      },
+      {
+        actionTitle: local.registerSettlement,
+        actionIcon: 'bulk-loan-applications-approval',
+        actionPermission: ability.can('updateSettlement', 'legal'),
+        actionOnClick: () => {
+          toggleCustomerForSettlement(customer)
+        },
+      },
+      {
+        actionTitle: local.reviewSettlement,
+        actionIcon: 'bulk-loan-applications-review',
+        actionPermission: (isCurrentUserManager &&
+          customer.settlement?.settlementStatus === 'reviewed' &&
+          !!availableManagerReview([customer]).length) as boolean,
+        actionOnClick: () => {
+          setCustomersForReview([customer])
+        },
+      },
+      {
+        actionTitle: local.print,
+        actionIcon: 'download',
+        actionPermission: !!customer.settlement?.financialManagerReview,
+        actionOnClick: () => {
+          setCustomerForPrint(customer)
+        },
+      },
+      {
+        actionTitle: local.downloadHistory,
+        actionIcon: 'download-big-file',
+        actionPermission: ability.can('getDefaultingCustomer', 'legal'),
+        actionOnClick: async () => {
+          await handleDownloadHistory(customer._id)
+        },
+      },
+    ]
+  }
+
   const tableMapper: TableMapperItem[] = [
     {
       title: () => (
@@ -459,118 +525,122 @@ const LegalCustomersList: FunctionComponent = () => {
           ? local[customer.settlement.settlementStatus]
           : local.notDone,
     },
-  ]
-
-  const hasReviews = (settlement: SettlementFormValues & ManagerReviews) =>
-    settlement.branchManagerReview ||
-    settlement.areaManagerReview ||
-    settlement.areaSupervisorReview ||
-    settlement.financialManagerReview
-
-  const tableActionsMapper: TableMapperItem[] = [
     {
       title: '',
-      key: 'view',
-      render: (customer: SettledCustomer) =>
-        customer.settlement &&
-        hasReviews(customer.settlement) && (
-          <Button
-            type="button"
-            variant="default"
-            onClick={() => setCustomerForView(customer)}
-            className="p-0"
-            title={local.logs}
-          >
-            <img alt={local.logs} src={require('../../../Assets/view.svg')} />
-          </Button>
-        ),
-    },
-    {
-      title: '',
-      key: 'actions',
+      key: 'action',
       render: (customer: SettledCustomer) => (
-        <Can I="updateDefaultingCustomer" a="legal">
-          <button
-            className="btn clickable-action rounded-0 p-0 font-weight-normal"
-            style={{ color: '#2f2f2f', fontSize: '.9rem' }}
-            type="button"
-            onClick={() =>
-              history.push({
-                pathname: '/legal-affairs/customer-actions',
-                state: { customer },
-              })
-            }
-          >
-            {local.registerLegalAction}
-          </button>
-        </Can>
-      ),
-    },
-    {
-      title: '',
-      key: 'legalSettlement',
-      render: (customer: SettledCustomer) => (
-        <div className="d-flex align-items-center p-1">
-          <Can I="updateSettlement" a="legal">
-            <button
-              className="btn clickable-action rounded-0 p-0 font-weight-normal mr-2"
-              style={{ color: '#2f2f2f', fontSize: '.9rem' }}
-              onClick={() => toggleCustomerForSettlement(customer)}
-              type="button"
-            >
-              {local.registerSettlement}
-            </button>
-          </Can>
-
-          {isCurrentUserManager &&
-            customer.settlement?.settlementStatus === 'reviewed' &&
-            !!availableManagerReview([customer]).length && (
-              <Button
-                type="button"
-                variant="default"
-                className="mr-2 p-0"
-                onClick={() => setCustomersForReview([customer])}
-                title={local.read}
-              >
-                <img
-                  alt={local.read}
-                  src={require('../../../Assets/check-circle.svg')}
-                />
-              </Button>
-            )}
-
-          {customer.settlement?.financialManagerReview && (
-            <Button
-              type="button"
-              variant="default"
-              className="mr-2 p-0"
-              onClick={() => setCustomerForPrint(customer)}
-              title={local.print}
-            >
-              <img
-                alt={local.print}
-                style={{ maxWidth: 18 }}
-                src={require('../../../Assets/green-download.svg')}
-              />
-            </Button>
-          )}
-          <Can I="getDefaultingCustomer" a="legal">
-            <Button
-              type="button"
-              variant="default"
-              className="clickable-action font-weight-normal text-dark"
-              title={local.logs}
-              onClick={async () => {
-                await handleDownloadHistory(customer._id)
-              }}
-            >
-              {local.downloadHistory}
-            </Button>
-          </Can>
-        </div>
+        <ActionsIconGroup
+          currentId={customer._id}
+          actions={renderActions(customer)}
+        />
       ),
     },
   ]
+
+  // const tableActionsMapper: TableMapperItem[] = [
+  //   {
+  //     title: '',
+  //     key: 'view',
+  //     render: (customer: SettledCustomer) =>
+  //       customer.settlement &&
+  //       hasReviews(customer.settlement) && (
+  //         <Button
+  //           type="button"
+  //           variant="default"
+  //           onClick={() => setCustomerForView(customer)}
+  //           className="p-0"
+  //           title={local.logs}
+  //         >
+  //           <img alt={local.logs} src={require('../../../Assets/view.svg')} />
+  //         </Button>
+  //       ),
+  //   },
+  //   {
+  //     title: '',
+  //     key: 'actions',
+  //     render: (customer: SettledCustomer) => (
+  //       <Can I="updateDefaultingCustomer" a="legal">
+  //         <button
+  //           className="btn clickable-action rounded-0 p-0 font-weight-normal"
+  //           style={{ color: '#2f2f2f', fontSize: '.9rem' }}
+  //           type="button"
+  //           onClick={() =>
+  //             history.push({
+  //               pathname: '/legal-affairs/customer-actions',
+  //               state: { customer },
+  //             })
+  //           }
+  //         >
+  //           {local.registerLegalAction}
+  //         </button>
+  //       </Can>
+  //     ),
+  //   },
+  //   {
+  //     title: '',
+  //     key: 'legalSettlement',
+  //     render: (customer: SettledCustomer) => (
+  //       <div className="d-flex align-items-center p-1">
+  //         <Can I="updateSettlement" a="legal">
+  //           <button
+  //             className="btn clickable-action rounded-0 p-0 font-weight-normal mr-2"
+  //             style={{ color: '#2f2f2f', fontSize: '.9rem' }}
+  //             onClick={() => toggleCustomerForSettlement(customer)}
+  //             type="button"
+  //           >
+  //             {local.registerSettlement}
+  //           </button>
+  //         </Can>
+
+  //         {isCurrentUserManager &&
+  //           customer.settlement?.settlementStatus === 'reviewed' &&
+  //           !!availableManagerReview([customer]).length && (
+  //             <Button
+  //               type="button"
+  //               variant="default"
+  //               className="mr-2 p-0"
+  //               onClick={() => setCustomersForReview([customer])}
+  //               title={local.read}
+  //             >
+  //               <img
+  //                 alt={local.read}
+  //                 src={require('../../../Assets/check-circle.svg')}
+  //               />
+  //             </Button>
+  //           )}
+
+  //         {customer.settlement?.financialManagerReview && (
+  //           <Button
+  //             type="button"
+  //             variant="default"
+  //             className="mr-2 p-0"
+  //             onClick={() => setCustomerForPrint(customer)}
+  //             title={local.print}
+  //           >
+  //             <img
+  //               alt={local.print}
+  //               style={{ maxWidth: 18 }}
+  //               src={require('../../../Assets/green-download.svg')}
+  //             />
+  //           </Button>
+  //         )}
+  //         <Can I="getDefaultingCustomer" a="legal">
+  //           <Button
+  //             type="button"
+  //             variant="default"
+  //             className="clickable-action font-weight-normal text-dark"
+  //             title={local.logs}
+  //             onClick={async () => {
+  //               await handleDownloadHistory(customer._id)
+  //             }}
+  //           >
+  //             {local.downloadHistory}
+  //           </Button>
+  //         </Can>
+  //       </div>
+  //     ),
+  //   },
+  // ]
 
   const judgeActors = [
     'مدير الادارة العامة لتنفيذ الاحكام – قطاع الامن العام',
@@ -671,7 +741,7 @@ const LegalCustomersList: FunctionComponent = () => {
                 from={from}
                 size={size}
                 totalCount={totalCount}
-                mappers={[...tableMapper, ...tableActionsMapper]}
+                mappers={tableMapper}
                 data={data}
                 url={url}
                 changeNumber={(key: string, number: number) => {

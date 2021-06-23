@@ -13,12 +13,12 @@ export const ActionsIconGroup = ({
   actions,
 }: ActionsIconGroupProps) => {
   return (
-    <Container>
-      <Row lg="4" md="2" sm="1">
+    <Container className="p-0 m-0">
+      <Row lg="5" md="2" sm="1">
         {actions.map(
           (action, index) =>
             action.actionPermission && (
-              <Col key={index} className="m-2">
+              <Col key={index} className="m-1">
                 <Button
                   size="sm"
                   variant="outline-primary"

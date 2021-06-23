@@ -1122,5 +1122,6 @@
   "contractType": "نوع العقد",
   "standard": "اساسي",
   "masterGas": "خاص بقرض ماستر جاس",
-  "viewLoanProduct": "تفاصيل نوع القرض"
+  "viewLoanProduct": "تفاصيل نوع القرض",
+  "reviewLogs": "سجل المراجعات"
 }
