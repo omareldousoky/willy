@@ -7,6 +7,7 @@ export interface CalendarEvent {
     | 'oppositionAppealSession'
   customerId: string
   customerKey: number
+  loanKey: number
   customerType: 'individual' | 'group' | 'company'
   customerName: string
   caseNumber: string

@@ -20,6 +20,8 @@ export const EventDetails = ({ event }: { event: CalendarEvent }) => {
     caseStatus,
     caseStatusSummary,
     decision,
+    customerKey,
+    loanKey,
   } = event
   return (
     <Card className="border-0">
@@ -39,6 +41,34 @@ export const EventDetails = ({ event }: { event: CalendarEvent }) => {
           <Row>
             <Col>
               <p className="text-secondary font-weight-bold mb-0">
+                {local.customerCode}
+              </p>
+              <p className="mt-0">{customerKey}</p>
+            </Col>
+            <Col>
+              <p className="text-secondary font-weight-bold mb-0">
+                {local.loanCode}
+              </p>
+              <p>{loanKey}</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <p className="text-secondary font-weight-bold mb-0">
+                {local.caseNumber}
+              </p>
+              <p className="mt-0">{caseNumber}</p>
+            </Col>
+            <Col>
+              <p className="text-secondary font-weight-bold mb-0">
+                {local.court}
+              </p>
+              <p>{court}</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <p className="text-secondary font-weight-bold mb-0">
                 {local.caseNumber}
               </p>
               <p className="mt-0">{caseNumber}</p>
@@ -55,7 +85,7 @@ export const EventDetails = ({ event }: { event: CalendarEvent }) => {
               <p className="text-secondary font-weight-bold mb-0">
                 {local.courtSessionDate}
               </p>
-              <p>{formatWrapper(new Date(sessionDate), 'dd/mm/yyy')}</p>
+              <p>{formatWrapper(new Date(sessionDate), 'dd/LL/yyy')}</p>
             </Col>
             <Col>
               <p className="text-secondary font-weight-bold mb-0">
