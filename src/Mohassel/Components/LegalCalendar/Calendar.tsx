@@ -23,9 +23,6 @@ export const Calendar = ({
       <Table responsive="md" bordered className="calendar" size="lg">
         <thead>
           <tr>
-            <th className="text-center time p-2" style={{ width: '40px' }}>
-              <span>{local.time}</span>
-            </th>
             {daysOfWeek.map((day, weekIndex) => {
               const today = isToday(weekDaysDates[weekIndex])
               return (
@@ -46,8 +43,6 @@ export const Calendar = ({
         <tbody>
           {Array.from({ length: eventsMaxLength }).map((_, cellIndex) => (
             <tr key={cellIndex}>
-              <td />
-
               {events &&
                 Array.from({ length: 6 }).map((__, dayIndex) => {
                   const currentEvent = events[dayIndex][cellIndex]
