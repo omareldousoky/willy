@@ -30,7 +30,7 @@ export const EventDetails = ({ event }: { event: CalendarEvent }) => {
           style={{ color: '#2a3390' }}
           className="font-weight-bolder py-2"
         >
-          {customerName}
+          {customerName || local.noDataAvaliable}
         </Card.Title>
         <p className="mb-2  text-primary font-weight-bold">
           {`${formatWrapper(new Date(sessionDate), ' LLLL d EEEE')} - ${
@@ -43,13 +43,13 @@ export const EventDetails = ({ event }: { event: CalendarEvent }) => {
               <p className="text-secondary font-weight-bold mb-0">
                 {local.customerCode}
               </p>
-              <p className="mt-0">{customerKey}</p>
+              <p>{customerKey || local.noDataAvaliable}</p>
             </Col>
             <Col>
               <p className="text-secondary font-weight-bold mb-0">
                 {local.loanCode}
               </p>
-              <p>{loanKey}</p>
+              <p>{loanKey || local.noDataAvaliable}</p>
             </Col>
           </Row>
           <Row>
@@ -57,13 +57,13 @@ export const EventDetails = ({ event }: { event: CalendarEvent }) => {
               <p className="text-secondary font-weight-bold mb-0">
                 {local.caseNumber}
               </p>
-              <p className="mt-0">{caseNumber}</p>
+              <p className="mt-0">{caseNumber || local.noDataAvaliable}</p>
             </Col>
             <Col>
               <p className="text-secondary font-weight-bold mb-0">
                 {local.court}
               </p>
-              <p>{court}</p>
+              <p>{court || local.noDataAvaliable}</p>
             </Col>
           </Row>
           <Row>
@@ -71,13 +71,16 @@ export const EventDetails = ({ event }: { event: CalendarEvent }) => {
               <p className="text-secondary font-weight-bold mb-0">
                 {local.courtSessionDate}
               </p>
-              <p>{formatWrapper(new Date(sessionDate), 'dd/LL/yyy')}</p>
+              <p>
+                {formatWrapper(new Date(sessionDate), 'dd/LL/yyy') ||
+                  local.noDataAvaliable}
+              </p>
             </Col>
             <Col>
               <p className="text-secondary font-weight-bold mb-0">
                 {local.theDecision}
               </p>
-              <p>{decision}</p>
+              <p>{decision || local.noDataAvaliable}</p>
             </Col>
           </Row>
           <Row>
@@ -85,13 +88,13 @@ export const EventDetails = ({ event }: { event: CalendarEvent }) => {
               <p className="text-secondary font-weight-bold mb-0">
                 {local.caseStatus}
               </p>
-              <p>{caseStatus}</p>
+              <p>{caseStatus || local.noDataAvaliable}</p>
             </Col>
             <Col>
               <p className="text-secondary font-weight-bold mb-0">
                 {local.caseStatusSummary}
               </p>
-              <p>{caseStatusSummary}</p>
+              <p>{caseStatusSummary || local.noDataAvaliable}</p>
             </Col>
           </Row>
         </Container>
