@@ -69,20 +69,6 @@ export const EventDetails = ({ event }: { event: CalendarEvent }) => {
           <Row>
             <Col>
               <p className="text-secondary font-weight-bold mb-0">
-                {local.caseNumber}
-              </p>
-              <p className="mt-0">{caseNumber}</p>
-            </Col>
-            <Col>
-              <p className="text-secondary font-weight-bold mb-0">
-                {local.court}
-              </p>
-              <p>{court}</p>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <p className="text-secondary font-weight-bold mb-0">
                 {local.courtSessionDate}
               </p>
               <p>{formatWrapper(new Date(sessionDate), 'dd/LL/yyy')}</p>
