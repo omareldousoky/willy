@@ -131,7 +131,7 @@ export const LegalCalendar = () => {
                 handleNext={nextWeek}
               />
             </div>
-            <Button size="lg" variant="outline-primary">
+            <Button size="lg" variant="outline-secondary" disabled>
               {local.downloadPDF}
             </Button>
           </div>
