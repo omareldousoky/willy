@@ -371,7 +371,8 @@ const LegalCustomersList: FunctionComponent = () => {
     settlement.areaManagerReview ||
     settlement.areaSupervisorReview ||
     settlement.financialManagerReview
-  const renderActions = (customer: SettledCustomer) => {
+
+  const createActionsMapper = (customer: SettledCustomer) => {
     return [
       {
         actionTitle: local.reviewLogs,
@@ -531,7 +532,7 @@ const LegalCustomersList: FunctionComponent = () => {
       render: (customer: SettledCustomer) => (
         <ActionsIconGroup
           currentId={customer._id}
-          actions={renderActions(customer)}
+          actions={createActionsMapper(customer)}
         />
       ),
     },
