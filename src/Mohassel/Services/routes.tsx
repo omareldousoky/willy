@@ -67,6 +67,7 @@ import LegalActionsForm from '../Components/ManageLegalAffairs/LegalCustomerActi
 import FinancialReviewing from '../Components/FinancialClosing/FinancialReviewing'
 import { CompanyList, CompanyProfile } from '../../Shared/Components'
 import CompanyCreation from '../Components/CustomerCreation/companyCreation'
+import { LegalWarnings } from '../Components/LegalWarnings'
 
 const appRoutes = [
   {
@@ -807,6 +808,15 @@ const appRoutes = [
             render: (props) => (
               <Can I="updateDefaultingCustomer" a="legal">
                 <LegalActionsForm {...props} />
+              </Can>
+            ),
+          },
+          {
+            path: '/legal-warnings',
+            label: local.legalAffairs,
+            render: (props) => (
+              <Can I="getLegalWarnings" a="legal">
+                <LegalWarnings {...props} />
               </Can>
             ),
           },

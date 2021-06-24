@@ -1,23 +1,18 @@
 import React from 'react'
 import { Header } from '../pdfTemplateCommon/header'
-import './index.scss'
+import './styles.scss'
+import { LegalWarningProps } from './types'
 
-export interface LegalWarning {
-  showDateAndTime?: boolean
-  courtAgent?: boolean
-  details: string | JSX.Element
-  action: string
-}
-
-const preJudgeWarning = `
+const PRE_JUDGE_WARNING = `
   بمقتضي عقد من عقود الامانة استلم المنذر الية من الشركة سالفة الذكر
   مبلغ مالي علي سبيل الامانة وحيث ان الشركة طالبته وديآ اكثر من مرة برد
   المبلغ الا انه امتنع عن السداد مختلسا ومبددا المبلغ لنفسة واستنادا الي نص
   المادة 341 من قانون العقوبات سوف تقوم الشركة باتخاذ كافة الاجراءات
   الجنائية اتجاه هذا الفعل المؤثم وتقديم بلاغ لوكيل النائب العام ليقوم سيادتة باتخاذ الاجراءات القانونية جراء هذا الفعل المؤثم وفقا لما ورد بقانون العقوبات.
 `
-const legalWarnings: LegalWarning[] = [
-  {
+
+const LEGAL_WARNINGS_TEMPLATES = {
+  quickRefundWarning: {
     showDateAndTime: true,
     courtAgent: true,
     details: (
@@ -41,17 +36,17 @@ const legalWarnings: LegalWarning[] = [
       علي سبيل الامانة خلال خمسة ايام والا سوف تقوم الشركة باتخاذ اجراءات التنفيذ ضد المنذر الية .
     `,
   },
-  {
+  legalActionWarning: {
     showDateAndTime: true,
     courtAgent: true,
-    details: preJudgeWarning,
+    details: PRE_JUDGE_WARNING,
     action: `
     انا المحضر سالف الذكر قد انتقلت الي حيث اقامة المنذر اليه
-     وسلمتة صورة من هذا الانذار للعلم بما جاء به ونفاذه في مواجهتة لقيامة برد
-     المبالغ المستلمة علي سبيل الامانة خلال خمسة ايام والا سوف تقوم الشركة باتخاذ الاجراءات القانونية ضد المنذر الية .
+     وسلمتة صورة من هذا الانذار للعلم بما جاء به ونفاذه في مواجهتة لقيامه برد
+     المبالغ المستلمة علي سبيل الامانة خلال خمسة ايام والا سوف تقوم الشركة باتخاذ الاجراءات القانونية ضد المنذر اليه .
     `,
   },
-  {
+  misdemeanorNumberWarning: {
     showDateAndTime: true,
     courtAgent: true,
     details: (
@@ -70,22 +65,25 @@ const legalWarnings: LegalWarning[] = [
       الشركة المنذرة باخطار الجهات المعنية لتفعيل كافة الاجراءات الاخري.
     `,
   },
-  {
-    details: preJudgeWarning,
+  verdictNoticeWarning: {
+    showDateAndTime: false,
+    courtAgent: false,
+    details: PRE_JUDGE_WARNING,
     action: `
       سلمتة صورة من هذا الانذار للعلم بما جاء به ونفاذه في مواجهتة لقيامة برد المبالغ المستلمة علي سبيل
       الامانة خلال خمسة ايام والا سوف تقوم الشركة باتخاذ الاجراءات القانونية ضد المنذر الية .
     `,
   },
-]
+}
 
-const index = ({ warning }: { warning: LegalWarning }) => {
+export const LegalWarning = ({ type }: LegalWarningProps) => {
+  const warning = LEGAL_WARNINGS_TEMPLATES[type]
   const { showDateAndTime, courtAgent, details, action } = warning
 
   return (
     <main className="p-4 font-weight-bold">
       <header>
-        <Header title="" showCurrentTime={false} showCurrentUser={false} />
+        <Header showCurrentTime={false} showCurrentUser={false} />
       </header>
 
       <article className="d-flex justify-content-between">
@@ -175,5 +173,3 @@ const index = ({ warning }: { warning: LegalWarning }) => {
     </main>
   )
 }
-
-export default index

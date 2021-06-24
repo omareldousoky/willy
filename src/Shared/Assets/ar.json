@@ -1122,5 +1122,6 @@
   "contractType": "نوع العقد",
   "standard": "اساسي",
   "masterGas": "خاص بقرض ماستر جاس",
-  "position": "الصفة في النشاط"
+  "position": "الصفة في النشاط",
+	"legalWarningsList": "قائمة الإنذارات"
 }
