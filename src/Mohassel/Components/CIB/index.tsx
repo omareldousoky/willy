@@ -2,16 +2,8 @@ import React, { Component, ReactNode } from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import FormCheck from 'react-bootstrap/FormCheck'
-import Form from 'react-bootstrap/Form'
-import { Formik } from 'formik'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import InputGroup from 'react-bootstrap/InputGroup'
-import FormControl from 'react-bootstrap/FormControl'
 import Table from 'react-bootstrap/Table'
 import Swal from 'sweetalert2'
-import produce from 'immer'
-import { BranchesDropDown } from '../dropDowns/allDropDowns'
 import { cibReport } from '../../Services/APIs/loanApplication/cibReport'
 import { downloadTxtFile } from './textFiles'
 import { changeSourceFund } from '../../Services/APIs/loanApplication/changeSourceFund'
@@ -21,33 +13,16 @@ import { manageLoansArray } from '../LoanList/manageLoansInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { Pagination } from '../Common/Pagination'
-import { SearchForm } from './searchForm'
+import { SearchForm } from './SearchForm'
 import { SearchFormValues } from './types'
+import { CibLoan, CibLoanResponse } from '../../Models/CIB'
 
-interface CibLoan {
-  loanId: string
-  principal: string
-  loanBranch: string
-  customerNationalId: string
-  customerKey: string
-  gender: string
-  customerName: string
-  customerBirthDate: string
-  iscore: string
-  activeLoans: string
-  numInst: string
-}
 interface State {
   size: number
   from: number
-  selectedCustomers: Array<string>
+  selectedLoans?: string[]
   loading: boolean
-  // fromDate: string
-  // toDate: string
-  // keyword: string
-  data: Array<CibLoan>
-  // filteredData: Array<CibLoan>
-  // filteredBranch: string
+  data?: CibLoanResponse
   principalSelectedSum: number
   manageLoansTabs: any[]
   searchFormValues: SearchFormValues
@@ -64,16 +39,13 @@ class CIB extends Component<{}, State> {
   constructor(props) {
     super(props)
     this.state = {
-      size: 10,
+      size: 25,
       from: 0,
-      selectedCustomers: [],
       loading: false,
       searchFormValues: {
-        fromDate: 0,
-        toDate: 0,
         branchId: '',
+        customerName: '',
       },
-      data: [],
       principalSelectedSum: 0,
       manageLoansTabs: [],
     }
@@ -84,7 +56,7 @@ class CIB extends Component<{}, State> {
         render: (data) => (
           <FormCheck
             type="checkbox"
-            checked={this.state.selectedCustomers.includes(data.loanId)}
+            checked={this.state?.selectedLoans?.includes(data.loanId)}
             onChange={() => this.addRemoveItemFromChecked(data)}
           />
         ),
@@ -118,9 +90,10 @@ class CIB extends Component<{}, State> {
   }
 
   handleSearch = async (values: SearchFormValues) => {
-    this.setState({ loading: true })
-    console.log({ ...values })
     const { fromDate, toDate, branchId, customerName } = values
+    if (!fromDate || !toDate) return
+    this.setState({ loading: true })
+
     const name = (customerName || '').trim()
     const res = await cibReport({
       startDate: new Date(fromDate).setHours(0, 0, 0, 0).valueOf(),
@@ -128,28 +101,34 @@ class CIB extends Component<{}, State> {
       offset: this.state.from,
       size: this.state.size,
       branchId,
-      customerName: name || undefined,
+      customerName: name,
     })
     if (res.status === 'success') {
+      this.setState({ loading: false })
+
       this.setState({
-        data: res.body.loans || [],
-        loading: false,
+        data: res.body,
       })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire(
+          'Error !',
+          getErrorMessage(res.error.error || 'error'),
+          'error'
+        )
       )
     }
   }
 
   addRemoveItemFromChecked(loan: CibLoan) {
+    if (!this.state.selectedLoans) return
     if (
-      this.state.selectedCustomers.findIndex(
+      this.state.selectedLoans.findIndex(
         (selectedCustomerLoanId) => selectedCustomerLoanId === loan.loanId
       ) > -1
     ) {
       this.setState((prevState) => ({
-        selectedCustomers: prevState.selectedCustomers.filter(
+        selectedLoans: prevState?.selectedLoans?.filter(
           (el) => el !== loan.loanId
         ),
         principalSelectedSum:
@@ -157,7 +136,7 @@ class CIB extends Component<{}, State> {
       }))
     } else {
       this.setState((prevState) => ({
-        selectedCustomers: [...prevState.selectedCustomers, loan.loanId],
+        selectedLoans: [...(prevState?.selectedLoans || []), loan.loanId],
         principalSelectedSum:
           prevState.principalSelectedSum + Number(loan.principal),
       }))
@@ -165,20 +144,21 @@ class CIB extends Component<{}, State> {
   }
 
   async submit() {
+    if (!this.state.selectedLoans) return
     this.setState({ loading: true })
     const obj = {
       fundSource: 'cib',
-      applicationIds: this.state.selectedCustomers,
+      applicationIds: this.state.selectedLoans,
       returnDetails: true,
       approvalDate: new Date().valueOf(),
     }
     const res = await changeSourceFund(obj)
     if (res.status === 'success') {
       this.setState({
-        selectedCustomers: [],
+        selectedLoans: undefined,
         loading: false,
         principalSelectedSum: 0,
-        data: [],
+        data: undefined,
       })
       Swal.fire('', local.changeSourceFundSuccess, 'success').then(() =>
         downloadTxtFile(res.body.loans, false, 0)
@@ -192,13 +172,14 @@ class CIB extends Component<{}, State> {
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
       this.setState((prevState) => ({
-        selectedCustomers: prevState.data.map((el) => el.loanId),
-        principalSelectedSum: prevState.data.reduce(
-          (a, b) => a + (Number(b.principal) || 0),
-          0
-        ),
+        selectedLoans: prevState.data?.loans?.map((el) => el.loanId),
+        principalSelectedSum:
+          prevState?.data?.loans?.reduce(
+            (a, b) => a + (Number(b.principal) || 0),
+            0
+          ) || 0,
       }))
-    } else this.setState({ selectedCustomers: [], principalSelectedSum: 0 })
+    } else this.setState({ selectedLoans: undefined, principalSelectedSum: 0 })
   }
 
   render() {
@@ -226,7 +207,7 @@ class CIB extends Component<{}, State> {
                   <span
                     className="font-weight-bold"
                     style={{ color: '#7dc356' }}
-                  >{` (${this.state.selectedCustomers.length})`}</span>
+                  >{` (${this.state?.selectedLoans?.length || 0})`}</span>
                 </span>
                 <span className="font-weight-bold">
                   {local.loansSelectedAmount}
@@ -238,7 +219,7 @@ class CIB extends Component<{}, State> {
               </div>
               <Button
                 onClick={() => this.submit()}
-                disabled={!this.state.selectedCustomers.length}
+                disabled={!this.state?.selectedLoans?.length}
                 className="big-button"
               >
                 {local.changeFund}
@@ -253,139 +234,15 @@ class CIB extends Component<{}, State> {
               handleSearch={this.handleSearch}
               initialValues={this.state.searchFormValues}
               setSearchFormValues={(newValues: Partial<SearchFormValues>) =>
-                this.setState(
-                  produce<State>((draftState) => {
-                    draftState.searchFormValues = {
-                      ...draftState.searchFormValues,
-                      ...newValues,
-                    }
-                  })
-                )
+                this.setState((prevState) => ({
+                  searchFormValues: {
+                    ...prevState.searchFormValues,
+                    ...newValues,
+                  },
+                }))
               }
             />
-            {/* <Formik<{
-              customerName?: string
-              fromDate?: number
-              toDate?: number
-              branchId: string
-            }>
-              enableReinitialize
-              // initialValues={{
-              //   customerName: undefined,
-              //   fromDate: undefined,
-              //   toDate: undefined,
-              //   branchId: '',
-              // }}
-              onSubmit={this.handleSearch}
-              // validationSchema={}
-              validateOnBlur
-              validateOnChange
-            >
-              {(formikProps) => (
-                <Form onSubmit={formikProps.handleSubmit}>
-                  <Row>
-                    <Col sm={6}>
-                      <InputGroup>
-                        <InputGroup.Append>
-                          <InputGroup.Text className="bg-white border-left-0">
-                            <span className="fa fa-search fa-rotate-90" />
-                          </InputGroup.Text>
-                        </InputGroup.Append>
-                        <FormControl
-                          type="text"
-                          name="customerName"
-                          data-qc="customerName"
-                          className="border-right-0"
-                          onChange={(e) => {
-                            // this.setState((prevState) => ({
-                            //   keyword: e.currentTarget.value,
-                            //   // filteredData: prevState.data.filter((el) =>
-                            //   //   el.customerName.includes(e.currentTarget.value)
-                            //   // ),
-                            // }))
-                            formikProps.setFieldValue(
-                              'customerName',
-                              e.currentTarget.value
-                            )
-                          }}
-                          placeholder={local.name}
-                          value={formikProps.values.customerName}
-                        />
-                      </InputGroup>
-                    </Col>
-                    <Col sm={6}>
-                      <div
-                        className="dropdown-container"
-                        style={{ flex: 1, alignItems: 'center' }}
-                      >
-                        <p
-                          className="dropdown-label"
-                          style={{
-                            alignSelf: 'normal',
-                            marginLeft: 20,
-                            width: 400,
-                          }}
-                        >
-                          {local.issuanceDate}
-                        </p>
-                        <span>{local.from}</span>
-                        <Form.Control
-                          required
-                          style={{ marginLeft: 20, border: 'none' }}
-                          type="date"
-                          name="fromDate"
-                          data-qc="fromDate"
-                          value={formikProps.values.fromDate}
-                          onChange={(e) => {
-                            formikProps.setFieldValue(
-                              'fromDate',
-                              e.currentTarget.value
-                            )
-                            if (e.currentTarget.value === '')
-                              formikProps.setFieldValue('toDate', '')
-                          }}
-                        />
-                        <span>{local.to}</span>
-                        <Form.Control
-                          required
-                          style={{ marginRight: 20, border: 'none' }}
-                          type="date"
-                          name="toDate"
-                          data-qc="toDate"
-                          value={formikProps.values.toDate}
-                          min={formikProps.values.fromDate}
-                          onChange={formikProps.handleChange}
-                          disabled={!formikProps.values.fromDate}
-                        />
-                      </div>
-                    </Col>
-                    <Col sm={6} style={{ marginTop: 20 }}>
-                      <BranchesDropDown
-                        onSelectBranch={(branch) => {
-                          formikProps.setFieldValue('branchId', branch._id)
-                          // this.setState((prevState) => ({
-                          //   filteredBranch: branch._id,
-                          //   filteredData: prevState.data.filter(
-                          //     (item) => item.loanBranch === branch._id
-                          //   ),
-                          // }))
-                        }}
-                      />
-                    </Col>
-                    <Col className="d-flex">
-                      <Button
-                        className="ml-auto"
-                        type="submit"
-                        style={{ width: 180, height: 50, marginTop: 20 }}
-                      >
-                        {local.search}
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form>
-              )}
-            </Formik> */}
-            {this.state.data.length ? (
+            {this.state?.data?.loans?.length ? (
               <Table striped hover>
                 <thead>
                   <tr>
@@ -402,7 +259,7 @@ class CIB extends Component<{}, State> {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.data.map((item, index: number) => {
+                  {this.state?.data?.loans?.map((item, index: number) => {
                     return (
                       <tr key={index}>
                         {this.mappers?.map((mapper, mapperIndex: number) => {
@@ -421,19 +278,22 @@ class CIB extends Component<{}, State> {
                   alt="no-data-found"
                   src={require('../../../Shared/Assets/no-results-found.svg')}
                 />
-                <p className="img-title">{local.noResultsFound}</p>
+                {this.state.data && (
+                  <p className="img-title">{local.noResultsFound}</p>
+                )}
               </div>
             )}
-            {this.state.data.length ? (
+            {this.state.data ? (
               <Pagination
-                totalCount={23}
+                totalCount={this.state.data.totalCount}
+                dataLength={this.state.size}
+                paginationArr={[25, 50, 100, 500]}
                 updatePagination={(key: string, number: number) => {
                   this.setState(
                     ({ [key]: number } as unknown) as Pick<State, keyof State>,
                     () => this.handleSearch(this.state.searchFormValues)
                   )
                 }}
-                fromKeyName="offset"
               />
             ) : null}
           </Card.Body>

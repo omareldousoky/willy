@@ -1,12 +1,12 @@
 export interface SearchFormValues {
-  fromDate: number
-  toDate: number
+  fromDate?: string
+  toDate?: string
   branchId: string
-  customerName?: string
+  customerName: string
 }
 
 export interface SearchFormProps {
   handleSearch: (values: SearchFormValues) => void
   setSearchFormValues: (newValues: Partial<SearchFormValues>) => void
-  initialValues: Partial<SearchFormValues>
+  initialValues: SearchFormValues
 }

@@ -1,15 +1,17 @@
-import { Formik, FormikProps } from 'formik'
-import React from 'react'
+import { Field, Formik, FormikProps } from 'formik'
+import React, { ChangeEvent } from 'react'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import InputGroup from 'react-bootstrap/InputGroup'
-import FormControl from 'react-bootstrap/FormControl'
 import Button from 'react-bootstrap/Button'
 
 import local from '../../../Shared/Assets/ar.json'
 import { BranchesDropDown } from '../dropDowns/allDropDowns'
 import { SearchFormProps, SearchFormValues } from './types'
+import TextField from '../Common/FormikFields/textField'
+import { DateFromToField } from '../Reports/Fields/dateFromTo'
+import { required } from '../../../Shared/validations'
 
 export const SearchForm = ({
   initialValues,
@@ -21,12 +23,11 @@ export const SearchForm = ({
       enableReinitialize
       initialValues={initialValues}
       onSubmit={handleSearch}
-      // validationSchema={}
       validateOnBlur
       validateOnChange
     >
-      {(formikProps: FormikProps<SearchFormValues>) => (
-        <Form onSubmit={formikProps.handleSubmit}>
+      {(formik: FormikProps<SearchFormValues>) => (
+        <Form onSubmit={formik.handleSubmit}>
           <Row>
             <Col sm={6}>
               <InputGroup>
@@ -35,87 +36,67 @@ export const SearchForm = ({
                     <span className="fa fa-search fa-rotate-90" />
                   </InputGroup.Text>
                 </InputGroup.Append>
-                <FormControl
+                <Field
+                  onlyField
                   type="text"
                   name="customerName"
                   data-qc="customerName"
-                  className="border-right-0"
-                  onChange={(e) => {
-                    formikProps.setFieldValue(
-                      'customerName',
-                      e.currentTarget.value
-                    )
-                    setSearchFormValues({
-                      customerName: e.currentTarget.value,
-                    })
-                  }}
+                  id="customerName"
+                  onChange={formik.handleChange}
                   placeholder={local.name}
-                  value={formikProps.values.customerName}
+                  className="border-right-0"
+                  component={TextField}
+                  value={formik.values.customerName}
                 />
               </InputGroup>
             </Col>
-            <Col sm={6}>
-              <div
-                className="dropdown-container"
-                style={{ flex: 1, alignItems: 'center' }}
-              >
-                <p
-                  className="dropdown-label"
-                  style={{
-                    alignSelf: 'normal',
-                    marginLeft: 20,
-                    width: 400,
-                  }}
-                >
-                  {local.issuanceDate}
-                </p>
-                <span>{local.from}</span>
-                <Form.Control
-                  required
-                  style={{ marginLeft: 20, border: 'none' }}
-                  type="date"
-                  name="fromDate"
-                  data-qc="fromDate"
-                  value={formikProps.values.fromDate}
-                  onChange={(e) => {
-                    formikProps.setFieldValue('fromDate', e.currentTarget.value)
-                    if (e.currentTarget.value === '')
-                      formikProps.setFieldValue('toDate', '')
-                    setSearchFormValues({
-                      fromDate: Number(e.currentTarget.value),
-                    })
-                  }}
-                />
-                <span>{local.to}</span>
-                <Form.Control
-                  required
-                  style={{ marginRight: 20, border: 'none' }}
-                  type="date"
-                  name="toDate"
-                  data-qc="toDate"
-                  value={formikProps.values.toDate}
-                  min={formikProps.values.fromDate}
-                  onChange={(e) => {
-                    formikProps.setFieldValue('toDate', e.currentTarget.value)
-                    setSearchFormValues({
-                      toDate: Number(e.currentTarget.value),
-                    })
-                  }}
-                  disabled={!formikProps.values.fromDate}
-                />
-              </div>
-            </Col>
+            <DateFromToField
+              id="cibDateFromTo"
+              name={local.issuanceDate}
+              cols={6}
+              from={{
+                name: 'fromDate',
+                onChange: (e: ChangeEvent<HTMLInputElement>) => {
+                  const fromDateValue = e.currentTarget.value
+                  formik.setFieldValue('fromDate', fromDateValue)
+                  if (fromDateValue === '') formik.setFieldValue('toDate', '')
+                  setSearchFormValues({
+                    fromDate: fromDateValue,
+                  })
+                },
+                value: formik.values.fromDate || undefined,
+                error: formik.errors.fromDate,
+                // to avoid Warning: Received `false` for a non-boolean attribute
+                touched: formik.touched.fromDate ? 1 : 0,
+                isInvalid: !!(
+                  formik.errors.fromDate && formik.touched.fromDate
+                ),
+                validate: required,
+              }}
+              to={{
+                name: 'toDate',
+                min: formik.values.fromDate,
+                onChange: (e: ChangeEvent<HTMLInputElement>) => {
+                  const toDateValue = e.currentTarget.value
+                  formik.setFieldValue('toDate', toDateValue)
+                  setSearchFormValues({
+                    toDate: toDateValue,
+                  })
+                },
+                value: formik.values.toDate || undefined,
+                error: formik.errors.toDate,
+                touched: formik.touched.toDate ? 1 : 0,
+                isInvalid: !!(formik.errors.toDate && formik.touched.toDate),
+                disabled: !formik.values.fromDate,
+                validate: required,
+              }}
+            />
             <Col sm={6} style={{ marginTop: 20 }}>
               <BranchesDropDown
+                value={formik.values.branchId}
                 onSelectBranch={(branch) => {
-                  formikProps.setFieldValue('branchId', branch._id)
+                  formik.setFieldValue('branchId', branch._id)
                   setSearchFormValues({ branchId: branch._id })
-                  // this.setState((prevState) => ({
-                  //   filteredBranch: branch._id,
-                  //   filteredData: prevState.data.filter(
-                  //     (item) => item.loanBranch === branch._id
-                  //   ),
-                  // }))
                 }}
               />
             </Col>

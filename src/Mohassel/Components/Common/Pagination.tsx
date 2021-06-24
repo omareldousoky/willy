@@ -11,12 +11,9 @@ export const Pagination = ({
   updatePagination,
   dataLength,
   paginationArr,
-  fromKeyName,
 }: PaginationProps) => {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(dataLength || 10)
-
-  const from = fromKeyName || 'from'
 
   const totalPagesCount: number = Math.ceil(totalCount / rowsPerPage)
   const getPages = () => {
@@ -42,7 +39,7 @@ export const Pagination = ({
             setRowsPerPage(Number(event.currentTarget.value))
             updatePagination &&
               updatePagination('size', Number(event.currentTarget.value))
-            updatePagination && updatePagination(from, 0)
+            updatePagination && updatePagination('from', 0)
             setPage(0)
           }}
         >
@@ -75,7 +72,7 @@ export const Pagination = ({
             if (page !== 0) {
               setPage(page - 1)
               updatePagination &&
-                updatePagination(from, page * rowsPerPage - rowsPerPage)
+                updatePagination('from', page * rowsPerPage - rowsPerPage)
             }
           }}
         >
@@ -95,7 +92,7 @@ export const Pagination = ({
                 onClick={() => {
                   setPage(number - 1)
                   updatePagination &&
-                    updatePagination(from, (number - 1) * rowsPerPage)
+                    updatePagination('from', (number - 1) * rowsPerPage)
                 }}
               >
                 {number}
@@ -114,7 +111,7 @@ export const Pagination = ({
             if (page + 1 !== Math.ceil(totalCount / rowsPerPage)) {
               setPage(page + 1)
               updatePagination &&
-                updatePagination(from, page * rowsPerPage + rowsPerPage)
+                updatePagination('from', page * rowsPerPage + rowsPerPage)
             }
           }}
         >
