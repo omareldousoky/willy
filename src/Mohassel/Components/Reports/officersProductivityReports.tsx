@@ -119,64 +119,10 @@ class OfficersProductivityReports extends Component<{}, State> {
                 {local.requestNewreport}
               </Button>
             </div>
-            {this.state.data.length > 0 ? (
-              this.state.data.map((pdf, index) => {
-                return (
-                  <Card key={index}>
-                    <Card.Body>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          padding: '0px 20px',
-                          fontWeight: 'bold',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <div style={{ display: 'flex' }}>
-                          <span style={{ marginLeft: 40 }}>#{index + 1}</span>
-                          <span
-                            style={{
-                              marginLeft: 40,
-                              display: 'flex',
-                              flexDirection: 'column',
-                              alignItems: 'flex-start',
-                            }}
-                          >
-                            <span>{local.loanAppCreationDate}</span>
-                            {timeToArabicDate(pdf.created.at, true)}
-                          </span>
-                          <span style={{ marginLeft: 40 }}>
-                            {getIscoreReportStatus(pdf.status)}
-                          </span>
-                          {pdf.status === 'created' && (
-                            <span
-                              style={{
-                                marginLeft: 40,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-start',
-                              }}
-                            >
-                              <span>{local.creationDate}</span>
-                              {timeToArabicDate(pdf.generatedAt, true)}
-                            </span>
-                          )}
-                        </div>
-                        <ReportsList
-                          list={this.state.data}
-                          onClickDownload={(itemId) => this.getFile(itemId)}
-                        />
-                      </div>
-                    </Card.Body>
-                  </Card>
-                )
-              })
-            ) : (
-              <div className="d-flex align-items-center justify-content-center">
-                {local.noResults}
-              </div>
-            )}
+            <ReportsList
+              list={this.state.data}
+              onClickDownload={(itemId) => this.getFile(itemId)}
+            />
           </Card.Body>
         </Card>
         {this.state.showModal && (
