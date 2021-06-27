@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react'
 
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
 
-import local from "../../Assets/ar.json";
-import { getIscoreReportStatus, timeToArabicDate } from "../../Services/utils";
+import local from '../../Assets/ar.json'
+import { getIscoreReportStatus, timeToArabicDate } from '../../Services/utils'
 
-import { LtsIcon } from "../LtsIcon";
+import { LtsIcon } from '../LtsIcon'
 
-import { ReportsListProps } from "./types";
+import { ReportsListProps } from './types'
 
 export const ReportsList = ({ list, onClickDownload }: ReportsListProps) => {
   return (
@@ -28,12 +28,12 @@ export const ReportsList = ({ list, onClickDownload }: ReportsListProps) => {
                   )}
                   <span
                     className={`mr-5  text-${
-                      listItem.status === "created"
-                        ? "success"
-                        : listItem.status === "queued" ||
-                          listItem.status === "processing"
-                        ? "warning"
-                        : "danger"
+                      listItem.status === 'created'
+                        ? 'success'
+                        : listItem.status === 'queued' ||
+                          listItem.status === 'processing'
+                        ? 'warning'
+                        : 'danger'
                     } `}
                   >
                     {getIscoreReportStatus(listItem.status)}
@@ -41,25 +41,21 @@ export const ReportsList = ({ list, onClickDownload }: ReportsListProps) => {
                   {listItem.fileName && (
                     <span className="mr-5">{listItem.fileName}</span>
                   )}
-                  {listItem.status === "created" && (
+                  {listItem.status === 'created' && (
                     <span className="mr-5 d-flex flex-start flex-column">
                       <span>{local.creationDate}</span>
                       {timeToArabicDate(listItem.generatedAt, true)}
                     </span>
                   )}
                 </div>
-                {listItem.status === "created" && (
+                {listItem.status === 'created' && (
                   <Button
                     type="button"
                     variant="default"
                     onClick={() => onClickDownload(listItem._id)}
                     title="download"
                   >
-                    <LtsIcon
-                      name="green-download"
-                      color="#7dc356"
-                      size="40px"
-                    />
+                    <LtsIcon name="download" color="#7dc356" size="40px" />
                   </Button>
                 )}
               </div>
@@ -72,5 +68,5 @@ export const ReportsList = ({ list, onClickDownload }: ReportsListProps) => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
