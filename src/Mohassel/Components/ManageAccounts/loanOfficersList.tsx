@@ -3,7 +3,13 @@ import Card from 'react-bootstrap/Card'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { connect } from 'react-redux'
-import { Modal, Form, Col, Button, Row } from 'react-bootstrap'
+
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import Modal from 'react-bootstrap/Modal'
+import Form from 'react-bootstrap/Form'
+
 import { Formik } from 'formik'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -22,40 +28,40 @@ import { updateLoanOfficer } from '../../Services/APIs/LoanOfficers/updateLoanOf
 import { getDateAndTime } from '../../Services/getRenderDate'
 
 interface Props extends RouteComponentProps {
-  history: any;
-  data: any;
-  error: string;
-  totalCount: number;
-  loading: boolean;
-  searchFilters: any;
-  statusCode: string;
-  search: (data) => Promise<void>;
-  setLoading: (data) => void;
-  setSearchFilters: (data) => void;
-  withHeader: boolean;
+  history: any
+  data: any
+  error: string
+  totalCount: number
+  loading: boolean
+  searchFilters: any
+  statusCode: string
+  search: (data) => Promise<void>
+  setLoading: (data) => void
+  setSearchFilters: (data) => void
+  withHeader: boolean
 }
 interface State {
-  size: number;
-  from: number;
-  showModal: boolean;
-  manageAccountTabs: Tab[];
-  loadingInline: boolean;
-  branchId: string;
+  size: number
+  from: number
+  showModal: boolean
+  manageAccountTabs: Tab[]
+  loadingInline: boolean
+  branchId: string
   loanOfficer: {
-    id: string;
-    name: string;
-    username: string;
-    password?: string;
-    confirmPassword?: string;
-  };
+    id: string
+    name: string
+    username: string
+    password?: string
+    confirmPassword?: string
+  }
 }
 
 class LoanOfficersList extends Component<Props, State> {
   mappers: {
-    title: string;
-    key: string;
-    sortable?: boolean;
-    render: (data: any) => void;
+    title: string
+    key: string
+    sortable?: boolean
+    render: (data: any) => void
   }[]
 
   constructor(props: Props) {

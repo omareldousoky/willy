@@ -1,47 +1,40 @@
-import { AxiosResponse } from "axios";
-import { UnpaidInstallmentsPerAreaRequest } from "../../interfaces";
-import axios from "../axios-instance";
+import { AxiosResponse } from 'axios'
+import { ApiResponse } from '../../../Models/common'
+import { UnpaidInstallmentsPerAreaRequest } from '../../interfaces'
+import axios from '../axios-instance'
 
-const { REACT_APP_BASE_URL } = process.env;
-const fetchUnpaidInstallmentsPerAreaUrl = `${REACT_APP_BASE_URL}/report/unpaid-installments-per-area`;
+const { REACT_APP_BASE_URL } = process.env
+const fetchUnpaidInstallmentsPerAreaUrl = `${REACT_APP_BASE_URL}/report/unpaid-installments-per-area`
 
 interface CustomersResponse {
-  address: string;
-  amountDue: number;
-  customerName: string;
-  installmentAmount: number;
-  installmentSerial: string;
-  installmentStatus: string;
-  phone: string;
-  representativeName: string;
-  truthDate: string;
+  address: string
+  amountDue: number
+  customerName: string
+  installmentAmount: number
+  installmentSerial: string
+  installmentStatus: string
+  phone: string
+  representativeName: string
+  truthDate: string
 }
 
 interface AreaResponse {
-  amount: number;
-  count: number;
-  name: string;
-  customers: Array<CustomersResponse>;
+  amount: number
+  count: number
+  name: string
+  customers: Array<CustomersResponse>
 }
 interface BranchResponse {
-  amount: number;
-  count: number;
-  name: string;
-  areas: Array<AreaResponse>;
+  amount: number
+  count: number
+  name: string
+  areas: Array<AreaResponse>
 }
 
 export interface UnpaidInstallmentsPerAreaResponse {
-  branches: Array<BranchResponse>;
-  amount: number;
-  count: number;
-}
-
-
-// TODO: move out to common file
-export interface ApiResponse<T> {
-  status: "success" | "error";
-  body?: T;
-  error?: unknown;
+  branches: Array<BranchResponse>
+  amount: number
+  count: number
 }
 
 export const fetchUnpaidInstallmentsPerAreaReport = async (
@@ -51,9 +44,9 @@ export const fetchUnpaidInstallmentsPerAreaReport = async (
     const res: AxiosResponse<UnpaidInstallmentsPerAreaResponse> = await axios.post(
       fetchUnpaidInstallmentsPerAreaUrl,
       request
-    );
-    return { status: "success", body: res.data };
+    )
+    return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: "error", error: error.response.data };
+    return { status: 'error', error: error.response.data }
   }
-};
+}

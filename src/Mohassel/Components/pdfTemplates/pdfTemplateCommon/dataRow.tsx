@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  extractGMTDate,
   numbersToArabic,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
@@ -10,11 +11,13 @@ import {
 } from './reportLocal'
 
 interface DataRowProps {
-  type: 'string' | 'money' | 'number' | 'date';
-  value?: string | number;
-  placeholderType?: 'string' | 'money' | 'number';
-  className?: string;
-  meta?: Record<string, string>;
+  type: 'string' | 'money' | 'number' | 'date'
+  value?: string | number
+  placeholderType?: 'string' | 'money' | 'number'
+  className?: string
+  isFullDate?: boolean
+  getGMTDate?: boolean
+  meta?: Record<string, string>
 }
 
 const placeHolders = {
@@ -30,6 +33,8 @@ const DataRow = ({
   placeholderType,
   className,
   meta,
+  isFullDate = false,
+  getGMTDate = true,
 }: DataRowProps) => {
   const isDate = type === 'date'
   const isString = type === 'string'
@@ -43,7 +48,12 @@ const DataRow = ({
       {isDate && (
         <td className={className || ''} {...meta}>
           {value
-            ? timeToArabicDate(Number(new Date (value).valueOf()) || 0, false)
+            ? getGMTDate && typeof value === 'number'
+              ? extractGMTDate(value)
+              : timeToArabicDate(
+                  Number(new Date(value).valueOf()) || 0,
+                  isFullDate as boolean
+                )
             : stringPlaceholder}
         </td>
       )}

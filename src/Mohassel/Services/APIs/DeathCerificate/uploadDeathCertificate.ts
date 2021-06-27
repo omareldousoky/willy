@@ -1,12 +1,11 @@
-import axios from '../axios-instance';
+import axios from '../axios-instance'
 
 export const uploadDeathCertificate = async (data: FormData) => {
-    const url = process.env.REACT_APP_BASE_URL + '/customer/death-certificate';
-    try {
-        const res = await axios.post(url, data);
-        return { status: "success", body: res.data }
-    }
-    catch (error) {
-        return { status: "error", error: error.response.data }
-    }
+  const url = process.env.REACT_APP_BASE_URL + '/customer/death-certificate'
+  try {
+    const res = await axios.post(url, data)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
 }

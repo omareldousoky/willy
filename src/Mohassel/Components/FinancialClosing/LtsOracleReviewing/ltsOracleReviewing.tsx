@@ -1,16 +1,25 @@
 import React, { Component } from 'react'
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
 
+import Swal from 'sweetalert2'
 import { Loader } from '../../../../Shared/Components/Loader'
 import local from '../../../../Shared/Assets/ar.json'
-import { downloadOracleReviewFile, getOracleReviewFiles, ReviewFilesResponse } from '../../../Services/APIs/loanApplication/financialClosing'
-import { downloadFile, getErrorMessage, timeToArabicDate } from '../../../../Shared/Services/utils'
-import Swal from 'sweetalert2'
-import { LtsIcon } from '../../../../Shared/Components';
+import {
+  downloadOracleReviewFile,
+  getOracleReviewFiles,
+  ReviewFilesResponse,
+} from '../../../Services/APIs/loanApplication/financialClosing'
+import {
+  downloadFile,
+  getErrorMessage,
+  timeToArabicDate,
+} from '../../../../Shared/Services/utils'
+import { LtsIcon } from '../../../../Shared/Components'
+
 interface State {
-  loading: boolean;
-  data: ReviewFilesResponse;
+  loading: boolean
+  data: ReviewFilesResponse
 }
 class LtsOracleReviewing extends Component<{}, State> {
   constructor(props) {
@@ -20,30 +29,41 @@ class LtsOracleReviewing extends Component<{}, State> {
       data: {},
     }
   }
-  componentDidMount(){
+
+  componentDidMount() {
     this.getOracleReviews()
   }
- async getOracleReviews(){
-     this.setState({loading: true})
-     const res = await getOracleReviewFiles();
-     if(res.status==='success' && res.body){
-          this.setState({data: res.body})
-     } else {
-         Swal.fire('Error!', getErrorMessage((res.error as Record<string, string>).error),'error')
-     }
-     this.setState({loading: false})
+
+  async getOracleReviews() {
+    this.setState({ loading: true })
+    const res = await getOracleReviewFiles()
+    if (res.status === 'success' && res.body) {
+      this.setState({ data: res.body })
+    } else {
+      Swal.fire(
+        'Error!',
+        getErrorMessage((res.error as Record<string, string>).error),
+        'error'
+      )
+    }
+    this.setState({ loading: false })
   }
-  async getFileUrl(id: string){
-      this.setState({loading: true})
-      const res = await downloadOracleReviewFile(id);
-      if(res.status==='success') {
-          if(res.body)
-           downloadFile(res.body?.presignedUrl)
-      }else{
-          Swal.fire('Error !', getErrorMessage((res.error as Record<string, string>).error),'error')
-      }
-      this.setState({loading: false})
+
+  async getFileUrl(id: string) {
+    this.setState({ loading: true })
+    const res = await downloadOracleReviewFile(id)
+    if (res.status === 'success') {
+      if (res.body) downloadFile(res.body?.presignedUrl)
+    } else {
+      Swal.fire(
+        'Error !',
+        getErrorMessage((res.error as Record<string, string>).error),
+        'error'
+      )
+    }
+    this.setState({ loading: false })
   }
+
   render() {
     return (
       <Card className="main-card">
@@ -61,39 +81,49 @@ class LtsOracleReviewing extends Component<{}, State> {
                   <Card.Body>
                     <div className="file-review-container">
                       <div className="d-flex align-items-center">
-                        <span className="mx-3 text-secondary">#{index + 1}</span>
+                        <span className="mx-3 text-secondary">
+                          #{index + 1}
+                        </span>
                         <span className="file-date-container mx-5">
                           <span>{local.closeDate}</span>
-                          {file.toDate? timeToArabicDate(file.toDate, true):''}
+                          {file.toDate
+                            ? timeToArabicDate(file.toDate, true)
+                            : ''}
                         </span>
                         <span className="mx-5">{file.fileName}</span>
-                        <span className={`mx-5  text-${
-                            file.status === "created"
-                              ? "success"
-                              : file.status === "queued"
-                              ? "warning"
-                              : "danger"
-                          } `}>{local[file.status]}</span>
+                        <span
+                          className={`mx-5  text-${
+                            file.status === 'created'
+                              ? 'success'
+                              : file.status === 'queued'
+                              ? 'warning'
+                              : 'danger'
+                          } `}
+                        >
+                          {local[file.status]}
+                        </span>
                         {file.status === 'created' && (
                           <span className="file-date-container mx-5">
                             <span>{local.creationDate}</span>
-                            {file.fileGeneratedAt? timeToArabicDate(file.fileGeneratedAt, true):''}
+                            {file.fileGeneratedAt
+                              ? timeToArabicDate(file.fileGeneratedAt, true)
+                              : ''}
                           </span>
                         )}
                       </div>
                       {file.status === 'created' && (
-                           <Button
-                           type="button"
-                           variant="default"
-                           onClick={() => this.getFileUrl(file._id)}
-                           title="download"
-                         >
+                        <Button
+                          type="button"
+                          variant="default"
+                          onClick={() => this.getFileUrl(file._id)}
+                          title="download"
+                        >
                           <LtsIcon
-                              name="green-download"
-                              color="#7dc356"
-                              size="40px"
-                            />                         
-                          </Button>
+                            name="green-download"
+                            color="#7dc356"
+                            size="40px"
+                          />
+                        </Button>
                       )}
                     </div>
                   </Card.Body>
@@ -103,11 +133,11 @@ class LtsOracleReviewing extends Component<{}, State> {
           ) : (
             <div className="d-flex justify-content-center align-items-center mr-5 text-align-center">
               <div>
-              <img
-                alt="no-data-found"
-                src={require('../../../../Shared/Assets/no-results-found.svg')}
-              />
-              <h4>{local.noResultsFound}</h4>
+                <img
+                  alt="no-data-found"
+                  src={require('../../../../Shared/Assets/no-results-found.svg')}
+                />
+                <h4>{local.noResultsFound}</h4>
               </div>
             </div>
           )}

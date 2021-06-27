@@ -1,131 +1,220 @@
-import React, { Component } from 'react'
-import { Button, Col, Form, Row } from 'react-bootstrap';
-import * as local from '../../../Shared/Assets/ar.json';
-import UsersSearch from './usersSearch';
-import { getManagerHierarchy } from "../../Services/APIs/ManagerHierarchy/getManagerHierarchy";
-import { updateManagerHierarchy } from "../../Services/APIs/ManagerHierarchy/updateManagersHierarchy";
-import { searchUsers } from "../../Services/APIs/Users/searchUsers";
-import { Loader } from '../../../Shared/Components/Loader';
-import Can from '../../config/Can';
-import ability from '../../config/ability';
-import { withRouter } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import { getErrorMessage } from '../../../Shared/Services/utils';
-import { Managers } from './branchBasicsCard';
-interface Props {
-branchId: string;
-}
-interface State {
-    values: Managers;
-    loading: boolean;
-    disabled: boolean;
-    users: [];
-}
- class ManagersCreation extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            loading: false,
-            values: {
-                branchManager: {id:"", name:""},
-                operationsManager: {id:"", name:""},
-                areaManager: {id:"", name:""},
-                areaSupervisor: {id:"", name:""},
-                centerManager: {id:"", name:""}
-            },
-            disabled: true,
-            users: [],
-        }
+import React, { FunctionComponent, useEffect, useState } from 'react'
+
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+
+import Swal from 'sweetalert2'
+import * as local from '../../../Shared/Assets/ar.json'
+import { UsersSearch } from './usersSearch'
+import { getManagerHierarchy } from '../../Services/APIs/ManagerHierarchy/getManagerHierarchy'
+import { updateManagerHierarchy } from '../../Services/APIs/ManagerHierarchy/updateManagersHierarchy'
+import { searchUsers } from '../../Services/APIs/Users/searchUsers'
+import { Loader } from '../../../Shared/Components/Loader'
+import Can from '../../config/Can'
+import { getErrorMessage } from '../../../Shared/Services/utils'
+import { Managers, ManagersCreationProps } from './types'
+import { ManagerHierarchyUser } from '../../../Shared/Services/interfaces'
+
+const ManagersCreation: FunctionComponent<ManagersCreationProps> = ({
+  branchId,
+}) => {
+  const [loading, setLoading] = useState(false)
+  const [values, setValues] = useState<Managers>({
+    branchManager: { id: '', name: '' },
+    operationsManager: { id: '', name: '' },
+    areaManager: { id: '', name: '' },
+    areaSupervisor: { id: '', name: '' },
+    centerManager: { id: '', name: '' },
+  })
+  const [users, setUsers] = useState([])
+
+  const getUsers = async () => {
+    setLoading(true)
+    const query = { from: 0, size: 100, status: 'active' }
+    const res = await searchUsers(query)
+    if (res.status === 'success' && res.body.data) {
+      setUsers(res.body.data)
     }
-    componentDidMount() {
-        if(ability.can("updateBranchManagersHierarchy","branch")){
-            this.setState({disabled:false})
-        }
-        this.setState({ loading: true });
-        this.getManagers();
-        this.getUsers();
-        this.setState({ loading: false });
-        
-    }
-    async getUsers() {
-        this.setState({loading: true})
-         const query = { from: 0, size: 100, status: 'active' };
-          const res = await searchUsers(query);
-          if (res.status == 'success' && res.body.data) {
-            this.setState({ users: res.body.data })
-          }
-          this.setState({loading: false})
+    setLoading(false)
+  }
+
+  const getManagers = async () => {
+    const res = await getManagerHierarchy(branchId)
+    if (res.status === 'success' && res.body?.data) {
+      const {
+        operationsManager,
+        areaManager,
+        areaSupervisor,
+        centerManager,
+        branchManager,
+      } = res.body.data
+      const newValues = {
+        operationsManager,
+        areaManager,
+        areaSupervisor,
+        centerManager,
+        branchManager,
       }
-    async getManagers() {
-        const res = await getManagerHierarchy(this.props.branchId);
-        if (res.status === "success") {
-            const values = {
-                operationsManager: res.body.data.operationsManager,
-                areaManager: res.body.data.areaManager,
-                areaSupervisor: res.body.data.areaSupervisor,
-                centerManager: res.body.data.centerManager,
-                branchManager: res.body.data.branchManager
-            }
-            this.setState({
-                values: values
-            })
-        }
+      setValues(newValues)
     }
-    async updateManagers() {
-        this.setState({ loading: true });
-        const obj = this.prepareManagers()
-      const res=  await updateManagerHierarchy(obj, this.props.branchId);
-        if(res.status=='success'){
-            Swal.fire('Success !',local.updateSuccess ,'success');
-        } else {
-            Swal.fire('Error !', getErrorMessage(res.error.error),'error');
-        }
-        this.setState({ loading: false });
+  }
+
+  useEffect(() => {
+    setLoading(true)
+    getManagers()
+    getUsers()
+  }, [])
+
+  const prepareManagers = () => {
+    return {
+      operationsManager: values?.operationsManager?.id || undefined,
+      areaManager: values?.areaManager?.id || undefined,
+      areaSupervisor: values?.areaSupervisor?.id || undefined,
+      centerManager: values?.centerManager?.id || undefined,
+      branchManager: values?.branchManager?.id || undefined,
     }
-    prepareManagers() {
-        let managers = {}
-        if(this.state.values?.operationsManager?.id) managers={...managers, ...{operationsManager: this.state.values.operationsManager.id}}
-        if(this.state.values?.areaManager?.id) managers= {...managers, ...{areaManager: this.state.values.areaManager.id}}
-        if(this.state.values?.areaSupervisor?.id) managers= {...managers, ...{areaSupervisor: this.state.values.areaSupervisor.id}}
-        if(this.state.values?.centerManager?.id) managers = {...managers, ...{centerManager: this.state.values.centerManager.id}}
-        if(this.state.values?.branchManager?.id) managers= {...managers, ...{branchManager: this.state.values.branchManager.id}}
-        return managers;
+  }
+
+  const updateManagers = async () => {
+    setLoading(true)
+    const updateManagersData = prepareManagers()
+    const res = await updateManagerHierarchy(updateManagersData, branchId)
+    if (res.status === 'success') {
+      Swal.fire('Success !', local.updateSuccess, 'success')
+    } else {
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
-    render() {
-        return (
-            <div>
-                <Loader open={this.state.loading} type={'fullscreen'} />
-                <Form className="managers-form">
-                    <Form.Group className={'managers-form-group'} as={Col} id="operationsManager">
-                        <Form.Label className={"managers-label"} >{local.operationsManager}</Form.Label>
-                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'operationsManager'} item={this.state.values}  disabled = {this.state.disabled} isClearable/> </Row>
-                    </Form.Group>
-                    <Form.Group className={'managers-form-group'} as={Col} id="districtManager">
-                        <Form.Label className={"managers-label"} >{local.districtManager}</Form.Label>
-                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'areaManager'} item={this.state.values}  disabled = {this.state.disabled} isClearable/> </Row>
-                    </Form.Group>
-                    <Form.Group className={'managers-form-group'} as={Col} id="districtSupervisor">
-                        <Form.Label className={"managers-label"} >{local.districtSupervisor}</Form.Label>
-                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'areaSupervisor'} item={this.state.values}  disabled = {this.state.disabled} isClearable /> </Row>
-                    </Form.Group>
-                    <Form.Group className={'managers-form-group'} as={Col} id="centerManager">
-                        <Form.Label className={"managers-label"} >{local.centerManager}</Form.Label>
-                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'centerManager'} item={this.state.values}  disabled = {this.state.disabled} isClearable /> </Row>
-                    </Form.Group>
-                    <Form.Group className={'managers-form-group'} as={Col} id="branchManager">
-                        <Form.Label className={"managers-label"} >{local.branchManager}</Form.Label>
-                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'branchManager'} item={this.state.values}  disabled = {this.state.disabled} isClearable /> </Row>
-                    </Form.Group>
-                </Form>
-                <Can I="updateBranchManagersHierarchy" a="branch">
-                    <Form.Group>
-                        <Button className={'save-button'} onClick={async () => {
-                            await this.updateManagers();
-                        }}>{local.save}</Button>
-                    </Form.Group>
-                </Can>
-            </div>
-        )
-    }
+    setLoading(false)
+  }
+
+  return (
+    <div>
+      <Loader open={loading} type="fullscreen" />
+      <Form className="managers-form">
+        <Form.Group
+          className="managers-form-group"
+          as={Col}
+          id="operationsManager"
+        >
+          <Form.Label className="managers-label">
+            {local.operationsManager}
+          </Form.Label>
+          <Row>
+            <UsersSearch
+              usersInitial={users}
+              objectKey="operationsManager"
+              item={values.operationsManager}
+              updateItem={(newOperationsManager?: ManagerHierarchyUser) =>
+                setValues({
+                  ...values,
+                  operationsManager: newOperationsManager,
+                })
+              }
+              isClearable
+            />
+          </Row>
+        </Form.Group>
+        <Form.Group
+          className="managers-form-group"
+          as={Col}
+          id="districtManager"
+        >
+          <Form.Label className="managers-label">
+            {local.districtManager}
+          </Form.Label>
+          <Row>
+            <UsersSearch
+              isClearable
+              usersInitial={users}
+              objectKey="areaManager"
+              item={values.areaManager}
+              updateItem={(newAreaManager?: ManagerHierarchyUser) =>
+                setValues({
+                  ...values,
+                  areaManager: newAreaManager,
+                })
+              }
+            />
+          </Row>
+        </Form.Group>
+        <Form.Group
+          className="managers-form-group"
+          as={Col}
+          id="districtSupervisor"
+        >
+          <Form.Label className="managers-label">
+            {local.districtSupervisor}
+          </Form.Label>
+          <Row>
+            <UsersSearch
+              isClearable
+              usersInitial={users}
+              objectKey="areaSupervisor"
+              item={values.areaSupervisor}
+              updateItem={(newAreaSupervisor?: ManagerHierarchyUser) =>
+                setValues({
+                  ...values,
+                  areaSupervisor: newAreaSupervisor,
+                })
+              }
+            />
+          </Row>
+        </Form.Group>
+        <Form.Group className="managers-form-group" as={Col} id="centerManager">
+          <Form.Label className="managers-label">
+            {local.centerManager}
+          </Form.Label>
+          <Row>
+            <UsersSearch
+              isClearable
+              usersInitial={users}
+              objectKey="centerManager"
+              item={values.centerManager}
+              updateItem={(newCenterManager?: ManagerHierarchyUser) =>
+                setValues({
+                  ...values,
+                  centerManager: newCenterManager,
+                })
+              }
+            />
+          </Row>
+        </Form.Group>
+        <Form.Group className="managers-form-group" as={Col} id="branchManager">
+          <Form.Label className="managers-label">
+            {local.branchManager}
+          </Form.Label>
+          <Row>
+            <UsersSearch
+              isClearable
+              usersInitial={users}
+              objectKey="branchManager"
+              item={values.branchManager}
+              updateItem={(newBranchManager?: ManagerHierarchyUser) =>
+                setValues({
+                  ...values,
+                  branchManager: newBranchManager,
+                })
+              }
+            />
+          </Row>
+        </Form.Group>
+      </Form>
+      <Can I="updateBranchManagersHierarchy" a="branch">
+        <Form.Group>
+          <Button
+            className="save-button"
+            onClick={async () => {
+              await updateManagers()
+            }}
+          >
+            {local.save}
+          </Button>
+        </Form.Group>
+      </Can>
+    </div>
+  )
 }
-export default withRouter(ManagersCreation);
+
+export default ManagersCreation

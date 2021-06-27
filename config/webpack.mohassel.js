@@ -59,7 +59,7 @@ module.exports = (env) => {
 					],
 				},
 				{
-					test: /\.(png|svg|jpg|woff)$/,
+					test: /\.(png|svg|jpg|woff|woff2|xlsx)$/,
 					use: [{
 						loader: 'file-loader',
 						options: {

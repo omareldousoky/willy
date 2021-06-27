@@ -1,13 +1,13 @@
-import React from "react";
-import Breadcrumbs from "./breadcrumbs";
+import React from 'react'
+import Breadcrumbs from './breadcrumbs'
 
 const WithBreadcrumbs = ({ route }) => {
-  const PageBody = route.render||route.component;
+  const PageBody = route.render || route.component
   return (
     <>
       {Object.keys(route.parent).length > 0 && <Breadcrumbs route={route} />}
-       <PageBody /> 
+      <PageBody />
     </>
-  );
-};
-export default WithBreadcrumbs;
+  )
+}
+export default WithBreadcrumbs

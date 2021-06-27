@@ -1,18 +1,22 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from 'react'
 
-import Can from "../../../config/Can";
-import ability from "../../../config/ability";
-import * as local from "../../../../Shared/Assets/ar.json";
-import Swal from "sweetalert2";
-import { downloadFile } from "../../../../Shared/Services/utils";
+import Swal from 'sweetalert2'
 
-import { Button, Card } from "react-bootstrap";
+import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
 
-import HeaderWithCards from "../../HeaderWithCards/headerWithCards";
-import { Loader } from "../../../../Shared/Components/Loader";
-import ReportsModal from "../reportsModal";
-import { RisksReport } from "./RisksReport";
-import { DebtsAgingReport } from "./DebtsAgingReport";
+import Can from '../../../config/Can'
+import ability from '../../../config/ability'
+import * as local from '../../../../Shared/Assets/ar.json'
+import { downloadFile } from '../../../../Shared/Services/utils'
+
+import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
+import { Loader } from '../../../../Shared/Components/Loader'
+import ReportsModal from '../reportsModal'
+import { RisksReport } from './RisksReport'
+import { DebtsAgingReport } from './DebtsAgingReport'
+import { Tab } from '../../HeaderWithCards/cardNavbar'
+import { ReportsList } from '../../../../Shared/Components/ReportsList'
 
 import {
   getAllLoanAge,
@@ -27,11 +31,9 @@ import {
   getLoanAgeReport,
   getMonthlyReport,
   getQuarterlyReport,
-} from "../../../Services/APIs/Reports/tasaheelRisksReports";
+} from '../../../Services/APIs/Reports/tasaheelRisksReports'
 
-import { Report, ReportDetails } from "./types";
-import { Tab } from "../../HeaderWithCards/cardNavbar";
-import { ReportsList } from "../../../../Shared/Components/ReportsList";
+import { Report, ReportDetails } from './types'
 
 export const TasaheelReports = () => {
   const reportsRequests = {
@@ -57,124 +59,121 @@ export const TasaheelReports = () => {
       requestReport: generateQuarterlyReport,
       getReportDetails: getQuarterlyReport,
     },
-  };
-  const [tabs, setTabs] = useState<any[]>([]);
+  }
+  const [tabs, setTabs] = useState<any[]>([])
   const [activeTabKey, setActiveTabKey] = useState<string>(
-    tabs.length > 0 ? tabs[0].stringKey : ""
-  );
+    tabs.length > 0 ? tabs[0].stringKey : ''
+  )
   useEffect(() => {
-    const allowedTabs: Tab[] = [];
-    ability.can("tasaheelRisks", "report") &&
+    const allowedTabs: Tab[] = []
+    ability.can('tasaheelRisks', 'report') &&
       allowedTabs.push({
         header: local.tasaheelRisks,
-        stringKey: "tasaheelRisks",
-        permission: "tasaheelRisks",
-        permissionKey: "report",
-      });
+        stringKey: 'tasaheelRisks',
+        permission: 'tasaheelRisks',
+        permissionKey: 'report',
+      })
 
-    ability.can("debtsAging", "report") &&
+    ability.can('debtsAging', 'report') &&
       allowedTabs.push({
         header: local.loanAge,
-        stringKey: "loanAge",
-        permission: "debtsAging",
-        permissionKey: "report",
-      });
+        stringKey: 'loanAge',
+        permission: 'debtsAging',
+        permissionKey: 'report',
+      })
 
-    ability.can("monthlyReport", "report") &&
+    ability.can('monthlyReport', 'report') &&
       allowedTabs.push({
         header: local.monthlyReport,
-        stringKey: "monthlyReport",
-        permission: "monthlyReport",
-        permissionKey: "report",
-      });
+        stringKey: 'monthlyReport',
+        permission: 'monthlyReport',
+        permissionKey: 'report',
+      })
 
-    ability.can("quarterlyReport", "report") &&
+    ability.can('quarterlyReport', 'report') &&
       allowedTabs.push({
         header: local.quarterReport,
-        stringKey: "quarterlyReport",
-        permission: "quarterlyReport",
-        permissionKey: "report",
-      });
+        stringKey: 'quarterlyReport',
+        permission: 'quarterlyReport',
+        permissionKey: 'report',
+      })
 
-    setTabs(allowedTabs);
-    setActiveTabKey(allowedTabs[0]?.stringKey || "");
-  }, []);
+    setTabs(allowedTabs)
+    setActiveTabKey(allowedTabs[0]?.stringKey || '')
+  }, [])
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
-  const [print, setPrint] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
+  const [print, setPrint] = useState<boolean>(false)
 
-  const [reports, setReports] = useState<Report[]>([]);
-  const [reportDetails, setReportDetails] = useState<ReportDetails>();
+  const [reports, setReports] = useState<Report[]>([])
+  const [reportDetails, setReportDetails] = useState<ReportDetails>()
 
   const activeTabIndex = useCallback(() => {
     const calculatedActiveTabIndex = tabs.findIndex(
       ({ stringKey }) => stringKey === activeTabKey
-    );
-    return calculatedActiveTabIndex > -1 ? calculatedActiveTabIndex : 0;
-  }, [activeTabKey, tabs]);
+    )
+    return calculatedActiveTabIndex > -1 ? calculatedActiveTabIndex : 0
+  }, [activeTabKey, tabs])
 
   const getAllReports = async () => {
-    setIsLoading(true);
-    const res = await reportsRequests[activeTabKey].getAll();
+    setIsLoading(true)
+    const res = await reportsRequests[activeTabKey].getAll()
 
-    if (res.status === "success") {
-      setIsLoading(false);
-      setReports(res.body.files || res.body.reportFiles);
+    if (res.status === 'success') {
+      setIsLoading(false)
+      setReports(res.body.files || res.body.reportFiles)
     } else {
-      setIsLoading(false);
-      Swal.fire("error", local.searchError, "error");
-      console.log(res);
+      setIsLoading(false)
+      Swal.fire('error', local.searchError, 'error')
     }
-  };
+  }
 
   useEffect(() => {
-    tabs.length > 0 && activeTabKey && getAllReports();
-    setReports([]);
-    setPrint(false);
-  }, [tabs, activeTabKey]);
+    tabs.length > 0 && activeTabKey && getAllReports()
+    setReports([])
+    setPrint(false)
+  }, [tabs, activeTabKey])
 
   const requestReport = async (values) => {
-    setIsLoading(true);
+    setIsLoading(true)
     const date = values ? values.date : ''
     const res = await reportsRequests[activeTabKey].requestReport({
       date,
-    });
+    })
 
-    if (res.status === "success") {
-      Swal.fire("success", local.fileQueuedSuccess, "success");
-      setModalIsOpen(false);
-      setIsLoading(false);
-      getAllReports();
+    if (res.status === 'success') {
+      Swal.fire('success', local.fileQueuedSuccess, 'success')
+      setModalIsOpen(false)
+      setIsLoading(false)
+      getAllReports()
     } else {
-      setIsLoading(false);
-      Swal.fire("error", local.fileQueuedError, "error");
-      console.log(res);
+      setIsLoading(false)
+      Swal.fire('error', local.fileQueuedError, 'error')
     }
-  };
+  }
   const downloadGeneratedReport = async (id: string) => {
-    setIsLoading(true);
-    const res = await reportsRequests[activeTabKey].getReportDetails(id);
+    setIsLoading(true)
+    const res = await reportsRequests[activeTabKey].getReportDetails(id)
 
-    if (res.status === "success") {
+    if (res.status === 'success') {
       if (
-        tabs[activeTabIndex()].stringKey === "monthlyReport" ||
-        tabs[activeTabIndex()].stringKey === "quarterlyReport"
+        tabs[activeTabIndex()].stringKey === 'monthlyReport' ||
+        tabs[activeTabIndex()].stringKey === 'quarterlyReport'
       ) {
-        downloadFile(res.body.url);
+        downloadFile(res.body.url)
       } else {
-        setReportDetails(res.body);
-        setPrint(true);
-        window.print();
+        setReportDetails(res.body)
+        setPrint(true)
+        window.print()
       }
 
-      setIsLoading(false);
+      setIsLoading(false)
     } else {
-      setIsLoading(false);
-      Swal.fire("error", local.searchError, "error");
-      console.log(res);
+      setIsLoading(false)
+      Swal.fire('error', local.searchError, 'error')
     }
-  };
+  }
 
   return (
     <>
@@ -192,8 +191,8 @@ export const TasaheelReports = () => {
             pdf={{
               key: activeTabKey,
               local: tabs[activeTabIndex()].header,
-              inputs: ["date"],
-              permission: tabs[activeTabIndex()].permission || "",
+              inputs: ['date'],
+              permission: tabs[activeTabIndex()].permission || '',
             }}
             show={modalIsOpen}
             hideModal={() => setModalIsOpen(false)}
@@ -209,7 +208,7 @@ export const TasaheelReports = () => {
               <div className="d-flex justify-content-between">
                 <Card.Title>{tabs[activeTabIndex()].header}</Card.Title>
                 <Can
-                  I={tabs[activeTabIndex()].permission || ""}
+                  I={tabs[activeTabIndex()].permission || ''}
                   a={tabs[activeTabIndex()].permissionKey}
                 >
                   <Button
@@ -217,12 +216,12 @@ export const TasaheelReports = () => {
                     variant="primary"
                     onClick={() => {
                       if (
-                        tabs[activeTabIndex()].stringKey === "monthlyReport" ||
-                        tabs[activeTabIndex()].stringKey === "quarterlyReport"
+                        tabs[activeTabIndex()].stringKey === 'monthlyReport' ||
+                        tabs[activeTabIndex()].stringKey === 'quarterlyReport'
                       ) {
-                        requestReport('');
+                        requestReport('')
                       } else {
-                        setModalIsOpen(true);
+                        setModalIsOpen(true)
                       }
                     }}
                   >
@@ -243,5 +242,5 @@ export const TasaheelReports = () => {
         reportsRequests[activeTabKey].printComponent &&
         reportsRequests[activeTabKey].printComponent(reportDetails)}
     </>
-  );
-};
+  )
+}

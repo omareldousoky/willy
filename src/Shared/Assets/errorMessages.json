@@ -1,129 +1,542 @@
- {
-   "default_error":{"en" : "Error !","ar": "خطأ !"},
-    "lead_not_found":{"en":"Lead not found.","ar":"هذا العميل المحتمل غير موجود"},
-    "invalid_lead_status":{"en":"Invalid lead status.","ar":"حالة العميل المحتمل غير صحيحة"},
-    "invalid_age":{"en":"Invalid age","ar":"خطأ في السن"},
-    "invalid_phone_number":{"en":"Invalid Phone Number","ar":"خطأ في رقم الهاتف"},
-    "invalid_source":{"en":"Invalid Source","ar":"خطأ في المصدر"},
-    "invalid_business_date":{"en":"Invalid Business Date","ar":"خطأ في تاريخ الإنشاء"},
-    "invalid_customer_name":{"en":"Invalid Customer Name","ar":"خطأ في اسم العميل"},
-    "invalid_device_id":{"en":"Error in device id","ar":"خطأ في كود الجهاز"},
-    "invalid_loan_officer":{"en":"Invalid Loan officer name","ar":"خطأ في بيانات المندوب"},
-    "invalid_username":{"en":"Invalid Username","ar":"خطأ في اسم المستخدم"},
-    "inactive_user_login":{"en":"Error in login","ar":"خطأ في تسجيل الدخول"},
-    "invalid_branch_id":{"en":"Invalid branch Id","ar":"خطأ في الفرع"},
-    "invalid-date":{"en":"Invalid Date","ar":"خطأ في التاريخ"},
-    "invalid_data":{"en":"Invalid data","ar":"خطأ في البيانات"},
-    "internal_error":{"en":"Sorry, something went wrong. Please contact customer support.","ar":"عفوًا، حدث خطأ فني، برجاء التواصل مع خدمة العملاء."},
-    "unauthorized":{"en":"You are not authorized to perform this action.","ar":"غير مسموح لك بهذه الخاصية"},
-    "missing_role_id":{"en":"Users with provided roles cannot be retrieved.","ar":"لا يوجد مستخدمين بالوظائف المختارة."},
-    "duplicate_loan_usage":{"en":"This loan usage already exists","ar":"غرض القرض موجود بالفعل."},
-    "invalid_loan_id":{"en":"Invalid Loan ID","ar":"كود القرض غير موجود"},
-    "not_found":{"en":"Not Found","ar":"غير موجود"},
-    "branch_context":{"en":"Branch is incorrect, please choose the correct branch.","ar":"الفرع خاطيء، برجاء اختيار الفرع المناسب"},
-    "invalid_password":{"en":"Password must be at least 8 characters, all english and contain at least 1 uppercase and 1 special character","ar":"كلمة المرور يجب أن تكون ٨ حروف علي الأقل، وأن تحتوي على حرف كبير ورمز خاص ورقم"},
-    "invalid_customer":{"en":"Invalid Customer","ar":"هذا العميل غير صحيح"},
-    "move_missing_customers":{"en":"All customers and grantors of the same loan should be assigned to the same loan officer.","ar":"سوف يتم نقل كل المستخدمين المرتبطين بهذا العميل لنفس القرض"},
-    "invalid_payment_type":{"en":"Invalid Payment Type","ar":"نوع السداد خاطئ"},
-    "customer_not_in_age":{"en":"Customer is not in age.","ar":"غير مسموح للعملاء خارج نطاق السن المسموح به"},
-    "invalid_customer_key":{"en":"Invalid Customer Key","ar":"كود العميل غير صحيح"},
-    "invalid_branches_ids":{"en":"Invalid Branch ID","ar":"كود الفروع غير صحيح"},
-    "empty_transactions_array":{"en":"No transactions found.","ar":"لا توجد تعاملات"},
-    "hr_code_exists_in_another_user":{"en":"Code exists for another user","ar":"هذا الكود موجود لعميل آخر"},
-    "invalid_page_token":{"en":"Invalid Page token","ar":"كود الترميز لهذه الصفحة غير صحيح"},
-    "no-data":{"en":"No data","ar":"لا توجد بيانات"},
-    "invalid_beneficiary_type":{"en":"Invalid Beneficiary Type","ar":"نوع المستفيد من القرض غير صحيح"},
-    "invalid_penalty_policy_date":{"en":"Invalid penalty date","ar":"تاريخ الغرامة غير صحيح"},
-    "doc_read_failed":{"en":"Error reading file","ar":"خطأ في قراءة الملف"},
-    "invalid_user_id":{"en":"Invalid user ID","ar":"كود المستخدم غير صحيح"},
-    "invalid_customer_id":{"en":"Invalid customer ID","ar":"كود العميل غير صحيح"},
-    "duplicate_manual_payment":{"en":"Duplicate Manual Payment","ar":"عملية دفع يدوية مكررة"},
-    "loan_status_not_pending":{"en":"Loan status is not pending","ar":"هذا القرض ليس قيد التحقيق."},
-    "invalid_installment_payment":{"en":"Invalid Installment Payment","ar":"عملية دفع للقسط غير صحيحة"},
-    "invalid_installment_status":{"en":"Invalid Installment Status","ar":"حالة القسط غير صحيحة"},
-    "invalid_installment_date":{"en":"Invalid Installment Date","ar":"تاريخ القسط غير صحيح"},
-    "application-written-off":{"en":"Application is written off","ar":"هذا القرض مشطوب"},
-    "application-doubtful":{"en":"Application is doubtful","ar":"هذا القرض مشكوك به"},
-    "invalid_action":{"en":"Invalid action","ar":"عملية خاطئة"},
-    "earlypayment-remaining-principal-amount":{"en":"Paid less than required early payment amount","ar":"القيمه المحصله من العميل اقل من قيمه السداد المعجل"},
-    "duplicate_branch":{"en":"Duplicate Branch","ar":"فرع مكرر"},
-    "duplicate":{"en":"Duplicate","ar":"مكرر"},
-    "invalid_id":{"en":"Invalid ID","ar":"كود تعريف غير صحيح"},
-    "exceeded_max_limit":{"en":"You have exceeded the maximum limit","ar":"لقد تخطيت الحد الأقصى"},
-    "product_not_in_branch":{"en":"This product is not found in the branch","ar":"هذا المنتج غير موجود بالفرع"},
-    "invalid_Header":{"en":"Invalid Header","ar":"الواجهة غير صحيحة"},
-    "duplicate_lead":{"en":"Duplicate lead","ar":"هذا العميل المحتمل  مكرر"},
-    "loan_officer_has_customers":{"en":"Officer has customers","ar":"هذا المندوب لديه عملاء"},
-    "loan_officer_multi_branch":{"en":"Officer in multiple branches","ar":"هذا المندوب لديه فرع بالفعل"},
-    "customer_blocked":{"en":"Customer blocked","ar":"هذا العميل محظور"},
-    "invalid_application_id":{"en":"Invalid Application ID","ar":"كود الطلب غير صحيح"},
-    "application_not_found":{"en":"Application Not Found","ar":"هذا القرض غير موجود"},
-    "customer_already_guarantor":{"en":"Customer is already a grantor","ar":"هذا العميل موجود بالفعل كضامن"},
-    "not_allowed_multi_guarantee":{"en":"Grantors are not allowed more than one loan.","ar":"لا يسمح للضامن بضمان أكثر من قرض"},
-    "customer_not_allowed_multi_loans":{"en":"Customers are not allowed more than one loan.","ar":"لا يسمح للعملاء بأكثر من قرض"},
-    "principal_must_be_in_range":{"en":"Principal must be in the set range.","ar":"يجب ان يكون أصل القرض في النطاق المسموح"},
-    "number_of_installments_must_be_in_range":{"en":"Number of installments must be in the set range.","ar":"عدد الأقساط يجب أن يكون في النطاق المسموح به"},
-    "group_number_must_be_in_range":{"en":"Group number must be in the set range","ar":"العدد بالمجموعة يجب أن يكون في النطاق المسموح به"},
-    "customers_not_same_loan_officer":{"en":"Customers don't belong to the same officer.","ar":"العملاء لا يتبعون نفس الموظف"},
-    "must_be_leader_in_group":{"en":"Group Leader must be assigned.","ar":"يجب أن يتم تعيين مدير للمجموعة"},
-    "guarantor_with_different_loanofficer":{"en":"This Grantor is already with another officer.","ar":"يجب ان جميع الضمان للقرض بكون لديهم نفس المندوب"},
-    "invalid_no_of_guarantors":{"en":"Invalid number of grantors","ar":"عدد الضامنين غير صحيح"},
-    "application_not_issued":{"en":"Application not issued","ar":"القرض غير مصدر بعد"},
-    "loan_Is_doubtful":{"en":"Doubtful Loan","ar":"القرض مشكوك به"},
-    "loan_must_be_doubtful":{"en":"Loan must be doubtful","ar":"يجب أن يكون القرض مشكوك به"},
-    "Leader_cant_split_from_loan":{"en":"Leader can't leave from loan group.","ar":"قائد المجموعة لا يمكن له الخروج منها."},
-    "no_actions_to_rollback":{"en":"No actions to roll back.","ar":"لا توجد أي تحديثات للرجوع عنها"},
-    "action_cannot_be_rolledback":{"en":"Action cannot be rolled back","ar":"هذه عملية لا يمكن التراجع عنها."},
-    "not_latest_action_cannot_be_rolledback":{"en":"Last action cannot be rolled back","ar":"العملية الأخيرة لا يمكن التراجع عنها"},
-    "cannot_rollback_cancelled_loan":{"en":"No roll back for cancelled loans","ar":"لا يمكن الرجوع عن قرض ملغي"},
-    "cannot_rollback_paid_loan":{"en":"No roll back for paid loans","ar":"لا يمكن التراجع عن قرض مدفوع"},
-    "action_to_rollback_not_found":{"en":"Action to roll back is not found","ar":"العملية التي تريد الرجوع عنها غير موجودة"},
-    "reschedule_exceeded_number_of_restructuring":{"en":"Restructuring actions limit exceeded.","ar":"لقد تجاوزت الحد الاقصي للجدوله / الترحيلات"},
-    "reschedule_wrong_fee_destination":{"en":"Wrong Rescheduling Fees Destination","ar":"مكان فائدة الترحيل خاطئة"},
-    "reschedule_num_of_installments_more_than_remaining_installments":{"en":"Number of installments to be rescheduled is less than the remaining installments.","ar":"الأقساط المراد جدولتها أكثر من عدد الأقساط المتبقية."},
-    "reschedule_rollback_future_payment_before_postponing":{"en":"Roll back future payments before postponing.","ar":"يجب التراجع عن المدفوعات المستقبلية قبل التأجيل."},
-    "reschedule_chosen_installment_is_unpaid":{"en":"The chosen installment is unpaid.","ar":"القسط الذي اخترته غير مدفوع."},
-    "reschedule_no_unpaid_installment_found":{"en":"No unpaid installments found to be rescheduled.","ar":"لا يوجد أقساط غير مدفوعة لجدولتها."},
-    "reschedule_num_of_installments_less_than_original":{"en":"Number of installments to reschedule is less than the original.","ar":"عدد الأقساط المراد جدولتها أقل من العدد الأصلي."},
-    "reschedule_both_installments_not_start_with_same_serial":{"en":"Both installments don't start with the same serial.","ar":"القسطين لا يبدأو بنفس الكود المتسلسل"},
-    "reschedule_must_rollback_future_installment":{"en":"Rescheduled future installments must be rolled back.","ar":"يجب التراجع عن جدولة أي أقساط قادمة."},
-    "reschedule_cannot_pay_more_than_principal":{"en":"Payment more than principal value is not allowed.","ar":"يجب ان يكون الاصل المتبقي متساوي بعد الجدوله "},
-    "reschedule_cannot_pay_than_required_fee":{"en":"Can't pay more fees than required","ar":"لا يمكن أن تدفع فائدة أكثر من المطلوبة"},
-    "reschedule_date_and_payment_date_not_chronological":{"en":"Reschedule and payment dates are not choronological.","ar":"تاريخ الجدولة والدفع غير متتاليين."},
-    "reschedule_invalid_installment_value":{"en":"Invalid rescheduled installment value.","ar":"قيمة القسط المعاد جدولته غير صحيحة"},
-    "reschedule_fees_plus_principal_must_be_eq_installments":{"en":"Reschedule and principal fees should be equal across installments.","ar":"تكلفة إعادة الجدولة والقرض الأساسي يجب أن تكون متساوية عبر الأقساط."},
-    "reschedule_installment_id_must_be_serial":{"en":"Rescheduled Installment ID must be serial.","ar":"كود القسط المجدول يجب أن يكون متسلسلًا"},
-    "cannot_free_reschedule_partial_paid_installment":{"en":"Partially paid installments cannot be rescheduled.","ar":"لا يمكن إعادة جدولة الأقساط المدفوعة جزئيًا."},
-    "reschedule_cannot_edit_paid_installments":{"en":"Paid installments cannot be edited in reschedule.","ar":"لا يمكن تعديل الأقساط المدفوعة في الجدولة"},
-    "unpaid_installment_must_remain_unpaid_or_rescheduled":{"en":"Unpaid installment must remain unpaid or rescheduled.","ar":"القسط غير المدفوعة يجب أن يبقى غير مدفوع أو يتم إعادة جدولته."},
-    "rescheduled_installments_cannot_be_paid":{"en":"Rescheduled Installments cannot be paid.","ar":"الأقساط المعاد جدولتها لا يمكن دفعها."},
-    "reschedule_paid_installments_must_be_same":{"en":"Paid installment reschedule must be the same.","ar":"إعادة جدولة الأقساط المدفوعة يجب أن تكون مماثلة"},
-    "reschedule_total_principal_must_be_same":{"en":"Total principal reschedule must be the same.","ar":"إعادة جدولة إجمالي القرض الأساسي يجب أن تكون مماثلة"},
-    "missing_branch_manager_or_manager_visit_date":{"en":"Missing input of Branch Manager or visit date.","ar":"بيانات مدير الفرع أو تاريخ الزيارة غير مكتملة"},
-    "invalid_branch_manager_id":{"en":"Invalid Branch Manager ID","ar":"خطأ بتعريف مدير الفرع"},
-    "early_pay_partially_paid":{"en":"Can't early pay with an installlment partially paid","ar":"لا يمكن سداد معجل لقرض لديه قسط مدفوع جزئي"},
-    "application_locked":{"en":"This application is locked, you can't edit any of its details.","ar":"هذا الطلب مغلق مؤقتاً، لا يمكنك تغيير أي من بياناته الأن , حاول مره أخري"},
-    "quarter_snapshot_missing":{"en":"The quarter snapshot needed to produce the report is missing.","ar":"نسخة البيانات ربع السنوية غير موجودة"},
-    "group_leader_exists": {"en":"Group leader is already exists","ar":"قائد المجموعة موجود بالفعل "},
-    "group_officer_exists": {"en":"Group officer is already exists","ar":"مندوب موجود بالفعل "},
-    "wrong_password": {"en":"Current password is incorrect","ar":"كلمة المرور الحالية خطأ"},
-    "customer_not_over_65": {"en": "Customer is younger than 65 years old", "ar": "سن العميل أقل من ٦٥ سنة"},
-    "customer_not_deceased": {"en":"Customer must be deceased","ar":"العميل غير متوفي"},
-    "sector_not_found" : {"en": "sector not found","ar": "قطاع الأعمال غير موجود"},
-    "activity_not_found":{"en": "activity not found ","ar": "نوع النشاط غير موجود"},
-    "invalid_close_date_in_future":{"en":"The financial closing date is in the future","ar":"تاريخ الإقفال المالي في المستقبل"},
-    "invalid_close_date_pending_actions":{"en":"There are pending actions before that date, please close them first","ar":"يوجد حركات معلقة قبل هذا التاريخ، برجاء إغلاقها أولاً"},
-    "invalid_system_is_financially_closed":{"en":"The system is financially closed at this date","ar":"النظام مغلق ماليا في هذا التاريخ"},
-    "cannot_split_rescheduled_loan": {"en":"Can't split a loan that has been rescheduled" ,"ar":"لا يمكن فصل قرض مجدول"},
-    "cannot_split_partially_paid": {"en":"Can't split a loan that has partial payments" ,"ar":"لا يمكن فصل قرض لديه سداد جزئي"},
-    "insufficient-early-payment-amount":{"en":"Must pay full early payment required amount", "ar":"يجب دفع مبلغ السداد المعجل كامل"},
-    "invalid_block_date_in_future":{"en":"The financial blocking date is in the future","ar":"تاريخ الحجب المالي في المستقبل"},
-    "invalid_system_is_financially_blocked":{"en":"The system is financially blocked at this date","ar":"النظام محجوب ماليا في هذا التاريخ"},
-    "invalid_system_is_not_financially_blocked":{"en":"The system is not financially blocked at this date","ar":"النظام غير محجوب ماليا في هذا التاريخ"},
-    "customer_is_defaulting": {"en":"This customer is a defaulting customer", "ar": "هذا العميل موجود في قائمة الشئون القانونية"},
-    "cannot_early_pay_nano_loan":{"en":"Can't early pay nano loan", "ar":"لا يوجد سداد معجل لقرض نانو"},
-    "wrong_customer_and_product_types": {"en":"Wrong Customer and  Product Types", "ar":"نوع العميل والمنتج خاطئ"},
-    "user_not_researcher": {"en":"the user entered is not a researcher", "ar": "باحث خاطئ"},
-    "sme_min_one_entitled_to_sign":{  "en":"entitled to sign number should be at least one","ar": " عدد من له حق التوقيع يجب ان يكون واحد على الاقل"},
-    "invalid_close_date_manual_pending_actions":{"en":"There are manual pending actions before that date, please close them first","ar":"يوجد حركات يدوية معلقة قبل هذا التاريخ، برجاء إغلاقها أولاً"}
+{
+  "default_error": {
+    "en": "Error !",
+    "ar": "خطأ !"
+  },
+  "lead_not_found": {
+    "en": "Lead not found.",
+    "ar": "هذا العميل المحتمل غير موجود"
+  },
+  "invalid_lead_status": {
+    "en": "Invalid lead status.",
+    "ar": "حالة العميل المحتمل غير صحيحة"
+  },
+  "invalid_age": {
+    "en": "Invalid age",
+    "ar": "خطأ في السن"
+  },
+  "invalid_phone_number": {
+    "en": "Invalid Phone Number",
+    "ar": "خطأ في رقم الهاتف"
+  },
+  "invalid_source": {
+    "en": "Invalid Source",
+    "ar": "خطأ في المصدر"
+  },
+  "invalid_business_date": {
+    "en": "Invalid Business Date",
+    "ar": "خطأ في تاريخ الإنشاء"
+  },
+  "invalid_customer_name": {
+    "en": "Invalid Customer Name",
+    "ar": "خطأ في اسم العميل"
+  },
+  "invalid_device_id": {
+    "en": "Error in device id",
+    "ar": "خطأ في كود الجهاز"
+  },
+  "invalid_loan_officer": {
+    "en": "Invalid Loan officer name",
+    "ar": "خطأ في بيانات المندوب"
+  },
+  "invalid_username": {
+    "en": "Invalid Username",
+    "ar": "خطأ في اسم المستخدم"
+  },
+  "inactive_user_login": {
+    "en": "Error in login",
+    "ar": "خطأ في تسجيل الدخول"
+  },
+  "invalid_branch_id": {
+    "en": "Invalid branch Id",
+    "ar": "خطأ في الفرع"
+  },
+  "invalid-date": {
+    "en": "Invalid Date",
+    "ar": "خطأ في التاريخ"
+  },
+  "invalid_data": {
+    "en": "Invalid data",
+    "ar": "خطأ في البيانات"
+  },
+  "internal_error": {
+    "en": "Sorry, something went wrong. Please contact customer support.",
+    "ar": "عفوًا، حدث خطأ فني، برجاء التواصل مع خدمة العملاء."
+  },
+  "unauthorized": {
+    "en": "You are not authorized to perform this action.",
+    "ar": "غير مسموح لك بهذه الخاصية"
+  },
+  "missing_role_id": {
+    "en": "Users with provided roles cannot be retrieved.",
+    "ar": "لا يوجد مستخدمين بالوظائف المختارة."
+  },
+  "duplicate_loan_usage": {
+    "en": "This loan usage already exists",
+    "ar": "غرض القرض موجود بالفعل."
+  },
+  "invalid_loan_id": {
+    "en": "Invalid Loan ID",
+    "ar": "كود القرض غير موجود"
+  },
+  "not_found": {
+    "en": "Not Found",
+    "ar": "غير موجود"
+  },
+  "branch_context": {
+    "en": "Branch is incorrect, please choose the correct branch.",
+    "ar": "الفرع خاطيء، برجاء اختيار الفرع المناسب"
+  },
+  "invalid_password": {
+    "en": "Password must be at least 8 characters, all english and contain at least 1 uppercase and 1 special character",
+    "ar": "كلمة المرور يجب أن تكون ٨ حروف علي الأقل، وأن تحتوي على حرف كبير ورمز خاص ورقم"
+  },
+  "invalid_customer": {
+    "en": "Invalid Customer",
+    "ar": "هذا العميل غير صحيح"
+  },
+  "move_missing_customers": {
+    "en": "All customers and grantors of the same loan should be assigned to the same loan officer.",
+    "ar": "سوف يتم نقل كل المستخدمين المرتبطين بهذا العميل لنفس القرض"
+  },
+  "invalid_payment_type": {
+    "en": "Invalid Payment Type",
+    "ar": "نوع السداد خاطئ"
+  },
+  "customer_not_in_age": {
+    "en": "Customer is not in age.",
+    "ar": "غير مسموح للعملاء خارج نطاق السن المسموح به"
+  },
+  "invalid_customer_key": {
+    "en": "Invalid Customer Key",
+    "ar": "كود العميل غير صحيح"
+  },
+  "invalid_branches_ids": {
+    "en": "Invalid Branch ID",
+    "ar": "كود الفروع غير صحيح"
+  },
+  "empty_transactions_array": {
+    "en": "No transactions found.",
+    "ar": "لا توجد تعاملات"
+  },
+  "hr_code_exists_in_another_user": {
+    "en": "Code exists for another user",
+    "ar": "هذا الكود موجود لعميل آخر"
+  },
+  "invalid_page_token": {
+    "en": "Invalid Page token",
+    "ar": "كود الترميز لهذه الصفحة غير صحيح"
+  },
+  "no-data": {
+    "en": "No data",
+    "ar": "لا توجد بيانات"
+  },
+  "invalid_beneficiary_type": {
+    "en": "Invalid Beneficiary Type",
+    "ar": "نوع المستفيد من القرض غير صحيح"
+  },
+  "invalid_penalty_policy_date": {
+    "en": "Invalid penalty date",
+    "ar": "تاريخ الغرامة غير صحيح"
+  },
+  "doc_read_failed": {
+    "en": "Error reading file",
+    "ar": "خطأ في قراءة الملف"
+  },
+  "invalid_user_id": {
+    "en": "Invalid user ID",
+    "ar": "كود المستخدم غير صحيح"
+  },
+  "invalid_customer_id": {
+    "en": "Invalid customer ID",
+    "ar": "كود العميل غير صحيح"
+  },
+  "duplicate_manual_payment": {
+    "en": "Duplicate Manual Payment",
+    "ar": "عملية دفع يدوية مكررة"
+  },
+  "loan_status_not_pending": {
+    "en": "Loan status is not pending",
+    "ar": "هذا القرض ليس قيد التحقيق."
+  },
+  "invalid_installment_payment": {
+    "en": "Invalid Installment Payment",
+    "ar": "عملية دفع للقسط غير صحيحة"
+  },
+  "invalid_installment_status": {
+    "en": "Invalid Installment Status",
+    "ar": "حالة القسط غير صحيحة"
+  },
+  "invalid_installment_date": {
+    "en": "Invalid Installment Date",
+    "ar": "تاريخ القسط غير صحيح"
+  },
+  "application-written-off": {
+    "en": "Application is written off",
+    "ar": "هذا القرض مشطوب"
+  },
+  "application-doubtful": {
+    "en": "Application is doubtful",
+    "ar": "هذا القرض مشكوك به"
+  },
+  "invalid_action": {
+    "en": "Invalid action",
+    "ar": "عملية خاطئة"
+  },
+  "earlypayment-remaining-principal-amount": {
+    "en": "Paid less than required early payment amount",
+    "ar": "القيمه المحصله من العميل اقل من قيمه السداد المعجل"
+  },
+  "duplicate_branch": {
+    "en": "Duplicate Branch",
+    "ar": "فرع مكرر"
+  },
+  "duplicate": {
+    "en": "Duplicate",
+    "ar": "مكرر"
+  },
+  "invalid_id": {
+    "en": "Invalid ID",
+    "ar": "كود تعريف غير صحيح"
+  },
+  "exceeded_max_limit": {
+    "en": "You have exceeded the maximum limit",
+    "ar": "لقد تخطيت الحد الأقصى"
+  },
+  "product_not_in_branch": {
+    "en": "This product is not found in the branch",
+    "ar": "هذا المنتج غير موجود بالفرع"
+  },
+  "invalid_Header": {
+    "en": "Invalid Header",
+    "ar": "الواجهة غير صحيحة"
+  },
+  "duplicate_lead": {
+    "en": "Duplicate lead",
+    "ar": "هذا العميل المحتمل  مكرر"
+  },
+  "loan_officer_has_customers": {
+    "en": "Officer has customers",
+    "ar": "هذا المندوب لديه عملاء"
+  },
+  "loan_officer_multi_branch": {
+    "en": "Officer in multiple branches",
+    "ar": "هذا المندوب لديه فرع بالفعل"
+  },
+  "customer_blocked": {
+    "en": "Customer blocked",
+    "ar": "هذا العميل محظور"
+  },
+  "invalid_application_id": {
+    "en": "Invalid Application ID",
+    "ar": "كود الطلب غير صحيح"
+  },
+  "application_not_found": {
+    "en": "Application Not Found",
+    "ar": "هذا القرض غير موجود"
+  },
+  "customer_already_guarantor": {
+    "en": "Customer is already a grantor",
+    "ar": "هذا العميل موجود بالفعل كضامن"
+  },
+  "not_allowed_multi_guarantee": {
+    "en": "Grantors are not allowed more than one loan.",
+    "ar": "لا يسمح للضامن بضمان أكثر من قرض"
+  },
+  "customer_not_allowed_multi_loans": {
+    "en": "Customers are not allowed more than one loan.",
+    "ar": "لا يسمح للعملاء بأكثر من قرض"
+  },
+  "principal_must_be_in_range": {
+    "en": "Principal must be in the set range.",
+    "ar": "يجب ان يكون أصل القرض في النطاق المسموح"
+  },
+  "number_of_installments_must_be_in_range": {
+    "en": "Number of installments must be in the set range.",
+    "ar": "عدد الأقساط يجب أن يكون في النطاق المسموح به"
+  },
+  "group_number_must_be_in_range": {
+    "en": "Group number must be in the set range",
+    "ar": "العدد بالمجموعة يجب أن يكون في النطاق المسموح به"
+  },
+  "customers_not_same_loan_officer": {
+    "en": "Customers don't belong to the same officer.",
+    "ar": "العملاء لا يتبعون نفس الموظف"
+  },
+  "must_be_leader_in_group": {
+    "en": "Group Leader must be assigned.",
+    "ar": "يجب أن يتم تعيين مدير للمجموعة"
+  },
+  "guarantor_with_different_loanofficer": {
+    "en": "This Grantor is already with another officer.",
+    "ar": "يجب ان جميع الضمان للقرض بكون لديهم نفس المندوب"
+  },
+  "invalid_no_of_guarantors": {
+    "en": "Invalid number of grantors",
+    "ar": "عدد الضامنين غير صحيح"
+  },
+  "application_not_issued": {
+    "en": "Application not issued",
+    "ar": "القرض غير مصدر بعد"
+  },
+  "loan_Is_doubtful": {
+    "en": "Doubtful Loan",
+    "ar": "القرض مشكوك به"
+  },
+  "loan_must_be_doubtful": {
+    "en": "Loan must be doubtful",
+    "ar": "يجب أن يكون القرض مشكوك به"
+  },
+  "Leader_cant_split_from_loan": {
+    "en": "Leader can't leave from loan group.",
+    "ar": "قائد المجموعة لا يمكن له الخروج منها."
+  },
+  "no_actions_to_rollback": {
+    "en": "No actions to roll back.",
+    "ar": "لا توجد أي تحديثات للرجوع عنها"
+  },
+  "action_cannot_be_rolledback": {
+    "en": "Action cannot be rolled back",
+    "ar": "هذه عملية لا يمكن التراجع عنها."
+  },
+  "not_latest_action_cannot_be_rolledback": {
+    "en": "Last action cannot be rolled back",
+    "ar": "العملية الأخيرة لا يمكن التراجع عنها"
+  },
+  "cannot_rollback_cancelled_loan": {
+    "en": "No roll back for cancelled loans",
+    "ar": "لا يمكن الرجوع عن قرض ملغي"
+  },
+  "cannot_rollback_paid_loan": {
+    "en": "No roll back for paid loans",
+    "ar": "لا يمكن التراجع عن قرض مدفوع"
+  },
+  "action_to_rollback_not_found": {
+    "en": "Action to roll back is not found",
+    "ar": "العملية التي تريد الرجوع عنها غير موجودة"
+  },
+  "reschedule_exceeded_number_of_restructuring": {
+    "en": "Restructuring actions limit exceeded.",
+    "ar": "لقد تجاوزت الحد الاقصي للجدوله / الترحيلات"
+  },
+  "reschedule_wrong_fee_destination": {
+    "en": "Wrong Rescheduling Fees Destination",
+    "ar": "مكان فائدة الترحيل خاطئة"
+  },
+  "reschedule_num_of_installments_more_than_remaining_installments": {
+    "en": "Number of installments to be rescheduled is less than the remaining installments.",
+    "ar": "الأقساط المراد جدولتها أكثر من عدد الأقساط المتبقية."
+  },
+  "reschedule_rollback_future_payment_before_postponing": {
+    "en": "Roll back future payments before postponing.",
+    "ar": "يجب التراجع عن المدفوعات المستقبلية قبل التأجيل."
+  },
+  "reschedule_chosen_installment_is_unpaid": {
+    "en": "The chosen installment is unpaid.",
+    "ar": "القسط الذي اخترته غير مدفوع."
+  },
+  "reschedule_no_unpaid_installment_found": {
+    "en": "No unpaid installments found to be rescheduled.",
+    "ar": "لا يوجد أقساط غير مدفوعة لجدولتها."
+  },
+  "reschedule_num_of_installments_less_than_original": {
+    "en": "Number of installments to reschedule is less than the original.",
+    "ar": "عدد الأقساط المراد جدولتها أقل من العدد الأصلي."
+  },
+  "reschedule_both_installments_not_start_with_same_serial": {
+    "en": "Both installments don't start with the same serial.",
+    "ar": "القسطين لا يبدأو بنفس الكود المتسلسل"
+  },
+  "reschedule_must_rollback_future_installment": {
+    "en": "Rescheduled future installments must be rolled back.",
+    "ar": "يجب التراجع عن جدولة أي أقساط قادمة."
+  },
+  "reschedule_cannot_pay_more_than_principal": {
+    "en": "Payment more than principal value is not allowed.",
+    "ar": "يجب ان يكون الاصل المتبقي متساوي بعد الجدوله "
+  },
+  "reschedule_cannot_pay_than_required_fee": {
+    "en": "Can't pay more fees than required",
+    "ar": "لا يمكن أن تدفع فائدة أكثر من المطلوبة"
+  },
+  "reschedule_date_and_payment_date_not_chronological": {
+    "en": "Reschedule and payment dates are not choronological.",
+    "ar": "تاريخ الجدولة والدفع غير متتاليين."
+  },
+  "reschedule_invalid_installment_value": {
+    "en": "Invalid rescheduled installment value.",
+    "ar": "قيمة القسط المعاد جدولته غير صحيحة"
+  },
+  "reschedule_fees_plus_principal_must_be_eq_installments": {
+    "en": "Reschedule and principal fees should be equal across installments.",
+    "ar": "تكلفة إعادة الجدولة والقرض الأساسي يجب أن تكون متساوية عبر الأقساط."
+  },
+  "reschedule_installment_id_must_be_serial": {
+    "en": "Rescheduled Installment ID must be serial.",
+    "ar": "كود القسط المجدول يجب أن يكون متسلسلًا"
+  },
+  "cannot_free_reschedule_partial_paid_installment": {
+    "en": "Partially paid installments cannot be rescheduled.",
+    "ar": "لا يمكن إعادة جدولة الأقساط المدفوعة جزئيًا."
+  },
+  "reschedule_cannot_edit_paid_installments": {
+    "en": "Paid installments cannot be edited in reschedule.",
+    "ar": "لا يمكن تعديل الأقساط المدفوعة في الجدولة"
+  },
+  "unpaid_installment_must_remain_unpaid_or_rescheduled": {
+    "en": "Unpaid installment must remain unpaid or rescheduled.",
+    "ar": "القسط غير المدفوعة يجب أن يبقى غير مدفوع أو يتم إعادة جدولته."
+  },
+  "rescheduled_installments_cannot_be_paid": {
+    "en": "Rescheduled Installments cannot be paid.",
+    "ar": "الأقساط المعاد جدولتها لا يمكن دفعها."
+  },
+  "reschedule_paid_installments_must_be_same": {
+    "en": "Paid installment reschedule must be the same.",
+    "ar": "إعادة جدولة الأقساط المدفوعة يجب أن تكون مماثلة"
+  },
+  "reschedule_total_principal_must_be_same": {
+    "en": "Total principal reschedule must be the same.",
+    "ar": "إعادة جدولة إجمالي القرض الأساسي يجب أن تكون مماثلة"
+  },
+  "missing_branch_manager_or_manager_visit_date": {
+    "en": "Missing input of Branch Manager or visit date.",
+    "ar": "بيانات مدير الفرع أو تاريخ الزيارة غير مكتملة"
+  },
+  "invalid_branch_manager_id": {
+    "en": "Invalid Branch Manager ID",
+    "ar": "خطأ بتعريف مدير الفرع"
+  },
+  "early_pay_partially_paid": {
+    "en": "Can't early pay with an installlment partially paid",
+    "ar": "لا يمكن سداد معجل لقرض لديه قسط مدفوع جزئي"
+  },
+  "application_locked": {
+    "en": "This application is locked, you can't edit any of its details.",
+    "ar": "هذا الطلب مغلق مؤقتاً، لا يمكنك تغيير أي من بياناته الأن , حاول مره أخري"
+  },
+  "quarter_snapshot_missing": {
+    "en": "The quarter snapshot needed to produce the report is missing.",
+    "ar": "نسخة البيانات ربع السنوية غير موجودة"
+  },
+  "group_leader_exists": {
+    "en": "Group leader is already exists",
+    "ar": "قائد المجموعة موجود بالفعل "
+  },
+  "group_officer_exists": {
+    "en": "Group officer is already exists",
+    "ar": "مندوب موجود بالفعل "
+  },
+  "wrong_password": {
+    "en": "Current password is incorrect",
+    "ar": "كلمة المرور الحالية خطأ"
+  },
+  "customer_not_over_65": {
+    "en": "Customer is younger than 65 years old",
+    "ar": "سن العميل أقل من ٦٥ سنة"
+  },
+  "customer_not_deceased": {
+    "en": "Customer must be deceased",
+    "ar": "العميل غير متوفي"
+  },
+  "sector_not_found": {
+    "en": "sector not found",
+    "ar": "قطاع الأعمال غير موجود"
+  },
+  "activity_not_found": {
+    "en": "activity not found ",
+    "ar": "نوع النشاط غير موجود"
+  },
+  "invalid_close_date_in_future": {
+    "en": "The financial closing date is in the future",
+    "ar": "تاريخ الإقفال المالي في المستقبل"
+  },
+  "invalid_close_date_pending_actions": {
+    "en": "There are pending actions before that date, please close them first",
+    "ar": "يوجد حركات معلقة قبل هذا التاريخ، برجاء إغلاقها أولاً"
+  },
+  "invalid_system_is_financially_closed": {
+    "en": "The system is financially closed at this date",
+    "ar": "النظام مغلق ماليا في هذا التاريخ"
+  },
+  "cannot_split_rescheduled_loan": {
+    "en": "Can't split a loan that has been rescheduled",
+    "ar": "لا يمكن فصل قرض مجدول"
+  },
+  "cannot_split_partially_paid": {
+    "en": "Can't split a loan that has partial payments",
+    "ar": "لا يمكن فصل قرض لديه سداد جزئي"
+  },
+  "insufficient-early-payment-amount": {
+    "en": "Must pay full early payment required amount",
+    "ar": "يجب دفع مبلغ السداد المعجل كامل"
+  },
+  "customer_is_defaulting": {
+    "en": "This customer is a defaulting customer",
+    "ar": "هذا العميل موجود في قائمة الشئون القانونية"
+  },
+  "customer_details_not_filled": {
+    "en": "Please fill all the required details before adding the customer to the legal affairs list",
+    "ar": "برجاء املاء البيانات اللازمه للعميل للامكانيه من اضافته للشئون القانونيه"
+  },
+  "settlement_status_reviewed": {
+    "en": "Can't update settlement with status reviewed",
+    "ar": "لا يمكن تحديث مصالحة تم مراجعتها"
+  },
+  "can_not_delete_defaulting_customer": {
+    "en": "Can't delete defaulting customer with financial manager approval",
+    "ar": "لا يمكن مسح عميل متأخر تم مراجعته من المدير المالي"
+  },
+  "invalid_block_date_in_future": {
+    "en": "The financial blocking date is in the future",
+    "ar": "تاريخ الحجب المالي في المستقبل"
+  },
+  "invalid_system_is_financially_blocked": {
+    "en": "The system is financially blocked at this date",
+    "ar": "النظام محجوب ماليا في هذا التاريخ"
+  },
+  "invalid_system_is_not_financially_blocked": {
+    "en": "The system is not financially blocked at this date",
+    "ar": "النظام غير محجوب ماليا في هذا التاريخ"
+  },
+  "invalid_file_format": {
+    "en": "Invalid file format",
+    "ar": "الملف المرفوع ليس صحيح"
+  },
+  "files_size_too_big": {
+    "en": "Files uploaded are too big",
+    "ar": "عفوا الملفات المرفوعة اكبر من الحجم المسموح به"
+  },
+  "cannot_early_pay_nano_loan": {
+    "en": "Can't early pay nano loan",
+    "ar": "لا يوجد سداد معجل لقرض نانو"
+  },
+  "wrong_customer_and_product_types": {
+    "en": "Wrong Customer and  Product Types",
+    "ar": "نوع العميل والمنتج خاطئ"
+  },
+  "user_not_researcher": {
+    "en": "the user entered is not a researcher",
+    "ar": "باحث خاطئ"
+  },
+  "sme_min_one_entitled_to_sign": {
+    "en": "entitled to sign number should be at least one",
+    "ar": " عدد من له حق التوقيع يجب ان يكون واحد على الاقل"
+  },
+  "invalid_close_date_pending_manual_actions": {
+    "en": "There are manual pending actions before that date, please close them first",
+    "ar": "يوجد حركات يدوية معلقة قبل هذا التاريخ، برجاء إغلاقها أولاً"
+  },
+  "customer_has_death_certificate": {
+    "en": "customer has a death certificate",
+    "ar": "العميل لديه شهادة وفاة"
+  },
+  "invalid_close_date_manual_pending_actions": {
+    "en": "There are manual pending actions before that date, please close them first",
+    "ar": "يوجد حركات يدوية معلقة قبل هذا التاريخ، برجاء إغلاقها أولاً"
+  },
+  "earlypayment_blocked_loan_product": {
+    "en": "Can't pay early payment for this loan product",
+    "ar": "لا يسمح بالسداد المعجل في نوع القرض هذا"
+  }
 }

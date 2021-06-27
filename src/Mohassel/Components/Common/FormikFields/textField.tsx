@@ -1,23 +1,25 @@
-import React from "react";
-import { FieldProps } from "formik";
-import { Col, FormControl, InputGroup } from "react-bootstrap";
+import React from 'react'
+import { FieldProps } from 'formik'
+
+import Col from 'react-bootstrap/Col'
+import FormControl from 'react-bootstrap/FormControl'
+import InputGroup from 'react-bootstrap/InputGroup'
 
 interface TextFieldProps {
-  key: string;
-  id: string;
-  displayName?: string;
-  type?: "number";
-  smSize?: number;
-  className?: string;
-  onlyField?: boolean;
-  fieldClassName?: string;
+  key: string
+  id: string
+  displayName?: string
+  type?: 'number'
+  smSize?: number
+  className?: string
+  onlyField?: boolean
+  fieldClassName?: string
 }
 
 const TextField = (props: TextFieldProps & FieldProps<string>) => {
   const {
     field,
     form,
-    meta,
     key,
     id,
     smSize,
@@ -27,15 +29,15 @@ const TextField = (props: TextFieldProps & FieldProps<string>) => {
     type,
     onlyField = false,
     ...restProps
-  } = props;
-  const { touched, errors } = form;
+  } = props
+  const { touched, errors } = form
 
   return (
     <>
       {!onlyField && (
         <Col
           sm={smSize || 12}
-          className={`d-flex flex-column ${className || ""}`}
+          className={`d-flex flex-column ${className || ''}`}
         >
           <InputGroup key={key}>
             {displayName && (
@@ -46,7 +48,7 @@ const TextField = (props: TextFieldProps & FieldProps<string>) => {
               </InputGroup.Append>
             )}
             <FormControl
-              type={type || "text"}
+              type={type || 'text'}
               {...field}
               {...restProps}
               id={id || field.name}
@@ -63,11 +65,11 @@ const TextField = (props: TextFieldProps & FieldProps<string>) => {
       {onlyField && (
         <>
           <FormControl
-            type={type || "text"}
+            type={type || 'text'}
             {...field}
             {...restProps}
             id={id || field.name}
-            className={`mr-0 ${fieldClassName || ""}`}
+            className={`mr-0 ${fieldClassName || ''}`}
           />
           {touched[field.name] && errors[field.name] && (
             <small className="text-danger ml-auto mb-2">
@@ -77,7 +79,7 @@ const TextField = (props: TextFieldProps & FieldProps<string>) => {
         </>
       )}
     </>
-  );
-};
+  )
+}
 
-export default TextField;
+export default TextField
