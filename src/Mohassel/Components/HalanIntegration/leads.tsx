@@ -32,6 +32,9 @@ import local from '../../../Shared/Assets/ar.json'
 import './leads.scss'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { theme } from '../../../Shared/theme'
+import { Action } from '../../Models/common'
+import ability from '../../config/ability'
+import { ActionsGroup } from '../../../Shared/Components/ActionsGroup'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -203,7 +206,7 @@ class Leads extends Component<Props, State> {
         key: 'actions',
         render: (data) => (
           <div style={{ position: 'relative' }}>
-            <p
+            <div
               className="clickable-action"
               onClick={() =>
                 this.setState((prevState) => ({
@@ -213,95 +216,12 @@ class Leads extends Component<Props, State> {
               }
             >
               {local.actions}
-            </p>
+            </div>
             {this.state.openActionsId === data.uuid && (
-              <div className="actions-list">
-                {(data.status === 'in-review' ||
-                  data.status === 'submitted') && (
-                  <Can I="reviewLead" a="halanuser">
-                    <div
-                      className="item"
-                      onClick={() =>
-                        this.changeLeadState(
-                          data.phoneNumber,
-                          data.status,
-                          data.inReviewStatus,
-                          'rejected',
-                          ''
-                        )
-                      }
-                    >
-                      {local.rejectApplication}
-                    </div>
-                  </Can>
-                )}
-                {(data.status === 'in-review' ||
-                  data.status === 'submitted') && (
-                  <Can I="reviewLead" a="halanuser">
-                    <div
-                      className="item"
-                      onClick={() =>
-                        this.changeLeadState(
-                          data.phoneNumber,
-                          data.status,
-                          data.inReviewStatus,
-                          'approved',
-                          ''
-                        )
-                      }
-                    >
-                      {local.acceptApplication}
-                    </div>
-                  </Can>
-                )}
-                <Can I="leadInReviewStatus" a="halanuser">
-                  <div
-                    className="item"
-                    onClick={() => {
-                      this.props.history.push(
-                        '/halan-integration/leads/view-lead',
-                        {
-                          leadDetails: data,
-                        }
-                      )
-                    }}
-                  >
-                    {local.viewCustomerLead}
-                  </div>
-                </Can>
-                {data.status === 'rejected' && (
-                  <Can I="reviewLead" a="halanuser">
-                    <div
-                      className="item"
-                      onClick={() =>
-                        this.setState({
-                          viewRejectionModal: true,
-                          selectedLead: data,
-                        })
-                      }
-                    >
-                      {local.viewRejectionReason}
-                    </div>
-                  </Can>
-                )}
-                {data.status !== 'rejected' && (
-                  <Can I="leadInReviewStatus" a="halanuser">
-                    <div
-                      className="item"
-                      onClick={() =>
-                        this.props.history.push(
-                          '/halan-integration/leads/edit-lead',
-                          {
-                            leadDetails: data,
-                          }
-                        )
-                      }
-                    >
-                      {local.editLead}
-                    </div>
-                  </Can>
-                )}
-              </div>
+              <ActionsGroup
+                currentId={data.uuid}
+                actions={this.getLeadActions(data)}
+              />
             )}
           </div>
         ),
@@ -386,6 +306,71 @@ class Leads extends Component<Props, State> {
     }
     this.setState({ branches: [] })
     return []
+  }
+
+  getLeadActions(lead): Action[] {
+    return [
+      {
+        actionTitle: local.rejectApplication,
+        actionPermission:
+          (lead.status === 'in-review' || lead.status === 'submitted') &&
+          ability.can('reviewLead', 'halanuser'),
+        actionOnClick: () => {
+          this.changeLeadState(
+            lead.phoneNumber,
+            lead.status,
+            lead.inReviewStatus,
+            'rejected',
+            ''
+          )
+        },
+      },
+      {
+        actionTitle: local.acceptApplication,
+        actionPermission:
+          (lead.status === 'in-review' || lead.status === 'submitted') &&
+          ability.can('reviewLead', 'halanuser'),
+        actionOnClick: () => {
+          this.changeLeadState(
+            lead.phoneNumber,
+            lead.status,
+            lead.inReviewStatus,
+            'approved',
+            ''
+          )
+        },
+      },
+      {
+        actionTitle: local.viewCustomerLead,
+        actionPermission: ability.can('leadInReviewStatus', 'halanuser'),
+        actionOnClick: () => {
+          this.props.history.push('/halan-integration/leads/view-lead', {
+            leadDetails: lead,
+          })
+        },
+      },
+      {
+        actionTitle: local.viewRejectionReason,
+        actionPermission:
+          lead.status === 'rejected' && ability.can('reviewLead', 'halanuser'),
+        actionOnClick: () => {
+          this.setState({
+            viewRejectionModal: true,
+            selectedLead: lead,
+          })
+        },
+      },
+      {
+        actionTitle: local.editLead,
+        actionPermission:
+          lead.status !== 'rejected' &&
+          ability.can('leadInReviewStatus', 'halanuser'),
+        actionOnClick: () =>
+          this.props.history.push('/halan-integration/leads/edit-lead', {
+            leadDetails: lead,
+          }),
+      },
+    ]
   }
 
   rejectLead = (values: {

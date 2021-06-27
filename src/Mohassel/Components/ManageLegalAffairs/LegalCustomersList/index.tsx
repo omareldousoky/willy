@@ -66,7 +66,7 @@ import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
 import LegalJudgePdf from '../../pdfTemplates/LegalJudge'
 import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
 import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
-import { ActionsIconGroup } from '../../../../Shared/Components'
+import { ActionsGroup } from '../../../../Shared/Components/ActionsGroup'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -115,7 +115,7 @@ const LegalCustomersList: FunctionComponent = () => {
     null
   )
   const [isJudgeModalOpen, setIsJudgeModalOpen] = useState(false)
-
+  const [openActionsId, setOpenActionsId] = useState('')
   const data: SettledCustomer[] =
     useSelector((state: any) => state.search.data) || []
   const error: string = useSelector((state: any) => state.search.error)
@@ -376,7 +376,6 @@ const LegalCustomersList: FunctionComponent = () => {
     return [
       {
         actionTitle: local.reviewLogs,
-        actionIcon: 'view',
         actionPermission: !!(
           customer.settlement && hasReviews(customer.settlement)
         ),
@@ -386,7 +385,6 @@ const LegalCustomersList: FunctionComponent = () => {
       },
       {
         actionTitle: local.registerLegalAction,
-        actionIcon: 'bulk-application-creation',
         actionPermission: ability.can('updateDefaultingCustomer', 'legal'),
         actionOnClick: () => {
           history.push({
@@ -397,7 +395,6 @@ const LegalCustomersList: FunctionComponent = () => {
       },
       {
         actionTitle: local.registerSettlement,
-        actionIcon: 'bulk-loan-applications-approval',
         actionPermission: ability.can('updateSettlement', 'legal'),
         actionOnClick: () => {
           toggleCustomerForSettlement(customer)
@@ -405,7 +402,6 @@ const LegalCustomersList: FunctionComponent = () => {
       },
       {
         actionTitle: local.reviewSettlement,
-        actionIcon: 'bulk-loan-applications-review',
         actionPermission: (isCurrentUserManager &&
           customer.settlement?.settlementStatus === 'reviewed' &&
           !!availableManagerReview([customer]).length) as boolean,
@@ -414,8 +410,7 @@ const LegalCustomersList: FunctionComponent = () => {
         },
       },
       {
-        actionTitle: local.print,
-        actionIcon: 'download',
+        actionTitle: local.printSettlementType,
         actionPermission: !!customer.settlement?.financialManagerReview,
         actionOnClick: () => {
           setCustomerForPrint(customer)
@@ -423,7 +418,6 @@ const LegalCustomersList: FunctionComponent = () => {
       },
       {
         actionTitle: local.downloadHistory,
-        actionIcon: 'download-big-file',
         actionPermission: ability.can('getDefaultingCustomer', 'legal'),
         actionOnClick: async () => {
           await handleDownloadHistory(customer._id)
@@ -527,13 +521,29 @@ const LegalCustomersList: FunctionComponent = () => {
           : local.notDone,
     },
     {
-      title: '',
-      key: 'action',
+      title: local.actions,
+      key: 'actions',
       render: (customer: SettledCustomer) => (
-        <ActionsIconGroup
-          currentId={customer._id}
-          actions={createActionsMapper(customer)}
-        />
+        <div className="position-relative">
+          <div
+            className="clickable-action"
+            onClick={() => {
+              if (openActionsId === customer._id) {
+                setOpenActionsId('')
+              } else {
+                setOpenActionsId(customer._id)
+              }
+            }}
+          >
+            {local.actions}
+          </div>
+          {openActionsId === customer._id && (
+            <ActionsGroup
+              currentId={customer._id}
+              actions={createActionsMapper(customer)}
+            />
+          )}
+        </div>
       ),
     },
   ]

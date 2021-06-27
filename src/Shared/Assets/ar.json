@@ -1123,5 +1123,6 @@
   "standard": "اساسي",
   "masterGas": "خاص بقرض ماستر جاس",
   "viewLoanProduct": "تفاصيل نوع القرض",
-  "reviewLogs": "سجل المراجعات"
+  "reviewLogs": "سجل المراجعات",
+  "printSettlementType":"طباعة طلب حالةالتصالح"
 }
