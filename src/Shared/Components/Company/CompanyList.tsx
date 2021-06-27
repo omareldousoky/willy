@@ -17,8 +17,8 @@ import { ActionsIconGroup } from '..'
 import HeaderWithCards from '../../../Mohassel/Components/HeaderWithCards/headerWithCards'
 
 import { CompanyListProps, TableMapperItem } from './types'
-import { Actions } from '../ActionsIconGroup/types'
 import { manageCompaniesArray } from '../../../Mohassel/Components/CustomerCreation/manageCustomersInitial'
+import { ActionWithIcon } from '../../../Mohassel/Models/common'
 
 const List = ({
   branchId,
@@ -83,7 +83,7 @@ const List = ({
     )
     if (error) Swal.fire('error', getErrorMessage(error), 'error')
   }, [])
-  const companyActions: Actions[] = [
+  const companyActions: ActionWithIcon[] = [
     {
       actionTitle: editCompany,
       actionIcon: 'editIcon',

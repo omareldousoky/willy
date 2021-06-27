@@ -13,9 +13,9 @@ import { manageLoansArray } from './manageLoansInitials'
 import { Formula } from '../LoanApplication/loanApplicationCreation'
 import { getDetailedProducts } from '../../Services/APIs/loanProduct/getProduct'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { Actions } from '../../../Shared/Components/ActionsIconGroup/types'
 import ability from '../../config/ability'
 import { ActionsIconGroup } from '../../../Shared/Components'
+import { ActionWithIcon } from '../../Models/common'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -37,7 +37,7 @@ interface State {
 class LoanProducts extends Component<Props, State> {
   mappers: { title: string; key: string; render: (data: any) => void }[]
 
-  productActions: Actions[]
+  productActions: ActionWithIcon[]
 
   constructor(props: Props) {
     super(props)

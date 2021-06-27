@@ -19,7 +19,7 @@ import {
   getFullCustomerKey,
 } from '../../../Shared/Services/utils'
 import { ActionsIconGroup } from '../../../Shared/Components'
-import { Actions } from '../../../Shared/Components/ActionsIconGroup/types'
+import { ActionWithIcon } from '../../Models/common'
 
 interface State {
   size: number
@@ -54,7 +54,7 @@ class CustomersList extends Component<Props, State> {
     render: (data: any) => void
   }[]
 
-  customerActions: Actions[]
+  customerActions: ActionWithIcon[]
 
   constructor(props) {
     super(props)
