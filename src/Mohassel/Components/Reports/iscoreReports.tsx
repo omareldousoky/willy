@@ -9,11 +9,7 @@ import {
   generateiScoreReport,
   getiScoreReport,
 } from '../../Services/APIs/Reports/iScoreReports'
-import {
-  downloadFile,
-  getIscoreReportStatus,
-  timeToArabicDate,
-} from '../../../Shared/Services/utils'
+import { downloadFile } from '../../../Shared/Services/utils'
 import Can from '../../config/Can'
 
 import { ReportsList } from '../../../Shared/Components/ReportsList'
@@ -65,6 +61,26 @@ class IscoreReports extends Component<{}, State> {
     } else {
       this.setState({ loading: false })
       Swal.fire('error', local.searchError, 'error')
+      console.log(res)
+    }
+  }
+
+  async generateReport() {
+    this.setState({ loading: true })
+    const res = await generateiScoreReport()
+    if (res.status === 'success') {
+      Swal.fire('success', local.fileQueuedSuccess, 'success')
+      this.setState(
+        {
+          loading: false,
+        },
+        () => {
+          this.getiScoreReports()
+        }
+      )
+    } else {
+      this.setState({ loading: false })
+      Swal.fire('error', local.fileQueuedError, 'error')
       console.log(res)
     }
   }
