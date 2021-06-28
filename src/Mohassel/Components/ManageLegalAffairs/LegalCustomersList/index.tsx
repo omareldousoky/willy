@@ -115,7 +115,6 @@ const LegalCustomersList: FunctionComponent = () => {
     null
   )
   const [isJudgeModalOpen, setIsJudgeModalOpen] = useState(false)
-  const [openActionsId, setOpenActionsId] = useState('')
   const data: SettledCustomer[] =
     useSelector((state: any) => state.search.data) || []
   const error: string = useSelector((state: any) => state.search.error)
@@ -525,24 +524,11 @@ const LegalCustomersList: FunctionComponent = () => {
       key: 'actions',
       render: (customer: SettledCustomer) => (
         <div className="position-relative">
-          <div
-            className="clickable-action"
-            onClick={() => {
-              if (openActionsId === customer._id) {
-                setOpenActionsId('')
-              } else {
-                setOpenActionsId(customer._id)
-              }
-            }}
-          >
-            {local.actions}
-          </div>
-          {openActionsId === customer._id && (
-            <ActionsGroup
-              currentId={customer._id}
-              actions={createActionsMapper(customer)}
-            />
-          )}
+          <ActionsGroup
+            currentId={customer._id}
+            dropdownBtnTitle={local.actions}
+            actions={createActionsMapper(customer)}
+          />
         </div>
       ),
     },

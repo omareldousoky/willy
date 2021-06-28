@@ -55,7 +55,6 @@ interface State {
   }>
   size: number
   from: number
-  openActionsId: string
   openLOModal: boolean
   openBranchModal: boolean
   loanOfficers: Array<any>
@@ -98,7 +97,6 @@ class Leads extends Component<Props, State> {
       ],
       size: 10,
       from: 0,
-      openActionsId: '',
       openLOModal: false,
       openBranchModal: false,
       loanOfficers: [],
@@ -205,24 +203,12 @@ class Leads extends Component<Props, State> {
         ),
         key: 'actions',
         render: (data) => (
-          <div style={{ position: 'relative' }}>
-            <div
-              className="clickable-action"
-              onClick={() =>
-                this.setState((prevState) => ({
-                  openActionsId:
-                    prevState.openActionsId === data.uuid ? '' : data.uuid,
-                }))
-              }
-            >
-              {local.actions}
-            </div>
-            {this.state.openActionsId === data.uuid && (
-              <ActionsGroup
-                currentId={data.uuid}
-                actions={this.getLeadActions(data)}
-              />
-            )}
+          <div className="position-relative">
+            <ActionsGroup
+              dropdownBtnTitle={local.actions}
+              currentId={data.uuid}
+              actions={this.getLeadActions(data)}
+            />
           </div>
         ),
       },
@@ -415,7 +401,6 @@ class Leads extends Component<Props, State> {
               )
               if (inReviewStatusRes.status === 'success') {
                 this.props.setLoading(false)
-                this.setState({ openActionsId: '' })
                 Swal.fire('', local.changeState, 'success').then(() =>
                   this.getLeadsCustomers()
                 )
@@ -448,7 +433,7 @@ class Leads extends Component<Props, State> {
     )
     if (res.status === 'success') {
       this.props.setLoading(false)
-      this.setState({ openActionsId: '', rejectLeadModal: false })
+      this.setState({ rejectLeadModal: false })
 
       Swal.fire('', local.changeState, 'success').then(() =>
         this.getLeadsCustomers()
@@ -558,9 +543,8 @@ class Leads extends Component<Props, State> {
                 data={this.props.data}
                 url="lead"
                 changeNumber={(key: string, number: number) => {
-                  this.setState(
-                    { [key]: number, openActionsId: '' } as any,
-                    () => this.getLeadsCustomers()
+                  this.setState({ [key]: number } as any, () =>
+                    this.getLeadsCustomers()
                   )
                 }}
               />
