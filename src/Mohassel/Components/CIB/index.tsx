@@ -2,33 +2,24 @@ import React, { Component, ReactNode } from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import FormCheck from 'react-bootstrap/FormCheck'
-import Table from 'react-bootstrap/Table'
+import { connect } from 'react-redux'
 import Swal from 'sweetalert2'
-import { cibReport } from '../../Services/APIs/loanApplication/cibReport'
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
+import Search from '../../../Shared/Components/Search/search'
+
 import { downloadTxtFile } from './textFiles'
 import { changeSourceFund } from '../../Services/APIs/loanApplication/changeSourceFund'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import { manageLoansArray } from '../LoanList/manageLoansInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import { CIBProps, CIBState } from './types'
+import { CibLoan } from '../../Models/CIB'
+import { search, searchFilters } from '../../../Shared/redux/search/actions'
+import { loading } from '../../../Shared/redux/loading/actions'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { Pagination } from '../Common/Pagination'
-import { SearchForm } from './SearchForm'
-import { SearchFormValues } from './types'
-import { CibLoan, CibLoanResponse } from '../../Models/CIB'
 
-interface State {
-  size: number
-  from: number
-  selectedLoans?: string[]
-  loading: boolean
-  data?: CibLoanResponse
-  principalSelectedSum: number
-  manageLoansTabs: any[]
-  searchFormValues: SearchFormValues
-}
-
-class CIB extends Component<{}, State> {
+class CIB extends Component<CIBProps, CIBState> {
   mappers: {
     title: string | ReactNode
     key: string
@@ -41,17 +32,14 @@ class CIB extends Component<{}, State> {
     this.state = {
       size: 25,
       from: 0,
-      loading: false,
-      searchFormValues: {
-        branchId: '',
-        customerName: '',
-      },
       principalSelectedSum: 0,
       manageLoansTabs: [],
     }
     this.mappers = [
       {
-        title: <FormCheck type="checkbox" onChange={(e) => this.checkAll(e)} />,
+        title: () => (
+          <FormCheck type="checkbox" onChange={(e) => this.checkAll(e)} />
+        ),
         key: 'selected',
         render: (data) => (
           <FormCheck
@@ -86,43 +74,38 @@ class CIB extends Component<{}, State> {
   }
 
   componentDidMount() {
-    this.setState({ manageLoansTabs: manageLoansArray() })
+    this.props.search({ url: 'clearData' })
+    this.setState({
+      manageLoansTabs: manageLoansArray(),
+      selectedLoans: undefined,
+    })
   }
 
-  handleSearch = async (values: SearchFormValues) => {
-    const { fromDate, toDate, branchId, customerName } = values
-    if (!fromDate || !toDate) return
-    this.setState({ loading: true })
+  handleSearch = async () => {
+    const {
+      branchId,
+      customerName,
+      startDate,
+      endDate,
+    } = this.props.searchFilters
+    if (!startDate || !endDate) return
 
     const name = (customerName || '').trim()
-    const res = await cibReport({
-      startDate: new Date(fromDate).setHours(0, 0, 0, 0).valueOf(),
-      endDate: new Date(toDate).setHours(23, 59, 59, 59).valueOf(),
+    const request = {
+      startDate,
+      endDate,
       offset: this.state.from,
       size: this.state.size,
-      branchId,
+      branchId: branchId || '',
       customerName: name,
-    })
-    if (res.status === 'success') {
-      this.setState({ loading: false })
-
-      this.setState({
-        data: res.body,
-      })
-    } else {
-      this.setState({ loading: false }, () =>
-        Swal.fire(
-          'Error !',
-          getErrorMessage(res.error.error || 'error'),
-          'error'
-        )
-      )
+      url: 'cib',
     }
+    this.props.search(request)
   }
 
   addRemoveItemFromChecked(loan: CibLoan) {
-    if (!this.state.selectedLoans) return
     if (
+      this.state?.selectedLoans &&
       this.state.selectedLoans.findIndex(
         (selectedCustomerLoanId) => selectedCustomerLoanId === loan.loanId
       ) > -1
@@ -145,40 +128,39 @@ class CIB extends Component<{}, State> {
 
   async submit() {
     if (!this.state.selectedLoans) return
-    this.setState({ loading: true })
-    const obj = {
+    const request = {
       fundSource: 'cib',
       applicationIds: this.state.selectedLoans,
       returnDetails: true,
       approvalDate: new Date().valueOf(),
     }
-    const res = await changeSourceFund(obj)
+
+    const res = await changeSourceFund(request)
     if (res.status === 'success') {
       this.setState({
         selectedLoans: undefined,
-        loading: false,
         principalSelectedSum: 0,
-        data: undefined,
+        from: 0,
       })
-      Swal.fire('', local.changeSourceFundSuccess, 'success').then(() =>
+      Swal.fire('', local.changeSourceFundSuccess, 'success').then(() => {
         downloadTxtFile(res.body.loans, false, 0)
-      )
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
+        this.handleSearch()
+      })
+    } else {
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    }
   }
 
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
-      this.setState((prevState) => ({
-        selectedLoans: prevState.data?.loans?.map((el) => el.loanId),
+      this.setState({
+        selectedLoans: this.props.loans?.map((el) => el.loanId),
         principalSelectedSum:
-          prevState?.data?.loans?.reduce(
+          this.props.loans?.reduce(
             (a, b) => a + (Number(b.principal) || 0),
             0
           ) || 0,
-      }))
+      })
     } else this.setState({ selectedLoans: undefined, principalSelectedSum: 0 })
   }
 
@@ -195,9 +177,9 @@ class CIB extends Component<{}, State> {
             .indexOf('cib')}
         />
         <Card className="main-card">
-          <Loader type="fullsection" open={this.state.loading} />
-          <Card.Body>
-            <div className="d-flex justify-content-between">
+          <Loader type="fullsection" open={this.props.loading} />
+          <Card.Body className="p-0">
+            <div className="custom-card-header">
               <div className="d-flex align-items-center">
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
                   {local.cib}
@@ -230,72 +212,37 @@ class CIB extends Component<{}, State> {
               </Button>
             </div>
             <hr className="dashed-line" />
-            <SearchForm
-              handleSearch={this.handleSearch}
-              initialValues={this.state.searchFormValues}
-              setSearchFormValues={(newValues: Partial<SearchFormValues>) =>
-                this.setState((prevState) => ({
-                  searchFormValues: {
-                    ...prevState.searchFormValues,
-                    ...newValues,
-                  },
-                }))
+            <Search
+              searchKeys={['keyword', 'dateFromTo', 'branch']}
+              datePlaceholder={local.issuanceDate}
+              searchPlaceholder={local.name}
+              url="cib"
+              from={this.state.from}
+              size={this.state.size}
+              setFrom={(from) => this.setState({ from })}
+              resetSelectedItems={() =>
+                this.setState({ selectedLoans: undefined })
               }
             />
-            {this.state?.data?.loans?.length ? (
-              <Table striped hover>
-                <thead>
-                  <tr>
-                    {this.mappers?.map((mapper, index: number) => {
-                      return (
-                        <th
-                          style={mapper.sortable ? { cursor: 'pointer' } : {}}
-                          key={index}
-                        >
-                          {mapper.title}
-                        </th>
-                      )
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state?.data?.loans?.map((item, index: number) => {
-                    return (
-                      <tr key={index}>
-                        {this.mappers?.map((mapper, mapperIndex: number) => {
-                          return (
-                            <td key={mapperIndex}>{mapper.render(item)}</td>
-                          )
-                        })}
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </Table>
-            ) : (
-              <div className="text-center">
-                <img
-                  alt="no-data-found"
-                  src={require('../../../Shared/Assets/no-results-found.svg')}
-                />
-                {this.state.data && (
-                  <p className="img-title">{local.noResultsFound}</p>
-                )}
-              </div>
-            )}
-            {this.state.data ? (
-              <Pagination
-                totalCount={this.state.data.totalCount}
-                dataLength={this.state.size}
-                paginationArr={[25, 50, 100, 500]}
-                updatePagination={(key: string, number: number) => {
-                  this.setState(
-                    ({ [key]: number } as unknown) as Pick<State, keyof State>,
-                    () => this.handleSearch(this.state.searchFormValues)
-                  )
-                }}
-              />
-            ) : null}
+
+            <DynamicTable
+              pagination
+              customPagination={{
+                size: this.state.size,
+                pagesList: [10, 25, 50, 100, 500],
+              }}
+              from={this.state.from}
+              size={this.state.size}
+              totalCount={this.props.totalCount}
+              mappers={this.mappers}
+              data={this.props.loans}
+              url="cib"
+              changeNumber={(key: string, number: number) => {
+                this.setState({ [key]: number } as any, () =>
+                  this.handleSearch()
+                )
+              }}
+            />
           </Card.Body>
         </Card>
       </>
@@ -303,4 +250,21 @@ class CIB extends Component<{}, State> {
   }
 }
 
-export default CIB
+const addSearchToProps = (dispatch) => {
+  return {
+    search: (request) => dispatch(search(request)),
+    setSearchFilters: (filters) => dispatch(searchFilters(filters)),
+    setLoading: (isLoading) => dispatch(loading(isLoading)),
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    loans: state.search.loans,
+    totalCount: state.search.totalCount,
+    searchFilters: state.searchFilters,
+    loading: state.loading,
+  }
+}
+
+export default connect(mapStateToProps, addSearchToProps)(CIB)

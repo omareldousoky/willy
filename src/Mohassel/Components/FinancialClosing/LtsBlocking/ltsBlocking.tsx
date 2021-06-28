@@ -283,7 +283,8 @@ class LtsBlocking extends Component<Props, State> {
               />
               <Pagination
                 totalCount={this.props.totalCount}
-                dataLength={this.props.data.length}
+                size={this.props.data.length}
+                from={this.state.from}
                 paginationArr={[10, 100, 500, 1000]}
                 updatePagination={(key: string, number: number) => {
                   this.setState(

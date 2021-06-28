@@ -1,12 +1,20 @@
-export interface SearchFormValues {
-  fromDate?: string
-  toDate?: string
-  branchId: string
-  customerName: string
+import { CibLoan, CIBReportRequest } from '../../Models/CIB'
+
+export interface CIBProps {
+  loans: CibLoan[]
+  totalCount: number
+  searchFilters: CIBReportRequest
+  search: (request) => Promise<void>
+  setSearchFilters: (filters) => void
+  loading: boolean
+  setLoading: (isLoading) => void
 }
 
-export interface SearchFormProps {
-  handleSearch: (values: SearchFormValues) => void
-  setSearchFormValues: (newValues: Partial<SearchFormValues>) => void
-  initialValues: SearchFormValues
+export interface CIBState {
+  size: number
+  from: number
+  principalSelectedSum: number
+  manageLoansTabs: any[]
+  selectedLoans?: string[]
+  showNoResultMessage?: boolean
 }

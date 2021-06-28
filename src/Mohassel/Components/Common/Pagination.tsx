@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import Form from 'react-bootstrap/Form'
 import local from '../../../Shared/Assets/ar.json'
@@ -9,12 +9,16 @@ const MAX_PAGE_NUMBERS = 5
 export const Pagination = ({
   totalCount,
   updatePagination,
-  dataLength,
+  size,
   paginationArr,
+  from,
 }: PaginationProps) => {
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(dataLength || 10)
+  const [rowsPerPage, setRowsPerPage] = useState(size || 10)
 
+  useEffect(() => {
+    if (from === 0) setPage(0)
+  }, [from])
   const totalPagesCount: number = Math.ceil(totalCount / rowsPerPage)
   const getPages = () => {
     const maxLength =

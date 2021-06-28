@@ -10,7 +10,7 @@ export interface OrientationProps {
 export interface PaginationProps {
   totalCount: number
   updatePagination: (key: string, number: number) => void
-  dataLength?: number
+  from: number
+  size?: number
   paginationArr?: number[]
-  fromKeyName?: string
 }

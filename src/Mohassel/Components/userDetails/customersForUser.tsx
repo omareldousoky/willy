@@ -481,7 +481,8 @@ class CustomersForUser extends Component<Props, State> {
         </Modal>
         <Pagination
           totalCount={this.state.totalCustomers}
-          dataLength={this.state.customers.length}
+          size={this.state.customers.length}
+          from={this.state.from}
           paginationArr={[10, 100, 500, 1000]}
           updatePagination={(key: string, number: number) => {
             this.setState({ [key]: number } as any, () =>
