@@ -17,6 +17,12 @@ interface Guarantor {
 export interface EntitledToSign {
   searchResults: Results
   entitledToSign: Customer
+  position?: string
+}
+
+export interface EntitledToSignIds {
+  customerId: string
+  position?: string
 }
 interface GroupMember {
   customer: Customer
@@ -101,7 +107,7 @@ export interface Application {
   managerVisitDate: string
   status?: string
   customer?: Customer
-  entitledToSignIds: Array<string>
+  entitledToSignIds: EntitledToSignIds[]
   entitledToSign: Array<EntitledToSign>
   customerType: string
 }

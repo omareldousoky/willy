@@ -265,6 +265,10 @@ class LoanProfile extends Component<Props, State> {
   async getCachediScores(application) {
     const ids: string[] = []
     const commercialRegisterNumbers: string[] = []
+    const entitledToSign = application.entitledToSign?.map(
+      this.mapEntitledToSignToCustomer
+    )
+
     if (application.product.beneficiaryType === 'group') {
       application.group.individualsInGroup.forEach((member) =>
         ids.push(member.customer.nationalId)
@@ -277,8 +281,8 @@ class LoanProfile extends Component<Props, State> {
             : ids.push(guar.nationalId)
         )
       }
-      if (application.entitledToSign && application.entitledToSign.length > 0) {
-        application.entitledToSign.forEach((cust) => ids.push(cust.nationalId))
+      if (entitledToSign && entitledToSign.length > 0) {
+        entitledToSign.forEach((cust) => ids.push(cust.nationalId))
       }
       application.customer.customerType === 'company'
         ? commercialRegisterNumbers.push(
@@ -769,6 +773,19 @@ class LoanProfile extends Component<Props, State> {
     return {}
   }
 
+  mapEntitledToSignToCustomer({
+    customer,
+    position,
+  }: {
+    customer: Customer
+    position: string
+  }) {
+    return {
+      ...customer,
+      position,
+    }
+  }
+
   async writeOffApplication() {
     const options = await this.getWriteOffReasons()
     const { value: text } = await Swal.fire({
@@ -1175,7 +1192,9 @@ class LoanProfile extends Component<Props, State> {
       case 'entitledToSign':
         return (
           <GuarantorTableView
-            guarantors={this.state.application.entitledToSign}
+            guarantors={this.state.application.entitledToSign.map(
+              this.mapEntitledToSignToCustomer
+            )}
             customerId={this.state.application.customer._id}
             application={this.state.application}
             getGeoArea={(area) => this.getCustomerGeoArea(area)}
