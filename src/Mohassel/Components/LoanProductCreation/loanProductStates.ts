@@ -61,7 +61,6 @@ export const LoanProductValidation = Yup.object().shape({
       local.maxGlobalLimitReachedError,
       function (this: any, value: any) {
         const { beneficiaryType, principals, type } = this.parent
-        console.log(this.parent)
         if (
           (beneficiaryType === 'individual' &&
             value <= principals?.maxIndividualPrincipal) ||
