@@ -19,7 +19,6 @@ import {
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import { DropDownOption, LoanOfficersDropDown } from '../dropDowns/allDropDowns'
-import Pagination from '../pagination/pagination'
 import Can from '../../config/Can'
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer'
 import { moveCustomerToOfficer } from '../../Services/APIs/Customer-Creation/moveCustomerToOfficer'
@@ -29,6 +28,7 @@ import {
 } from '../CustomerCreation/manageCustomersInitial'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { Customer } from '../../../Shared/Services/interfaces'
+import { Pagination } from '../Common/Pagination'
 
 interface State {
   customers: Array<Customer>
@@ -457,10 +457,10 @@ class MoveCustomers extends Component<{ isCompany?: false }, State> {
                   </Modal>
                   <Pagination
                     totalCount={this.state.totalCustomers}
-                    pagination
-                    dataLength={this.state.customers.length}
+                    size={this.state.customers.length}
+                    from={this.state.from}
                     paginationArr={[10, 100, 500, 1000]}
-                    changeNumber={(key: string, number: number) => {
+                    updatePagination={(key: string, number: number) => {
                       this.setState({ [key]: number } as any, () =>
                         this.getCustomersForUser()
                       )
