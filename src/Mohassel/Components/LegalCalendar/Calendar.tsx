@@ -56,7 +56,7 @@ export const Calendar = ({
                     >
                       <OverlayTrigger
                         trigger="click"
-                        placement="right"
+                        placement="auto"
                         overlay={
                           <Popover
                             id="popover-basic"
