@@ -160,11 +160,10 @@ code {
 	display: flex;
 	justify-content: space-between;
 	margin: 30px;
+}
 
-	& .big-button {
-		width: 200px;
-		// height: 50px;
-	}
+.big-button {
+	width: 200px;
 }
 
 .dashed-line {
@@ -526,4 +525,8 @@ code {
 .plus-green-icon {
 	background: url(./Assets/greenAdd.svg);
 	@extend .icon-base;
+}
+
+.img-title {
+	font-size: 24px;
 }
