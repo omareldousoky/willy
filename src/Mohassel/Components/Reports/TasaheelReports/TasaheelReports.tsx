@@ -122,11 +122,27 @@ export const TasaheelReports = () => {
 
     if (res.status === 'success') {
       setIsLoading(false)
-      setReports(res.body.files || res.body.reportFiles)
+      setReports(
+        res.body.files ||
+          res.body.reportFiles ||
+          res.body.monthlyReportFiles ||
+          res.body.quarterlyReportFiles
+      )
     } else {
       setIsLoading(false)
       Swal.fire('error', local.searchError, 'error')
     }
+  }
+  const formatValues = (values) => {
+    if (!values) return ''
+    if (tabs[activeTabIndex()].stringKey === 'quarterlyReport') {
+      return {
+        quarter: `${new Date(values.quarterYear).getFullYear()}-${
+          values.quarterNumber
+        }`,
+      }
+    }
+    return { date: values.date }
   }
 
   useEffect(() => {
@@ -137,10 +153,10 @@ export const TasaheelReports = () => {
 
   const requestReport = async (values) => {
     setIsLoading(true)
-    const date = values ? values.date : ''
-    const res = await reportsRequests[activeTabKey].requestReport({
-      date,
-    })
+    const formattedValues = formatValues(values)
+    const res = await reportsRequests[activeTabKey].requestReport(
+      formattedValues
+    )
 
     if (res.status === 'success') {
       Swal.fire('success', local.fileQueuedSuccess, 'success')
@@ -191,7 +207,10 @@ export const TasaheelReports = () => {
             pdf={{
               key: activeTabKey,
               local: tabs[activeTabIndex()].header,
-              inputs: ['date'],
+              inputs:
+                tabs[activeTabIndex()].stringKey === 'quarterlyReport'
+                  ? ['quarterYear', 'quarterNumber']
+                  : ['date'],
               permission: tabs[activeTabIndex()].permission || '',
             }}
             show={modalIsOpen}
@@ -215,13 +234,21 @@ export const TasaheelReports = () => {
                     type="button"
                     variant="primary"
                     onClick={() => {
-                      if (
-                        tabs[activeTabIndex()].stringKey === 'monthlyReport' ||
-                        tabs[activeTabIndex()].stringKey === 'quarterlyReport'
-                      ) {
-                        requestReport('')
-                      } else {
-                        setModalIsOpen(true)
+                      switch (tabs[activeTabIndex()].stringKey) {
+                        case 'tasaheelRisks':
+                          setModalIsOpen(true)
+                          break
+                        case 'loanAge':
+                          setModalIsOpen(true)
+                          break
+                        case 'monthlyReport':
+                          requestReport('')
+                          break
+                        case 'quarterlyReport':
+                          setModalIsOpen(true)
+                          break
+                        default:
+                          break
                       }
                     }}
                   >

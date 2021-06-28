@@ -64,10 +64,10 @@ export const generateMonthlyReport = async () => {
     return { status: 'error', error: error.response.data }
   }
 }
-export const generateQuarterlyReport = async () => {
+export const generateQuarterlyReport = async (quarter: { quarter: string }) => {
   const url = process.env.REACT_APP_BASE_URL + `/report/excel/quarterly-report`
   try {
-    const res = await axios.post(url)
+    const res = await axios.post(url, quarter)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
