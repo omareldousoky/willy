@@ -17,6 +17,8 @@ import { RisksReport } from './RisksReport'
 import { DebtsAgingReport } from './DebtsAgingReport'
 import { Tab } from '../../HeaderWithCards/cardNavbar'
 import { ReportsList } from '../../../../Shared/Components/ReportsList'
+import MonthlyReport from '../../pdfTemplates/monthlyReport/monthlyReport'
+import QuarterlyReport from '../../pdfTemplates/quarterlyReport/quarterlyReport'
 
 import {
   getAllLoanAge,
@@ -53,11 +55,13 @@ export const TasaheelReports = () => {
       getAll: getAllMonthlyReport,
       requestReport: generateMonthlyReport,
       getReportDetails: getMonthlyReport,
+      printComponent: MonthlyReport,
     },
     quarterlyReport: {
       getAll: getAllQuarterlyReport,
       requestReport: generateQuarterlyReport,
       getReportDetails: getQuarterlyReport,
+      printComponent: QuarterlyReport,
     },
   }
   const [tabs, setTabs] = useState<any[]>([])
@@ -177,7 +181,10 @@ export const TasaheelReports = () => {
         tabs[activeTabIndex()].stringKey === 'monthlyReport' ||
         tabs[activeTabIndex()].stringKey === 'quarterlyReport'
       ) {
-        downloadFile(res.body.url)
+        downloadFile(res.body.fileKey)
+        setReportDetails(res.body.response)
+        setPrint(true)
+        window.print()
       } else {
         setReportDetails(res.body)
         setPrint(true)
