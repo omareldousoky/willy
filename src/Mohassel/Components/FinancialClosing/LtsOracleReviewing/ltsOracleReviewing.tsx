@@ -119,7 +119,7 @@ class LtsOracleReviewing extends Component<{}, State> {
                           title="download"
                         >
                           <LtsIcon
-                            name="green-download"
+                            name="download"
                             color="#7dc356"
                             size="40px"
                           />
