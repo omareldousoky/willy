@@ -356,6 +356,11 @@ class DefaultingCustomersList extends Component<Props, State> {
       endDate: new Date(toDate).setHours(23, 59, 59, 999).valueOf(),
     }
 
+    this.setState({
+      loading: true,
+      showReportsModal: false,
+    })
+
     const printReportRes: {
       status: string
       body?: { result: ReviewedDefaultingCustomer[] }
@@ -365,14 +370,13 @@ class DefaultingCustomersList extends Component<Props, State> {
     const defaultingCustomersReport = printReportRes.body?.result ?? []
 
     if (printReportRes.status === 'success') {
-      this.setState(
-        { defaultingCustomersReport, showReportsModal: false },
-        () => {
-          window.print()
-        }
-      )
+      this.setState({ defaultingCustomersReport, loading: false }, () => {
+        window.print()
+      })
     } else {
-      this.setState({ showReportsModal: false })
+      this.setState({
+        loading: false,
+      })
       Swal.fire('Error !', getErrorMessage(printReportRes.error.error), 'error')
     }
   }
