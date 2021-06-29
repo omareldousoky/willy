@@ -15,6 +15,7 @@ import { FormFieldProps } from './types'
 import DocumentPhoto from '../../../../Shared/Components/documentPhoto/documentPhoto'
 import { AppFormContext } from '.'
 import { getNestedByStringKey } from './utils'
+import DocumentUploader from '../../../../Shared/Components/documentUploader/documentUploader'
 
 const FormField: FunctionComponent<FormFieldProps> = ({
   field,
@@ -44,7 +45,10 @@ const FormField: FunctionComponent<FormFieldProps> = ({
       .describe()
       .tests.find((test: any) => test.name === 'required')
 
-  const label = `${field.label}${isRequired(field.validation) ? ' *' : ''}`
+  const label =
+    field.type !== 'document'
+      ? `${field.label}${isRequired(field.validation) ? ' *' : ''}`
+      : ''
 
   const trimField = (e: React.FocusEvent<any>) => {
     setFieldValue(e.target.name, e.target.value.trim().replace(/\s\s+/g, ' '))
@@ -137,6 +141,17 @@ const FormField: FunctionComponent<FormFieldProps> = ({
           />
         )
 
+      case 'document':
+        return (
+          <DocumentUploader
+            documentType={field.documentType}
+            edit={!inputFieldProps.disabled}
+            keyName={inputFieldProps.name}
+            keyId={inputFieldProps.name}
+            view={inputFieldProps.readOnly}
+          />
+        )
+
       default:
         return (
           <Form.Control
@@ -157,9 +172,8 @@ const FormField: FunctionComponent<FormFieldProps> = ({
       <Form.Label column title={label}>
         {label}
       </Form.Label>
-
+      {field.header}
       {renderFormField()}
-
       <Form.Control.Feedback type="invalid">
         {getNestedByStringKey(errors, field.name)}
       </Form.Control.Feedback>
