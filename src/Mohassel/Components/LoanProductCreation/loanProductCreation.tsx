@@ -34,6 +34,7 @@ class LoanProductCreation extends Component<Props, State> {
       product: {
         productName: '',
         beneficiaryType: 'individual',
+        contractType: 'standard',
         calculationFormulaId: '',
         type: 'micro',
         loanNature: 'cash',

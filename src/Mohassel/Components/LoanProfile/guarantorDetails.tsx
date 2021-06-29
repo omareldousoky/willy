@@ -24,8 +24,9 @@ import { editGuarantors } from '../../Services/APIs/loanApplication/editGuaranto
 import ability from '../../config/ability'
 import { Customer } from '../../../Shared/Services/interfaces'
 
+type Guarantor = Customer & { position?: string }
 interface Props {
-  guarantors: Array<Customer>
+  guarantors: Array<Guarantor>
   iScores?: any
   getIscore?: Function
   status?: string
@@ -254,8 +255,8 @@ export const GuarantorTableView = (props: Props) => {
     ['reviewed', 'created', 'approved', 'secondReview', 'thirdReview'].includes(
       props.status
     )
-  const individualGuarantors: { guarantor: Customer; index: number }[] = []
-  const companyGuarantors: { guarantor: Customer; index: number }[] = []
+  const individualGuarantors: { guarantor: Guarantor; index: number }[] = []
+  const companyGuarantors: { guarantor: Guarantor; index: number }[] = []
   props.guarantors.forEach((guarantor, i) => {
     const guarObj = { guarantor, index: i }
     guarantor.customerType === 'company'
@@ -359,7 +360,7 @@ export const GuarantorTableView = (props: Props) => {
                       <td>{guar.guarantor.mobilePhoneNumber}</td>
                       {props.iScores &&
                         props.iScores.length > 0 &&
-                        iScore.nationalId.length > 0 && (
+                        iScore.nationalId?.length > 0 && (
                           <td
                             style={{
                               color: iscoreStatusColor(iScore.iscore).color,
