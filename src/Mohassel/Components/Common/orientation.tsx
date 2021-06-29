@@ -1,9 +1,5 @@
 import React from 'react'
-
-interface OrientationProps {
-  size: 'landscape' | 'portrait'
-  keepCardStyle?: boolean
-}
+import { OrientationProps } from './types'
 
 const Orientation = ({ size, keepCardStyle }: OrientationProps) => (
   <style type="text/css">
