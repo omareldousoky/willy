@@ -53,6 +53,8 @@ export interface DocumentField extends FieldDefaultProps {
   type: 'document'
   documentType: DocumentType
   label?: string
+  keyId: string
+  keyName: string
 }
 
 type SingleField =

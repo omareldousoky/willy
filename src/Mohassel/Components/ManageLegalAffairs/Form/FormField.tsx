@@ -146,9 +146,9 @@ const FormField: FunctionComponent<FormFieldProps> = ({
           <DocumentUploader
             documentType={field.documentType}
             edit={!inputFieldProps.disabled}
-            keyName={inputFieldProps.name}
-            keyId={inputFieldProps.name}
-            view={inputFieldProps.readOnly}
+            keyName={field.keyName}
+            keyId={field.keyId}
+            view={inputFieldProps.disabled}
           />
         )
 
