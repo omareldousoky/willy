@@ -1123,5 +1123,9 @@
   "lastMonth": "الشهر الماضي",
   "contractType": "نوع العقد",
   "standard": "اساسي",
-  "masterGas": "خاص بقرض ماستر جاس"
+  "masterGas": "خاص بقرض ماستر جاس",
+  "position": "الصفة في النشاط",
+  "viewLoanProduct": "تفاصيل نوع القرض",
+  "reviewLogs": "سجل المراجعات",
+  "printSettlementType":"طباعة طلب حالةالتصالح"
 }

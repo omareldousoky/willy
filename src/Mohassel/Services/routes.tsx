@@ -38,7 +38,7 @@ import DocumentTypeCreation from '../Components/documentTypeCreation/documentTyp
 import { CustomerProfile } from '../Components/CustomerCreation/customerProfile'
 import ActionLogs from '../Components/ActionLogs/action-logs'
 import SourceOfFund from '../Components/SourceOfFund/sourceOfFund'
-import CIB from '../Components/CIB/cib'
+import CIB from '../Components/CIB'
 import ReportsHome from '../Components/Reports/reportsHome'
 import MoveCustomers from '../Components/MoveCustomers/moveCustomers'
 import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation'
