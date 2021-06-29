@@ -1122,5 +1122,8 @@
   "contractType": "نوع العقد",
   "standard": "اساسي",
   "masterGas": "خاص بقرض ماستر جاس",
-  "position": "الصفة في النشاط"
+  "position": "الصفة في النشاط",
+  "nanoCustomerLimit": "Nano الحد الائتماني لعميل ال",
+  "loanLimit": "الحد الائتماني",
+  "loanLimitInsurance": "صوره وصل الحد الائتماني"
 }

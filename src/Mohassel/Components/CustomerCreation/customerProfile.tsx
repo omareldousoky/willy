@@ -19,6 +19,7 @@ import { TabDataProps } from '../../../Shared/Components/Profile/types'
 import HalanLinkageModal from './halanLinkageModal'
 import { blockCustomer } from '../../Services/APIs/blockCustomer/blockCustomer'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
+import LoanLimitModal from './LoanLimitModal'
 
 export interface Score {
   id?: string // commercialRegisterNumber
@@ -84,6 +85,7 @@ export const CustomerProfile = () => {
   const [showHalanLinkageModal, setShowHalanLinkageModal] = useState<boolean>(
     false
   )
+  const [showLoanLimitModal, setShowLoanLimitModal] = useState(false)
   const location = useLocation<LocationState>()
   const history = useHistory()
 
@@ -474,6 +476,14 @@ export const CustomerProfile = () => {
         permission: true,
         onActionClick: () => setShowHalanLinkageModal(true),
       },
+      {
+        title: local.nanoCustomerLimit,
+        icon: 'principal-range',
+        permission: true, // TODO: replace with permission
+        onActionClick: () => {
+          setShowLoanLimitModal(true)
+        },
+      },
     ]
   }
   return (
@@ -499,6 +509,14 @@ export const CustomerProfile = () => {
             show={showHalanLinkageModal}
             hideModal={() => setShowHalanLinkageModal(false)}
             customer={customerDetails}
+          />
+        )}
+
+        {showLoanLimitModal && (
+          <LoanLimitModal
+            show={showLoanLimitModal}
+            hideModal={() => setShowLoanLimitModal(false)}
+            customerId={location.state.id}
           />
         )}
       </Container>

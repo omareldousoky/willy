@@ -17,7 +17,7 @@ import {
   RemoveFromSelectionArray,
 } from '../../redux/document/actions'
 import { Image } from '../../redux/document/types'
-import * as local from '../../Assets/ar.json'
+import local from '../../Assets/ar.json'
 import { DocumentType } from '../../Services/interfaces'
 
 interface Props {
@@ -529,7 +529,11 @@ class DocumentUploader extends Component<Props, State> {
           }}
         >
           <div style={{ textAlign: 'right', fontWeight: 'bold' }}>
-            <span>{this.props.documentType.name}&nbsp;</span>
+            <span>
+              {local[this.props.documentType.name] ||
+                this.props.documentType.name}
+              &nbsp;
+            </span>
             <span
               style={{
                 margin: '0  10px',
