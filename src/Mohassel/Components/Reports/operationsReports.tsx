@@ -47,6 +47,7 @@ import {
   fetchActiveWalletIndividualReport,
 } from '../../Services/APIs/Reports/activeWallet'
 import ActiveWalletGroupPdf from '../pdfTemplates/activeWalletGroup/activeWalletGroup'
+import { PDFList } from '../../../Shared/Components/PdfList'
 
 export interface PDF {
   key?: string
