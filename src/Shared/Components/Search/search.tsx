@@ -27,49 +27,9 @@ import { getGovernorates } from '../../../Mohassel/Services/APIs/configApis/conf
 import { loading } from '../../redux/loading/actions'
 import { getActionsList } from '../../../Mohassel/Services/APIs/ActionLogs/getActionsList'
 import Can from '../../../Mohassel/config/Can'
+import { SearchInitialFormikState, SearchProps, SearchState } from './types'
 
-interface InitialFormikState {
-  name?: string
-  keyword?: string
-  fromDate?: string
-  toDate?: string
-  governorate?: string
-  status?: string
-  action?: string
-  branchId?: string
-  isDoubtful?: boolean
-  isWrittenOff?: boolean
-  printed?: boolean
-  lastDates?: 'day' | 'week' | 'month' | ''
-  type?: string
-}
-interface Props {
-  size: number
-  from: number
-  url: string
-  roleId?: string
-  searchPlaceholder?: string
-  datePlaceholder?: string
-  hqBranchIdRequest?: string
-  status?: string
-  fundSource?: string
-  searchKeys: Array<string>
-  dropDownKeys?: Array<string>
-  issuedLoansSearchFilters: any
-  chosenStatus?: string
-  setFrom?: (from: number) => void
-  search: (data) => void
-  searchFilters: (data) => void
-  setIssuedLoansSearchFilters: (data) => void
-  setLoading: (data) => void
-  submitClassName?: string
-}
-interface State {
-  governorates: Array<any>
-  dropDownValue: string
-  actionsList: Array<string>
-}
-class Search extends Component<Props, State> {
+class Search extends Component<SearchProps, SearchState> {
   constructor(props) {
     super(props)
     this.state = {
@@ -80,7 +40,7 @@ class Search extends Component<Props, State> {
   }
 
   getInitialState() {
-    const initialState: InitialFormikState = {}
+    const initialState: SearchInitialFormikState = {}
     this.props.searchKeys.forEach((searchkey) => {
       switch (searchkey) {
         case 'dateFromTo':
@@ -215,8 +175,8 @@ class Search extends Component<Props, State> {
       ...{ from: this.props.from },
       [this.state.dropDownValue]: values.keyword,
     }
-    delete obj.keyword
     const { url } = this.props
+    const isCib = url === 'cib'
     if (Object.getOwnPropertyDescriptor(obj, 'fromDate'))
       obj.fromDate = new Date(obj.fromDate).setHours(0, 0, 0, 0).valueOf()
     if (Object.getOwnPropertyDescriptor(obj, 'toDate'))
@@ -277,10 +237,24 @@ class Search extends Component<Props, State> {
       )
         ? 'company'
         : 'individual'
+
     obj = this.removeEmptyArg(obj)
+
+    if (isCib) {
+      const { fromDate, toDate, keyword, branchId } = obj
+      if (!fromDate || !toDate) return
+      obj = {
+        startDate: fromDate,
+        endDate: toDate,
+        customerName: keyword || '',
+        branchId,
+      }
+    }
+
+    delete obj.keyword
     this.props.setFrom ? this.props.setFrom(0) : null
     this.props.searchFilters(obj)
-    this.props.search({
+    const searchQuery = {
       ...obj,
       from: 0,
       size: this.props.size,
@@ -288,7 +262,14 @@ class Search extends Component<Props, State> {
       branchId: this.props.hqBranchIdRequest
         ? this.props.hqBranchIdRequest
         : values.branchId,
-    })
+    }
+    if (isCib) {
+      searchQuery.offset = 0
+      searchQuery.branchId = values.branchId || ''
+    } else searchQuery.from = 0
+
+    if (this.props.resetSelectedItems) this.props.resetSelectedItems()
+    this.props.search(searchQuery)
   }
 
   removeEmptyArg(obj) {
@@ -440,6 +421,7 @@ class Search extends Component<Props, State> {
                         </p>
                         <span>{local.from}</span>
                         <Form.Control
+                          required={this.props?.url === 'cib'}
                           className="border-0"
                           type="date"
                           name="fromDate"
@@ -457,6 +439,7 @@ class Search extends Component<Props, State> {
                         />
                         <span className="mr-1">{local.to}</span>
                         <Form.Control
+                          required={this.props?.url === 'cib'}
                           className="border-0"
                           type="date"
                           name="toDate"
