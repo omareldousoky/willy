@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react'
 
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
 
-import local from "../../Assets/ar.json";
-import Can from "../../config/Can";
-import { LtsIcon } from "../LtsIcon";
+import local from '../../Assets/ar.json'
+import Can from '../../config/Can'
+import { LtsIcon } from '../LtsIcon'
 
-import { PDFListProps } from "./types";
+import { PDFListProps } from './types'
 
 export const PDFList = ({ list, onClickDownload }: PDFListProps) => {
   return (
@@ -17,7 +17,7 @@ export const PDFList = ({ list, onClickDownload }: PDFListProps) => {
           <Can I={listItem.permission} a="report" key={index}>
             <Card key={index} className="mx-0">
               <Card.Body>
-                <div className="d-flex justify-content-between font-weight-bold">
+                <div className="d-flex justify-content-between align-items-center font-weight-bold">
                   <div className="d-flex">
                     <span className="mr-5 text-secondary">#{index + 1}</span>
                     <span>{listItem.local}</span>
@@ -28,11 +28,7 @@ export const PDFList = ({ list, onClickDownload }: PDFListProps) => {
                     onClick={() => onClickDownload(listItem)}
                     title="download"
                   >
-                    <LtsIcon
-                      name="green-download"
-                      color="#7dc356"
-                      size="40px"
-                    />
+                    <LtsIcon name="download" color="#7dc356" size="40px" />
                   </Button>
                 </div>
               </Card.Body>
@@ -45,5 +41,5 @@ export const PDFList = ({ list, onClickDownload }: PDFListProps) => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
