@@ -149,3 +149,13 @@
     content: '\e919';
   }
 }
+.lts-arrow-right {
+  &:before {
+    content: '\e91a';
+  }
+}
+.lts-arrow-left {
+  &:before {
+    content: '\e91b';
+  }
+}
