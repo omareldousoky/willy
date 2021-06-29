@@ -5,8 +5,12 @@ import { ReviewedDefaultingCustomer } from '../../ManageLegalAffairs/defaultingC
 import { timeToArabicDate, timeToDate } from '../../../../Shared/Services/utils'
 import local from '../../../../Shared/Assets/ar.json'
 
+export type ReportDefaultedCustomer = ReviewedDefaultingCustomer & {
+  nationalId?: string
+  currentHomeAddress: string
+}
 interface DefaultingCustomersTempProps {
-  customers: ReviewedDefaultingCustomer[]
+  customers: ReportDefaultedCustomer[]
 }
 
 const DefaultingCustomers = ({ customers }: DefaultingCustomersTempProps) => {
@@ -56,12 +60,13 @@ const DefaultingCustomers = ({ customers }: DefaultingCustomersTempProps) => {
               <th>مبلغ الإيصال</th>
               <th>أقساط متأخره</th>
               <th colSpan={2}>أقساط غير مسدده</th>
+              <th>{local.nationalId}</th>
             </tr>
           </thead>
 
           <tbody>
             {customerGroups[groupKey].map(
-              (customer: ReviewedDefaultingCustomer, index: number) => (
+              (customer: ReportDefaultedCustomer, index: number) => (
                 <>
                   <tr>
                     <td>{index + 1}</td>
@@ -74,6 +79,7 @@ const DefaultingCustomers = ({ customers }: DefaultingCustomersTempProps) => {
                     <td>{customer.overdueInstallmentCount}</td>
                     <td>{customer.unpaidInstallmentCount}</td>
                     <td>{customer.unpaidInstallmentAmount}</td>
+                    <td>{customer.nationalId}</td>
                   </tr>
                   <tr>
                     <td>العنوان</td>
