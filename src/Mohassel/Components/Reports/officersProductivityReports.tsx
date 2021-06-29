@@ -17,10 +17,6 @@ import {
 } from '../../Models/OfficersProductivityReport'
 import OfficersProductivity from '../pdfTemplates/officersPercentPayment/officersProductivity/officersProductivity'
 import { ReportsList } from '../../../Shared/Components/ReportsList'
-import {
-  getIscoreReportStatus,
-  timeToArabicDate,
-} from '../../../Shared/Services/utils'
 
 interface State {
   data: any
