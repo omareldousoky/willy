@@ -75,10 +75,10 @@ export const RisksReport = (report) => {
                       <tr key={index}>
                         <td>{formatTier(row.tier)}</td>
                         <td>{row.customersCount || 0}</td>
-                        <td>{row.wallet || 0}</td>
+                        <td>{Number(row.wallet).toLocaleString() || 0}</td>
                         <td>{`${row.arrearsPercentage || 0}%`}</td>
                         <td>{`${row.feesPercentage || 0}%`}</td>
-                        <td>{row.provisions || 0}</td>
+                        <td>{Number(row.provisions).toLocaleString() || 0}</td>
                       </tr>
                     ))}
                 </tbody>
@@ -97,15 +97,15 @@ export const RisksReport = (report) => {
           </tr>
           <tr>
             <td>{local.undeservedCredit}</td>
-            <td>{report.undeservedCredit}</td>
+            <td>{Number(report.undeservedCredit).toLocaleString()}</td>
           </tr>
           <tr>
             <td>{local.lateCredit}</td>
-            <td>{report.lateCredit}</td>
+            <td>{Number(report.lateCredit).toLocaleString()}</td>
           </tr>
           <tr>
             <td>{local.totalCredit}</td>
-            <td>{report.totalCredit}</td>
+            <td>{Number(report.totalCredit).toLocaleString()}</td>
           </tr>
         </tbody>
       </table>
