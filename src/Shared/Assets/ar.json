@@ -1104,6 +1104,8 @@
   "lengthShouldBe9": "رقم البطاقة يجب ان يكون 9 ارقام",
   "duplicateCompanyNumberMessage": "رقم البطاقة موجود بالفعل لشركة اخرى",
   "moveCompanies": "نقل الشركات",
+  "legalCalendar": "الأجندة القضائية",
+  "time": "الوقت ",
   "downloadHistory": "تنزيل السجلات",
   "managerReviews": "مراجعات الميديرين",
   "finalVerdict": "حكم نهائي",
@@ -1125,6 +1127,7 @@
   "position": "الصفة في النشاط",
   "viewLoanProduct": "تفاصيل نوع القرض",
   "reviewLogs": "سجل المراجعات",
-  "printSettlementType":"طباعة طلب حالةالتصالح",
+  "printSettlementType": "طباعة طلب حالةالتصالح",
+  "customerAddress": "عنوان العميل",
   "productApplicationsReport":"تقرير طلبات القروض لنوع قرض"
 }
