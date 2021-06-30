@@ -109,11 +109,10 @@ class LoanProductCreation extends Component<Props, State> {
   }
 
   componentDidMount() {
-    if (this.props.edit) {
-      this.getProduct()
-    }
     this.getFormulas()
-    this.getGlobalPrinciple()
+    if (this.props.edit) {
+      this.getProduct().then(() => this.getGlobalPrinciple())
+    } else this.getGlobalPrinciple()
   }
 
   async getGlobalPrinciple() {

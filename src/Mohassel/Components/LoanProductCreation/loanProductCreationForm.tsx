@@ -85,7 +85,6 @@ export const LoanProductCreationForm = (props: any) => {
                 handleChange(e)
               }}
               isInvalid={errors.contractType && touched.contractType}
-              disabled={edit}
             >
               <option value="standard">{local.standard}</option>
               {values.beneficiaryType !== 'group' && (
