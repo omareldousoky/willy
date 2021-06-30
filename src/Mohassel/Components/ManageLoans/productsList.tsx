@@ -40,7 +40,7 @@ interface State {
   from: number
 }
 
-class LoanProducts extends Component<RouteComponentProps<{}> & Props, State> {
+class LoanProducts extends Component<Props, State> {
   mappers: { title: string; key: string; render: (data: any) => void }[]
 
   productActions: ActionWithIcon[]
