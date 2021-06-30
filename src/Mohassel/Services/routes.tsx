@@ -68,7 +68,7 @@ import FinancialReviewing from '../Components/FinancialClosing/FinancialReviewin
 import { CompanyList, CompanyProfile } from '../../Shared/Components'
 import CompanyCreation from '../Components/CustomerCreation/companyCreation'
 import { LegalCalendar } from '../Components/LegalCalendar'
-import { LegalWarnings } from '../Components/LegalWarnings'
+import { legalWarningRoute } from '../Components/LegalWarnings/routes'
 
 const appRoutes = [
   {
@@ -821,15 +821,7 @@ const appRoutes = [
               </Can>
             ),
           },
-          {
-            path: '/legal-warnings',
-            label: local.legalAffairs,
-            render: (props) => (
-              <Can I="getLegalWarnings" a="legal">
-                <LegalWarnings {...props} />
-              </Can>
-            ),
-          },
+          legalWarningRoute,
         ],
       },
     ],
