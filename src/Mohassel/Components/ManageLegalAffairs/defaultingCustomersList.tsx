@@ -36,7 +36,9 @@ import {
 import ability from '../../config/ability'
 import ReportsModal from '../Reports/reportsModal'
 import { PDF } from '../Reports/reports'
-import DefaultingCustomersPdfTemplate from '../pdfTemplates/defaultingCustomers/DefaultingCustomers'
+import DefaultingCustomersPdfTemplate, {
+  ReportDefaultedCustomer,
+} from '../pdfTemplates/defaultingCustomers/DefaultingCustomers'
 
 interface Review {
   at: number
@@ -938,7 +940,9 @@ class DefaultingCustomersList extends Component<Props, State> {
           )}
         </div>
         <DefaultingCustomersPdfTemplate
-          customers={this.state.defaultingCustomersReport}
+          customers={
+            this.state.defaultingCustomersReport as ReportDefaultedCustomer[]
+          }
         />
       </>
     )

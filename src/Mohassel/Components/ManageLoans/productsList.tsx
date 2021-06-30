@@ -13,6 +13,9 @@ import { manageLoansArray } from './manageLoansInitials'
 import { Formula } from '../LoanApplication/loanApplicationCreation'
 import { getDetailedProducts } from '../../Services/APIs/loanProduct/getProduct'
 import { getErrorMessage } from '../../../Shared/Services/utils'
+import ability from '../../config/ability'
+import { ActionsIconGroup } from '../../../Shared/Components'
+import { ActionWithIcon } from '../../Models/common'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -34,6 +37,8 @@ interface State {
 class LoanProducts extends Component<Props, State> {
   mappers: { title: string; key: string; render: (data: any) => void }[]
 
+  productActions: ActionWithIcon[]
+
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -54,9 +59,34 @@ class LoanProducts extends Component<Props, State> {
         render: (data) => (data.branches ? data.branches : 0),
       },
       {
-        title: '',
+        title: local.actions,
         key: 'actions',
-        render: (data) => this.renderIcons(data),
+        render: (data) => (
+          <ActionsIconGroup currentId={data.id} actions={this.productActions} />
+        ),
+      },
+    ]
+    this.productActions = [
+      {
+        actionTitle: local.editLoanProduct,
+        actionIcon: 'editIcon',
+        actionPermission: ability.can('updateLoanProduct', 'product'),
+        actionOnClick: (id) =>
+          this.props.history.push(
+            '/manage-loans/loan-products/edit-loan-product',
+            {
+              id,
+            }
+          ),
+      },
+      {
+        actionTitle: local.viewLoanProduct,
+        actionIcon: 'view',
+        actionPermission: ability.can('updateLoanProduct', 'product'),
+        actionOnClick: (id) =>
+          this.props.history.push('/manage-loans/loan-products/view-product', {
+            id,
+          }),
       },
     ]
   }
@@ -79,37 +109,6 @@ class LoanProducts extends Component<Props, State> {
         Swal.fire('Error !', getErrorMessage(products.error.error), 'error')
       )
     }
-  }
-
-  renderIcons(data: any) {
-    return (
-      <>
-        <img
-          style={{ cursor: 'pointer', marginLeft: '30px' }}
-          alt="view"
-          src={require('../../Assets/view.svg')}
-          onClick={() => {
-            this.props.history.push({
-              pathname: '/manage-loans/loan-products/view-product',
-              state: { id: data.id },
-            })
-          }}
-        />
-        <Can I="updateLoanProduct" a="product">
-          <img
-            style={{ cursor: 'pointer', marginLeft: '30px' }}
-            alt="edit"
-            src={require('../../Assets/editIcon.svg')}
-            onClick={() => {
-              this.props.history.push({
-                pathname: '/manage-loans/loan-products/edit-loan-product',
-                state: { id: data.id },
-              })
-            }}
-          />
-        </Can>
-      </>
-    )
   }
 
   render() {
