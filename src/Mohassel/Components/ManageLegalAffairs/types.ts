@@ -46,13 +46,6 @@ export type CustomerListProps = {
   totalCount: number
 }
 
-export interface TableMapperItem {
-  title: string | (() => JSX.Element)
-  key: string
-  sortable?: boolean
-  render: (data: any) => ReactNode
-}
-
 export interface SettlementInfo {
   penaltyFees: number
   courtFees: number

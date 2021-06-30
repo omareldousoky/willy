@@ -39,7 +39,6 @@ import {
   SettledCustomer,
   SettlementFormValues,
   SettlementInfo,
-  TableMapperItem,
 } from '../types'
 import { DefaultedCustomer, ManagerReviews } from '../defaultingCustomersList'
 import LegalSettlementForm from './LegalSettlementForm'
@@ -67,6 +66,7 @@ import LegalJudgePdf from '../../pdfTemplates/LegalJudge'
 import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
 import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
 import { ActionsGroup } from '../../../../Shared/Components/ActionsGroup'
+import { TableMapperItem } from '../../../../Shared/Components/DynamicTable/types'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
