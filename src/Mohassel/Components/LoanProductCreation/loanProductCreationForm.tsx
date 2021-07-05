@@ -149,6 +149,7 @@ export const LoanProductCreationForm = (props: any) => {
                 {values.contractType !== 'masterGas' && (
                   <option value="sme">SME</option>
                 )}
+                <option value="nano">Nano</option>
               </Form.Control>
               <Form.Control.Feedback type="invalid">
                 {errors.type}
