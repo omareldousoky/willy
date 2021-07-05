@@ -541,7 +541,7 @@
   },
   "product_has_applications": {
     "en": "product has applications, please cancel them first",
-    "ar": "هذه القائمة لديها طلبات قروض من فضلك الغيهم اولا "
+    "ar": "هذه القائمة لديها طلبات قروض من فضلك قم بإلغائهم أولا "
   },
   "duplicate_product": {
     "en": "Duplicate Product Name",
