@@ -10,6 +10,10 @@ import {
 } from '../../../../Shared/Services/utils'
 
 const LoanContractForGroup = (props) => {
+  const installments = props.data.installmentsObject.installments?.filter(
+    (installment) => installment.id !== 0
+  )
+
   const getAge = (birthDate: number) => {
     const diff = Date.now() - birthDate
     const day = 1000 * 60 * 60 * 24
@@ -304,32 +308,23 @@ const LoanContractForGroup = (props) => {
                         'EGP'
                       ).parse()})`}
                       ، يتم سداده علي
-                      {numbersToArabic(
-                        props.data.installmentsObject.installments.length
-                      )}
+                      {numbersToArabic(installments.length)}
                       قسط كل {numbersToArabic(props.data.product.periodLength)}
                       {props.data.product.periodType === 'days'
                         ? local.day
                         : local.month}
                       قيمة كل قسط
                       {`${numbersToArabic(
-                        props.data.installmentsObject.installments[0]
-                          .installmentResponse
+                        installments[0].installmentResponse
                       )} جنيه (${new Tafgeet(
-                        props.data.installmentsObject.installments[0].installmentResponse,
+                        installments[0].installmentResponse,
                         'EGP'
                       ).parse()})`}
                       ، تبدأ في
-                      {timeToArabicDate(
-                        props.data.installmentsObject.installments[0]
-                          .dateOfPayment,
-                        false
-                      )}
+                      {timeToArabicDate(installments[0].dateOfPayment, false)}
                       وينتهي في
                       {timeToArabicDate(
-                        props.data.installmentsObject.installments[
-                          props.data.installmentsObject.installments.length - 1
-                        ].dateOfPayment,
+                        installments[installments.length - 1].dateOfPayment,
                         false
                       )}
                       علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في

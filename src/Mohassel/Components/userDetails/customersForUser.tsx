@@ -14,7 +14,6 @@ import { Loader } from '../../../Shared/Components/Loader'
 import { LoanOfficersDropDown } from '../dropDowns/allDropDowns'
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer'
 import { moveCustomerToOfficer } from '../../Services/APIs/Customer-Creation/moveCustomerToOfficer'
-import Pagination from '../pagination/pagination'
 import { getBranches } from '../../Services/APIs/Branch/getBranches'
 import * as local from '../../../Shared/Assets/ar.json'
 import Can from '../../config/Can'
@@ -26,6 +25,7 @@ import {
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import { theme } from '../../../Shared/theme'
+import { Pagination } from '../Common/Pagination'
 
 interface Props {
   id: string
@@ -481,10 +481,10 @@ class CustomersForUser extends Component<Props, State> {
         </Modal>
         <Pagination
           totalCount={this.state.totalCustomers}
-          pagination
-          dataLength={this.state.customers.length}
+          size={this.state.customers.length}
+          from={this.state.from}
           paginationArr={[10, 100, 500, 1000]}
-          changeNumber={(key: string, number: number) => {
+          updatePagination={(key: string, number: number) => {
             this.setState({ [key]: number } as any, () =>
               this.getCustomersForUser()
             )

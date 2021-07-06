@@ -11,7 +11,7 @@ import Can from '../../config/Can'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { Loader } from '../../../Shared/Components/Loader'
-import * as local from '../../../Shared/Assets/ar.json'
+import local from '../../../Shared/Assets/ar.json'
 import {
   getErrorMessage,
   timeToDateyyymmdd,
@@ -120,9 +120,7 @@ class ClearancesList extends Component<Props, State> {
         title: local.customerType,
         key: 'customerType',
         render: (data) =>
-          data.beneficiaryType === 'individual'
-            ? local.individual
-            : local.group,
+          data.beneficiaryType ? local[data.beneficiaryType] : '',
       },
       {
         title: local.registrationDate,
