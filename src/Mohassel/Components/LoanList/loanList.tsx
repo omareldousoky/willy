@@ -167,14 +167,25 @@ class LoanList extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.props.setIssuedLoanSearchFilters({
-      type:
-        this.props.location.state && this.props.location.state.sme
-          ? 'sme'
-          : 'micro',
-    })
+    let searchFiltersQuery = {}
+    if (
+      (this.props.location.state?.sme &&
+        this.props.issuedLoansSearchFilters.type === 'sme') ||
+      (!this.props.location.state?.sme &&
+        this.props.issuedLoansSearchFilters.type !== 'sme')
+    ) {
+      searchFiltersQuery = this.props.issuedLoansSearchFilters
+    } else {
+      this.props.setIssuedLoanSearchFilters({})
+      this.props.setIssuedLoanSearchFilters({
+        type:
+          this.props.location.state && this.props.location.state.sme
+            ? 'sme'
+            : 'micro',
+      })
+    }
     let query = {
-      ...this.props.issuedLoansSearchFilters,
+      ...searchFiltersQuery,
       size: this.state.size,
       from: this.state.from,
       url: 'loan',
