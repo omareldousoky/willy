@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 
 import * as Yup from 'yup'
 import Modal from 'react-bootstrap/Modal'
@@ -14,68 +14,85 @@ import { PdfPortal } from '../Common/PdfPortal'
 import ClientGuaranteedLoans from '../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans'
 import { mapFormFieldsToFormData } from '../ManageLegalAffairs/Form/utils'
 import { maxValue, minValue } from '../../localUtils'
-import { useDispatch, useSelector } from 'react-redux'
-import { getDocuments } from '../../../Shared/redux/document/actions'
+import { getCustomerMaxNanoLoan } from '../../Services/APIs/Customer-Creation/getCustomer'
+import { setNanoLoanLimit } from '../../Services/APIs/Customer-Creation/setNanoLoanLimit'
+import Swal from 'sweetalert2'
+import { getErrorMessage } from '../../../Shared/Services/utils'
+import { Document } from '../../../Shared/Services/interfaces'
 
 interface LoanLimitForm {
-  // TODO: replace actual keys [backend]
-  loanLimit: number
-  data?: File
+  limit: number
+  nanoLimitDocument?: Document[]
 }
 
-const LoanLimitModal = ({ show, hideModal, customerId }) => {
+interface LoanLimitModalProps {
+  show: boolean
+  hideModal: () => void
+  customerId: string
+  loanLimit: number
+}
+
+const LoanLimitModal: FunctionComponent<LoanLimitModalProps> = ({
+  show,
+  hideModal,
+  customerId,
+  loanLimit,
+}) => {
   const defaultValues: LoanLimitForm = {
-    // TODO: get default value from the customer [backend]
-    loanLimit: 0,
+    limit: loanLimit,
   }
 
-  // TODO: Move to parent
-  const dispatch = useDispatch()
-  const documents: any[] = useSelector((state: any) => state.document)
+  const [loanLimitMax, setLoanLimitMax] = useState(0)
+
+  const fetchCustomerMaxNanoLoan = async () => {
+    const response = await getCustomerMaxNanoLoan()
+
+    if (response.status === 'success') {
+      setLoanLimitMax(response.body?.maximumNanoLoansLimit)
+    }
+  }
+
   useEffect(() => {
-    dispatch(
-      getDocuments({
-        customerId: customerId,
-        docType: 'deathCertificate',
-      })
-    )
-  }, [documents])
-  // TODO: Move to parent END
+    fetchCustomerMaxNanoLoan()
+  }, [])
 
   const LOAN_LIMIT_MIN = 1000
-  const LOAN_LIMIT_MAX = 3000
 
   const [currentLoanLimit, setCurrentLoanLimitValue] = useState<number | null>(
-    defaultValues.loanLimit
+    defaultValues.limit
   )
-  const isTemplateDisabled =
+
+  const isDocumentDisabled =
     currentLoanLimit === null ||
-    (currentLoanLimit !== null && currentLoanLimit < LOAN_LIMIT_MIN)
+    (currentLoanLimit !== null &&
+      (currentLoanLimit < LOAN_LIMIT_MIN || currentLoanLimit > loanLimitMax))
 
   const [isLoading, setIsLoading] = useState(false)
 
   const formFields: FormField[] = [
     {
-      name: 'loanLimit', // TODO: replace actual key [backend]
+      name: 'limit',
       type: 'number',
       label: local.loanLimit,
       validation: Yup.number()
         .min(LOAN_LIMIT_MIN, minValue(LOAN_LIMIT_MIN))
-        .max(LOAN_LIMIT_MAX, maxValue(LOAN_LIMIT_MAX))
+        .max(loanLimitMax, maxValue(loanLimitMax))
         .required(local.required),
+      disabled: loanLimitMax === 0,
+      clearFieldOnChange: 'nanoLimitDocument',
     },
     {
-      name: 'data', // TODO: replace actual key [backend]
-      label: local.loanLimitInsurance,
+      name: 'nanoLimitDocument',
+      label: local.nanoLimitDocument,
       type: 'document',
       documentType: {
         pages: 1,
-        type: 'deathCertificate', // for redux actions
+        type: 'nanoLimitDocument', // for redux actions
         paperType: 'A4',
-        name: 'deathCertificate', // TODO: replace actual key [backend]
+        name: 'nanoLimitDocument',
         updatable: false,
         customerType: 'individual',
-        active: true, // What is this for?
+        active: true,
       },
       keyName: 'customerId', // entity key to be updated by
       keyId: customerId, // entity key value
@@ -84,21 +101,42 @@ const LoanLimitModal = ({ show, hideModal, customerId }) => {
           className="mx-auto mb-1 py-2 d-flex align-items-center justify-content-center"
           variant="link"
           onClick={() => window.print()}
-          disabled={isTemplateDisabled}
+          disabled={isDocumentDisabled}
         >
           <span className="mr-2">{local.downloadTemplate}</span>
           <LtsIcon name="download" color="#7dc356" />
         </Button>
       ),
-      disabled: isTemplateDisabled,
+      disabled: isDocumentDisabled,
     },
   ]
 
-  const handleSubmit = (values: LoanLimitForm) => {
-    console.log('submit values', values)
+  const handleSubmit = async (values: LoanLimitForm) => {
+    const nanoLimitFile = values.nanoLimitDocument?.find(
+      (document) => document?.file
+    )?.file
 
-    const formData = mapFormFieldsToFormData(values)
-    console.log('submit formData', formData)
+    const nanoLimitRequestBody = {
+      customerId,
+      docName: 'nanoLimitDocument',
+      limit: values.limit,
+      file: nanoLimitFile,
+    }
+
+    const formData = mapFormFieldsToFormData(nanoLimitRequestBody)
+
+    setIsLoading(true)
+
+    const result = await setNanoLoanLimit(formData)
+
+    setIsLoading(false)
+
+    if (result.status === 'success') {
+      Swal.fire('', local.success, 'success')
+      hideModal()
+    } else {
+      Swal.fire(local.error, getErrorMessage(result.error.error), 'error')
+    }
   }
 
   return (
@@ -119,7 +157,7 @@ const LoanLimitModal = ({ show, hideModal, customerId }) => {
             options={{ wideBtns: true }}
             onChange={({
               currentTarget: {
-                loanLimit: { value },
+                limit: { value },
               },
             }) =>
               value === ''

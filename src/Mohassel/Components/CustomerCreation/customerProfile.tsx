@@ -479,7 +479,10 @@ export const CustomerProfile = () => {
       {
         title: local.nanoCustomerLimit,
         icon: 'principal-range',
-        permission: true, // TODO: replace with permission
+        permission:
+          ability.can('editCustomerNanoLoansLimit', 'customer') &&
+          ability.can('getMaximumNanoLoansLimit', 'application') &&
+          ability.can('getCustomerNanoLoansLimitDocument', 'customer'),
         onActionClick: () => {
           setShowLoanLimitModal(true)
         },
@@ -517,6 +520,7 @@ export const CustomerProfile = () => {
             show={showLoanLimitModal}
             hideModal={() => setShowLoanLimitModal(false)}
             customerId={location.state.id}
+            loanLimit={customerDetails?.nanoLoansLimit ?? 0}
           />
         )}
       </Container>

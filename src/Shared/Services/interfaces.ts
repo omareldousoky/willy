@@ -80,6 +80,7 @@ export interface Customer {
     type?: string
   }[]
   customerType?: string
+  nanoLoansLimit?: number
 }
 
 export interface Action {
@@ -137,6 +138,7 @@ export interface Document {
   valid: boolean
   delete?: boolean
   selected?: boolean
+  file?: File
 }
 
 export interface LoanOfficer {
