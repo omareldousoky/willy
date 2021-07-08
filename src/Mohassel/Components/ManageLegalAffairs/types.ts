@@ -1,4 +1,3 @@
-import { ReactNode } from 'react'
 import { Managers } from '../managerHierarchy/types'
 import { DefaultedCustomer, ManagerReviews } from './defaultingCustomersList'
 import { CourtSession, LegalHistoryResponse } from '../../Models/LegalAffairs'
