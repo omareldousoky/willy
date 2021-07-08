@@ -34,7 +34,6 @@ export const WarningCreationModal = ({
   )
   const [isLoading, setIsLoading] = useState(false)
   const [customer, setCustomer] = useState<Customer>()
-  // TODO: add loan type
   const [loan, setLoan] = useState<any>()
   const [warningType, setWarningType] = useState<LegalWarningType>()
 
