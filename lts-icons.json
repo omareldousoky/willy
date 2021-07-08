@@ -1,7 +1,6 @@
 {
   "IcoMoonType": "selection",
-  "icons": [
-    {
+  "icons": [{
       "icon": {
         "paths": [
           "M612.234 559.33l-291.188-291.188c-20.115-20.115-20.115-52.727-0-72.842l-0.036 0.036c20.115-20.115 52.727-20.115 72.842 0l291.188 291.188c20.115 20.115 20.115 52.727 0 72.842l0.036-0.036c-20.115 20.115-52.727 20.115-72.842 0z",
@@ -58,8 +57,7 @@
           "M690.722 771.447h-357.478c-11.989 0-21.709 9.719-21.709 21.709s9.719 21.709 21.709 21.709l357.683-0c11.945-0.058 21.607-9.755 21.607-21.709 0-11.99-9.719-21.709-21.709-21.709-0.036 0-0.072 0-0.108 0l0.006-0zM690.722 771.447",
           "M496.094 693.453c3.954 4.276 9.593 6.944 15.855 6.944s11.901-2.668 15.842-6.93l0.013-0.014 127.249-136.533c3.323-3.789 5.35-8.787 5.35-14.258 0-11.971-9.704-21.675-21.675-21.675-6.014 0-11.457 2.45-15.384 6.406l-0.001 0.001-89.702 96.188v-237.158c0-11.989-9.719-21.709-21.709-21.709s-21.709 9.719-21.709 21.709v-0 237.158l-89.463-96.188c-3.928-3.957-9.37-6.407-15.385-6.407-11.971 0-21.675 9.704-21.675 21.675 0 5.471 2.027 10.468 5.371 14.283l-0.021-0.025zM496.094 693.453"
         ],
-        "attrs": [
-          {
+        "attrs": [{
             "strokeLinejoin": "miter",
             "strokeLinecap": "butt",
             "strokeMiterlimit": "4",
@@ -81,13 +79,18 @@
         "isMulticolor": false,
         "isMulticolor2": false,
         "colorPermutations": {
-          "12519586125525525514747471": [{ "s": 0 }, { "s": 0 }, { "s": 0 }]
+          "12519586125525525514747471": [{
+            "s": 0
+          }, {
+            "s": 0
+          }, {
+            "s": 0
+          }]
         },
         "tags": ["download-big-file"],
         "grid": 0
       },
-      "attrs": [
-        {
+      "attrs": [{
           "strokeLinejoin": "miter",
           "strokeLinecap": "butt",
           "strokeMiterlimit": "4",
@@ -126,7 +129,9 @@
         "attrs": [{}, {}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}, {}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}, {}]
+        },
         "tags": ["i-score"],
         "grid": 0
       },
@@ -150,7 +155,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["issued-loans"],
         "grid": 0
       },
@@ -176,7 +183,9 @@
         "attrs": [{}, {}, {}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}, {}, {}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}, {}, {}]
+        },
         "tags": ["cib"],
         "grid": 0
       },
@@ -200,7 +209,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["change-source-of-fund"],
         "grid": 0
       },
@@ -224,7 +235,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["bulk-loan-applications-review"],
         "grid": 0
       },
@@ -248,7 +261,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["bulk-loan-applications-approval"],
         "grid": 0
       },
@@ -272,7 +287,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["bulk-application-creation"],
         "grid": 0
       },
@@ -296,7 +313,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["applications"],
         "grid": 0
       },
@@ -320,7 +339,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["buildings"],
         "grid": 0
       },
@@ -345,7 +366,9 @@
         "attrs": [{}, {}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}, {}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}, {}]
+        },
         "tags": ["reschedule"],
         "grid": 0
       },
@@ -393,7 +416,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["minus"],
         "grid": 0
       },
@@ -417,7 +442,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["closeIcon"],
         "grid": 0
       },
@@ -441,7 +468,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["deactivate-user"],
         "grid": 0
       },
@@ -464,23 +493,39 @@
           "M403.42 330.953l289.631 289.631c19.995 19.995 19.995 52.413 0 72.408s-52.413 19.995-72.408 0l-289.631-289.631c-19.995-19.995-19.995-52.413 0-72.408s52.413-19.995 72.408 0z",
           "M693.033 403.431l-289.631 289.631c-19.995 19.995-52.413 19.995-72.408 0s-19.995-52.413 0-72.408l289.631-289.631c19.995-19.995 52.413-19.995 72.408 0s19.995 52.413 0 72.408z"
         ],
-        "attrs": [
-          { "fill": "rgb(47, 47, 47)" },
-          { "fill": "rgb(255, 255, 255)" },
-          { "fill": "rgb(255, 255, 255)" }
+        "attrs": [{
+            "fill": "rgb(47, 47, 47)"
+          },
+          {
+            "fill": "rgb(255, 255, 255)"
+          },
+          {
+            "fill": "rgb(255, 255, 255)"
+          }
         ],
         "isMulticolor": true,
         "isMulticolor2": false,
         "colorPermutations": {
-          "12519586125525525514747471": [{ "f": 0 }, { "f": 2 }, { "f": 2 }]
+          "12519586125525525514747471": [{
+            "f": 0
+          }, {
+            "f": 2
+          }, {
+            "f": 2
+          }]
         },
         "tags": ["removeIcon"],
         "grid": 0
       },
-      "attrs": [
-        { "fill": "rgb(47, 47, 47)" },
-        { "fill": "rgb(255, 255, 255)" },
-        { "fill": "rgb(255, 255, 255)" }
+      "attrs": [{
+          "fill": "rgb(47, 47, 47)"
+        },
+        {
+          "fill": "rgb(255, 255, 255)"
+        },
+        {
+          "fill": "rgb(255, 255, 255)"
+        }
       ],
       "properties": {
         "order": 16,
@@ -503,7 +548,9 @@
         "attrs": [{}, {}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}, {}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}, {}]
+        },
         "tags": ["editIcon"],
         "grid": 0
       },
@@ -529,7 +576,9 @@
         "attrs": [{}, {}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}, {}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}, {}]
+        },
         "tags": ["view"],
         "grid": 0
       },
@@ -554,7 +603,9 @@
         "attrs": [{}, {}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}, {}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}, {}]
+        },
         "tags": ["changeOfficer-inactive"],
         "grid": 0
       },
@@ -578,7 +629,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["customers-inactive"],
         "grid": 0
       },
@@ -602,7 +655,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["checkbox-checked"],
         "grid": 0
       },
@@ -626,7 +681,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["checkbox-unchecked"],
         "grid": 0
       },
@@ -650,7 +707,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["radio-checked"],
         "grid": 0
       },
@@ -674,7 +733,9 @@
         "attrs": [{}],
         "isMulticolor": false,
         "isMulticolor2": false,
-        "colorPermutations": { "12519586125525525514747471": [{}] },
+        "colorPermutations": {
+          "12519586125525525514747471": [{}]
+        },
         "tags": ["radio-unchecked"],
         "grid": 0
       },
@@ -692,7 +753,9 @@
     }
   ],
   "height": 1024,
-  "metadata": { "name": "lts-icons" },
+  "metadata": {
+    "name": "lts-icons"
+  },
   "preferences": {
     "showGlyphs": true,
     "showCodes": true,
@@ -706,7 +769,11 @@
         "majorVersion": 1,
         "minorVersion": 0
       },
-      "metrics": { "emSize": 1024, "baseline": 6.25, "whitespace": 50 },
+      "metrics": {
+        "emSize": 1024,
+        "baseline": 6.25,
+        "whitespace": 50
+      },
       "embed": false,
       "cssVars": true,
       "cssVarsFormat": "scss",
