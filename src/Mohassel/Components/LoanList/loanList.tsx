@@ -158,7 +158,7 @@ class LoanList extends Component<Props, State> {
         key: 'action',
         render: (data) => (
           <ActionsIconGroup
-            currentCustomerId={data._id}
+            currentId={data._id}
             actions={this.renderActions(data)}
           />
         ),
