@@ -177,12 +177,6 @@ class LoanList extends Component<Props, State> {
       searchFiltersQuery = this.props.issuedLoansSearchFilters
     } else {
       this.props.setIssuedLoanSearchFilters({})
-      this.props.setIssuedLoanSearchFilters({
-        type:
-          this.props.location.state && this.props.location.state.sme
-            ? 'sme'
-            : 'micro',
-      })
     }
     let query = {
       ...searchFiltersQuery,
@@ -196,6 +190,12 @@ class LoanList extends Component<Props, State> {
           : 'micro',
     }
     query = removeEmptyArg(query)
+    this.props.setIssuedLoanSearchFilters({
+      type:
+        this.props.location.state && this.props.location.state.sme
+          ? 'sme'
+          : 'micro',
+    })
     this.props.search(query).then(() => {
       if (this.props.error)
         Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
