@@ -22,6 +22,7 @@ import {
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import { rollbackValidation } from '../Payment/paymentValidation'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface State {
   loading: boolean
@@ -208,12 +209,12 @@ class LoanRollBack extends Component<
                       style={{ width: '20%' }}
                     >
                       {i === 0 && (
-                        <img
-                          alt="rollback"
-                          src={require('../../Assets/rollback-icon.svg')}
-                          style={{ cursor: 'pointer' }}
+                        <Button
+                          variant="default"
                           onClick={() => this.rollbackModal(action)}
-                        />
+                        >
+                          <LtsIcon name="rollback" />
+                        </Button>
                       )}
                     </div>
                   </div>

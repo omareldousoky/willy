@@ -40,6 +40,7 @@ import { manageApplicationsArray } from './manageApplicationInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { LoanApplicationReportRequest } from '../../Services/interfaces'
 import ability from '../../config/ability'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Product {
   productName: string
@@ -410,16 +411,16 @@ class TrackLoanApplications extends Component<Props, State> {
   renderIcons(data) {
     return (
       <>
-        <img
-          style={{ cursor: 'pointer', marginLeft: 20 }}
-          alt="view"
-          src={require('../../Assets/view.svg')}
+        <Button
+          variant="default"
           onClick={() =>
             this.props.history.push('/track-loan-applications/loan-profile', {
               id: data.application._id,
             })
           }
-        />
+        >
+          <LtsIcon name="view" />
+        </Button>
         <Can I="viewIscore" a="customer">
           <span
             style={{ cursor: 'pointer' }}

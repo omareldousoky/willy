@@ -26,6 +26,8 @@ import { editLoanOfficerValidation } from './loanOfficersValidation'
 import { checkUsernameDuplicates } from '../../Services/APIs/User-Creation/checkUsernameDup'
 import { updateLoanOfficer } from '../../Services/APIs/LoanOfficers/updateLoanOfficer'
 import { getDateAndTime } from '../../Services/getRenderDate'
+import { LtsIcon } from '../../../Shared/Components'
+import ability from '../../config/ability'
 
 interface Props extends RouteComponentProps {
   history: any
@@ -174,6 +176,7 @@ class LoanOfficersList extends Component<Props, State> {
     return (
       <>
         <span
+          className="mx-2"
           onClick={() => {
             this.props.history.push({
               pathname: '/manage-accounts/loan-officers/loanOfficer-details',
@@ -181,14 +184,11 @@ class LoanOfficersList extends Component<Props, State> {
             })
           }}
         >
-          <img
-            style={{ cursor: 'pointer', marginLeft: 20 }}
-            alt="view"
-            src={require('../../Assets/view.svg')}
-          />
+          <LtsIcon name="view" />
         </span>
         <Can I="updateLoanOfficer" a="user">
           <span
+            className="mx-2"
             onClick={() => {
               this.setState({
                 showModal: true,
@@ -200,12 +200,7 @@ class LoanOfficersList extends Component<Props, State> {
               })
             }}
           >
-            <img
-              key={data._id}
-              style={{ cursor: 'pointer', marginLeft: 20 }}
-              alt="edit"
-              src={require('../../Assets/editIcon.svg')}
-            />
+            <LtsIcon name="edit" />
           </span>
         </Can>
       </>

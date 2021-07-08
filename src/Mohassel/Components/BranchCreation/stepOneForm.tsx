@@ -18,6 +18,7 @@ import {
   BasicTouched,
   BasicValues,
 } from './branchCreationInterfaces'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props {
   values: BasicValues
@@ -103,10 +104,7 @@ const StepOneForm = (props: Props) => {
             onClick={() => openCloseMap(true)}
           >
             <span>
-              <img
-                alt="location"
-                src={require('../../Assets/activeLocation.svg')}
-              />
+              <LtsIcon name="active-location" color="#7dc255" />
               {local.branchOnMap}
             </span>
           </Button>

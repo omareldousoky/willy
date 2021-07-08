@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Swal from 'sweetalert2'
+import Button from 'react-bootstrap/Button'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -21,6 +22,7 @@ import {
 import { manageLoansArray } from './manageLoansInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import ability from '../../config/ability'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -222,16 +224,16 @@ class LoanList extends Component<Props, State> {
   renderIcons(data) {
     return (
       <>
-        <img
-          style={{ cursor: 'pointer', marginLeft: 20 }}
-          alt="view"
-          src={require('../../Assets/view.svg')}
+        <Button
+          variant="default"
           onClick={() =>
             this.props.history.push('/loans/loan-profile', {
               id: data.application._id,
             })
           }
-        />
+        >
+          <LtsIcon name="view" />
+        </Button>
       </>
     )
   }
