@@ -17,6 +17,7 @@ import {
 import Can from '../../config/Can'
 import ReportsModal from './reportsModal'
 import { cibTpayURL } from '../../Services/APIs/Reports/cibURL'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface TPAYFile {
   created: {
@@ -168,13 +169,18 @@ class CIBReports extends Component<{}, State> {
                           )}
                         </div>
                         {pdf.status === 'created' && (
-                          <img
-                            style={{ cursor: 'pointer' }}
-                            alt="download"
-                            data-qc="download"
-                            src={require(`../../Assets/green-download.svg`)}
+                          <Button
+                            type="button"
+                            variant="default"
                             onClick={() => this.getFileUrl(pdf.key)}
-                          />
+                            title="download"
+                          >
+                            <LtsIcon
+                              name="download"
+                              size="40px"
+                              color="#7dc356"
+                            />
+                          </Button>
                         )}
                       </div>
                     </Card.Body>

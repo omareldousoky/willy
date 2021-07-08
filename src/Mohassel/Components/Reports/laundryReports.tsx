@@ -16,6 +16,7 @@ import { FalteringPayments as FalteringPaymentsPdf } from '../pdfTemplates/falte
 import { fetchEarlyPaymentsReport } from '../../Services/APIs/Reports/earlyPayments'
 import { EarlyPayments as EarlyPaymentsPdf } from '../pdfTemplates/earlyPayments/earlyPayments'
 import { ApiResponse } from '../../Models/common'
+import { LtsIcon } from '../../../Shared/Components'
 
 enum ReportEnum {
   FalteringPayments = 'falteringPayments',
@@ -168,7 +169,7 @@ const LaundryReports: FunctionComponent = () => {
                         onClick={() => handlePrint(pdf)}
                         title="download"
                       >
-                        <span className="download-icon" aria-hidden="true" />
+                        <LtsIcon name="download" size="40px" color="#7dc356" />
                       </Button>
                     </div>
                   </Card.Body>
