@@ -1127,7 +1127,6 @@
   "position": "الصفة في النشاط",
   "viewLoanProduct": "تفاصيل نوع القرض",
   "reviewLogs": "سجل المراجعات",
-  "printSettlementType":"طباعة طلب حالةالتصالح",
 	"legalWarningsList": "قائمة الإنذارات",
 	"warningType": "نوع الإنذار",
 	"warningForCustomer": "إنذار لعميل",
@@ -1137,5 +1136,8 @@
 	"misdemeanorNumberWarning": "إنذار بإخطار رقم الجنحة",
 	"verdictNoticeWarning": "إنذار بإخطار الحكم",
 	"customerHas": "العميل لديه",
-	"theSameLoan": "على نفس القرض"
+	"theSameLoan": "على نفس القرض",
+  "printSettlementType": "طباعة طلب حالةالتصالح",
+  "customerAddress": "عنوان العميل",
+  "productApplicationsReport":"تقرير طلبات القروض لنوع قرض"
 }

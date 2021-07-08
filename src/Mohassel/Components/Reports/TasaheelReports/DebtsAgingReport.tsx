@@ -77,9 +77,9 @@ export const DebtsAgingReport = (report) => {
               <tr key={index}>
                 <td>{formatTier(row.tier)}</td>
                 <td>{row.customersCount || 0}</td>
-                <td>{row.principal || 0}</td>
-                <td>{row.costs || 0}</td>
-                <td>{row.total || 0}</td>
+                <td>{Number(row.principal).toLocaleString() || 0}</td>
+                <td>{Number(row.costs).toLocaleString() || 0}</td>
+                <td>{Number(row.total).toLocaleString() || 0}</td>
                 <td>{`${row.arrearsPercentage || 0}%`}</td>
                 <td>{`${row.costsPercentage || 0}%`}</td>
                 <td>{`${row.totalPercentage || 0}%`}</td>

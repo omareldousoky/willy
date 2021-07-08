@@ -37,3 +37,8 @@ export interface Action {
 export interface ActionWithIcon extends Action {
   actionIcon: string
 }
+export interface Product {
+  id: string
+  name: string
+  branches?: number
+}
