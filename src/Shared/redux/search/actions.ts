@@ -18,6 +18,7 @@ import {
 } from '../../../Mohassel/Services/APIs/LegalAffairs/defaultingCustomers'
 import { searchFinancialBlocking } from '../../../Mohassel/Services/APIs/loanApplication/financialClosing'
 import { cibReport } from '../../../Mohassel/Services/APIs/loanApplication/cibReport'
+import { searchWarnings } from '../../../Mohassel/Services/APIs/LegalAffairs/warning'
 
 const searchWrapper = (
   request: any,
@@ -80,6 +81,8 @@ export const search = (request) => {
       return searchWrapper(request, searchFinancialBlocking)
     case 'cib':
       return searchWrapper(request, cibReport, 'cib')
+    case 'legal-warning':
+      return searchWrapper(request, searchWarnings)
     case 'clearData':
       return (dispatch) => {
         dispatch({ type: 'CLEAR_DATA', payload: {} })
