@@ -1,9 +1,12 @@
-import { LegalWarningType } from '../../../Models/LegalAffairs'
+import {
+  LegalWarningResponse,
+  LegalWarningType,
+} from '../../../Models/LegalAffairs'
 
 export interface LegalWarningTemplate {
   showDateAndTime: boolean
   courtAgent: boolean
-  details: string | JSX.Element
+  details: (court?: string, caseNumber?: string) => JSX.Element | string
   action: string
 }
 
@@ -14,4 +17,5 @@ export type LegalWarningTemplates = Record<
 
 export interface LegalWarningProps {
   type: LegalWarningType
+  warnings: LegalWarningResponse[]
 }

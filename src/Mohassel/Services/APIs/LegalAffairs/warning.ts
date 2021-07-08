@@ -39,7 +39,7 @@ export const createWarning = async (
 
 export const setPrintWarningFlag = async (warningsIds: string[]) => {
   try {
-    const res = await axios.post(setPrintWarningFlagUrl, warningsIds)
+    const res = await axios.post(setPrintWarningFlagUrl, { ids: warningsIds })
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }

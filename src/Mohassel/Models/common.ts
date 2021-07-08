@@ -23,6 +23,7 @@ export interface SearchRequest {
   name?: string
   nationalId?: string
   key?: number
+  url?: string // for FE ONLY
 }
 
 export interface PaginatedResponse {

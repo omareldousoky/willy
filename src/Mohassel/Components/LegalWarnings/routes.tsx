@@ -7,7 +7,7 @@ export const legalWarningRoute = {
   path: '/legal-warnings',
   label: local.legalAffairs,
   render: (props) => (
-    <Can I="getLegalWarnings" a="legal">
+    <Can I="getLegalWarning" a="legal">
       <LegalWarnings {...props} />
     </Can>
   ),

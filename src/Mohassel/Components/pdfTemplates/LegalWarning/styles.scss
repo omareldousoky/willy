@@ -1,7 +1,15 @@
-main {
-  font-family: Arial, Helvetica, sans-serif;
+.legal-warning {
   -webkit-print-color-adjust: exact;
   page-break-after: always;
+
+  h4 {
+    font-size: 28px !important;
+		font-weight: bold;
+  }
+
+  * {
+    font-family: Arial, Helvetica, sans-serif !important;
+  }
 
   .text-underline {
     text-decoration: underline;
@@ -10,15 +18,16 @@ main {
   article {
     column-gap: 20px;
 
+    p,
+    span {
+      font-size: 23px;
+    }
+
     aside {
       height: fit-content;
       min-width: 25%;
       min-height: 10rem;
       border-radius: 30px;
-
-      h4 {
-        font-weight: bold;
-      }
 
       .lawyer-info {
         span {

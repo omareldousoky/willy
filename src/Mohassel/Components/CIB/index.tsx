@@ -18,14 +18,10 @@ import { CibLoan } from '../../Models/CIB'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { loading } from '../../../Shared/redux/loading/actions'
 import { getErrorMessage } from '../../../Shared/Services/utils'
+import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
 
 class CIB extends Component<CIBProps, CIBState> {
-  mappers: {
-    title: string | ReactNode
-    key: string
-    sortable?: boolean
-    render: (data: any) => ReactNode
-  }[]
+  mappers: TableMapperItem[]
 
   constructor(props) {
     super(props)

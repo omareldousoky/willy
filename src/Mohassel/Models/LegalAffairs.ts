@@ -44,23 +44,25 @@ export type LegalWarningType =
   | 'verdictNoticeWarning'
 
 export interface LegalWarningResponse extends Trace {
-  _id?: string
+  _id: string
   customerId?: string
   loanId?: string
   customerName?: string
   nationalId?: string
   customerKey?: number
   customerBranchId?: string
-  warningType?: LegalWarningType
+  warningType: LegalWarningType
   printed?: boolean
   loanKey?: number
   currentHomeAddress?: string
+  caseNumber?: string
+  court?: string
 }
 
 export interface LegalWarningsSearchRequest extends SearchRequest {
+  printed: boolean
   customerKey?: number
   customerBranchId?: string
-  printed: boolean
   warningType?: LegalWarningType
 }
 

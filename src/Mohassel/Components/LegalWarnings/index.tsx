@@ -1,60 +1,365 @@
-import React from 'react'
+import React, { useState, useEffect, ChangeEvent } from 'react'
 import FormCheck from 'react-bootstrap/FormCheck'
+import Button from 'react-bootstrap/Button'
+import { connect } from 'react-redux'
+import Card from 'react-bootstrap/esm/Card'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from '../ManageLegalAffairs/manageLegalAffairsInitials'
 import local from '../../../Shared/Assets/ar.json'
-import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
+import {
+  ChangeNumberType,
+  TableMapperItem,
+} from '../../../Shared/Components/DynamicTable/types'
 import {
   LegalWarningResponse,
+  LegalWarningsSearchRequest,
   LegalWarningType,
 } from '../../Models/LegalAffairs'
+import { timeToArabicDate } from '../../../Shared/Services/utils'
+import ability from '../../config/ability'
+import {
+  search as searchAction,
+  searchFilters as searchFiltersAction,
+} from '../../../Shared/redux/search/actions'
+import { LegalWarningsProps } from './types'
+import { Loader } from '../../../Shared/Components/Loader'
+import SearchForm from '../../../Shared/Components/Search/search'
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
+import { LegalWarning } from '../pdfTemplates/LegalWarning'
+import { PdfPortal } from '../Common/PdfPortal'
+import { setPrintWarningFlag } from '../../Services/APIs/LegalAffairs/warning'
+import { WarningCreationModal } from './WarningCreationModal'
+import { loading as loadingAction } from '../../../Shared/redux/loading/actions'
 
-export const LegalWarnings = () => {
+const Warnings = ({
+  data,
+  totalCount,
+  loading,
+  setLoading,
+  searchFilters,
+  search,
+}: LegalWarningsProps) => {
+  const [from, setFrom] = useState(0)
+  const [size, setSize] = useState(10)
+  const [selectedWarnings, setSelectedWarnings] = useState<
+    LegalWarningResponse[]
+  >()
+  const [
+    validSelectedWarningsLength,
+    setValidSelectedWarningsLength,
+  ] = useState(0)
+  const [printWarningType, setPrintWarningType] = useState<LegalWarningType>()
+  const [printWarnings, setPrintWarnings] = useState<LegalWarningResponse[]>()
+  const [showModal, setShowModal] = useState(false)
+
+  const LEGAL_WARNING_URL = 'legal-warning'
+
+  const hasAddWarningPermission = ability.can('addLegalWarning', 'legal')
+  const hasMultiPrintWarningPermission = ability.can(
+    'multiPrintLegalWarning',
+    'legal'
+  )
+
+  const canPrint = (
+    target: LegalWarningResponse | LegalWarningResponse[]
+  ): boolean => {
+    if (hasMultiPrintWarningPermission) return true
+    if (!ability.can('printLegalWarning', 'legal')) return false
+    // they're all printed and user only has single print permission
+    return Array.isArray(target)
+      ? target.filter((warning) => warning.printed).length < data.length
+      : !target?.printed || false
+  }
+
+  const getLegalWarnings = (resetFrom?: boolean) => {
+    if (resetFrom) setFrom(0)
+
+    const request = {
+      ...searchFilters,
+      from: resetFrom ? 0 : from,
+      size,
+      url: LEGAL_WARNING_URL,
+    }
+    setSelectedWarnings(undefined)
+    search(request as LegalWarningsSearchRequest)
+  }
+
+  useEffect(() => {
+    getLegalWarnings()
+  }, [])
+
+  useEffect(() => {
+    if (from) getLegalWarnings()
+  }, [from, size])
+
+  useEffect(() => {
+    if (searchFilters.warningType)
+      setPrintWarningType(searchFilters.warningType)
+    else setPrintWarningType(undefined)
+  }, [searchFilters.warningType])
+
+  useEffect(() => {
+    if (printWarnings) window.print()
+  }, [printWarnings])
+
+  const print = (warning: LegalWarningResponse) => {
+    setPrintWarningType(warning.warningType)
+    setPrintWarnings([warning])
+  }
+
+  window.onafterprint = async () => {
+    if (printWarnings && !searchFilters.printed) {
+      const setPrintFlag = await setPrintWarningFlag(
+        printWarnings?.map((warning) => warning._id)
+      )
+      if (setPrintFlag.status === 'success') {
+        setLoading(true)
+        setTimeout(() => {
+          getLegalWarnings(true)
+        }, 2000) // wait so print is properly reflected
+      }
+    } else {
+      setPrintWarnings(undefined)
+    }
+  }
+
+  const toggleSelectAllValidWarnings = (e: ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.currentTarget.checked
+
+    if (isChecked) {
+      const validSelectedWarnings = hasMultiPrintWarningPermission
+        ? [...data]
+        : data.filter((warning) => canPrint(warning))
+      setSelectedWarnings(validSelectedWarnings)
+      setValidSelectedWarningsLength(validSelectedWarnings.length)
+    } else {
+      setSelectedWarnings(undefined)
+    }
+  }
+
+  const toggleSelectWarning = (
+    e: ChangeEvent<HTMLInputElement>,
+    warning: LegalWarningResponse
+  ) => {
+    const isChecked = e.currentTarget.checked
+
+    if (isChecked) {
+      setSelectedWarnings([...(selectedWarnings || []), warning])
+    } else {
+      setSelectedWarnings(
+        selectedWarnings?.filter((item) => item._id !== warning._id)
+      )
+    }
+  }
+
   const manageLegalAffairsTabs = manageLegalAffairsArray()
-  const tableMappers: TableMapperItem[] = [
+  const tableMappers: TableMapperItem<LegalWarningResponse>[] = [
     {
       title: () => (
         <FormCheck
           type="checkbox"
-          // onChange={toggleSelectAllCustomers}
-          // checked={
-          //   !!customersForBulkAction.length &&
-          //   customersForBulkAction.length === data.length
-          // }
-          // disabled={!searchFilters.reviewer}
+          checked={
+            !!selectedWarnings?.length &&
+            selectedWarnings.length === validSelectedWarningsLength
+          }
+          onChange={toggleSelectAllValidWarnings}
+          disabled={
+            !printWarningType ||
+            !(
+              printWarningType &&
+              (hasMultiPrintWarningPermission || canPrint(data))
+            )
+          }
         />
       ),
       key: 'selected',
-      render: (warning: LegalWarningResponse) => (
+      render: (warning) => (
         <FormCheck
           type="checkbox"
-          // checked={
-          //   !!customersForBulkAction.find(
-          //     (selectedCustomer) => selectedCustomer._id === customer._id
-          //   )
-          // }
-          // onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          //   toggleSelectCustomer(e, customer)
-          // }
-          // disabled={!searchFilters.reviewer}
+          checked={
+            !!selectedWarnings &&
+            !!selectedWarnings.find(
+              (selectedWarning) => selectedWarning._id === warning._id
+            )
+          }
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            toggleSelectWarning(e, warning)
+          }
+          disabled={
+            !printWarningType ||
+            !(
+              printWarningType &&
+              (hasMultiPrintWarningPermission || canPrint(warning))
+            )
+          }
         />
       ),
     },
     {
       title: local.customerCode,
       key: 'customerCode',
-      render: (data) => data.key,
+      render: (warning) => warning.customerKey,
+    },
+    {
+      title: local.customerName,
+      key: 'customerName',
+      render: (warning) => warning.customerName,
+    },
+    {
+      title: local.nationalId,
+      key: 'nationalId',
+      render: (warning) => warning.nationalId,
+    },
+    {
+      title: local.loanCode,
+      key: 'loanCode',
+      render: (warning) => warning.loanKey,
+    },
+    {
+      title: local.creationDate,
+      key: 'creationDate',
+      render: (warning) =>
+        warning.created?.at ? timeToArabicDate(warning.created.at, true) : '',
+    },
+    {
+      title: local.warningType,
+      key: 'warningType',
+      render: (warning) => local[warning.warningType],
+    },
+    {
+      title: local.actions,
+      key: 'actions',
+      render: (warning) => {
+        const canPrintWarning = canPrint(warning)
+        return (
+          <Button
+            variant="default"
+            onClick={() => (canPrintWarning ? print(warning) : undefined)}
+            disabled={!canPrintWarning}
+          >
+            <span className="printer-icon" />
+            {/* <LtsIcon
+              name="printer"
+              size="25px"
+              color={canPrintWarning ? '#7dc356' : '#6c757d'}
+              tooltipText={local.print}
+            /> */}
+          </Button>
+        )
+      },
     },
   ]
+
   return (
-    <HeaderWithCards
-      header={local.legalAffairs}
-      array={manageLegalAffairsTabs}
-      active={manageLegalAffairsTabs
-        .map((item) => {
-          return item.icon
-        })
-        .indexOf('money-penalty')}
-    />
+    <>
+      <HeaderWithCards
+        header={local.legalAffairs}
+        array={manageLegalAffairsTabs}
+        active={manageLegalAffairsTabs
+          .map((item) => {
+            return item.icon
+          })
+          .indexOf('money-penalty')} // TODO: get icon from icomoon
+      />
+      <Card className="main-card">
+        <Loader type="fullscreen" open={loading} />
+        <Card.Body className="p-0">
+          <div className="custom-card-header">
+            <div className="d-flex align-items-center">
+              <Card.Title className="mb-0 mr-3">
+                {local.legalWarningsList}
+              </Card.Title>
+              <span className="font-weight-bold mr-3">
+                {local.noOfSelectedWarnings}
+                <span
+                  className="font-weight-bold"
+                  style={{ color: '#7dc356' }}
+                >{` (${selectedWarnings?.length || 0})`}</span>
+              </span>
+            </div>
+            <div className="d-flex">
+              <Button
+                className="big-button mr-3"
+                disabled={!hasAddWarningPermission}
+                onClick={() =>
+                  hasAddWarningPermission ? setShowModal(true) : undefined
+                }
+              >
+                {local.add}&nbsp;{local.warningForCustomer}
+              </Button>
+
+              <Button
+                onClick={() => {
+                  if (selectedWarnings) setPrintWarnings(selectedWarnings)
+                }}
+                disabled={!selectedWarnings?.length}
+                className="big-button"
+              >
+                {local.downloadPDF}
+              </Button>
+            </div>
+          </div>
+          <hr className="dashed-line" />
+
+          <SearchForm
+            searchKeys={['keyword', 'warningType', 'branch', 'printed']}
+            dropDownKeys={['name', 'key', 'customerKey', 'nationalId']}
+            url={LEGAL_WARNING_URL}
+            from={from}
+            size={size}
+            setFrom={(newState: number) => setFrom(newState)}
+            resetSelectedItems={() => setSelectedWarnings(undefined)}
+          />
+          <DynamicTable
+            pagination
+            url={LEGAL_WARNING_URL}
+            from={from}
+            size={size}
+            totalCount={totalCount}
+            mappers={tableMappers}
+            data={data}
+            changeNumber={(key: ChangeNumberType, number: number) => {
+              if (key === 'from') setFrom(number)
+              else setSize(number)
+            }}
+          />
+        </Card.Body>
+      </Card>
+      {showModal && (
+        <WarningCreationModal
+          setShowModal={setShowModal}
+          showModal={showModal}
+          getLegalWarnings={getLegalWarnings}
+        />
+      )}
+      {printWarningType && printWarnings && (
+        <PdfPortal
+          component={
+            <LegalWarning type={printWarningType} warnings={printWarnings} />
+          }
+        />
+      )}
+    </>
   )
 }
+
+const addSearchToProps = (dispatch) => {
+  return {
+    search: (data) => dispatch(searchAction(data)),
+    setSearchFilters: (data) => dispatch(searchFiltersAction(data)),
+    setLoading: (data) => dispatch(loadingAction(data)),
+  }
+}
+const mapStateToProps = (state) => {
+  return {
+    data: state.search.data,
+    totalCount: state.search.totalCount,
+    loading: state.loading,
+    searchFilters: state.searchFilters,
+  }
+}
+
+export const LegalWarnings = connect(
+  mapStateToProps,
+  addSearchToProps
+)(Warnings)
