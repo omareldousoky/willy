@@ -22,6 +22,7 @@ import { loading } from '../../../Shared/redux/loading/actions'
 import local from '../../../Shared/Assets/ar.json'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { theme } from '../../../Shared/theme'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -62,7 +63,7 @@ class AssignLoanOfficer extends Component<Props, State> {
     this.state = {
       tabs: [
         {
-          icon: 'users',
+          icon: 'user',
           header: local.roles,
           desc: local.rolesDesc,
           path: '/halan-integration/leads',
@@ -142,26 +143,26 @@ class AssignLoanOfficer extends Component<Props, State> {
         key: 'actions',
         render: (data) => (
           <>
-            <img
-              style={{ cursor: 'pointer', marginLeft: 20 }}
-              alt="view"
-              src={require('../../Assets/editIcon.svg')}
+            <Button
+              variant="default"
               onClick={() =>
                 this.props.history.push('/customers/edit-customer', {
                   id: data._id,
                 })
               }
-            />
-            <img
-              style={{ cursor: 'pointer' }}
-              alt="view"
-              src={require('../../Assets/view.svg')}
+            >
+              <LtsIcon name="edit" />
+            </Button>
+            <Button
+              variant="default"
               onClick={() =>
                 this.props.history.push('/customers/view-customer', {
                   id: data._id,
                 })
               }
-            />
+            >
+              <LtsIcon name="view" />
+            </Button>
           </>
         ),
       },

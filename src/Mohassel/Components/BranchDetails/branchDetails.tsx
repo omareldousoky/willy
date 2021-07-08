@@ -23,6 +23,7 @@ import {
 } from '../../../Shared/Services/utils'
 import ManagerProfile from '../managerHierarchy/managersProfile'
 import SupervisionsProfile from '../managerHierarchy/supervisionsProfile'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps<{}, {}, { details: string }> {
   getBranchById: typeof getBranchById
@@ -242,12 +243,8 @@ class BranchDetails extends Component<Props, State> {
               })
             }}
           >
-            <img
-              className="iconImage"
-              alt="edit"
-              src={require('../../Assets/editIcon.svg')}
-            />
-            {local.edit}
+            <LtsIcon name="edit" />
+            <span className="mx-1">{local.edit}</span>
           </div>
         </span>
       </div>

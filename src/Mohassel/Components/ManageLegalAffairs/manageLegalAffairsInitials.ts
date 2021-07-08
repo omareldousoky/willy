@@ -6,7 +6,7 @@ export const manageLegalAffairsArray = (): Card[] => {
   const mangeLegalAffairsArr: Card[] = []
   if (ability.can('getDefaultingCustomer', 'legal')) {
     mangeLegalAffairsArr.push({
-      icon: 'loanUses',
+      icon: 'loan-uses',
       header: local.lateList,
       desc: local.lateList,
       path: '/legal-affairs/late-list',

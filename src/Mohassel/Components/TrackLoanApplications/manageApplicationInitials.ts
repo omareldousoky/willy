@@ -17,7 +17,7 @@ export const manageApplicationsArray = (): Card[] => {
     ability.can('thirdReview', 'application')
   ) {
     manageLoanArr.push({
-      icon: 'bulkLoanApplicationsReview',
+      icon: 'bulk-loan-applications-review',
       header: local.bulkLoanApplicationReviews,
       desc: local.bulkLoanApplicationReviews,
       path: '/track-loan-applications/bulk-reviews',
@@ -25,7 +25,7 @@ export const manageApplicationsArray = (): Card[] => {
   }
   if (ability.can('approveLoanApplication', 'application')) {
     manageLoanArr.push({
-      icon: 'bulkLoanApplicationsApproval',
+      icon: 'bulk-loan-applications-approval',
       header: local.bulkLoanApplicationsApproval,
       desc: local.bulkLoanApplicationsApproval,
       path: '/track-loan-applications/bulk-approvals',
@@ -33,7 +33,7 @@ export const manageApplicationsArray = (): Card[] => {
   }
   if (ability.can('createLoan', 'application')) {
     manageLoanArr.push({
-      icon: 'bulkApplicationCreation',
+      icon: 'bulk-application-creation',
       header: local.bulkApplicationCreation,
       desc: local.bulkApplicationCreation,
       path: '/track-loan-applications/bulk-creation',

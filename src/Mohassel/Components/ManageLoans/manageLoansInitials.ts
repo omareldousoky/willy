@@ -6,7 +6,7 @@ export const manageLoansArray = (): Card[] => {
   const manageLoanArr: Card[] = []
   if (ability.can('getLoanProduct', 'product')) {
     manageLoanArr.push({
-      icon: 'loanProducts',
+      icon: 'loan-products',
       header: local.loanProducts,
       desc: local.loanProductsDesc,
       path: '/manage-loans/loan-products',
@@ -14,7 +14,7 @@ export const manageLoansArray = (): Card[] => {
   }
   if (ability.can('getCalculationFormula', 'product')) {
     manageLoanArr.push({
-      icon: 'calculationForumlas',
+      icon: 'calculation-forumlas',
       header: local.calculationForumlas,
       desc: local.calculationForumlasDesc,
       path: '/manage-loans/calculation-formulas',
@@ -22,7 +22,7 @@ export const manageLoansArray = (): Card[] => {
   }
   if (ability.can('testCalculate', 'product')) {
     manageLoanArr.push({
-      icon: 'testCalculationMethod',
+      icon: 'calculation-method',
       header: local.testCalculationMethod,
       desc: local.testCalculationMethodDesc,
       path: '/manage-loans/test-formula',
@@ -30,7 +30,7 @@ export const manageLoansArray = (): Card[] => {
   }
   if (ability.can('assignProductToBranch', 'product')) {
     manageLoanArr.push({
-      icon: 'assignProductToBranch',
+      icon: 'assign-product-to-branch',
       header: local.assignProductToBranch,
       desc: local.assignProductToBranch,
       path: '/manage-loans/assign-products-branches',

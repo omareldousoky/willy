@@ -66,7 +66,7 @@ class CustomersList extends Component<Props, State> {
     this.customerActions = [
       {
         actionTitle: local.editCustomer,
-        actionIcon: 'editIcon',
+        actionIcon: 'edit',
 
         actionPermission:
           ability.can('updateCustomer', 'customer') ||
