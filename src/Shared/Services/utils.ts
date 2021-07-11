@@ -772,3 +772,12 @@ export const extractGMTDate = (date: number) => {
     true
   )
 }
+
+export const removeEmptyArg = (obj) => {
+  Object.keys(obj).forEach((el) => {
+    if (obj[el] === '' || obj[el] === undefined) {
+      delete obj[el]
+    }
+  })
+  return obj
+}
