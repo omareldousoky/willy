@@ -67,6 +67,7 @@ import LegalJudgePdf from '../../pdfTemplates/LegalJudge'
 import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
 import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
 import { ActionsGroup } from '../../../../Shared/Components/ActionsGroup'
+import useDidUpdateEffect from '../../../../Shared/hooks/useDidUpdateEffect'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -133,6 +134,8 @@ const LegalCustomersList: FunctionComponent = () => {
   )
 
   useEffect(() => {
+    getLegalCustomers({})
+
     return () => {
       dispatch(searchFiltersAction({}))
     }
@@ -202,17 +205,18 @@ const LegalCustomersList: FunctionComponent = () => {
     fetchSettlementFees()
   }, [customerForSettlement])
 
-  const getLegalCustomers = () =>
+  function getLegalCustomers(filters?: any) {
     dispatch(
       search({
-        ...searchFilters,
+        ...(filters ? filters : searchFilters),
         size,
         from,
         url,
       })
     )
+  }
 
-  useEffect(() => {
+  useDidUpdateEffect(() => {
     getLegalCustomers()
   }, [dispatch, from, size])
 
