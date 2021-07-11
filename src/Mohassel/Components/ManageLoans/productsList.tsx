@@ -4,18 +4,20 @@ import Button from 'react-bootstrap/Button'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Form from 'react-bootstrap/Form'
+import produce from 'immer'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import Can from '../../config/Can'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards, { Tab } from '../HeaderWithCards/headerWithCards'
 import { manageLoansArray } from './manageLoansInitials'
-import { Formula } from '../LoanApplication/loanApplicationCreation'
 import { getDetailedProducts } from '../../Services/APIs/loanProduct/getProduct'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import { downloadFile, getErrorMessage } from '../../../Shared/Services/utils'
 import ability from '../../config/ability'
 import { ActionsIconGroup } from '../../../Shared/Components'
-import { ActionWithIcon } from '../../Models/common'
+import { ActionWithIcon, Product } from '../../Models/common'
+import { getProductApplications } from '../../Services/APIs/loanProduct/productCreation'
+import { Pagination } from '../Common/Pagination'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -29,9 +31,13 @@ interface Props extends RouteComponentProps {
 }
 interface State {
   loading: boolean
-  products: Array<Formula>
+  products: Array<Product>
   filterProducts: string
-  manageLoansTabs: any[]
+  manageLoansTabs: Tab[]
+  paginatedProducts: Array<Product>
+  totalCount: number
+  size: number
+  from: number
 }
 
 class LoanProducts extends Component<Props, State> {
@@ -46,6 +52,10 @@ class LoanProducts extends Component<Props, State> {
       products: [],
       filterProducts: '',
       manageLoansTabs: [],
+      paginatedProducts: [],
+      size: 10,
+      from: 0,
+      totalCount: 0,
     }
     this.mappers = [
       {
@@ -88,6 +98,12 @@ class LoanProducts extends Component<Props, State> {
             id,
           }),
       },
+      {
+        actionTitle: local.productApplicationsReport,
+        actionIcon: 'download-big-file',
+        actionPermission: ability.can('getApplicationsOfProduct', 'report'),
+        actionOnClick: (id) => this.getProductApplicationsReport(id as string),
+      },
     ]
   }
 
@@ -96,19 +112,56 @@ class LoanProducts extends Component<Props, State> {
     this.setState({ manageLoansTabs: manageLoansArray() })
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.filterProducts !== this.state.filterProducts) {
+      this.paginateProducts()
+    }
+  }
+
+  async getProductApplicationsReport(productId: string) {
+    this.setState({ loading: true })
+    const res = await getProductApplications(productId)
+    if (res.status === 'success' && res.body) {
+      downloadFile(res.body.presignedUr)
+    } else {
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    }
+    this.setState({ loading: false })
+  }
+
   async getProducts() {
     this.setState({ loading: true })
     const products = await getDetailedProducts()
     if (products.status === 'success') {
-      this.setState({
-        products: products.body.data,
-        loading: false,
-      })
+      this.setState(
+        {
+          products: products.body.data,
+          loading: false,
+        },
+        () => this.paginateProducts()
+      )
     } else {
       this.setState({ loading: false }, () =>
         Swal.fire('Error !', getErrorMessage(products.error.error), 'error')
       )
     }
+  }
+
+  paginateProducts() {
+    const filteredProduct = this.state.products.filter((product) => {
+      return product.name
+        ?.toLocaleLowerCase()
+        .includes(this.state.filterProducts.toLocaleLowerCase())
+    })
+    this.setState(
+      produce<State>((draftState) => {
+        draftState.paginatedProducts = filteredProduct.slice(
+          draftState.from,
+          draftState.from + draftState.size
+        )
+        draftState.totalCount = filteredProduct.length
+      })
+    )
   }
 
   render() {
@@ -127,18 +180,18 @@ class LoanProducts extends Component<Props, State> {
           <Loader type="fullsection" open={this.state.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
+              <div className="d-flex align-items-center">
+                <Card.Title className="ml-2 mb-0">
                   {local.loanProducts}
                 </Card.Title>
-                <span className="text-muted">
-                  {local.noOfLoanProducts + ` (${this.state.products.length})`}
+                <span className="text-muted ml-2">
+                  {local.noOfLoanProducts + ` (${this.state.totalCount})`}
                 </span>
               </div>
               <div>
                 <Can I="createLoanProduct" a="product">
                   <Button
-                    className="big-button"
+                    className="big-button mx-2"
                     onClick={() =>
                       this.props.history.push(
                         '/manage-loans/loan-products/new-loan-product'
@@ -158,7 +211,7 @@ class LoanProducts extends Component<Props, State> {
                   type="text"
                   data-qc="filterProducts"
                   placeholder={local.search}
-                  style={{ marginBottom: 20, width: '60%' }}
+                  className="mb-2 w-75"
                   maxLength={100}
                   value={this.state.filterProducts}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -167,16 +220,34 @@ class LoanProducts extends Component<Props, State> {
                 />
               </div>
             )}
-            <DynamicTable
-              totalCount={0}
-              mappers={this.mappers}
-              pagination={false}
-              data={this.state.products.filter((product) =>
-                product.name
-                  .toLocaleLowerCase()
-                  .includes(this.state.filterProducts.toLocaleLowerCase())
-              )}
-            />
+            {this.state.products && (
+              <>
+                {' '}
+                <DynamicTable
+                  totalCount={0}
+                  mappers={this.mappers}
+                  pagination={false}
+                  data={this.state.paginatedProducts}
+                  size={this.state.size}
+                  from={this.state.from}
+                />
+                <Pagination
+                  totalCount={this.state.totalCount}
+                  size={this.state.paginatedProducts.length}
+                  paginationArr={[10, 100, 500]}
+                  from={this.state.from}
+                  updatePagination={(key: string, number: number) => {
+                    this.setState(
+                      ({ [key]: number } as unknown) as Pick<
+                        State,
+                        keyof State
+                      >,
+                      () => this.paginateProducts()
+                    )
+                  }}
+                />
+              </>
+            )}
           </Card.Body>
         </Card>
       </div>

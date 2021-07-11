@@ -106,7 +106,7 @@ export const TasaheelReports = () => {
   const requestReport = async (values) => {
     setIsLoading(true)
     const res = await reportsRequests[activeTabKey].requestReport({
-      date: values.date,
+      date: values.date + '-01',
     })
 
     if (res.status === 'success') {
@@ -150,7 +150,7 @@ export const TasaheelReports = () => {
             pdf={{
               key: activeTabKey,
               local: tabs[activeTabIndex()].header,
-              inputs: ['date'],
+              inputs: ['month'],
               permission: tabs[activeTabIndex()].permission || '',
             }}
             show={modalIsOpen}
