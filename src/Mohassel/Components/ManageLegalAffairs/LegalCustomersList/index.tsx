@@ -133,6 +133,16 @@ const LegalCustomersList: FunctionComponent = () => {
     ability.can(type.permission, type.key)
   )
 
+  const getLegalCustomers = (filters?: any) =>
+    dispatch(
+      search({
+        ...(filters || searchFilters),
+        size,
+        from,
+        url,
+      })
+    )
+
   useEffect(() => {
     getLegalCustomers({})
 
@@ -204,17 +214,6 @@ const LegalCustomersList: FunctionComponent = () => {
 
     fetchSettlementFees()
   }, [customerForSettlement])
-
-  function getLegalCustomers(filters?: any) {
-    dispatch(
-      search({
-        ...(filters ? filters : searchFilters),
-        size,
-        from,
-        url,
-      })
-    )
-  }
 
   useDidUpdateEffect(() => {
     getLegalCustomers()
