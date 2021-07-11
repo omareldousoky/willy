@@ -1129,5 +1129,6 @@
   "reviewLogs": "سجل المراجعات",
   "printSettlementType": "طباعة طلب حالةالتصالح",
   "customerAddress": "عنوان العميل",
-  "productApplicationsReport":"تقرير طلبات القروض لنوع قرض"
+  "productApplicationsReport": "تقرير طلبات القروض لنوع قرض",
+  "nano": "نانو"
 }
