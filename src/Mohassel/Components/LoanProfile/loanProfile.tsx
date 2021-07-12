@@ -1446,6 +1446,7 @@ class LoanProfile extends Component<Props, State> {
             <PromissoryNoteMicro
               application={this.state.application}
               branchDetails={this.state.branchDetails}
+              customer={this.state.application.customer}
             />
           </>
         )}

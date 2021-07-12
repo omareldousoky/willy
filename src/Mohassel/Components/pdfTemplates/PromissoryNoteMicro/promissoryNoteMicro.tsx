@@ -6,22 +6,27 @@ import {
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
 import { ApplicationResponse } from '../../../Models/Application'
+import { Customer } from '../../../Models/Customer'
 import { BranchDetails } from '../../../Services/APIs/Branch/getBranch'
 import { Header } from '../pdfTemplateCommon/header'
 import './promissoryNoteMicro.scss'
 
 interface PromissoryNoteProps {
-  application: ApplicationResponse
+  customer: Customer
   branchDetails: BranchDetails
-  nanoForm?: boolean
+  application?: ApplicationResponse
 }
-const template = (customer, application, branchDetails, nanoFlag) => (
+const template = (
+  customer: Customer,
+  branchDetails,
+  application?: ApplicationResponse
+) => (
   <div className="promissory-note-micro" dir="rtl" lang="ar">
     <Header title="سند لأمر" showCurrentUser={false} showCurrentTime={false} />
     <p>
       تاريخ الاصدار : &nbsp;
       {timeToArabicDate(
-        nanoFlag ? new Date().valueOf() : application.creationDate,
+        application ? application.creationDate : new Date().valueOf(),
         false
       )}
     </p>
@@ -29,19 +34,24 @@ const template = (customer, application, branchDetails, nanoFlag) => (
     <p>
       تاريخ الاستحقاق : &nbsp;
       {timeToArabicDate(
-        nanoFlag
-          ? new Date(new Date().setFullYear(new Date().getFullYear() + 2))
-          : application.installmentsObject?.installments[
+        application
+          ? application.installmentsObject?.installments[
               application.installmentsObject.installments.length - 1
-            ].dateOfPayment || 0,
+            ].dateOfPayment || 0
+          : new Date(
+              new Date().setFullYear(new Date().getFullYear() + 2)
+            ).valueOf(),
         false
       )}
     </p>
-    <p>المبلغ : {numbersToArabic(nanoFlag ? 3000 : application.principal)}</p>
+    <p>
+      المبلغ :&nbsp;
+      {numbersToArabic(application ? application.principal : 3000)}
+    </p>
     <p>
       نتعهد نحن الموقعين ادناه تعهداً نهائيا وبدون اى قيد او شرط بأن ندفع فى
       تاريخ الاستحقاق لأمر واذن شركة تساهيل للتمويل مبلغ وقدره &nbsp;
-      {new Tafgeet(nanoFlag ? 3000 : application.principal, 'EGP').parse()}
+      {new Tafgeet(application ? application.principal : 3000, 'EGP').parse()}
       &nbsp; والقيمة وصلتنا نقداً ويستحق علينا عوائد من تاريخ تحرير السند وحتى
       تاريخ السداد بواقع .... % سنوياً ، كما يستحق علينا عوائد تأخير بواقع
       ......... % علاوة على سعر العائد المطبق من تاريخ الاستحقاق حتى تمام السداد
@@ -72,33 +82,36 @@ const template = (customer, application, branchDetails, nanoFlag) => (
     <p>بطاقة الرقم القومى : {customer.nationalId}</p>
     <p>العنوان: {customer.customerHomeAddress}</p>
     <p>التوقيع :</p>
-    {application.product.type === 'micro' && application.guarantors.length > 0 && (
-      <div className="d-flex justify-content-between flex-wrap">
-        {application.guarantors.map((guarantor, i) => (
-          <div className="mt-5">
-            <p>
-              <u>{guarantorOrderLocal[i && i > 10 ? 'default' : i]}</u>
-            </p>
-            <p>الاسم : {guarantor.customerName}</p>
-            <p>بطاقة الرقم القومى : {guarantor.nationalId}</p>
-            <p>العنوان: {guarantor.customerHomeAddress}</p>
-            <p>التوقيع :</p>
-          </div>
-        ))}
-      </div>
-    )}
+    {application?.product.type === 'micro' &&
+      application.guarantors.length > 0 && (
+        <div className="d-flex justify-content-between flex-wrap">
+          {application.guarantors.map((guarantor, i) => (
+            <div className="mt-5">
+              <p>
+                <u>{guarantorOrderLocal[i && i > 10 ? 'default' : i]}</u>
+              </p>
+              <p>الاسم : {guarantor.customerName}</p>
+              <p>بطاقة الرقم القومى : {guarantor.nationalId}</p>
+              <p>العنوان: {guarantor.customerHomeAddress}</p>
+              <p>التوقيع :</p>
+            </div>
+          ))}
+        </div>
+      )}
   </div>
 )
 export const PromissoryNoteMicro = ({
   application,
   branchDetails,
-  nanoForm,
+  customer,
 }: PromissoryNoteProps) => (
   <>
-    {application.product?.beneficiaryType === 'group'
-      ? application.group?.individualsInGroup.map((member) =>
-          template(member.customer, application, branchDetails, false)
-        )
-      : template(application.customer, application, branchDetails, nanoForm)}
+    {application
+      ? application.product?.beneficiaryType === 'group'
+        ? application.group?.individualsInGroup.map((member) =>
+            template(member.customer, branchDetails, application)
+          )
+        : template(application?.customer, branchDetails, application)
+      : template(customer, branchDetails)}
   </>
 )
