@@ -81,6 +81,7 @@ import {
   CalculateEarlyPaymentResponse,
   RemainingLoanResponse,
 } from '../../Models/Payment'
+import NanoLoanContract from '../pdfTemplates/nanoLoanContract/nanoLoanContract'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -1426,7 +1427,13 @@ class LoanProfile extends Component<Props, State> {
               branchDetails={this.state.branchDetails}
               members={this.state.individualsWithInstallments}
             />
-            {this.state.application.product.beneficiaryType === 'individual' ? (
+            {this.state.application.product.type === 'nano' ? (
+              <NanoLoanContract
+                data={this.state.application}
+                branchDetails={this.state.branchDetails}
+              />
+            ) : this.state.application.product.beneficiaryType ===
+              'individual' ? (
               <LoanContract
                 data={this.state.application}
                 branchDetails={this.state.branchDetails}
