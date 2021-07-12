@@ -219,7 +219,10 @@ export interface Application {
   earlyPaymentAmount?: number
   enquirerName?: string
   enquirorId?: string
-  entitledToSign?: Customer[]
+  entitledToSign?: {
+    customer: Customer
+    position: string
+  }[]
   entryDate: number
   fundSource?: string
   group?: {
