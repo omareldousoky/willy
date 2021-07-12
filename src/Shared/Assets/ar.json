@@ -1128,5 +1128,6 @@
   "viewLoanProduct": "تفاصيل نوع القرض",
   "reviewLogs": "سجل المراجعات",
   "printSettlementType": "طباعة طلب حالةالتصالح",
-  "customerAddress": "عنوان العميل"
+  "customerAddress": "عنوان العميل",
+  "productApplicationsReport":"تقرير طلبات القروض لنوع قرض"
 }
