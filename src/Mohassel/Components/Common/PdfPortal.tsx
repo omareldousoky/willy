@@ -1,9 +1,6 @@
 import React from 'react'
 import { createPortal } from 'react-dom'
-
-interface PdfPortalProps {
-  component: JSX.Element
-}
+import { PdfPortalProps } from './types'
 
 export const PdfPortal = (props: PdfPortalProps) =>
   createPortal(

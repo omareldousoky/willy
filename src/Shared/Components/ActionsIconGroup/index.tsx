@@ -9,12 +9,12 @@ import { LtsIcon } from '..'
 import { ActionsIconGroupProps } from './types'
 
 export const ActionsIconGroup = ({
-  currentCustomerId,
+  currentId,
   actions,
 }: ActionsIconGroupProps) => {
   return (
-    <Container>
-      <Row lg="4" md="2" sm="1">
+    <Container className="p-0 m-0">
+      <Row lg="5" md="2" sm="1">
         {actions.map(
           (action, index) =>
             action.actionPermission && (
@@ -22,7 +22,7 @@ export const ActionsIconGroup = ({
                 <Button
                   size="sm"
                   variant="outline-primary"
-                  onClick={() => action.actionOnClick(currentCustomerId)}
+                  onClick={() => action.actionOnClick(currentId)}
                 >
                   <LtsIcon
                     name={action.actionIcon}

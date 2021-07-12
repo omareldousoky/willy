@@ -9,9 +9,13 @@ const Breadcrumbs = ({ route }) => {
         (crumb, index, breadcrumbs) =>
           crumb.path && (
             <div key={index} className="item">
-              {index < breadcrumbs.length - 1 && (
-                <NavLink to={crumb.path}>{crumb.label}</NavLink>
-              )}
+              {index < breadcrumbs.length - 1 ? (
+                crumb.disableLink ? (
+                  crumb.label
+                ) : (
+                  <NavLink to={crumb.path}>{crumb.label}</NavLink>
+                )
+              ) : null}
               {index === breadcrumbs.length - 1 && crumb.label}
             </div>
           )

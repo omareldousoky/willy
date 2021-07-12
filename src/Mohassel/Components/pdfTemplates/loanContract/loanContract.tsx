@@ -382,17 +382,15 @@ const LoanContract = (props) => {
                         props.data.principal,
                         'EGP'
                       ).parse()})`}{' '}
+                      وكافة المصروفات الادارية البالغه{' '}
+                      {numbersToArabic(props.data.applicationFeesRequired)} جنيه{' '}
                       {contractType === 'masterGas' ? (
                         <>
                           <span>وكافه المصروفات الاخري</span> <br />
                         </>
                       ) : (
                         <span>
-                          وكافة المصروفات الادارية البالغه
-                          {numbersToArabic(
-                            props.data.applicationFeesRequired
-                          )}{' '}
-                          جنيه وتكاليف التمويل البالغه
+                          وتكاليف التمويل البالغه{' '}
                           {numbersToArabic(
                             installmentsObject.totalInstallments.feesSum
                           )}

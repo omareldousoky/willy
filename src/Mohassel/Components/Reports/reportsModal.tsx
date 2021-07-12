@@ -160,6 +160,9 @@ const ReportsModal = (props: Props) => {
         case 'managers':
           initValues.managers = []
           break
+        case 'month':
+          initValues.date = ''
+          break
         default:
           break
       }
@@ -687,6 +690,26 @@ const ReportsModal = (props: Props) => {
                             </Form.Control>
                           </div>
                         </Col>
+                      )
+                    }
+                    if (input === 'month') {
+                      return (
+                        <Field
+                          type="month"
+                          name="date"
+                          id="date"
+                          value={formikProps.values.date}
+                          onChange={formikProps.handleChange}
+                          isInvalid={
+                            !!(
+                              formikProps.errors.date &&
+                              formikProps.touched.date
+                            )
+                          }
+                          component={DateField}
+                          key={input}
+                          validate={required}
+                        />
                       )
                     }
                   })}

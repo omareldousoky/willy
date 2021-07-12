@@ -1104,6 +1104,8 @@
   "lengthShouldBe9": "رقم البطاقة يجب ان يكون 9 ارقام",
   "duplicateCompanyNumberMessage": "رقم البطاقة موجود بالفعل لشركة اخرى",
   "moveCompanies": "نقل الشركات",
+  "legalCalendar": "الأجندة القضائية",
+  "time": "الوقت ",
   "downloadHistory": "تنزيل السجلات",
   "managerReviews": "مراجعات الميديرين",
   "finalVerdict": "حكم نهائي",
@@ -1122,5 +1124,10 @@
   "contractType": "نوع العقد",
   "standard": "اساسي",
   "masterGas": "خاص بقرض ماستر جاس",
-  "position": "الصفة في النشاط"
+  "position": "الصفة في النشاط",
+  "viewLoanProduct": "تفاصيل نوع القرض",
+  "reviewLogs": "سجل المراجعات",
+  "printSettlementType": "طباعة طلب حالةالتصالح",
+  "customerAddress": "عنوان العميل",
+  "productApplicationsReport":"تقرير طلبات القروض لنوع قرض"
 }
