@@ -57,8 +57,9 @@ interface State {
 }
 
 interface LoanCreationRouteState {
-  id: string
-  type: string
+  id?: string
+  type?: string
+  sme?: boolean
 }
 
 export interface Location {
@@ -108,47 +109,49 @@ class LoanCreation extends Component<
 
   async componentDidMount() {
     const { id, type } = this.props.location.state
-    this.setState({ id, type, loading: true })
-    if (type === 'create') {
-      const res = await testCalculateApplication(
-        id,
-        new Date(this.state.loanCreationDate).valueOf()
-      )
-      if (res.status === 'success') {
-        this.setState({ installmentsData: res.body })
-      } else Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    }
-    const res = await getApplication(id)
-    if (res.status === 'success') {
-      this.setState((prevState) => ({
-        loading: false,
-        application: res.body,
-        approvalDate: res.body.approvalDate,
-        loanCreationDate: res.body.creationDate || prevState.loanCreationDate,
-        beneficiaryType: res.body.product.beneficiaryType,
-        customerData: {
+    if (id && type) {
+      this.setState({ id, type, loading: true })
+      if (type === 'create') {
+        const res = await testCalculateApplication(
           id,
-          customerName: res.body.customer.customerName,
-          customerType: res.body.customer.customerType,
-          principal: res.body.principal,
-          currency: res.body.product.currency,
-          noOfInstallments: res.body.product.noOfInstallments,
-          gracePeriod: res.body.product.gracePeriod,
-          periodLength: res.body.product.periodLength,
-          periodType: res.body.product.periodType,
-          productName: res.body.product.productName,
-          entryDate: res.body.entryDate,
-          status: res.body.status,
-          businessName: res.body.customer.businessName,
-        },
-      }))
-      if (type === 'issue') {
-        this.setState({ installmentsData: res.body.installmentsObject })
+          new Date(this.state.loanCreationDate).valueOf()
+        )
+        if (res.status === 'success') {
+          this.setState({ installmentsData: res.body })
+        } else Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
       }
-    } else {
-      this.setState({ loading: false }, () => {
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      })
+      const res = await getApplication(id)
+      if (res.status === 'success') {
+        this.setState((prevState) => ({
+          loading: false,
+          application: res.body,
+          approvalDate: res.body.approvalDate,
+          loanCreationDate: res.body.creationDate || prevState.loanCreationDate,
+          beneficiaryType: res.body.product.beneficiaryType,
+          customerData: {
+            id,
+            customerName: res.body.customer.customerName,
+            customerType: res.body.customer.customerType,
+            principal: res.body.principal,
+            currency: res.body.product.currency,
+            noOfInstallments: res.body.product.noOfInstallments,
+            gracePeriod: res.body.product.gracePeriod,
+            periodLength: res.body.product.periodLength,
+            periodType: res.body.product.periodType,
+            productName: res.body.product.productName,
+            entryDate: res.body.entryDate,
+            status: res.body.status,
+            businessName: res.body.customer.businessName,
+          },
+        }))
+        if (type === 'issue') {
+          this.setState({ installmentsData: res.body.installmentsObject })
+        }
+      } else {
+        this.setState({ loading: false }, () => {
+          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        })
+      }
     }
   }
 
@@ -163,7 +166,9 @@ class LoanCreation extends Component<
       if (res.status === 'success') {
         this.setState({ loading: false })
         Swal.fire('', local.loanCreationSuccess, 'success').then(() =>
-          this.props.history.push('/track-loan-applications')
+          this.props.history.push('/track-loan-applications', {
+            sme: this.state.customerData.customerType === 'company',
+          })
         )
       } else {
         this.setState({ loading: false })
@@ -187,7 +192,9 @@ class LoanCreation extends Component<
             res.body.loanApplicationKey,
           'success'
         ).then(() => {
-          this.props.history.push('/track-loan-applications')
+          this.props.history.push('/track-loan-applications', {
+            sme: this.state.customerData.customerType === 'company',
+          })
         })
       } else {
         this.setState({ loading: false })
@@ -198,17 +205,19 @@ class LoanCreation extends Component<
 
   async handleCreationDateChange(creationDate: string) {
     const { id } = this.props.location.state
-    this.setState({ loading: true })
-    const res = await testCalculateApplication(
-      id,
-      new Date(creationDate).valueOf()
-    )
-    if (res.status === 'success') {
-      this.setState({ installmentsData: res.body, loading: false })
-    } else
-      this.setState({ loading: false }, () => {
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      })
+    if (id) {
+      this.setState({ loading: true })
+      const res = await testCalculateApplication(
+        id,
+        new Date(creationDate).valueOf()
+      )
+      if (res.status === 'success') {
+        this.setState({ installmentsData: res.body, loading: false })
+      } else
+        this.setState({ loading: false }, () => {
+          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        })
+    }
   }
 
   getStatus(status: string) {

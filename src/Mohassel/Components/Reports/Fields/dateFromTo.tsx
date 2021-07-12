@@ -21,14 +21,15 @@ interface DateFromToFieldProps {
   name: string
   from: DateFieldProps
   to: DateFieldProps
+  cols?: number
   className?: string
   labelWidth?: string
 }
 
 export const DateFromToField = (props: DateFromToFieldProps) => {
-  const { id, className, name, from, to, labelWidth } = props
+  const { id, className, name, from, cols, to, labelWidth } = props
   return (
-    <Col sm={12} className={className || ''}>
+    <Col sm={cols || 12} className={className || ''}>
       <InputGroup className="mb-0 flex-column" id={id}>
         <div
           className="dropdown-container"
@@ -54,8 +55,8 @@ export const DateFromToField = (props: DateFromToFieldProps) => {
             key={from.id || from.name}
             disabled={from.disabled}
             validate={from.validate}
-            min={from.min}
-            max={from.max}
+            min={from.min || undefined}
+            max={from.max || undefined}
           />
           <span className="mr-1">{local.to}</span>
           <Field
@@ -72,7 +73,7 @@ export const DateFromToField = (props: DateFromToFieldProps) => {
             disabled={to.disabled}
             validate={to.validate}
             min={to.min || from.value}
-            max={to.max}
+            max={to.max || undefined}
           />
         </div>
         <span className="text-danger ml-auto mt-2">
