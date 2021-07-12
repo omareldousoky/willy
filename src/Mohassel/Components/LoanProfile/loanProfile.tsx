@@ -1432,6 +1432,11 @@ class LoanProfile extends Component<Props, State> {
               branchDetails={this.state.branchDetails}
               members={this.state.individualsWithInstallments}
             />
+            <PromissoryNoteMicro
+              application={this.state.application}
+              branchDetails={this.state.branchDetails}
+              customer={this.state.application.customer}
+            />
             {this.state.application.product.beneficiaryType === 'individual' ? (
               <LoanContract
                 data={this.state.application}
@@ -1443,11 +1448,6 @@ class LoanProfile extends Component<Props, State> {
                 branchDetails={this.state.branchDetails}
               />
             )}
-            <PromissoryNoteMicro
-              application={this.state.application}
-              branchDetails={this.state.branchDetails}
-              customer={this.state.application.customer}
-            />
           </>
         )}
         {this.state.print === 'allSME' && (

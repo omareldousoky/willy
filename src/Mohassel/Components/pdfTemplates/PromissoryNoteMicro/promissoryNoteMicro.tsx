@@ -46,13 +46,28 @@ const template = (
     </p>
     <p>
       المبلغ :&nbsp;
-      {numbersToArabic(application ? application.principal : 3000)}
+      {numbersToArabic(
+        application
+          ? application.installmentsObject?.totalInstallments.installmentSum
+          : 3000
+      )}
     </p>
     <p>
       نتعهد نحن الموقعين ادناه تعهداً نهائيا وبدون اى قيد او شرط بأن ندفع فى
       تاريخ الاستحقاق لأمر واذن شركة تساهيل للتمويل مبلغ وقدره &nbsp;
-      {new Tafgeet(application ? application.principal : 3000, 'EGP').parse()}
-      &nbsp; والقيمة وصلتنا نقداً ويستحق علينا عوائد من تاريخ تحرير السند وحتى
+      {numbersToArabic(
+        application
+          ? application.installmentsObject?.totalInstallments.installmentSum
+          : 3000
+      )}
+      &nbsp;جنيه (
+      {new Tafgeet(
+        application
+          ? application.installmentsObject?.totalInstallments.installmentSum
+          : 3000,
+        'EGP'
+      ).parse()}
+      ) &nbsp; والقيمة وصلتنا نقداً ويستحق علينا عوائد من تاريخ تحرير السند وحتى
       تاريخ السداد بواقع .... % سنوياً ، كما يستحق علينا عوائد تأخير بواقع
       ......... % علاوة على سعر العائد المطبق من تاريخ الاستحقاق حتى تمام السداد
       وذلك بدون حاجة الى تنبيه او انذار.
