@@ -1,6 +1,7 @@
 import * as Yup from 'yup'
 import { FormikHelpers, FormikProps } from 'formik'
 import { FormEvent } from 'react'
+import { DocumentType } from '../../../../Shared/Services/interfaces'
 
 export interface FieldDefaultProps {
   name: string
@@ -10,6 +11,7 @@ export interface FieldDefaultProps {
   // Field name to clear if this field changed
   // used for related fields like: Governorate and District (police station)
   clearFieldOnChange?: string
+  header?: JSX.Element | string
 }
 
 export interface Field extends FieldDefaultProps {
@@ -47,7 +49,20 @@ export interface FileField extends FieldDefaultProps {
   label: string
 }
 
-type SingleField = Field | SelectField | CheckboxField | FileField
+export interface DocumentField extends FieldDefaultProps {
+  type: 'document'
+  documentType: DocumentType
+  label?: string
+  keyId: string
+  keyName: string
+}
+
+type SingleField =
+  | Field
+  | SelectField
+  | CheckboxField
+  | FileField
+  | DocumentField
 
 export type FormField = SingleField | GroupField
 

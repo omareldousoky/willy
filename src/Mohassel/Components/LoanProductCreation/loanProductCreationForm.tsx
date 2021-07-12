@@ -87,9 +87,10 @@ export const LoanProductCreationForm = (props: any) => {
               isInvalid={errors.contractType && touched.contractType}
             >
               <option value="standard">{local.standard}</option>
-              {values.beneficiaryType !== 'group' && (
-                <option value="masterGas">{local.masterGas}</option>
-              )}
+              {values.type === 'micro' &&
+                values.beneficiaryType === 'individual' && (
+                  <option value="masterGas">{local.masterGas}</option>
+                )}
             </Form.Control>
             <Form.Control.Feedback type="invalid">
               {errors.contractType}
@@ -141,7 +142,10 @@ export const LoanProductCreationForm = (props: any) => {
               >
                 <option value="micro">Micro</option>
                 {values.contractType !== 'masterGas' && (
-                  <option value="sme">SME</option>
+                  <>
+                    <option value="sme">SME</option>
+                    <option value="nano">Nano</option>
+                  </>
                 )}
               </Form.Control>
               <Form.Control.Feedback type="invalid">
