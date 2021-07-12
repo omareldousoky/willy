@@ -2,6 +2,7 @@ import React, {
   ChangeEvent,
   FunctionComponent,
   useContext,
+  useEffect,
   useRef,
 } from 'react'
 
@@ -11,10 +12,18 @@ import { FormControlProps } from 'react-bootstrap/FormControl'
 import { Schema } from 'yup'
 
 import { getDateString } from '../../../../Shared/Services/utils'
-import { FormFieldProps } from './types'
+import { DocumentField, FormField, FormFieldProps } from './types'
 import DocumentPhoto from '../../../../Shared/Components/documentPhoto/documentPhoto'
 import { AppFormContext } from '.'
 import { getNestedByStringKey } from './utils'
+import DocumentUploader from '../../../../Shared/Components/documentUploader/documentUploader'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  getDocuments,
+  invalidDocument,
+} from '../../../../Shared/redux/document/actions'
+import { Document } from '../../../../Shared/Services/interfaces'
+import { DocumentsType } from '../../../../Shared/redux/document/types'
 
 const FormField: FunctionComponent<FormFieldProps> = ({
   field,
@@ -27,7 +36,9 @@ const FormField: FunctionComponent<FormFieldProps> = ({
     errors,
   },
 }) => {
-  const { defaultValues, onPhotoChange } = useContext(AppFormContext)
+  const { defaultValues, onPhotoChange, formFields } = useContext(
+    AppFormContext
+  )
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const fieldErrors = getNestedByStringKey(errors, field.name)
@@ -44,10 +55,65 @@ const FormField: FunctionComponent<FormFieldProps> = ({
       .describe()
       .tests.find((test: any) => test.name === 'required')
 
-  const label = `${field.label}${isRequired(field.validation) ? ' *' : ''}`
+  const isDocument = (field?: FormField): field is DocumentField =>
+    !!field && field.type === 'document'
+
+  const label = !isDocument(field)
+    ? `${field.label}${isRequired(field.validation) ? ' *' : ''}`
+    : ''
 
   const trimField = (e: React.FocusEvent<any>) => {
     setFieldValue(e.target.name, e.target.value.trim().replace(/\s\s+/g, ' '))
+  }
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (isDocument(field)) {
+      dispatch(
+        getDocuments({
+          [field.keyName]: field.keyId,
+          docType: field.documentType.type,
+        })
+      )
+    }
+  }, [])
+
+  const fieldToClear = formFields.find(
+    ({ name }) => name === field.clearFieldOnChange
+  )
+
+  const documentImages: Document[] =
+    (useSelector((state: any) => state.documents) || []).find(
+      (document: DocumentsType) => {
+        const fieldName = isDocument(fieldToClear)
+          ? fieldToClear.name
+          : field.name
+
+        return document.docName === fieldName
+      }
+    )?.imagesFiles ?? []
+
+  const validDocuments = documentImages.filter((document) => document.valid)
+
+  const handleDocumentDelete = (name: string) => {
+    const lastDocument = documentImages[documentImages.length - 1]
+    dispatch(invalidDocument(lastDocument.key, name))
+  }
+
+  useEffect(() => {
+    if (isDocument(field)) {
+      values[field.name] = documentImages
+    }
+  }, [validDocuments.length])
+
+  const handleFieldChange = (e: ChangeEvent<any>) => {
+    if (field.clearFieldOnChange) {
+      isDocument(fieldToClear)
+        ? handleDocumentDelete(field.clearFieldOnChange)
+        : setFieldValue(field.clearFieldOnChange, '')
+    }
+
+    handleChange(e)
   }
 
   const inputFieldProps = {
@@ -60,10 +126,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
         : handleBlur,
     name: field.name,
     value,
-    onChange: (e: ChangeEvent<any>) => {
-      field.clearFieldOnChange && setFieldValue(field.clearFieldOnChange, '')
-      handleChange(e)
-    },
+    onChange: handleFieldChange,
     readOnly: field.readOnly ?? false,
     disabled: field.disabled ?? field.readOnly ?? false,
     isInvalid: !!fieldErrors && isTouched,
@@ -137,6 +200,18 @@ const FormField: FunctionComponent<FormFieldProps> = ({
           />
         )
 
+      case 'document':
+        return (
+          <DocumentUploader
+            documentType={field.documentType}
+            edit={!inputFieldProps.disabled}
+            keyName={field.keyName}
+            keyId={field.keyId}
+            view={inputFieldProps.disabled}
+            handleChangeFromParent={true}
+          />
+        )
+
       default:
         return (
           <Form.Control
@@ -157,9 +232,8 @@ const FormField: FunctionComponent<FormFieldProps> = ({
       <Form.Label column title={label}>
         {label}
       </Form.Label>
-
+      {field.header}
       {renderFormField()}
-
       <Form.Control.Feedback type="invalid">
         {getNestedByStringKey(errors, field.name)}
       </Form.Control.Feedback>
