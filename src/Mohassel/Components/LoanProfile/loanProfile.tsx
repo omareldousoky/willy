@@ -1427,7 +1427,6 @@ class LoanProfile extends Component<Props, State> {
               branchDetails={this.state.branchDetails}
               members={this.state.individualsWithInstallments}
             />
-            {console.log({ product: this.state.application.product })}
             {this.state.application.product.type === 'nano' ? (
               <NanoLoanContract
                 data={this.state.application}
