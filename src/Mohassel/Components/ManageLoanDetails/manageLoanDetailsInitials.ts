@@ -26,7 +26,7 @@ export const manageLoanDetailsArray = (): Card[] => {
   const mangeLoanDetailsArr: Card[] = []
   if (ability.can('loanUsage', 'config')) {
     mangeLoanDetailsArr.push({
-      icon: 'loanUses',
+      icon: 'loan-uses',
       header: local.loanUses,
       desc: local.loanUses,
       path: '/manage-loan-details/loan-uses',
