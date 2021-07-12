@@ -73,29 +73,29 @@ export const KnowYourCustomer = ({
             </p>
             <p>
               الأســـــــــــــــــــم :-
-              {person.customerName ?? ''}
+              {person.customer.customerName ?? ''}
             </p>
             <p>
               بطاقة رقم قومــي :-
-              {person.nationalId ?? ''}
+              {person.customer.nationalId ?? ''}
             </p>
             <p>
               صادرة بتاريــــــخ :-
-              {(person.nationalIdIssueDate &&
-                timeToArabicDate(person.nationalIdIssueDate, false)) ??
+              {(person.customer.nationalIdIssueDate &&
+                timeToArabicDate(person.customer.nationalIdIssueDate, false)) ??
                 ''}
             </p>
             <p>
               عنوان سكنــــــــه :-
-              {person.customerHomeAddress ?? ''}
+              {person.customer.customerHomeAddress ?? ''}
             </p>
             <p>
               رقــم التليفــــــون :-
-              {person.homePhoneNumber
-                ? person.homePhoneNumber
-                : person.businessPhoneNumber || ''}
+              {person.customer.homePhoneNumber
+                ? person.customer.homePhoneNumber
+                : person.customer.businessPhoneNumber || ''}
             </p>
-            <p>الصفة في النشاط :-</p>
+            <p>الصفة في النشاط :- {person.position}</p>
           </div>
         ))}
         {application.guarantors?.map((person, index) => (
@@ -153,7 +153,7 @@ export const KnowYourCustomer = ({
           <div key={index}>
             <p>
               إسم من له حق التوقيع والاقتراض :-
-              {person.customerName ?? ''}
+              {person.customer.customerName ?? ''}
             </p>
             <p>التوقيع /</p>
             <p>التاريخ &emsp;/&emsp;/ &emsp; &emsp; &emsp;</p>

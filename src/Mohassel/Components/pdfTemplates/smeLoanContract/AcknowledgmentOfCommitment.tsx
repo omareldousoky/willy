@@ -18,8 +18,8 @@ export const AcknowledgmentOfCommitment = ({
         {application.entitledToSign?.map((person, index) => (
           <p key={index}>
             {!index
-              ? ` اقر انا / ${person.customerName} `
-              : `و ${person.customerName}`}
+              ? ` اقر انا / ${person.customer.customerName} `
+              : `و ${person.customer.customerName}`}
           </p>
         ))}
         <p>الممثل القانوني لشركة / {application.customer?.businessName}</p>

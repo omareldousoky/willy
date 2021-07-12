@@ -49,7 +49,7 @@ export const AcknowledgmentWasSignedInFront = ({
               <tr key={index}>
                 <td>
                   من له حق التوقيع والاقتراض {orderLocal[index]} /{' '}
-                  {person.customerName ?? ''}{' '}
+                  {person.customer.customerName ?? ''}{' '}
                 </td>
                 <td />
               </tr>
