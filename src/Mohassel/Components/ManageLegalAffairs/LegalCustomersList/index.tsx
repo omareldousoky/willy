@@ -46,6 +46,7 @@ import LegalSettlementForm from './LegalSettlementForm'
 import {
   getSettlementFees,
   reviewLegalCustomer,
+  getLegalHistory,
 } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
 import { FormField } from '../Form/types'
 import { defaultValidationSchema } from '../validations'
@@ -55,6 +56,7 @@ import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
 import { Branch } from '../../../../Shared/Services/interfaces'
 import { getBranch } from '../../../Services/APIs/Branch/getBranch'
 import managerTypes from '../configs/managerTypes'
+import { LegalHistory } from './LegalHistory'
 import {
   handleUpdateSuccess,
   hasCourtSession,
@@ -63,6 +65,8 @@ import {
 import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
 import LegalJudgePdf from '../../pdfTemplates/LegalJudge'
 import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
+import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
+import { ActionsGroup } from '../../../../Shared/Components/ActionsGroup'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -107,8 +111,10 @@ const LegalCustomersList: FunctionComponent = () => {
 
   const [isSettlementLoading, setIsSettlementLoading] = useState(false)
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
+  const [historyData, setHistoryData] = useState<LegalHistoryResponse | null>(
+    null
+  )
   const [isJudgeModalOpen, setIsJudgeModalOpen] = useState(false)
-
   const data: SettledCustomer[] =
     useSelector((state: any) => state.search.data) || []
   const error: string = useSelector((state: any) => state.search.error)
@@ -155,17 +161,17 @@ const LegalCustomersList: FunctionComponent = () => {
   }, [customerForPrint])
 
   useEffect(() => {
-    if (branchForPrint || !!customersForConvictedReport) {
+    if (branchForPrint || historyData || !!customersForConvictedReport) {
       window.print()
     }
-
     window.onafterprint = () => {
       setCustomerForPrint(null)
       setBranchForPrint(null)
       setCustomersForConvictedReport(null)
       setConvictedReportInfo({ policeStation: '', governorate: '' })
+      setHistoryData(null)
     }
-  }, [branchForPrint, customersForConvictedReport])
+  }, [branchForPrint, customersForConvictedReport, historyData])
 
   useEffect(() => {
     const fetchSettlementFees = async () => {
@@ -309,6 +315,26 @@ const LegalCustomersList: FunctionComponent = () => {
 
     setCustomersForReview(null)
   }
+  const handleDownloadHistory = async (legalId: string) => {
+    const response = await getLegalHistory(legalId)
+    setIsSettlementLoading(true)
+    if (response.status === 'success') {
+      const resBody: LegalHistoryResponse = response.body as LegalHistoryResponse
+      if (resBody.history && resBody?.history.length > 0) {
+        setHistoryData(resBody)
+      } else {
+        setHistoryData(null)
+        Swal.fire('', local.noLogsFound, 'info')
+      }
+    } else {
+      Swal.fire(
+        'error',
+        getErrorMessage((response.error as Record<string, string>).error),
+        'error'
+      )
+    }
+    setIsSettlementLoading(false)
+  }
 
   const handleJudgeReport = async (values: JudgeCustomersFormValues) => {
     setConvictedReportInfo({
@@ -337,6 +363,66 @@ const LegalCustomersList: FunctionComponent = () => {
     } else {
       Swal.fire('error', getErrorMessage(response.error.error), 'error')
     }
+  }
+
+  const hasReviews = (settlement: SettlementFormValues & ManagerReviews) =>
+    settlement.branchManagerReview ||
+    settlement.areaManagerReview ||
+    settlement.areaSupervisorReview ||
+    settlement.financialManagerReview
+
+  const createActionsMapper = (customer: SettledCustomer) => {
+    return [
+      {
+        actionTitle: local.reviewLogs,
+        actionPermission: !!(
+          customer.settlement && hasReviews(customer.settlement)
+        ),
+        actionOnClick: () => {
+          setCustomerForView(customer)
+        },
+      },
+      {
+        actionTitle: local.registerLegalAction,
+        actionPermission: ability.can('updateDefaultingCustomer', 'legal'),
+        actionOnClick: () => {
+          history.push({
+            pathname: '/legal-affairs/customer-actions',
+            state: { customer },
+          })
+        },
+      },
+      {
+        actionTitle: local.registerSettlement,
+        actionPermission: ability.can('updateSettlement', 'legal'),
+        actionOnClick: () => {
+          toggleCustomerForSettlement(customer)
+        },
+      },
+      {
+        actionTitle: local.reviewSettlement,
+        actionPermission: (isCurrentUserManager &&
+          customer.settlement?.settlementStatus === 'reviewed' &&
+          !!availableManagerReview([customer]).length) as boolean,
+        actionOnClick: () => {
+          setCustomersForReview([customer])
+        },
+      },
+      {
+        actionTitle: local.printSettlementType,
+        actionPermission: !!customer.settlement?.financialManagerReview,
+        actionOnClick: () => {
+          setCustomerForPrint(customer)
+        },
+      },
+      {
+        actionTitle: local.downloadHistory,
+        actionPermission: ability.can('getDefaultingCustomer', 'legal'),
+        actionOnClick: async () => {
+          await handleDownloadHistory(customer._id)
+        },
+      },
+    ]
   }
 
   const tableMapper: TableMapperItem[] = [
@@ -433,101 +519,16 @@ const LegalCustomersList: FunctionComponent = () => {
           ? local[customer.settlement.settlementStatus]
           : local.notDone,
     },
-  ]
-
-  const hasReviews = (settlement: SettlementFormValues & ManagerReviews) =>
-    settlement.branchManagerReview ||
-    settlement.areaManagerReview ||
-    settlement.areaSupervisorReview ||
-    settlement.financialManagerReview
-
-  const tableActionsMapper: TableMapperItem[] = [
     {
-      title: '',
-      key: 'view',
-      render: (customer: SettledCustomer) =>
-        customer.settlement &&
-        hasReviews(customer.settlement) && (
-          <Button
-            type="button"
-            variant="default"
-            onClick={() => setCustomerForView(customer)}
-            className="p-0"
-            title={local.logs}
-          >
-            <img alt={local.logs} src={require('../../../Assets/view.svg')} />
-          </Button>
-        ),
-    },
-    {
-      title: '',
+      title: local.actions,
       key: 'actions',
       render: (customer: SettledCustomer) => (
-        <Can I="updateDefaultingCustomer" a="legal">
-          <button
-            className="btn clickable-action rounded-0 p-0 font-weight-normal"
-            style={{ color: '#2f2f2f', fontSize: '.9rem' }}
-            type="button"
-            onClick={() =>
-              history.push({
-                pathname: '/legal-affairs/customer-actions',
-                state: { customer },
-              })
-            }
-          >
-            {local.registerLegalAction}
-          </button>
-        </Can>
-      ),
-    },
-    {
-      title: '',
-      key: 'legalSettlement',
-      render: (customer: SettledCustomer) => (
-        <div className="d-flex align-items-center p-1">
-          <Can I="updateSettlement" a="legal">
-            <button
-              className="btn clickable-action rounded-0 p-0 font-weight-normal mr-2"
-              style={{ color: '#2f2f2f', fontSize: '.9rem' }}
-              onClick={() => toggleCustomerForSettlement(customer)}
-              type="button"
-            >
-              {local.registerSettlement}
-            </button>
-          </Can>
-
-          {isCurrentUserManager &&
-            customer.settlement?.settlementStatus === 'reviewed' &&
-            !!availableManagerReview([customer]).length && (
-              <Button
-                type="button"
-                variant="default"
-                className="mr-2 p-0"
-                onClick={() => setCustomersForReview([customer])}
-                title={local.read}
-              >
-                <img
-                  alt={local.read}
-                  src={require('../../../Assets/check-circle.svg')}
-                />
-              </Button>
-            )}
-
-          {customer.settlement?.financialManagerReview && (
-            <Button
-              type="button"
-              variant="default"
-              className="mr-2 p-0"
-              onClick={() => setCustomerForPrint(customer)}
-              title={local.print}
-            >
-              <img
-                alt={local.print}
-                style={{ maxWidth: 18 }}
-                src={require('../../../Assets/green-download.svg')}
-              />
-            </Button>
-          )}
+        <div className="position-relative">
+          <ActionsGroup
+            currentId={customer._id}
+            dropdownBtnTitle={local.actions}
+            actions={createActionsMapper(customer)}
+          />
         </div>
       ),
     },
@@ -632,7 +633,7 @@ const LegalCustomersList: FunctionComponent = () => {
                 from={from}
                 size={size}
                 totalCount={totalCount}
-                mappers={[...tableMapper, ...tableActionsMapper]}
+                mappers={tableMapper}
                 data={data}
                 url={url}
                 changeNumber={(key: string, number: number) => {
@@ -784,6 +785,7 @@ const LegalCustomersList: FunctionComponent = () => {
           customer={customerForPrint}
         />
       )}
+      {historyData && <LegalHistory data={historyData} />}
 
       {!!customersForConvictedReport &&
         !!convictedReportInfo.governorate &&

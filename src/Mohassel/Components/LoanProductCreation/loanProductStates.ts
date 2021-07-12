@@ -61,16 +61,11 @@ export const LoanProductValidation = Yup.object().shape({
       local.maxGlobalLimitReachedError,
       function (this: any, value: any) {
         const { beneficiaryType, principals, type } = this.parent
-        if (
-          (beneficiaryType === 'individual' &&
-            value <= principals?.maxIndividualPrincipal) ||
+        return ((beneficiaryType === 'individual' &&
+          value <= principals?.maxIndividualPrincipal) ||
           (beneficiaryType === 'group' &&
             value <= principals?.maxGroupPrincipal) ||
-          type === 'sme'
-        ) {
-          return true
-        }
-        return false
+          type === 'sme') as boolean
       }
     )
     .required(local.required),

@@ -88,11 +88,11 @@ import {
 import { Score } from '../CustomerCreation/customerProfile'
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
 
-interface EarlyPayment {
-  remainingPrincipal?: number
-  requiredAmount?: number
-  earlyPaymentFees?: number
-}
+import { getEarlyPaymentPdfData } from './utils'
+import {
+  CalculateEarlyPaymentResponse,
+  RemainingLoanResponse,
+} from '../../Models/Payment'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -115,7 +115,7 @@ interface State {
   tabsArray: Array<Tab>
   loading: boolean
   print: string
-  earlyPaymentData: EarlyPayment
+  earlyPaymentData?: CalculateEarlyPaymentResponse
   pendingActions: PendingActions
   manualPaymentEditId: string
   branchDetails?: BranchDetails
@@ -125,6 +125,7 @@ interface State {
   randomPendingActions: Array<any>
   geoAreas: Array<any>
   remainingTotal: number
+  remainingLoan?: RemainingLoanResponse
   individualsWithInstallments: IndividualWithInstallments
   loanUsage: string
 }
@@ -149,7 +150,6 @@ class LoanProfile extends Component<Props, State> {
       tabsArray: [],
       loading: false,
       print: '',
-      earlyPaymentData: {},
       pendingActions: {},
       manualPaymentEditId: '',
       receiptData: {},
@@ -243,12 +243,12 @@ class LoanProfile extends Component<Props, State> {
         application.body.product.beneficiaryType === 'group'
           ? application.body?.group?.individualsInGroup[0]?.customer?._id
           : application.body.customer._id
-      const totalRemain = await this.getRemainingLoan(
+      const remainingLoanRes = await this.getRemainingLoan(
         customerId,
         application.body.status
       )
-      if (totalRemain) {
-        this.setState({ remainingTotal: totalRemain })
+      if (remainingLoanRes) {
+        this.setState({ remainingLoan: remainingLoanRes })
       }
     }
   }
@@ -261,14 +261,14 @@ class LoanProfile extends Component<Props, State> {
     ) {
       const res = await remainingLoan(id)
       if (res.status === 'success') {
-        return res.body.remainingTotal
+        return res.body
       }
-      return 0
+      return undefined
     }
-    return 0
+    return undefined
   }
 
-  async getCachedIndivdualiScores(obj) {
+  async getCachedIndividualIScores(obj) {
     this.setState({ loading: true })
     const iScores = await getIscoreCached(obj)
     if (iScores.status === 'success') {
@@ -297,6 +297,10 @@ class LoanProfile extends Component<Props, State> {
   async getCachediScores(application) {
     const ids: string[] = []
     const commercialRegisterNumbers: string[] = []
+    const entitledToSign = application.entitledToSign?.map(
+      this.mapEntitledToSignToCustomer
+    )
+
     if (application.product.beneficiaryType === 'group') {
       application.group.individualsInGroup.forEach((member) =>
         ids.push(member.customer.nationalId)
@@ -309,8 +313,8 @@ class LoanProfile extends Component<Props, State> {
             : ids.push(guar.nationalId)
         )
       }
-      if (application.entitledToSign && application.entitledToSign.length > 0) {
-        application.entitledToSign.forEach((cust) => ids.push(cust.nationalId))
+      if (entitledToSign && entitledToSign.length > 0) {
+        entitledToSign.forEach((cust) => ids.push(cust.nationalId))
       }
       application.customer.customerType === 'company'
         ? commercialRegisterNumbers.push(
@@ -352,7 +356,7 @@ class LoanProfile extends Component<Props, State> {
     }
     let iscores: Array<Score> = []
     if (obj.nationalIds.length > 0)
-      iscores = await this.getCachedIndivdualiScores(obj)
+      iscores = await this.getCachedIndividualIScores(obj)
     if (smeObj.ids.length > 0) {
       const smeScores: Array<Score> = await this.getCachedSMEiScores(smeObj)
       iscores.push(...smeScores)
@@ -801,6 +805,19 @@ class LoanProfile extends Component<Props, State> {
     return {}
   }
 
+  mapEntitledToSignToCustomer({
+    customer,
+    position,
+  }: {
+    customer: Customer
+    position: string
+  }) {
+    return {
+      ...customer,
+      position,
+    }
+  }
+
   async writeOffApplication() {
     const options = await this.getWriteOffReasons()
     const { value: text } = await Swal.fire({
@@ -1207,7 +1224,9 @@ class LoanProfile extends Component<Props, State> {
       case 'entitledToSign':
         return (
           <GuarantorTableView
-            guarantors={this.state.application.entitledToSign}
+            guarantors={this.state.application.entitledToSign.map(
+              this.mapEntitledToSignToCustomer
+            )}
             customerId={this.state.application.customer._id}
             application={this.state.application}
             getGeoArea={(area) => this.getCustomerGeoArea(area)}
@@ -1420,14 +1439,14 @@ class LoanProfile extends Component<Props, State> {
           <>
             <CashReceiptPDF
               data={this.state.application}
-              remainingTotal={this.state.remainingTotal}
+              remainingTotal={this.state.remainingLoan?.remainingTotal || 0}
             />
             <CustomerCardPDF
               data={this.state.application}
               getGeoArea={(area) => this.getCustomerGeoArea(area)}
               penalty={this.state.penalty}
               branchDetails={this.state.branchDetails}
-              remainingTotal={this.state.remainingTotal}
+              remainingTotal={this.state.remainingLoan?.remainingTotal || 0}
               members={this.state.individualsWithInstallments}
             />
             <CustomerCardAttachments
@@ -1499,14 +1518,17 @@ class LoanProfile extends Component<Props, State> {
             getGeoArea={(area) => this.getCustomerGeoArea(area)}
             penalty={this.state.penalty}
             branchDetails={this.state.branchDetails}
-            remainingTotal={this.state.remainingTotal}
+            remainingTotal={this.state.remainingLoan?.remainingTotal || 0}
             members={this.state.individualsWithInstallments}
           />
         )}
         {this.state.print === 'earlyPayment' && (
           <EarlyPaymentPDF
-            data={this.state.application}
-            earlyPaymentData={this.state.earlyPaymentData}
+            application={this.state.application}
+            earlyPaymentPdfData={getEarlyPaymentPdfData(
+              this.state.application,
+              this.state.remainingLoan
+            )}
             branchDetails={this.state.branchDetails}
           />
         )}

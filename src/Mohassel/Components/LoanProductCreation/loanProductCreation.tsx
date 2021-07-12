@@ -6,9 +6,11 @@ import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
 import { LoanProductValidation } from './loanProductStates'
 import { LoanProductCreationForm } from './loanProductCreationForm'
-import { createProduct } from '../../Services/APIs/loanProduct/createProduct'
+import {
+  createProduct,
+  editProduct,
+} from '../../Services/APIs/loanProduct/productCreation'
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas'
-import { editProductsPrincipals } from '../../Services/APIs/loanProduct/editProductPrincipals'
 import { getProduct } from '../../Services/APIs/loanProduct/getProduct'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -32,6 +34,7 @@ class LoanProductCreation extends Component<Props, State> {
       product: {
         productName: '',
         beneficiaryType: 'individual',
+        contractType: 'standard',
         calculationFormulaId: '',
         type: 'micro',
         loanNature: 'cash',
@@ -106,11 +109,10 @@ class LoanProductCreation extends Component<Props, State> {
   }
 
   componentDidMount() {
-    if (this.props.edit) {
-      this.getProduct()
-    }
     this.getFormulas()
-    this.getGlobalPrinciple()
+    if (this.props.edit) {
+      this.getProduct().then(() => this.getGlobalPrinciple())
+    } else this.getGlobalPrinciple()
   }
 
   async getGlobalPrinciple() {
@@ -170,13 +172,14 @@ class LoanProductCreation extends Component<Props, State> {
     if (this.props.edit) {
       const { id } = this.props.location.state
       this.setState({ loading: true })
-      const res = await editProductsPrincipals(id, {
-        maxPrincipal: values.maxPrincipal,
-        minPrincipal: values.minPrincipal,
-      })
+      const res = await editProduct(id, values)
       if (res.status === 'success') {
         this.setState({ loading: false })
-        Swal.fire('success', local.updateLoanProductPrincipalsSuccess)
+        Swal.fire('success', local.updateLoanProductPrincipalsSuccess).then(
+          () => {
+            this.props.history.push('/manage-loans/loan-products')
+          }
+        )
       } else {
         this.setState({ loading: false })
         Swal.fire('error', getErrorMessage(res.error.error), 'error')

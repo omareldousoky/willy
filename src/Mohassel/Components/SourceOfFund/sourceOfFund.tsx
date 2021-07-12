@@ -22,6 +22,7 @@ import { cibExtractions } from '../../Services/APIs/loanApplication/cibExtractio
 import { downloadTxtFile } from '../CIB/textFiles'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageLoansArray } from '../LoanList/manageLoansInitials'
+import { ActionsIconGroup } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -143,6 +144,16 @@ class SourceOfFund extends Component<Props, State> {
         key: 'status',
         sortable: true,
         render: (data) => this.getStatus(data.application.status),
+      },
+      {
+        title: '',
+        key: 'action',
+        render: (data) => (
+          <ActionsIconGroup
+            currentId={data._id}
+            actions={this.renderActions(data)}
+          />
+        ),
       },
     ]
   }
@@ -272,6 +283,21 @@ class SourceOfFund extends Component<Props, State> {
     }
   }
 
+  renderActions(data) {
+    return [
+      {
+        actionTitle: local.view,
+        actionIcon: 'view',
+
+        actionPermission: true,
+        actionOnClick: () =>
+          this.props.history.push('/track-loan-applications/loan-profile', {
+            id: data.application._id,
+          }),
+      },
+    ]
+  }
+
   render() {
     return (
       <>
@@ -282,7 +308,7 @@ class SourceOfFund extends Component<Props, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('changeSourceOfFund')}
+            .indexOf('change-source-of-fund')}
         />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullscreen" open={this.props.loading} />

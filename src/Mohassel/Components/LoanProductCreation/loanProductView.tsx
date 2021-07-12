@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container'
 import Swal from 'sweetalert2'
 import Table from 'react-bootstrap/Table'
 import { Loader } from '../../../Shared/Components/Loader'
-import * as local from '../../../Shared/Assets/ar.json'
+import local from '../../../Shared/Assets/ar.json'
 import BackButton from '../BackButton/back-button'
 import {
   beneficiaryType,
@@ -74,6 +74,10 @@ class ViewProduct extends Component<
                       {beneficiaryType(this.state.product.beneficiaryType)} -
                       {this.state.product.type || ''}
                     </td>
+                  </tr>
+                  <tr>
+                    <td>{local.contractType}</td>
+                    <td>{local[this.state.product.contractType]}</td>
                   </tr>
                   <tr>
                     <td>{local.calculationFormulaId}</td>
