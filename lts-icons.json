@@ -1795,9 +1795,15 @@
           "M693.033 403.431l-289.631 289.631c-19.995 19.995-52.413 19.995-72.408 0s-19.995-52.413 0-72.408l289.631-289.631c19.995-19.995 52.413-19.995 72.408 0s19.995 52.413 0 72.408z"
         ],
         "attrs": [
-          { "fill": "rgb(47, 47, 47)" },
-          { "fill": "rgb(255, 255, 255)" },
-          { "fill": "rgb(255, 255, 255)" }
+          {
+            "fill": "rgb(47, 47, 47)"
+          },
+          {
+            "fill": "rgb(255, 255, 255)"
+          },
+          {
+            "fill": "rgb(255, 255, 255)"
+          }
         ],
         "isMulticolor": true,
         "isMulticolor2": false,
@@ -1817,9 +1823,15 @@
         "grid": 0
       },
       "attrs": [
-        { "fill": "rgb(47, 47, 47)" },
-        { "fill": "rgb(255, 255, 255)" },
-        { "fill": "rgb(255, 255, 255)" }
+        {
+          "fill": "rgb(47, 47, 47)"
+        },
+        {
+          "fill": "rgb(255, 255, 255)"
+        },
+        {
+          "fill": "rgb(255, 255, 255)"
+        }
       ],
       "properties": {
         "order": 16,
@@ -2093,7 +2105,9 @@
     }
   ],
   "height": 1024,
-  "metadata": { "name": "lts-icons" },
+  "metadata": {
+    "name": "lts-icons"
+  },
   "preferences": {
     "showGlyphs": true,
     "showCodes": true,
@@ -2107,7 +2121,11 @@
         "majorVersion": 1,
         "minorVersion": 0
       },
-      "metrics": { "emSize": 1024, "baseline": 6.25, "whitespace": 50 },
+      "metrics": {
+        "emSize": 1024,
+        "baseline": 6.25,
+        "whitespace": 50
+      },
       "embed": false,
       "cssVars": true,
       "cssVarsFormat": "scss",

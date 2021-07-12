@@ -36,11 +36,14 @@ import {
 } from '../../Services/APIs/iScore/iScore'
 import { Score } from '../CustomerCreation/customerProfile'
 import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApplications'
-import { manageApplicationsArray } from './manageApplicationInitials'
+import {
+  manageApplicationsArray,
+  manageSMEApplicationsArray,
+} from './manageApplicationInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { LoanApplicationReportRequest } from '../../Services/interfaces'
+import { ActionsIconGroup, LtsIcon } from '../../../Shared/Components'
 import ability from '../../config/ability'
-import { LtsIcon } from '../../../Shared/Components'
 
 interface Product {
   productName: string
@@ -71,9 +74,13 @@ interface State {
   iScoreModal: boolean
   iScoreCustomers: any
   loading: boolean
-  manageApplicationsTabs: any[]
 }
-interface Props extends RouteComponentProps {
+interface Props
+  extends RouteComponentProps<
+    {},
+    {},
+    { sme?: boolean; id?: string; action?: string }
+  > {
   data: any
   error: string
   totalCount: number
@@ -82,6 +89,7 @@ interface Props extends RouteComponentProps {
   search: (data) => Promise<void>
   setSearchFilters: (data) => void
   branchId?: string
+  sme?: boolean
 }
 class TrackLoanApplications extends Component<Props, State> {
   mappers: {
@@ -102,7 +110,6 @@ class TrackLoanApplications extends Component<Props, State> {
       iScoreModal: false,
       iScoreCustomers: [],
       loading: false,
-      manageApplicationsTabs: [],
     }
     this.mappers = [
       {
@@ -181,26 +188,67 @@ class TrackLoanApplications extends Component<Props, State> {
       {
         title: '',
         key: 'action',
-        render: (data) => this.renderIcons(data),
+        render: (data) => (
+          <ActionsIconGroup
+            currentId={data._id}
+            actions={this.renderActions(data)}
+          />
+        ),
       },
     ]
   }
 
   componentDidMount() {
-    this.props.setSearchFilters({ type: 'micro' })
+    this.props.setSearchFilters({
+      type:
+        this.props.location.state && this.props.location.state.sme
+          ? 'sme'
+          : 'micro',
+    })
     this.props
       .search({
         size: this.state.size,
         from: this.state.from,
         url: 'application',
         branchId: this.props.branchId,
-        type: 'micro',
+        type:
+          this.props.location.state && this.props.location.state.sme
+            ? 'sme'
+            : 'micro',
       })
       .then(() => {
         if (this.props.error)
           Swal.fire('', getErrorMessage(this.props.error), 'error')
       })
-    this.setState({ manageApplicationsTabs: manageApplicationsArray() })
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (
+      (prevProps.location.state && prevProps.location.state.sme) !==
+      (this.props.location.state && this.props.location.state.sme)
+    ) {
+      this.props.setSearchFilters({
+        type:
+          this.props.location.state && this.props.location.state.sme
+            ? 'sme'
+            : 'micro',
+      })
+      this.props
+        .search({
+          size: this.state.size,
+          from: this.state.from,
+          url: 'application',
+          branchId: this.props.branchId,
+          type:
+            this.props.location.state && this.props.location.state.sme
+              ? 'sme'
+              : 'micro',
+        })
+        .then(() => {
+          if (this.props.error)
+            Swal.fire('', getErrorMessage(this.props.error), 'error')
+        })
+    }
   }
 
   componentWillUnmount() {
@@ -408,40 +456,45 @@ class TrackLoanApplications extends Component<Props, State> {
     return true
   }
 
-  renderIcons(data) {
-    return (
-      <>
-        <Button
-          variant="default"
-          onClick={() =>
-            this.props.history.push('/track-loan-applications/loan-profile', {
-              id: data.application._id,
-            })
-          }
-        >
-          <LtsIcon name="view" />
-        </Button>
-        <Can I="viewIscore" a="customer">
-          <span
-            style={{ cursor: 'pointer' }}
-            title="iScore"
-            onClick={() => this.getCachediScores(data.application)}
-          >
-            iScore
-          </span>
-        </Can>
-      </>
-    )
+  renderActions(data) {
+    return [
+      {
+        actionTitle: local.view,
+        actionIcon: 'view',
+
+        actionPermission: true,
+        actionOnClick: () =>
+          this.props.history.push('/track-loan-applications/loan-profile', {
+            id: data.application._id,
+          }),
+      },
+      {
+        actionTitle: `${local.view} iScore`,
+        actionIcon: 'i-score',
+
+        actionPermission: ability.can('viewIscore', 'customer'),
+        actionOnClick: () => this.getCachediScores(data.application),
+      },
+    ]
   }
 
   render() {
-    const searchKeys = ['keyword', 'dateFromTo', 'branch', 'status-application']
     const smePermission =
-      ability.can('getSMEApplication', 'application') &&
-      this.props.searchFilters.type === 'sme'
+      (this.props.location.state && this.props.location.state.sme) || false
+    const searchKeys = ['keyword', 'dateFromTo', 'branch', 'status-application']
     const filteredMappers = smePermission
       ? this.mappers.filter((mapper) => mapper.key !== 'nationalId')
       : this.mappers
+    const dropDownKeys = [
+      'name',
+      'key',
+      'customerKey',
+      'customerCode',
+      'customerShortenedCode',
+    ]
+    const manageApplicationsTabs = smePermission
+      ? manageSMEApplicationsArray()
+      : manageApplicationsArray()
     if (smePermission) {
       filteredMappers.splice(3, 0, {
         title: local.commercialRegisterNumber,
@@ -453,26 +506,17 @@ class TrackLoanApplications extends Component<Props, State> {
         key: 'taxCardNumber',
         render: (data) => data.application.customer.taxCardNumber,
       })
-    }
-    const dropDownKeys = [
-      'name',
-      'nationalId',
-      'key',
-      'customerKey',
-      'customerCode',
-      'customerShortenedCode',
-    ]
-    if (ability.can('getSMEApplication', 'application')) {
-      searchKeys.push('sme')
       dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
+    } else {
+      dropDownKeys.push('nationalId')
     }
     return (
       <>
         <div className="print-none">
           <HeaderWithCards
             header={local.loanApplications}
-            array={this.state.manageApplicationsTabs}
-            active={this.state.manageApplicationsTabs
+            array={manageApplicationsTabs}
+            active={manageApplicationsTabs
               .map((item) => {
                 return item.icon
               })
@@ -500,7 +544,7 @@ class TrackLoanApplications extends Component<Props, State> {
                       onClick={() =>
                         this.props.history.push(
                           '/track-loan-applications/new-loan-application',
-                          { id: '', action: 'under_review' }
+                          { id: '', action: 'under_review', sme: smePermission }
                         )
                       }
                     >
@@ -530,6 +574,7 @@ class TrackLoanApplications extends Component<Props, State> {
                 setFrom={(from) => this.setState({ from })}
                 searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
                 hqBranchIdRequest={this.props.branchId}
+                sme={this.props.location.state && this.props.location.state.sme}
               />
               <DynamicTable
                 url="application"

@@ -6,7 +6,7 @@ export interface Card {
   icon: string
   header: string
   desc: string
-  path: string
+  path: string | object
 }
 export const manageAccountsArray = (): Card[] => {
   const mangeAccountArr: Card[] = []

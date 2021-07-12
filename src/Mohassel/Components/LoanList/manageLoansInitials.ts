@@ -8,7 +8,7 @@ export const manageLoansArray = (): Card[] => {
     manageLoanArr.push({
       icon: 'issued-loans',
       header: local.issuedLoans,
-      desc: local.issuedLoans,
+      desc: local.individuals,
       path: '/loans',
     })
   }
@@ -26,6 +26,19 @@ export const manageLoansArray = (): Card[] => {
       header: local.changeSourceOfFund,
       desc: local.changeSourceOfFund,
       path: '/loans/source-of-fund',
+    })
+  }
+  return manageLoanArr
+}
+
+export const manageSMELoansArray = (): Card[] => {
+  const manageLoanArr: Card[] = []
+  if (ability.can('getIssuedSMELoan', 'application')) {
+    manageLoanArr.push({
+      icon: 'issued-loans',
+      header: local.issuedLoans,
+      desc: local.companies,
+      path: '/loans',
     })
   }
   return manageLoanArr
