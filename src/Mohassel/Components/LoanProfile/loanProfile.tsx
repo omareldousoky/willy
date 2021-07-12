@@ -1501,7 +1501,9 @@ class LoanProfile extends Component<Props, State> {
               branchDetails={this.state.branchDetails}
             />
             <div className="text-center loan-contract">
-              <Barcode value={this.state.application.loanApplicationKey} />
+              <Barcode
+                value={this.state.application.loanApplicationKey.toString()}
+              />
             </div>
           </>
         )}
