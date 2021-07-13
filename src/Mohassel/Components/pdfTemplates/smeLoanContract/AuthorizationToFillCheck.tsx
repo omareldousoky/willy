@@ -12,6 +12,7 @@ export const AuthorizationToFillCheck = ({
         title="تفويض بملء بيانات  "
         showCurrentUser={false}
         showCurrentTime={false}
+        sme
       />
       <p>
         نقر نحن الموقعين ادناه بأننا نفوض شركة تساهيل بموجب تفويضاً غير مشروط

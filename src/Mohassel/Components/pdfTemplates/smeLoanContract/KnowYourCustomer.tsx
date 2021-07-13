@@ -21,6 +21,7 @@ export const KnowYourCustomer = ({
           title="أعرف عميلك"
           showCurrentUser={false}
           showCurrentTime={false}
+          sme
         />
         <p className="font-weight-bolder border-bottom w-25">بيانات الشركة:-</p>
         <p>

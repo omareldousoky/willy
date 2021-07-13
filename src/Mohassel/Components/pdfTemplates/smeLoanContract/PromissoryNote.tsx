@@ -21,6 +21,7 @@ export const PromissoryNote = ({
         title={`سند لأمر ( ${noteKind} )`}
         showCurrentUser={false}
         showCurrentTime={false}
+        sme
       />
       <p>
         تاريخ الاصدار : {timeToArabicDate(application.creationDate, false)}{' '}

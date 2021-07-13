@@ -17,6 +17,7 @@ export const AcknowledgmentWasSignedInFront = ({
           title="إقرار تم التوقيع أمامي "
           showCurrentUser={false}
           showCurrentTime={false}
+          sme
         />
         <p>نقر نحن الموقعان أدناه :-</p>
         <div className="d-flex justify-content-between">

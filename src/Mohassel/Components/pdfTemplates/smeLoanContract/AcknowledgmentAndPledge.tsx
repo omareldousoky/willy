@@ -14,6 +14,7 @@ export const AcknowledgmentAndPledge = ({
           title="إقرار وتعهد"
           showCurrentUser={false}
           showCurrentTime={false}
+          sme
         />
         <p>
           نقر نحن الموقعين أدناه بالتزامنا وتعهدنا بسداد قيمة الاقساط المستحقة
