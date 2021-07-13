@@ -40,7 +40,7 @@ export const PromissoryNote = ({
         المبلغ :{' '}
         {`${numbersToArabic(
           application.installmentsObject?.totalInstallments?.installmentSum
-        )} جنيه )`}{' '}
+        )} جنيه `}{' '}
       </p>
       <p>
         نتعهد نحن الموقعين ادناه تعهداً نهائيا وبدون اى قيد او شرط بأن ندفع فى
