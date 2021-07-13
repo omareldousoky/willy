@@ -60,7 +60,7 @@ class DocumentUploader extends Component<Props, State> {
 
   getImageFilesLength(): number {
     const len: number = this.props.documents.find(
-      (doc) => doc.docName === this.props.documentType.name
+      (doc) => doc?.docName === this.props.documentType.name
     )?.imagesFiles?.length
     if (len > 0) return len
     return 0
@@ -127,7 +127,7 @@ class DocumentUploader extends Component<Props, State> {
 
   calculateNumOfValidDocuments(name: string): number {
     const numOfValidDocs: number = this.props.documents
-      .find((doc) => doc.docName === name)
+      .find((doc) => doc?.docName === name)
       ?.imagesFiles.filter((doc) => {
         return !doc.valid
       }).length
@@ -138,8 +138,9 @@ class DocumentUploader extends Component<Props, State> {
   async deleteDocument(event, name: string, key: number) {
     this.overrideEventDefaults(event)
 
-    const docToDelete = this.props.documents.find((doc) => doc.docName === name)
-      ?.imagesFiles[key]
+    const docToDelete = this.props.documents.find(
+      (doc) => doc?.docName === name
+    )?.imagesFiles[key]
 
     const data = {
       [this.props.keyName]: this.props.keyId,
@@ -210,7 +211,7 @@ class DocumentUploader extends Component<Props, State> {
               ...(this.props.handleChangeFromParent && { file }),
             }
 
-            if (this.props.documents.find((doc) => doc.docName === name))
+            if (this.props.documents.find((doc) => doc?.docName === name))
               this.props.addToDocuments(newDocument, name)
             else {
               this.props.addNewToDocuments({
@@ -290,13 +291,13 @@ class DocumentUploader extends Component<Props, State> {
   }
 
   renderPhotoByName(key: number, name: string) {
-    const document = this.props.documents.find((doc) => doc.docName === name)
+    const document = this.props.documents.find((doc) => doc?.docName === name)
       .imagesFiles[key]
     return (
       <Card.Body key={key} className="document-upload-container">
         <Row data-qc="document-actions" className="document-actions">
           {this.props.documentType.active &&
-            this.props.documents.find((doc) => doc.docName === name)
+            this.props.documents.find((doc) => doc?.docName === name)
               .imagesFiles[key]?.valid &&
             !this.props.view && (
               <span
@@ -322,7 +323,7 @@ class DocumentUploader extends Component<Props, State> {
             className="icon"
             onClick={() => {
               this.downloadPhoto(
-                this.props.documents.find((doc) => doc.docName === name)
+                this.props.documents.find((doc) => doc?.docName === name)
                   ?.imagesFiles[key]
               )
             }}
@@ -347,7 +348,7 @@ class DocumentUploader extends Component<Props, State> {
           </span>
         </Row>
         <Row style={{ height: '' }}>
-          {!this.props.documents.find((doc) => doc.docName === name)
+          {!this.props.documents.find((doc) => doc?.docName === name)
             ?.imagesFiles[key]?.valid && (
             <div className="invalid-document">
               <img
@@ -358,7 +359,7 @@ class DocumentUploader extends Component<Props, State> {
           )}
           <div
             className={
-              this.props.documents.find((doc) => doc.docName === name)
+              this.props.documents.find((doc) => doc?.docName === name)
                 ?.imagesFiles[key]?.valid
                 ? ''
                 : 'invalid-image'
@@ -367,7 +368,7 @@ class DocumentUploader extends Component<Props, State> {
             <img
               className="uploaded-image"
               src={
-                this.props.documents.find((doc) => doc.docName === name)
+                this.props.documents.find((doc) => doc?.docName === name)
                   ?.imagesFiles[key]?.url as string
               }
               key={key}
@@ -449,7 +450,7 @@ class DocumentUploader extends Component<Props, State> {
           justifyContent: 'flex-start',
           backgroundColor: '#fafafa',
           cursor:
-            this.props.documents.find((doc) => doc.docName === name)
+            this.props.documents.find((doc) => doc?.docName === name)
               ?.imagesFiles.length === Limit
               ? 'not-allowed'
               : 'pointer',
@@ -483,7 +484,7 @@ class DocumentUploader extends Component<Props, State> {
           : this.constructArr(name).map((_value: number, key: number) => {
               if (
                 this.props.documents.find(
-                  (document) => document.docName === name
+                  (document) => document?.docName === name
                 )?.imagesFiles[key] === undefined
               ) {
                 if (this.state.dragging) return this.renderDropHere(key)
@@ -588,7 +589,7 @@ class DocumentUploader extends Component<Props, State> {
       </div>
     ) : !this.props.documentType.active &&
       this.props.documents.find(
-        (doc) => doc.docName === this.props.documentType.name
+        (doc) => doc?.docName === this.props.documentType.name
       )?.imagesFiles.length > 0 ? (
       this.renderInactiveDoc(this.props.documentType.name)
     ) : null

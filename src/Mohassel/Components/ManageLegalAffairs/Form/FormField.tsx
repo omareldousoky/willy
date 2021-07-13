@@ -89,7 +89,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
           ? fieldToClear.name
           : field.name
 
-        return document.docName === fieldName
+        return document?.docName === fieldName
       }
     )?.imagesFiles ?? []
 
@@ -97,7 +97,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
 
   const handleDocumentDelete = (name: string) => {
     const lastDocument = documentImages[documentImages.length - 1]
-    dispatch(invalidDocument(lastDocument.key, name))
+    lastDocument && dispatch(invalidDocument(lastDocument.key, name))
   }
 
   useEffect(() => {
