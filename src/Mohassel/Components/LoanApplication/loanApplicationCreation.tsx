@@ -1786,6 +1786,19 @@ class LoanApplicationCreation extends Component<Props, State> {
                       {local.group}
                     </Button>
                   </div>
+                  <div
+                    className="d-flex flex-column"
+                    style={{ margin: '20px 60px' }}
+                  >
+                    <img
+                      alt="group"
+                      style={{ width: 75, margin: '40px 20px' }}
+                      src={require('../../Assets/group.svg')}
+                    />
+                    <Button onClick={() => this.setCustomerType('individual')}>
+                      {local.nano}
+                    </Button>
+                  </div>
                 </>
               )}
               {this.props.location.state.sme && (
