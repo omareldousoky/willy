@@ -18,6 +18,7 @@ export const AcknowledgmentOfCommitment = ({
           title="إقرار بالالتزام"
           showCurrentUser={false}
           showCurrentTime={false}
+          sme
         />
         {application.entitledToSign?.map((person, index) => (
           <p key={index}>

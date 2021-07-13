@@ -17,6 +17,7 @@ export const SolidarityGuarantee = ({
         title="كفالة تضامنية "
         showCurrentUser={false}
         showCurrentTime={false}
+        sme
       />
       <p>التاريخ : {timeToArabicDate(application.creationDate, false)} </p>
       <p>
