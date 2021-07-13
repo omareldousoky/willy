@@ -93,6 +93,7 @@ import {
   CalculateEarlyPaymentResponse,
   RemainingLoanResponse,
 } from '../../Models/Payment'
+import { PromissoryNoteMicro } from '../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -118,7 +119,7 @@ interface State {
   earlyPaymentData?: CalculateEarlyPaymentResponse
   pendingActions: PendingActions
   manualPaymentEditId: string
-  branchDetails?: BranchDetails
+  branchDetails: BranchDetails
   receiptData: any
   iscores: any
   penalty: number
@@ -162,6 +163,11 @@ class LoanProfile extends Component<Props, State> {
         installmentTable: [],
       },
       loanUsage: '',
+      branchDetails: {
+        branchCode: 0,
+        _id: '',
+        status: '',
+      },
     }
   }
 
@@ -1457,6 +1463,11 @@ class LoanProfile extends Component<Props, State> {
               data={this.state.application}
               branchDetails={this.state.branchDetails}
               members={this.state.individualsWithInstallments}
+            />
+            <PromissoryNoteMicro
+              application={this.state.application}
+              branchDetails={this.state.branchDetails}
+              customer={this.state.application.customer}
             />
             {this.state.application.product.beneficiaryType === 'individual' ? (
               <LoanContract
