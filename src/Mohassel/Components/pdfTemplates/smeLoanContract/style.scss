@@ -1,4 +1,18 @@
 @media screen, print {
+  .contract-container {
+    page-break-after: always;
+    font-family: Arial;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 3rem 6rem;
+    th,
+    td {
+      border: 1px solid black;
+    }
+    table {
+      border-spacing: 10px;
+    }
+  }
   .loan-contract {
     text-align: right;
     font-size: 12px;
@@ -93,7 +107,7 @@
 }
 
 @media screen {
-  .loan-contract {
+  .loan-contract, .contract-container {
     max-width: 624px;
     display: none;
     & .main {

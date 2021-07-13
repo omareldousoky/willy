@@ -1,0 +1,22 @@
+@media screen, print {
+    .promissory-note-micro {
+		page-break-after: always;
+		font-family: Arial;
+		font-size: 14px;
+		font-weight: 600;
+		padding: 3rem 6rem;
+		th,
+		td {
+			border: 1px solid black;
+		}
+		table {
+			border-spacing: 10px;
+		}
+	}
+}
+@media screen {
+    .promissory-note-micro {
+        max-width: 700px;
+        display: none;
+    }
+}
