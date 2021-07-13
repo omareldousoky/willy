@@ -1,11 +1,15 @@
 import React from 'react'
 import Tafgeet from 'tafgeetjs'
-import { guarantorOrderLocal } from '../../../../Shared/Services/utils'
+import {
+  guarantorOrderLocal,
+  timeToArabicDate,
+} from '../../../../Shared/Services/utils'
 import { Header } from '../pdfTemplateCommon/header'
 import { AcknowledgmentOfCommitmentProps } from './types'
 
 export const AcknowledgmentOfCommitment = ({
   application,
+  branchDetails,
 }: AcknowledgmentOfCommitmentProps) => {
   return (
     <>
@@ -32,17 +36,18 @@ export const AcknowledgmentOfCommitment = ({
         ))}
         <div className="d-flex justify-content-between">
           <span>نوع النشاط/ {application.customer?.businessSector ?? ''} </span>
-          <span> فرع التعامل/ </span>
+          <span> فرع التعامل/ {branchDetails?.name}</span>
         </div>
         <p>
           بأنني قد تسلمت تمويل قدره {application.principal} جم (
           {new Tafgeet(application.principal, 'EGP').parse()})
         </p>
         <p>
-          من شركة تساهيل للتمويل بتاريخ &emsp;/&emsp;/ &emsp; &emsp; &emsp; وذلك
-          بهدف تطوير وزيادة رأس مال النشاط وانني غير متضرر من الظروف الحالية
-          والتي لها تأثير عام علي جميع الانشطة الاقتصادية والمشروعات وقد ينتج عن
-          هذه الاحداث ركود في حركات البيع والشراء .
+          من شركة تساهيل للتمويل بتاريخ
+          {timeToArabicDate(application.creationDate, false)} وذلك بهدف تطوير
+          وزيادة رأس مال النشاط وانني غير متضرر من الظروف الحالية والتي لها
+          تأثير عام علي جميع الانشطة الاقتصادية والمشروعات وقد ينتج عن هذه
+          الاحداث ركود في حركات البيع والشراء .
         </p>
         <p>
           لذا وبناء علي رغبتي أرفض عمل أي جدولة للتمويل أو تأجيل للاقساط أو

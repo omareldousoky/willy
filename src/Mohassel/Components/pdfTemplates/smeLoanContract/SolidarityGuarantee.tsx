@@ -1,8 +1,16 @@
 import React from 'react'
+import Tafgeet from 'tafgeetjs'
+import {
+  numbersToArabic,
+  timeToArabicDate,
+} from '../../../../Shared/Services/utils'
 
 import { Header } from '../pdfTemplateCommon/header'
+import { SolidarityGuaranteeProps } from './types'
 
-export const SolidarityGuarantee = () => (
+export const SolidarityGuarantee = ({
+  application,
+}: SolidarityGuaranteeProps) => (
   <>
     <div className="contract-container mb-0 pb-0" dir="rtl" lang="ar">
       <Header
@@ -10,11 +18,16 @@ export const SolidarityGuarantee = () => (
         showCurrentUser={false}
         showCurrentTime={false}
       />
-      <p>التاريخ : &emsp;/&emsp;/ &emsp; &emsp; &emsp; </p>
+      <p>التاريخ : {timeToArabicDate(application.creationDate, false)} </p>
       <p>
-        بالاشارة الى التسهيلات الائتمانية الممنوحة من شركة تساهيل للتمويل
-        الى.............................................. البالغ قيمتها
-        الاجمالية ..............................
+        بالاشارة الى التسهيلات الائتمانية الممنوحة من شركة تساهيل للتمويل الى{' '}
+        {application.customer?.customerName} البالغ قيمتها الاجمالية
+        {`${numbersToArabic(
+          application.installmentsObject?.totalInstallments?.installmentSum
+        )} جنيه (${new Tafgeet(
+          application.installmentsObject?.totalInstallments?.installmentSum,
+          'EGP'
+        ).parse()})`}
       </p>
       <p>
         ضماناَ وتأميناً للتسهيلات الائتمانية الممنوحة للمدين والمشار اليه بعاليه
@@ -166,12 +179,16 @@ export const SolidarityGuarantee = () => (
         </li>
       </ol>
       <p className="font-weight-bolder">الكفيل المتضامن</p>
-      <p>الاسم :</p>
-      <p>بطاقة الرقم القومى:</p>
-      <p>الصفة :</p>
-      <p>التاريخ:</p>
-      <p>العنوان :</p>
-      <p>التوقيع :</p>
+      {application.guarantors?.map((person, index) => (
+        <div key={index}>
+          <p>الاسم : {person.customerName ?? ''}</p>
+          <p>بطاقة الرقم القومى: {person.nationalId ?? ''}</p>
+          <p>الصفة :</p>
+          <p>التاريخ: {timeToArabicDate(application.creationDate, false)}</p>
+          <p>العنوان : {person.customerHomeAddress ?? ''}</p>
+          <p>التوقيع :</p>
+        </div>
+      ))}
     </div>
   </>
 )

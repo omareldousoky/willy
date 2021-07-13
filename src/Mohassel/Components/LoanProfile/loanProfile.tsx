@@ -1475,6 +1475,7 @@ class LoanProfile extends Component<Props, State> {
           <>
             <AcknowledgmentAndPledge
               entitledToSign={this.state.application.entitledToSign}
+              application={this.state.application}
             />
             <KnowYourCustomer
               application={this.state.application}
@@ -1482,6 +1483,7 @@ class LoanProfile extends Component<Props, State> {
             />
             <AcknowledgmentWasSignedInFront
               application={this.state.application}
+              branchDetails={this.state.branchDetails}
             />
             <CustomerCardPDF
               data={this.state.application}
@@ -1491,11 +1493,31 @@ class LoanProfile extends Component<Props, State> {
               remainingTotal={this.state.remainingTotal}
               members={this.state.individualsWithInstallments}
             />
-            <AcknowledgmentOfCommitment application={this.state.application} />
-            <SolidarityGuarantee />
-            <AuthorizationToFillCheck />
-            <PromissoryNote noteKind="شخصى" />
-            <PromissoryNote noteKind="شركات" />
+            <AcknowledgmentOfCommitment
+              application={this.state.application}
+              branchDetails={this.state.branchDetails}
+            />
+            <SolidarityGuarantee application={this.state.application} />
+            <AuthorizationToFillCheck application={this.state.application} />
+            {this.state.application.guarantors?.map((person, index) => (
+              <PromissoryNote
+                key={index}
+                noteKind="شخصى"
+                application={this.state.application}
+                branchDetails={this.state.branchDetails}
+                person={person}
+              />
+            ))}
+            {this.state.application.entitledToSign?.map((person, index) => (
+              <PromissoryNote
+                key={index}
+                noteKind="شركات"
+                application={this.state.application}
+                branchDetails={this.state.branchDetails}
+                person={person.customer}
+                personPosition={person.position}
+              />
+            ))}
             <SmeLoanContract
               data={this.state.application}
               branchDetails={this.state.branchDetails}

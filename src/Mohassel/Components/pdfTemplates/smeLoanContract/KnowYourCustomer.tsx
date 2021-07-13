@@ -156,7 +156,9 @@ export const KnowYourCustomer = ({
               {person.customer.customerName ?? ''}
             </p>
             <p>التوقيع /</p>
-            <p>التاريخ &emsp;/&emsp;/ &emsp; &emsp; &emsp;</p>
+            <p>
+              التاريخ &emsp; {timeToArabicDate(application.creationDate, false)}
+            </p>
           </div>
         ))}
         <p>
@@ -166,7 +168,9 @@ export const KnowYourCustomer = ({
         <div className="d-flex justify-content-between">
           <span>أسم عضو الرقابة</span>
           <span>توقيع عضو الرقابة</span>
-          <span>التاريخ</span>
+          <span>
+            التاريخ &emsp; {timeToArabicDate(application.creationDate, false)}
+          </span>
         </div>
         <p>توقيع مدير الفرع :-</p>
       </div>

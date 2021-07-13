@@ -1,8 +1,11 @@
 import React from 'react'
 
 import { Header } from '../pdfTemplateCommon/header'
+import { AuthorizationToFillCheckProps } from './types'
 
-export const AuthorizationToFillCheck = () => (
+export const AuthorizationToFillCheck = ({
+  application,
+}: AuthorizationToFillCheckProps) => (
   <>
     <div className="contract-container" dir="rtl" lang="ar">
       <Header
@@ -19,9 +22,13 @@ export const AuthorizationToFillCheck = () => (
         منازعة فى الحال والاستقبال.
       </p>
       <p>وهذا تفويض منى بذلك ،،،،</p>
-      <p>الاسم</p>
-      <p>التوقيع</p>
-      <p>العنوان</p>
+      {application.guarantors?.map((person, index) => (
+        <div key={index}>
+          <p>الاسم : {person.customerName ?? ''}</p>
+          <p>العنوان : {person.customerHomeAddress ?? ''}</p>
+          <p>التوقيع :</p>
+        </div>
+      ))}
     </div>
   </>
 )

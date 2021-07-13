@@ -8,6 +8,7 @@ import { AcknowledgmentWasSignedInFrontProps } from './types'
 
 export const AcknowledgmentWasSignedInFront = ({
   application,
+  branchDetails,
 }: AcknowledgmentWasSignedInFrontProps) => {
   return (
     <>
@@ -20,12 +21,12 @@ export const AcknowledgmentWasSignedInFront = ({
         <p>نقر نحن الموقعان أدناه :-</p>
         <div className="d-flex justify-content-between">
           <span>الاسم / </span>
-          <span> الموظف بشركة تساهيل للتمويل فرع</span>
+          <span>الموظف بشركة تساهيل للتمويل فرع {branchDetails?.name}</span>
         </div>
         <p>الوظيفة /</p>
         <div className="d-flex justify-content-between">
           <span>الاسم / </span>
-          <span> الموظف بشركة تساهيل للتمويل فرع</span>
+          <span>الموظف بشركة تساهيل للتمويل فرع {branchDetails?.name}</span>
         </div>
         <p>الوظيفة /</p>
         <p>
@@ -43,7 +44,7 @@ export const AcknowledgmentWasSignedInFront = ({
             </tr>
             <tr>
               <td>أسم الشركة / {application.customer?.businessName ?? ''}</td>
-              <td />
+              <td>{application.customer?.key}</td>
             </tr>
             {application.entitledToSign?.map((person, index) => (
               <tr key={index}>
@@ -51,7 +52,7 @@ export const AcknowledgmentWasSignedInFront = ({
                   من له حق التوقيع والاقتراض {orderLocal[index]} /{' '}
                   {person.customer.customerName ?? ''}{' '}
                 </td>
-                <td />
+                <td>{person.customer.key} </td>
               </tr>
             ))}
             {application.guarantors?.map((person, index) => (
@@ -59,7 +60,7 @@ export const AcknowledgmentWasSignedInFront = ({
                 <td>
                   {guarantorOrderLocal[index]}/ {person.customerName ?? ''}{' '}
                 </td>
-                <td />
+                <td>{person.key}</td>
               </tr>
             ))}
           </tbody>
