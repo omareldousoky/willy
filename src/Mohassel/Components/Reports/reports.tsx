@@ -690,7 +690,6 @@ class Reports extends Component<{}, State> {
 
   async getDoubtfulLoansReport(values) {
     this.setState({ loading: true, showModal: false })
-    const branches = values.branches.map((branch) => branch._id)
     const res = await doubtfulLoans({
       startDate: values.fromDate,
       endDate: values.toDate,
@@ -850,6 +849,7 @@ class Reports extends Component<{}, State> {
       branches: values.branches.some((branch) => branch._id === '')
         ? []
         : values.branches.map((branch) => branch._id),
+      loanType: values.loanType,
     }
     const res = await func(obj)
     if (res.status === 'success') {
