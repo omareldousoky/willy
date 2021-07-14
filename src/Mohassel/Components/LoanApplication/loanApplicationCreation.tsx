@@ -376,10 +376,15 @@ class LoanApplicationCreation extends Component<Props, State> {
   }
 
   setCustomerType(type) {
+    const isNano = type === 'nano'
+    const filteredroducts = this.state.products.filter((product) =>
+      isNano ? product.type === 'nano' : product.type !== 'nano'
+    )
     this.setState(
       produce<State>((draftState) => {
-        draftState.customerType = type
-        draftState.application.beneficiaryType = type
+        draftState.products = filteredroducts
+        draftState.customerType = isNano ? 'individual' : type
+        draftState.application.beneficiaryType = isNano ? 'individual' : type
       })
     )
   }
@@ -1363,6 +1368,12 @@ class LoanApplicationCreation extends Component<Props, State> {
       if (res.body.data && res.body.data.length > 0) {
         merged.forEach((customer) => {
           if (!guarantor) {
+            if (customer.nanoLoanIds && customer.nanoLoanIds.length > 0) {
+              validationObject[customer._id] = {
+                customerName: customer.customerName,
+                nanoLoanIds: customer.nanoLoanIds,
+              }
+            }
             if (
               customer.applicationIds &&
               !customer.loanIds &&
@@ -1784,6 +1795,19 @@ class LoanApplicationCreation extends Component<Props, State> {
                     />
                     <Button onClick={() => this.setCustomerType('group')}>
                       {local.group}
+                    </Button>
+                  </div>
+                  <div
+                    className="d-flex flex-column"
+                    style={{ margin: '20px 60px' }}
+                  >
+                    <img
+                      alt="group"
+                      style={{ width: 75, margin: '40px 20px' }}
+                      src={require('../../Assets/group.svg')}
+                    />
+                    <Button onClick={() => this.setCustomerType('nano')}>
+                      {local.nano}
                     </Button>
                   </div>
                 </>

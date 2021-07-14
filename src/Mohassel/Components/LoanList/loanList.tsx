@@ -86,14 +86,14 @@ class LoanList extends Component<Props, State> {
             }
           >
             {data.application.product.beneficiaryType === 'individual' &&
-            data.application.product.type === 'micro' ? (
+            ['micro', 'nano'].includes(data.application.product.type) ? (
               data.application.customer.customerName
             ) : data.application.product.beneficiaryType === 'individual' &&
               data.application.product.type === 'sme' ? (
               data.application.customer.businessName
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {data.application.group?.individualsInGroup.map((member) =>
+                {data.application.group?.individualsInGroup?.map((member) =>
                   member.type === 'leader' ? (
                     <span key={member.customer._id}>
                       {member.customer.customerName}
