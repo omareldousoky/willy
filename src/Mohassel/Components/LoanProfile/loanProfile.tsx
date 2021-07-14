@@ -525,7 +525,7 @@ class LoanProfile extends Component<Props, State> {
   getProfileActions = () => {
     return [
       {
-        icon: 'edit',
+        icon: 'deactivate-doc',
         title: local.memberSeperation,
         permission:
           this.state.application.status === 'issued' &&
@@ -568,7 +568,7 @@ class LoanProfile extends Component<Props, State> {
           ),
       },
       {
-        icon: 'edit',
+        icon: 'bulk-loan-applications-review',
         title: local.reviewLoan,
         permission:
           this.state.application.status === 'underReview' &&
@@ -580,7 +580,7 @@ class LoanProfile extends Component<Props, State> {
           ),
       },
       {
-        icon: 'edit',
+        icon: 'bulk-loan-applications-review',
         title: local.undoLoanReview,
         permission:
           this.state.application.status === 'reviewed' &&
@@ -592,7 +592,7 @@ class LoanProfile extends Component<Props, State> {
           ),
       },
       {
-        icon: 'edit',
+        icon: 'deactivate-doc',
         title: local.rejectLoan,
         permission:
           this.state.application.status === 'reviewed' &&
@@ -604,7 +604,7 @@ class LoanProfile extends Component<Props, State> {
           ),
       },
       {
-        icon: 'edit',
+        icon: 'applications',
         title: local.issueLoan,
         permission:
           this.state.application.status === 'created' &&
@@ -616,7 +616,7 @@ class LoanProfile extends Component<Props, State> {
           }),
       },
       {
-        icon: 'edit',
+        icon: 'applications',
         title: local.createLoan,
         permission:
           this.state.application.status === 'approved' &&
