@@ -11,14 +11,16 @@ import { LtsIcon } from '../../../Shared/Components'
 import AppForm from '../ManageLegalAffairs/Form'
 import { FormField } from '../ManageLegalAffairs/Form/types'
 import { PdfPortal } from '../Common/PdfPortal'
-import ClientGuaranteedLoans from '../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans'
 import { mapFormFieldsToFormData } from '../ManageLegalAffairs/Form/utils'
 import { maxValue, minValue } from '../../localUtils'
 import { getCustomerMaxNanoLoan } from '../../Services/APIs/Customer-Creation/getCustomer'
 import { setNanoLoanLimit } from '../../Services/APIs/Customer-Creation/setNanoLoanLimit'
 import Swal from 'sweetalert2'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { Document } from '../../../Shared/Services/interfaces'
+import { Customer, Document } from '../../../Shared/Services/interfaces'
+import { Customer as CustomerModel } from '../../Models/Customer'
+import { PromissoryNoteMicro } from '../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
+import { BranchDetails, getBranch } from '../../Services/APIs/Branch/getBranch'
 
 interface LoanLimitForm {
   limit: number
@@ -28,32 +30,48 @@ interface LoanLimitForm {
 interface LoanLimitModalProps {
   show: boolean
   hideModal: () => void
-  customerId: string
+  customer: Customer
   loanLimit: number
 }
 
 const LoanLimitModal: FunctionComponent<LoanLimitModalProps> = ({
   show,
   hideModal,
-  customerId,
+  customer,
   loanLimit,
 }) => {
   const defaultValues: LoanLimitForm = {
     limit: loanLimit,
   }
 
+  const customerId = customer._id + ''
+
   const [loanLimitMax, setLoanLimitMax] = useState(0)
-
-  const fetchCustomerMaxNanoLoan = async () => {
-    const response = await getCustomerMaxNanoLoan()
-
-    if (response.status === 'success') {
-      setLoanLimitMax(response.body?.maximumNanoLoansLimit)
-    }
-  }
+  const [customerBranch, setCustomerBranch] = useState<
+    BranchDetails | undefined
+  >()
 
   useEffect(() => {
+    const fetchCustomerMaxNanoLoan = async () => {
+      const response = await getCustomerMaxNanoLoan()
+
+      if (response.status === 'success') {
+        setLoanLimitMax(response.body?.maximumNanoLoansLimit)
+      }
+    }
+
+    const getCustomerBranch = async () => {
+      if (customer.branchId) {
+        const response = await getBranch(customer.branchId)
+
+        if (response.status === 'success') {
+          setCustomerBranch(response.body?.data)
+        }
+      }
+    }
+
     fetchCustomerMaxNanoLoan()
+    getCustomerBranch()
   }, [])
 
   const LOAN_LIMIT_MIN = 1000
@@ -101,7 +119,7 @@ const LoanLimitModal: FunctionComponent<LoanLimitModalProps> = ({
           className="mx-auto mb-1 py-2 d-flex align-items-center justify-content-center"
           variant="link"
           onClick={() => window.print()}
-          disabled={isDocumentDisabled}
+          disabled={isDocumentDisabled || !customerBranch}
         >
           <span className="mr-2">{local.downloadTemplate}</span>
           <LtsIcon name="download" color="#7dc356" />
@@ -167,12 +185,21 @@ const LoanLimitModal: FunctionComponent<LoanLimitModalProps> = ({
           />
         </Modal.Body>
       </Modal>
-      <PdfPortal
-        component={
-          // TODO: replace with limit receipt [business]
-          <PdfPortal component={<ClientGuaranteedLoans data={{}} />} />
-        }
-      />
+      {customerBranch && (
+        <PdfPortal
+          component={
+            <PromissoryNoteMicro
+              customer={
+                {
+                  ...customer,
+                  nanoLoansLimit: currentLoanLimit,
+                } as CustomerModel
+              }
+              branchDetails={customerBranch}
+            />
+          }
+        />
+      )}
     </>
   )
 }

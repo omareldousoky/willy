@@ -515,11 +515,11 @@ export const CustomerProfile = () => {
           />
         )}
 
-        {showLoanLimitModal && (
+        {showLoanLimitModal && customerDetails && (
           <LoanLimitModal
             show={showLoanLimitModal}
             hideModal={() => setShowLoanLimitModal(false)}
-            customerId={location.state.id}
+            customer={customerDetails}
             loanLimit={customerDetails?.nanoLoansLimit ?? 0}
           />
         )}
