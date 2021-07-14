@@ -432,7 +432,7 @@ class Reports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branches: branches.includes('') ? [''] : branches,
+      branches: branches.includes('') ? [] : branches,
     }
     const res = await installments(obj)
     if (res.status === 'success') {
@@ -467,7 +467,7 @@ class Reports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branches: branches.includes('') ? [''] : branches,
+      branches: branches.includes('') ? [] : branches,
     }
     const res = await getRandomPayments(obj)
     if (res.status === 'success') {
@@ -653,7 +653,6 @@ class Reports extends Component<{}, State> {
   }
 
   async getLoanPenaltiesReport(values) {
-    const branches = values.branches.map((branch) => branch._id)
     this.setState({ loading: true, showModal: false })
     const res = await penalties({
       startDate: values.fromDate,
@@ -786,7 +785,7 @@ class Reports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branches: branches.includes('') ? [''] : branches,
+      branches: branches.includes('') ? [] : branches,
     }
     const res = await getManualPayments(obj)
     if (res.status === 'success') {
