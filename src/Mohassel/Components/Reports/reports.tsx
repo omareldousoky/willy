@@ -658,7 +658,9 @@ class Reports extends Component<{}, State> {
     const res = await penalties({
       startDate: values.fromDate,
       endDate: values.toDate,
-      branches: branches.includes('') ? [''] : branches,
+      branches: values.branches.some((branch) => branch._id === '')
+        ? []
+        : values.branches.map((branch) => branch._id),
     })
     if (res.status === 'success') {
       if (!res.body) {
