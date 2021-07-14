@@ -22,7 +22,7 @@ export const manageLegalAffairsArray = (): Card[] => {
         path: '/legal-affairs/legal-actions',
       },
       {
-        icon: 'legal-actions',
+        icon: 'encoding-files',
         header: local.legalCalendar,
         desc: local.legalCalendar,
         path: '/legal-affairs/legal-calendar',
