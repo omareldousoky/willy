@@ -14,6 +14,7 @@ interface HeaderProps {
   fromDate?: string | number
   toDate?: string | number
   branchName?: string
+  sme?: boolean
 }
 export const Header = ({
   title,
@@ -23,13 +24,16 @@ export const Header = ({
   fromDate,
   toDate,
   branchName,
+  sme,
 }: HeaderProps) => {
   return (
     <>
       <div className="d-flex justify-content-between m-2">
         <span className="logo-print" role="img" />
         <p className="m-0 ml-3 text-right text-sm">
-          ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+          {sme
+            ? 'ترخيص ممارسه نشاط تمويل المشروعات الصغيره والمتوسطة رقم ١ لسنه ٢٠٢١'
+            : 'ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
         </p>
       </div>
       <div className="d-flex mb-3">

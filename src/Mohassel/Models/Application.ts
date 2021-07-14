@@ -161,7 +161,7 @@ export interface ApplicationResponse {
   branchManagerName?: string
   created?: Signature
   creationDate: number
-  customer?: Customer
+  customer: Customer
   earlyPaymentAmount?: number
   enquirerName?: string
   enquirorId?: string
@@ -182,7 +182,7 @@ export interface ApplicationResponse {
   penaltiesPaid?: number
   penaltyPolicy?: PenaltyPolicy
   principal: number
-  product?: LoanProductResponse
+  product: LoanProductResponse
   rejectionDate?: number
   rejectionReason?: string
   representativeFeesPaid?: number
