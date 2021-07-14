@@ -184,7 +184,7 @@ export const getDocuments = (obj) => {
           dispatch({
             type: GET_DOCUMENTS,
             payload: handleDocuments(
-              res.body.docs,
+              res.body.docs ?? [],
               obj.customerId,
               documentType
             ),
@@ -203,7 +203,7 @@ export const getDocuments = (obj) => {
           dispatch({
             type: GET_DOCUMENTS,
             payload: handleDocuments(
-              res.body.docs,
+              res.body.docs ?? [],
               obj.applicationId,
               documentType
             ),
@@ -221,7 +221,7 @@ export const getDocuments = (obj) => {
           dispatch({
             type: GET_DOCUMENTS,
             payload: handleDocuments(
-              res.body.docs,
+              res.body.docs ?? [],
               obj.applicationId,
               documentType
             ),
@@ -239,7 +239,7 @@ export const getDocuments = (obj) => {
           dispatch({
             type: GET_DOCUMENTS,
             payload: handleDocuments(
-              res.body.docs,
+              res.body.docs ?? [],
               obj.customerId,
               documentType
             ),

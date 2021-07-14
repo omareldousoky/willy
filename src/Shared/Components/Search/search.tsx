@@ -102,7 +102,7 @@ class Search extends Component<SearchProps, SearchState> {
         case 'printed':
           initialState.printed = false
           break
-        case 'sme':
+        case 'loanType':
           initialState.type =
             this.props.url === 'loan'
               ? this.props.issuedLoansSearchFilters.type
@@ -222,7 +222,7 @@ class Search extends Component<SearchProps, SearchState> {
     if (!['application', 'loan'].includes(url)) {
       delete obj.type
     } else {
-      obj.type = this.props.sme ? 'sme' : 'micro'
+      obj.type = this.props.sme ? 'sme' : obj.type
     }
 
     if (obj.lastDates) {
@@ -807,6 +807,24 @@ class Search extends Component<SearchProps, SearchState> {
                         />
                       </Form.Group>
                     </Col>
+                  )
+                }
+                if (searchKey === 'loanType') {
+                  return this.statusDropdown(
+                    formikProps,
+                    index,
+                    [
+                      {
+                        value: 'micro',
+                        text: 'Micro',
+                      },
+                      {
+                        value: 'nano',
+                        text: local.nano,
+                      },
+                    ],
+                    'type',
+                    local.productName
                   )
                 }
               })}

@@ -328,6 +328,7 @@ class LoanList extends Component<Props, State> {
       dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
     } else {
       dropDownKeys.push('nationalId')
+      searchKeys.splice(4, 0, 'loanType')
     }
     return (
       <>

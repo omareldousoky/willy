@@ -509,6 +509,7 @@ class TrackLoanApplications extends Component<Props, State> {
       dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
     } else {
       dropDownKeys.push('nationalId')
+      searchKeys.push('loanType')
     }
     return (
       <>

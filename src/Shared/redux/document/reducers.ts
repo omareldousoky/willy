@@ -42,7 +42,7 @@ export const DocumentsReducer = produce(
         const actionDocument = action.payload[0]
 
         const stateSlice = draft.find(
-          (doc) => doc.docName === actionDocument.docName
+          (doc) => doc?.docName === actionDocument?.docName
         )
 
         if (stateSlice) {
