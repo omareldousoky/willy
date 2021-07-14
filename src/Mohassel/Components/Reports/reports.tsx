@@ -654,12 +654,11 @@ class Reports extends Component<{}, State> {
 
   async getLoanPenaltiesReport(values) {
     this.setState({ loading: true, showModal: false })
+    const branches = values.branches.map((branch) => branch._id)
     const res = await penalties({
       startDate: values.fromDate,
       endDate: values.toDate,
-      branches: values.branches.some((branch) => branch._id === '')
-        ? []
-        : values.branches.map((branch) => branch._id),
+      branches: branches.includes('') ? [] : branches,
     })
     if (res.status === 'success') {
       if (!res.body) {
