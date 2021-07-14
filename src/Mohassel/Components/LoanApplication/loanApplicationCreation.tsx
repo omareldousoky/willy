@@ -376,10 +376,15 @@ class LoanApplicationCreation extends Component<Props, State> {
   }
 
   setCustomerType(type) {
+    const isNano = type === 'nano'
+    const filteredroducts = this.state.products.filter((product) =>
+      isNano ? product.type === 'nano' : product.type !== 'nano'
+    )
     this.setState(
       produce<State>((draftState) => {
-        draftState.customerType = type
-        draftState.application.beneficiaryType = type
+        draftState.products = filteredroducts
+        draftState.customerType = isNano ? 'individual' : type
+        draftState.application.beneficiaryType = isNano ? 'individual' : type
       })
     )
   }
@@ -1795,7 +1800,7 @@ class LoanApplicationCreation extends Component<Props, State> {
                       style={{ width: 75, margin: '40px 20px' }}
                       src={require('../../Assets/group.svg')}
                     />
-                    <Button onClick={() => this.setCustomerType('individual')}>
+                    <Button onClick={() => this.setCustomerType('nano')}>
                       {local.nano}
                     </Button>
                   </div>
