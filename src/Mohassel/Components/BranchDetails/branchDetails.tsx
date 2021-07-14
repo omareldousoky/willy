@@ -23,7 +23,7 @@ import {
 } from '../../../Shared/Services/utils'
 import ManagerProfile from '../managerHierarchy/managersProfile'
 import SupervisionsProfile from '../managerHierarchy/supervisionsProfile'
-import { LtsIcon } from '../../../Shared/Components'
+import { ProfileActions } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps<{}, {}, { details: string }> {
   getBranchById: typeof getBranchById
@@ -233,20 +233,20 @@ class BranchDetails extends Component<Props, State> {
     const _id = this.props.location.state.details
     return (
       <div className="rowContainer">
-        <span className="icon">
-          <div
-            className="iconContainer icon"
-            onClick={() => {
-              this.props.history.push({
-                pathname: '/manage-accounts/branches/edit-branch',
-                state: { details: _id },
-              })
-            }}
-          >
-            <LtsIcon name="edit" />
-            <span className="mx-1">{local.edit}</span>
-          </div>
-        </span>
+        <ProfileActions
+          actions={[
+            {
+              icon: 'edit',
+              title: local.edit,
+              permission: true,
+              onActionClick: () =>
+                this.props.history.push({
+                  pathname: '/manage-accounts/branches/edit-branch',
+                  state: { details: _id },
+                }),
+            },
+          ]}
+        />
       </div>
     )
   }
