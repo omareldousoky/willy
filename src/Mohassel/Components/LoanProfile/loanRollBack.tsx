@@ -195,25 +195,23 @@ class LoanRollBack extends Component<
               </div>
               {this.sortByKey(this.state.actions, 'insertedAt').map(
                 (action, i) => (
-                  <div
-                    key={action._id}
-                    className="d-flex"
-                    style={{ margin: '10px 0px' }}
-                  >
+                  <div key={action._id} className="d-flex my-3">
                     <p style={{ width: '40%', margin: 0 }}>{action.action}</p>
                     <p style={{ width: '40%', margin: 0 }}>
                       {getDateAndTime(action.insertedAt)}
                     </p>
-                    <div
-                      className="d-flex align-items-center"
-                      style={{ width: '20%' }}
-                    >
+                    <div className="d-flex align-items-center ">
                       {i === 0 && (
                         <Button
+                          size="sm"
                           variant="default"
                           onClick={() => this.rollbackModal(action)}
                         >
-                          <LtsIcon name="rollback" />
+                          <LtsIcon
+                            name="rollback"
+                            size="15px"
+                            color="#7dc255"
+                          />
                         </Button>
                       )}
                     </div>
