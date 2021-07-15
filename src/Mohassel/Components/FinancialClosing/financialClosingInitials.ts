@@ -17,14 +17,14 @@ export const financialClosingArray = (): Tab[] => {
   }
   if (ability.can('summarizeTransactions', 'oracleIntegration')) {
     financialClosingArr.push({
-      icon: 'bulkLoanApplicationsReview',
+      icon: 'bulk-loan-applications-review',
       header: local.oracleReports,
       path: '/financial-closing/lts-review-oracle',
     })
   }
   if (ability.can('financialClosing', 'application')) {
     financialClosingArr.push({
-      icon: 'assignProductToBranch',
+      icon: 'assign-product-to-branch',
       header: local.financialClosing,
       path: '/financial-closing/lts-closing',
     })

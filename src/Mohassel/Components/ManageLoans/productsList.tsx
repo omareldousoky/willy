@@ -79,7 +79,7 @@ class LoanProducts extends Component<Props, State> {
     this.productActions = [
       {
         actionTitle: local.editLoanProduct,
-        actionIcon: 'editIcon',
+        actionIcon: 'edit',
         actionPermission: ability.can('updateLoanProduct', 'product'),
         actionOnClick: (id) =>
           this.props.history.push(

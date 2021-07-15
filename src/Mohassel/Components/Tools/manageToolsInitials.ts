@@ -6,7 +6,7 @@ export const manageToolsArray = (): Card[] => {
   const manageLoanArr: Card[] = []
   if (ability.can('documentTypes', 'config')) {
     manageLoanArr.push({
-      icon: 'encodingFiles',
+      icon: 'encoding-files',
       header: local.encodingFiles,
       desc: local.encodingFiles,
       path: '/tools/encoding-files',
@@ -14,7 +14,7 @@ export const manageToolsArray = (): Card[] => {
   }
   if (ability.can('geoArea', 'config')) {
     manageLoanArr.push({
-      icon: 'branchAreas',
+      icon: 'branch-areas',
       header: local.branchAreas,
       desc: local.branchAreas,
       path: '/tools/geo-areas',
@@ -22,7 +22,7 @@ export const manageToolsArray = (): Card[] => {
   }
   if (ability.can('createMaxPrincipal', 'config')) {
     manageLoanArr.push({
-      icon: 'principalRange',
+      icon: 'principal-range',
       header: local.principalRange,
       desc: local.principalRange,
       path: '/tools/principalRange',

@@ -22,6 +22,7 @@ import { theme } from '../../../Shared/theme'
 import { getBranchesByProducts } from '../../Services/APIs/Branch/getBranches'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageLoansArray } from '../ManageLoans/manageLoansInitials'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props {
   title: string
@@ -233,11 +234,7 @@ class AssignProductsToBranches extends Component<Props, State> {
                             margin: '5px',
                           }}
                         >
-                          <img
-                            style={{ float: 'right' }}
-                            alt="search-icon"
-                            src={require('../../Assets/searchIcon.svg')}
-                          />
+                          <LtsIcon name="search" />
                           {local.searchByProductName}
                         </span>
                       }

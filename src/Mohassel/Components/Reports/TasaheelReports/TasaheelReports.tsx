@@ -30,6 +30,7 @@ import {
 
 import { Report, ReportDetails } from './types'
 import { Tab } from '../../HeaderWithCards/cardNavbar'
+import { LtsIcon } from '../../../../Shared/Components'
 
 export const TasaheelReports = () => {
   const reportsRequests = {
@@ -212,11 +213,18 @@ export const TasaheelReports = () => {
                         )}
                       </div>
                       {report.status === 'created' && (
-                        <div
-                          style={{ cursor: 'pointer' }}
+                        <Button
+                          type="button"
+                          variant="default"
                           onClick={() => downloadGeneratedReport(report._id)}
-                          className="download-icon"
-                        />
+                          title="download"
+                        >
+                          <LtsIcon
+                            name="download"
+                            size="40px"
+                            color="#7dc356"
+                          />
+                        </Button>
                       )}
                     </div>
                   </Card.Body>

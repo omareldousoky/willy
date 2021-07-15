@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
-    <g id="prefix__close_ic_20px" transform="translate(-125 -142)">
-        <path id="prefix__boundary" d="M0 0H20V20H0z" transform="translate(125 142)" style="fill:none"/>
-        <path id="prefix__close_ic" d="M297.071-3264.514l-5.657-5.657-5.657 5.657a1 1 0 0 1-1.414 0 1 1 0 0 1 0-1.415l5.657-5.656-5.657-5.656a1 1 0 0 1 0-1.415 1 1 0 0 1 1.414 0l5.657 5.657 5.657-5.657a1 1 0 0 1 1.414 0 1 1 0 0 1 0 1.415l-5.657 5.657 5.657 5.657a1 1 0 0 1 0 1.414 1 1 0 0 1-.707.293 1 1 0 0 1-.707-.294z" transform="translate(-156.05 3423.95)" style="fill:#2f2f2f"/>
-    </g>
-</svg>

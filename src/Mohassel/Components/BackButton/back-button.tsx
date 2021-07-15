@@ -1,5 +1,7 @@
 import React, { CSSProperties } from 'react'
+import Button from 'react-bootstrap/Button'
 import { useHistory } from 'react-router-dom'
+import { LtsIcon } from '../../../Shared/Components'
 import { theme } from '../../../Shared/theme'
 
 interface Props {
@@ -21,13 +23,13 @@ const BackButton = (props: Props) => {
   return (
     <div style={buttonStyle} className={props.className ? props.className : ''}>
       <span style={{ margin: '20px' }}>
-        <img
-          alt="backButton"
-          onClick={() => {
-            history.goBack()
-          }}
-          src={require('../../Assets/backIcon.svg')}
-        />
+        <Button
+          variant="default"
+          onClick={() => history.goBack()}
+          title="download"
+        >
+          <LtsIcon name="back" color="#7dc255" />
+        </Button>
         <span style={{ marginRight: '1rem' }}> {props.title} </span>
       </span>
     </div>

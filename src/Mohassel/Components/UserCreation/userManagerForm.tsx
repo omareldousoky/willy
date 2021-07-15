@@ -14,6 +14,7 @@ import {
 import { MainChoosesValues } from './userCreationinterfaces'
 import { searchUsers } from '../../Services/APIs/Users/searchUsers'
 import { Loader } from '../../../Shared/Components/Loader'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props {
   roles: any[]
@@ -124,11 +125,7 @@ class UserManagerForm extends Component<Props, State> {
             filterOption={customFilterOption}
             placeholder={
               <span style={{ width: '100%', padding: '5px', margin: '5px' }}>
-                <img
-                  style={{ float: 'right' }}
-                  alt="search-icon"
-                  src={require('../../Assets/searchIcon.svg')}
-                />
+                <LtsIcon name="search" />
                 {local.searchByUserRole}
               </span>
             }
@@ -182,11 +179,7 @@ class UserManagerForm extends Component<Props, State> {
               filterOption={customFilterOption}
               placeholder={
                 <span style={{ width: '100%', padding: '5px', margin: '5px' }}>
-                  <img
-                    style={{ float: 'right' }}
-                    alt="search-icon"
-                    src={require('../../Assets/searchIcon.svg')}
-                  />
+                  <LtsIcon name="search" />
                   {local.searchByBranch}
                 </span>
               }
@@ -240,11 +233,7 @@ class UserManagerForm extends Component<Props, State> {
                   <span
                     style={{ width: '100%', padding: '5px', margin: '5px' }}
                   >
-                    <img
-                      style={{ float: 'right' }}
-                      alt="search-icon"
-                      src={require('../../Assets/searchIcon.svg')}
-                    />
+                    <LtsIcon name="search" />
                     {local.searchByName}
                   </span>
                 }
