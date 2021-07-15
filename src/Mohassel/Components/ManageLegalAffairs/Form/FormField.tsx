@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useRef,
 } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Form from 'react-bootstrap/Form'
 import { FormControlProps } from 'react-bootstrap/FormControl'
@@ -12,12 +13,15 @@ import { FormControlProps } from 'react-bootstrap/FormControl'
 import { Schema } from 'yup'
 
 import { getDateString } from '../../../../Shared/Services/utils'
-import { DocumentField, FormField, FormFieldProps } from './types'
+import {
+  DocumentField,
+  FormField as FormFieldType,
+  FormFieldProps,
+} from './types'
 import DocumentPhoto from '../../../../Shared/Components/documentPhoto/documentPhoto'
 import { AppFormContext } from '.'
 import { getNestedByStringKey } from './utils'
 import DocumentUploader from '../../../../Shared/Components/documentUploader/documentUploader'
-import { useDispatch, useSelector } from 'react-redux'
 import {
   getDocuments,
   invalidDocument,
@@ -55,8 +59,8 @@ const FormField: FunctionComponent<FormFieldProps> = ({
       .describe()
       .tests.find((test: any) => test.name === 'required')
 
-  const isDocument = (field?: FormField): field is DocumentField =>
-    !!field && field.type === 'document'
+  const isDocument = (formField?: FormFieldType): formField is DocumentField =>
+    !!formField && formField.type === 'document'
 
   const label = !isDocument(field)
     ? `${field.label}${isRequired(field.validation) ? ' *' : ''}`
@@ -208,7 +212,7 @@ const FormField: FunctionComponent<FormFieldProps> = ({
             keyName={field.keyName}
             keyId={field.keyId}
             view={inputFieldProps.disabled}
-            handleChangeFromParent={true}
+            handleChangeFromParent
           />
         )
 
