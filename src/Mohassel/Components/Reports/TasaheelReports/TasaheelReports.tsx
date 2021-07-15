@@ -146,7 +146,7 @@ export const TasaheelReports = () => {
         }`,
       }
     }
-    return { date: values.date }
+    return { date: values.date + '-01' }
   }
 
   useEffect(() => {
@@ -216,8 +216,8 @@ export const TasaheelReports = () => {
               local: tabs[activeTabIndex()].header,
               inputs:
                 tabs[activeTabIndex()].stringKey === 'quarterlyReport'
-                  ? ['quarterYear', 'quarterNumber']
-                  : ['date'],
+                  ? ['year', 'quarterNumber']
+                  : ['month'],
               permission: tabs[activeTabIndex()].permission || '',
             }}
             show={modalIsOpen}
