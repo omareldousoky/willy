@@ -727,6 +727,8 @@ class LoanApplicationCreation extends Component<Props, State> {
         entitledToSignIds: [],
         entitledToSign: [],
         customerType: '',
+        productType: '',
+        nanoLoansLimit: 0,
       },
       customerType: '',
       loading: false,
@@ -1247,6 +1249,7 @@ class LoanApplicationCreation extends Component<Props, State> {
         app.branchManagerAndDate = selectedProductDetails.branchManagerAndDate
         app.branchManagerId = ''
         app.managerVisitDate = ''
+        app.productType = selectedProductDetails.type
       })
     )
   }
@@ -1294,6 +1297,7 @@ class LoanApplicationCreation extends Component<Props, State> {
         app.permanentEmployeeCount = response.permanentEmployeeCount
         app.partTimeEmployeeCount = response.partTimeEmployeeCount
         app.representative = response.representative
+        app.nanoLoansLimit = response.nanoLoansLimit
       })
     )
   }
