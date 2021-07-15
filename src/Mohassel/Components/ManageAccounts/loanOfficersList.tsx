@@ -27,7 +27,6 @@ import { checkUsernameDuplicates } from '../../Services/APIs/User-Creation/check
 import { updateLoanOfficer } from '../../Services/APIs/LoanOfficers/updateLoanOfficer'
 import { getDateAndTime } from '../../Services/getRenderDate'
 import { LtsIcon } from '../../../Shared/Components'
-import ability from '../../config/ability'
 
 interface Props extends RouteComponentProps {
   history: any

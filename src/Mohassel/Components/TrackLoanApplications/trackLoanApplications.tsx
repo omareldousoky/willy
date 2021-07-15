@@ -42,7 +42,7 @@ import {
 } from './manageApplicationInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { LoanApplicationReportRequest } from '../../Services/interfaces'
-import { ActionsIconGroup, LtsIcon } from '../../../Shared/Components'
+import { ActionsIconGroup } from '../../../Shared/Components'
 import ability from '../../config/ability'
 
 interface Product {

@@ -80,7 +80,7 @@ class RoleUsers extends Component<Props, State> {
         title: '',
         key: 'actions',
         render: (data) => (
-          <>}
+          <>
             <Button
               variant="default"
               onClick={() =>
