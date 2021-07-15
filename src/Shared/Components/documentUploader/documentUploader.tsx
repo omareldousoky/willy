@@ -189,11 +189,11 @@ class DocumentUploader extends Component<Props, State> {
         formData.append('docName', name)
         formData.append(this.props.keyName, this.props.keyId)
         formData.append('file', files[index])
-        // eslint-disable-next-line no-await-in-loop
 
         if (this.props.handleChangeFromParent) {
           this.props.document.status = 'success'
         } else {
+          // eslint-disable-next-line no-await-in-loop
           await this.props.uploadDocument(
             formData,
             this.props.documentType.type
