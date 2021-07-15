@@ -13,6 +13,7 @@ import { manageLoansArray } from './manageLoansInitials'
 import { getErrorMessage, interestType } from '../../../Shared/Services/utils'
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas'
 import { Formula } from '../LoanApplication/loanApplicationCreation'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -84,17 +85,17 @@ class FormulaList extends Component<Props, State> {
   renderIcons(data: any) {
     return (
       <>
-        <img
-          style={{ cursor: 'pointer' }}
-          alt="view"
-          src={require('../../Assets/view.svg')}
-          onClick={() => {
+        <Button
+          variant="default"
+          onClick={() =>
             this.props.history.push({
               pathname: '/manage-loans/calculation-formulas/view-formula',
               state: { id: data._id },
             })
-          }}
-        />
+          }
+        >
+          <LtsIcon name="view" />
+        </Button>
       </>
     )
   }

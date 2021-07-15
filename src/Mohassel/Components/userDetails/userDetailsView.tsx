@@ -5,6 +5,7 @@ import { theme } from '../../../Shared/theme'
 import { UserDateValues } from './userDetailsInterfaces'
 import { timeToDate, timeToDateyyymmdd } from '../../../Shared/Services/utils'
 import Labels from '../Labels/labels'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props {
   data: UserDateValues
@@ -27,7 +28,7 @@ const UserDetailsView = (props: Props) => {
   return (
     <>
       <div style={{ margin: '0 1rem 2rem 0', float: 'right' }}>
-        <img alt="backButton" src={require('../../Assets/usersBasic.svg')} />
+        <LtsIcon name="user" color="#7dc255" />
         <span style={{ marginRight: '1rem' }}> {local.userBasicData} </span>
       </div>
       <Table striped bordered hover>

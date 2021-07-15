@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
+import Button from 'react-bootstrap/Button'
 import { Loader } from '../../../Shared/Components/Loader'
 import ReportsModal from './reportsModal'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -82,6 +83,7 @@ import { downloadFile } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import CustomerTransactionReport from '../pdfTemplates/customerTransactionReport/customerTransactionReport'
 import { getCustomerTransactions } from '../../Services/APIs/Reports/customerTransactions'
+import { LtsIcon } from '../../../Shared/Components'
 
 export interface PDF {
   key?: string
@@ -932,13 +934,18 @@ class Reports extends Component<{}, State> {
                           <span style={{ marginLeft: 40 }}>#{index + 1}</span>
                           <span>{pdf.local}</span>
                         </div>
-                        <img
-                          style={{ cursor: 'pointer' }}
-                          alt="download"
-                          data-qc="download"
-                          src={require(`../../Assets/green-download.svg`)}
+                        <Button
+                          type="button"
+                          variant="default"
                           onClick={() => this.handlePrint(pdf)}
-                        />
+                          title="download"
+                        >
+                          <LtsIcon
+                            name="download"
+                            size="40px"
+                            color="#7dc356"
+                          />
+                        </Button>
                       </div>
                     </Card.Body>
                   </Card>

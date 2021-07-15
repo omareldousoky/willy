@@ -22,6 +22,7 @@ import { getErrorMessage, timeToDate } from '../../../Shared/Services/utils'
 import './clearance.scss'
 import PenaltyStrike from './penaltyStrike'
 import { reviewClearance } from '../../Services/APIs/clearance/reviewClearance'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface State {
   loading: boolean
@@ -249,11 +250,7 @@ class ClearanceProfile extends Component<
                       })
                     }
                   >
-                    <img
-                      className="pr-2"
-                      alt="edit"
-                      src={require('../../Assets/editIcon.svg')}
-                    />
+                    <LtsIcon name="edit" />
                   </span>
                 </Can>
                 {local.editClearance}

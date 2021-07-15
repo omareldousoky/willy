@@ -35,6 +35,7 @@ import { theme } from '../../../Shared/theme'
 import { Action } from '../../Models/common'
 import ability from '../../config/ability'
 import { ActionsGroup } from '../../../Shared/Components/ActionsGroup'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -89,7 +90,7 @@ class Leads extends Component<Props, State> {
     this.state = {
       tabs: [
         {
-          icon: 'users',
+          icon: 'user',
           header: local.applicantsLeads,
           desc: local.createAndEditApplicantLeads,
           path: '/halan-integration/leads',
@@ -163,14 +164,15 @@ class Leads extends Component<Props, State> {
         render: (data) =>
           data.status !== 'rejected' && (
             <Can I="assignLead" a="halanuser">
-              <img
-                style={{ cursor: 'pointer', marginRight: 5 }}
-                alt="change-loan-officer"
-                src={require('../../Assets/changeOfficer-inactive.svg')}
+              <Button
+                variant="default"
                 onClick={() =>
-                  this.setState({ selectedLead: data, openLOModal: true })
+                  this.setState({ selectedLead: data, openBranchModal: true })
                 }
-              />
+                title="change-loan-officer"
+              >
+                <LtsIcon name="exchange" />
+              </Button>
             </Can>
           ),
       },
@@ -184,14 +186,15 @@ class Leads extends Component<Props, State> {
         render: (data) =>
           data.status !== 'rejected' && (
             <Can I="assignLead" a="halanuser">
-              <img
-                style={{ cursor: 'pointer', marginRight: 5 }}
-                alt="change-branch"
-                src={require('../../Assets/branches-inactive.svg')}
+              <Button
+                variant="default"
                 onClick={() =>
                   this.setState({ selectedLead: data, openBranchModal: true })
                 }
-              />
+                title="change-branch"
+              >
+                <LtsIcon name="branches" />
+              </Button>
             </Can>
           ),
       },

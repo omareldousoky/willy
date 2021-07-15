@@ -6,7 +6,7 @@ export const manageLegalAffairsArray = (): Card[] => {
   const mangeLegalAffairsArr: Card[] = []
   if (ability.can('getDefaultingCustomer', 'legal')) {
     mangeLegalAffairsArr.push({
-      icon: 'loanUses',
+      icon: 'loan-uses',
       header: local.lateList,
       desc: local.lateList,
       path: '/legal-affairs/late-list',
@@ -22,7 +22,7 @@ export const manageLegalAffairsArray = (): Card[] => {
         path: '/legal-affairs/legal-actions',
       },
       {
-        icon: 'legal-actions',
+        icon: 'encoding-files',
         header: local.legalCalendar,
         desc: local.legalCalendar,
         path: '/legal-affairs/legal-calendar',

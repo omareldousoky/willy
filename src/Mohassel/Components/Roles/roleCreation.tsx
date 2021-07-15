@@ -27,6 +27,7 @@ import {
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import { Role } from '../userDetails/userDetailsInterfaces'
+import { LtsIcon } from '../../../Shared/Components'
 
 export interface Section {
   _id: string
@@ -323,11 +324,7 @@ class RoleCreation extends Component<Props, State> {
                     <span
                       style={{ width: '100%', padding: '5px', margin: '5px' }}
                     >
-                      <img
-                        style={{ float: 'right' }}
-                        alt="search-icon"
-                        src={require('../../Assets/searchIcon.svg')}
-                      />
+                      <LtsIcon name="search" />
                       {local.searchByUserRole}
                     </span>
                   }
