@@ -5,34 +5,25 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/esm/Button'
 import Swal from 'sweetalert2'
 
-import local from '../../../Shared/Assets/ar.json'
+import local from '../../../../Shared/Assets/ar.json'
 
-import { Loader } from '../../../Shared/Components/Loader'
-import { LtsIcon } from '../../../Shared/Components'
-import AppForm from '../ManageLegalAffairs/Form'
-import { FormField } from '../ManageLegalAffairs/Form/types'
-import { PdfPortal } from '../Common/PdfPortal'
-import { mapFormFieldsToFormData } from '../ManageLegalAffairs/Form/utils'
-import { maxValue, minValue } from '../../localUtils'
-import { getCustomerMaxNanoLoan } from '../../Services/APIs/Customer-Creation/getCustomer'
-import { setNanoLoanLimit } from '../../Services/APIs/Customer-Creation/setNanoLoanLimit'
-import { getErrorMessage } from '../../../Shared/Services/utils'
-import { Customer, Document } from '../../../Shared/Services/interfaces'
-import { Customer as CustomerModel } from '../../Models/Customer'
-import { PromissoryNoteMicro } from '../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
-import { BranchDetails, getBranch } from '../../Services/APIs/Branch/getBranch'
-
-interface LoanLimitForm {
-  limit: number
-  nanoLimitDocument?: Document[]
-}
-
-interface LoanLimitModalProps {
-  show: boolean
-  hideModal: () => void
-  customer: Customer
-  loanLimit: number
-}
+import { Loader } from '../../../../Shared/Components/Loader'
+import { LtsIcon } from '../../../../Shared/Components'
+import AppForm from '../../ManageLegalAffairs/Form'
+import { FormField } from '../../ManageLegalAffairs/Form/types'
+import { PdfPortal } from '../../Common/PdfPortal'
+import { mapFormFieldsToFormData } from '../../ManageLegalAffairs/Form/utils'
+import { maxValue, minValue } from '../../../localUtils'
+import { getCustomerMaxNanoLoan } from '../../../Services/APIs/Customer-Creation/getCustomer'
+import { setNanoLoanLimit } from '../../../Services/APIs/Customer-Creation/setNanoLoanLimit'
+import { getErrorMessage } from '../../../../Shared/Services/utils'
+import { Customer as CustomerModel } from '../../../Models/Customer'
+import { PromissoryNoteMicro } from '../../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
+import {
+  BranchDetails,
+  getBranch,
+} from '../../../Services/APIs/Branch/getBranch'
+import { LoanLimitModalProps, LoanLimitForm } from './types'
 
 const LoanLimitModal: FunctionComponent<LoanLimitModalProps> = ({
   show,
