@@ -167,7 +167,7 @@ class Leads extends Component<Props, State> {
               <Button
                 variant="default"
                 onClick={() =>
-                  this.setState({ selectedLead: data, openBranchModal: true })
+                  this.setState({ selectedLead: data, openLOModal: true })
                 }
                 title="change-loan-officer"
               >
