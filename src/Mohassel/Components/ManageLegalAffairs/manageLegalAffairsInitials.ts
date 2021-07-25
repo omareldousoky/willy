@@ -16,7 +16,7 @@ export const manageLegalAffairsArray = (): Card[] => {
 
   if (ability.can('getLegalWarning', 'legal')) {
     mangeLegalAffairsArr.push({
-      icon: 'money-penalty',
+      icon: 'warning',
       header: local.legalWarningsList,
       desc: local.legalWarningsList,
       path: '/legal-affairs/legal-warnings',

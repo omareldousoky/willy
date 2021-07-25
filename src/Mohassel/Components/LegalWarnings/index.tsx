@@ -259,7 +259,7 @@ const Warnings = ({
           .map((item) => {
             return item.icon
           })
-          .indexOf('money-penalty')} // TODO: get icon from icomoon
+          .indexOf('warning')}
       />
       <Card className="main-card">
         <Loader type="fullscreen" open={loading} />
