@@ -30,7 +30,9 @@ const template = (
         false
       )}
     </p>
-    <p>مكان الاصدار: {branchDetails.address}</p>
+    <p>
+      مكان الاصدار: {branchDetails.name} - {branchDetails.address}
+    </p>
     <p>تاريخ الاستحقاق : &nbsp; / &nbsp; / &nbsp; &nbsp;</p>
     <p>
       المبلغ :&nbsp;
@@ -63,7 +65,7 @@ const template = (
     </p>
     <p>
       وعلى ان يتم الوفاء بمبلغ السند بمقر الشركة الكائن فى&nbsp;
-      {branchDetails.address} - {branchDetails.name}
+      {branchDetails.name} - {branchDetails.address}
     </p>
     <p>
       ويحق لحامل هذا السند الرجوع علينا بدون مصروفات او اخطار او عمل احتجاج لعدم
