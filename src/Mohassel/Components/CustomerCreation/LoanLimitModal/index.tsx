@@ -30,6 +30,7 @@ const LoanLimitModal: FunctionComponent<LoanLimitModalProps> = ({
   hideModal,
   customer,
   loanLimit,
+  onSuccess,
 }) => {
   const defaultValues: LoanLimitForm = {
     limit: loanLimit,
@@ -141,8 +142,9 @@ const LoanLimitModal: FunctionComponent<LoanLimitModalProps> = ({
     setIsLoading(false)
 
     if (result.status === 'success') {
-      Swal.fire('', local.success, 'success')
       hideModal()
+      await Swal.fire('', local.success, 'success')
+      onSuccess()
     } else {
       Swal.fire(local.error, getErrorMessage(result.error.error), 'error')
     }

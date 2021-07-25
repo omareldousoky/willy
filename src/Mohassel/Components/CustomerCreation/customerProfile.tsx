@@ -521,6 +521,7 @@ export const CustomerProfile = () => {
             hideModal={() => setShowLoanLimitModal(false)}
             customer={customerDetails}
             loanLimit={customerDetails?.nanoLoansLimit ?? 0}
+            onSuccess={() => getCustomerDetails()}
           />
         )}
       </Container>

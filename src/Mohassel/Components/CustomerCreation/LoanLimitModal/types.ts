@@ -10,4 +10,5 @@ export interface LoanLimitModalProps {
   hideModal: () => void
   customer: Customer
   loanLimit: number
+  onSuccess: () => void
 }

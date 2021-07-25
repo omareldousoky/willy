@@ -205,7 +205,7 @@ class DocumentUploader extends Component<Props, State> {
           const file = files[index]
           reader.onloadend = () => {
             const newDocument = {
-              key: this.props.document.body?.message ?? new Date().valueOf(),
+              key: this.props.document.body?.message ?? `customer/${file.name}`,
               url: reader.result,
               valid: true,
               ...(this.props.handleChangeFromParent && { file }),
