@@ -27,7 +27,7 @@ export interface AuthorizationToFillCheckProps {
   application: Application
 }
 export interface PromissoryNoteProps {
-  noteKind: 'شركات' | 'شخصى'
+  noteKind: 'sme' | 'individual'
   application: Application
   branchDetails?: BranchDetails
   person?: Customer

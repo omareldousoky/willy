@@ -1509,7 +1509,7 @@ class LoanProfile extends Component<Props, State> {
             {this.state.application.guarantors?.map((person, index) => (
               <PromissoryNote
                 key={index}
-                noteKind="شخصى"
+                noteKind="individual"
                 application={this.state.application}
                 branchDetails={this.state.branchDetails}
                 person={person}
@@ -1518,7 +1518,7 @@ class LoanProfile extends Component<Props, State> {
             {this.state.application.entitledToSign?.map((person, index) => (
               <PromissoryNote
                 key={index}
-                noteKind="شركات"
+                noteKind="sme"
                 application={this.state.application}
                 branchDetails={this.state.branchDetails}
                 person={person.customer}
