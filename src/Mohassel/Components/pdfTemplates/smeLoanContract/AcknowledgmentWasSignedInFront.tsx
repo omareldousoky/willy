@@ -22,12 +22,16 @@ export const AcknowledgmentWasSignedInFront = ({
         <p>نقر نحن الموقعان أدناه :-</p>
         <div className="d-flex justify-content-between">
           <span>الاسم / </span>
-          <span>الموظف بشركة تساهيل للتمويل فرع {branchDetails?.name}</span>
+          <span>
+            الموظف بشركة تساهيل للتمويل متناهي الصغر فرع {branchDetails?.name}
+          </span>
         </div>
         <p>الوظيفة /</p>
         <div className="d-flex justify-content-between">
           <span>الاسم / </span>
-          <span>الموظف بشركة تساهيل للتمويل فرع {branchDetails?.name}</span>
+          <span>
+            الموظف بشركة تساهيل للتمويل متناهي الصغر فرع {branchDetails?.name}
+          </span>
         </div>
         <p>الوظيفة /</p>
         <p>
