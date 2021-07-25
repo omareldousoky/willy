@@ -309,11 +309,11 @@ const LoanContract = (props) => {
                       </div>
                     ) : (
                       <div>
-                        &nbsp; وقد تقدم الطرف الثاني صاحب نشاط
+                        وقد تقدم الطرف الثاني صاحب نشاط &nbsp;
                         {props.data.customer.businessSector} -
                         {props.data.customer.businessActivity} بطلب للحصول علي
-                        &nbsp; قرض من فرع
-                        {props.branchDetails.name} &nbsp;الكائن
+                        &nbsp; قرض من فرع &nbsp;{props.branchDetails.name}{' '}
+                        الكائن
                         {props.branchDetails.address} لحاجته للسيوله النقديه
                         يخصص استخدامه في تمويل رأس المال العامل وذلك وفقا لاحكام
                         القانون رقم ١٤١ لسنة ٢٠١٤ المشار اليه وذلك بضمان وتضامن
