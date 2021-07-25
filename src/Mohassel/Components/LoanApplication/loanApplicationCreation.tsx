@@ -31,6 +31,7 @@ import { getGenderFromNationalId } from '../../Services/nationalIdValidation'
 import {
   newApplication,
   editApplication,
+  newNanoApplication,
 } from '../../Services/APIs/loanApplication/newApplication'
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication'
 import { getCookie } from '../../../Shared/Services/getCookie'
@@ -100,6 +101,7 @@ interface State {
   searchGroupCustomerKey: string
   showModal: boolean
   customerToView: Customer
+  isNano: boolean
 }
 const date = new Date()
 
@@ -385,6 +387,7 @@ class LoanApplicationCreation extends Component<Props, State> {
         draftState.products = filteredroducts
         draftState.customerType = isNano ? 'individual' : type
         draftState.application.beneficiaryType = isNano ? 'individual' : type
+        draftState.isNano = isNano
       })
     )
   }
@@ -753,6 +756,7 @@ class LoanApplicationCreation extends Component<Props, State> {
       prevId: '',
       showModal: false,
       customerToView: {},
+      isNano: false,
     }
   }
 
@@ -1072,7 +1076,11 @@ class LoanApplicationCreation extends Component<Props, State> {
         Swal.fire('error', local.selectTwoGuarantors, 'error')
       } else if (!this.props.edit) {
         this.setState({ loading: true })
-        const res = await newApplication(objToSubmit)
+
+        const res = await (this.state.isNano
+          ? newNanoApplication(objToSubmit)
+          : newApplication(objToSubmit))
+
         if (res.status === 'success') {
           this.setState({ loading: false })
           Swal.fire(
