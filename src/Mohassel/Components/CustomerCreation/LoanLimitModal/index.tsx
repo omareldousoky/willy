@@ -178,7 +178,7 @@ const LoanLimitModal: FunctionComponent<LoanLimitModalProps> = ({
           />
         </Modal.Body>
       </Modal>
-      {customerBranch && (
+      {customerBranch && currentLoanLimit && (
         <PdfPortal
           component={
             <PromissoryNoteMicro
