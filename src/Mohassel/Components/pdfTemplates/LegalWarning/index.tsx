@@ -93,10 +93,6 @@ export const LegalWarning = ({ type, warnings }: LegalWarningProps) => {
         const { court, caseNumber, customerName, currentHomeAddress } = warning
         return (
           <main className="p-4 font-weight-bold legal-warning" key={index}>
-            <header>
-              <Header showCurrentTime={false} showCurrentUser={false} />
-            </header>
-
             <article className="d-flex justify-content-between">
               <div>
                 <section>
