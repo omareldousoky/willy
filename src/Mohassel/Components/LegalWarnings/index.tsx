@@ -30,6 +30,7 @@ import { PdfPortal } from '../Common/PdfPortal'
 import { setPrintWarningFlag } from '../../Services/APIs/LegalAffairs/warning'
 import { WarningCreationModal } from './WarningCreationModal'
 import { loading as loadingAction } from '../../../Shared/redux/loading/actions'
+import { LtsIcon } from '../../../Shared/Components'
 
 const Warnings = ({
   data,
@@ -237,13 +238,12 @@ const Warnings = ({
             onClick={() => (canPrintWarning ? print(warning) : undefined)}
             disabled={!canPrintWarning}
           >
-            <span className="printer-icon" />
-            {/* <LtsIcon
+            <LtsIcon
               name="printer"
               size="25px"
               color={canPrintWarning ? '#7dc356' : '#6c757d'}
               tooltipText={local.print}
-            /> */}
+            />
           </Button>
         )
       },
