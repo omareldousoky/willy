@@ -19,6 +19,7 @@ import {
   BranchDetailsResponse,
   getBranch,
 } from '../../Services/APIs/Branch/getBranch'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface State {
   size: number
@@ -83,29 +84,29 @@ class BranchesList extends Component<Props, State> {
         key: 'actions',
         render: (data) => (
           <>
-            <img
-              style={{ cursor: 'pointer', marginLeft: 20 }}
-              alt="view"
-              src={require('../../Assets/view.svg')}
-              onClick={() => {
+            <Button
+              variant="default"
+              onClick={() =>
                 this.props.history.push({
                   pathname: '/manage-accounts/branches/branch-details',
                   state: { details: data._id },
                 })
-              }}
-            />
+              }
+            >
+              <LtsIcon name="view" />
+            </Button>
             <Can I="createBranch" a="branch">
-              <img
-                style={{ cursor: 'pointer' }}
-                alt="edit"
-                src={require('../../Assets/editIcon.svg')}
-                onClick={() => {
+              <Button
+                variant="default"
+                onClick={() =>
                   this.props.history.push({
                     pathname: '/manage-accounts/branches/edit-branch',
                     state: { details: data._id },
                   })
-                }}
-              />
+                }
+              >
+                <LtsIcon name="edit" />
+              </Button>
             </Can>
           </>
         ),

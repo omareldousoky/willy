@@ -6,13 +6,13 @@ export interface Card {
   icon: string
   header: string
   desc: string
-  path: string
+  path: string | object
 }
 export const manageAccountsArray = (): Card[] => {
   const mangeAccountArr: Card[] = []
   if (ability.can('getRoles', 'user')) {
     mangeAccountArr.push({
-      icon: 'roles',
+      icon: 'role',
       header: local.roles,
       desc: local.rolesDesc,
       path: '/manage-accounts/roles',
@@ -20,7 +20,7 @@ export const manageAccountsArray = (): Card[] => {
   }
   if (ability.can('getUser', 'user')) {
     mangeAccountArr.push({
-      icon: 'users',
+      icon: 'user',
       header: local.users,
       desc: local.usersDesc,
       path: '/manage-accounts/users',

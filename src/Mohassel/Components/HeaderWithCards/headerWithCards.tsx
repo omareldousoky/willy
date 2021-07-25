@@ -9,7 +9,7 @@ export interface Tab {
   header: string
   desc?: string
   stringKey?: string
-  path?: string
+  path?: string | object
 }
 
 interface HeaderWithCardsProps {

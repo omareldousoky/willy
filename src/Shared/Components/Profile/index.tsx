@@ -3,16 +3,16 @@ import React from 'react'
 // Components
 import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
+
 import { Loader } from '../Loader'
 import BackButton from '../../../Mohassel/Components/BackButton/back-button'
 import { CardNavBar } from '../../../Mohassel/Components/HeaderWithCards/cardNavbar'
 import DocumentsUpload from '../../../Mohassel/Components/CustomerCreation/documentsUpload'
 import DeathCertificate from '../../../Mohassel/Components/CustomerCreation/deathCertificate'
 import { CustomerCategorization } from '../../../Mohassel/Components/CustomerCreation/customerCategorization'
-
-// Bootstrap Components
-import { ProfileProps } from './types'
+import { ProfileActions } from '../ProfileActions'
 import { CustomerReportsTab } from '../../../Mohassel/Components/CustomerCreation/customerReportsTab'
+import { ProfileProps } from './types'
 
 export const Profile = ({
   source,
@@ -33,20 +33,16 @@ export const Profile = ({
         {backButtonText && (
           <BackButton title={backButtonText} className="print-none" />
         )}
-        {editPermission && editText && (
-          <div
-            className="print-none"
-            style={{ cursor: 'pointer' }}
-            onClick={editOnClick}
-          >
-            <img
-              className="iconImage"
-              alt="edit"
-              src={require('../../Assets/editIcon.svg')}
-            />
-            {editText}
-          </div>
-        )}
+        <ProfileActions
+          actions={[
+            {
+              icon: 'edit',
+              title: editText || '',
+              permission: Boolean(editPermission && editText),
+              onActionClick: () => editOnClick,
+            },
+          ]}
+        />
       </div>
       <Card style={{ marginTop: 10 }} className="print-none">
         <CardNavBar

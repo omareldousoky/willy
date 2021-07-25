@@ -87,7 +87,7 @@ const List = ({
   const companyActions: ActionWithIcon[] = [
     {
       actionTitle: editCompany,
-      actionIcon: 'editIcon',
+      actionIcon: 'edit',
 
       actionPermission:
         ability.can('updateCustomer', 'customer') ||

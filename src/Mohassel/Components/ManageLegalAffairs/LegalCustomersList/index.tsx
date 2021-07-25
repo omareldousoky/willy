@@ -67,6 +67,7 @@ import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
 import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
 import { ActionsGroup } from '../../../../Shared/Components/ActionsGroup'
 import { TableMapperItem } from '../../../../Shared/Components/DynamicTable/types'
+import useDidUpdateEffect from '../../../../Shared/hooks/useDidUpdateEffect'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -132,7 +133,19 @@ const LegalCustomersList: FunctionComponent = () => {
     ability.can(type.permission, type.key)
   )
 
+  const getLegalCustomers = (filters?: any) =>
+    dispatch(
+      search({
+        ...(filters || searchFilters),
+        size,
+        from,
+        url,
+      })
+    )
+
   useEffect(() => {
+    getLegalCustomers({})
+
     return () => {
       dispatch(searchFiltersAction({}))
     }
@@ -202,17 +215,7 @@ const LegalCustomersList: FunctionComponent = () => {
     fetchSettlementFees()
   }, [customerForSettlement])
 
-  const getLegalCustomers = () =>
-    dispatch(
-      search({
-        ...searchFilters,
-        size,
-        from,
-        url,
-      })
-    )
-
-  useEffect(() => {
+  useDidUpdateEffect(() => {
     getLegalCustomers()
   }, [dispatch, from, size])
 

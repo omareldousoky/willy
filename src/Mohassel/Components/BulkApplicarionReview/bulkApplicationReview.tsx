@@ -24,10 +24,12 @@ import {
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import local from '../../../Shared/Assets/ar.json'
-import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicationInitials'
+import {
+  manageApplicationsArray,
+  manageSMEApplicationsArray,
+} from '../TrackLoanApplications/manageApplicationInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import Can from '../../config/Can'
-import ability from '../../config/ability'
 import { getCookie } from '../../../Shared/Services/getCookie'
 
 interface Product {
@@ -69,11 +71,10 @@ interface State {
   checkAll: boolean
   from: number
   size: number
-  manageApplicationsTabs: any[]
-  checkPermission: boolean
   branchId: string
 }
-interface Props extends RouteComponentProps {
+interface Props
+  extends RouteComponentProps<{}, {}, { sme?: boolean; id?: string }> {
   loading: boolean
   totalCount: number
   data: any
@@ -99,8 +100,6 @@ class BulkApplicationReview extends Component<Props, State> {
       checkAll: false,
       from: 0,
       size: 10,
-      manageApplicationsTabs: [],
-      checkPermission: false,
       branchId: JSON.parse(getCookie('ltsbranch'))._id,
     }
     this.mappers = [
@@ -223,34 +222,33 @@ class BulkApplicationReview extends Component<Props, State> {
   }
 
   componentDidMount() {
-    if (
-      ability.can('secondReview', 'application') ||
-      ability.can('thirdReview', 'application')
-    ) {
-      this.setState({ checkPermission: true })
-      this.props
-        .search({
-          size: this.state.size,
-          from: this.state.from,
-          url: 'application',
-          status: 'reviewed',
-          branchId: this.state.branchId !== 'hq' ? this.state.branchId : '',
-          type: 'micro',
-        })
-        .then(() => {
-          if (this.props.error)
-            Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
-        })
-      this.props.setSearchFilters({
+    this.props
+      .search({
         size: this.state.size,
         from: this.state.from,
         url: 'application',
         status: 'reviewed',
         branchId: this.state.branchId !== 'hq' ? this.state.branchId : '',
-        type: 'micro',
+        type:
+          this.props.location.state && this.props.location.state.sme
+            ? 'sme'
+            : 'micro',
       })
-      this.setState({ manageApplicationsTabs: manageApplicationsArray() })
-    }
+      .then(() => {
+        if (this.props.error)
+          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+      })
+    this.props.setSearchFilters({
+      size: this.state.size,
+      from: this.state.from,
+      url: 'application',
+      status: 'reviewed',
+      branchId: this.state.branchId !== 'hq' ? this.state.branchId : '',
+      type:
+        this.props.location.state && this.props.location.state.sme
+          ? 'sme'
+          : 'micro',
+    })
   }
 
   componentDidUpdate() {
@@ -413,14 +411,20 @@ class BulkApplicationReview extends Component<Props, State> {
   render() {
     const searchKey = ['keyword', 'dateFromTo', 'review-application']
     const smePermission =
-      ability.can('getSMEApplication', 'application') &&
-      this.props.searchFilters.type === 'sme'
+      (this.props.location.state && this.props.location.state.sme) || false
     const filteredMappers = smePermission
       ? this.mappers.filter(
           (mapper) =>
             !['nationalId', 'age', 'businessActivity'].includes(mapper.key)
         )
       : this.mappers
+    const dropDownKeys = [
+      'name',
+      'key',
+      'customerKey',
+      'customerCode',
+      'customerShortenedCode',
+    ]
     if (smePermission) {
       filteredMappers.splice(3, 0, {
         title: local.commercialRegisterNumber,
@@ -437,203 +441,197 @@ class BulkApplicationReview extends Component<Props, State> {
         key: 'businessSector',
         render: (data) => data.application.customer.businessSector,
       })
-    }
-    const dropDownKeys = [
-      'name',
-      'nationalId',
-      'key',
-      'customerKey',
-      'customerCode',
-      'customerShortenedCode',
-    ]
-    this.state.branchId === 'hq' && searchKey.push('branch')
-    if (ability.can('getSMEApplication', 'application')) {
-      searchKey.push('sme')
       dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
+    } else {
+      dropDownKeys.push('nationalId')
     }
+    this.state.branchId === 'hq' && searchKey.push('branch')
+    const manageApplicationsTabs = smePermission
+      ? manageSMEApplicationsArray()
+      : manageApplicationsArray()
 
     return (
-      this.state.checkPermission && (
-        <>
-          <HeaderWithCards
-            header={local.bulkLoanApplicationReviews}
-            array={this.state.manageApplicationsTabs}
-            active={this.state.manageApplicationsTabs
-              .map((item) => {
-                return item.icon
-              })
-              .indexOf('bulkLoanApplicationsReview')}
-          />
-          <Card className="main-card">
-            <Loader type="fullscreen" open={this.props.loading} />
-            <Card.Body style={{ padding: 0 }}>
-              <div className="custom-card-header">
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                    {local.reviewedApplications}
-                  </Card.Title>
-                  <span className="text-muted" style={{ marginLeft: 10 }}>
-                    {local.maxLoansAllowed + ` (${this.props.totalCount || 0})`}
-                  </span>
-                  <span className="text-muted">
-                    {local.noOfSelectedLoans +
-                      ` (${this.state.selectedReviewedLoans.length})`}
-                  </span>
-                </div>
-                <Button
-                  onClick={() => {
-                    this.setState({ showModal: true })
-                  }}
-                  disabled={!this.state.selectedReviewedLoans.length}
-                  className="big-button"
-                  style={{ height: 70 }}
-                >
-                  {local.bulkLoanApplicationReviews}
-                </Button>
+      <>
+        <HeaderWithCards
+          header={local.bulkLoanApplicationReviews}
+          array={manageApplicationsTabs}
+          active={manageApplicationsTabs
+            .map((item) => {
+              return item.icon
+            })
+            .indexOf('bulk-loan-applications-review')}
+        />
+        <Card className="main-card">
+          <Loader type="fullscreen" open={this.props.loading} />
+          <Card.Body style={{ padding: 0 }}>
+            <div className="custom-card-header">
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
+                  {local.reviewedApplications}
+                </Card.Title>
+                <span className="text-muted" style={{ marginLeft: 10 }}>
+                  {local.maxLoansAllowed + ` (${this.props.totalCount || 0})`}
+                </span>
+                <span className="text-muted">
+                  {local.noOfSelectedLoans +
+                    ` (${this.state.selectedReviewedLoans.length})`}
+                </span>
               </div>
-              <hr className="dashed-line" />
+              <Button
+                onClick={() => {
+                  this.setState({ showModal: true })
+                }}
+                disabled={!this.state.selectedReviewedLoans.length}
+                className="big-button"
+                style={{ height: 70 }}
+              >
+                {local.bulkLoanApplicationReviews}
+              </Button>
+            </div>
+            <hr className="dashed-line" />
 
-              {this.state.branchId === 'hq' ? (
-                <Search
-                  searchKeys={searchKey}
-                  dropDownKeys={dropDownKeys}
-                  url="application"
-                  from={this.state.from}
-                  size={this.state.size}
-                  searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-                />
-              ) : (
-                <Search
-                  searchKeys={searchKey}
-                  dropDownKeys={dropDownKeys}
-                  url="application"
-                  from={this.state.from}
-                  size={this.state.size}
-                  searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-                  hqBranchIdRequest={this.state.branchId}
-                />
-              )}
-              <DynamicTable
+            {this.state.branchId === 'hq' ? (
+              <Search
+                searchKeys={searchKey}
+                dropDownKeys={dropDownKeys}
+                url="application"
                 from={this.state.from}
                 size={this.state.size}
-                url="application"
-                totalCount={this.props.totalCount}
-                mappers={filteredMappers}
-                pagination
-                data={this.props.data}
-                changeNumber={(key: string, number: number) => {
-                  this.setState({ [key]: number, checkAll: false } as any, () =>
-                    this.getApplications()
-                  )
-                }}
+                searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+                sme={this.props.location.state && this.props.location.state.sme}
               />
-            </Card.Body>
-          </Card>
-          {this.state.showModal && (
-            <Modal
-              show={this.state.showModal}
-              onHide={() => this.setState({ showModal: false })}
+            ) : (
+              <Search
+                searchKeys={searchKey}
+                dropDownKeys={dropDownKeys}
+                url="application"
+                from={this.state.from}
+                size={this.state.size}
+                searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+                hqBranchIdRequest={this.state.branchId}
+                sme={this.props.location.state && this.props.location.state.sme}
+              />
+            )}
+            <DynamicTable
+              from={this.state.from}
+              size={this.state.size}
+              url="application"
+              totalCount={this.props.totalCount}
+              mappers={filteredMappers}
+              pagination
+              data={this.props.data}
+              changeNumber={(key: string, number: number) => {
+                this.setState({ [key]: number, checkAll: false } as any, () =>
+                  this.getApplications()
+                )
+              }}
+            />
+          </Card.Body>
+        </Card>
+        {this.state.showModal && (
+          <Modal
+            show={this.state.showModal}
+            onHide={() => this.setState({ showModal: false })}
+          >
+            <Formik
+              initialValues={{
+                date: this.dateSlice(null),
+                action: '',
+                selectedReviewedLoans: this.state.selectedReviewedLoans,
+              }}
+              onSubmit={this.handleSubmit}
+              validationSchema={bulkApplicationReviewValidation}
+              validateOnBlur
+              validateOnChange
             >
-              <Formik
-                initialValues={{
-                  date: this.dateSlice(null),
-                  action: '',
-                  selectedReviewedLoans: this.state.selectedReviewedLoans,
-                }}
-                onSubmit={this.handleSubmit}
-                validationSchema={bulkApplicationReviewValidation}
-                validateOnBlur
-                validateOnChange
-              >
-                {(formikProps) => (
-                  <Form onSubmit={formikProps.handleSubmit}>
-                    <Modal.Header>
-                      <Modal.Title className="m-auto">
-                        {local.bulkLoanApplicationReviews}
-                      </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <Form.Group as={Row} controlId="date">
-                        <Form.Label
-                          column
-                          sm={3}
-                        >{`${local.entryDate}*`}</Form.Label>
-                        <Col sm={7}>
-                          <Form.Control
-                            type="date"
-                            name="date"
-                            data-qc="date"
-                            value={formikProps.values.date}
-                            onBlur={formikProps.handleBlur}
-                            onChange={formikProps.handleChange}
-                            isInvalid={
-                              Boolean(formikProps.errors.date) &&
-                              Boolean(formikProps.touched.date)
-                            }
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {formikProps.errors.date}
-                          </Form.Control.Feedback>
-                        </Col>
-                      </Form.Group>
-                      <Form.Group as={Row} controlId="action">
-                        <Form.Label
-                          style={{ textAlign: 'right' }}
-                          column
-                          sm={3}
-                        >{`${local.action}*`}</Form.Label>
-                        <Col sm={7}>
-                          <Form.Control
-                            as="select"
-                            name="action"
-                            data-qc="action"
-                            value={formikProps.values.action}
-                            onBlur={formikProps.handleBlur}
-                            onChange={formikProps.handleChange}
-                            isInvalid={
-                              Boolean(formikProps.errors.action) &&
-                              Boolean(formikProps.touched.action)
-                            }
-                          >
-                            <option value="" disabled />
-                            {this.state.selectedReviewedLoans[0].application
-                              .status !== 'secondReview' && (
-                              <Can I="secondReview" a="application">
-                                <option value="secondReview">
-                                  {local.secondReview}
-                                </option>
-                              </Can>
-                            )}
-                            <Can I="thirdReview" a="application">
-                              <option value="thirdReview">
-                                {local.thirdReview}
+              {(formikProps) => (
+                <Form onSubmit={formikProps.handleSubmit}>
+                  <Modal.Header>
+                    <Modal.Title className="m-auto">
+                      {local.bulkLoanApplicationReviews}
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <Form.Group as={Row} controlId="date">
+                      <Form.Label
+                        column
+                        sm={3}
+                      >{`${local.entryDate}*`}</Form.Label>
+                      <Col sm={7}>
+                        <Form.Control
+                          type="date"
+                          name="date"
+                          data-qc="date"
+                          value={formikProps.values.date}
+                          onBlur={formikProps.handleBlur}
+                          onChange={formikProps.handleChange}
+                          isInvalid={
+                            Boolean(formikProps.errors.date) &&
+                            Boolean(formikProps.touched.date)
+                          }
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.date}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="action">
+                      <Form.Label
+                        style={{ textAlign: 'right' }}
+                        column
+                        sm={3}
+                      >{`${local.action}*`}</Form.Label>
+                      <Col sm={7}>
+                        <Form.Control
+                          as="select"
+                          name="action"
+                          data-qc="action"
+                          value={formikProps.values.action}
+                          onBlur={formikProps.handleBlur}
+                          onChange={formikProps.handleChange}
+                          isInvalid={
+                            Boolean(formikProps.errors.action) &&
+                            Boolean(formikProps.touched.action)
+                          }
+                        >
+                          <option value="" disabled />
+                          {this.state.selectedReviewedLoans[0].application
+                            .status !== 'secondReview' && (
+                            <Can I="secondReview" a="application">
+                              <option value="secondReview">
+                                {local.secondReview}
                               </option>
                             </Can>
-                          </Form.Control>
-                          <Form.Control.Feedback type="invalid">
-                            {formikProps.errors.action}
-                          </Form.Control.Feedback>
-                        </Col>
-                      </Form.Group>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button
-                        variant="secondary"
-                        onClick={() => this.setState({ showModal: false })}
-                      >
-                        {local.cancel}
-                      </Button>
-                      <Button type="submit" variant="primary">
-                        {local.submit}
-                      </Button>
-                    </Modal.Footer>
-                  </Form>
-                )}
-              </Formik>
-            </Modal>
-          )}
-        </>
-      )
+                          )}
+                          <Can I="thirdReview" a="application">
+                            <option value="thirdReview">
+                              {local.thirdReview}
+                            </option>
+                          </Can>
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.action}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button
+                      variant="secondary"
+                      onClick={() => this.setState({ showModal: false })}
+                    >
+                      {local.cancel}
+                    </Button>
+                    <Button type="submit" variant="primary">
+                      {local.submit}
+                    </Button>
+                  </Modal.Footer>
+                </Form>
+              )}
+            </Formik>
+          </Modal>
+        )}
+      </>
     )
   }
 }

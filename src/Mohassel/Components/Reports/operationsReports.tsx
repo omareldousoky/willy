@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
+import Button from 'react-bootstrap/Button'
 import { Loader } from '../../../Shared/Components/Loader'
 import ReportsModal from './reportsModal'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -48,6 +49,7 @@ import {
   fetchActiveWalletIndividualReport,
 } from '../../Services/APIs/Reports/activeWallet'
 import ActiveWalletGroupPdf from '../pdfTemplates/activeWalletGroup/activeWalletGroup'
+import { LtsIcon } from '../../../Shared/Components'
 
 export interface PDF {
   key?: string
@@ -466,15 +468,18 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                           </span>
                           <span>{pdf.local}</span>
                         </div>
-                        <img
-                          style={{
-                            cursor: 'pointer',
-                          }}
-                          alt="download"
-                          data-qc="download"
-                          src={require(`../../Assets/green-download.svg`)}
+                        <Button
+                          type="button"
+                          variant="default"
                           onClick={() => this.handlePrint(pdf)}
-                        />
+                          title="download"
+                        >
+                          <LtsIcon
+                            name="download"
+                            size="40px"
+                            color="#7dc356"
+                          />
+                        </Button>
                       </div>
                     </Card.Body>
                   </Card>

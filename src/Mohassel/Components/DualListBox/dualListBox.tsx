@@ -10,6 +10,7 @@ import Container from 'react-bootstrap/Container'
 import './styles.scss'
 import Swal from 'sweetalert2'
 import * as local from '../../../Shared/Assets/ar.json'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props {
   options: any
@@ -350,11 +351,7 @@ const DualBox = (props: Props) => {
                       <li key={option._id} className="list-group-item">
                         {!props.oneWay && (
                           <span onClick={() => removeItemFromList(option)}>
-                            <img
-                              alt="close"
-                              style={{ width: '15px', height: '15px' }}
-                              src={require('../../Assets/closeIcon.svg')}
-                            />
+                            <LtsIcon name="close" size="20px" />
                           </span>
                         )}
                         <span>{option[props.labelKey]}</span>

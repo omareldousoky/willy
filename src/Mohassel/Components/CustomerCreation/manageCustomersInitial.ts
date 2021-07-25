@@ -14,7 +14,7 @@ export const manageCustomersArray = (): Card[] => {
   }
   if (ability.can('changeOfficer', 'customer')) {
     manageLoanArr.push({
-      icon: 'changeOfficer',
+      icon: 'exchange',
       header: local.moveCustomers,
       desc: local.moveCustomers,
       path: '/customers/move-customers',
@@ -35,7 +35,7 @@ export const manageCompaniesArray = (): Card[] => {
   }
   if (ability.can('changeOfficer', 'customer')) {
     manageLoanArr.push({
-      icon: 'changeOfficer',
+      icon: 'exchange',
       header: local.moveCompanies,
       desc: local.moveCompanies,
       path: '/company/move-company',

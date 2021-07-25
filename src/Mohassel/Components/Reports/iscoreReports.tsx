@@ -15,6 +15,7 @@ import {
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
 import Can from '../../config/Can'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface State {
   data: any
@@ -153,13 +154,18 @@ class IscoreReports extends Component<{}, State> {
                           )}
                         </div>
                         {pdf.status === 'created' && (
-                          <img
-                            style={{ cursor: 'pointer' }}
-                            alt="download"
-                            data-qc="download"
-                            src={require(`../../Assets/green-download.svg`)}
+                          <Button
+                            type="button"
+                            variant="default"
                             onClick={() => this.getFile(pdf)}
-                          />
+                            title="download"
+                          >
+                            <LtsIcon
+                              name="download"
+                              size="40px"
+                              color="#7dc356"
+                            />
+                          </Button>
                         )}
                       </div>
                     </Card.Body>

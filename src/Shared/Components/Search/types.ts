@@ -38,6 +38,7 @@ export interface SearchProps {
   setIssuedLoansSearchFilters: (data) => void
   setLoading: (data) => void
   submitClassName?: string
+  sme?: boolean
 }
 
 export interface SearchState {

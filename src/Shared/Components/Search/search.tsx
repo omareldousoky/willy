@@ -20,6 +20,7 @@ import { BranchesDropDown } from '../../../Mohassel/Components/dropDowns/allDrop
 import {
   getFullCustomerKey,
   parseJwt,
+  removeEmptyArg,
   timeToDateyyymmdd,
 } from '../../Services/utils'
 import { getCookie } from '../../Services/getCookie'
@@ -225,7 +226,7 @@ class Search extends Component<SearchProps, SearchState> {
     if (!['application', 'loan'].includes(url)) {
       delete obj.type
     } else {
-      obj.type = obj.type ? obj.type : 'micro'
+      obj.type = this.props.sme ? 'sme' : 'micro'
     }
 
     if (obj.lastDates) {
@@ -242,7 +243,7 @@ class Search extends Component<SearchProps, SearchState> {
         ? 'company'
         : 'individual'
 
-    obj = this.removeEmptyArg(obj)
+    obj = removeEmptyArg(obj)
 
     if (isCib) {
       const { fromDate, toDate, keyword, branchId } = obj
@@ -278,15 +279,6 @@ class Search extends Component<SearchProps, SearchState> {
     }
     if (this.props.resetSelectedItems) this.props.resetSelectedItems()
     this.props.search(searchQuery)
-  }
-
-  removeEmptyArg(obj) {
-    Object.keys(obj).forEach((el) => {
-      if (obj[el] === '' || obj[el] === undefined) {
-        delete obj[el]
-      }
-    })
-    return obj
   }
 
   viewBranchDropdown() {

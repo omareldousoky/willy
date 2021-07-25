@@ -39,6 +39,7 @@ import { PDF } from '../Reports/reports'
 import DefaultingCustomersPdfTemplate, {
   ReportDefaultedCustomer,
 } from '../pdfTemplates/defaultingCustomers/DefaultingCustomers'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Review {
   at: number
@@ -613,60 +614,54 @@ class DefaultingCustomersList extends Component<Props, State> {
           data.areaManagerReview ||
           data.areaSupervisorReview ||
           data.financialManagerReview) && (
-          <img
-            style={{ cursor: 'pointer', marginLeft: 20 }}
+          <Button
+            variant="default"
+            onClick={() => this.showLogs(data)}
             title={local.logs}
-            alt={local.logs}
-            src={require('../../Assets/view.svg')}
-            onClick={() => {
-              this.showLogs(data)
-            }}
-          />
+          >
+            <LtsIcon name="view" />
+          </Button>
         )}
         {daysSince < 3 && data.status === 'underReview' && (
           <Can I="branchManagerReview" a="legal">
-            <img
-              style={{ cursor: 'pointer', marginLeft: 20 }}
-              title={local.branchManagerReview}
-              alt={local.branchManagerReview}
-              src={require('../../Assets/check-circle.svg')}
-              onClick={() => {
+            <Button
+              variant="default"
+              onClick={() =>
                 this.reviewDefaultedLoan([data._id], 'branchManagerReview')
-              }}
-            />
-            <img
-              style={{ cursor: 'pointer', marginLeft: 20 }}
+              }
+              title={local.branchManagerReview}
+            >
+              <LtsIcon name="check-circle" />
+            </Button>
+            <Button
+              variant="default"
+              onClick={() => this.deleteDefaultedLoanEntry([data._id])}
               title={local.delete}
-              alt={local.delete}
-              src={require('../../../Shared/Assets/deleteIcon.svg')}
-              onClick={() => {
-                this.deleteDefaultedLoanEntry([data._id])
-              }}
-            />
+            >
+              <LtsIcon name="trash" />
+            </Button>
           </Can>
         )}
         {daysSince < 6 &&
           (data.status === 'branchManagerReview' ||
             (daysSince >= 3 && data.status === 'underReview')) && (
             <Can I="areaSupervisorReview" a="legal">
-              <img
-                style={{ cursor: 'pointer', marginLeft: 20 }}
-                title={local.areaSupervisorReview}
-                alt={local.areaSupervisorReview}
-                src={require('../../Assets/check-circle.svg')}
-                onClick={() => {
+              <Button
+                variant="default"
+                onClick={() =>
                   this.reviewDefaultedLoan([data._id], 'areaSupervisorReview')
-                }}
-              />
-              <img
-                style={{ cursor: 'pointer', marginLeft: 20 }}
+                }
+                title={local.areaSupervisorReview}
+              >
+                <LtsIcon name="check-circle" />
+              </Button>
+              <Button
+                variant="default"
+                onClick={() => this.deleteDefaultedLoanEntry([data._id])}
                 title={local.delete}
-                alt={local.delete}
-                src={require('../../../Shared/Assets/deleteIcon.svg')}
-                onClick={() => {
-                  this.deleteDefaultedLoanEntry([data._id])
-                }}
-              />
+              >
+                <LtsIcon name="trash" />
+              </Button>
             </Can>
           )}
         {daysSince < 9 &&
@@ -675,24 +670,22 @@ class DefaultingCustomersList extends Component<Props, State> {
               (data.status === 'branchManagerReview' ||
                 data.status === 'underReview'))) && (
             <Can I="areaManagerReview" a="legal">
-              <img
-                style={{ cursor: 'pointer', marginLeft: 20 }}
-                title={local.areaManagerReview}
-                alt={local.areaManagerReview}
-                src={require('../../Assets/check-circle.svg')}
-                onClick={() => {
+              <Button
+                variant="default"
+                onClick={() =>
                   this.reviewDefaultedLoan([data._id], 'areaManagerReview')
-                }}
-              />
-              <img
-                style={{ cursor: 'pointer', marginLeft: 20 }}
+                }
+                title={local.areaManagerReview}
+              >
+                <LtsIcon name="check-circle" />
+              </Button>
+              <Button
+                variant="default"
+                onClick={() => this.deleteDefaultedLoanEntry([data._id])}
                 title={local.delete}
-                alt={local.delete}
-                src={require('../../../Shared/Assets/deleteIcon.svg')}
-                onClick={() => {
-                  this.deleteDefaultedLoanEntry([data._id])
-                }}
-              />
+              >
+                <LtsIcon name="trash" />
+              </Button>
             </Can>
           )}
         {daysSince < 15 &&
@@ -702,37 +695,33 @@ class DefaultingCustomersList extends Component<Props, State> {
                 data.status === 'branchManagerReview' ||
                 data.status === 'underReview'))) && (
             <Can I="financialManagerReview" a="legal">
-              <img
-                style={{ cursor: 'pointer', marginLeft: 20 }}
-                title={local.financialManagerReview}
-                alt={local.financialManagerReview}
-                src={require('../../Assets/check-circle.svg')}
-                onClick={() => {
+              <Button
+                variant="default"
+                onClick={() =>
                   this.reviewDefaultedLoan([data._id], 'financialManagerReview')
-                }}
-              />
-              <img
-                style={{ cursor: 'pointer', marginLeft: 20 }}
-                alt={local.delete}
+                }
+                title={local.financialManagerReview}
+              >
+                <LtsIcon name="check-circle" />
+              </Button>
+              <Button
+                variant="default"
+                onClick={() => this.deleteDefaultedLoanEntry([data._id])}
                 title={local.delete}
-                src={require('../../../Shared/Assets/deleteIcon.svg')}
-                onClick={() => {
-                  this.deleteDefaultedLoanEntry([data._id])
-                }}
-              />
+              >
+                <LtsIcon name="trash" />
+              </Button>
             </Can>
           )}
         {daysSince >= 15 && data.status !== 'financialManagerReview' && (
           <Can I="deleteDefaultingCustomer" a="legal">
-            <img
-              style={{ cursor: 'pointer', marginLeft: 20 }}
+            <Button
+              variant="default"
+              onClick={() => this.deleteDefaultedLoanEntry([data._id])}
               title={local.delete}
-              alt={local.delete}
-              src={require('../../../Shared/Assets/deleteIcon.svg')}
-              onClick={() => {
-                this.deleteDefaultedLoanEntry([data._id])
-              }}
-            />
+            >
+              <LtsIcon name="trash" />
+            </Button>
           </Can>
         )}
       </>
