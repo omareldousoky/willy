@@ -28,6 +28,7 @@ import {
 } from '../../../../Shared/redux/document/actions'
 import { Document } from '../../../../Shared/Services/interfaces'
 import { DocumentsType } from '../../../../Shared/redux/document/types'
+import useDidUpdateEffect from '../../../../Shared/hooks/useDidUpdateEffect'
 
 const FormField: FunctionComponent<FormFieldProps> = ({
   field,
@@ -86,29 +87,30 @@ const FormField: FunctionComponent<FormFieldProps> = ({
     ({ name }) => name === field.clearFieldOnChange
   )
 
-  const documentImages: Document[] =
-    (useSelector((state: any) => state.documents) || []).find(
-      (document: DocumentsType) => {
-        const fieldName = isDocument(fieldToClear)
-          ? fieldToClear.name
-          : field.name
+  const documentImages: Document[] = (
+    useSelector((state: any) => state.documents) || []
+  ).find((document: DocumentsType) => {
+    const fieldName = isDocument(fieldToClear) ? fieldToClear.name : field.name
 
-        return document?.docName === fieldName
-      }
-    )?.imagesFiles ?? []
+    return document?.docName === fieldName
+  })?.imagesFiles
 
-  const validDocuments = documentImages.filter((document) => document.valid)
+  const validDocuments = documentImages?.filter((document) => document.valid)
 
   const handleDocumentDelete = (name: string) => {
     const lastDocument = documentImages[documentImages.length - 1]
     lastDocument && dispatch(invalidDocument(lastDocument.key, name))
   }
 
-  useEffect(() => {
+  useDidUpdateEffect(() => {
     if (isDocument(field)) {
-      values[field.name] = documentImages
+      if (values[field.name] === undefined) {
+        values[field.name] = documentImages
+      } else {
+        setFieldValue(field.name, documentImages)
+      }
     }
-  }, [validDocuments.length])
+  }, [validDocuments?.length])
 
   const handleFieldChange = (e: ChangeEvent<any>) => {
     if (field.clearFieldOnChange) {
