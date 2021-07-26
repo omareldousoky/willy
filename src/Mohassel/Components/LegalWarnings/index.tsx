@@ -212,8 +212,10 @@ const Warnings = ({
       key: 'customerCode',
       render: (warning) =>
         ability.can('getCustomer', 'customer') ? (
-          <span
-            style={{ cursor: 'pointer' }}
+          <Button
+            variant="default"
+            className="px-0"
+            title={`${local.view} ${local.viewCustomer}`}
             onClick={() =>
               history.push('/customers/view-customer', {
                 id: warning.customerId,
@@ -221,7 +223,7 @@ const Warnings = ({
             }
           >
             {warning.customerKey}
-          </span>
+          </Button>
         ) : (
           warning.customerKey
         ),
@@ -242,8 +244,10 @@ const Warnings = ({
       render: (warning) =>
         ability.can('getIssuedLoan', 'application') ||
         ability.can('branchIssuedLoan', 'application') ? (
-          <span
-            style={{ cursor: 'pointer' }}
+          <Button
+            variant="default"
+            className="px-0"
+            title={`${local.view} ${local.loanDetails}`}
             onClick={() =>
               history.push('/loans/loan-profile', {
                 id: warning.loanId,
@@ -251,7 +255,7 @@ const Warnings = ({
             }
           >
             {warning.loanKey}
-          </span>
+          </Button>
         ) : (
           warning.loanKey
         ),
