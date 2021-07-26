@@ -286,7 +286,6 @@ const Warnings = ({
               name="printer"
               size="25px"
               color={canPrintWarning ? '#7dc356' : '#6c757d'}
-              tooltipText={local.print}
             />
           </Button>
         )
