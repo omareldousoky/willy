@@ -44,7 +44,7 @@ export const AcknowledgmentOfCommitment = ({
           {new Tafgeet(application.principal, 'EGP').parse()})
         </p>
         <p>
-          من شركة تساهيل للتمويل بتاريخ
+          من شركة تساهيل للتمويل متناهي الصغر بتاريخ
           {timeToArabicDate(application.creationDate, false)} وذلك بهدف تطوير
           وزيادة رأس مال النشاط وانني غير متضرر من الظروف الحالية والتي لها
           تأثير عام علي جميع الانشطة الاقتصادية والمشروعات وقد ينتج عن هذه

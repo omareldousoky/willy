@@ -30,20 +30,10 @@ const template = (
         false
       )}
     </p>
-    <p>مكان الاصدار: {branchDetails.address}</p>
     <p>
-      تاريخ الاستحقاق : &nbsp;
-      {timeToArabicDate(
-        application
-          ? application.installmentsObject?.installments[
-              application.installmentsObject.installments.length - 1
-            ].dateOfPayment || 0
-          : new Date(
-              new Date().setFullYear(new Date().getFullYear() + 2)
-            ).valueOf(),
-        false
-      )}
+      مكان الاصدار: {branchDetails.name} - {branchDetails.address}
     </p>
+    <p>تاريخ الاستحقاق : &nbsp; / &nbsp; / &nbsp; &nbsp;</p>
     <p>
       المبلغ :&nbsp;
       {numbersToArabic(
@@ -54,7 +44,8 @@ const template = (
     </p>
     <p>
       نتعهد نحن الموقعين ادناه تعهداً نهائيا وبدون اى قيد او شرط بأن ندفع فى
-      تاريخ الاستحقاق لأمر واذن شركة تساهيل للتمويل مبلغ وقدره &nbsp;
+      تاريخ الاستحقاق لأمر واذن شركة تساهيل للتمويل متناهي الصغر مبلغ وقدره
+      &nbsp;
       {numbersToArabic(
         application
           ? application.installmentsObject?.totalInstallments.installmentSum
@@ -74,7 +65,7 @@ const template = (
     </p>
     <p>
       وعلى ان يتم الوفاء بمبلغ السند بمقر الشركة الكائن فى&nbsp;
-      {branchDetails.address}
+      {branchDetails.name} - {branchDetails.address}
     </p>
     <p>
       ويحق لحامل هذا السند الرجوع علينا بدون مصروفات او اخطار او عمل احتجاج لعدم
@@ -87,7 +78,7 @@ const template = (
     </p>
     <p>
       يخضع هذا السند لاحكام القانون المصري ويكون اي نزاع ينشأ عنه او يتصل به
-      الفصل فيه والتقاضي يكون من اختصاصى وامام محاكم ( الجيزة ) على اختلاف
+      الفصل فيه والتقاضي يكون من اختصاص وامام محاكم ( الجيزة ) على اختلاف
       درجاتها وانواعها.
     </p>
     <p>

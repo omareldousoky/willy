@@ -113,7 +113,7 @@ class CustomerCardPDF extends Component<Props, State> {
             </th>
             <th style={{ backgroundColor: 'white' }} colSpan={6}>
               {this.props.data.product.type === 'sme'
-                ? 'ترخيص ممارسه نشاط تمويل المشروعات الصغيره والمتوسطة رقم ١ لسنه ٢٠٢١'
+                ? 'ترخيص ممارسة نشاط تمويل المشروعات المتوسطة والصغيرة رقم ١ لسنه ٢٠٢١'
                 : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
             </th>
           </tr>
