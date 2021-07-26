@@ -513,11 +513,3 @@ code {
 .img-title {
   font-size: 24px;
 }
-
-.printer-icon {
-  background: url(./Assets/printer.svg);
-  @extend .icon-base;
-	width: 25px;
-  height: 25px;
-  background-size: 25px !important;
-}
