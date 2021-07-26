@@ -3,6 +3,7 @@ import FormCheck from 'react-bootstrap/FormCheck'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
 import Card from 'react-bootstrap/esm/Card'
+import { useHistory } from 'react-router-dom'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from '../ManageLegalAffairs/manageLegalAffairsInitials'
 import local from '../../../Shared/Assets/ar.json'
@@ -53,6 +54,8 @@ const Warnings = ({
   const [printWarnings, setPrintWarnings] = useState<LegalWarningResponse[]>()
   const [showModal, setShowModal] = useState(false)
 
+  const history = useHistory<{ id?: string }>()
+
   const LEGAL_WARNING_URL = 'legal-warning'
 
   const hasAddWarningPermission = ability.can('addLegalWarning', 'legal')
@@ -72,11 +75,17 @@ const Warnings = ({
       : !target?.printed || false
   }
 
-  const getLegalWarnings = (resetFrom?: boolean) => {
+  const getLegalWarnings = (
+    resetFrom?: boolean,
+    newSearchFilters?: Record<string, string>
+  ) => {
     if (resetFrom) setFrom(0)
+    const filters = newSearchFilters
+      ? { ...newSearchFilters }
+      : { ...searchFilters }
 
     const request = {
-      ...searchFilters,
+      ...filters,
       from: resetFrom ? 0 : from,
       size,
       url: LEGAL_WARNING_URL,
@@ -86,10 +95,11 @@ const Warnings = ({
   }
 
   useEffect(() => {
-    getLegalWarnings()
+    getLegalWarnings(false, {})
   }, [])
 
   useEffect(() => {
+    // avoid trigger when from == 0
     if (from) getLegalWarnings()
   }, [from, size])
 
@@ -117,11 +127,10 @@ const Warnings = ({
         setLoading(true)
         setTimeout(() => {
           getLegalWarnings(true)
-        }, 2000) // wait so print is properly reflected
+        }, 3500) // wait so print is properly reflected
       }
-    } else {
-      setPrintWarnings(undefined)
     }
+    setPrintWarnings(undefined)
   }
 
   const toggleSelectAllValidWarnings = (e: ChangeEvent<HTMLInputElement>) => {
@@ -165,8 +174,9 @@ const Warnings = ({
           }
           onChange={toggleSelectAllValidWarnings}
           disabled={
-            !printWarningType ||
+            !searchFilters?.warningType ||
             !(
+              searchFilters?.warningType &&
               printWarningType &&
               (hasMultiPrintWarningPermission || canPrint(data))
             )
@@ -187,8 +197,9 @@ const Warnings = ({
             toggleSelectWarning(e, warning)
           }
           disabled={
-            !printWarningType ||
+            !searchFilters?.warningType ||
             !(
+              searchFilters?.warningType &&
               printWarningType &&
               (hasMultiPrintWarningPermission || canPrint(warning))
             )
@@ -199,7 +210,21 @@ const Warnings = ({
     {
       title: local.customerCode,
       key: 'customerCode',
-      render: (warning) => warning.customerKey,
+      render: (warning) =>
+        ability.can('getCustomer', 'customer') ? (
+          <span
+            style={{ cursor: 'pointer' }}
+            onClick={() =>
+              history.push('/customers/view-customer', {
+                id: warning.customerId,
+              })
+            }
+          >
+            {warning.customerKey}
+          </span>
+        ) : (
+          warning.customerKey
+        ),
     },
     {
       title: local.customerName,
@@ -214,7 +239,22 @@ const Warnings = ({
     {
       title: local.loanCode,
       key: 'loanCode',
-      render: (warning) => warning.loanKey,
+      render: (warning) =>
+        ability.can('getIssuedLoan', 'application') ||
+        ability.can('branchIssuedLoan', 'application') ? (
+          <span
+            style={{ cursor: 'pointer' }}
+            onClick={() =>
+              history.push('/loans/loan-profile', {
+                id: warning.loanId,
+              })
+            }
+          >
+            {warning.loanKey}
+          </span>
+        ) : (
+          warning.loanKey
+        ),
     },
     {
       title: local.creationDate,
@@ -319,8 +359,10 @@ const Warnings = ({
             mappers={tableMappers}
             data={data}
             changeNumber={(key: ChangeNumberType, number: number) => {
-              if (key === 'from') setFrom(number)
-              else setSize(number)
+              if (key === 'from') {
+                if (!number) getLegalWarnings(true)
+                else setFrom(number)
+              } else setSize(number)
             }}
           />
         </Card.Body>
