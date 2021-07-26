@@ -37,9 +37,10 @@ export const WarningTypeDropDown = ({
           className="full-width"
           styles={theme.selectStyleWithoutBorder}
           theme={theme.selectTheme}
-          defaultValue={OPTIONS_WITH_ALL.find(
-            (option) => option.value === defaultValue
-          )}
+          defaultValue={
+            OPTIONS_WITH_ALL.find((option) => option.value === defaultValue) ||
+            OPTIONS_WITH_ALL[0]
+          }
           onChange={(option) => {
             onChange(option as OptionType)
           }}
