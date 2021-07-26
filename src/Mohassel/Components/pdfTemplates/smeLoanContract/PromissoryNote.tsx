@@ -27,16 +27,7 @@ export const PromissoryNote = ({
         تاريخ الاصدار : {timeToArabicDate(application.creationDate, false)}{' '}
       </p>
       <p>مكان الاصدار: {branchDetails?.address}</p>
-      <p>
-        تاريخ الاستحقاق :{' '}
-        {application?.installmentsObject?.installments &&
-          timeToArabicDate(
-            application?.installmentsObject?.installments[
-              application?.installmentsObject?.installments?.length - 1
-            ].dateOfPayment,
-            false
-          )}
-      </p>
+      <p>تاريخ الاستحقاق :</p>
       <p>
         المبلغ :{' '}
         {`${numbersToArabic(
