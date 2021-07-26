@@ -1,5 +1,4 @@
 import React from 'react'
-import { Header } from '../pdfTemplateCommon/header'
 import './styles.scss'
 import { LegalWarningProps } from './types'
 
