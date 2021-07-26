@@ -1,8 +1,8 @@
 import React, { useState, useEffect, ChangeEvent } from 'react'
 import FormCheck from 'react-bootstrap/FormCheck'
 import Button from 'react-bootstrap/Button'
-import { connect } from 'react-redux'
-import Card from 'react-bootstrap/esm/Card'
+import { useDispatch, useSelector } from 'react-redux'
+import Card from 'react-bootstrap/Card'
 import { useHistory } from 'react-router-dom'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from '../ManageLegalAffairs/manageLegalAffairsInitials'
@@ -18,11 +18,7 @@ import {
 } from '../../Models/LegalAffairs'
 import { timeToArabicDate } from '../../../Shared/Services/utils'
 import ability from '../../config/ability'
-import {
-  search as searchAction,
-  searchFilters as searchFiltersAction,
-} from '../../../Shared/redux/search/actions'
-import { LegalWarningsProps } from './types'
+import { search as searchAction } from '../../../Shared/redux/search/actions'
 import { Loader } from '../../../Shared/Components/Loader'
 import SearchForm from '../../../Shared/Components/Search/search'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
@@ -33,14 +29,7 @@ import { WarningCreationModal } from './WarningCreationModal'
 import { loading as loadingAction } from '../../../Shared/redux/loading/actions'
 import { LtsIcon } from '../../../Shared/Components'
 
-const Warnings = ({
-  data,
-  totalCount,
-  loading,
-  setLoading,
-  searchFilters,
-  search,
-}: LegalWarningsProps) => {
+export const LegalWarnings = () => {
   const [from, setFrom] = useState(0)
   const [size, setSize] = useState(10)
   const [selectedWarnings, setSelectedWarnings] = useState<
@@ -55,6 +44,22 @@ const Warnings = ({
   const [showModal, setShowModal] = useState(false)
 
   const history = useHistory<{ id?: string }>()
+  const dispatch = useDispatch()
+
+  const dispatchActions = {
+    search: (data) => dispatch(searchAction(data)),
+    setLoading: (data) => dispatch(loadingAction(data)),
+  }
+
+  const selectedProps = useSelector((state: any) => ({
+    data: state.search.data,
+    totalCount: state.search.totalCount,
+    loading: state.loading,
+    searchFilters: state.searchFilters,
+  }))
+
+  const { data, totalCount, loading, searchFilters } = selectedProps
+  const { search, setLoading } = dispatchActions
 
   const LEGAL_WARNING_URL = 'legal-warning'
 
@@ -387,24 +392,3 @@ const Warnings = ({
     </>
   )
 }
-
-const addSearchToProps = (dispatch) => {
-  return {
-    search: (data) => dispatch(searchAction(data)),
-    setSearchFilters: (data) => dispatch(searchFiltersAction(data)),
-    setLoading: (data) => dispatch(loadingAction(data)),
-  }
-}
-const mapStateToProps = (state) => {
-  return {
-    data: state.search.data,
-    totalCount: state.search.totalCount,
-    loading: state.loading,
-    searchFilters: state.searchFilters,
-  }
-}
-
-export const LegalWarnings = connect(
-  mapStateToProps,
-  addSearchToProps
-)(Warnings)

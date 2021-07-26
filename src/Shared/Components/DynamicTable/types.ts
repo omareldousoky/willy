@@ -15,13 +15,6 @@ export interface CommonDynamicTableProps<T = any, S = any> {
   setSearchFilters: (filters: S) => void
 }
 
-// used by components that uses dynamic table
-export interface ExtendedDynamicTableProps<T = any, S = any>
-  extends CommonDynamicTableProps<T, S> {
-  loading: boolean
-  setLoading: (loading: boolean) => void
-}
-
 export type ChangeNumberType = 'from' | 'size'
 
 export interface PaginationProps {
