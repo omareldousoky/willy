@@ -703,6 +703,7 @@ class LoanProfile extends Component<Props, State> {
         isLeader: false,
         getIscore: (data) => this.getIscore(data),
         applicationStatus: this.state.application.status,
+        productType: this.state.application.product.type,
       })
       return [info]
     }
