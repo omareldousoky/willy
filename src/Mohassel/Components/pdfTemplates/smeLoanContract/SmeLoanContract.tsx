@@ -79,7 +79,7 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                     <div className="headtitle textcenter">مرفق رقم (2) </div>
 
                     <div className="headtitle textcenter">
-                      عقد تمويل المشروعات الصغيره والمتوسطه
+                      عقد تمويل المشروعات المتوسطة والصغيرة
                     </div>
                     <div className="headtitle textcenter">
                       <u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u>
@@ -101,7 +101,7 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                         <b>أولا:</b> شركة تساهيل للتمويل متناهي الصغر - شركه
                         مساهمه مصريه - مقيده بسجل تجاري استثمار القاهره تحت رقم
                         ___________________ والكائن مقرها ٣ شارع الزهور
-                        بالمهندسين والمقيده تحت رقم _____ بهيئة الرقابه الماليه
+                        بالمهندسين والمقيده تحت رقم (1) بهيئة الرقابه الماليه
                         ويمثلها في هذا العقد السيد/ ___________________________
                         بصفته ________________________________
                       </p>
@@ -221,7 +221,7 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                         وقد تقدم الطرف الثانى بطلب للحصول على قرض من فرع الطرف
                         الاول الكائن ٣ شارع الزهور المهندسين لحاجته للسيوله
                         النقديه يخصص استخدامه فى &nbsp;{' '}
-                        {data.customer.businessActivity} &nbsp; وذلك وفقا لاحكام
+                        {data.customer.businessSector} &nbsp; وذلك وفقا لاحكام
                         القانون رقم ١٤١ لسنه ٢٠١٤ وتعديلاته المشار اليه. وذلك
                         بضمان وتضامن الطرف الثالث.
                       </div>
@@ -262,8 +262,8 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                     <section>
                       <div className="title">البند الثالث</div>
                       <div>
-                        يلتزم الطرفان الثاني و ضامنين متضامنين فيما بينهم بسداد
-                        اجمالي قيمة القرض البالغة
+                        يلتزم الطرفان الثاني والثالث ضامنين متضامنين فيما بينهم
+                        بسداد اجمالي قيمة القرض البالغة
                         {`${numbersToArabic(
                           data.principal
                         )} جنيه (${new Tafgeet(
@@ -271,12 +271,20 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                           'EGP'
                         ).parse()})`}
                         وكافة المصروفات الادارية البالغه
-                        {numbersToArabic(data.applicationFeesRequired)} جنيه
+                        {`${numbersToArabic(
+                          data.applicationFeesRequired
+                        )} جنيه (${new Tafgeet(
+                          data.applicationFeesRequired,
+                          'EGP'
+                        ).parse()})`}
                         وتكاليف التمويل البالغه
-                        {numbersToArabic(
+                        {`${numbersToArabic(
                           data.installmentsObject.totalInstallments.feesSum
                         )}
-                        جنيه الي الطرف الأول وذلك بواقع مبلغ قدره
+                        جنيه (${new Tafgeet(
+                          data.installmentsObject.totalInstallments.feesSum,
+                          'EGP'
+                        ).parse()}) الي الطرف الأول وذلك بواقع مبلغ قدره`}
                         {`${numbersToArabic(
                           data.installmentsObject.totalInstallments
                             .installmentSum +
@@ -428,12 +436,12 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                       <p>
                         يقر الطرف الثالث الضامن المتضامن بانه يكفل علي سبيل (
                         الضمان والتضامن ) الطرف الثاني لقيمه هذا القرض من اصل
-                        وعوائد وعمولات وكافة المصروفات ، ويحق للمقرض الرجوع عليه
-                        بكامل قيمه المديونيات المستحقه علي هذا القرض ، ولايحق
-                        للطرف الثالث الدفع بالتجريد او التقسيم او اي دفوع اخري
-                        في مواجهة المقرض ويحق للمقرض الرجوع عليه وحده او الرجوع
-                        عليه وعلي المقترض منفردا او مجتمعين معا بكامل قيمه
-                        المديونيات المستحقه له .{' '}
+                        وعوائد وعمولات وكافة المصروفات ، ويحق للمقرض(الطرف
+                        الأول) الرجوع عليه بكامل قيمه المديونيات المستحقه علي
+                        هذا القرض ، ولايحق للطرف الثالث الدفع بالتجريد او
+                        التقسيم او اي دفوع اخري في مواجهة المقرض ويحق للمقرض
+                        الرجوع عليه وحده او الرجوع عليه وعلي المقترض منفردا او
+                        مجتمعين معا بكامل قيمه المديونيات المستحقه له .{' '}
                       </p>
                     </section>
                     <table>
@@ -467,12 +475,12 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                                 عن هذا العقد او جزء منها الى الغير . ويحق له
                                 الافصاح للجهة المحال اليها عن كافة بيانات الطرف
                                 الثانى ويعد توقيع الطرف الثانى وضامنية على هذا
-                                العقد موافقته على قيام الطرف الاول بحوالة تلك
+                                العقد موافقتهم على قيام الطرف الاول بحوالة تلك
                                 الحقوق او جزء منها الى الغير وذلك يشمل كافة
                                 الجهات وشركات التمويل والبنوك والمؤسسات التى
                                 تباشر نشاط التوريق والمباشرة للانشطة المالية غير
                                 المصرفية وغيرها من كافة الانشطة المتعلقة بسوق
-                                المال .
+                                المال
                               </div>
                             </section>
                           </td>
@@ -535,7 +543,7 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                                 <tr>
                                   <td style={{ paddingBottom: 70 }}>
                                     <div>
-                                      <b> ( الدائن ) الطرف الأول</b>
+                                      <b> الطرف الاول ( الدائن ) </b>
                                     </div>
                                     <div style={{ marginBottom: 30 }}>
                                       <b>الأسم:</b>
@@ -546,7 +554,7 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                                   </td>
                                   <td style={{ paddingBottom: 70 }}>
                                     <div>
-                                      <b> ( المدين ) الطرف الثاني</b>
+                                      <b>الطرف الثانى ( المدين )</b>
                                     </div>
                                     <div>
                                       <b>الأسم:</b>

@@ -173,7 +173,13 @@ export const KnowYourCustomer = ({
             التاريخ &emsp; {timeToArabicDate(application.creationDate, false)}
           </span>
         </div>
-        <p>توقيع مدير الفرع :-</p>
+        <div className="d-flex justify-content-between">
+          <span>أسم مدير الفرع </span>
+          <span>توقيع مدير الفرع</span>
+          <span>
+            التاريخ &emsp; {timeToArabicDate(application.creationDate, false)}
+          </span>
+        </div>
       </div>
     </>
   )
