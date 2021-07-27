@@ -80,6 +80,7 @@ import {
   AcknowledgmentOfCommitment,
   AcknowledgmentWasSignedInFront,
   AuthorizationToFillCheck,
+  AuthorizationToFillInfo,
   KnowYourCustomer,
   PromissoryNote,
   SmeLoanContract,
@@ -1506,6 +1507,7 @@ class LoanProfile extends Component<Props, State> {
             />
             <SolidarityGuarantee application={this.state.application} />
             <AuthorizationToFillCheck application={this.state.application} />
+            <AuthorizationToFillInfo application={this.state.application} />
             {this.state.application.guarantors?.map((person, index) => (
               <PromissoryNote
                 key={index}

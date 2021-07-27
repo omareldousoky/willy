@@ -26,6 +26,9 @@ export interface SolidarityGuaranteeProps {
 export interface AuthorizationToFillCheckProps {
   application: Application
 }
+export interface AuthorizationToFillInfoProps {
+  application: Application
+}
 export interface PromissoryNoteProps {
   noteKind: 'sme' | 'individual'
   application: Application
