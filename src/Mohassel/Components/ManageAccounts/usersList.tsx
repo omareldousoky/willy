@@ -19,6 +19,7 @@ import {
   getErrorMessage,
   timeToDateyyymmdd,
 } from '../../../Shared/Services/utils'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -160,44 +161,46 @@ class UsersList extends Component<Props, State> {
   renderIcons(data: any) {
     return (
       <>
-        <img
-          style={{ cursor: 'pointer', marginLeft: 20 }}
-          alt="view"
-          src={require('../../Assets/view.svg')}
-          onClick={() => {
-            this.props.history.push({
-              pathname: '/manage-accounts/users/user-details',
-              state: { details: data._id },
-            })
-          }}
-        />
-        <Can I="updateUser" a="user">
-          <img
-            style={{ cursor: 'pointer', marginLeft: 20 }}
-            alt="edit"
-            src={require('../../Assets/editIcon.svg')}
-            onClick={() => {
-              this.props.history.push({
-                pathname: '/manage-accounts/users/edit-user',
-                state: { details: data._id },
-              })
-            }}
-          />
-        </Can>
         <Can I="userActivation" a="user">
           <span
             className="icon"
             onClick={() => this.handleActivationClick(data)}
           >
             {data.status === 'active' && (
-              <img
-                alt="deactive"
-                src={require('../../Assets/deactivate-user.svg')}
+              <LtsIcon
+                name="deactivate-user"
+                color="#7dc255"
+                tooltipText={local.deactivate}
               />
             )}
             {data.status === 'inactive' && local.activate}
           </span>
         </Can>
+        <Can I="updateUser" a="user">
+          <span
+            className="icon"
+            onClick={() => {
+              this.props.history.push({
+                pathname: '/manage-accounts/users/edit-user',
+                state: { details: data._id },
+              })
+            }}
+          >
+            <LtsIcon name="edit" color="#7dc255" tooltipText={local.edit} />
+          </span>
+        </Can>
+
+        <span
+          className="icon"
+          onClick={() => {
+            this.props.history.push({
+              pathname: '/manage-accounts/users/user-details',
+              state: { details: data._id },
+            })
+          }}
+        >
+          <LtsIcon name="view" color="#7dc255" tooltipText={local.view} />
+        </span>
       </>
     )
   }

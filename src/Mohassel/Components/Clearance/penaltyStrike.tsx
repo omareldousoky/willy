@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import * as local from '../../../Shared/Assets/ar.json'
+import { LtsIcon } from '../../../Shared/Components'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties'
 
@@ -22,11 +23,7 @@ const PenaltyStrike = (props: { loanId: string }) => {
     <>
       {penalty ? (
         <div className="error-container  mx-2 my-3">
-          <img
-            alt="error"
-            src={require('../../Assets/error-red-circle.svg')}
-            style={{ marginLeft: 20 }}
-          />
+          <LtsIcon name="warning" color="#d51b1b" />
           <h4>
             <span style={{ margin: '0 10px' }}> {local.penaltyMessage}</span>
             <span style={{ color: '#d51b1b' }}>{penalty}</span>

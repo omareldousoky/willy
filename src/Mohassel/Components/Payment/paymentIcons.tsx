@@ -7,6 +7,9 @@ import { Installment } from './payInstallment'
 import { payment } from '../../../Shared/redux/payment/actions'
 import * as local from '../../../Shared/Assets/ar.json'
 import ability from '../../config/ability'
+import { LtsIcon } from '../../../Shared/Components'
+
+type ContractType = 'standard' | 'masterGas'
 
 interface Props {
   paymentType: string
@@ -16,6 +19,7 @@ interface Props {
     writeOff: boolean
     product: {
       type: string
+      contractType: ContractType
     }
   }
   installments: Array<Installment>
@@ -68,21 +72,18 @@ class PaymentIcons extends Component<Props, {}> {
           {(ability.can('payInstallment', 'application') ||
             ability.can('payByInsurance', 'application')) &&
             this.props.application.product.type !== 'sme' && (
-              <div className="payment-icon">
-                <img
-                  height="90"
-                  alt={
+              <div className="payment-icon m-4">
+                <LtsIcon
+                  name={
                     this.props.paymentType === 'penalties'
                       ? 'pay-penalty'
                       : 'pay-installment'
                   }
-                  src={
-                    this.props.paymentType === 'penalties'
-                      ? require('../../Assets/payPenalty.svg')
-                      : require('../../Assets/payInstallment.svg')
-                  }
+                  size="90px"
+                  color="#7dc255"
                 />
                 <Button
+                  className="my-4"
                   disabled={
                     this.props.application.status === 'pending' &&
                     this.props.paymentType === 'normal'
@@ -104,13 +105,11 @@ class PaymentIcons extends Component<Props, {}> {
           {this.props.paymentType === 'penalties' ? (
             <>
               <Can I="cancelPenalty" a="application">
-                <div className="payment-icon">
-                  <img
-                    height="90"
-                    alt="cancel-penalty"
-                    src={require('../../Assets/cancelPenalty.svg')}
-                  />
+                <div className="payment-icon m-4">
+                  <LtsIcon name="cancel-penalty" color="#7dc255" size="90px" />
+
                   <Button
+                    className="my-4"
                     onClick={() => {
                       this.props.handleChangePenaltyAction('cancel')
                       this.props.changePaymentState(1)
@@ -122,13 +121,11 @@ class PaymentIcons extends Component<Props, {}> {
                 </div>
               </Can>
               <Can I="payInstallment" a="application">
-                <div className="payment-icon">
-                  <img
-                    height="90"
-                    alt="pay-installment"
-                    src={require('../../Assets/payInstallment.svg')}
-                  />
+                <div className="payment-icon m-4">
+                  <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
+
                   <Button
+                    className="my-4"
                     onClick={() => {
                       this.props.changePaymentState(3)
                     }}
@@ -142,15 +139,13 @@ class PaymentIcons extends Component<Props, {}> {
           ) : null}
           {this.props.paymentType === 'normal' &&
           !this.props.application.writeOff &&
-          this.props.application.product.type !== 'sme' ? (
+          this.props.application.product.type !== 'sme' &&
+          this.props.application.product.contractType === 'standard' ? (
             <Can I="payEarly" a="application">
-              <div className="payment-icon">
-                <img
-                  height="90"
-                  alt="early-payment"
-                  src={require('../../Assets/earlyPayment.svg')}
-                />
+              <div className="payment-icon m-4">
+                <LtsIcon name="early-payment" size="90px" color="#7dc255" />
                 <Button
+                  className="my-4"
                   disabled={
                     this.props.application.status === 'pending' ||
                     this.props.installments.some(
@@ -169,13 +164,11 @@ class PaymentIcons extends Component<Props, {}> {
             (ability.can('payInstallment', 'application') ||
               ability.can('payByInsurance', 'application')) &&
             this.props.application.product.type === 'sme' && (
-              <div className="payment-icon">
-                <img
-                  height="90"
-                  alt="pay-installment"
-                  src={require('../../Assets/payInstallment.svg')}
-                />
+              <div className="payment-icon m-4">
+                <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
+
                 <Button
+                  className="my-4"
                   disabled={this.props.application.status === 'pending'}
                   onClick={() => this.props.changePaymentState(4)}
                   variant="primary"
@@ -187,13 +180,10 @@ class PaymentIcons extends Component<Props, {}> {
           {this.props.paymentType === 'normal' &&
             (ability.can('payInstallment', 'application') ||
               ability.can('payByInsurance', 'application')) && (
-              <div className="payment-icon">
-                <img
-                  height="90"
-                  alt="pay-installment"
-                  src={require('../../Assets/payInstallment.svg')}
-                />
+              <div className="payment-icon m-4">
+                <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
                 <Button
+                  className="my-4"
                   disabled={this.props.application.status === 'pending'}
                   onClick={() => this.props.changePaymentState(3)}
                   variant="primary"
@@ -204,13 +194,11 @@ class PaymentIcons extends Component<Props, {}> {
             )}
           {this.props.paymentType === 'random' ? (
             <Can I="payInstallment" a="application">
-              <div className="payment-icon">
-                <img
-                  height="90"
-                  alt="pay-installment"
-                  src={require('../../Assets/payInstallment.svg')}
-                />
+              <div className="payment-icon m-4">
+                <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
+
                 <Button
+                  className="my-4"
                   onClick={() => {
                     this.props.changePaymentState(3)
                   }}

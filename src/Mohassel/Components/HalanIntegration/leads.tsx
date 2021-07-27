@@ -32,6 +32,10 @@ import local from '../../../Shared/Assets/ar.json'
 import './leads.scss'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { theme } from '../../../Shared/theme'
+import { Action } from '../../Models/common'
+import ability from '../../config/ability'
+import { ActionsGroup } from '../../../Shared/Components/ActionsGroup'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -52,7 +56,6 @@ interface State {
   }>
   size: number
   from: number
-  openActionsId: string
   openLOModal: boolean
   openBranchModal: boolean
   loanOfficers: Array<any>
@@ -87,7 +90,7 @@ class Leads extends Component<Props, State> {
     this.state = {
       tabs: [
         {
-          icon: 'users',
+          icon: 'user',
           header: local.applicantsLeads,
           desc: local.createAndEditApplicantLeads,
           path: '/halan-integration/leads',
@@ -95,7 +98,6 @@ class Leads extends Component<Props, State> {
       ],
       size: 10,
       from: 0,
-      openActionsId: '',
       openLOModal: false,
       openBranchModal: false,
       loanOfficers: [],
@@ -162,14 +164,15 @@ class Leads extends Component<Props, State> {
         render: (data) =>
           data.status !== 'rejected' && (
             <Can I="assignLead" a="halanuser">
-              <img
-                style={{ cursor: 'pointer', marginRight: 5 }}
-                alt="change-loan-officer"
-                src={require('../../Assets/changeOfficer-inactive.svg')}
+              <Button
+                variant="default"
                 onClick={() =>
                   this.setState({ selectedLead: data, openLOModal: true })
                 }
-              />
+                title="change-loan-officer"
+              >
+                <LtsIcon name="exchange" />
+              </Button>
             </Can>
           ),
       },
@@ -183,14 +186,15 @@ class Leads extends Component<Props, State> {
         render: (data) =>
           data.status !== 'rejected' && (
             <Can I="assignLead" a="halanuser">
-              <img
-                style={{ cursor: 'pointer', marginRight: 5 }}
-                alt="change-branch"
-                src={require('../../Assets/branches-inactive.svg')}
+              <Button
+                variant="default"
                 onClick={() =>
                   this.setState({ selectedLead: data, openBranchModal: true })
                 }
-              />
+                title="change-branch"
+              >
+                <LtsIcon name="branches" />
+              </Button>
             </Can>
           ),
       },
@@ -202,107 +206,12 @@ class Leads extends Component<Props, State> {
         ),
         key: 'actions',
         render: (data) => (
-          <div style={{ position: 'relative' }}>
-            <p
-              className="clickable-action"
-              onClick={() =>
-                this.setState((prevState) => ({
-                  openActionsId:
-                    prevState.openActionsId === data.uuid ? '' : data.uuid,
-                }))
-              }
-            >
-              {local.actions}
-            </p>
-            {this.state.openActionsId === data.uuid && (
-              <div className="actions-list">
-                {(data.status === 'in-review' ||
-                  data.status === 'submitted') && (
-                  <Can I="reviewLead" a="halanuser">
-                    <div
-                      className="item"
-                      onClick={() =>
-                        this.changeLeadState(
-                          data.phoneNumber,
-                          data.status,
-                          data.inReviewStatus,
-                          'rejected',
-                          ''
-                        )
-                      }
-                    >
-                      {local.rejectApplication}
-                    </div>
-                  </Can>
-                )}
-                {(data.status === 'in-review' ||
-                  data.status === 'submitted') && (
-                  <Can I="reviewLead" a="halanuser">
-                    <div
-                      className="item"
-                      onClick={() =>
-                        this.changeLeadState(
-                          data.phoneNumber,
-                          data.status,
-                          data.inReviewStatus,
-                          'approved',
-                          ''
-                        )
-                      }
-                    >
-                      {local.acceptApplication}
-                    </div>
-                  </Can>
-                )}
-                <Can I="leadInReviewStatus" a="halanuser">
-                  <div
-                    className="item"
-                    onClick={() => {
-                      this.props.history.push(
-                        '/halan-integration/leads/view-lead',
-                        {
-                          leadDetails: data,
-                        }
-                      )
-                    }}
-                  >
-                    {local.viewCustomerLead}
-                  </div>
-                </Can>
-                {data.status === 'rejected' && (
-                  <Can I="reviewLead" a="halanuser">
-                    <div
-                      className="item"
-                      onClick={() =>
-                        this.setState({
-                          viewRejectionModal: true,
-                          selectedLead: data,
-                        })
-                      }
-                    >
-                      {local.viewRejectionReason}
-                    </div>
-                  </Can>
-                )}
-                {data.status !== 'rejected' && (
-                  <Can I="leadInReviewStatus" a="halanuser">
-                    <div
-                      className="item"
-                      onClick={() =>
-                        this.props.history.push(
-                          '/halan-integration/leads/edit-lead',
-                          {
-                            leadDetails: data,
-                          }
-                        )
-                      }
-                    >
-                      {local.editLead}
-                    </div>
-                  </Can>
-                )}
-              </div>
-            )}
+          <div className="position-relative">
+            <ActionsGroup
+              dropdownBtnTitle={local.actions}
+              currentId={data.uuid}
+              actions={this.getLeadActions(data)}
+            />
           </div>
         ),
       },
@@ -388,6 +297,71 @@ class Leads extends Component<Props, State> {
     return []
   }
 
+  getLeadActions(lead): Action[] {
+    return [
+      {
+        actionTitle: local.rejectApplication,
+        actionPermission:
+          (lead.status === 'in-review' || lead.status === 'submitted') &&
+          ability.can('reviewLead', 'halanuser'),
+        actionOnClick: () => {
+          this.changeLeadState(
+            lead.phoneNumber,
+            lead.status,
+            lead.inReviewStatus,
+            'rejected',
+            ''
+          )
+        },
+      },
+      {
+        actionTitle: local.acceptApplication,
+        actionPermission:
+          (lead.status === 'in-review' || lead.status === 'submitted') &&
+          ability.can('reviewLead', 'halanuser'),
+        actionOnClick: () => {
+          this.changeLeadState(
+            lead.phoneNumber,
+            lead.status,
+            lead.inReviewStatus,
+            'approved',
+            ''
+          )
+        },
+      },
+      {
+        actionTitle: local.viewCustomerLead,
+        actionPermission: ability.can('leadInReviewStatus', 'halanuser'),
+        actionOnClick: () => {
+          this.props.history.push('/halan-integration/leads/view-lead', {
+            leadDetails: lead,
+          })
+        },
+      },
+      {
+        actionTitle: local.viewRejectionReason,
+        actionPermission:
+          lead.status === 'rejected' && ability.can('reviewLead', 'halanuser'),
+        actionOnClick: () => {
+          this.setState({
+            viewRejectionModal: true,
+            selectedLead: lead,
+          })
+        },
+      },
+      {
+        actionTitle: local.editLead,
+        actionPermission:
+          lead.status !== 'rejected' &&
+          ability.can('leadInReviewStatus', 'halanuser'),
+        actionOnClick: () =>
+          this.props.history.push('/halan-integration/leads/edit-lead', {
+            leadDetails: lead,
+          }),
+      },
+    ]
+  }
+
   rejectLead = (values: {
     rejectionReason: string
     rejectionDetails: string
@@ -430,7 +404,6 @@ class Leads extends Component<Props, State> {
               )
               if (inReviewStatusRes.status === 'success') {
                 this.props.setLoading(false)
-                this.setState({ openActionsId: '' })
                 Swal.fire('', local.changeState, 'success').then(() =>
                   this.getLeadsCustomers()
                 )
@@ -463,7 +436,7 @@ class Leads extends Component<Props, State> {
     )
     if (res.status === 'success') {
       this.props.setLoading(false)
-      this.setState({ openActionsId: '', rejectLeadModal: false })
+      this.setState({ rejectLeadModal: false })
 
       Swal.fire('', local.changeState, 'success').then(() =>
         this.getLeadsCustomers()
@@ -573,9 +546,8 @@ class Leads extends Component<Props, State> {
                 data={this.props.data}
                 url="lead"
                 changeNumber={(key: string, number: number) => {
-                  this.setState(
-                    { [key]: number, openActionsId: '' } as any,
-                    () => this.getLeadsCustomers()
+                  this.setState({ [key]: number } as any, () =>
+                    this.getLeadsCustomers()
                   )
                 }}
               />

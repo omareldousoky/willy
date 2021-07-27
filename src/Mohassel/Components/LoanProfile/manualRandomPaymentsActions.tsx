@@ -1,5 +1,6 @@
 import React from 'react'
 import * as local from '../../../Shared/Assets/ar.json'
+import { LtsIcon } from '../../../Shared/Components'
 import {
   timeToDateyyymmdd,
   getRandomPaymentByKey,
@@ -12,11 +13,7 @@ const ManualRandomPaymentsActions = (props) => {
       {props.pendingActions.map((pendingAction, index) => {
         return (
           <div key={index} className="warning-container">
-            <img
-              alt="warning"
-              src={require('../../Assets/warning-yellow-circle.svg')}
-              style={{ marginLeft: 20 }}
-            />
+            <LtsIcon name="warning" color="#edb600" />
             <h6>{local.manualRandomPaymentNeedsInspection}</h6>
             <div className="info">
               <span className="text-muted">{local.gender}</span>

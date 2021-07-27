@@ -17,294 +17,72 @@ import {
   searchLegalAffairsCustomers,
 } from '../../../Mohassel/Services/APIs/LegalAffairs/defaultingCustomers'
 import { searchFinancialBlocking } from '../../../Mohassel/Services/APIs/loanApplication/financialClosing'
+import { cibReport } from '../../../Mohassel/Services/APIs/loanApplication/cibReport'
+import { searchWarnings } from '../../../Mohassel/Services/APIs/LegalAffairs/warning'
 
-export const search = (obj) => {
-  switch (obj.url) {
+const searchWrapper = (
+  request: any,
+  searchApi: (request: any) => any,
+  entity?: string
+) => {
+  return async (dispatch) => {
+    delete request.url
+    dispatch({ type: 'SET_LOADING', payload: true })
+    const res = await searchApi(request)
+    if (res.status === 'success') {
+      let data = res.body
+      if (!data && entity === 'cib') data = { loans: [], totalCount: 0 }
+      dispatch({ type: 'SET_LOADING', payload: false })
+      dispatch({
+        type: 'SEARCH',
+        payload: { ...data, status: res.status, error: undefined },
+      })
+    } else {
+      dispatch({ type: 'SET_LOADING', payload: false })
+      dispatch({
+        type: 'SEARCH',
+        payload: { ...res.error, status: res.status },
+      })
+    }
+  }
+}
+export const search = (request) => {
+  const entityName: string = request.url
+  switch (entityName) {
     case 'customer':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchCustomer(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.error, status: res.status },
-          })
-        }
-      }
+      return searchWrapper(request, searchCustomer)
     case 'branch':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchBranches(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.error, status: res.status },
-          })
-        }
-      }
+      return searchWrapper(request, searchBranches)
     case 'user':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchUsers(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.error, status: res.status },
-          })
-        }
-      }
+      return searchWrapper(request, searchUsers)
     case 'loan':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchLoan(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.error, status: res.status },
-          })
-        }
-      }
+      return searchWrapper(request, searchLoan)
     case 'application':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchApplication(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.error, status: res.status },
-          })
-        }
-      }
+      return searchWrapper(request, searchApplication)
     case 'actionLogs':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchActionLogs(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.error, status: res.status },
-          })
-        }
-      }
+      return searchWrapper(request, searchActionLogs)
     case 'lead':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchLeads(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.error, status: res.status },
-          })
-        }
-      }
+      return searchWrapper(request, searchLeads)
     case 'clearance':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchClearance(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.error, status: res.status },
-          })
-        }
-      }
+      return searchWrapper(request, searchClearance)
     case 'supervisionsGroups':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchGroups(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.error, status: res.status },
-          })
-        }
-      }
+      return searchWrapper(request, searchGroups)
     case 'loanOfficer':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchLoanOfficer(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.error, status: res.status },
-          })
-        }
-      }
+      return searchWrapper(request, searchLoanOfficer)
     case 'defaultingCustomers':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchDefaultingCustomers(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.error, status: res.status },
-          })
-        }
-      }
+      return searchWrapper(request, searchDefaultingCustomers)
     case 'legal-affairs':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchLegalAffairsCustomers(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.error, status: res.status },
-          })
-        }
-      }
+      return searchWrapper(request, searchLegalAffairsCustomers)
     case 'terrorist':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchTerrorists(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...(res.error as Record<string, string>) },
-          })
-        }
-      }
+      return searchWrapper(request, searchTerrorists)
     case 'terroristUn':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchUnTerrorists(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...(res.error as Record<string, string>) },
-          })
-        }
-      }
+      return searchWrapper(request, searchUnTerrorists)
     case 'block':
-      return async (dispatch) => {
-        delete obj.url
-        dispatch({ type: 'SET_LOADING', payload: true })
-        const res = await searchFinancialBlocking(obj)
-        if (res.status === 'success') {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.body, status: res.status, error: undefined },
-          })
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          dispatch({
-            type: 'SEARCH',
-            payload: { ...res.error, status: res.status },
-          })
-        }
-      }
+      return searchWrapper(request, searchFinancialBlocking)
+    case 'cib':
+      return searchWrapper(request, cibReport, 'cib')
+    case 'legal-warning':
+      return searchWrapper(request, searchWarnings)
     case 'clearData':
       return (dispatch) => {
         dispatch({ type: 'CLEAR_DATA', payload: {} })

@@ -1,36 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactNode } from 'react'
 import Table from 'react-bootstrap/Table'
 import Form from 'react-bootstrap/Form'
 import './styles.scss'
 import { connect } from 'react-redux'
 import * as local from '../../Assets/ar.json'
 import { searchFilters, search } from '../../redux/search/actions'
+import { DynamicTableProps } from './types'
 
-interface Props {
-  mappers: Array<any>
-  pagination: boolean
-  data: Array<any>
-  totalCount: number
-  changeNumber?: (key: string, number: number) => void | undefined
-  search: (data) => void
-  setSearchFilters: (data) => void
-  searchFilters: any
-  size?: number
-  from?: number
-  url?: string
-}
-
-const DynamicTable = (props: Props) => {
-  const [page, changePage] = useState(0)
-  const [rowsPerPage, changeRowsPerPage] = useState(
-    props.pagination ? 10 : props.data.length
+const DynamicTable = (props: DynamicTableProps) => {
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(
+    props.pagination ? props?.customPagination?.size || 10 : props.data.length
   )
   const [order, changeOrder] = useState('')
   const [selectedSortKey, changeSortKey] = useState('')
   const totalPages: Array<number> = []
   useEffect(() => {
     if (props.from === 0) {
-      changePage(0)
+      setPage(0)
     }
   }, [props.from])
   for (
@@ -40,6 +27,10 @@ const DynamicTable = (props: Props) => {
   ) {
     totalPages.push(index)
   }
+
+  const pagesList = props.pagination
+    ? props?.customPagination?.pagesList || [10, 25, 50, 100]
+    : undefined
   function getArrayOfNumbers() {
     const length = page + 5 >= totalPages.length ? totalPages.length : page + 5
     const output: Array<number> = []
@@ -52,7 +43,7 @@ const DynamicTable = (props: Props) => {
     changeSortKey(key)
     if (order === '') {
       changeOrder('asc')
-      changePage(0)
+      setPage(0)
       props.setSearchFilters({
         ...props.searchFilters,
         sort: props.url === 'loan' && key === '' ? 'issueLoan' : key,
@@ -67,7 +58,7 @@ const DynamicTable = (props: Props) => {
       })
     } else if (order === 'asc') {
       changeOrder('desc')
-      changePage(0)
+      setPage(0)
       props.setSearchFilters({
         ...props.searchFilters,
         sort: props.url === 'loan' && key === '' ? 'issueLoan' : key,
@@ -82,7 +73,7 @@ const DynamicTable = (props: Props) => {
       })
     } else {
       changeOrder('')
-      changePage(0)
+      setPage(0)
       props.setSearchFilters({
         ...props.searchFilters,
         sort: props.url === 'loan' ? 'issueLoan' : '',
@@ -148,10 +139,12 @@ const DynamicTable = (props: Props) => {
                         key={i}
                         style={{ width: 'fit-content', maxWidth: '300px' }}
                       >
-                        {(mapper.render || ((data) => data[mapper.key]))(
-                          item,
-                          i
-                        )}
+                        {
+                          (mapper.render || ((data) => data[mapper.key]))(
+                            item,
+                            i
+                          ) as ReactNode
+                        }
                       </td>
                     )
                   })}
@@ -179,26 +172,27 @@ const DynamicTable = (props: Props) => {
             <Form.Control
               as="select"
               className="dropdown-select"
+              value={props.size}
               onChange={(event) => {
-                changeRowsPerPage(Number(event.currentTarget.value))
+                setRowsPerPage(Number(event.currentTarget.value))
                 props.changeNumber &&
                   props.changeNumber('size', Number(event.currentTarget.value))
                 props.changeNumber && props.changeNumber('from', 0)
-                changePage(0)
+                setPage(0)
               }}
             >
-              <option value={10} data-qc={10}>
-                10
-              </option>
-              <option value={25} data-qc={25}>
-                25
-              </option>
-              <option value={50} data-qc={50}>
-                50
-              </option>
-              <option value={100} data-qc={100}>
-                100
-              </option>
+              {pagesList &&
+                pagesList.map((optionValue, index) => {
+                  return (
+                    <option
+                      key={index}
+                      value={optionValue}
+                      data-qc={optionValue}
+                    >
+                      {optionValue}
+                    </option>
+                  )
+                })}
             </Form.Control>
           </div>
           <div className="pagination-container">
@@ -210,7 +204,7 @@ const DynamicTable = (props: Props) => {
               }
               onClick={() => {
                 if (page !== 0) {
-                  changePage(page - 1)
+                  setPage(page - 1)
                   props.changeNumber &&
                     props.changeNumber('from', page * rowsPerPage - rowsPerPage)
                 }
@@ -229,7 +223,7 @@ const DynamicTable = (props: Props) => {
                         : 'pagination-number-inactive'
                     }
                     onClick={() => {
-                      changePage(number - 1)
+                      setPage(number - 1)
                       props.changeNumber &&
                         props.changeNumber('from', (number - 1) * rowsPerPage)
                     }}
@@ -247,7 +241,7 @@ const DynamicTable = (props: Props) => {
               }
               onClick={() => {
                 if (page + 1 !== Math.ceil(props.totalCount / rowsPerPage)) {
-                  changePage(page + 1)
+                  setPage(page + 1)
                   props.changeNumber &&
                     props.changeNumber('from', page * rowsPerPage + rowsPerPage)
                 }

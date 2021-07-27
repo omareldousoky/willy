@@ -1,17 +1,14 @@
 import React from 'react'
 import { createPortal } from 'react-dom'
+import { PdfPortalProps } from './types'
 
-interface PdfPortalProps {
-  component: JSX.Element
-}
-
-export const PdfPortal = (props: PdfPortalProps) =>
+export const PdfPortal = ({ component }: PdfPortalProps) =>
   createPortal(
     <>
       <style type="text/css">
-        {'@media print{.app-container{display: none !important;}}'}
+        {'@media print{.app-container, .tooltip {display: none !important;}}'}
       </style>
-      {props.component}
+      {component}
     </>,
     document.querySelector('#print') as Element
   )

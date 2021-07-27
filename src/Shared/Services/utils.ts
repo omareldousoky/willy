@@ -768,3 +768,22 @@ export const formatMoney = (money: string | number) => {
   if (Number.isNaN(moneyNumber)) return money
   return moneyNumber.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
+
+// Extract GMT date from a timestamp
+export const extractGMTDate = (date: number) => {
+  const dateInstance = new Date(date)
+  if (!(dateInstance instanceof Date)) return date
+  return numbersToArabic(
+    dateInstance.toISOString().split('T')[0].replace(/-/g, '/'),
+    true
+  )
+}
+
+export const removeEmptyArg = (obj) => {
+  Object.keys(obj).forEach((el) => {
+    if (obj[el] === '' || obj[el] === undefined) {
+      delete obj[el]
+    }
+  })
+  return obj
+}

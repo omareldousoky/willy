@@ -16,9 +16,3 @@ export interface CompanyListProps {
   loading: boolean
   totalCount: number
 }
-export interface TableMapperItem {
-  title: string
-  key: string
-  sortable?: boolean
-  render: (data: any) => void
-}

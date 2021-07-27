@@ -38,7 +38,7 @@ import DocumentTypeCreation from '../Components/documentTypeCreation/documentTyp
 import { CustomerProfile } from '../Components/CustomerCreation/customerProfile'
 import ActionLogs from '../Components/ActionLogs/action-logs'
 import SourceOfFund from '../Components/SourceOfFund/sourceOfFund'
-import CIB from '../Components/CIB/cib'
+import CIB from '../Components/CIB'
 import ReportsHome from '../Components/Reports/reportsHome'
 import MoveCustomers from '../Components/MoveCustomers/moveCustomers'
 import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation'
@@ -67,6 +67,8 @@ import LegalActionsForm from '../Components/ManageLegalAffairs/LegalCustomerActi
 import FinancialReviewing from '../Components/FinancialClosing/FinancialReviewing'
 import { CompanyList, CompanyProfile } from '../../Shared/Components'
 import CompanyCreation from '../Components/CustomerCreation/companyCreation'
+import { LegalCalendar } from '../Components/LegalCalendar'
+import { legalWarningRoute } from '../Components/LegalWarnings/routes'
 
 const appRoutes = [
   {
@@ -231,6 +233,7 @@ const appRoutes = [
       {
         path: '/track-loan-applications',
         label: local.loanApplications,
+        disableLink: true,
         render: () => (
           <Can I="getLoanApplication" a="application">
             <TrackLoanApplications />
@@ -590,6 +593,7 @@ const appRoutes = [
       {
         path: '/loans',
         label: local.issuedLoans,
+        disableLink: true,
         render: (props) => <LoanList {...props} />,
         routes: [
           {
@@ -810,6 +814,16 @@ const appRoutes = [
               </Can>
             ),
           },
+          {
+            path: '/legal-calendar',
+            label: local.legalCalendar,
+            render: (props) => (
+              <Can I="updateDefaultingCustomer" a="legal">
+                <LegalCalendar {...props} />
+              </Can>
+            ),
+          },
+          legalWarningRoute,
         ],
       },
     ],

@@ -18,6 +18,7 @@ import {
 } from '../../../Shared/Services/utils'
 import { manageToolsArray } from './manageToolsInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface State {
   documentTypes: DocumentType[]
@@ -63,7 +64,7 @@ class EncodingFiles extends Component<RouteComponentProps, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('encodingFiles')}
+            .indexOf('encoding-files')}
         />
         <Loader type="fullscreen" open={this.state.loading} />
         <Card className="main-card">
@@ -199,10 +200,7 @@ class EncodingFiles extends Component<RouteComponentProps, State> {
                             }}
                             className="icon"
                           >
-                            <img
-                              alt="edit"
-                              src={require('../../Assets/editIcon.svg')}
-                            />
+                            <LtsIcon name="edit" />
                           </span>
                         </Col>
                       </Can>

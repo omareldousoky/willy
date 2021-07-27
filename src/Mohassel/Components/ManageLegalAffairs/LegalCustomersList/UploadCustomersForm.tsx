@@ -12,6 +12,7 @@ import {
 } from '../types'
 import AppForm from '../Form'
 import { FileField } from '../Form/types'
+import { LtsIcon } from '../../../../Shared/Components'
 
 const UploadLegalCustomers = ({
   onSubmit,
@@ -85,12 +86,7 @@ const UploadLegalCustomers = ({
           role="button"
         >
           {local.downloadTemplate}
-          <img
-            alt={local.print}
-            style={{ maxWidth: 18 }}
-            src={require('../../../Assets/green-download.svg')}
-            className="ml-2"
-          />
+          <LtsIcon name="download" />
         </a>
       </div>
 
@@ -114,11 +110,7 @@ const UploadLegalCustomers = ({
                 download={local.customersFailedToUpload}
                 role="button"
               >
-                <img
-                  alt={local.print}
-                  style={{ maxWidth: 18 }}
-                  src={require('../../../Assets/green-download.svg')}
-                />
+                <LtsIcon name="download" />
               </a>
             </div>
           ),

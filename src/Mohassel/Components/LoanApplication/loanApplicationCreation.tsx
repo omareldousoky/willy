@@ -18,6 +18,7 @@ import {
   SMELoanApplicationValidation,
   SMELoanApplicationStep2Validation,
   EntitledToSign,
+  EntitledToSignIds,
 } from './loanApplicationStates'
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm'
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
@@ -55,10 +56,12 @@ import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/cust
 import { theme } from '../../../Shared/theme'
 import { Customer } from '../../../Shared/Services/interfaces'
 import Can from '../../config/Can'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface LoanApplicationCreationRouteState {
-  id: string
-  action: string
+  id?: string
+  action?: string
+  sme?: boolean
 }
 
 interface Props
@@ -278,7 +281,9 @@ class LoanApplicationCreation extends Component<Props, State> {
       size: 1000,
       excludedIds: [
         this.state.application.customerID,
-        ...this.state.application.entitledToSignIds,
+        ...this.state.application.entitledToSignIds.map(
+          ({ customerId }) => customerId
+        ),
       ],
       customerType: 'individual',
     }
@@ -544,17 +549,21 @@ class LoanApplicationCreation extends Component<Props, State> {
 
       const entitledArr: Array<EntitledToSign> = []
       if (application.body.entitledToSign?.length > 0) {
-        application.body.entitledToSign.forEach((customer) => {
+        application.body.entitledToSign.forEach(({ customer, position }) => {
           entitledArr.push({
             searchResults: {
               results: [],
               empty: false,
             },
             entitledToSign: customer,
+            position,
           })
           this.setState(
             produce<State>((draftState) => {
-              draftState.application.entitledToSignIds.push(customer._id)
+              draftState.application.entitledToSignIds.push({
+                customerId: customer._id,
+                position,
+              })
             })
           )
         })
@@ -952,7 +961,7 @@ class LoanApplicationCreation extends Component<Props, State> {
             ...selectedGuarantor.body,
             id: obj._id,
           }
-          draftApp.entitledToSignIds.push(obj._id)
+          draftApp.entitledToSignIds.push({ customerId: obj._id })
           draftApp.entitledToSign[index] = defaultCustomer
         })
         this.setState({ application, loading: false })
@@ -996,9 +1005,25 @@ class LoanApplicationCreation extends Component<Props, State> {
       if (obj.beneficiaryType !== 'group') {
         principalToSend = obj.principal
       }
+
       const viceCustomers = obj.viceCustomers.filter(
         (item) => item !== undefined
       )
+
+      const entitledToSignIds: EntitledToSignIds[] = obj.entitledToSignIds.map(
+        ({ customerId }) => {
+          const entitledToSign = values.entitledToSign.find(
+            ({ entitledToSign: entitledToSignItem }) =>
+              entitledToSignItem._id === customerId
+          )
+
+          return {
+            customerId,
+            position: entitledToSign?.position,
+          }
+        }
+      )
+
       const objToSubmit = {
         customerId: obj.customerID,
         guarantorIds: obj.guarantorIds,
@@ -1031,7 +1056,7 @@ class LoanApplicationCreation extends Component<Props, State> {
         managerVisitDate: values.managerVisitDate
           ? new Date(values.managerVisitDate).valueOf()
           : 0,
-        entitledToSignIds: obj.entitledToSignIds,
+        entitledToSignIds,
       }
       if (
         this.state.application.guarantorIds.length <
@@ -1050,7 +1075,9 @@ class LoanApplicationCreation extends Component<Props, State> {
               ` ${local.withCode} ` +
               res.body.applicationKey
           ).then(() => {
-            this.props.history.push('/track-loan-applications')
+            this.props.history.push('/track-loan-applications', {
+              sme: this.state.customerType === 'sme',
+            })
           })
         } else {
           Swal.fire('error', getErrorMessage(res.error.error), 'error')
@@ -1062,7 +1089,9 @@ class LoanApplicationCreation extends Component<Props, State> {
         if (res.status === 'success') {
           this.setState({ loading: false })
           Swal.fire('success', local.loanApplicationEdited).then(() => {
-            this.props.history.push('/track-loan-applications')
+            this.props.history.push('/track-loan-applications', {
+              sme: this.state.customerType === 'sme',
+            })
           })
         } else {
           Swal.fire('error', getErrorMessage(res.error.error), 'error')
@@ -1079,7 +1108,7 @@ class LoanApplicationCreation extends Component<Props, State> {
       const defaultEntitledToSign = { ...draftApp.entitledToSign }
       const defaultCustomer = { ...defaultEntitledToSign[index] }
       draftApp.entitledToSignIds = draftApp.entitledToSignIds.filter(
-        (id) => obj._id !== id
+        ({ customerId }) => obj._id !== customerId
       )
       defaultCustomer.entitledToSign = {}
       defaultCustomer.searchResults.results = []
@@ -1234,7 +1263,7 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const application = produce(values as Application, (draftApp) => {
       draftApp.entitledToSignIds = draftApp.entitledToSignIds.filter(
-        (id) => obj.entitledToSign._id !== id
+        ({ customerId }) => obj.entitledToSign._id !== customerId
       )
       draftApp.entitledToSign.splice(index, 1)
     })
@@ -1588,7 +1617,9 @@ class LoanApplicationCreation extends Component<Props, State> {
             variant="secondary"
             className="w-25"
             onClick={() => {
-              this.props.history.push('/track-loan-applications')
+              this.props.history.push('/track-loan-applications', {
+                sme: this.state.customerType === 'sme',
+              })
             }}
           >
             {local.cancel}
@@ -1728,47 +1759,44 @@ class LoanApplicationCreation extends Component<Props, State> {
         <Card>
           {this.state.customerType === '' ? (
             <div className="d-flex justify-content-center">
-              <div
-                className="d-flex flex-column"
-                style={{ margin: '20px 60px' }}
-              >
-                <img
-                  alt="individual"
-                  style={{ width: 75, margin: '40px 20px' }}
-                  src={require('../../Assets/individual.svg')}
-                />
-                <Button onClick={() => this.setCustomerType('individual')}>
-                  {local.individual}
-                </Button>
-              </div>
-              <div
-                className="d-flex flex-column"
-                style={{ margin: '20px 60px' }}
-              >
-                <img
-                  alt="group"
-                  style={{ width: 75, margin: '40px 20px' }}
-                  src={require('../../Assets/group.svg')}
-                />
-                <Button onClick={() => this.setCustomerType('group')}>
-                  {local.group}
-                </Button>
-              </div>
-              <Can I="getSMEApplication" a="application">
-                <div
-                  className="d-flex flex-column"
-                  style={{ margin: '20px 60px' }}
-                >
-                  <img
-                    alt="sme"
-                    style={{ width: 75, margin: '40px 20px' }}
-                    src={require('../../Assets/group.svg')}
-                  />
-                  <Button onClick={() => this.setCustomerType('sme')}>
-                    {local.company}
-                  </Button>
-                </div>
-              </Can>
+              {!this.props.location.state.sme && (
+                <>
+                  <div className="d-flex flex-column m-5">
+                    <LtsIcon name="user" size="100px" color="#7dc356" />
+
+                    <Button
+                      className="my-4"
+                      onClick={() => this.setCustomerType('individual')}
+                    >
+                      {local.individual}
+                    </Button>
+                  </div>
+                  <div className="d-flex flex-column m-5">
+                    <LtsIcon name="group" size="100px" color="#7dc356" />
+
+                    <Button
+                      className="my-4"
+                      onClick={() => this.setCustomerType('group')}
+                    >
+                      {local.group}
+                    </Button>
+                  </div>
+                </>
+              )}
+              {this.props.location.state.sme && (
+                <Can I="getSMEApplication" a="application">
+                  <div className="d-flex flex-column m-5">
+                    <LtsIcon name="company" size="100px" color="#7dc356" />
+
+                    <Button
+                      className="my-4"
+                      onClick={() => this.setCustomerType('sme')}
+                    >
+                      {local.company}
+                    </Button>
+                  </div>
+                </Can>
+              )}
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'row' }}>

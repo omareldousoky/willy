@@ -10,6 +10,10 @@ import {
 } from '../../../../Shared/Services/utils'
 
 const LoanContractForGroup = (props) => {
+  const installments = props.data.installmentsObject.installments?.filter(
+    (installment) => installment.id !== 0
+  )
+
   const getAge = (birthDate: number) => {
     const diff = Date.now() - birthDate
     const day = 1000 * 60 * 60 * 24
@@ -85,9 +89,10 @@ const LoanContractForGroup = (props) => {
                     <u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u>
                   </div>
                   <div>
-                    انه في يوم
-                    {dayToArabic(new Date(props.data.creationDate).getDay())}
-                    الموافق {timeToArabicDate(props.data.creationDate, false)}
+                    انه في يوم &nbsp;{' '}
+                    {dayToArabic(new Date(props.data.creationDate).getDay())}{' '}
+                    &nbsp; الموافق &nbsp;
+                    {timeToArabicDate(props.data.creationDate, false)}
                   </div>
                   <div>
                     حرر هذا العقد في فرع {props.branchDetails.name} الكائن في:
@@ -187,7 +192,7 @@ const LoanContractForGroup = (props) => {
                     </div>
                     <div>
                       وقد تقدم افراد الطرف الثاني بطلب للحصول علي قرض من فرع
-                      {props.branchDetails.name} الكائن
+                      &nbsp; {props.branchDetails.name} الكائن &nbsp;{' '}
                       {props.branchDetails.address} لحاجتهم للسيوله النقديه يخصص
                       استخدامه في تمويل رأس المال العامل لنشاط كل عضوه وذلك وفقا
                       لاحكام القانون رقم ١٤١ لسنة ٢٠١٤ المشار اليه وقد وافقهم
@@ -303,37 +308,29 @@ const LoanContractForGroup = (props) => {
                             : 0),
                         'EGP'
                       ).parse()})`}
-                      ، يتم سداده علي
-                      {numbersToArabic(
-                        props.data.installmentsObject.installments.length
-                      )}
-                      قسط كل {numbersToArabic(props.data.product.periodLength)}
+                      &nbsp; ، يتم سداده علي
+                      {numbersToArabic(installments.length)}
+                      قسط كل &nbsp;{' '}
+                      {numbersToArabic(props.data.product.periodLength)}
                       {props.data.product.periodType === 'days'
                         ? local.day
                         : local.month}
-                      قيمة كل قسط
+                      &nbsp; قيمة كل قسط
                       {`${numbersToArabic(
-                        props.data.installmentsObject.installments[0]
-                          .installmentResponse
+                        installments[0].installmentResponse
                       )} جنيه (${new Tafgeet(
-                        props.data.installmentsObject.installments[0].installmentResponse,
+                        installments[0].installmentResponse,
                         'EGP'
                       ).parse()})`}
                       ، تبدأ في
-                      {timeToArabicDate(
-                        props.data.installmentsObject.installments[0]
-                          .dateOfPayment,
-                        false
-                      )}
+                      {timeToArabicDate(installments[0].dateOfPayment, false)}
                       وينتهي في
                       {timeToArabicDate(
-                        props.data.installmentsObject.installments[
-                          props.data.installmentsObject.installments.length - 1
-                        ].dateOfPayment,
+                        installments[installments.length - 1].dateOfPayment,
                         false
                       )}
                       علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في
-                      {props.branchDetails.name}طرف الأول وذلك
+                      &nbsp; {props.branchDetails.name} طرف الأول وذلك &nbsp;{' '}
                       {props.branchDetails.address} أو بأحدي وسائل الدفع
                       الإلكتروني المعتمده من هيئه الرقابه الماليه
                     </div>

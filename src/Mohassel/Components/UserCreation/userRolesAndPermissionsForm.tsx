@@ -9,6 +9,7 @@ import { theme } from '../../../Shared/theme'
 import { RolesBranchesValues } from './userCreationinterfaces'
 import DualBox from '../DualListBox/dualListBox'
 import { customFilterOption } from '../../../Shared/Services/utils'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props {
   values: RolesBranchesValues
@@ -95,11 +96,8 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
             filterOption={customFilterOption}
             placeholder={
               <span style={{ width: '100%', padding: '5px', margin: '5px' }}>
-                <img
-                  style={{ float: 'right' }}
-                  alt="search-icon"
-                  src={require('../../Assets/searchIcon.svg')}
-                />
+                <LtsIcon name="search" />
+
                 {local.searchByUserRole}
               </span>
             }

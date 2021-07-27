@@ -1,4 +1,3 @@
-import { ReactNode } from 'react'
 import { Managers } from '../managerHierarchy/types'
 import { DefaultedCustomer, ManagerReviews } from './defaultingCustomersList'
 import { CourtSession, LegalHistoryResponse } from '../../Models/LegalAffairs'
@@ -44,13 +43,6 @@ export type CustomerListProps = {
   history: any
   loading: boolean
   totalCount: number
-}
-
-export interface TableMapperItem {
-  title: string | (() => JSX.Element)
-  key: string
-  sortable?: boolean
-  render: (data: any) => ReactNode
 }
 
 export interface SettlementInfo {

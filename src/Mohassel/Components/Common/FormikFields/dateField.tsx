@@ -6,6 +6,7 @@ import FormControl from 'react-bootstrap/FormControl'
 import InputGroup from 'react-bootstrap/InputGroup'
 
 import * as local from '../../../../Shared/Assets/ar.json'
+import { LtsIcon } from '../../../../Shared/Components'
 
 interface DateFieldProps {
   key: string
@@ -67,11 +68,7 @@ const DateField = (props: DateFieldProps & FieldProps<string>) => {
                     if (onClear) onClear()
                   }}
                 >
-                  <img
-                    alt="clear"
-                    className="w-75 h-75"
-                    src={require('../../../Assets/clear.svg')}
-                  />
+                  <LtsIcon name="close" />
                 </InputGroup.Text>
               </InputGroup.Append>
             )}

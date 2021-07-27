@@ -3,6 +3,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 import * as local from '../../../Shared/Assets/ar.json'
+import { LtsIcon } from '../../../Shared/Components'
 
 export interface CrudOption {
   name: string
@@ -122,7 +123,7 @@ export const CRUDList = (props: Props) => {
             onClick={() => addOption()}
             style={{ margin: 'auto 20px', color: '#7dc356', cursor: 'pointer' }}
           >
-            <img alt="addOption" src={require('../../Assets/plus.svg')} />
+            <LtsIcon name="plus" color="#7dc356" />
           </span>
         )}
       </div>
@@ -235,14 +236,7 @@ export const CRUDList = (props: Props) => {
                     }}
                     data-qc="editSaveIcon"
                   >
-                    <img
-                      alt={option.disabledUi ? 'edit' : 'save'}
-                      src={
-                        option.disabledUi
-                          ? require('../../Assets/editIcon.svg')
-                          : require('../../Assets/save.svg')
-                      }
-                    />
+                    <LtsIcon name={option.disabledUi ? 'edit' : 'save'} />
                   </span>
                 )}
               </ListGroup.Item>
