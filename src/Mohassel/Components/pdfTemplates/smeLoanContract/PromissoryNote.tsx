@@ -27,7 +27,7 @@ export const PromissoryNote = ({
         تاريخ الاصدار : {timeToArabicDate(application.creationDate, false)}{' '}
       </p>
       <p>مكان الاصدار: {branchDetails?.address}</p>
-      <p>تاريخ الاستحقاق :</p>
+      <p>تاريخ الاستحقاق : &nbsp; / &nbsp; / &nbsp; &nbsp;</p>
       <p>
         المبلغ :{' '}
         {`${numbersToArabic(
@@ -58,18 +58,30 @@ export const PromissoryNote = ({
       <p>
         والدفع والتقاضى يكون امام محاكم ( الجيزه ) على اختلاف درجاتها وانواعها.
       </p>
-      <p>
-        {noteKind === 'sme'
-          ? ` الشركة: ${application.customer?.customerName} `
-          : `الأسم: ${person?.customerName} `}
-      </p>
-      {noteKind === 'sme' && (
-        <p>من له حق التوقيع عن الشركة : {person?.customerName}</p>
-      )}
-      <p>الصفة : {personPosition || ''}</p>
-      <p>بطاقة الرقم القومى :{person?.nationalId}</p>
-      <p>العنوان: {person?.currentHomeAddress}</p>
-      <p>التوقيع :</p>
+      <section>
+        <h4>المدين</h4>
+        <p>
+          {noteKind === 'sme'
+            ? ` الشركة: ${application.customer?.customerName} `
+            : `الأسم: ${person?.customerName} `}
+        </p>
+        {noteKind === 'sme' && (
+          <p>من له حق التوقيع عن الشركة : {person?.customerName}</p>
+        )}
+        <p>الصفة : {personPosition || ''}</p>
+        <p>بطاقة الرقم القومى :{person?.nationalId}</p>
+        <p>العنوان: {person?.currentHomeAddress}</p>
+        <p>التوقيع :</p>
+      </section>
+      {application.guarantors.map((person, index) => (
+        <section key={index}>
+          <h4>ضامن متضامن</h4>
+          <p>الأسم: ${person?.customerName}</p>
+
+          <p>العنوان: {person?.currentHomeAddress}</p>
+          <p>التوقيع :</p>
+        </section>
+      ))}
     </div>
   </>
 )
