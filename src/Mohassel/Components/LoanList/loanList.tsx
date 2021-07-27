@@ -178,23 +178,26 @@ class LoanList extends Component<Props, State> {
     } else {
       this.props.setIssuedLoanSearchFilters({})
     }
+
+    const productType =
+      this.props.location.state && this.props.location.state.sme
+        ? 'sme'
+        : this.props.issuedLoansSearchFilters.type
+        ? this.props.issuedLoansSearchFilters.type
+        : 'micro'
+
     let query = {
       ...searchFiltersQuery,
       size: this.state.size,
       from: this.state.from,
       url: 'loan',
       sort: 'issueDate',
-      type:
-        this.props.location.state && this.props.location.state.sme
-          ? 'sme'
-          : 'micro',
+      type: productType,
     }
+
     query = removeEmptyArg(query)
     this.props.setIssuedLoanSearchFilters({
-      type:
-        this.props.location.state && this.props.location.state.sme
-          ? 'sme'
-          : 'micro',
+      type: productType,
     })
     this.props.search(query).then(() => {
       if (this.props.error)
