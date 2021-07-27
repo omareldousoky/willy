@@ -162,6 +162,7 @@ const ReportsModal = (props: Props) => {
           break
         case 'loanType':
           initValues.loanType = 'all'
+          break
         case 'month':
           initValues.date = ''
           break
@@ -726,6 +727,8 @@ const ReportsModal = (props: Props) => {
                             {formikProps.errors.loanType}
                           </span>
                         </Col>
+                      )
+                    }
                     if (input === 'month') {
                       return (
                         <Field
