@@ -1380,10 +1380,18 @@ class LoanApplicationCreation extends Component<Props, State> {
       if (res.body.data && res.body.data.length > 0) {
         merged.forEach((customer) => {
           if (!guarantor) {
-            if (customer.nanoLoanIds && customer.nanoLoanIds.length > 0) {
+            if (
+              customer.nanoLoanIds?.length ||
+              customer.nanoApplicationIds?.length
+            ) {
               validationObject[customer._id] = {
                 customerName: customer.customerName,
-                nanoLoanIds: customer.nanoLoanIds,
+                ...(customer.nanoLoanIds && {
+                  nanoLoanIds: customer.nanoLoanIds,
+                }),
+                ...(customer.nanoApplicationIds && {
+                  nanoApplicationIds: customer.nanoApplicationIds,
+                }),
               }
             }
             if (
