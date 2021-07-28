@@ -20,6 +20,7 @@ export const AcknowledgmentOfCommitment = ({
           showCurrentTime={false}
           sme
         />
+        <p>التاريخ : {timeToArabicDate(application.creationDate, false)} </p>
         {application.entitledToSign?.map((person, index) => (
           <p key={index}>
             {!index
@@ -55,7 +56,12 @@ export const AcknowledgmentOfCommitment = ({
           الحصول علي فترة سماح لاي أقساط مستحقة طوال فترة التمويل وبأنني ملتزم
           بسداد الاقساط طبقا لجدول الاقساط المسلم لي من الشركة .
         </p>
-        <p>المقر بما فيه</p>
+        <p>
+          كما نقر ونقرر بالمديونية المستحقة علينا بأجمالي المبلغ سالف الذكر
+          عالية لصالح الشركة.
+        </p>
+        <p style={{ textAlign: 'center' }}>وهذا أقرار منا بذلك</p>
+        <p>المقرين بما فيه</p>
         <p>شركة / {application.customer?.businessName}</p>
         <p>التوقيع/</p>
 
