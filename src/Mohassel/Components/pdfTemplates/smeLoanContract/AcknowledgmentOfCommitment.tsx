@@ -15,7 +15,7 @@ export const AcknowledgmentOfCommitment = ({
     <>
       <div className="contract-container" dir="rtl" lang="ar">
         <Header
-          title="إقرار بالالتزام"
+          title="إقرار بالالتزام بمديونية"
           showCurrentUser={false}
           showCurrentTime={false}
           sme

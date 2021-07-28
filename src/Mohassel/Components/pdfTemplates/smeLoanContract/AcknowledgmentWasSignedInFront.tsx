@@ -72,10 +72,11 @@ export const AcknowledgmentWasSignedInFront = ({
         </table>
         <br />
         <p>القائم بالمراجعة</p>
-        <p>الاسم /</p>
-        <p>التوقيع /</p>
-        <p>الاسم /</p>
-        <p>التوقيع /</p>
+        <p className="py-2">الاسم /</p>
+        <p className="py-2">التوقيع /</p>
+        <hr />
+        <p className="py-2">الاسم /</p>
+        <p className="py-2"> التوقيع /</p>
       </div>
     </>
   )

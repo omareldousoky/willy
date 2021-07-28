@@ -16,7 +16,7 @@ export const KnowYourCustomer = ({
 }: KnowYourCustomerProps) => {
   return (
     <>
-      <div className="contract-container" dir="rtl" lang="ar">
+      <div className="contract-container p-0" dir="rtl" lang="ar">
         <Header
           title="أعرف عميلك"
           showCurrentUser={false}
@@ -138,7 +138,7 @@ export const KnowYourCustomer = ({
           </div>
         ))}
 
-        <h3 className="text-center my-5">إقرار بصحة البيانات</h3>
+        <h3 className="text-center my-2">إقرار بصحة البيانات</h3>
         <p>
           أقر أنا الموقع أدناه بتحمل المسئوليه القانونية عن صحة البيانات في
           النموذج عاليه والمستندات ( وصورها ) المقدمة لشركة تساهيل للتمويل
