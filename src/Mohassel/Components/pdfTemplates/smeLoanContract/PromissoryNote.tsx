@@ -67,7 +67,7 @@ export const PromissoryNote = ({
         {noteKind === 'sme' && (
           <p>من له حق التوقيع عن الشركة : {person?.customerName}</p>
         )}
-        <p>الصفة : {personPosition || ''}</p>
+        {personPosition && <p>الصفة : {personPosition}</p>}
         <p>
           {noteKind === 'sme'
             ? ` السجل التجاري: ${application.customer?.commercialRegisterNumber} `
