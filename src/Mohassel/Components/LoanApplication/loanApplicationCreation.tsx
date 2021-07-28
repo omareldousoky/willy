@@ -1397,7 +1397,8 @@ class LoanApplicationCreation extends Component<Props, State> {
             if (
               customer.applicationIds &&
               !customer.loanIds &&
-              customer.applicationIds.length >= customer.maxLoansAllowed
+              (this.state.isNano ||
+                customer.applicationIds.length >= customer.maxLoansAllowed)
             ) {
               validationObject[customer._id] = {
                 customerName: customer.customerName,
@@ -1407,7 +1408,8 @@ class LoanApplicationCreation extends Component<Props, State> {
             if (
               customer.loanIds &&
               !customer.applicationIds &&
-              customer.loanIds.length >= customer.maxLoansAllowed
+              (this.state.isNano ||
+                customer.loanIds.length >= customer.maxLoansAllowed)
             ) {
               if (Object.keys(validationObject).includes(customer._id)) {
                 validationObject[customer._id] = {
