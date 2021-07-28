@@ -18,7 +18,7 @@ export const PromissoryNote = ({
   <>
     <div className="contract-container" dir="rtl" lang="ar">
       <Header
-        title={`سند لأمر ( ${noteKind} )`}
+        title="سند لأمر"
         showCurrentUser={false}
         showCurrentTime={false}
         sme
@@ -27,16 +27,7 @@ export const PromissoryNote = ({
         تاريخ الاصدار : {timeToArabicDate(application.creationDate, false)}{' '}
       </p>
       <p>مكان الاصدار: {branchDetails?.address}</p>
-      <p>
-        تاريخ الاستحقاق :{' '}
-        {application?.installmentsObject?.installments &&
-          timeToArabicDate(
-            application?.installmentsObject?.installments[
-              application?.installmentsObject?.installments?.length - 1
-            ].dateOfPayment,
-            false
-          )}
-      </p>
+      <p>تاريخ الاستحقاق : &nbsp; / &nbsp; / &nbsp; &nbsp;</p>
       <p>
         المبلغ :{' '}
         {`${numbersToArabic(
@@ -45,7 +36,7 @@ export const PromissoryNote = ({
       </p>
       <p>
         نتعهد نحن الموقعين ادناه تعهداً نهائيا وبدون اى قيد او شرط بأن ندفع فى
-        تاريخ الاستحقاق لأمر واذن شركة تساهيل للتمويل مبلغ وقدره
+        تاريخ الاستحقاق لأمر واذن شركة تساهيل للتمويل متناهي الصغر مبلغ وقدره
         {`${numbersToArabic(
           application.installmentsObject?.totalInstallments?.installmentSum
         )} جنيه (${new Tafgeet(
@@ -67,18 +58,24 @@ export const PromissoryNote = ({
       <p>
         والدفع والتقاضى يكون امام محاكم ( الجيزه ) على اختلاف درجاتها وانواعها.
       </p>
-      <p>
-        {noteKind === 'شركات'
-          ? ` الشركة: ${application.customer?.customerName} `
-          : `الأسم: ${person?.customerName} `}
-      </p>
-      {noteKind === 'شركات' && (
-        <p>من له حق التوقيع عن الشركة : {person?.customerName}</p>
-      )}
-      <p>الصفة : {personPosition || ''}</p>
-      <p>بطاقة الرقم القومى :{person?.nationalId}</p>
-      <p>العنوان: {person?.currentHomeAddress}</p>
-      <p>التوقيع :</p>
+      <section>
+        <p>
+          {noteKind === 'sme'
+            ? ` الشركة: ${application.customer?.customerName} `
+            : `الأسم: ${person?.customerName} `}
+        </p>
+        {noteKind === 'sme' && (
+          <p>من له حق التوقيع عن الشركة : {person?.customerName}</p>
+        )}
+        {personPosition && <p>الصفة : {personPosition}</p>}
+        <p>
+          {noteKind === 'sme'
+            ? ` السجل التجاري: ${application.customer?.commercialRegisterNumber} `
+            : `بطاقة الرقم القومى: ${person?.nationalId} `}
+        </p>
+        <p>العنوان: {person?.currentHomeAddress}</p>
+        <p>التوقيع :</p>
+      </section>
     </div>
   </>
 )
