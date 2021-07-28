@@ -222,7 +222,7 @@ class Search extends Component<SearchProps, SearchState> {
     if (!['application', 'loan'].includes(url)) {
       delete obj.type
     } else {
-      obj.type = this.props.sme ? 'sme' : obj.type
+      obj.type = this.props.sme ? 'sme' : obj.type ? obj.type : 'micro'
     }
 
     if (obj.lastDates) {
