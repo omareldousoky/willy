@@ -1133,5 +1133,7 @@
   "nanoCustomerLimit": "Nano الحد الائتماني لعميل ال",
   "loanLimit": "الحد الائتماني",
   "nanoLimitDocument": "صوره وصل الحد الائتماني",
-  "nano": "Nano"
+  "nano": "نانو",
+  "sme": "شركات",
+  "micro": "ميكرو"
 }

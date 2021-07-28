@@ -816,7 +816,7 @@ class Search extends Component<SearchProps, SearchState> {
                     [
                       {
                         value: 'micro',
-                        text: 'Micro',
+                        text: local.micro,
                       },
                       {
                         value: 'nano',
