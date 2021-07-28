@@ -35,6 +35,13 @@ export const AuthorizationToFillInfo = ({
           <p>التوقيع :</p>
         </div>
       ))}
+      {application.guarantors?.map((person, index) => (
+        <div key={index}>
+          <p>الاسم : {person.customerName ?? ''}</p>
+          <p>العنوان : {person.customerHomeAddress ?? ''}</p>
+          <p>التوقيع :</p>
+        </div>
+      ))}
     </div>
   </>
 )

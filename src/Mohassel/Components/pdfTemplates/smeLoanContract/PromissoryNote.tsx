@@ -76,7 +76,7 @@ export const PromissoryNote = ({
       {application.guarantors.map((guarantor, index) => (
         <section key={index}>
           <h4>ضامن متضامن</h4>
-          <p>الأسم: ${guarantor?.customerName}</p>
+          <p>الأسم: {guarantor?.customerName}</p>
 
           <p>العنوان: {guarantor?.currentHomeAddress}</p>
           <p>التوقيع :</p>

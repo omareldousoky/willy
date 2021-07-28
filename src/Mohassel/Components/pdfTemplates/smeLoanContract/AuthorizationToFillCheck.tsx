@@ -25,10 +25,10 @@ export const AuthorizationToFillCheck = ({
         دون اى منازعة فى الحال والاستقبال.
       </p>
       <p>وهذا تفويض منى بذلك ،،،،</p>
-      {application.guarantors?.map((person, index) => (
+      {application.entitledToSign?.map((person, index) => (
         <div key={index}>
-          <p>الاسم : {person.customerName ?? ''}</p>
-          <p>العنوان : {person.customerHomeAddress ?? ''}</p>
+          <p>الاسم : {person.customer.customerName ?? ''}</p>
+          <p>العنوان : {person.customer.customerHomeAddress ?? ''}</p>
           <p>التوقيع :</p>
         </div>
       ))}
