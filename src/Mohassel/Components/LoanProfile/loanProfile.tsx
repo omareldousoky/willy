@@ -80,6 +80,7 @@ import {
   AcknowledgmentOfCommitment,
   AcknowledgmentWasSignedInFront,
   AuthorizationToFillCheck,
+  AuthorizationToFillInfo,
   KnowYourCustomer,
   PromissoryNote,
   SmeLoanContract,
@@ -1504,27 +1505,38 @@ class LoanProfile extends Component<Props, State> {
               application={this.state.application}
               branchDetails={this.state.branchDetails}
             />
-            <SolidarityGuarantee application={this.state.application} />
-            <AuthorizationToFillCheck application={this.state.application} />
             {this.state.application.guarantors?.map((person, index) => (
-              <PromissoryNote
-                key={index}
-                noteKind="شخصى"
-                application={this.state.application}
-                branchDetails={this.state.branchDetails}
-                person={person}
-              />
+              <div key={index}>
+                <SolidarityGuarantee
+                  application={this.state.application}
+                  person={person}
+                />
+                <PromissoryNote
+                  noteKind="individual"
+                  application={this.state.application}
+                  branchDetails={this.state.branchDetails}
+                  person={person}
+                />
+              </div>
             ))}
             {this.state.application.entitledToSign?.map((person, index) => (
-              <PromissoryNote
-                key={index}
-                noteKind="شركات"
-                application={this.state.application}
-                branchDetails={this.state.branchDetails}
-                person={person.customer}
-                personPosition={person.position}
-              />
+              <div key={index}>
+                <SolidarityGuarantee
+                  application={this.state.application}
+                  person={person.customer}
+                  personPosition={person.position}
+                />
+                <PromissoryNote
+                  noteKind="sme"
+                  application={this.state.application}
+                  branchDetails={this.state.branchDetails}
+                  person={person.customer}
+                  personPosition={person.position}
+                />
+              </div>
             ))}
+            <AuthorizationToFillCheck application={this.state.application} />
+            <AuthorizationToFillInfo application={this.state.application} />
             <SmeLoanContract
               data={this.state.application}
               branchDetails={this.state.branchDetails}
