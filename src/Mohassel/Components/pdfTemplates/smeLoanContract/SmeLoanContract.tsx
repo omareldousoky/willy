@@ -284,7 +284,7 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                         جنيه (${new Tafgeet(
                           data.installmentsObject.totalInstallments.feesSum,
                           'EGP'
-                        ).parse()}) الي الطرف الأول وذلك بواقع مبلغ قدره`}
+                        ).parse()}) الي الطرف الأول وذلك بواقع اجمالي مبلغ تكلفة التمويل قدره`}
                         {`${numbersToArabic(
                           data.installmentsObject.totalInstallments
                             .installmentSum +
@@ -514,9 +514,6 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                                 خلو القانون المشار اليه من تنظيم النزاع المطروح
                                 على المحكمه.
                               </div>
-                              <div>
-                                {timeToArabicDate(data.creationDate, false)}
-                              </div>
                             </section>
                           </td>
                         </tr>
@@ -556,7 +553,7 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                                     <div>
                                       <b>الطرف الثانى ( المدين )</b>
                                     </div>
-                                    <div>
+                                    <div style={{ marginBottom: 30 }}>
                                       <b>الأسم:</b>
                                     </div>
                                     <div>

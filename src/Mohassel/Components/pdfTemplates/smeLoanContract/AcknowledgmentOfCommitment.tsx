@@ -63,12 +63,14 @@ export const AcknowledgmentOfCommitment = ({
         <p style={{ textAlign: 'center' }}>وهذا أقرار منا بذلك</p>
         <p>المقرين بما فيه</p>
         <p>شركة / {application.customer?.businessName}</p>
-        <p>التوقيع/</p>
-
+        <p className="py-3">التوقيع/</p>
         {application.guarantors?.map((person, index) => (
-          <p key={index}>
-            {guarantorOrderLocal[index]}/ {person.customerName ?? ''}{' '}
-          </p>
+          <div key={index}>
+            <p>
+              {guarantorOrderLocal[index]}/ {person.customerName ?? ''}{' '}
+            </p>
+            <p className="py-3">التوقيع/</p>
+          </div>
         ))}
       </div>
     </>

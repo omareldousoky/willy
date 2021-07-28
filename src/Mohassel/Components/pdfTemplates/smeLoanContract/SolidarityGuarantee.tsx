@@ -10,9 +10,11 @@ import { SolidarityGuaranteeProps } from './types'
 
 export const SolidarityGuarantee = ({
   application,
+  person,
+  personPosition,
 }: SolidarityGuaranteeProps) => (
   <>
-    <div className="contract-container mb-0 pb-0" dir="rtl" lang="ar">
+    <div className="contract-container m-0 p-0" dir="rtl" lang="ar">
       <Header
         title="كفالة تضامنية "
         showCurrentUser={false}
@@ -66,8 +68,8 @@ export const SolidarityGuarantee = ({
           منها
         </li>
         <li>
-          ان التزاماتنا بموجب ھذه الكفالة لا تسقط ولا تخفض ولا تتأثر بأى من
-          الاحوال الاتیة :
+          ان التزامات الكفيل المتضامن بموجب ھذه الكفالة لا تسقط ولا تخفض ولا
+          تتأثر بأى من الاحوال الاتیة :
           <ol>
             <li>
               افلاس او تصفية او حل او اعادة تنظيم السداد للمدين او اى تغيير فى
@@ -153,6 +155,11 @@ export const SolidarityGuarantee = ({
           مطالبته بكامل المبلغ المكفول.
         </li>
         <li>
+          اذا أصبح اي بند من بنود هذه الكفالة باطلا او مخالفأ للقانون أو غير
+          قابل للتنفيذ بأي شكل وبموجب اي قانون , فان ذلك لن يؤثر علي صلاحية
+          وقانونية وسريان باقي البنود للتنفيذ
+        </li>
+        <li>
           يكون اى طلب من قبل الشركة بموجب هذه الكفالة خطياً ويرسل الى عنوان
           الكفيل المذكور ادناه ( او الى اى عنوان اخر يخطر به الكفيل الشركة
           كتابياً من وقت لاخر ) ويعتبر اثره نافذا قانوناً عند ارساله على العنوان
@@ -166,10 +173,6 @@ export const SolidarityGuarantee = ({
           يتعهد الكفيل المتضامن بالحفاظ على سرية اية معلومات وبيانات خاصة
           بالمدين او التسهيلات او الكفالة وعدم الافصاح عن أى من تلك المعلومات
           لاى طرف ثالث
-        </li>
-        <li>
-          نتعهد بالحفاظ على سرية اية معلومات وبيانات خاصة بالمدين او التسهيلات
-          او الكفالة وعدم الافصاح عن أى من تلك المعلومات لاى طرف ثالث
         </li>
         <li>
           نصرح للشركة بالكشف والحصول على كل او بعض البيانات الخاصة بمعاملات
@@ -193,16 +196,12 @@ export const SolidarityGuarantee = ({
         </li>
       </ol>
       <p className="font-weight-bolder">الكفيل المتضامن</p>
-      {application.guarantors?.map((person, index) => (
-        <div key={index}>
-          <p>الاسم : {person.customerName ?? ''}</p>
-          <p>بطاقة الرقم القومى: {person.nationalId ?? ''}</p>
-          <p>الصفة :</p>
-          <p>التاريخ: {timeToArabicDate(application.creationDate, false)}</p>
-          <p>العنوان : {person.customerHomeAddress ?? ''}</p>
-          <p>التوقيع :</p>
-        </div>
-      ))}
+      <p>الاسم : {person.customerName ?? ''}</p>
+      <p>بطاقة الرقم القومى: {person.nationalId ?? ''}</p>
+      {personPosition && <p>الصفة : {personPosition}</p>}
+      <p>التاريخ: {timeToArabicDate(application.creationDate, false)}</p>
+      <p>العنوان : {person.customerHomeAddress ?? ''}</p>
+      <p>التوقيع :</p>
     </div>
   </>
 )

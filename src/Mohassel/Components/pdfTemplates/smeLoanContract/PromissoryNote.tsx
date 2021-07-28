@@ -59,7 +59,6 @@ export const PromissoryNote = ({
         والدفع والتقاضى يكون امام محاكم ( الجيزه ) على اختلاف درجاتها وانواعها.
       </p>
       <section>
-        <h4>المدين</h4>
         <p>
           {noteKind === 'sme'
             ? ` الشركة: ${application.customer?.customerName} `
@@ -69,19 +68,14 @@ export const PromissoryNote = ({
           <p>من له حق التوقيع عن الشركة : {person?.customerName}</p>
         )}
         <p>الصفة : {personPosition || ''}</p>
-        <p>بطاقة الرقم القومى :{person?.nationalId}</p>
+        <p>
+          {noteKind === 'sme'
+            ? ` السجل التجاري: ${application.customer?.commercialRegisterNumber} `
+            : `بطاقة الرقم القومى: ${person?.nationalId} `}
+        </p>
         <p>العنوان: {person?.currentHomeAddress}</p>
         <p>التوقيع :</p>
       </section>
-      {application.guarantors.map((guarantor, index) => (
-        <section key={index}>
-          <h4>ضامن متضامن</h4>
-          <p>الأسم: {guarantor?.customerName}</p>
-
-          <p>العنوان: {guarantor?.currentHomeAddress}</p>
-          <p>التوقيع :</p>
-        </section>
-      ))}
     </div>
   </>
 )
