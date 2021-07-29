@@ -1530,7 +1530,7 @@ class LoanProfile extends Component<Props, State> {
                   noteKind="individual"
                   application={this.state.application}
                   branchDetails={this.state.branchDetails}
-                  person={person}
+                  person={person.customer}
                   personPosition={person.position}
                 />
                 <PromissoryNote
