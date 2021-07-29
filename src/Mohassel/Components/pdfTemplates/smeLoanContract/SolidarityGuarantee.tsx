@@ -21,7 +21,9 @@ export const SolidarityGuarantee = ({
         showCurrentTime={false}
         sme
       />
-      <p>التاريخ : {timeToArabicDate(application.creationDate, false)} </p>
+      <p className="my-0 py-0">
+        التاريخ : {timeToArabicDate(application.creationDate, false)}{' '}
+      </p>
       <p>
         بالاشارة الى التسهيلات الائتمانية الممنوحة من شركة تساهيل للتمويل متناهي
         الصغر الى {application.customer?.customerName} البالغ قيمتها الاجمالية
@@ -195,7 +197,7 @@ export const SolidarityGuarantee = ({
           يتعلق بأى نزاع فى اى اختصاص قضائى آخر.
         </li>
       </ol>
-      <p className="font-weight-bolder">الكفيل المتضامن</p>
+      <p className="font-weight-bolder my-0">الكفيل المتضامن</p>
       <p>الاسم : {person.customerName ?? ''}</p>
       <p>بطاقة الرقم القومى: {person.nationalId ?? ''}</p>
       {personPosition && <p>الصفة : {personPosition}</p>}
