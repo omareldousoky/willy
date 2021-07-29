@@ -843,6 +843,14 @@ class LoanApplicationCreation extends Component<Props, State> {
   selectCustomer = async (customer) => {
     let customerIsBlockerError = ''
     let customerLoanOrAgeError = ''
+
+    const invalidNanoLimit = this.state.isNano && !customer.nanoLoansLimit
+
+    if (invalidNanoLimit) {
+      Swal.fire(local.error, 'برجاء تحديد الحد الائتماني', 'error')
+      return
+    }
+
     this.setState({ loading: true })
     const selectedCustomer = await getCustomerByID(customer._id)
     if (selectedCustomer.status === 'success') {
