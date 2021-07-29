@@ -546,5 +546,13 @@
   "duplicate_product": {
     "en": "Duplicate Product Name",
     "ar": " نوع القرض موجود بالفعل."
+  },
+  "customer_nano_limit_exceeds_max": {
+    "en": "Customer nano loans limit exceeds maximum limit",
+    "ar": "حد قروض النانو للعميل يتعدي الحد الأقصى"
+  },
+  "customer_has_ongoing_nano_loans": {
+    "en": "Customer has ongoing nano limits",
+    "ar": "العميل لديه قروض نانو جارية"
   }
 }
