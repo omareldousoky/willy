@@ -18,6 +18,9 @@ export const LoanProductCreationForm = (props: any) => {
     touched,
     setFieldValue,
   } = props
+
+  const isNanoProduct = values.type === 'nano'
+
   return (
     <Form onSubmit={handleSubmit} style={{ padding: '1rem 2rem' }}>
       <Row>
@@ -137,7 +140,17 @@ export const LoanProductCreationForm = (props: any) => {
                 data-qc="type"
                 value={values.type}
                 onBlur={handleBlur}
-                onChange={handleChange}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                  const val = e.currentTarget.value
+                  if (val === 'nano') {
+                    setFieldValue('allowInterestAdjustment', false)
+                    setFieldValue('allowStampsAdjustment', false)
+                    setFieldValue('allowRepresentativeFeesAdjustment', false)
+                    setFieldValue('allowAdminFeesAdjustment', false)
+                    setFieldValue('allowApplicationFeeAdjustment', false)
+                  }
+                  handleChange(e)
+                }}
                 isInvalid={errors.type && touched.type}
               >
                 <option value="micro">Micro</option>
@@ -352,6 +365,7 @@ export const LoanProductCreationForm = (props: any) => {
                 errors.allowInterestAdjustment &&
                 touched.allowInterestAdjustment
               }
+              disabled={isNanoProduct}
             />
             <Form.Control.Feedback type="invalid">
               {errors.allowInterestAdjustment}
@@ -456,6 +470,7 @@ export const LoanProductCreationForm = (props: any) => {
                 isInvalid={
                   errors.allowStampsAdjustment && touched.allowStampsAdjustment
                 }
+                disabled={isNanoProduct}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.allowStampsAdjustment}
@@ -506,6 +521,7 @@ export const LoanProductCreationForm = (props: any) => {
                   errors.allowRepresentativeFeesAdjustment &&
                   touched.allowRepresentativeFeesAdjustment
                 }
+                disabled={isNanoProduct}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.allowRepresentativeFeesAdjustment}
@@ -551,6 +567,7 @@ export const LoanProductCreationForm = (props: any) => {
                   errors.allowAdminFeesAdjustment &&
                   touched.allowAdminFeesAdjustment
                 }
+                disabled={isNanoProduct}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.allowAdminFeesAdjustment}
@@ -744,6 +761,7 @@ export const LoanProductCreationForm = (props: any) => {
                   errors.allowApplicationFeeAdjustment &&
                   touched.allowApplicationFeeAdjustment
                 }
+                disabled={isNanoProduct}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.allowApplicationFeeAdjustment}
