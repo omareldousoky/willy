@@ -1,4 +1,4 @@
-import { Signature } from './common'
+import { PaginatedResponse, SearchRequest, Signature, Trace } from './common'
 
 export interface CourtSession {
   confinementNumber?: string
@@ -35,4 +35,43 @@ export interface LegalHistoryResponse {
     oppositionSession?: CourtSession
     oppositionAppealSession?: CourtSession
   }[]
+}
+
+export type LegalWarningType =
+  | 'quickRefundWarning'
+  | 'legalActionWarning'
+  | 'misdemeanorNumberWarning'
+  | 'verdictNoticeWarning'
+
+export interface LegalWarningResponse extends Trace {
+  _id: string
+  customerId?: string
+  loanId?: string
+  customerName?: string
+  nationalId?: string
+  customerKey?: number
+  customerBranchId?: string
+  warningType: LegalWarningType
+  printed?: boolean
+  loanKey?: number
+  currentHomeAddress?: string
+  caseNumber?: string
+  court?: string
+}
+
+export interface LegalWarningsSearchRequest extends SearchRequest {
+  printed: boolean
+  customerKey?: number
+  customerBranchId?: string
+  warningType?: LegalWarningType
+}
+
+export interface LegalWarningsSearchResponse extends PaginatedResponse {
+  data: LegalWarningResponse[]
+}
+
+export interface LegalWarningRequest {
+  loanId: string
+  warningType: LegalWarningType
+  customerId: string
 }

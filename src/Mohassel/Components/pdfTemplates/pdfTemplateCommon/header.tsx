@@ -7,7 +7,7 @@ import {
 } from '../../../../Shared/Services/utils'
 
 interface HeaderProps {
-  title: string
+  title?: string
   showCurrentUser?: boolean
   showCurrentTime?: boolean
   showCurrentDate?: boolean
@@ -16,6 +16,7 @@ interface HeaderProps {
   branchName?: string
   sme?: boolean
 }
+
 export const Header = ({
   title,
   showCurrentUser = true,
@@ -61,13 +62,15 @@ export const Header = ({
         )}
       </div>
       <div className="d-flex mb-3">
-        <p className="m-auto" style={{ fontSize: '16px' }}>
-          {title} {fromDate && `من : `}
-          {fromDate &&
-            `${timeToArabicDate(new Date(fromDate).valueOf(), false)}`}
-          {toDate &&
-            ` إلى : ${timeToArabicDate(new Date(toDate).valueOf(), false)}`}
-        </p>
+        {title && (
+          <p className="m-auto" style={{ fontSize: '16px' }}>
+            {title} {fromDate && `من : `}
+            {fromDate &&
+              `${timeToArabicDate(new Date(fromDate).valueOf(), false)}`}
+            {toDate &&
+              ` إلى : ${timeToArabicDate(new Date(toDate).valueOf(), false)}`}
+          </p>
+        )}
       </div>
     </>
   )

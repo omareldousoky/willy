@@ -44,6 +44,7 @@ import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { LoanApplicationReportRequest } from '../../Services/interfaces'
 import { ActionsIconGroup } from '../../../Shared/Components'
 import ability from '../../config/ability'
+import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
 
 interface Product {
   productName: string
@@ -92,12 +93,7 @@ interface Props
   sme?: boolean
 }
 class TrackLoanApplications extends Component<Props, State> {
-  mappers: {
-    title: string
-    key: string
-    sortable?: boolean
-    render: (data: any) => void
-  }[]
+  mappers: TableMapperItem[]
 
   constructor(props) {
     super(props)
