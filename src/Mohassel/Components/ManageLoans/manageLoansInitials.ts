@@ -14,7 +14,7 @@ export const manageLoansArray = (): Card[] => {
   }
   if (ability.can('getCalculationFormula', 'product')) {
     manageLoanArr.push({
-      icon: 'calculation-forumlas',
+      icon: 'calculation-formulas',
       header: local.calculationForumlas,
       desc: local.calculationForumlasDesc,
       path: '/manage-loans/calculation-formulas',
