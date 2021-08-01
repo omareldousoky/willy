@@ -140,9 +140,13 @@ class ClearanceCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const res = await getCustomersBalances({ ids: [id] })
     if (res.status === 'success') {
-      const paidLoansIds: string[] = res.body.data[0].paidLoans
-      if (paidLoansIds) {
-        const paidLoans = await getApplicationsKeys({ ids: paidLoansIds })
+      const paidLoansIds: string[] = res.body.data[0].paidLoans ?? []
+      const paidNanoLoans: string[] = res.body.data[0].paidNanoLoans ?? []
+
+      if (paidLoansIds.length || paidNanoLoans.length) {
+        const paidLoans = await getApplicationsKeys({
+          ids: [...paidLoansIds, ...paidNanoLoans],
+        })
         if (paidLoans.status === 'success') {
           this.setState({ paidLoans: paidLoans.body.data })
         } else {
