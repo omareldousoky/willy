@@ -18,6 +18,7 @@ import { Employee } from './payment'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import Can from '../../config/Can'
 import { theme } from '../../../Shared/theme'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface FormValues {
   requiredAmount: number
@@ -112,7 +113,10 @@ class PayInstallment extends Component<Props, State> {
       payerId: '',
       installmentNumber: -1,
       employees: [],
-      sidePaymentInfo: { image: 'payInstallment', local: local.payInstallment },
+      sidePaymentInfo: {
+        image: 'pay-installment',
+        local: local.payInstallment,
+      },
     }
   }
 
@@ -120,11 +124,11 @@ class PayInstallment extends Component<Props, State> {
     if (this.props.paymentType === 'penalties' && this.props.penaltyAction) {
       this.props.penaltyAction !== 'cancel'
         ? this.setState({
-            sidePaymentInfo: { image: 'payPenalty', local: local.payPenalty },
+            sidePaymentInfo: { image: 'pay-penalty', local: local.payPenalty },
           })
         : this.setState({
             sidePaymentInfo: {
-              image: 'cancelPenalty',
+              image: 'cancel-penalty',
               local: local.cancelPenalty,
             },
           })
@@ -177,10 +181,11 @@ class PayInstallment extends Component<Props, State> {
     return (
       <Card className="payment-menu">
         <div className="payment-info" style={{ textAlign: 'center' }}>
-          <img
+          {/* <img
             alt={this.state.sidePaymentInfo.image}
             src={require(`../../Assets/${this.state.sidePaymentInfo.image}.svg`)}
-          />
+          /> */}
+          <LtsIcon name={this.state.sidePaymentInfo.image} />
           <h6
             style={{ cursor: 'pointer' }}
             onClick={() => this.props.changePaymentState(0)}

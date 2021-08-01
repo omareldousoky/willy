@@ -16,6 +16,7 @@ import RoleUsers from './roleUsers'
 import BackButton from '../BackButton/back-button'
 
 import { getErrorMessage } from '../../../Shared/Services/utils'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Role {
   permissions: Array<any>
@@ -125,11 +126,7 @@ class RoleProfile extends Component<RouteComponentProps<{}, {}, Role>, State> {
                   fontWeight: 'bold',
                 }}
               >
-                <img
-                  style={{ float: 'right', margin: '0px 5px' }}
-                  alt="search-icon"
-                  src={require('../../Assets/permissions-inactive.svg')}
-                />
+                <LtsIcon name="permissions" color="#7dc255" />
                 {local.permissions}
               </span>
             </div>
@@ -163,7 +160,7 @@ class RoleProfile extends Component<RouteComponentProps<{}, {}, Role>, State> {
                     })
                   }}
                 >
-                  <img alt="edit" src={require('../../Assets/editIcon.svg')} />
+                  <LtsIcon name="edit" />
                   {local.edit}
                 </span>
               </div>

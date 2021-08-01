@@ -21,6 +21,7 @@ import { searchUsers } from '../../Services/APIs/Users/searchUsers'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import { Group, SupervisionLevelsCreationProps } from './types'
 import { SupervisionGroup } from './supervisionGroup'
+import { LtsIcon } from '../../../Shared/Components'
 
 export const SupervisionLevelsCreation: FunctionComponent<SupervisionLevelsCreationProps> = ({
   branchId,
@@ -208,10 +209,7 @@ export const SupervisionLevelsCreation: FunctionComponent<SupervisionLevelsCreat
                 className="mr-auto my-5"
                 onClick={() => setGroups(groups.concat(emptyGroup))}
               >
-                <span
-                  className="plus-green-icon align-middle"
-                  aria-hidden="true"
-                />
+                <LtsIcon name="plus" color="#7dc255" />
                 <span className="text-success pl-2 font-weight-bold">
                   {local.addGroupManager}
                 </span>

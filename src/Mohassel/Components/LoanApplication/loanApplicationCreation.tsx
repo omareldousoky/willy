@@ -56,6 +56,7 @@ import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/cust
 import { theme } from '../../../Shared/theme'
 import { Customer } from '../../../Shared/Services/interfaces'
 import Can from '../../config/Can'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface LoanApplicationCreationRouteState {
   id?: string
@@ -1760,29 +1761,23 @@ class LoanApplicationCreation extends Component<Props, State> {
             <div className="d-flex justify-content-center">
               {!this.props.location.state.sme && (
                 <>
-                  <div
-                    className="d-flex flex-column"
-                    style={{ margin: '20px 60px' }}
-                  >
-                    <img
-                      alt="individual"
-                      style={{ width: 75, margin: '40px 20px' }}
-                      src={require('../../Assets/individual.svg')}
-                    />
-                    <Button onClick={() => this.setCustomerType('individual')}>
+                  <div className="d-flex flex-column m-5">
+                    <LtsIcon name="user" size="100px" color="#7dc356" />
+
+                    <Button
+                      className="my-4"
+                      onClick={() => this.setCustomerType('individual')}
+                    >
                       {local.individual}
                     </Button>
                   </div>
-                  <div
-                    className="d-flex flex-column"
-                    style={{ margin: '20px 60px' }}
-                  >
-                    <img
-                      alt="group"
-                      style={{ width: 75, margin: '40px 20px' }}
-                      src={require('../../Assets/group.svg')}
-                    />
-                    <Button onClick={() => this.setCustomerType('group')}>
+                  <div className="d-flex flex-column m-5">
+                    <LtsIcon name="group" size="100px" color="#7dc356" />
+
+                    <Button
+                      className="my-4"
+                      onClick={() => this.setCustomerType('group')}
+                    >
                       {local.group}
                     </Button>
                   </div>
@@ -1790,16 +1785,13 @@ class LoanApplicationCreation extends Component<Props, State> {
               )}
               {this.props.location.state.sme && (
                 <Can I="getSMEApplication" a="application">
-                  <div
-                    className="d-flex flex-column"
-                    style={{ margin: '20px 60px' }}
-                  >
-                    <img
-                      alt="sme"
-                      style={{ width: 75, margin: '40px 20px' }}
-                      src={require('../../Assets/group.svg')}
-                    />
-                    <Button onClick={() => this.setCustomerType('sme')}>
+                  <div className="d-flex flex-column m-5">
+                    <LtsIcon name="company" size="100px" color="#7dc356" />
+
+                    <Button
+                      className="my-4"
+                      onClick={() => this.setCustomerType('sme')}
+                    >
                       {local.company}
                     </Button>
                   </div>

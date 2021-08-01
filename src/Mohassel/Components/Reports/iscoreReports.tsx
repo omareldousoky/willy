@@ -11,6 +11,7 @@ import {
 } from '../../Services/APIs/Reports/iScoreReports'
 import { downloadFile } from '../../../Shared/Services/utils'
 import Can from '../../config/Can'
+import { LtsIcon } from '../../../Shared/Components'
 
 import { ReportsList } from '../../../Shared/Components/ReportsList'
 

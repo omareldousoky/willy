@@ -149,9 +149,10 @@ const LoanContract = (props) => {
                     <u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u>
                   </div>
                   <div>
-                    انه في يوم
-                    {dayToArabic(new Date(props.data.creationDate).getDay())}
-                    الموافق {timeToArabicDate(props.data.creationDate, false)}
+                    انه في يوم &nbsp;{' '}
+                    {dayToArabic(new Date(props.data.creationDate).getDay())}{' '}
+                    &nbsp; الموافق &nbsp;
+                    {timeToArabicDate(props.data.creationDate, false)}
                   </div>
                   <div>
                     حرر هذا العقد في فرع {props.branchDetails.name} الكائن في:
@@ -308,11 +309,11 @@ const LoanContract = (props) => {
                       </div>
                     ) : (
                       <div>
-                        وقد تقدم الطرف الثاني صاحب نشاط
+                        وقد تقدم الطرف الثاني صاحب نشاط &nbsp;
                         {props.data.customer.businessSector} -
                         {props.data.customer.businessActivity} بطلب للحصول علي
-                        قرض من فرع
-                        {props.branchDetails.name} الكائن
+                        &nbsp; قرض من فرع &nbsp;{props.branchDetails.name}{' '}
+                        الكائن
                         {props.branchDetails.address} لحاجته للسيوله النقديه
                         يخصص استخدامه في تمويل رأس المال العامل وذلك وفقا لاحكام
                         القانون رقم ١٤١ لسنة ٢٠١٤ المشار اليه وذلك بضمان وتضامن
@@ -370,8 +371,8 @@ const LoanContract = (props) => {
                   <section>
                     <div className="title">البند الثالث</div>
                     <div>
-                      يلتزم الطرفان الثاني و{getNumbersOfGuarantor('and')}
-                      ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة{' '}
+                      يلتزم الطرفان الثاني و{getNumbersOfGuarantor('and')}{' '}
+                      &nbsp; ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة{' '}
                       <span>
                         {contractType === 'masterGas' ? 'التمويل' : 'القرض'}
                       </span>{' '}

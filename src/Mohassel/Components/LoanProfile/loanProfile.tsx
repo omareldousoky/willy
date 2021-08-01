@@ -68,7 +68,7 @@ import { FollowUpStatementView } from './followupStatementView'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares'
 import { getWriteOffReasons } from '../../Services/APIs/configApis/config'
-import { InfoBox, ProfileActions } from '../../../Shared/Components'
+import { InfoBox, LtsIcon, ProfileActions } from '../../../Shared/Components'
 
 import {
   getCompanyInfo,
@@ -80,6 +80,7 @@ import {
   AcknowledgmentOfCommitment,
   AcknowledgmentWasSignedInFront,
   AuthorizationToFillCheck,
+  AuthorizationToFillInfo,
   KnowYourCustomer,
   PromissoryNote,
   SmeLoanContract,
@@ -525,7 +526,7 @@ class LoanProfile extends Component<Props, State> {
   getProfileActions = () => {
     return [
       {
-        icon: 'editIcon',
+        icon: 'deactivate-doc',
         title: local.memberSeperation,
         permission:
           this.state.application.status === 'issued' &&
@@ -556,7 +557,7 @@ class LoanProfile extends Component<Props, State> {
         },
       },
       {
-        icon: 'editIcon',
+        icon: 'edit',
         title: local.editLoan,
         permission:
           this.state.application.status === 'underReview' &&
@@ -568,7 +569,7 @@ class LoanProfile extends Component<Props, State> {
           ),
       },
       {
-        icon: 'editIcon',
+        icon: 'bulk-loan-applications-review',
         title: local.reviewLoan,
         permission:
           this.state.application.status === 'underReview' &&
@@ -580,7 +581,7 @@ class LoanProfile extends Component<Props, State> {
           ),
       },
       {
-        icon: 'editIcon',
+        icon: 'bulk-loan-applications-review',
         title: local.undoLoanReview,
         permission:
           this.state.application.status === 'reviewed' &&
@@ -592,7 +593,7 @@ class LoanProfile extends Component<Props, State> {
           ),
       },
       {
-        icon: 'editIcon',
+        icon: 'deactivate-doc',
         title: local.rejectLoan,
         permission:
           this.state.application.status === 'reviewed' &&
@@ -604,7 +605,7 @@ class LoanProfile extends Component<Props, State> {
           ),
       },
       {
-        icon: 'editIcon',
+        icon: 'applications',
         title: local.issueLoan,
         permission:
           this.state.application.status === 'created' &&
@@ -616,7 +617,7 @@ class LoanProfile extends Component<Props, State> {
           }),
       },
       {
-        icon: 'editIcon',
+        icon: 'applications',
         title: local.createLoan,
         permission:
           this.state.application.status === 'approved' &&
@@ -628,7 +629,7 @@ class LoanProfile extends Component<Props, State> {
           }),
       },
       {
-        icon: 'closeIcon',
+        icon: 'close',
         title: local.cancel,
         permission:
           this.state.application.status === 'underReview' &&
@@ -651,7 +652,7 @@ class LoanProfile extends Component<Props, State> {
           }),
       },
       {
-        icon: 'closeIcon',
+        icon: 'close',
         title: local.writeOffLoan,
         permission:
           this.state.application.status === 'issued' &&
@@ -1327,11 +1328,7 @@ class LoanProfile extends Component<Props, State> {
             </div>
             {this.state.application.status === 'pending' ? (
               <div className="warning-container">
-                <img
-                  alt="warning"
-                  src={require('../../Assets/warning-yellow-circle.svg')}
-                  style={{ marginLeft: 20 }}
-                />
+                <LtsIcon name="warning" color="#edb600" />
                 <h6>{local.manualPaymentNeedsInspection}</h6>
                 <div className="info">
                   <span className="text-muted">{local.truthDate}</span>
@@ -1508,27 +1505,45 @@ class LoanProfile extends Component<Props, State> {
               application={this.state.application}
               branchDetails={this.state.branchDetails}
             />
-            <SolidarityGuarantee application={this.state.application} />
-            <AuthorizationToFillCheck application={this.state.application} />
             {this.state.application.guarantors?.map((person, index) => (
-              <PromissoryNote
-                key={index}
-                noteKind="شخصى"
-                application={this.state.application}
-                branchDetails={this.state.branchDetails}
-                person={person}
-              />
+              <div key={index}>
+                <SolidarityGuarantee
+                  application={this.state.application}
+                  person={person}
+                />
+                <PromissoryNote
+                  noteKind="individual"
+                  application={this.state.application}
+                  branchDetails={this.state.branchDetails}
+                  person={person}
+                />
+              </div>
             ))}
             {this.state.application.entitledToSign?.map((person, index) => (
-              <PromissoryNote
-                key={index}
-                noteKind="شركات"
-                application={this.state.application}
-                branchDetails={this.state.branchDetails}
-                person={person.customer}
-                personPosition={person.position}
-              />
+              <div key={index}>
+                <SolidarityGuarantee
+                  application={this.state.application}
+                  person={person.customer}
+                  personPosition={person.position}
+                />
+                <PromissoryNote
+                  noteKind="individual"
+                  application={this.state.application}
+                  branchDetails={this.state.branchDetails}
+                  person={person.customer}
+                  personPosition={person.position}
+                />
+                <PromissoryNote
+                  noteKind="sme"
+                  application={this.state.application}
+                  branchDetails={this.state.branchDetails}
+                  person={person.customer}
+                  personPosition={person.position}
+                />
+              </div>
             ))}
+            <AuthorizationToFillCheck application={this.state.application} />
+            <AuthorizationToFillInfo application={this.state.application} />
             <SmeLoanContract
               data={this.state.application}
               branchDetails={this.state.branchDetails}

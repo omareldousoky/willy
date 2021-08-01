@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -20,6 +21,7 @@ import ReportsModal from './reportsModal'
 import { getErrorMessage, downloadFile } from '../../../Shared/Services/utils'
 
 import { MonthReport, QuarterReport } from '../../../Shared/Services/interfaces'
+import { LtsIcon } from '../../../Shared/Components'
 
 export interface PDF {
   key?: string
@@ -212,13 +214,18 @@ class MonthlyQuarterlyReports extends Component<{}, State> {
                           <span style={{ marginLeft: 40 }}>#{index + 1}</span>
                           <span style={{ marginLeft: 40 }}>{pdf.local}</span>
                         </div>
-                        <img
-                          style={{ cursor: 'pointer' }}
-                          alt="download"
-                          data-qc="download"
-                          src={require(`../../Assets/green-download.svg`)}
+                        <Button
+                          type="button"
+                          variant="default"
                           onClick={() => this.handlePrint(pdf)}
-                        />
+                          title="download"
+                        >
+                          <LtsIcon
+                            name="download"
+                            size="40px"
+                            color="#7dc356"
+                          />
+                        </Button>
                       </div>
                     </Card.Body>
                   </Card>
