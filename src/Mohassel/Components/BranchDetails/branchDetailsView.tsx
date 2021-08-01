@@ -5,6 +5,7 @@ import { theme } from '../../../Shared/theme'
 import { timeToDate } from '../../../Shared/Services/utils'
 import Labels from '../Labels/labels'
 import { BranchBasicsView } from './branchDetailsInterfaces'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props {
   data: BranchBasicsView
@@ -27,7 +28,7 @@ const BranchDetailsView = (props: Props) => {
   return (
     <>
       <div style={{ margin: '0 1rem 2rem 0', float: 'right' }}>
-        <img alt="backButton" src={require('../../Assets/branchesIcon.svg')} />
+        <LtsIcon name="branches" color="#7dc255" />
         <span style={{ marginRight: '1rem' }}> {local.basicInfo} </span>
       </div>
       <Table striped bordered hover>

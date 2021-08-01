@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import Button from 'react-bootstrap/Button'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -10,6 +11,7 @@ import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import Can from '../../config/Can'
 import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
 import { getDateAndTime } from '../../Services/getRenderDate'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps {
   _id: string
@@ -79,29 +81,29 @@ class RoleUsers extends Component<Props, State> {
         key: 'actions',
         render: (data) => (
           <>
-            <img
-              style={{ cursor: 'pointer', marginLeft: 20 }}
-              alt="view"
-              src={require('../../Assets/view.svg')}
-              onClick={() => {
+            <Button
+              variant="default"
+              onClick={() =>
                 this.props.history.push({
                   pathname: '/manage-accounts/users/user-details',
                   state: { details: data._id },
                 })
-              }}
-            />
+              }
+            >
+              <LtsIcon name="view" />
+            </Button>
             <Can I="createUser" a="user">
-              <img
-                style={{ cursor: 'pointer' }}
-                alt="edit"
-                src={require('../../Assets/editIcon.svg')}
-                onClick={() => {
+              <Button
+                variant="default"
+                onClick={() =>
                   this.props.history.push({
                     pathname: '/manage-accounts/users/edit-user',
                     state: { details: data._id },
                   })
-                }}
-              />
+                }
+              >
+                <LtsIcon name="edit" />
+              </Button>
             </Can>
           </>
         ),

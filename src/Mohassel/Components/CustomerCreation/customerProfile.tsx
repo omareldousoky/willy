@@ -441,7 +441,7 @@ export const CustomerProfile = () => {
   const getProfileActions = () => {
     return [
       {
-        icon: 'editIcon',
+        icon: 'edit',
         title: local.edit,
         permission:
           ability.can('updateCustomer', 'customer') ||
@@ -452,6 +452,7 @@ export const CustomerProfile = () => {
           }),
       },
       {
+        icon: 'applications',
         title: local.createClearance,
         permission: ability.can('newClearance', 'application'),
         onActionClick: () =>
@@ -472,6 +473,7 @@ export const CustomerProfile = () => {
           }),
       },
       {
+        icon: 'business-activities',
         title: local.halanLinkage,
         permission: true,
         onActionClick: () => setShowHalanLinkageModal(true),

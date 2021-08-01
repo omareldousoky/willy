@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 
 import * as local from '../../../Shared/Assets/ar.json'
+import { LtsIcon } from '../../../Shared/Components'
 import './managerHierarchy.scss'
 import { BranchBasicsCardProps } from './types'
 
@@ -17,11 +18,8 @@ export const BranchBasicsCard: FunctionComponent<BranchBasicsCardProps> = ({
     <div className="branch-basics-card">
       <div className="row-nowrap">
         <span className="basic-info">
-          <img
-            className="pr-3"
-            alt="basic-info"
-            src={require('../../Assets/basicInfo.svg')}
-          />
+          <LtsIcon name="branches" color="#7dc255" />
+
           <Form.Label>{local.basicInfo}</Form.Label>
         </span>
       </div>

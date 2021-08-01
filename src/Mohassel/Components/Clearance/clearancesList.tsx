@@ -23,6 +23,7 @@ import {
   ChangeClearancePrintStatusRequest,
 } from '../../Services/APIs/clearance/changeClearancePrintStatus'
 import { loading } from '../../../Shared/redux/loading/actions'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface State {
   size: number
@@ -109,12 +110,9 @@ class ClearancesList extends Component<Props, State> {
       {
         title: local.printed,
         key: 'printed',
-        render: (data) =>
-          data.printed ? (
-            <img alt="printed" src={require('../../Assets/check-circle.svg')} />
-          ) : (
-            <img alt="printed" src={require('../../Assets/times-circle.svg')} />
-          ),
+        render: (data) => (
+          <LtsIcon name={data.printed ? 'check-circle' : 'remove'} />
+        ),
       },
       {
         title: local.customerType,
@@ -145,31 +143,31 @@ class ClearancesList extends Component<Props, State> {
           >
             <td className="icon-td">
               <Can I="getClearance" a="application">
-                <img
-                  style={{ cursor: 'pointer' }}
-                  alt="view"
-                  src={require('../../Assets/view.svg')}
+                <Button
+                  variant="default"
                   onClick={() =>
                     this.props.history.push('/clearances/clearance-profile', {
                       clearanceId: data._id,
                     })
                   }
-                />
+                >
+                  <LtsIcon name="view" />
+                </Button>
               </Can>
             </td>
             <td className="icon-td">
               {data.status === 'underReview' ? (
                 <Can I="editClearance" a="application">
-                  <img
-                    style={{ cursor: 'pointer', marginLeft: 20 }}
-                    alt="edit"
-                    src={require('../../Assets/editIcon.svg')}
+                  <Button
+                    variant="default"
                     onClick={() =>
                       this.props.history.push('/clearances/edit-clearance', {
                         clearanceId: data._id,
                       })
                     }
-                  />
+                  >
+                    <LtsIcon name="edit" />
+                  </Button>
                 </Can>
               ) : null}
             </td>

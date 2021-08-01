@@ -30,20 +30,10 @@ const template = (
         false
       )}
     </p>
-    <p>مكان الاصدار: {branchDetails.address}</p>
     <p>
-      تاريخ الاستحقاق : &nbsp;
-      {timeToArabicDate(
-        application
-          ? application.installmentsObject?.installments[
-              application.installmentsObject.installments.length - 1
-            ].dateOfPayment || 0
-          : new Date(
-              new Date().setFullYear(new Date().getFullYear() + 2)
-            ).valueOf(),
-        false
-      )}
+      مكان الاصدار: {branchDetails.name} - {branchDetails.address}
     </p>
+    <p>تاريخ الاستحقاق : &nbsp; / &nbsp; / &nbsp; &nbsp;</p>
     <p>
       المبلغ :&nbsp;
       {numbersToArabic(
@@ -54,7 +44,8 @@ const template = (
     </p>
     <p>
       نتعهد نحن الموقعين ادناه تعهداً نهائيا وبدون اى قيد او شرط بأن ندفع فى
-      تاريخ الاستحقاق لأمر واذن شركة تساهيل للتمويل مبلغ وقدره &nbsp;
+      تاريخ الاستحقاق لأمر واذن شركة تساهيل للتمويل متناهي الصغر مبلغ وقدره
+      &nbsp;
       {numbersToArabic(
         application
           ? application.installmentsObject?.totalInstallments.installmentSum
@@ -73,8 +64,8 @@ const template = (
       وذلك بدون حاجة الى تنبيه او انذار.
     </p>
     <p>
-      وعلى ان يتم الوفاء بمبلغ السند بمقر الشركة الكانن فى&nbsp;
-      {branchDetails.address}
+      وعلى ان يتم الوفاء بمبلغ السند بمقر الشركة الكائن فى&nbsp;
+      {branchDetails.name} - {branchDetails.address}
     </p>
     <p>
       ويحق لحامل هذا السند الرجوع علينا بدون مصروفات او اخطار او عمل احتجاج لعدم
@@ -82,12 +73,12 @@ const template = (
       ونلتزم بما ورد فى السند ولا يجوز لنا الاعتراض.
     </p>
     <p>
-      ولا تبرأ ذمتنا من هذا المبلغ الا باستلامنا هذا السند مؤشرا عليه من شركة
-      تساهيل للتمويل متناهي الصفر بتمام السداد
+      ولا تبرأ ذمتنا من هذا المبلغ الا باستلامنا أصل هذا السند مؤشرا عليه من
+      شركة تساهيل للتمويل متناهي الصغر بتمام السداد
     </p>
     <p>
       يخضع هذا السند لاحكام القانون المصري ويكون اي نزاع ينشأ عنه او يتصل به
-      الغصل فيه والتقاضي يكون من اختصاصى وامام محاكم ( الجيزة ) على اختلاف
+      الفصل فيه والتقاضي يكون من اختصاص وامام محاكم ( الجيزة ) على اختلاف
       درجاتها وانواعها.
     </p>
     <p>

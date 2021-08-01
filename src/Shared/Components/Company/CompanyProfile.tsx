@@ -142,7 +142,7 @@ export const CompanyProfile = () => {
   const getProfileActions = () => {
     return [
       {
-        icon: 'editIcon',
+        icon: 'edit',
         title: local.edit,
         permission:
           ability.can('updateCustomer', 'customer') ||

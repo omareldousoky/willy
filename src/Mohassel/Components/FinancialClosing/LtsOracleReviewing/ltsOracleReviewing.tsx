@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
 
 import Swal from 'sweetalert2'
 import { Loader } from '../../../../Shared/Components/Loader'
@@ -15,6 +16,7 @@ import {
   getErrorMessage,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
+import { LtsIcon } from '../../../../Shared/Components'
 
 interface State {
   loading: boolean
@@ -99,13 +101,18 @@ class LtsOracleReviewing extends Component<{}, State> {
                         )}
                       </div>
                       {file.status === 'created' && (
-                        <img
-                          className="btn"
-                          alt="download"
-                          data-qc="download"
-                          src={require(`../../../Assets/green-download.svg`)}
+                        <Button
+                          type="button"
+                          variant="default"
                           onClick={() => this.getFileUrl(file._id)}
-                        />
+                          title="download"
+                        >
+                          <LtsIcon
+                            name="download"
+                            size="40px"
+                            color="#7dc356"
+                          />
+                        </Button>
                       )}
                     </div>
                   </Card.Body>

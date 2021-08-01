@@ -18,6 +18,7 @@ import {
 } from '../../../Shared/Services/utils'
 import { manageToolsArray } from './manageToolsInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface State {
   documentTypes: DocumentType[]
@@ -199,10 +200,7 @@ class EncodingFiles extends Component<RouteComponentProps, State> {
                             }}
                             className="icon"
                           >
-                            <img
-                              alt="edit"
-                              src={require('../../Assets/editIcon.svg')}
-                            />
+                            <LtsIcon name="edit" />
                           </span>
                         </Col>
                       </Can>
