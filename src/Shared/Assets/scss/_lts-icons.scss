@@ -31,341 +31,385 @@
     content: $lts-trash;
   }
 }
+
 .lts-printer {
   &:before {
     content: $lts-printer;
   }
 }
+
 .lts-image-placeholder {
   &:before {
     content: $lts-image-placeholder;
   }
 }
+
 .lts-no-branches-found {
   &:before {
     content: $lts-no-branches-found;
   }
 }
+
 .lts-refresh {
   &:before {
     content: $lts-refresh;
   }
 }
+
 .lts-home {
   &:before {
     content: $lts-home;
   }
 }
+
 .lts-deactivate-doc {
   &:before {
     content: $lts-deactivate-doc;
   }
 }
-.lts-active-location {
+
+.lts-location {
   &:before {
-    content: $lts-active-location;
+    content: $lts-location;
   }
 }
+
 .lts-back {
   &:before {
     content: $lts-back;
   }
 }
+
 .lts-cancel-penalty {
   &:before {
     content: $lts-cancel-penalty;
   }
 }
+
 .lts-check-circle {
   &:before {
     content: $lts-check-circle;
   }
 }
+
 .lts-clearance {
   &:before {
     content: $lts-clearance;
   }
 }
-.lts-deactivate-user1 {
-  &:before {
-    content: $lts-deactivate-user1;
-  }
-}
+
 .lts-early-payment {
   &:before {
     content: $lts-early-payment;
   }
 }
+
 .lts-warning {
   &:before {
     content: $lts-warning;
   }
 }
+
 .lts-add {
   &:before {
     content: $lts-add;
   }
 }
+
 .lts-group {
   &:before {
     content: $lts-group;
   }
 }
+
 .lts-pay-installment {
   &:before {
     content: $lts-pay-installment;
   }
 }
+
 .lts-pay-penalty {
   &:before {
     content: $lts-pay-penalty;
   }
 }
+
 .lts-permissions {
   &:before {
     content: $lts-permissions;
   }
 }
+
 .lts-plus {
   &:before {
     content: $lts-plus;
   }
 }
+
 .lts-role {
   &:before {
     content: $lts-role;
   }
 }
+
 .lts-rollback {
   &:before {
     content: $lts-rollback;
   }
 }
+
 .lts-search {
   &:before {
     content: $lts-search;
   }
 }
+
 .lts-save {
   &:before {
     content: $lts-save;
   }
 }
+
 .lts-terrorists {
   &:before {
     content: $lts-terrorists;
   }
 }
+
 .lts-legal-actions {
   &:before {
     content: $lts-legal-actions;
   }
 }
+
 .lts-branches {
   &:before {
     content: $lts-branches;
   }
 }
+
 .lts-business-specialities {
   &:before {
     content: $lts-business-specialities;
   }
 }
+
 .lts-business-activities {
   &:before {
     content: $lts-business-activities;
   }
 }
+
 .lts-loan-uses {
   &:before {
     content: $lts-loan-uses;
   }
 }
+
 .lts-user {
   &:before {
     content: $lts-user;
   }
 }
+
 .lts-principal-range {
   &:before {
     content: $lts-principal-range;
   }
 }
+
 .lts-branch-areas {
   &:before {
     content: $lts-branch-areas;
   }
 }
+
 .lts-encoding-files {
   &:before {
     content: $lts-encoding-files;
   }
 }
+
 .lts-blocking {
   &:before {
     content: $lts-blocking;
   }
 }
+
 .lts-assign-product-to-branch {
   &:before {
     content: $lts-assign-product-to-branch;
   }
 }
+
 .lts-calculation-method {
   &:before {
     content: $lts-calculation-method;
   }
 }
-.lts-calculation-forumlas {
+
+.lts-calculation-formulas {
   &:before {
-    content: $lts-calculation-forumlas;
+    content: $lts-calculation-formulas;
   }
 }
+
 .lts-loan-products {
   &:before {
     content: $lts-loan-products;
   }
 }
+
 .lts-arrow-right {
   &:before {
     content: $lts-arrow-right;
   }
 }
+
 .lts-arrow-left {
   &:before {
     content: $lts-arrow-left;
   }
 }
+
 .lts-download-big-file {
   &:before {
     content: $lts-download-big-file;
   }
 }
+
 .lts-i-score {
   &:before {
     content: $lts-i-score;
   }
 }
+
 .lts-issued-loans {
   &:before {
     content: $lts-issued-loans;
   }
 }
+
 .lts-cib {
   &:before {
     content: $lts-cib;
   }
 }
+
 .lts-change-source-of-fund {
   &:before {
     content: $lts-change-source-of-fund;
   }
 }
+
 .lts-bulk-loan-applications-review {
   &:before {
     content: $lts-bulk-loan-applications-review;
   }
 }
+
 .lts-bulk-loan-applications-approval {
   &:before {
     content: $lts-bulk-loan-applications-approval;
   }
 }
+
 .lts-bulk-application-creation {
   &:before {
     content: $lts-bulk-application-creation;
   }
 }
+
 .lts-applications {
   &:before {
     content: $lts-applications;
   }
 }
+
 .lts-company {
   &:before {
     content: $lts-company;
   }
 }
+
 .lts-reschedule {
   &:before {
     content: $lts-reschedule;
   }
 }
+
 .lts-download {
   &:before {
     content: $lts-download;
   }
 }
+
 .lts-minus {
   &:before {
     content: $lts-minus;
   }
 }
+
 .lts-close {
   &:before {
     content: $lts-close;
   }
 }
+
 .lts-deactivate-user {
   &:before {
     content: $lts-deactivate-user;
   }
 }
-.lts-remove .path1 {
+
+.lts-remove {
   &:before {
-    content: $lts-remove-path1;
-    color: rgb(47, 47, 47);
+    content: $lts-remove;
   }
 }
-.lts-remove .path2 {
-  &:before {
-    content: $lts-remove-path2;
-    margin-left: -1em;
-    color: rgb(255, 255, 255);
-  }
-}
-.lts-remove .path3 {
-  &:before {
-    content: $lts-remove-path3;
-    margin-left: -1em;
-    color: rgb(255, 255, 255);
-  }
-}
+
 .lts-edit {
   &:before {
     content: $lts-edit;
   }
 }
+
 .lts-view {
   &:before {
     content: $lts-view;
   }
 }
+
 .lts-exchange {
   &:before {
     content: $lts-exchange;
   }
 }
+
 .lts-customers {
   &:before {
     content: $lts-customers;
   }
 }
+
 .lts-checkbox-checked {
   &:before {
     content: $lts-checkbox-checked;
   }
 }
+
 .lts-checkbox-unchecked {
   &:before {
     content: $lts-checkbox-unchecked;
   }
 }
+
 .lts-radio-checked {
   &:before {
     content: $lts-radio-checked;
   }
 }
+
 .lts-radio-unchecked {
   &:before {
     content: $lts-radio-unchecked;

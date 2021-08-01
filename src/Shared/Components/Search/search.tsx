@@ -29,6 +29,7 @@ import { loading } from '../../redux/loading/actions'
 import { getActionsList } from '../../../Mohassel/Services/APIs/ActionLogs/getActionsList'
 import Can from '../../../Mohassel/config/Can'
 import { SearchInitialFormikState, SearchProps, SearchState } from './types'
+import { WarningTypeDropDown } from '../../../Mohassel/Components/dropDowns/WarningTypeDropDown'
 
 class Search extends Component<SearchProps, SearchState> {
   constructor(props) {
@@ -107,6 +108,9 @@ class Search extends Component<SearchProps, SearchState> {
             this.props.url === 'loan'
               ? this.props.issuedLoansSearchFilters.type
               : 'micro'
+          break
+        case 'warningType':
+          initialState.warningType = ''
           break
         default:
           break
@@ -269,6 +273,10 @@ class Search extends Component<SearchProps, SearchState> {
       searchQuery.branchId = values.branchId || ''
     } else searchQuery.from = 0
 
+    if (url === 'legal-warning') {
+      searchQuery.customerBranchId = values.branchId
+      delete searchQuery.branchId
+    }
     if (this.props.resetSelectedItems) this.props.resetSelectedItems()
     this.props.search(searchQuery)
   }
@@ -825,6 +833,20 @@ class Search extends Component<SearchProps, SearchState> {
                     ],
                     'type',
                     local.productName
+                  )
+                }
+                if (searchKey === 'warningType') {
+                  return (
+                    <WarningTypeDropDown
+                      key={index}
+                      onChange={(option) =>
+                        formikProps.setFieldValue(
+                          'warningType',
+                          option?.value || undefined
+                        )
+                      }
+                      defaultValue={formikProps.values.warningType}
+                    />
                   )
                 }
               })}

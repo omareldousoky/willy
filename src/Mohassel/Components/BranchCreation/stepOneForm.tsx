@@ -104,7 +104,7 @@ const StepOneForm = (props: Props) => {
             onClick={() => openCloseMap(true)}
           >
             <span>
-              <LtsIcon name="active-location" color="#7dc255" />
+              <LtsIcon name="location" color="#7dc255" />
               {local.branchOnMap}
             </span>
           </Button>
