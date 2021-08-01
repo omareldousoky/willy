@@ -18,8 +18,8 @@ const App = (props) => {
   }
   return (
     <BrowserRouter>
-      <div style={{ backgroundColor: '#fafafa' }} className="app-container">
-        <NavBar isLTS />
+      <div className="bg-white app-container">
+        <NavBar isLTS={false} />
         <Switch>
           {routes.map((route) => (
             <Route key={route.path} exact path={route.path}>

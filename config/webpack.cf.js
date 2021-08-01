@@ -13,21 +13,21 @@ const {
 } = require('clean-webpack-plugin');
 const TerserPlugin = require("terser-webpack-plugin");
 
-const LOGIN_APP_DIR = resolve(__dirname, '../src/Login/')
+const CF_APP_DIR = resolve(__dirname, '../src/CF/')
 const SHARED_DIR = resolve(__dirname, '../src/Shared/')
 
 module.exports = (env) => {
 
 	const isProd = !!env.production
 	return {
-		entry: './src/Login/index.tsx',
+		entry: './src/CF/index.tsx',
 		resolve: {
 			extensions: ['.ts', '.tsx', '.js'],
-			modules: [LOGIN_APP_DIR, SHARED_DIR, '../node_modules'],
+			modules: [CF_APP_DIR, SHARED_DIR, '../node_modules'],
 		},
 		output: {
 			filename: '[name].[hash].js',
-			path: join(__dirname, '../build/login'),
+			path: join(__dirname, '../build/cf'),
 		},
 		module: {
 			rules: [{
@@ -35,7 +35,8 @@ module.exports = (env) => {
 					loader: 'ts-loader',
 					options: {
 						// disable type checker - we will use it in fork plugin
-						transpileOnly: true
+						transpileOnly: true,
+						configFile: resolve(__dirname, '../tsconfig.json'),
 					},
 					exclude: /node_modules/,
 				},
@@ -58,7 +59,7 @@ module.exports = (env) => {
 					],
 				},
 				{
-					test: /\.(png|svg|jpg|woff|woff2)$/,
+					test: /\.(png|svg|jpg|woff|woff2|xlsx)$/,
 					use: [{
 						loader: 'file-loader',
 						options: {
@@ -81,9 +82,13 @@ module.exports = (env) => {
 						test: /[\\/]node_modules[\\/]/,
 						name: 'vendors',
 						chunks: 'all',
+						enforce: true,
 					},
 				},
 			},
+		},
+		devServer: {
+			historyApiFallback: true,
 		},
 		// "eval" values omit styles source map
 		// reason: https://github.com/webpack-contrib/sass-loader/releases/tag/v8.0.0
@@ -92,7 +97,7 @@ module.exports = (env) => {
 		devtool: !isProd ? 'source-map' : '',
 		plugins: [
 			new HtmlWebpackPlugin({
-				template: './src/Login/index.html',
+				template: './src/CF/index.html',
 				minify: {
 					collapseWhitespace: true
 				},
@@ -105,8 +110,9 @@ module.exports = (env) => {
 			new webpack.DefinePlugin({
 				'process.env': {
 					REACT_APP_BASE_URL: JSON.stringify(config.API_BASE_URL),
-					REACT_APP_LOGIN_URL: JSON.stringify(config.REACT_APP_LOGIN_URL),
 					REACT_APP_URL: JSON.stringify(config.REACT_APP_URL),
+					REACT_APP_LOGIN_URL: JSON.stringify(config.REACT_APP_LOGIN_URL),
+					REACT_APP_GOOGLE_MAP_KEY: JSON.stringify(config.REACT_APP_GOOGLE_MAP_KEY),
 					REACT_APP_DOMAIN: JSON.stringify(config.REACT_APP_DOMAIN),
 					REACT_APP_SUBDOMAIN: JSON.stringify(config.REACT_APP_SUBDOMAIN),
 				},
