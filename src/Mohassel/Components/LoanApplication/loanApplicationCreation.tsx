@@ -1823,15 +1823,15 @@ class LoanApplicationCreation extends Component<Props, State> {
                     </Button>
                   </div>
                   <div
-                    className="d-flex flex-column"
+                    className="d-flex flex-column m-5"
                     style={{ margin: '20px 60px' }}
                   >
-                    <img
-                      alt="group"
-                      style={{ width: 75, margin: '40px 20px' }}
-                      src={require('../../Assets/group.svg')}
-                    />
-                    <Button onClick={() => this.setCustomerType('nano')}>
+                    <LtsIcon name="coins" size="100px" color="#7dc356" />
+
+                    <Button
+                      className="my-4"
+                      onClick={() => this.setCustomerType('nano')}
+                    >
                       {local.nano}
                     </Button>
                   </div>
