@@ -141,9 +141,7 @@ export const TasaheelReports = () => {
     if (!values) return ''
     if (tabs[activeTabIndex()].stringKey === 'quarterlyReport') {
       return {
-        quarter: `${new Date(values.quarterYear).getFullYear()}-${
-          values.quarterNumber
-        }`,
+        quarter: `${values.year}-${values.quarterNumber}`,
       }
     }
     return { date: values.date + '-01' }
