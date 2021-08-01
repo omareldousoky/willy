@@ -64,7 +64,7 @@ class EncodingFiles extends Component<RouteComponentProps, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('encodingFiles')}
+            .indexOf('encoding-files')}
         />
         <Loader type="fullscreen" open={this.state.loading} />
         <Card className="main-card">

@@ -68,6 +68,7 @@ import FinancialReviewing from '../Components/FinancialClosing/FinancialReviewin
 import { CompanyList, CompanyProfile } from '../../Shared/Components'
 import CompanyCreation from '../Components/CustomerCreation/companyCreation'
 import { LegalCalendar } from '../Components/LegalCalendar'
+import { legalWarningRoute } from '../Components/LegalWarnings/routes'
 
 const appRoutes = [
   {
@@ -822,6 +823,7 @@ const appRoutes = [
               </Can>
             ),
           },
+          legalWarningRoute,
         ],
       },
     ],
