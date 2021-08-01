@@ -266,7 +266,7 @@ class TrackLoanApplications extends Component<Props, State> {
     } else {
       ids.push(
         smeCheck
-          ? application.customer.commercialRegisterNumber
+          ? `${application.customer.governorate}-${application.customer.commercialRegisterNumber}`
           : application.customer.nationalId
       )
     }

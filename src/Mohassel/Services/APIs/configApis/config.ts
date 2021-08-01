@@ -109,3 +109,13 @@ export const editBusinessSpeciality = async (obj) => {
     return { status: 'error', error: error.response.data }
   }
 }
+export const getIscoreIssuingAuthorities = async () => {
+  const url =
+    process.env.REACT_APP_BASE_URL + `/config/iscore-issuing-authorities`
+  try {
+    const res = await axios.get(url)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
+}
