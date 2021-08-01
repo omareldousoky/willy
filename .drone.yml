@@ -83,11 +83,11 @@ steps:
     build_args_from_env:
       - REACT_APP_GOOGLE_MAP_KEY
     build_args:
-      - REACT_APP_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
-      - REACT_APP_MOHASSEL_URL=https://mohassel.${DRONE_BRANCH}.halan.io
+      - API_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
+      - REACT_APP_URL=https://mohassel.${DRONE_BRANCH}.halan.io
       - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
       - REACT_APP_DOMAIN=.${DRONE_BRANCH}.halan.io
-      - REACT_APP_LTS_SUBDOMAIN=mohassel.${DRONE_BRANCH}.halan.io
+      - REACT_APP_SUBDOMAIN=mohassel.${DRONE_BRANCH}.halan.io
     tags:
       - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_BRANCH}
@@ -122,11 +122,11 @@ steps:
     build_args_from_env:
       - REACT_APP_GOOGLE_MAP_KEY
     build_args:
-      - REACT_APP_BASE_URL=https://api.fintech.halan.io
-      - REACT_APP_MOHASSEL_URL=https://mohassel.fintech.halan.io
+      - API_BASE_URL=https://api.fintech.halan.io
+      - REACT_APP_URL=https://mohassel.fintech.halan.io
       - REACT_APP_LOGIN_URL=https://login.fintech.halan.io
       - REACT_APP_DOMAIN=.fintech.halan.io
-      - REACT_APP_LTS_SUBDOMAIN=mohassel.fintech.halan.io
+      - REACT_APP_SUBDOMAIN=mohassel.fintech.halan.io
     tags:
       - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_BRANCH}
@@ -155,11 +155,11 @@ steps:
     build_args_from_env:
       - REACT_APP_GOOGLE_MAP_KEY
     build_args:
-      - REACT_APP_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
-      - REACT_APP_MOHASSEL_URL=https://mohassel.${DRONE_BRANCH}.halan.io
+      - API_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
+      - REACT_APP_URL=https://mohassel.${DRONE_BRANCH}.halan.io
       - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
       - REACT_APP_DOMAIN=.${DRONE_BRANCH}.halan.io
-      - REACT_APP_LTS_SUBDOMAIN=mohassel.${DRONE_BRANCH}.halan.io
+      - REACT_APP_SUBDOMAIN=mohassel.${DRONE_BRANCH}.halan.io
     region: us-east-1
     tags:
       - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
@@ -192,11 +192,11 @@ steps:
     build_args_from_env:
       - REACT_APP_GOOGLE_MAP_KEY
     build_args:
-      - REACT_APP_BASE_URL=https://api.fintech.halan.io
-      - REACT_APP_MOHASSEL_URL=https://mohassel.fintech.halan.io
+      - API_BASE_URL=https://api.fintech.halan.io
+      - REACT_APP_URL=https://mohassel.fintech.halan.io
       - REACT_APP_LOGIN_URL=https://login.fintech.halan.io
       - REACT_APP_DOMAIN=.fintech.halan.io
-      - REACT_APP_LTS_SUBDOMAIN=mohassel.fintech.halan.io
+      - REACT_APP_SUBDOMAIN=mohassel.fintech.halan.io
     region: us-east-1
     tags:
       - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
@@ -224,10 +224,10 @@ steps:
     build_args_from_env:
       - REACT_APP_GOOGLE_MAP_KEY
     build_args:
-      - REACT_APP_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
+      - API_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
       - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
       - REACT_APP_DOMAIN=.${DRONE_BRANCH}.halan.io
-      - REACT_APP_LTS_SUBDOMAIN=documents.${DRONE_BRANCH}.halan.io
+      - REACT_APP_SUBDOMAIN=documents.${DRONE_BRANCH}.halan.io
       - REACT_APP_DOCUMENTS_URL=documents.${DRONE_BRANCH}.halan.io
     region: us-east-1
     tags:
@@ -261,10 +261,10 @@ steps:
     build_args_from_env:
       - REACT_APP_GOOGLE_MAP_KEY
     build_args:
-      - REACT_APP_BASE_URL=https://api.fintech.halan.io
+      - API_BASE_URL=https://api.fintech.halan.io
       - REACT_APP_LOGIN_URL=https://login.fintech.halan.io
       - REACT_APP_DOMAIN=.fintech.halan.io
-      - REACT_APP_LTS_SUBDOMAIN=documents.fintech.halan.io
+      - REACT_APP_SUBDOMAIN=documents.fintech.halan.io
       - REACT_APP_DOCUMENTS_URL=documents.fintech.halan.io
     region: us-east-1
     tags:
