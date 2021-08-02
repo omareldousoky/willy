@@ -111,12 +111,17 @@ export const LegalCalendar = () => {
     [currentDate]
   )
 
+  const manageLegalAffairsTabs = manageLegalAffairsArray()
   return (
     <>
       <HeaderWithCards
         header={local.legalCalendar}
-        array={manageLegalAffairsArray()}
-        active={2}
+        array={manageLegalAffairsTabs}
+        active={manageLegalAffairsTabs
+          .map((item) => {
+            return item.icon
+          })
+          .indexOf('encoding-files')}
       />
       <Card className="main-card">
         <Card.Body className="p-0">

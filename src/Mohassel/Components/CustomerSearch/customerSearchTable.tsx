@@ -18,7 +18,7 @@ import {
 } from '../../../Shared/Services/formatCustomersInfo'
 import { Customer } from '../../../Shared/Services/interfaces'
 
-interface Results {
+export interface Results {
   results: Array<object>
   empty: boolean
 }
@@ -28,7 +28,7 @@ interface Props {
   handleSearch: Function
   selectCustomer: Function
   removeCustomer?: Function
-  selectedCustomer: Customer
+  selectedCustomer?: Customer
   style?: object
   header?: string
   className?: string

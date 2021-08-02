@@ -739,7 +739,7 @@ class DefaultingCustomersList extends Component<Props, State> {
               .map((item) => {
                 return item.icon
               })
-              .indexOf('loanUses')}
+              .indexOf('loan-uses')}
           />
           <Card className="main-card">
             <Loader
