@@ -9,13 +9,10 @@ import {
   generateiScoreReport,
   getiScoreReport,
 } from '../../Services/APIs/Reports/iScoreReports'
-import {
-  downloadFile,
-  getIscoreReportStatus,
-  timeToArabicDate,
-} from '../../../Shared/Services/utils'
+import { downloadFile } from '../../../Shared/Services/utils'
 import Can from '../../config/Can'
-import { LtsIcon } from '../../../Shared/Components'
+
+import { ReportsList } from '../../../Shared/Components/ReportsList'
 
 interface State {
   data: any
@@ -50,8 +47,8 @@ class IscoreReports extends Component<{}, State> {
     }
   }
 
-  async getFile(fileRequest) {
-    const res = await getiScoreReport(fileRequest._id)
+  async getFile(fileRequestId) {
+    const res = await getiScoreReport(fileRequestId)
     if (res.status === 'success') {
       this.setState(
         {
@@ -93,6 +90,7 @@ class IscoreReports extends Component<{}, State> {
       <>
         <Card style={{ margin: '20px 50px' }} className="print-none">
           <Loader type="fullscreen" open={this.state.loading} />
+
           <Card.Body style={{ padding: 15 }}>
             <div className="custom-card-header">
               <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
@@ -108,75 +106,10 @@ class IscoreReports extends Component<{}, State> {
                 </Button>
               </Can>
             </div>
-            {this.state.data.length > 0 ? (
-              this.state.data.map((pdf, index) => {
-                return (
-                  <Card key={index}>
-                    <Card.Body>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          padding: '0px 20px',
-                          fontWeight: 'bold',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <div style={{ display: 'flex' }}>
-                          <span style={{ marginLeft: 40 }}>#{index + 1}</span>
-                          <span
-                            style={{
-                              marginLeft: 40,
-                              display: 'flex',
-                              flexDirection: 'column',
-                              alignItems: 'flex-start',
-                            }}
-                          >
-                            <span>{local.loanAppCreationDate}</span>
-                            {timeToArabicDate(pdf.created.at, true)}
-                          </span>
-                          <span style={{ marginLeft: 40 }}>
-                            {getIscoreReportStatus(pdf.status)}
-                          </span>
-                          <span style={{ marginLeft: 40 }}>{pdf.fileName}</span>
-                          {pdf.status === 'created' && (
-                            <span
-                              style={{
-                                marginLeft: 40,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-start',
-                              }}
-                            >
-                              <span>{local.creationDate}</span>
-                              {timeToArabicDate(pdf.fileGeneratedAt, true)}
-                            </span>
-                          )}
-                        </div>
-                        {pdf.status === 'created' && (
-                          <Button
-                            type="button"
-                            variant="default"
-                            onClick={() => this.getFile(pdf)}
-                            title="download"
-                          >
-                            <LtsIcon
-                              name="download"
-                              size="40px"
-                              color="#7dc356"
-                            />
-                          </Button>
-                        )}
-                      </div>
-                    </Card.Body>
-                  </Card>
-                )
-              })
-            ) : (
-              <div className="d-flex align-items-center justify-content-center">
-                {local.noResults}
-              </div>
-            )}
+            <ReportsList
+              list={this.state.data}
+              onClickDownload={(itemId) => this.getFile(itemId)}
+            />
           </Card.Body>
         </Card>
       </>
