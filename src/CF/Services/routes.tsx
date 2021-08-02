@@ -10,6 +10,18 @@ const appRoutes = [
     path: '/',
     label: local.consumerFinance,
     render: () => <Landing appName={local.consumerFinance} />,
+    routes: [
+      {
+        path: '/customers',
+        label: local.customers,
+        render: () => <h1 className="m-4">Customers</h1>,
+      },
+      {
+        path: '/manage-accounts/roles',
+        label: local.manageAccounts,
+        render: () => <h1 className="m-4">Roles</h1>,
+      },
+    ],
   },
   manageAccountsRoute,
 ]
