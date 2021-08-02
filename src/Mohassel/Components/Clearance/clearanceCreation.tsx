@@ -31,7 +31,7 @@ import { getClearance } from '../../Services/APIs/clearance/getClearance'
 import { updateClearance } from '../../Services/APIs/clearance/updateClearance'
 import { Loader } from '../../../Shared/Components/Loader'
 import PenaltyStrike from './penaltyStrike'
-import Wizard from '../wizard/Wizard'
+import Wizard from '../../../Shared/Components/wizard/Wizard'
 import ClearanceCreationDocuments from './clearanceCreationDocuments'
 
 interface CreateClearanceRouteState {

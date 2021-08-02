@@ -34,7 +34,7 @@ import {
   getIscoreCached,
   getSMECachedIscore,
 } from '../../Services/APIs/iScore/iScore'
-import { Score } from '../CustomerCreation/customerProfile'
+import { Score } from '../CustomerCreation/CustomerProfile'
 import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApplications'
 import {
   manageApplicationsArray,

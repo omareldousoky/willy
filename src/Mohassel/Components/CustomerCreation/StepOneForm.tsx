@@ -10,7 +10,7 @@ import {
   getBirthdateFromNationalId,
   getGenderFromNationalId,
 } from '../../../Shared/Services/nationalIdValidation'
-import Map from '../Map/map'
+import Map from '../../../Shared/Components/Map/map'
 import * as local from '../../../Shared/Assets/ar.json'
 import { checkDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup'
 import Can from '../../config/Can'

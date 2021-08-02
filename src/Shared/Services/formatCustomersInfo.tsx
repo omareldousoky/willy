@@ -14,7 +14,7 @@ import {
   timeToDateyyymmdd,
   getDateAndTime,
 } from './utils'
-import { Score } from '../../Mohassel/Components/CustomerCreation/customerProfile'
+import { Score } from '../../Mohassel/Components/CustomerCreation/CustomerProfile'
 import Can from '../../Mohassel/config/Can'
 import { FieldProps } from '../Components/Profile/types'
 

@@ -89,7 +89,7 @@ import {
   SmeLoanContract,
   SolidarityGuarantee,
 } from '../pdfTemplates/smeLoanContract'
-import { Score } from '../CustomerCreation/customerProfile'
+import { Score } from '../CustomerCreation/CustomerProfile'
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
 
 import { getEarlyPaymentPdfData } from './utils'

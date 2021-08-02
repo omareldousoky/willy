@@ -54,32 +54,13 @@ const tabs: Array<Tab> = [
     permission: 'deathCertificate',
     permissionKey: 'customer',
   },
-  {
-    header: local.reports,
-    stringKey: 'reports',
-    permission: 'guaranteed',
-    permissionKey: 'report',
-  },
 ]
-
-const getCustomerCategorizationRating = async (
-  id: string,
-  setRating: (rating: Array<CustomerScore>) => void
-) => {
-  const res = await getCustomerCategorization({ customerId: id })
-  if (res.status === 'success' && res.body?.customerScores !== undefined) {
-    setRating(res.body?.customerScores)
-  } else {
-    setRating([])
-  }
-}
 
 export const CustomerProfile = () => {
   const [loading, setLoading] = useState(false)
   const [customerDetails, setCustomerDetails] = useState<Customer>()
   const [iScoreDetails, setIScoreDetails] = useState<Score>()
   const [activeTab, setActiveTab] = useState('workInfo')
-  const [ratings, setRatings] = useState<Array<CustomerScore>>([])
   const location = useLocation<LocationState>()
   const history = useHistory()
 
@@ -127,7 +108,6 @@ export const CustomerProfile = () => {
 
   useEffect(() => {
     getCustomerDetails()
-    getCustomerCategorizationRating(location.state.id, setRatings)
   }, [])
   function getArRuralUrban(ruralUrban: string | undefined) {
     if (ruralUrban === 'rural') return local.rural
@@ -399,15 +379,6 @@ export const CustomerProfile = () => {
         fieldTitle: local.taxCardNumber,
         fieldData: customerDetails?.taxCardNumber || '',
         showFieldCondition: true,
-      },
-    ],
-    customerScore: [
-      {
-        fieldTitle: 'ratings',
-        fieldData: ratings,
-        showFieldCondition: Boolean(
-          ability.can('customerCategorization', 'customer')
-        ),
       },
     ],
     documents: [

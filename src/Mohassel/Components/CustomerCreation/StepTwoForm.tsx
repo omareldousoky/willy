@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 
-import Map from '../Map/map'
+import Map from '../../../Shared/Components/Map/map'
 import {
   getGovernorates,
   getBusinessSectors,
