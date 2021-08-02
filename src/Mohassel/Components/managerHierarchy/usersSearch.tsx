@@ -10,6 +10,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 import { UsersSearchProps } from './types'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import { searchUsers } from '../../Services/APIs/Users/searchUsers'
+import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction'
 import {
   LoanOfficer,
   ManagerHierarchyUser,
@@ -28,6 +29,13 @@ export const UsersSearch: FunctionComponent<UsersSearchProps> = ({
 }) => {
   const [dropDownValue, setDropDownValue] = useState('name')
   const [options, setOptions] = useState<LoanOfficer[]>(usersInitial)
+  const managers = [
+    'branchManager',
+    'operationsManager',
+    'districtManager',
+    'districtSupervisor',
+    'centerManager',
+  ]
 
   const dropDownArValue = {
     name: local.name,
@@ -77,6 +85,22 @@ export const UsersSearch: FunctionComponent<UsersSearchProps> = ({
       }
     }
   }
+  const getUsersByAction = async (input: string, actionKey: string) => {
+    const obj = {
+      size: 100,
+      from: 0,
+      serviceKey: 'halan.com/managerHierarchy',
+      action: actionKey,
+      name: input,
+    }
+    const res = await searchUserByAction(obj)
+    if (res.status === 'success') {
+      setOptions(res.body.data)
+      return res.body.data
+    }
+    setOptions([])
+    return []
+  }
 
   return (
     <InputGroup className="row-nowrap">
@@ -124,8 +148,15 @@ export const UsersSearch: FunctionComponent<UsersSearchProps> = ({
           onChange={selectUser}
           value={item}
           isClearable={isClearable}
+          onFocus={() => {
+            typeof objectKey === 'string' && managers.includes(objectKey)
+              ? getUsersByAction('', objectKey)
+              : getUsers('')
+          }}
           onInputChange={(keyword) => {
-            getUsers(keyword)
+            typeof objectKey === 'string' && managers.includes(objectKey)
+              ? getUsersByAction(keyword, objectKey)
+              : getUsers(keyword)
           }}
         />
       </div>
