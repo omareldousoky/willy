@@ -1139,5 +1139,6 @@
   "theSameLoan": "على نفس القرض",
   "printSettlementType": "طباعة طلب حالةالتصالح",
   "customerAddress": "عنوان العميل",
-  "productApplicationsReport": "تقرير طلبات القروض لنوع قرض"
+  "productApplicationsReport": "تقرير طلبات القروض لنوع قرض",
+  "iscoreIssuingAuthorities": "جهه اصدار السجل التجاري"
 }
