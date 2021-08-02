@@ -9,7 +9,7 @@ import * as Yup from 'yup'
 import Col from 'react-bootstrap/Col'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import {
   getMaxPrinciples,
   setMaxPrinciples,

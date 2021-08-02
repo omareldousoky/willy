@@ -13,7 +13,7 @@ import {
 } from '../../Services/APIs/configApis/config'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
-import Can from '../../config/Can'
+import Can from '../../../Shared/config/Can'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { checkDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup'
 

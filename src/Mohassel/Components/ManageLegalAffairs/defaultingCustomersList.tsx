@@ -16,7 +16,9 @@ import Can from '../../config/Can'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { loading } from '../../../Shared/redux/loading/actions'
-import HeaderWithCards, { Tab } from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards, {
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from './manageLegalAffairsInitials'
 import {
   getErrorMessage,

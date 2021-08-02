@@ -24,7 +24,7 @@ import {
 import { bulkCreation } from '../../Services/APIs/loanApplication/bulkCreation'
 import { bulkApplicationCreationValidation } from './bulkApplicationCreationValidation'
 import Search from '../../../Shared/Components/Search/search'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import {
   manageApplicationsArray,
   manageSMEApplicationsArray,

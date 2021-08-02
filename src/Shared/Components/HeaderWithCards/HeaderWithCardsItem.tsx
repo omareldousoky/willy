@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { LtsIcon } from '../../../Shared/Components'
+import { LtsIcon } from '..'
 import { Tab } from './headerWithCards'
 
 export type CardSize = 'lg' | 'sm'

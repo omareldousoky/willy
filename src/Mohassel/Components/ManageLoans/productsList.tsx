@@ -9,7 +9,9 @@ import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import Can from '../../config/Can'
-import HeaderWithCards, { Tab } from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards, {
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageLoansArray } from './manageLoansInitials'
 import { getDetailedProducts } from '../../Services/APIs/loanProduct/getProduct'
 import { downloadFile, getErrorMessage } from '../../../Shared/Services/utils'

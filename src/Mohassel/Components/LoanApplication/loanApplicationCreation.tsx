@@ -27,7 +27,7 @@ import { Loader } from '../../../Shared/Components/Loader'
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas'
 import { getProduct } from '../../Services/APIs/loanProduct/getProduct'
 import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches'
-import { getGenderFromNationalId } from '../../Services/nationalIdValidation'
+import { getGenderFromNationalId } from '../../../Shared/Services/nationalIdValidation'
 import {
   newApplication,
   editApplication,
@@ -50,7 +50,7 @@ import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationG
 import DualBox from '../DualListBox/dualListBox'
 import InfoBox from '../userInfoBox'
 import CustomerSearch from '../CustomerSearch/customerSearchTable'
-import Wizard from '../wizard/Wizard'
+import Wizard from '../../../Shared/Components/wizard/Wizard'
 import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans'
 
 import { theme } from '../../../Shared/theme'

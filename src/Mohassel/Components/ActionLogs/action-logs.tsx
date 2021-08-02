@@ -7,8 +7,7 @@ import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getDateAndTime } from '../../Services/getRenderDate'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import { getErrorMessage, getDateAndTime } from '../../../Shared/Services/utils'
 
 interface State {
   size: number

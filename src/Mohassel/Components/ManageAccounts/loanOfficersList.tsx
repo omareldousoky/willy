@@ -18,14 +18,15 @@ import Can from '../../config/Can'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { loading } from '../../../Shared/redux/loading/actions'
-import HeaderWithCards, { Tab } from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards, {
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageAccountsArray } from './manageAccountsInitials'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import { getErrorMessage, getDateAndTime } from '../../../Shared/Services/utils'
 import { getCookie } from '../../../Shared/Services/getCookie'
 import { editLoanOfficerValidation } from './loanOfficersValidation'
 import { checkUsernameDuplicates } from '../../Services/APIs/User-Creation/checkUsernameDup'
 import { updateLoanOfficer } from '../../Services/APIs/LoanOfficers/updateLoanOfficer'
-import { getDateAndTime } from '../../Services/getRenderDate'
 import { LtsIcon } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps {

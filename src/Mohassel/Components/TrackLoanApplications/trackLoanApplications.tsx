@@ -34,13 +34,13 @@ import {
   getIscoreCached,
   getSMECachedIscore,
 } from '../../Services/APIs/iScore/iScore'
-import { Score } from '../CustomerCreation/customerProfile'
+import { Score } from '../CustomerCreation/CustomerProfile'
 import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApplications'
 import {
   manageApplicationsArray,
   manageSMEApplicationsArray,
 } from './manageApplicationInitials'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { LoanApplicationReportRequest } from '../../Services/interfaces'
 import { ActionsIconGroup } from '../../../Shared/Components'
 import ability from '../../config/ability'

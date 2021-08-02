@@ -7,7 +7,7 @@ import Card from 'react-bootstrap/Card'
 
 import { UserDataForm } from './userDataForm'
 import * as local from '../../../Shared/Assets/ar.json'
-import Wizard from '../wizard/Wizard'
+import Wizard from '../../../Shared/Components/wizard/Wizard'
 import { Loader } from '../../../Shared/Components/Loader'
 import {
   initialStep1,

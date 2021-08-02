@@ -13,8 +13,8 @@ import {
 import Map from '../../../Shared/Components/Map/map'
 import * as local from '../../../Shared/Assets/ar.json'
 import { checkDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup'
-import Can from '../../config/Can'
-import ability from '../../config/ability'
+import Can from '../../../Shared/config/Can'
+import ability from '../../../Shared/config/ability'
 import { getGovernorates } from '../../Services/APIs/configApis/config'
 import { Governorate, District } from './StepTwoForm'
 
