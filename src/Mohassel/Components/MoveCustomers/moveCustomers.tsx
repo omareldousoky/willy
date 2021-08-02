@@ -26,7 +26,7 @@ import {
   manageCustomersArray,
   manageCompaniesArray,
 } from '../CustomerCreation/manageCustomersInitial'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { Customer } from '../../../Shared/Services/interfaces'
 import { Pagination } from '../Common/Pagination'
 

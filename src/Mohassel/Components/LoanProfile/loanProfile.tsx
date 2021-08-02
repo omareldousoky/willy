@@ -20,7 +20,10 @@ import Payment from '../Payment/payment'
 import { englishToArabic } from '../../Services/statusLanguage'
 import local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
-import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
+import {
+  CardNavBar,
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import Logs from './applicationLogs'
 import { LoanDetailsTableView } from './applicationsDetails'
 import { GuarantorTableView } from './guarantorDetails'

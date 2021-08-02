@@ -8,7 +8,7 @@ import { getErrorMessage } from '../../../Shared/Services/utils'
 import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getIscoreCached } from '../../Services/APIs/iScore/iScore'
-import ability from '../../config/ability'
+import ability from '../../../Shared/config/ability'
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
 import {
   CustomerScore,
@@ -16,7 +16,6 @@ import {
 } from '../../Services/APIs/Customer-Creation/customerCategorization'
 import { Profile, InfoBox, ProfileActions } from '../../../Shared/Components'
 import { TabDataProps } from '../../../Shared/Components/Profile/types'
-import HalanLinkageModal from './halanLinkageModal'
 import { blockCustomer } from '../../Services/APIs/blockCustomer/blockCustomer'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
 
@@ -81,9 +80,6 @@ export const CustomerProfile = () => {
   const [iScoreDetails, setIScoreDetails] = useState<Score>()
   const [activeTab, setActiveTab] = useState('workInfo')
   const [ratings, setRatings] = useState<Array<CustomerScore>>([])
-  const [showHalanLinkageModal, setShowHalanLinkageModal] = useState<boolean>(
-    false
-  )
   const location = useLocation<LocationState>()
   const history = useHistory()
 
@@ -470,12 +466,6 @@ export const CustomerProfile = () => {
             blocked: customerDetails?.blocked,
           }),
       },
-      {
-        icon: 'business-activities',
-        title: local.halanLinkage,
-        permission: true,
-        onActionClick: () => setShowHalanLinkageModal(true),
-      },
     ]
   }
   return (
@@ -496,13 +486,6 @@ export const CustomerProfile = () => {
           setActiveTab={(stringKey) => setActiveTab(stringKey)}
           tabsData={tabsData}
         />
-        {showHalanLinkageModal && (
-          <HalanLinkageModal
-            show={showHalanLinkageModal}
-            hideModal={() => setShowHalanLinkageModal(false)}
-            customer={customerDetails}
-          />
-        )}
       </Container>
     </>
   )

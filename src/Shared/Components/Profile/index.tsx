@@ -6,7 +6,7 @@ import Table from 'react-bootstrap/Table'
 
 import { Loader } from '../Loader'
 import BackButton from '../../../Mohassel/Components/BackButton/back-button'
-import { CardNavBar } from '../../../Mohassel/Components/HeaderWithCards/cardNavbar'
+import { CardNavBar } from '../HeaderWithCards/cardNavbar'
 import DocumentsUpload from '../../../Mohassel/Components/CustomerCreation/documentsUpload'
 import DeathCertificate from '../../../Mohassel/Components/CustomerCreation/deathCertificate'
 import { CustomerCategorization } from '../../../Mohassel/Components/CustomerCreation/customerCategorization'

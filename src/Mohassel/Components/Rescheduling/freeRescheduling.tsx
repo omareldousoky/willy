@@ -9,7 +9,6 @@ import Table from 'react-bootstrap/Table'
 import { LoanDetailsBoxView } from '../LoanProfile/applicationsDetails'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getRenderDate } from '../../Services/getRenderDate'
 import {
   testFreeRescheduling,
   freeRescheduling,
@@ -20,6 +19,7 @@ import {
   getStatus,
   getDateString,
   getErrorMessage,
+  getRenderDate,
 } from '../../../Shared/Services/utils'
 import { LtsIcon } from '../../../Shared/Components'
 

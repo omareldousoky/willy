@@ -14,7 +14,7 @@ import { getSMECachedIscore } from '../../../Mohassel/Services/APIs/iScore/iScor
 import { getErrorMessage } from '../../Services/utils'
 
 import { TabDataProps } from '../Profile/types'
-import { Tab } from '../../../Mohassel/Components/HeaderWithCards/cardNavbar'
+import { Tab } from '../HeaderWithCards/cardNavbar'
 import { Customer } from '../../Services/interfaces'
 import { Score } from '../../../Mohassel/Components/CustomerCreation/customerProfile'
 import { getCompanyInfo } from '../../Services/formatCustomersInfo'

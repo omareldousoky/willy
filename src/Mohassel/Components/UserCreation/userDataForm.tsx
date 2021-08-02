@@ -16,7 +16,7 @@ import { checkHRCodeDuplicates } from '../../Services/APIs/User-Creation/checkHR
 import {
   getBirthdateFromNationalId,
   getGenderFromNationalId,
-} from '../../Services/nationalIdValidation'
+} from '../../../Shared/Services/nationalIdValidation'
 
 interface Props {
   values: Values

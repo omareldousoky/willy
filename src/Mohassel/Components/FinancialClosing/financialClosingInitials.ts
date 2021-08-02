@@ -1,6 +1,6 @@
 import * as local from '../../../Shared/Assets/ar.json'
 import ability from '../../config/ability'
-import { Tab } from '../HeaderWithCards/headerWithCards'
+import { Tab } from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 
 export const financialClosingArray = (): Tab[] => {
   const financialClosingArr: Tab[] = []

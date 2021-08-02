@@ -20,7 +20,7 @@ import {
 import DualBox from '../DualListBox/dualListBox'
 import { theme } from '../../../Shared/theme'
 import { getBranchesByProducts } from '../../Services/APIs/Branch/getBranches'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageLoansArray } from '../ManageLoans/manageLoansInitials'
 import { LtsIcon } from '../../../Shared/Components'
 

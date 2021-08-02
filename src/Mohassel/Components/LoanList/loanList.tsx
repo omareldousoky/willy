@@ -20,7 +20,7 @@ import {
   removeEmptyArg,
 } from '../../../Shared/Services/utils'
 import { manageLoansArray, manageSMELoansArray } from './manageLoansInitials'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { ActionsIconGroup } from '../../../Shared/Components'
 
 interface Props

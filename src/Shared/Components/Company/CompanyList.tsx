@@ -7,14 +7,17 @@ import Button from 'react-bootstrap/Button'
 import * as local from '../../Assets/ar.json'
 import ability from '../../../Mohassel/config/ability'
 import { search, searchFilters } from '../../redux/search/actions'
-import { getErrorMessage, getFullCustomerKey } from '../../Services/utils'
-import { getDateAndTime } from '../../../Mohassel/Services/getRenderDate'
+import {
+  getErrorMessage,
+  getFullCustomerKey,
+  getDateAndTime,
+} from '../../Services/utils'
 import DynamicTable from '../DynamicTable/dynamicTable'
 import Can from '../../../Mohassel/config/Can'
 import Search from '../Search/search'
 import { Loader } from '../Loader'
 import { ActionsIconGroup } from '..'
-import HeaderWithCards from '../../../Mohassel/Components/HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 
 import { CompanyListProps } from './types'
 import { manageCompaniesArray } from '../../../Mohassel/Components/CustomerCreation/manageCustomersInitial'

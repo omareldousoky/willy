@@ -8,14 +8,17 @@ import Swal from 'sweetalert2'
 import { LoanDetailsBoxView } from '../LoanProfile/applicationsDetails'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getRenderDate } from '../../Services/getRenderDate'
 import {
   testPostponeHalfInstallment,
   postponeHalfInstallment,
 } from '../../Services/APIs/loanApplication/postponeHalfInstallment'
 import { reschedulingValidation } from './reschedulingValidations'
 import { Loader } from '../../../Shared/Components/Loader'
-import { getErrorMessage, getStatus } from '../../../Shared/Services/utils'
+import {
+  getErrorMessage,
+  getStatus,
+  getRenderDate,
+} from '../../../Shared/Services/utils'
 
 interface Props {
   application: any

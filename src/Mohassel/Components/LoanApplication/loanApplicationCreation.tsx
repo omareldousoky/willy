@@ -27,7 +27,7 @@ import { Loader } from '../../../Shared/Components/Loader'
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas'
 import { getProduct } from '../../Services/APIs/loanProduct/getProduct'
 import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches'
-import { getGenderFromNationalId } from '../../Services/nationalIdValidation'
+import { getGenderFromNationalId } from '../../../Shared/Services/nationalIdValidation'
 import {
   newApplication,
   editApplication,

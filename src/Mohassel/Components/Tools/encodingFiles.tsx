@@ -17,7 +17,7 @@ import {
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import { manageToolsArray } from './manageToolsInitials'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { LtsIcon } from '../../../Shared/Components'
 
 interface State {
