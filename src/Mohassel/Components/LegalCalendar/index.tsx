@@ -11,7 +11,7 @@ import startOfDay from 'date-fns/startOfDay'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { Calendar } from './Calendar'
 import { Navigation } from './Navigation'
 

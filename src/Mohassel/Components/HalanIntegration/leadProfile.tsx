@@ -3,7 +3,10 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
-import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
+import {
+  CardNavBar,
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import BackButton from '../BackButton/back-button'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Lead } from './leadInterface'

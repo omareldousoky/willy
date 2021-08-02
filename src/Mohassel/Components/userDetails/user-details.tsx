@@ -12,7 +12,10 @@ import { Loader } from '../../../Shared/Components/Loader'
 import UserRolesView from './userRolesView'
 import { setUserActivation } from '../../Services/APIs/Users/userActivation'
 import CustomersForUser from './customersForUser'
-import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
+import {
+  CardNavBar,
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import Can from '../../config/Can'
 import ability from '../../config/ability'
 import { getErrorMessage } from '../../../Shared/Services/utils'

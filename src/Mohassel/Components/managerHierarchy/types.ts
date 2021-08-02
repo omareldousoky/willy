@@ -4,7 +4,7 @@ import {
   ManagerHierarchyUser,
   OfficersGroup,
 } from '../../../Shared/Services/interfaces'
-import { Tab } from '../HeaderWithCards/cardNavbar'
+import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 
 export interface UsersSearchProps {
   objectKey: string | number

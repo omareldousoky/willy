@@ -3,7 +3,10 @@ import { withRouter, RouteComponentProps } from 'react-router-dom'
 import Card from 'react-bootstrap/Card'
 import { connect } from 'react-redux'
 import Swal from 'sweetalert2'
-import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
+import {
+  CardNavBar,
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
 import BranchDetailsView from './branchDetailsView'
 import BackButton from '../BackButton/back-button'

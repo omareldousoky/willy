@@ -8,7 +8,7 @@ import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getRoles } from '../../Services/APIs/Roles/roles'
 import Can from '../../config/Can'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageAccountsArray } from './manageAccountsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 

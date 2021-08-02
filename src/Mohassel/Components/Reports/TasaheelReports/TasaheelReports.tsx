@@ -13,7 +13,7 @@ import Can from '../../../config/Can'
 import ability from '../../../config/ability'
 import * as local from '../../../../Shared/Assets/ar.json'
 
-import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { Loader } from '../../../../Shared/Components/Loader'
 import ReportsModal from '../reportsModal'
 import { RisksReport } from './RisksReport'
@@ -29,7 +29,7 @@ import {
 } from '../../../Services/APIs/Reports/tasaheelRisksReports'
 
 import { Report, ReportDetails } from './types'
-import { Tab } from '../../HeaderWithCards/cardNavbar'
+import { Tab } from '../../../../Shared/Components/HeaderWithCards/cardNavbar'
 import { LtsIcon } from '../../../../Shared/Components'
 
 export const TasaheelReports = () => {

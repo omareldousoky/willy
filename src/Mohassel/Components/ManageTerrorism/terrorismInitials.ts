@@ -1,6 +1,6 @@
 import ability from '../../config/ability'
 import * as local from '../../../Shared/Assets/ar.json'
-import { Tab } from '../HeaderWithCards/headerWithCards'
+import { Tab } from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 
 export const antiTerrorismArray = (): Tab[] => {
   const antiTerrorismArr: Tab[] = []

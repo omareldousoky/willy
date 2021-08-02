@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import * as local from '../../../Shared/Assets/ar.json'
-import HeaderWithCards, { Tab } from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards, {
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { financialClosingArray } from './financialClosingInitials'
 import LtsOracleReviewing from './LtsOracleReviewing/ltsOracleReviewing'
 

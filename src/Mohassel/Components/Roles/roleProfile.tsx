@@ -8,7 +8,10 @@ import Col from 'react-bootstrap/Col'
 
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
-import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
+import {
+  CardNavBar,
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import RoleTable from './roleTable'
 import { getPermissions } from '../../Services/APIs/Roles/roles'
 import { Section } from './roleCreation'
