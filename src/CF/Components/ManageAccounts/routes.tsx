@@ -2,6 +2,9 @@ import React from 'react'
 import { RolesList, UsersList } from '.'
 import local from '../../../Shared/Assets/ar.json'
 import Can from '../../../Shared/config/Can'
+import { RoleCreation, RoleProfile } from '../roles'
+import { UserCreation } from '../userCreation'
+import { UserDetails } from '../userDetails'
 
 export const manageAccountsRoute = {
   path: '/manage-accounts',
@@ -26,7 +29,7 @@ export const manageAccountsRoute = {
           label: local.createNewRole,
           render: (props) => (
             <Can I="createRoles" a="user">
-              {/* <RoleCreation {...props} edit={false} /> */}
+              <RoleCreation {...props} edit={false} />
             </Can>
           ),
         },
@@ -35,7 +38,7 @@ export const manageAccountsRoute = {
           label: local.editRole,
           render: (props) => (
             <Can I="createRoles" a="user">
-              {/* <RoleCreation {...props} edit /> */}
+              <RoleCreation {...props} edit />
             </Can>
           ),
         },
@@ -44,7 +47,7 @@ export const manageAccountsRoute = {
           label: local.roleDetails,
           render: (props) => (
             <Can I="getRoles" a="user">
-              {/* <RoleProfile {...props} /> */}
+              <RoleProfile {...props} />
             </Can>
           ),
         },
@@ -64,7 +67,7 @@ export const manageAccountsRoute = {
           label: local.newUser,
           render: (props) => (
             <Can I="createUser" a="user">
-              {/* <UserCreation {...props} edit={false} /> */}
+              <UserCreation {...props} edit={false} />
             </Can>
           ),
         },
@@ -73,7 +76,7 @@ export const manageAccountsRoute = {
           label: local.editUser,
           render: (props) => (
             <Can I="updateUser" a="user">
-              {/* <UserCreation {...props} edit /> */}
+              <UserCreation {...props} edit />
             </Can>
           ),
         },
@@ -82,7 +85,7 @@ export const manageAccountsRoute = {
           label: local.userDetails,
           render: (props) => (
             <Can I="getUser" a="user">
-              {/* <UserDetails {...props} /> */}
+              <UserDetails {...props} />
             </Can>
           ),
         },

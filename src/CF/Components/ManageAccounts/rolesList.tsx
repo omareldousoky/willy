@@ -6,7 +6,6 @@ import Form from 'react-bootstrap/Form'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-// import { getRoles } from '../../Services/APIs/Roles/roles'
 // import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageAccountsArray } from './manageAccountsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
@@ -68,13 +67,14 @@ class RolesList extends Component<RouteComponentProps, State> {
             })
             .indexOf('roles')}
         /> */}
+        test
         <Card className="main-card">
           <Loader type="fullsection" open={this.state.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                  {local.roles}
+                  {local.roles} test
                 </Card.Title>
                 <span className="text-muted">
                   {local.noOfRoles + ` (${this.state.totalCount})`}

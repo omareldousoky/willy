@@ -3,7 +3,7 @@ import local from '../../Shared/Assets/ar.json'
 import { Landing } from '../../Shared/Components/Landing'
 
 import { generateAppRoutes } from '../../Shared/Services/utils'
-import { manageAccountsRoute } from '../Components/ManageAccounts/routes'
+import { manageAccountsRoute } from '../Components/manageAccounts/routes'
 
 const appRoutes = [
   {
@@ -16,14 +16,9 @@ const appRoutes = [
         label: local.customers,
         render: () => <h1 className="m-4">Customers</h1>,
       },
-      {
-        path: '/manage-accounts/roles',
-        label: local.manageAccounts,
-        render: () => <h1 className="m-4">Roles</h1>,
-      },
+      manageAccountsRoute,
     ],
   },
-  manageAccountsRoute,
 ]
 
 export const routes = generateAppRoutes(appRoutes)
