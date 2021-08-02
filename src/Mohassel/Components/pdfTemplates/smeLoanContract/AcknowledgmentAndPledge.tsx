@@ -37,9 +37,11 @@ export const AcknowledgmentAndPledge = ({
         </p>
         <p className="text-center">المقرون بما فيه</p>
         {entitledToSign.map((person, index) => (
-          <div key={index} className="d-flex justify-content-between">
-            <span>الأسم / {person.customer.customerName ?? ''} </span>
-            <span> التوقيع :</span>
+          <div key={index}>
+            <p className="py-2">
+              الأسم : {person.customer.customerName ?? ''}{' '}
+            </p>
+            <p className="py-2"> التوقيع :</p>
           </div>
         ))}
       </div>

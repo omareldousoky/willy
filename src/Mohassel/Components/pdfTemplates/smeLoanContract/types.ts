@@ -22,8 +22,13 @@ export interface KnowYourCustomerProps {
 }
 export interface SolidarityGuaranteeProps {
   application: Application
+  person: Customer
+  personPosition?: string
 }
 export interface AuthorizationToFillCheckProps {
+  application: Application
+}
+export interface AuthorizationToFillInfoProps {
   application: Application
 }
 export interface PromissoryNoteProps {
