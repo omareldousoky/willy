@@ -208,7 +208,7 @@ class UsersList extends Component<Props, State> {
   render() {
     return (
       <div>
-        {this.props.withHeader && (
+        {/* {this.props.withHeader && (
           // <HeaderWithCards
           //   header={local.manageAccounts}
           //   array={this.state.manageAccountTabs}
@@ -218,7 +218,7 @@ class UsersList extends Component<Props, State> {
           //     })
           //     .indexOf('users')}
           // />
-        )}
+        )} */}
         <Card className="main-card">
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
