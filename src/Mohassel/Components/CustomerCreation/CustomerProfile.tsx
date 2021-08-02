@@ -16,7 +16,7 @@ import {
 } from '../../Services/APIs/Customer-Creation/customerCategorization'
 import { Profile, InfoBox, ProfileActions } from '../../../Shared/Components'
 import { TabDataProps } from '../../../Shared/Components/Profile/types'
-import HalanLinkageModal from './halanLinkageModal'
+import HalanLinkageModal from './HalanLinkageModal'
 import { blockCustomer } from '../../Services/APIs/blockCustomer/blockCustomer'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
 
