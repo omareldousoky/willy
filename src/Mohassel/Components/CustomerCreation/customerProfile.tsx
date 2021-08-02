@@ -25,7 +25,7 @@ export interface Score {
   customerName?: string
   activeLoans?: string
   iscore: string
-  nationalId: string
+  nationalId?: string
   url?: string
   bankCodes?: string[]
 }

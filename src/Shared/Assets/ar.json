@@ -1138,5 +1138,6 @@
   "printSettlementType": "طباعة طلب حالةالتصالح",
   "customerAddress": "عنوان العميل",
   "productApplicationsReport": "تقرير طلبات القروض لنوع قرض",
-  "consumerFinance": "CF"
+  "consumerFinance": "CF",
+  "iscoreIssuingAuthorities": "جهه اصدار السجل التجاري"
 }
