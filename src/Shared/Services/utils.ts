@@ -808,4 +808,4 @@ export const getDateAndTime = (date: number) => {
   return dateString
 }
 
-export const isCF = process.env.API_BASE_URL?.includes('cf') ?? false
+export const isCF = process.env.REACT_APP_BASE_URL?.includes('cf') ?? false

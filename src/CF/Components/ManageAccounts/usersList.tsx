@@ -229,7 +229,7 @@ class UsersList extends Component<Props, State> {
               <div>
                 <Can I="createUser" a="user">
                   <Button
-                    className="mr-4"
+                    className="mr-4 big-button"
                     onClick={() =>
                       this.props.history.push('/manage-accounts/users/new-user')
                     }

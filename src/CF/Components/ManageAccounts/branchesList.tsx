@@ -188,7 +188,7 @@ class BranchesList extends Component<Props, State> {
                         '/manage-accounts/branches/new-branch'
                       )
                     }}
-                    className="mr-4"
+                    className="mr-4 big-button"
                   >
                     {local.createNewBranch}
                   </Button>

@@ -202,6 +202,7 @@ class CustomersList extends Component<Props, State> {
                     onClick={() => {
                       this.props.history.push('/customers/new-customer')
                     }}
+                    className="big-button"
                   >
                     {local.newCustomer}
                   </Button>

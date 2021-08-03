@@ -63,32 +63,6 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   width: 20px;
   height: 20px;
 }
-/*Loader Component*/
-.loader-full-screen, .loader-full-section {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 99999;
-}
-
-.loader-full-section {
-  position: absolute;
-}
-
-.loader-full-screen .cover, .loader-full-section .cover {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: rgba(255, 255, 255, 0.9);
-}
-/*End of Loader Component*/
 .chip {
   background-color: lightgray;
   display: inline-block;

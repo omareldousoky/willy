@@ -74,7 +74,7 @@ class RolesList extends Component<RouteComponentProps, State> {
               <div>
                 <Can I="createRoles" a="user">
                   <Button
-                    className="mr-4"
+                    className="mr-4 big-button"
                     onClick={() =>
                       this.props.history.push('/manage-accounts/roles/new-role')
                     }

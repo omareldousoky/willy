@@ -30,11 +30,7 @@ import {
   getBranch,
 } from '../../../Shared/Services/APIs/Branch/getBranch'
 import { getCookie } from '../../../Shared/Services/getCookie'
-import {
-  getIscoreCached,
-  getSMECachedIscore,
-} from '../../../Mohassel/Services/APIs/iScore/iScore'
-import { Score } from '../CustomerCreation/customerProfile'
+import { Score } from '../CustomerCreation/CustomerProfile'
 import { getReviewedApplications } from '../../../Mohassel/Services/APIs/Reports/reviewedApplications'
 import {
   manageApplicationsArray,
@@ -45,6 +41,10 @@ import { LoanApplicationReportRequest } from '../../../Mohassel/Services/interfa
 import { ActionsIconGroup } from '../../../Shared/Components'
 import ability from '../../../Shared/config/ability'
 import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
+import {
+  getIscoreCached,
+  getSMECachedIscore,
+} from '../../../Shared/Services/APIs/iScore'
 
 interface Product {
   productName: string

@@ -11,8 +11,6 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import Swal from 'sweetalert2'
 import Select from 'react-select'
 import { Loader } from '../../../Shared/Components/Loader'
-import { searchCustomer } from '../../../Shared/Services/APIs/Customer-Creation/searchCustomer'
-import { moveCustomerToOfficer } from '../../../Shared/Services/APIs/Customer-Creation/moveCustomerToOfficer'
 import { getBranches } from '../../../Shared/Services/APIs/Branch/getBranches'
 import * as local from '../../../Shared/Assets/ar.json'
 import { UserDateValues } from './userDetailsInterfaces'
@@ -26,6 +24,8 @@ import { theme } from '../../../Shared/theme'
 import { Pagination } from '../../../Shared/Components/Common/Pagination'
 import Can from '../../../Shared/config/Can'
 import { LoanOfficersDropDown } from '../../../Shared/Components/dropDowns/allDropDowns'
+import { moveCustomerToOfficer } from '../../../Shared/Services/APIs/customer/moveCustomerToOfficer'
+import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 
 interface Props {
   id: string
