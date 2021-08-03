@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getAuthData } from '../Shared/redux/auth/actions'
 import { getCookie } from '../Shared/Services/getCookie'
-import NavBar from '../Shared/Components/NavBar/navBar'
+import NavBar from '../Shared/Components/NavBar'
 import { routes } from './Services/routes'
 import WithBreadcrumbs from '../Shared/Components/navigation/withBreadcrumbs'
 import './index.scss'
@@ -20,7 +20,7 @@ const App = (props) => {
   return (
     <BrowserRouter>
       <div style={{ direction: 'rtl', backgroundColor: '#fafafa' }}>
-        <NavBar {...hideProp} />
+        <NavBar {...hideProp} isLTS />
         <Switch>
           {routes.map((route) => (
             <Route key={route.path} exact path={route.path}>
