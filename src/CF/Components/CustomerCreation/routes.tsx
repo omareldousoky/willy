@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Can from '../../../Shared/config/Can'
-import CustomerCreation from './CustomerCreation'
+import CustomerCreation from '.'
 import { CustomerProfile } from './CustomerProfile'
 import CustomersList from './CustomersList'
 import local from '../../../Shared/Assets/ar.json'

@@ -18,7 +18,7 @@ import {
 import { StepOneForm } from './StepOneForm'
 import { StepTwoForm } from './StepTwoForm'
 import { StepThreeForm } from './StepThreeForm'
-import DocumentsUpload from './documentsUpload'
+import DocumentsUpload from './DocumentsUpload'
 import * as local from '../../../Shared/Assets/ar.json'
 import {
   getErrorMessage,
