@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table } from 'react-bootstrap'
+import Table from 'react-bootstrap/Table'
 
 import local from '../../../../Shared/Assets/ar.json'
 import { numbersToArabic } from '../../../../Shared/Services/utils'
@@ -59,10 +59,10 @@ const RaseedyTransactionsReport = ({
           </tr>
         </thead>
         <tbody>
-          {data.map((transaction, index) => (
-            <tr key={index}>
-              {tableColumns.map((item, index) => (
-                <td key={index}>
+          {data.map((transaction, i) => (
+            <tr key={i}>
+              {tableColumns.map((item, j) => (
+                <td key={j}>
                   {item.type === 'number'
                     ? numbersToArabic(transaction[item.key])
                     : transaction[item.key]}
