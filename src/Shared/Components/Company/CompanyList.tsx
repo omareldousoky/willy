@@ -16,9 +16,10 @@ import { Loader } from '../Loader'
 import { ActionsIconGroup } from '..'
 import HeaderWithCards from '../../../Mohassel/Components/HeaderWithCards/headerWithCards'
 
-import { CompanyListProps, TableMapperItem } from './types'
+import { CompanyListProps } from './types'
 import { manageCompaniesArray } from '../../../Mohassel/Components/CustomerCreation/manageCustomersInitial'
 import { ActionWithIcon } from '../../../Mohassel/Models/common'
+import { TableMapperItem } from '../DynamicTable/types'
 
 const List = ({
   branchId,
@@ -86,7 +87,7 @@ const List = ({
   const companyActions: ActionWithIcon[] = [
     {
       actionTitle: editCompany,
-      actionIcon: 'editIcon',
+      actionIcon: 'edit',
 
       actionPermission:
         ability.can('updateCustomer', 'customer') ||

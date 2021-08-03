@@ -39,6 +39,7 @@ import ManualPayment from './manualPayment'
 import { randomManualPayment } from '../../Services/APIs/Payment/randomManualPayment'
 import { editManualOtherPayment } from '../../Services/APIs/Payment/editManualOtherPayment'
 import { manualBankPayment } from '../../Services/APIs/Payment/manualBankPayment'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Installment {
   id: number
@@ -647,11 +648,7 @@ class Payment extends Component<Props, State> {
           <Card className="payment-menu">
             <Loader type="fullsection" open={this.state.loading} />
             <div className="payment-info" style={{ textAlign: 'center' }}>
-              <img
-                height="90"
-                alt="early-payment"
-                src={require('../../Assets/earlyPayment.svg')}
-              />
+              <LtsIcon name="early-payment" size="90px" color="#7dc255" />
               <h6
                 style={{ cursor: 'pointer' }}
                 onClick={() => this.props.changePaymentState(0)}
@@ -721,11 +718,8 @@ class Payment extends Component<Props, State> {
         return (
           <Card className="payment-menu">
             <div className="payment-info" style={{ textAlign: 'center' }}>
-              <img
-                height="90"
-                alt="pay-installment"
-                src={require('../../Assets/payInstallment.svg')}
-              />
+              <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
+
               <h6
                 style={{ cursor: 'pointer' }}
                 onClick={() => this.props.changePaymentState(0)}
@@ -780,11 +774,8 @@ class Payment extends Component<Props, State> {
         return (
           <Card className="payment-menu">
             <div className="payment-info" style={{ textAlign: 'center' }}>
-              <img
-                height="90"
-                alt="pay-installment"
-                src={require('../../Assets/payInstallment.svg')}
-              />
+              <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
+
               <h6
                 style={{ cursor: 'pointer' }}
                 onClick={() => this.props.changePaymentState(0)}

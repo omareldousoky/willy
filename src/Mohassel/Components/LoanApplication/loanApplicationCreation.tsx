@@ -56,10 +56,12 @@ import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/cust
 import { theme } from '../../../Shared/theme'
 import { Customer } from '../../../Shared/Services/interfaces'
 import Can from '../../config/Can'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface LoanApplicationCreationRouteState {
-  id: string
-  action: string
+  id?: string
+  action?: string
+  sme?: boolean
 }
 
 interface Props
@@ -1073,7 +1075,9 @@ class LoanApplicationCreation extends Component<Props, State> {
               ` ${local.withCode} ` +
               res.body.applicationKey
           ).then(() => {
-            this.props.history.push('/track-loan-applications')
+            this.props.history.push('/track-loan-applications', {
+              sme: this.state.customerType === 'sme',
+            })
           })
         } else {
           Swal.fire('error', getErrorMessage(res.error.error), 'error')
@@ -1085,7 +1089,9 @@ class LoanApplicationCreation extends Component<Props, State> {
         if (res.status === 'success') {
           this.setState({ loading: false })
           Swal.fire('success', local.loanApplicationEdited).then(() => {
-            this.props.history.push('/track-loan-applications')
+            this.props.history.push('/track-loan-applications', {
+              sme: this.state.customerType === 'sme',
+            })
           })
         } else {
           Swal.fire('error', getErrorMessage(res.error.error), 'error')
@@ -1611,7 +1617,9 @@ class LoanApplicationCreation extends Component<Props, State> {
             variant="secondary"
             className="w-25"
             onClick={() => {
-              this.props.history.push('/track-loan-applications')
+              this.props.history.push('/track-loan-applications', {
+                sme: this.state.customerType === 'sme',
+              })
             }}
           >
             {local.cancel}
@@ -1751,47 +1759,44 @@ class LoanApplicationCreation extends Component<Props, State> {
         <Card>
           {this.state.customerType === '' ? (
             <div className="d-flex justify-content-center">
-              <div
-                className="d-flex flex-column"
-                style={{ margin: '20px 60px' }}
-              >
-                <img
-                  alt="individual"
-                  style={{ width: 75, margin: '40px 20px' }}
-                  src={require('../../Assets/individual.svg')}
-                />
-                <Button onClick={() => this.setCustomerType('individual')}>
-                  {local.individual}
-                </Button>
-              </div>
-              <div
-                className="d-flex flex-column"
-                style={{ margin: '20px 60px' }}
-              >
-                <img
-                  alt="group"
-                  style={{ width: 75, margin: '40px 20px' }}
-                  src={require('../../Assets/group.svg')}
-                />
-                <Button onClick={() => this.setCustomerType('group')}>
-                  {local.group}
-                </Button>
-              </div>
-              <Can I="getSMEApplication" a="application">
-                <div
-                  className="d-flex flex-column"
-                  style={{ margin: '20px 60px' }}
-                >
-                  <img
-                    alt="sme"
-                    style={{ width: 75, margin: '40px 20px' }}
-                    src={require('../../Assets/group.svg')}
-                  />
-                  <Button onClick={() => this.setCustomerType('sme')}>
-                    {local.company}
-                  </Button>
-                </div>
-              </Can>
+              {!this.props.location.state.sme && (
+                <>
+                  <div className="d-flex flex-column m-5">
+                    <LtsIcon name="user" size="100px" color="#7dc356" />
+
+                    <Button
+                      className="my-4"
+                      onClick={() => this.setCustomerType('individual')}
+                    >
+                      {local.individual}
+                    </Button>
+                  </div>
+                  <div className="d-flex flex-column m-5">
+                    <LtsIcon name="group" size="100px" color="#7dc356" />
+
+                    <Button
+                      className="my-4"
+                      onClick={() => this.setCustomerType('group')}
+                    >
+                      {local.group}
+                    </Button>
+                  </div>
+                </>
+              )}
+              {this.props.location.state.sme && (
+                <Can I="getSMEApplication" a="application">
+                  <div className="d-flex flex-column m-5">
+                    <LtsIcon name="company" size="100px" color="#7dc356" />
+
+                    <Button
+                      className="my-4"
+                      onClick={() => this.setCustomerType('sme')}
+                    >
+                      {local.company}
+                    </Button>
+                  </div>
+                </Can>
+              )}
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'row' }}>

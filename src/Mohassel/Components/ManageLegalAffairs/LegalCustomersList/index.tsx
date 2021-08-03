@@ -39,7 +39,6 @@ import {
   SettledCustomer,
   SettlementFormValues,
   SettlementInfo,
-  TableMapperItem,
 } from '../types'
 import { DefaultedCustomer, ManagerReviews } from '../defaultingCustomersList'
 import LegalSettlementForm from './LegalSettlementForm'
@@ -67,6 +66,7 @@ import LegalJudgePdf from '../../pdfTemplates/LegalJudge'
 import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
 import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
 import { ActionsGroup } from '../../../../Shared/Components/ActionsGroup'
+import { TableMapperItem } from '../../../../Shared/Components/DynamicTable/types'
 import useDidUpdateEffect from '../../../../Shared/hooks/useDidUpdateEffect'
 
 const LegalCustomersList: FunctionComponent = () => {
@@ -132,6 +132,16 @@ const LegalCustomersList: FunctionComponent = () => {
   const isCurrentUserManager = managerTypes.some((type) =>
     ability.can(type.permission, type.key)
   )
+
+  const getLegalCustomers = (filters?: any) =>
+    dispatch(
+      search({
+        ...(filters || searchFilters),
+        size,
+        from,
+        url,
+      })
+    )
 
   useEffect(() => {
     getLegalCustomers({})
@@ -204,17 +214,6 @@ const LegalCustomersList: FunctionComponent = () => {
 
     fetchSettlementFees()
   }, [customerForSettlement])
-
-  function getLegalCustomers(filters?: any) {
-    dispatch(
-      search({
-        ...(filters ? filters : searchFilters),
-        size,
-        from,
-        url,
-      })
-    )
-  }
 
   useDidUpdateEffect(() => {
     getLegalCustomers()

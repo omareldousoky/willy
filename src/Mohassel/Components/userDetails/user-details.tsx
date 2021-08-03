@@ -16,6 +16,7 @@ import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import Can from '../../config/Can'
 import ability from '../../config/ability'
 import { getErrorMessage } from '../../../Shared/Services/utils'
+import { ProfileActions } from '../../../Shared/Components'
 
 interface State {
   activeTab: string
@@ -132,45 +133,32 @@ class UserDetails extends Component<
     const id = this.props.location.state.details
     return (
       <div className="rowContainer">
-        <Can I="updateUser" a="user">
-          <span className="icon">
-            <div
-              className="iconContainer icon"
-              onClick={() => {
+        <ProfileActions
+          actions={[
+            {
+              onActionClick: () =>
                 this.props.history.push({
                   pathname: '/manage-accounts/users/edit-user',
                   state: { details: id },
-                })
-              }}
-            >
-              <img
-                className="iconImage"
-                alt="edit"
-                src={require('../../Assets/editIcon.svg')}
-              />
-              {local.edit}
-            </div>
-          </span>
-        </Can>
-        <Can I="userActivation" a="user">
-          <span className="icon">
-            <div
-              onClick={async () => this.handleActivationClick()}
-              className="iconContainer "
-            >
-              {this.state.data.status === 'active' && (
-                <img
-                  className="iconImage"
-                  alt="deactive"
-                  src={require('../../Assets/deactivate-user.svg')}
-                />
-              )}
-              {this.state.data.status === 'active'
-                ? local.deactivate
-                : local.activate}
-            </div>
-          </span>
-        </Can>
+                }),
+              icon: 'edit',
+              title: local.edit,
+              permission: ability.can('updateUser', 'user'),
+            },
+            {
+              onActionClick: async () => this.handleActivationClick(),
+              icon:
+                this.state.data.status === 'active'
+                  ? 'deactivate-user'
+                  : 'check-circle',
+              title:
+                this.state.data.status === 'active'
+                  ? local.deactivate
+                  : local.activate,
+              permission: ability.can('userActivation', 'user'),
+            },
+          ]}
+        />
       </div>
     )
   }

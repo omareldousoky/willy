@@ -26,7 +26,7 @@ export const manageLoanDetailsArray = (): Card[] => {
   const mangeLoanDetailsArr: Card[] = []
   if (ability.can('loanUsage', 'config')) {
     mangeLoanDetailsArr.push({
-      icon: 'loanUses',
+      icon: 'loan-uses',
       header: local.loanUses,
       desc: local.loanUses,
       path: '/manage-loan-details/loan-uses',
@@ -35,13 +35,13 @@ export const manageLoanDetailsArray = (): Card[] => {
   if (ability.can('viewBusinessSectorConfig', 'config')) {
     mangeLoanDetailsArr.push(
       {
-        icon: 'businessActivities',
+        icon: 'business-activities',
         header: local.businessActivities,
         desc: local.businessActivities,
         path: '/manage-loan-details/business-activities',
       },
       {
-        icon: 'businessSpecialities',
+        icon: 'business-specialities',
         header: local.businessSpecialities,
         desc: local.businessSpecialities,
         path: '/manage-loan-details/business-specialities',

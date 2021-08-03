@@ -1,3 +1,5 @@
+import { LegalWarningType } from '../../../Mohassel/Models/LegalAffairs'
+
 export interface SearchInitialFormikState {
   name?: string
   keyword?: string
@@ -12,6 +14,7 @@ export interface SearchInitialFormikState {
   printed?: boolean
   lastDates?: 'day' | 'week' | 'month' | ''
   type?: string
+  warningType?: LegalWarningType | ''
 }
 
 export interface SearchProps {
@@ -35,6 +38,7 @@ export interface SearchProps {
   setIssuedLoansSearchFilters: (data) => void
   setLoading: (data) => void
   submitClassName?: string
+  sme?: boolean
 }
 
 export interface SearchState {

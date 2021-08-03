@@ -9,6 +9,7 @@ import { getPermissions } from '../../Services/APIs/Roles/roles'
 import { Loader } from '../../../Shared/Components/Loader'
 import RoleTable from '../Roles/roleTable'
 import { getErrorMessage } from '../../../Shared/Services/utils'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props {
   roles: Role[]
@@ -67,11 +68,9 @@ export default class UserRolesView extends Component<Props, State> {
           <Loader type="fullscreen" open={this.state.loading} />
           <Card.Body className="roleContainer">
             <span className="iconContainer">
-              <img
-                className="iconImage"
-                alt="role"
-                src={require('../../Assets/roleIcon.svg')}
-              />
+              <span className="mx-2">
+                <LtsIcon name="role" color="#7dc255" />
+              </span>
               {local.role}
             </span>
             <div className="rowContainer">
@@ -115,11 +114,9 @@ export default class UserRolesView extends Component<Props, State> {
               fontWeight: 'bold',
             }}
           >
-            <img
-              style={{ float: 'right', margin: '0px 5px' }}
-              alt="search-icon"
-              src={require('../../Assets/permissions-inactive.svg')}
-            />
+            <span className="mx-2">
+              <LtsIcon name="permissions" color="#7dc255" />
+            </span>
             {local.permissions}
           </span>
         </div>

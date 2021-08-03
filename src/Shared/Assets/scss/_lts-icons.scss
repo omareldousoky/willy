@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 @font-face {
   font-family: 'lts-icons';
   src: url('../fonts/lts-icons/lts-icons.woff') format('woff');
@@ -24,138 +26,392 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.lts-checkbox-checked:before {
-  content: '\e900';
-}
-.lts-checkbox-unchecked:before {
-  content: '\e901';
-}
-.lts-radio-checked:before {
-  content: '\e902';
-}
-.lts-radio-unchecked:before {
-  content: '\e903';
-}
-.lts-editIcon {
+.lts-trash {
   &:before {
-    content: '\e904';
+    content: $lts-trash;
   }
 }
-.lts-view {
+
+.lts-printer {
   &:before {
-    content: '\e905';
+    content: $lts-printer;
   }
 }
-.lts-changeOfficer {
+
+.lts-image-placeholder {
   &:before {
-    content: '\e906';
+    content: $lts-image-placeholder;
   }
 }
-.lts-customers {
+
+.lts-no-branches-found {
   &:before {
-    content: '\e907';
+    content: $lts-no-branches-found;
   }
 }
-.lts-minus {
+
+.lts-refresh {
   &:before {
-    content: '\e908';
+    content: $lts-refresh;
   }
 }
-.lts-closeIcon {
+
+.lts-home {
   &:before {
-    content: '\e909';
+    content: $lts-home;
   }
 }
-.lts-deactivate-user {
+
+.lts-deactivate-doc {
   &:before {
-    content: '\e90a';
+    content: $lts-deactivate-doc;
   }
 }
-.lts-removeIcon .path1 {
+
+.lts-location {
   &:before {
-    content: '\e90b';
-    color: rgb(47, 47, 47);
+    content: $lts-location;
   }
 }
-.lts-removeIcon .path2 {
+
+.lts-back {
   &:before {
-    content: '\e90c';
-    margin-left: -1em;
+    content: $lts-back;
   }
 }
-.lts-removeIcon .path3 {
+
+.lts-cancel-penalty {
   &:before {
-    content: '\e90d';
-    margin-left: -1em;
+    content: $lts-cancel-penalty;
   }
 }
-.lts-reschedule {
+
+.lts-check-circle {
   &:before {
-    content: '\e90e';
+    content: $lts-check-circle;
   }
 }
-.lts-download {
+
+.lts-clearance {
   &:before {
-    content: '\e90f';
+    content: $lts-clearance;
   }
 }
-.lts-company {
+
+.lts-early-payment {
   &:before {
-    content: '\e910';
+    content: $lts-early-payment;
   }
 }
-.lts-applications {
+
+.lts-warning {
   &:before {
-    content: '\e911';
+    content: $lts-warning;
   }
 }
-.lts-bulk-loan-applications-review {
+
+.lts-add {
   &:before {
-    content: '\e912';
+    content: $lts-add;
   }
 }
-.lts-bulk-loan-applications-approval {
+
+.lts-group {
   &:before {
-    content: '\e913';
+    content: $lts-group;
   }
 }
-.lts-bulk-application-creation {
+
+.lts-pay-installment {
   &:before {
-    content: '\e914';
+    content: $lts-pay-installment;
   }
 }
-.lts-issued-loans {
+
+.lts-pay-penalty {
   &:before {
-    content: '\e915';
+    content: $lts-pay-penalty;
   }
 }
-.lts-cib {
+
+.lts-permissions {
   &:before {
-    content: '\e916';
+    content: $lts-permissions;
   }
 }
-.lts-change-source-of-fund {
+
+.lts-plus {
   &:before {
-    content: '\e917';
+    content: $lts-plus;
   }
 }
-.lts-i-score {
+
+.lts-role {
   &:before {
-    content: '\e918';
+    content: $lts-role;
   }
 }
-.lts-download-big-file {
+
+.lts-rollback {
   &:before {
-    content: '\e919';
+    content: $lts-rollback;
   }
 }
+
+.lts-search {
+  &:before {
+    content: $lts-search;
+  }
+}
+
+.lts-save {
+  &:before {
+    content: $lts-save;
+  }
+}
+
+.lts-terrorists {
+  &:before {
+    content: $lts-terrorists;
+  }
+}
+
+.lts-legal-actions {
+  &:before {
+    content: $lts-legal-actions;
+  }
+}
+
+.lts-branches {
+  &:before {
+    content: $lts-branches;
+  }
+}
+
+.lts-business-specialities {
+  &:before {
+    content: $lts-business-specialities;
+  }
+}
+
+.lts-business-activities {
+  &:before {
+    content: $lts-business-activities;
+  }
+}
+
+.lts-loan-uses {
+  &:before {
+    content: $lts-loan-uses;
+  }
+}
+
+.lts-user {
+  &:before {
+    content: $lts-user;
+  }
+}
+
+.lts-principal-range {
+  &:before {
+    content: $lts-principal-range;
+  }
+}
+
+.lts-branch-areas {
+  &:before {
+    content: $lts-branch-areas;
+  }
+}
+
+.lts-encoding-files {
+  &:before {
+    content: $lts-encoding-files;
+  }
+}
+
+.lts-blocking {
+  &:before {
+    content: $lts-blocking;
+  }
+}
+
+.lts-assign-product-to-branch {
+  &:before {
+    content: $lts-assign-product-to-branch;
+  }
+}
+
+.lts-calculation-method {
+  &:before {
+    content: $lts-calculation-method;
+  }
+}
+
+.lts-calculation-formulas {
+  &:before {
+    content: $lts-calculation-formulas;
+  }
+}
+
+.lts-loan-products {
+  &:before {
+    content: $lts-loan-products;
+  }
+}
+
 .lts-arrow-right {
   &:before {
-    content: '\e91a';
+    content: $lts-arrow-right;
   }
 }
+
 .lts-arrow-left {
   &:before {
-    content: '\e91b';
+    content: $lts-arrow-left;
+  }
+}
+
+.lts-download-big-file {
+  &:before {
+    content: $lts-download-big-file;
+  }
+}
+
+.lts-i-score {
+  &:before {
+    content: $lts-i-score;
+  }
+}
+
+.lts-issued-loans {
+  &:before {
+    content: $lts-issued-loans;
+  }
+}
+
+.lts-cib {
+  &:before {
+    content: $lts-cib;
+  }
+}
+
+.lts-change-source-of-fund {
+  &:before {
+    content: $lts-change-source-of-fund;
+  }
+}
+
+.lts-bulk-loan-applications-review {
+  &:before {
+    content: $lts-bulk-loan-applications-review;
+  }
+}
+
+.lts-bulk-loan-applications-approval {
+  &:before {
+    content: $lts-bulk-loan-applications-approval;
+  }
+}
+
+.lts-bulk-application-creation {
+  &:before {
+    content: $lts-bulk-application-creation;
+  }
+}
+
+.lts-applications {
+  &:before {
+    content: $lts-applications;
+  }
+}
+
+.lts-company {
+  &:before {
+    content: $lts-company;
+  }
+}
+
+.lts-reschedule {
+  &:before {
+    content: $lts-reschedule;
+  }
+}
+
+.lts-download {
+  &:before {
+    content: $lts-download;
+  }
+}
+
+.lts-minus {
+  &:before {
+    content: $lts-minus;
+  }
+}
+
+.lts-close {
+  &:before {
+    content: $lts-close;
+  }
+}
+
+.lts-deactivate-user {
+  &:before {
+    content: $lts-deactivate-user;
+  }
+}
+
+.lts-remove {
+  &:before {
+    content: $lts-remove;
+  }
+}
+
+.lts-edit {
+  &:before {
+    content: $lts-edit;
+  }
+}
+
+.lts-view {
+  &:before {
+    content: $lts-view;
+  }
+}
+
+.lts-exchange {
+  &:before {
+    content: $lts-exchange;
+  }
+}
+
+.lts-customers {
+  &:before {
+    content: $lts-customers;
+  }
+}
+
+.lts-checkbox-checked {
+  &:before {
+    content: $lts-checkbox-checked;
+  }
+}
+
+.lts-checkbox-unchecked {
+  &:before {
+    content: $lts-checkbox-unchecked;
+  }
+}
+
+.lts-radio-checked {
+  &:before {
+    content: $lts-radio-checked;
+  }
+}
+
+.lts-radio-unchecked {
+  &:before {
+    content: $lts-radio-unchecked;
   }
 }

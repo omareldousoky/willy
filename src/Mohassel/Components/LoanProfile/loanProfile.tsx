@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import * as Barcode from 'react-barcode'
 
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
@@ -67,20 +68,33 @@ import { FollowUpStatementView } from './followupStatementView'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares'
 import { getWriteOffReasons } from '../../Services/APIs/configApis/config'
-import { InfoBox, ProfileActions } from '../../../Shared/Components'
+import { InfoBox, LtsIcon, ProfileActions } from '../../../Shared/Components'
 
 import {
   getCompanyInfo,
   getCustomerInfo,
 } from '../../../Shared/Services/formatCustomersInfo'
 import { FieldProps } from '../../../Shared/Components/Profile/types'
-import SmeLoanContract from '../pdfTemplates/smeLoanContract'
+import {
+  AcknowledgmentAndPledge,
+  AcknowledgmentOfCommitment,
+  AcknowledgmentWasSignedInFront,
+  AuthorizationToFillCheck,
+  AuthorizationToFillInfo,
+  KnowYourCustomer,
+  PromissoryNote,
+  SmeLoanContract,
+  SolidarityGuarantee,
+} from '../pdfTemplates/smeLoanContract'
 import { Score } from '../CustomerCreation/customerProfile'
+import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
+
 import { getEarlyPaymentPdfData } from './utils'
 import {
   CalculateEarlyPaymentResponse,
   RemainingLoanResponse,
 } from '../../Models/Payment'
+import { PromissoryNoteMicro } from '../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -106,14 +120,16 @@ interface State {
   earlyPaymentData?: CalculateEarlyPaymentResponse
   pendingActions: PendingActions
   manualPaymentEditId: string
-  branchDetails?: BranchDetails
+  branchDetails: BranchDetails
   receiptData: any
   iscores: any
   penalty: number
   randomPendingActions: Array<any>
   geoAreas: Array<any>
+  remainingTotal: number
   remainingLoan?: RemainingLoanResponse
   individualsWithInstallments: IndividualWithInstallments
+  loanUsage: string
 }
 
 interface LoanProfileRouteState {
@@ -143,8 +159,15 @@ class LoanProfile extends Component<Props, State> {
       penalty: 0,
       randomPendingActions: [],
       geoAreas: [],
+      remainingTotal: 0,
       individualsWithInstallments: {
         installmentTable: [],
+      },
+      loanUsage: '',
+      branchDetails: {
+        branchCode: 0,
+        _id: '',
+        status: '',
       },
     }
   }
@@ -152,6 +175,21 @@ class LoanProfile extends Component<Props, State> {
   componentDidMount() {
     const appId = this.props.location.state.id
     this.getAppByID(appId)
+  }
+
+  async getLoanUsages() {
+    this.setState({ loading: true })
+    const res = await getLoanUsage()
+    if (res.status === 'success') {
+      const uses = res.body.usages
+      const value = uses.find((use) => use.id === this.state.application.usage)
+        ?.name
+      this.setState({ loanUsage: value, loading: false })
+      return value
+    }
+    Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    this.setState({ loading: false })
+    return ''
   }
 
   async getManualOtherPayments(appId) {
@@ -197,6 +235,7 @@ class LoanProfile extends Component<Props, State> {
       } else this.setTabsToRender(application)
       if (ability.can('viewIscore', 'customer'))
         this.getCachediScores(application.body)
+      await this.getLoanUsages()
     } else {
       this.setState({ loading: false }, () =>
         Swal.fire('Error !', getErrorMessage(application.error.error), 'error')
@@ -487,7 +526,7 @@ class LoanProfile extends Component<Props, State> {
   getProfileActions = () => {
     return [
       {
-        icon: 'editIcon',
+        icon: 'deactivate-doc',
         title: local.memberSeperation,
         permission:
           this.state.application.status === 'issued' &&
@@ -518,7 +557,7 @@ class LoanProfile extends Component<Props, State> {
         },
       },
       {
-        icon: 'editIcon',
+        icon: 'edit',
         title: local.editLoan,
         permission:
           this.state.application.status === 'underReview' &&
@@ -530,7 +569,7 @@ class LoanProfile extends Component<Props, State> {
           ),
       },
       {
-        icon: 'editIcon',
+        icon: 'bulk-loan-applications-review',
         title: local.reviewLoan,
         permission:
           this.state.application.status === 'underReview' &&
@@ -542,7 +581,7 @@ class LoanProfile extends Component<Props, State> {
           ),
       },
       {
-        icon: 'editIcon',
+        icon: 'bulk-loan-applications-review',
         title: local.undoLoanReview,
         permission:
           this.state.application.status === 'reviewed' &&
@@ -554,7 +593,7 @@ class LoanProfile extends Component<Props, State> {
           ),
       },
       {
-        icon: 'editIcon',
+        icon: 'deactivate-doc',
         title: local.rejectLoan,
         permission:
           this.state.application.status === 'reviewed' &&
@@ -566,7 +605,7 @@ class LoanProfile extends Component<Props, State> {
           ),
       },
       {
-        icon: 'editIcon',
+        icon: 'applications',
         title: local.issueLoan,
         permission:
           this.state.application.status === 'created' &&
@@ -578,7 +617,7 @@ class LoanProfile extends Component<Props, State> {
           }),
       },
       {
-        icon: 'editIcon',
+        icon: 'applications',
         title: local.createLoan,
         permission:
           this.state.application.status === 'approved' &&
@@ -590,7 +629,7 @@ class LoanProfile extends Component<Props, State> {
           }),
       },
       {
-        icon: 'closeIcon',
+        icon: 'close',
         title: local.cancel,
         permission:
           this.state.application.status === 'underReview' &&
@@ -613,7 +652,7 @@ class LoanProfile extends Component<Props, State> {
           }),
       },
       {
-        icon: 'closeIcon',
+        icon: 'close',
         title: local.writeOffLoan,
         permission:
           this.state.application.status === 'issued' &&
@@ -1289,11 +1328,7 @@ class LoanProfile extends Component<Props, State> {
             </div>
             {this.state.application.status === 'pending' ? (
               <div className="warning-container">
-                <img
-                  alt="warning"
-                  src={require('../../Assets/warning-yellow-circle.svg')}
-                  style={{ marginLeft: 20 }}
-                />
+                <LtsIcon name="warning" color="#edb600" />
                 <h6>{local.manualPaymentNeedsInspection}</h6>
                 <div className="info">
                   <span className="text-muted">{local.truthDate}</span>
@@ -1426,6 +1461,11 @@ class LoanProfile extends Component<Props, State> {
               branchDetails={this.state.branchDetails}
               members={this.state.individualsWithInstallments}
             />
+            <PromissoryNoteMicro
+              application={this.state.application}
+              branchDetails={this.state.branchDetails}
+              customer={this.state.application.customer}
+            />
             {this.state.application.product.beneficiaryType === 'individual' ? (
               <LoanContract
                 data={this.state.application}
@@ -1440,10 +1480,80 @@ class LoanProfile extends Component<Props, State> {
           </>
         )}
         {this.state.print === 'allSME' && (
-          <SmeLoanContract
-            data={this.state.application}
-            branchDetails={this.state.branchDetails}
-          />
+          <>
+            <AcknowledgmentAndPledge
+              entitledToSign={this.state.application.entitledToSign}
+              application={this.state.application}
+            />
+            <KnowYourCustomer
+              application={this.state.application}
+              loanUsage={this.state.loanUsage}
+            />
+            <AcknowledgmentWasSignedInFront
+              application={this.state.application}
+              branchDetails={this.state.branchDetails}
+            />
+            <CustomerCardPDF
+              data={this.state.application}
+              getGeoArea={(area) => this.getCustomerGeoArea(area)}
+              penalty={this.state.penalty}
+              branchDetails={this.state.branchDetails}
+              remainingTotal={this.state.remainingTotal}
+              members={this.state.individualsWithInstallments}
+            />
+            <AcknowledgmentOfCommitment
+              application={this.state.application}
+              branchDetails={this.state.branchDetails}
+            />
+            {this.state.application.guarantors?.map((person, index) => (
+              <div key={index}>
+                <SolidarityGuarantee
+                  application={this.state.application}
+                  person={person}
+                />
+                <PromissoryNote
+                  noteKind="individual"
+                  application={this.state.application}
+                  branchDetails={this.state.branchDetails}
+                  person={person}
+                />
+              </div>
+            ))}
+            {this.state.application.entitledToSign?.map((person, index) => (
+              <div key={index}>
+                <SolidarityGuarantee
+                  application={this.state.application}
+                  person={person.customer}
+                  personPosition={person.position}
+                />
+                <PromissoryNote
+                  noteKind="individual"
+                  application={this.state.application}
+                  branchDetails={this.state.branchDetails}
+                  person={person.customer}
+                  personPosition={person.position}
+                />
+                <PromissoryNote
+                  noteKind="sme"
+                  application={this.state.application}
+                  branchDetails={this.state.branchDetails}
+                  person={person.customer}
+                  personPosition={person.position}
+                />
+              </div>
+            ))}
+            <AuthorizationToFillCheck application={this.state.application} />
+            <AuthorizationToFillInfo application={this.state.application} />
+            <SmeLoanContract
+              data={this.state.application}
+              branchDetails={this.state.branchDetails}
+            />
+            <div className="text-center loan-contract">
+              <Barcode
+                value={this.state.application.loanApplicationKey.toString()}
+              />
+            </div>
+          </>
         )}
         {this.state.print === 'followUpStatement' && (
           <FollowUpStatementPDF

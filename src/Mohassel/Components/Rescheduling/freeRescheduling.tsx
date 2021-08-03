@@ -21,6 +21,7 @@ import {
   getDateString,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props {
   application: any
@@ -525,11 +526,7 @@ class FreeRescheduling extends Component<Props, State> {
                                         )
                                       }
                                     >
-                                      <img
-                                        alt="reschedule"
-                                        src={require('../../Assets/reschedule.svg')}
-                                        style={{ margin: '0px 0px 0px 5px' }}
-                                      />
+                                      <LtsIcon name="reschedule" />
                                     </span>
                                   )}
                               </td>

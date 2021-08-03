@@ -27,8 +27,9 @@ interface State {
 }
 
 interface LoanStatusChangeRouteState {
-  id: string
-  action: string
+  id?: string
+  action?: string
+  sme?: boolean
 }
 
 class LoanStatusChange extends Component<
@@ -59,7 +60,9 @@ class LoanStatusChange extends Component<
       if (res.status === 'success') {
         this.setState({ loading: false })
         Swal.fire('success', local.reviewSuccess).then(() => {
-          this.props.history.push('/track-loan-applications')
+          this.props.history.push('/track-loan-applications', {
+            sme: this.state.application.customer.customerType === 'company',
+          })
         })
       } else {
         Swal.fire('error', getErrorMessage(res.error.error), 'error')
@@ -73,7 +76,9 @@ class LoanStatusChange extends Component<
       if (res.status === 'success') {
         this.setState({ loading: false })
         Swal.fire('success', local.unreviewSuccess).then(() => {
-          this.props.history.push('/track-loan-applications')
+          this.props.history.push('/track-loan-applications', {
+            sme: this.state.application.customer.customerType === 'company',
+          })
         })
       } else {
         Swal.fire('error', getErrorMessage(res.error.error), 'error')
@@ -88,7 +93,9 @@ class LoanStatusChange extends Component<
       if (res.status === 'success') {
         this.setState({ loading: false })
         Swal.fire('success', local.rejectSuccess).then(() => {
-          this.props.history.push('/track-loan-applications')
+          this.props.history.push('/track-loan-applications', {
+            sme: this.state.application.customer.customerType === 'company',
+          })
         })
       } else {
         Swal.fire('error', getErrorMessage(res.error.error), 'error')
@@ -148,20 +155,21 @@ class LoanStatusChange extends Component<
     return (
       <Container style={{ textAlign: 'right' }}>
         <Loader type="fullscreen" open={this.state.loading} />
-        {Object.keys(this.state.application).length > 0 && (
-          <div>
-            <StatusHelper
-              status={this.props.location.state.action}
-              id={this.state.application._id}
-              handleStatusChange={(values, status) => {
-                this.handleStatusChange(values, status)
-              }}
-              application={this.state.application}
-              getGeoArea={(area) => this.getCustomerGeoArea(area)}
-              branchName={this.state.branchDetails?.name}
-            />
-          </div>
-        )}
+        {Object.keys(this.state.application).length > 0 &&
+          this.props.location.state.action && (
+            <div>
+              <StatusHelper
+                status={this.props.location.state.action}
+                id={this.state.application._id}
+                handleStatusChange={(values, status) => {
+                  this.handleStatusChange(values, status)
+                }}
+                application={this.state.application}
+                getGeoArea={(area) => this.getCustomerGeoArea(area)}
+                branchName={this.state.branchDetails?.name}
+              />
+            </div>
+          )}
       </Container>
     )
   }

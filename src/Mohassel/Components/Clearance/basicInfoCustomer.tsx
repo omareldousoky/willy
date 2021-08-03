@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form'
 
 import * as local from '../../../Shared/Assets/ar.json'
 import './clearance.scss'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props {
   branchName: string
@@ -18,7 +19,7 @@ export default function CustomerBasicsCard(props: Props) {
     <div className="customer-basics-card">
       <div className="row-nowrap">
         <span className="basic-info">
-          <img alt="user-basic" src={require('../../Assets/usersBasic.svg')} />
+          <LtsIcon name="user" />
           <Form.Label className="ml-3">{local.basicInfo}</Form.Label>
         </span>
       </div>

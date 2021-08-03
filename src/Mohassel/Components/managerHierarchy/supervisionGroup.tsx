@@ -10,6 +10,7 @@ import { ManagerHierarchyUser } from '../../../Shared/Services/interfaces'
 import './managerHierarchy.scss'
 import { SupervisionGroupProps } from './types'
 import { UsersSearch } from './usersSearch'
+import { LtsIcon } from '../../../Shared/Components'
 
 export const SupervisionGroup: FunctionComponent<SupervisionGroupProps> = ({
   seqNo,
@@ -64,7 +65,7 @@ export const SupervisionGroup: FunctionComponent<SupervisionGroupProps> = ({
                     setOfficers(officers.filter((_, i) => index !== i))
                   }}
                 >
-                  <span className="remove-red-icon" aria-hidden="true" />
+                  <LtsIcon name="remove" color="#d51b1b" />
                 </Button>
                 {local.loanOfficerOrCoordinator}
               </Form.Label>
@@ -98,7 +99,7 @@ export const SupervisionGroup: FunctionComponent<SupervisionGroupProps> = ({
             setOfficers(officers.concat({ id: '', name: '' }))
           }}
         >
-          <span className="plus-green-icon align-middle" aria-hidden="true" />
+          <LtsIcon name="plus" color="#7dc255" />
           <span className="text-success pl-2 font-weight-bold">
             {local.addLoanOfficer}
           </span>
