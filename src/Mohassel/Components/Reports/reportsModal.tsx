@@ -731,6 +731,7 @@ const ReportsModal = (props: Props) => {
                     'loanDetails',
                     'cibPaymentReport',
                     'customerTransactionReport',
+                    'raseedyTransactions',
                   ].includes(props.pdf.key) &&
                   props.getExcel && (
                     <Button
