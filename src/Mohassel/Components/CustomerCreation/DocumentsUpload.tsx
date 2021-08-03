@@ -4,7 +4,6 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 import { connect } from 'react-redux'
-import { getDocumentsTypes } from '../../Services/APIs/encodingFiles/getDocumentsTypes'
 import * as local from '../../../Shared/Assets/ar.json'
 import DocumentUploader from '../../../Shared/Components/documentUploader/documentUploader'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -16,6 +15,7 @@ import {
 } from '../../../Shared/redux/document/actions'
 import { Image } from '../../../Shared/redux/document/types'
 import { downloadAsZip, getErrorMessage } from '../../../Shared/Services/utils'
+import { getDocumentsTypes } from '../../../Shared/Services/APIs/encodingFiles/documentType'
 
 interface State {
   documentTypes: any[]

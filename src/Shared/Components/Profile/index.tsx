@@ -9,10 +9,10 @@ import BackButton from '../../../Mohassel/Components/BackButton/back-button'
 import { CardNavBar } from '../HeaderWithCards/cardNavbar'
 import DocumentsUpload from '../../../Mohassel/Components/CustomerCreation/DocumentsUpload'
 import DeathCertificate from '../../../Mohassel/Components/CustomerCreation/DeathCertificate'
-import { CustomerCategorization } from '../../../Mohassel/Components/CustomerCreation/CustomerCategorization'
 import { ProfileActions } from '../ProfileActions'
 import { CustomerReportsTab } from '../../../Mohassel/Components/CustomerCreation/CustomerReportsTab'
 import { ProfileProps } from './types'
+import { CustomerCategorization } from '../../../Mohassel/Components/CustomerCreation/CustomerCategorization'
 
 export const Profile = ({
   source,

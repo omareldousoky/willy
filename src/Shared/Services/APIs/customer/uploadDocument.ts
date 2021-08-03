@@ -1,7 +1,7 @@
-import axios from '../axios-instance'
+import axios from '../../axiosInstance'
 
-export const getCustomersBalances = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + `/application/tracking`
+export const uploadDocument = async (data: FormData) => {
+  const url = process.env.REACT_APP_BASE_URL + `/customer/document`
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }

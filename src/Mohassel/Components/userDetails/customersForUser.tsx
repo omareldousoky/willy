@@ -12,8 +12,6 @@ import Swal from 'sweetalert2'
 import Select from 'react-select'
 import { Loader } from '../../../Shared/Components/Loader'
 import { LoanOfficersDropDown } from '../dropDowns/allDropDowns'
-import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer'
-import { moveCustomerToOfficer } from '../../Services/APIs/Customer-Creation/moveCustomerToOfficer'
 import { getBranches } from '../../Services/APIs/Branch/getBranches'
 import * as local from '../../../Shared/Assets/ar.json'
 import Can from '../../config/Can'
@@ -26,6 +24,8 @@ import {
 } from '../../../Shared/Services/utils'
 import { theme } from '../../../Shared/theme'
 import { Pagination } from '../Common/Pagination'
+import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
+import { moveCustomerToOfficer } from '../../../Shared/Services/APIs/customer/moveCustomerToOfficer'
 
 interface Props {
   id: string

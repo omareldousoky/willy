@@ -3,22 +3,22 @@ import { useHistory, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Container from 'react-bootstrap/Container'
 import { Customer } from '../../../Shared/Services/interfaces'
-import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getIscoreCached } from '../../Services/APIs/iScore/iScore'
 import ability from '../../config/ability'
-import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
-import {
-  CustomerScore,
-  getCustomerCategorization,
-} from '../../Services/APIs/Customer-Creation/customerCategorization'
 import { Profile, InfoBox, ProfileActions } from '../../../Shared/Components'
 import { TabDataProps } from '../../../Shared/Components/Profile/types'
 import HalanLinkageModal from './HalanLinkageModal'
-import { blockCustomer } from '../../Services/APIs/blockCustomer/blockCustomer'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
+import {
+  CustomerScore,
+  getCustomerCategorization,
+} from '../../../Shared/Services/APIs/customer/customerCategorization'
+import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
+import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
+import { getIscoreCached } from '../../../Shared/Services/APIs/iScore'
+import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCustomer'
 
 export interface Score {
   id?: string // commercialRegisterNumber

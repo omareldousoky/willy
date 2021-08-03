@@ -21,8 +21,8 @@ import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 
 import { CompanyListProps } from './types'
 import { manageCompaniesArray } from '../../../Mohassel/Components/CustomerCreation/manageCustomersInitial'
-import { ActionWithIcon } from '../../../Mohassel/Models/common'
 import { TableMapperItem } from '../DynamicTable/types'
+import { ActionWithIcon } from '../../Models/common'
 
 const List = ({
   branchId,

@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../axiosInstance'
 
 export const editCustomer = async (data: object, id: string) => {
   const url = process.env.REACT_APP_BASE_URL + `/customer/${id}`

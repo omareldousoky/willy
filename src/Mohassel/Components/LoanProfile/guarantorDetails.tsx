@@ -17,12 +17,12 @@ import {
 import Can from '../../config/Can'
 import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import { Loader } from '../../../Shared/Components/Loader'
-import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
-import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans'
-import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer'
 import { editGuarantors } from '../../Services/APIs/loanApplication/editGuarantors'
 import ability from '../../config/ability'
 import { Customer } from '../../../Shared/Services/interfaces'
+import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
+import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
+import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 
 type Guarantor = Customer & { position?: string }
 interface Props {

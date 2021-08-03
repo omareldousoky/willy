@@ -31,10 +31,10 @@ import local from '../../../Shared/Assets/ar.json'
 import './leads.scss'
 import { getErrorMessage, getDateAndTime } from '../../../Shared/Services/utils'
 import { theme } from '../../../Shared/theme'
-import { Action } from '../../Models/common'
 import ability from '../../config/ability'
 import { ActionsGroup } from '../../../Shared/Components/ActionsGroup'
 import { LtsIcon } from '../../../Shared/Components'
+import { Action } from '../../../Shared/Models/common'
 
 interface Props extends RouteComponentProps {
   data: any

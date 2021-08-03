@@ -3,6 +3,7 @@ import local from '../../Shared/Assets/ar.json'
 import { Landing } from '../../Shared/Components/Landing'
 
 import { generateAppRoutes } from '../../Shared/Services/utils'
+import { customerCreationRoutes } from '../Components/CustomerCreation/routes'
 
 const appRoutes = [
   {
@@ -10,11 +11,7 @@ const appRoutes = [
     label: local.consumerFinance,
     render: () => <Landing appName={local.consumerFinance} />,
     routes: [
-      {
-        path: '/customers',
-        label: local.customers,
-        render: () => <h1 className="m-4">Customers</h1>,
-      },
+      customerCreationRoutes,
       {
         path: '/manage-accounts/roles',
         label: local.manageAccounts,

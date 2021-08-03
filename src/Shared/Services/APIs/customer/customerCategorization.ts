@@ -1,5 +1,6 @@
-import axios from '../axios-instance'
+import axios from '../../axiosInstance'
 
+// TODO: move to model
 interface CustomerCategorizationRequest {
   customerId: string
 }

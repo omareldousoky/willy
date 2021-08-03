@@ -6,10 +6,10 @@ import { Branch } from '../../../Shared/redux/auth/types'
 import { searchBranches } from '../../Services/APIs/Branch/searchBranches'
 import * as local from '../../../Shared/Assets/ar.json'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
-import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
 import { CurrentHierarchiesSingleResponse } from '../../Models/OfficersProductivityReport'
 import { fetchCurrentHierarchies } from '../../Services/APIs/Reports/officersProductivity'
 import { theme } from '../../../Shared/theme'
+import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 
 export interface DropDownOption {
   name: string

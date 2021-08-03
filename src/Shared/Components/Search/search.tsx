@@ -24,12 +24,12 @@ import {
   timeToDateyyymmdd,
 } from '../../Services/utils'
 import { getCookie } from '../../Services/getCookie'
-import { getGovernorates } from '../../../Mohassel/Services/APIs/configApis/config'
 import { loading } from '../../redux/loading/actions'
 import { getActionsList } from '../../../Mohassel/Services/APIs/ActionLogs/getActionsList'
 import Can from '../../../Mohassel/config/Can'
 import { SearchInitialFormikState, SearchProps, SearchState } from './types'
 import { WarningTypeDropDown } from '../../../Mohassel/Components/dropDowns/WarningTypeDropDown'
+import { getGovernorates } from '../../Services/APIs/config'
 
 class Search extends Component<SearchProps, SearchState> {
   constructor(props) {

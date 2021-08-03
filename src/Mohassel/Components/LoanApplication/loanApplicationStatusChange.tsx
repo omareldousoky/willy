@@ -11,13 +11,13 @@ import {
   reviewApplication,
 } from '../../Services/APIs/loanApplication/stateHandler'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import {
   BranchDetails,
   BranchDetailsResponse,
   getBranch,
 } from '../../Services/APIs/Branch/getBranch'
+import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 
 interface State {
   loading: boolean

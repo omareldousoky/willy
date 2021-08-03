@@ -7,15 +7,15 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 
-import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../../Shared/config/Can'
 import { getCookie } from '../../../Shared/Services/getCookie'
 import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils'
-import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
 import ability from '../../../Shared/config/ability'
 import { theme } from '../../../Shared/theme'
+import { searchLoanOfficer } from '../../../Mohassel/Services/APIs/LoanOfficers/searchLoanOfficer'
+import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 
 interface GeoDivision {
   majorGeoDivisionName: { ar: string }

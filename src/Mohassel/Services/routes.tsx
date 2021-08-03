@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 
 import * as React from 'react'
-import CustomerCreation from '../Components/CustomerCreation/CustomerCreation'
+import CustomerCreation from '../Components/CustomerCreation'
 import UserCreation from '../Components/UserCreation/userCreation'
 import FormulaCreation from '../Components/LoanFormulaCreation/loanFormulaCreation'
 import FormulaTest from '../Components/LoanFormulaCreation/loanFormulaTest'

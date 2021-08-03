@@ -17,9 +17,10 @@ import { getDetailedProducts } from '../../Services/APIs/loanProduct/getProduct'
 import { downloadFile, getErrorMessage } from '../../../Shared/Services/utils'
 import ability from '../../config/ability'
 import { ActionsIconGroup } from '../../../Shared/Components'
-import { ActionWithIcon, Product } from '../../Models/common'
+import { Product } from '../../Models/common'
 import { getProductApplications } from '../../Services/APIs/loanProduct/productCreation'
 import { Pagination } from '../Common/Pagination'
+import { ActionWithIcon } from '../../../Shared/Models/common'
 
 interface Props extends RouteComponentProps {
   data: any

@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../axiosInstance'
 
 export const addGeoArea = async (obj: any) => {
   const url = process.env.REACT_APP_BASE_URL + '/config/geo-areas'

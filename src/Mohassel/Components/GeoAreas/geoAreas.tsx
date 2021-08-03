@@ -8,15 +8,15 @@ import Card from 'react-bootstrap/Card'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getBranches } from '../../Services/APIs/Branch/getBranches'
-import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
-import { addGeoArea } from '../../Services/APIs/GeoAreas/addGeoArea'
-import { updateGeoArea } from '../../Services/APIs/GeoAreas/updateGeoArea'
 import { Branch } from '../../../Shared/redux/auth/types'
 import { manageToolsArray } from '../Tools/manageToolsInitials'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { CRUDList } from '../CRUDList/crudList'
 import { theme } from '../../../Shared/theme'
+import { addGeoArea } from '../../../Shared/Services/APIs/geoAreas/addGeoArea'
+import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
+import { updateGeoArea } from '../../../Shared/Services/APIs/geoAreas/updateGeoArea'
 
 interface GeoArea {
   name: string

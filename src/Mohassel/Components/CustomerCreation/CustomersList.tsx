@@ -19,7 +19,7 @@ import {
   getDateAndTime,
 } from '../../../Shared/Services/utils'
 import { ActionsIconGroup } from '../../../Shared/Components'
-import { ActionWithIcon } from '../../Models/common'
+import { ActionWithIcon } from '../../../Shared/Models/common'
 
 interface State {
   size: number

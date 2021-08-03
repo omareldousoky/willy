@@ -7,15 +7,15 @@ import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 
 import Map from '../../../Shared/Components/Map/map'
-import {
-  getGovernorates,
-  getBusinessSectors,
-} from '../../Services/APIs/configApis/config'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../config/Can'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { checkDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup'
+import {
+  getBusinessSectors,
+  getGovernorates,
+} from '../../../Shared/Services/APIs/config'
+import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
 
 export interface Village {
   villageName: { ar: string }

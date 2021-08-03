@@ -25,7 +25,6 @@ import {
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
 import CustomerSearch from '../CustomerSearch/customerSearchTable'
-import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer'
 import { Customer } from '../../../Shared/Services/interfaces'
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan'
 import { Application } from '../LoanApplication/loanApplicationStates'
@@ -42,6 +41,7 @@ import DefaultingCustomersPdfTemplate, {
   ReportDefaultedCustomer,
 } from '../pdfTemplates/defaultingCustomers/DefaultingCustomers'
 import { LtsIcon } from '../../../Shared/Components'
+import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 
 interface Review {
   at: number

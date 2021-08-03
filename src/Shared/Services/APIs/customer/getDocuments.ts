@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../axiosInstance'
 
 export const getCustomerDocuments = async (customerId: string) => {
   const url =

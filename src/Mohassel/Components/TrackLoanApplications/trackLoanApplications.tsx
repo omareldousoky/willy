@@ -30,10 +30,6 @@ import {
   getBranch,
 } from '../../Services/APIs/Branch/getBranch'
 import { getCookie } from '../../../Shared/Services/getCookie'
-import {
-  getIscoreCached,
-  getSMECachedIscore,
-} from '../../Services/APIs/iScore/iScore'
 import { Score } from '../CustomerCreation/CustomerProfile'
 import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApplications'
 import {
@@ -45,6 +41,10 @@ import { LoanApplicationReportRequest } from '../../Services/interfaces'
 import { ActionsIconGroup } from '../../../Shared/Components'
 import ability from '../../config/ability'
 import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
+import {
+  getSMECachedIscore,
+  getIscoreCached,
+} from '../../../Shared/Services/APIs/iScore'
 
 interface Product {
   productName: string

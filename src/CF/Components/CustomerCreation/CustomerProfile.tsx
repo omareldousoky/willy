@@ -3,21 +3,17 @@ import { useHistory, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Container from 'react-bootstrap/Container'
 import { Customer } from '../../../Shared/Services/interfaces'
-import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getIscoreCached } from '../../Services/APIs/iScore/iScore'
 import ability from '../../../Shared/config/ability'
-import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
-import {
-  CustomerScore,
-  getCustomerCategorization,
-} from '../../Services/APIs/Customer-Creation/customerCategorization'
 import { Profile, InfoBox, ProfileActions } from '../../../Shared/Components'
 import { TabDataProps } from '../../../Shared/Components/Profile/types'
-import { blockCustomer } from '../../Services/APIs/blockCustomer/blockCustomer'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
+import { getIscoreCached } from '../../../Shared/Services/APIs/iScore'
+import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
+import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCustomer'
+import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 
 export interface Score {
   id?: string // commercialRegisterNumber
@@ -39,10 +35,6 @@ const tabs: Array<Tab> = [
   {
     header: local.differentInfo,
     stringKey: 'differentInfo',
-  },
-  {
-    header: local.customerCategorization,
-    stringKey: 'customerScore',
   },
   {
     header: local.documents,
@@ -414,15 +406,6 @@ export const CustomerProfile = () => {
         onActionClick: () =>
           history.push('/customers/edit-customer', {
             id: location.state.id,
-          }),
-      },
-      {
-        icon: 'applications',
-        title: local.createClearance,
-        permission: ability.can('newClearance', 'application'),
-        onActionClick: () =>
-          history.push('/customers/create-clearance', {
-            customerId: location.state.id,
           }),
       },
       {
