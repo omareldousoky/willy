@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col'
 import { Formik } from 'formik'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
-import BackButton from '../BackButton/back-button'
+import BackButton from '../../../Shared/Components/BackButton/back-button'
 import * as local from '../../../Shared/Assets/ar.json'
 import {
   getRollableActionsById,

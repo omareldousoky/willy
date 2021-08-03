@@ -28,7 +28,7 @@ import {
 import {
   BranchDetailsResponse,
   getBranch,
-} from '../../Services/APIs/Branch/getBranch'
+} from '../../../Shared/Services/APIs/Branch/getBranch'
 import { getCookie } from '../../../Shared/Services/getCookie'
 import {
   getIscoreCached,

@@ -11,21 +11,21 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import Swal from 'sweetalert2'
 import Select from 'react-select'
 import { Loader } from '../../../Shared/Components/Loader'
-import { LoanOfficersDropDown } from '../dropDowns/allDropDowns'
-import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer'
-import { moveCustomerToOfficer } from '../../Services/APIs/Customer-Creation/moveCustomerToOfficer'
-import { getBranches } from '../../Services/APIs/Branch/getBranches'
+import { LoanOfficersDropDown } from '../../../Shared/Components/dropDowns/allDropDowns'
+import { searchCustomer } from '../../../Shared/Services/APIs/Customer-Creation/searchCustomer'
+import { moveCustomerToOfficer } from '../../../Shared/Services/APIs/Customer-Creation/moveCustomerToOfficer'
+import { getBranches } from '../../../Shared/Services/APIs/Branch/getBranches'
 import * as local from '../../../Shared/Assets/ar.json'
 import Can from '../../config/Can'
 import { UserDateValues } from './userDetailsInterfaces'
-import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
+import { searchLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import { Customer, LoanOfficer } from '../../../Shared/Services/interfaces'
 import {
   beneficiaryType,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import { theme } from '../../../Shared/theme'
-import { Pagination } from '../Common/Pagination'
+import { Pagination } from '../../../Shared/Components/Common/Pagination'
 
 interface Props {
   id: string

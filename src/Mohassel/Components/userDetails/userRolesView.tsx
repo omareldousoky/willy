@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
-import Labels from '../Labels/labels'
+import Labels from '../../../Shared/Components/Labels/labels'
 import './userDetails.scss'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Role, Section } from './userDetailsInterfaces'

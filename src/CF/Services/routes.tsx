@@ -3,7 +3,7 @@ import local from '../../Shared/Assets/ar.json'
 import { Landing } from '../../Shared/Components/Landing'
 
 import { generateAppRoutes } from '../../Shared/Services/utils'
-import { manageAccountsRoute } from '../Components/manageAccounts/routes'
+import { manageAccountsRoute } from '../Components/ManageAccounts/routes'
 
 const appRoutes = [
   {

@@ -25,8 +25,8 @@ import { manageAccountsArray } from './manageAccountsInitials'
 import { getErrorMessage, getDateAndTime } from '../../../Shared/Services/utils'
 import { getCookie } from '../../../Shared/Services/getCookie'
 import { editLoanOfficerValidation } from './loanOfficersValidation'
-import { checkUsernameDuplicates } from '../../Services/APIs/User-Creation/checkUsernameDup'
-import { updateLoanOfficer } from '../../Services/APIs/LoanOfficers/updateLoanOfficer'
+import { checkUsernameDuplicates } from '../../../Shared/Services/APIs/User-Creation/checkUsernameDup'
+import { updateLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/updateLoanOfficer'
 import { LtsIcon } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps {

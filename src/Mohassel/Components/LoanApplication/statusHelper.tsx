@@ -16,7 +16,7 @@ import {
 } from './loanApplicationStates'
 import GroupInfoBox from '../LoanProfile/groupInfoBox'
 import { LoanDetailsTableView } from '../LoanProfile/applicationsDetails'
-import { getRejectionReasons } from '../../Services/APIs/configApis/config'
+import { getRejectionReasons } from '../../../Shared/Services/APIs/configApis/config'
 import { guarantorOrderLocal } from '../../../Shared/Services/utils'
 import { InfoBox } from '../../../Shared/Components'
 import {

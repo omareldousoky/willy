@@ -1,4 +1,4 @@
-import { CustomerScore } from '../../../Mohassel/Services/APIs/Customer-Creation/customerCategorization'
+import { CustomerScore } from '../../Services/APIs/Customer-Creation/customerCategorization'
 
 export interface FieldProps {
   fieldTitle: string

@@ -8,8 +8,10 @@ import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
-// import { getDateAndTime } from '../../Services/getRenderDate'
+import {
+  getDateAndTime,
+  timeToDateyyymmdd,
+} from '../../../Shared/Services/utils'
 import { LtsIcon } from '../../../Shared/Components'
 import Can from '../../../Shared/config/Can'
 
@@ -73,8 +75,8 @@ class RoleUsers extends Component<Props, State> {
         title: local.creationDate,
         key: 'creationDate',
         sortable: true,
-        render: (data) => '',
-        // data.created?.at ? getDateAndTime(data.created.at) : '',
+        render: (data) =>
+          data.created?.at ? getDateAndTime(data.created.at) : '',
       },
       {
         title: '',
@@ -128,15 +130,15 @@ class RoleUsers extends Component<Props, State> {
   render() {
     return (
       <>
-        <Card className="main-card">
+        <Card className="m-4">
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
-            <div className="custom-card-header">
+            <div className="d-flex justify-content-between m-3">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
                   {local.users}
                 </Card.Title>
-                <span className="text-muted">
+                <span>
                   {local.noOfUsers}
                   {this.props.totalCount ? this.props.totalCount : 0}
                 </span>

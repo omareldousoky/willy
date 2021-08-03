@@ -17,7 +17,7 @@ import {
   BranchDetails,
   BranchDetailsResponse,
   getBranch,
-} from '../../Services/APIs/Branch/getBranch'
+} from '../../../Shared/Services/APIs/Branch/getBranch'
 
 interface State {
   loading: boolean

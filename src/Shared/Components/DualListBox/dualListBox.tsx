@@ -9,8 +9,8 @@ import Container from 'react-bootstrap/Container'
 
 import './styles.scss'
 import Swal from 'sweetalert2'
-import * as local from '../../../Shared/Assets/ar.json'
-import { LtsIcon } from '../../../Shared/Components'
+import * as local from '../../Assets/ar.json'
+import { LtsIcon } from '..'
 
 interface Props {
   options: any

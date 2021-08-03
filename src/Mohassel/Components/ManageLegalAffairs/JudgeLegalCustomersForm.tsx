@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 
 import local from '../../../Shared/Assets/ar.json'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { getGovernorates } from '../../Services/APIs/configApis/config'
+import { getGovernorates } from '../../../Shared/Services/APIs/configApis/config'
 import { District, Governorate } from '../CustomerCreation/StepTwoForm'
 import AppForm from './Form'
 import { FormField } from './Form/types'

@@ -12,10 +12,10 @@ import {
 } from '../../../Shared/Services/nationalIdValidation'
 import Map from '../../../Shared/Components/Map/map'
 import * as local from '../../../Shared/Assets/ar.json'
-import { checkDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup'
+import { checkDuplicates } from '../../../Shared/Services/APIs/Customer-Creation/checkNationalIdDup'
 import Can from '../../config/Can'
 import ability from '../../config/ability'
-import { getGovernorates } from '../../Services/APIs/configApis/config'
+import { getGovernorates } from '../../../Shared/Services/APIs/configApis/config'
 import { Governorate, District } from './StepTwoForm'
 
 function calculateAge(dateOfBirth: number) {

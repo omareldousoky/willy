@@ -9,7 +9,7 @@ import { InfoBox, Profile, ProfileActions } from '..'
 
 import * as local from '../../Assets/ar.json'
 import ability from '../../../Mohassel/config/ability'
-import { getCustomerByID } from '../../../Mohassel/Services/APIs/Customer-Creation/getCustomer'
+import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
 import { getSMECachedIscore } from '../../../Mohassel/Services/APIs/iScore/iScore'
 import { getErrorMessage } from '../../Services/utils'
 

@@ -6,11 +6,11 @@ import Form from 'react-bootstrap/Form'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-// import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageAccountsArray } from './manageAccountsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import Can from '../../../Shared/config/Can'
 import { getRoles } from '../../../Shared/Services/APIs/Roles/roles'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 
 interface State {
   data: any
@@ -58,33 +58,23 @@ class RolesList extends Component<RouteComponentProps, State> {
   render() {
     return (
       <div>
-        {/* <HeaderWithCards
+        <HeaderWithCards
           header={local.manageAccounts}
           array={this.state.manageAccountTabs}
-          active={this.state.manageAccountTabs
-            .map((item) => {
-              return item.icon
-            })
-            .indexOf('roles')}
-        /> */}
-        test
-        <Card className="main-card">
+          active={0}
+        />
+        <Card className="m-4">
           <Loader type="fullsection" open={this.state.loading} />
-          <Card.Body style={{ padding: 0 }}>
-            <div className="custom-card-header">
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                  {local.roles} test
-                </Card.Title>
-                <span className="text-muted">
-                  {local.noOfRoles + ` (${this.state.totalCount})`}
-                </span>
+          <Card.Body className="p-0">
+            <div className="d-flex justify-content-between m-3">
+              <div className="d-flex align-items-center">
+                <Card.Title className="mr-4 mb-0">{local.roles}</Card.Title>
+                <span>{local.noOfRoles + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
                 <Can I="createRoles" a="user">
                   <Button
-                    className="big-button"
-                    style={{ marginLeft: 20 }}
+                    className="mr-4"
                     onClick={() =>
                       this.props.history.push('/manage-accounts/roles/new-role')
                     }
@@ -100,7 +90,7 @@ class RolesList extends Component<RouteComponentProps, State> {
                   type="text"
                   data-qc="filterLoanUsage"
                   placeholder={local.search}
-                  style={{ marginBottom: 20, width: '60%' }}
+                  className="mb-4 w-50"
                   maxLength={100}
                   value={this.state.filterRoles}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -129,23 +119,19 @@ class RolesList extends Component<RouteComponentProps, State> {
                     }
                   >
                     <Card.Body>
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <div className="d-flex align-items-center justify-content-between">
+                        <div className="d-flex align-items-center">
                           <h5 style={{ marginLeft: 50, minWidth: 50 }}>
                             #{index + 1}
                           </h5>
                           <div style={{ marginLeft: 150, minWidth: 200 }}>
-                            <span className="text-muted">{local.roleName}</span>
+                            <span className="text-primary">
+                              {local.roleName}
+                            </span>
                             <h6>{el.roleName}</h6>
                           </div>
                           <div>
-                            <span className="text-muted">
+                            <span className="text-primary">
                               {local.permissions}
                             </span>
                             <h6>

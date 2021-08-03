@@ -7,7 +7,7 @@ import {
   CardNavBar,
   Tab,
 } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
-import BackButton from '../BackButton/back-button'
+import BackButton from '../../../Shared/Components/BackButton/back-button'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Lead } from './leadInterface'
 

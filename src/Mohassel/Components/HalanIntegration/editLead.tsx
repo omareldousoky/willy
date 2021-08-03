@@ -13,7 +13,7 @@ import { Lead } from './leadInterface'
 import { Loader } from '../../../Shared/Components/Loader'
 import { editLead } from '../../Services/APIs/Leads/editLead'
 import { Governorate } from '../CustomerCreation/StepTwoForm'
-import { getGovernorates } from '../../Services/APIs/configApis/config'
+import { getGovernorates } from '../../../Shared/Services/APIs/configApis/config'
 import {
   leadStepOne,
   leadStepTwo,

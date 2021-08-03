@@ -1,10 +1,12 @@
 import React from 'react'
-import { RolesList, UsersList } from '.'
+import { BranchesList, LoanOfficersList, RolesList, UsersList } from '.'
 import local from '../../../Shared/Assets/ar.json'
 import Can from '../../../Shared/config/Can'
-import { RoleCreation, RoleProfile } from '../roles'
-import { UserCreation } from '../userCreation'
-import { UserDetails } from '../userDetails'
+import { CreateBranch } from '../BranchCreation'
+import { BranchDetails } from '../BranchDetails'
+import { RoleCreation, RoleProfile } from '../Roles'
+import { UserCreation } from '../UserCreation'
+import { UserDetails } from '../UserDetails'
 
 export const manageAccountsRoute = {
   path: '/manage-accounts',
@@ -88,6 +90,60 @@ export const manageAccountsRoute = {
               <UserDetails {...props} />
             </Can>
           ),
+        },
+      ],
+    },
+    {
+      path: '/branches',
+      label: local.branches,
+      render: (props) => (
+        <Can I="getBranch" a="branch">
+          <BranchesList {...props} withHeader />
+        </Can>
+      ),
+      routes: [
+        {
+          path: '/new-branch',
+          label: local.newBranch,
+          render: (props) => (
+            <Can I="createBranch" a="branch">
+              <CreateBranch {...props} edit={false} />
+            </Can>
+          ),
+        },
+        {
+          path: '/edit-branch',
+          label: local.editBranch,
+          render: (props) => (
+            <Can I="createBranch" a="branch">
+              <CreateBranch {...props} edit />
+            </Can>
+          ),
+        },
+        {
+          path: '/branch-details',
+          label: local.branchDetails,
+          render: (props) => (
+            <Can I="getBranch" a="branch">
+              <BranchDetails {...props} />
+            </Can>
+          ),
+        },
+      ],
+    },
+    {
+      path: '/loan-officers',
+      label: local.loanOfficers,
+      render: (props) => (
+        <Can I="updateLoanOfficer" a="user">
+          <LoanOfficersList {...props} withHeader />
+        </Can>
+      ),
+      routes: [
+        {
+          path: '/loanOfficer-details',
+          label: local.loanOfficer,
+          render: (props) => <UserDetails {...props} />,
         },
       ],
     },

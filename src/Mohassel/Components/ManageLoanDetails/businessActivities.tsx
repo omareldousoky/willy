@@ -19,7 +19,7 @@ import {
   createBusinessActivity,
   editBusinessActivity,
   getBusinessSectors,
-} from '../../Services/APIs/configApis/config'
+} from '../../../Shared/Services/APIs/configApis/config'
 import ability from '../../config/ability'
 
 interface State {

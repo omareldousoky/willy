@@ -1,6 +1,6 @@
 import React from 'react'
 import local from '../../../../Shared/Assets/ar.json'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 import './legalHistory.scss'
 import DataRow from '../../pdfTemplates/pdfTemplateCommon/dataRow'
 import { LegalHistoryProps } from '../types'

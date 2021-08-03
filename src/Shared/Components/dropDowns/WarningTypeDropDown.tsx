@@ -1,8 +1,8 @@
 import React from 'react'
 import Col from 'react-bootstrap/Col'
 import Select from 'react-select'
-import { theme } from '../../../Shared/theme'
-import local from '../../../Shared/Assets/ar.json'
+import { theme } from '../../theme'
+import local from '../../Assets/ar.json'
 import { OptionType, WarningTypeDropDownProps } from './types'
 
 const ALL_OPTION = { value: '', label: local.all }

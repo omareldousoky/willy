@@ -8,15 +8,18 @@ import Col from 'react-bootstrap/Col'
 
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
-// import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import RoleTable from './roleTable'
 import { getPermissions } from '../../../Shared/Services/APIs/Roles/roles'
-// import { Section } from './roleCreation'
-// import RoleUsers from '.'
-// import BackButton from '../BackButton/back-button'
+import { Section } from './roleCreation'
+import { RoleUsers } from '.'
 
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { LtsIcon } from '../../../Shared/Components'
+import {
+  CardNavBar,
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
+import BackButton from '../../../Shared/Components/BackButton/back-button'
 
 interface Role {
   permissions: Array<any>

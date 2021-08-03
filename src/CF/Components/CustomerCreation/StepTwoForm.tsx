@@ -10,12 +10,12 @@ import Map from '../../../Shared/Components/Map/map'
 import {
   getGovernorates,
   getBusinessSectors,
-} from '../../Services/APIs/configApis/config'
+} from '../../../Shared/Services/APIs/configApis/config'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../../Shared/config/Can'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { checkDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup'
+import { checkDuplicates } from '../../../Shared/Services/APIs/Customer-Creation/checkNationalIdDup'
 
 export interface Village {
   villageName: { ar: string }

@@ -15,7 +15,7 @@ import {
   BranchDetails,
   BranchDetailsResponse,
   getBranch,
-} from '../../Services/APIs/Branch/getBranch'
+} from '../../../Shared/Services/APIs/Branch/getBranch'
 import Payment from '../Payment/payment'
 import { englishToArabic } from '../../Services/statusLanguage'
 import local from '../../../Shared/Assets/ar.json'
@@ -70,7 +70,7 @@ import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
 import { FollowUpStatementView } from './followupStatementView'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares'
-import { getWriteOffReasons } from '../../Services/APIs/configApis/config'
+import { getWriteOffReasons } from '../../../Shared/Services/APIs/configApis/config'
 import { InfoBox, LtsIcon, ProfileActions } from '../../../Shared/Components'
 
 import {

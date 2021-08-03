@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
-import Labels from '../Labels/labels'
 import './userDetails.scss'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Role, Section } from './userDetailsInterfaces'
 import { getPermissions } from '../../../Shared/Services/APIs/Roles/roles'
 import { Loader } from '../../../Shared/Components/Loader'
-import RoleTable from '../roles/roleTable'
+import RoleTable from '../Roles/roleTable'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { LtsIcon } from '../../../Shared/Components'
+import Labels from '../../../Shared/Components/Labels/labels'
 
 interface Props {
   roles: Role[]

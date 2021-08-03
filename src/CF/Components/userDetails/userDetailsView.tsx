@@ -4,8 +4,8 @@ import * as local from '../../../Shared/Assets/ar.json'
 import { theme } from '../../../Shared/theme'
 import { UserDateValues } from './userDetailsInterfaces'
 import { timeToDate, timeToDateyyymmdd } from '../../../Shared/Services/utils'
-import Labels from '../Labels/labels'
 import { LtsIcon } from '../../../Shared/Components'
+import Labels from '../../../Shared/Components/Labels/labels'
 
 interface Props {
   data: UserDateValues

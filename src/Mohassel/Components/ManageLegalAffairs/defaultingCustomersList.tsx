@@ -25,7 +25,7 @@ import {
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
 import CustomerSearch from '../CustomerSearch/customerSearchTable'
-import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer'
+import { searchCustomer } from '../../../Shared/Services/APIs/Customer-Creation/searchCustomer'
 import { Customer } from '../../../Shared/Services/interfaces'
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan'
 import { Application } from '../LoanApplication/loanApplicationStates'

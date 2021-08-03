@@ -13,11 +13,11 @@ import {
   LegalWarningRequest,
   LegalWarningType,
 } from '../../Models/LegalAffairs'
-import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer'
+import { searchCustomer } from '../../../Shared/Services/APIs/Customer-Creation/searchCustomer'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan'
 import { Application } from '../LoanApplication/loanApplicationStates'
-import { WarningTypeDropDown } from '../dropDowns/WarningTypeDropDown'
+import { WarningTypeDropDown } from '../../../Shared/Components/dropDowns/WarningTypeDropDown'
 import {
   fetchWarning,
   createWarning,

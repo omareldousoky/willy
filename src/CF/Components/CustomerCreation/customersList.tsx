@@ -19,7 +19,7 @@ import {
   getDateAndTime,
 } from '../../../Shared/Services/utils'
 import { ActionsIconGroup } from '../../../Shared/Components'
-import { ActionWithIcon } from '../../Models/common'
+import { ActionWithIcon } from '../../../Mohassel/Models/common'
 
 interface State {
   size: number
@@ -183,15 +183,15 @@ class CustomersList extends Component<Props, State> {
             })
             .indexOf('customers')}
         />
-        <Card className="main-card">
+        <Card className="m-4">
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
-            <div className="custom-card-header">
+            <div className="d-flex justify-content-between m-3">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
                   {local.customers}
                 </Card.Title>
-                <span className="text-muted">
+                <span>
                   {local.noOfCustomers +
                     ` (${this.props.totalCount ? this.props.totalCount : 0})`}
                 </span>
@@ -202,7 +202,6 @@ class CustomersList extends Component<Props, State> {
                     onClick={() => {
                       this.props.history.push('/customers/new-customer')
                     }}
-                    className="big-button"
                   >
                     {local.newCustomer}
                   </Button>

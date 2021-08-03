@@ -6,7 +6,7 @@ import {
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
 import { MonthComparisonReportResponse } from '../../../Services/interfaces'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 import './monthComparison.scss'
 
 interface PaidArrearsProps {

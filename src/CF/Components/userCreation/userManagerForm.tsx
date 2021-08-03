@@ -12,9 +12,9 @@ import {
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import { MainChoosesValues } from './userCreationinterfaces'
-import { searchUsers } from '../../Services/APIs/Users/searchUsers'
 import { Loader } from '../../../Shared/Components/Loader'
 import { LtsIcon } from '../../../Shared/Components'
+import { searchUsers } from '../../../Shared/Services/APIs/Users/searchUsers'
 
 interface Props {
   roles: any[]

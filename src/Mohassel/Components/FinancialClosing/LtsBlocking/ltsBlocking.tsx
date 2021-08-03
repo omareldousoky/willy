@@ -20,7 +20,7 @@ import { search, searchFilters } from '../../../../Shared/redux/search/actions'
 import { loading } from '../../../../Shared/redux/loading/actions'
 import LtsBlockingModal from './ltsBlockingModal'
 import { financialUnlBlocking } from '../../../Services/APIs/loanApplication/financialClosing'
-import { Pagination } from '../../Common/Pagination'
+import { Pagination } from '../../../../Shared/Components/Common/Pagination'
 
 interface Props extends RouteComponentProps {
   data: Branch[]

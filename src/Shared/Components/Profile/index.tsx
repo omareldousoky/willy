@@ -5,13 +5,13 @@ import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 
 import { Loader } from '../Loader'
-import BackButton from '../../../Mohassel/Components/BackButton/back-button'
+import BackButton from '../BackButton/back-button'
 import { CardNavBar } from '../HeaderWithCards/cardNavbar'
-import DocumentsUpload from '../../../Mohassel/Components/CustomerCreation/DocumentsUpload'
-import DeathCertificate from '../../../Mohassel/Components/CustomerCreation/DeathCertificate'
-import { CustomerCategorization } from '../../../Mohassel/Components/CustomerCreation/CustomerCategorization'
+import DocumentsUpload from '../../../Mohassel/Components/CustomerCreation/documentsUpload'
+import DeathCertificate from '../../../Mohassel/Components/CustomerCreation/deathCertificate'
+import { CustomerCategorization } from '../../../Mohassel/Components/CustomerCreation/customerCategorization'
 import { ProfileActions } from '../ProfileActions'
-import { CustomerReportsTab } from '../../../Mohassel/Components/CustomerCreation/CustomerReportsTab'
+import { CustomerReportsTab } from '../../../Mohassel/Components/CustomerCreation/customerReportsTab'
 import { ProfileProps } from './types'
 
 export const Profile = ({

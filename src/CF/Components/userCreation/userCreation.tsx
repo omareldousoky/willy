@@ -7,7 +7,7 @@ import Card from 'react-bootstrap/Card'
 
 import { UserDataForm } from './userDataForm'
 import * as local from '../../../Shared/Assets/ar.json'
-import Wizard from '../wizard/Wizard'
+import Wizard from '../Wizard/Wizard'
 import { Loader } from '../../../Shared/Components/Loader'
 import {
   initialStep1,
@@ -25,15 +25,15 @@ import {
 } from './userCreationinterfaces'
 import UserRolesAndPermissionsFrom from './userRolesAndPermissionsForm'
 import './userCreation.scss'
-import { getUserRolesAndBranches } from '../../Services/APIs/User-Creation/getUserRolesAndBranches'
-import { createUser } from '../../Services/APIs/User-Creation/createUser'
-import { editUser } from '../../Services/APIs/User-Creation/editUser'
-import { getUserDetails } from '../../Services/APIs/Users/userDetails'
 import {
   getErrorMessage,
   timeToDateyyymmdd,
 } from '../../../Shared/Services/utils'
 import UserManagerForm from './userManagerForm'
+import { getUserDetails } from '../../../Shared/Services/APIs/Users/userDetails'
+import { getUserRolesAndBranches } from '../../../Shared/Services/APIs/User-Creation/getUserRolesAndBranches'
+import { createUser } from '../../../Shared/Services/APIs/User-Creation/createUser'
+import { editUser } from '../../../Shared/Services/APIs/User-Creation/editUser'
 
 interface Props extends RouteComponentProps<{}, {}, { details: string }> {
   edit: boolean

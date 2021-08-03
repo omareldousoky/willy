@@ -13,7 +13,7 @@ import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWi
 import {
   getMaxPrinciples,
   setMaxPrinciples,
-} from '../../Services/APIs/configApis/config'
+} from '../../../Shared/Services/APIs/configApis/config'
 import { manageToolsArray } from '../Tools/manageToolsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 

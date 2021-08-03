@@ -2,21 +2,24 @@ import React, { Component } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
-import BackButton from '../BackButton/back-button'
 import * as local from '../../../Shared/Assets/ar.json'
 import './userDetails.scss'
 import UserDetailsView from './userDetailsView'
-import { getUserDetails } from '../../Services/APIs/Users/userDetails'
 import { UserDateValues } from './userDetailsInterfaces'
 import { Loader } from '../../../Shared/Components/Loader'
 import UserRolesView from './userRolesView'
-import { setUserActivation } from '../../Services/APIs/Users/userActivation'
 import CustomersForUser from './customersForUser'
-import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
-import Can from '../../config/Can'
-import ability from '../../config/ability'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { ProfileActions } from '../../../Shared/Components'
+import BackButton from '../../../Shared/Components/BackButton/back-button'
+import ability from '../../../Shared/config/ability'
+import { setUserActivation } from '../../../Shared/Services/APIs/Users/userActivation'
+import { getUserDetails } from '../../../Shared/Services/APIs/Users/userDetails'
+import Can from '../../../Shared/config/Can'
+import {
+  CardNavBar,
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 
 interface State {
   activeTab: string

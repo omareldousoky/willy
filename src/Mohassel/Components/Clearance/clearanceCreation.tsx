@@ -7,7 +7,7 @@ import Card from 'react-bootstrap/Card'
 import { Formik } from 'formik'
 import Swal from 'sweetalert2'
 import CustomerBasicsCard from './basicInfoCustomer'
-import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
+import { getCustomerByID } from '../../../Shared/Services/APIs/Customer-Creation/getCustomer'
 import { ClearanceCreationForm } from './clearanceCreationForm'
 import {
   clearanceStep1CreationValidation,
@@ -20,7 +20,7 @@ import {
   ClearanceRequest,
 } from './clearanceFormIntialState'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans'
+import { getCustomersBalances } from '../../../Shared/Services/APIs/Customer-Creation/customerLoans'
 import {
   getErrorMessage,
   timeToDateyyymmdd,

@@ -5,8 +5,8 @@ import Col from 'react-bootstrap/Col'
 import FormControl from 'react-bootstrap/FormControl'
 import InputGroup from 'react-bootstrap/InputGroup'
 
-import * as local from '../../../../Shared/Assets/ar.json'
-import { LtsIcon } from '../../../../Shared/Components'
+import * as local from '../../../Assets/ar.json'
+import { LtsIcon } from '../..'
 
 interface DateFieldProps {
   key: string

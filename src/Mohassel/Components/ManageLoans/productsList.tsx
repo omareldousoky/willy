@@ -19,7 +19,7 @@ import ability from '../../config/ability'
 import { ActionsIconGroup } from '../../../Shared/Components'
 import { ActionWithIcon, Product } from '../../Models/common'
 import { getProductApplications } from '../../Services/APIs/loanProduct/productCreation'
-import { Pagination } from '../Common/Pagination'
+import { Pagination } from '../../../Shared/Components/Common/Pagination'
 
 interface Props extends RouteComponentProps {
   data: any

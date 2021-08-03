@@ -11,7 +11,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 import Governorates from '../Governorates/governorates'
 import { Loader } from '../../../Shared/Components/Loader'
 import Map from '../../../Shared/Components/Map/map'
-import { checkBranchNameDuplicates } from '../../Services/APIs/Branch/checkBranchNameDuplicates'
+import { checkBranchNameDuplicates } from '../../../Shared/Services/APIs/Branch/checkBranchNameDuplicates'
 
 import {
   BasicErrors,

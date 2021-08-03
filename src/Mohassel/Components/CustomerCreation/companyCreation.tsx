@@ -7,8 +7,8 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import produce from 'immer'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
 import { Loader } from '../../../Shared/Components/Loader'
-import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
-import { editCustomer } from '../../Services/APIs/Customer-Creation/editCustomer'
+import { getCustomerByID } from '../../../Shared/Services/APIs/Customer-Creation/getCustomer'
+import { editCustomer } from '../../../Shared/Services/APIs/Customer-Creation/editCustomer'
 import { step1Company, step2Company } from './customerFormIntialState'
 import {
   companyCreationValidationStepOne,
@@ -17,15 +17,15 @@ import {
 } from './companyFormIntialState'
 import { StepTwoForm } from './StepTwoForm'
 import { StepThreeForm } from './StepThreeForm'
-import DocumentsUpload from './DocumentsUpload'
-import { createCustomer } from '../../Services/APIs/Customer-Creation/createCustomer'
+import DocumentsUpload from './documentsUpload'
+import { createCustomer } from '../../../Shared/Services/APIs/Customer-Creation/createCustomer'
 import * as local from '../../../Shared/Assets/ar.json'
 import {
   getErrorMessage,
   timeToDateyyymmdd,
 } from '../../../Shared/Services/utils'
 import ability from '../../config/ability'
-import { getMaxPrinciples } from '../../Services/APIs/configApis/config'
+import { getMaxPrinciples } from '../../../Shared/Services/APIs/configApis/config'
 
 interface Props extends RouteComponentProps<{}, {}, { id?: string }> {
   edit: boolean

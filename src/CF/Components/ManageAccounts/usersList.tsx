@@ -5,21 +5,21 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { connect } from 'react-redux'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-// import { getDateAndTime } from '../../Services/getRenderDate'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-// import { setUserActivation } from '../../Services/APIs/Users/userActivation'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { loading } from '../../../Shared/redux/loading/actions'
-// import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageAccountsArray } from './manageAccountsInitials'
 import {
+  getDateAndTime,
   getErrorMessage,
   timeToDateyyymmdd,
 } from '../../../Shared/Services/utils'
 import { LtsIcon } from '../../../Shared/Components'
 import Can from '../../../Shared/config/Can'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
+import { setUserActivation } from '../../../Shared/Services/APIs/Users/userActivation'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -88,13 +88,13 @@ class UsersList extends Component<Props, State> {
         render: (data) =>
           data.hiringDate ? timeToDateyyymmdd(data.hiringDate) : '',
       },
-      // {
-      //   title: local.creationDate,
-      //   key: 'createdAt',
-      //   sortable: true,
-      //   render: (data) =>''
-      //     // data.created?.at ? getDateAndTime(data.created.at) : '',
-      // },
+      {
+        title: local.creationDate,
+        key: 'createdAt',
+        sortable: true,
+        render: (data) =>
+          data.created?.at ? getDateAndTime(data.created.at) : '',
+      },
       {
         title: '',
         key: 'actions',
@@ -131,16 +131,16 @@ class UsersList extends Component<Props, State> {
     }
     this.props.setLoading(true)
 
-    // const res = await setUserActivation(req)
-    // if (res.status === 'success') {
-    //   this.props.setLoading(false)
-    //   Swal.fire('', `${data.username}  ${req.status} `, 'success').then(() =>
-    //     this.getUsers()
-    //   )
-    // } else {
-    //   this.props.setLoading(false)
-    //   Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    // }
+    const res = await setUserActivation(req)
+    if (res.status === 'success') {
+      this.props.setLoading(false)
+      Swal.fire('', `${data.username}  ${req.status} `, 'success').then(() =>
+        this.getUsers()
+      )
+    } else {
+      this.props.setLoading(false)
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    }
   }
 
   async getUsers() {
@@ -208,26 +208,20 @@ class UsersList extends Component<Props, State> {
   render() {
     return (
       <div>
-        {/* {this.props.withHeader && (
-          // <HeaderWithCards
-          //   header={local.manageAccounts}
-          //   array={this.state.manageAccountTabs}
-          //   active={this.state.manageAccountTabs
-          //     .map((item) => {
-          //       return item.icon
-          //     })
-          //     .indexOf('users')}
-          // />
-        )} */}
-        <Card className="main-card">
+        {this.props.withHeader && (
+          <HeaderWithCards
+            header={local.manageAccounts}
+            array={this.state.manageAccountTabs}
+            active={1}
+          />
+        )}
+        <Card className="m-4">
           <Loader type="fullsection" open={this.props.loading} />
-          <Card.Body style={{ padding: 0 }}>
-            <div className="custom-card-header">
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                  {local.users}
-                </Card.Title>
-                <span className="text-muted">
+          <Card.Body className="p-0">
+            <div className="d-flex justify-content-between m-3">
+              <div className="d-flex align-items-center">
+                <Card.Title className="mr-4 mb-0">{local.users}</Card.Title>
+                <span>
                   {local.noOfUsers +
                     ` (${this.props.totalCount ? this.props.totalCount : 0})`}
                 </span>
@@ -235,7 +229,7 @@ class UsersList extends Component<Props, State> {
               <div>
                 <Can I="createUser" a="user">
                   <Button
-                    className="big-button"
+                    className="mr-4"
                     onClick={() =>
                       this.props.history.push('/manage-accounts/users/new-user')
                     }

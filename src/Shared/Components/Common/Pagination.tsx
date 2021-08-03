@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import Form from 'react-bootstrap/Form'
-import local from '../../../Shared/Assets/ar.json'
+import local from '../../Assets/ar.json'
 import { PaginationProps } from './types'
 
 const MAX_PAGE_NUMBERS = 5
