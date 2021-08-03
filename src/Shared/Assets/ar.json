@@ -1145,5 +1145,8 @@
   "nanoLimitDocument": "صوره وصل الحد الائتماني",
   "nano": "نانو",
   "sme": "شركات",
-  "micro": "ميكرو"
+  "micro": "ميكرو",
+  "monthlyIncome": "الدخل الشهري",
+  "initialConsumerFinanceLimit": "الحد المبدئي للعميل",
+  "maxConsumerFinanceLimit": "الحد الأقصي للعميل"
 }

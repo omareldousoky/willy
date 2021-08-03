@@ -12,11 +12,11 @@ import {
   iscoreStatusColor,
   timeToArabicDate,
   timeToDateyyymmdd,
+  getDateAndTime,
 } from './utils'
-import { Score } from '../../Mohassel/Components/CustomerCreation/customerProfile'
-import { getDateAndTime } from '../../Mohassel/Services/getRenderDate'
 import Can from '../../Mohassel/config/Can'
 import { FieldProps } from '../Components/Profile/types'
+import { Score } from '../../Mohassel/Components/CustomerCreation/CustomerProfile'
 
 const {
   companyName,

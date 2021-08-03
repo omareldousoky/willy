@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row'
 import Select from 'react-select'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import {
   Activities,
   BusinessSector,
@@ -16,12 +16,12 @@ import {
 } from './manageLoanDetailsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { CRUDList, CrudOption } from '../CRUDList/crudList'
+import ability from '../../config/ability'
 import {
   createBusinessSpeciality,
   editBusinessSpeciality,
   getBusinessSectors,
-} from '../../Services/APIs/configApis/config'
-import ability from '../../config/ability'
+} from '../../../Shared/Services/APIs/config'
 
 interface State {
   businessSectors: Array<BusinessSector>

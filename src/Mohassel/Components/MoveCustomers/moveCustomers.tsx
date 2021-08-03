@@ -10,7 +10,7 @@ import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import { ValueType } from 'react-select'
 import { getCookie } from '../../../Shared/Services/getCookie'
-import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
+import { searchLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import {
   beneficiaryType,
   getErrorMessage,
@@ -18,17 +18,20 @@ import {
 } from '../../../Shared/Services/utils'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-import { DropDownOption, LoanOfficersDropDown } from '../dropDowns/allDropDowns'
+import {
+  DropDownOption,
+  LoanOfficersDropDown,
+} from '../../../Shared/Components/dropDowns/allDropDowns'
 import Can from '../../config/Can'
-import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer'
-import { moveCustomerToOfficer } from '../../Services/APIs/Customer-Creation/moveCustomerToOfficer'
 import {
   manageCustomersArray,
   manageCompaniesArray,
 } from '../CustomerCreation/manageCustomersInitial'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { Customer } from '../../../Shared/Services/interfaces'
-import { Pagination } from '../Common/Pagination'
+import { Pagination } from '../../../Shared/Components/Common/Pagination'
+import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
+import { moveCustomerToOfficer } from '../../../Shared/Services/APIs/customer/moveCustomerToOfficer'
 
 interface State {
   customers: Array<Customer>

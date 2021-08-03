@@ -3,7 +3,7 @@ import {
   numbersToArabic,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 import './installmentsDuePerOfficerCustomerCard.scss'
 
 const installmentStatuses = {

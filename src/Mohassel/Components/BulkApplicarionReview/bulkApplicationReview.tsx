@@ -28,7 +28,7 @@ import {
   manageApplicationsArray,
   manageSMEApplicationsArray,
 } from '../TrackLoanApplications/manageApplicationInitials'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import Can from '../../config/Can'
 import { getCookie } from '../../../Shared/Services/getCookie'
 

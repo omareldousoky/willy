@@ -15,12 +15,15 @@ import {
   BranchDetails,
   BranchDetailsResponse,
   getBranch,
-} from '../../Services/APIs/Branch/getBranch'
+} from '../../../Shared/Services/APIs/Branch/getBranch'
 import Payment from '../Payment/payment'
 import { englishToArabic } from '../../Services/statusLanguage'
 import local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
-import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
+import {
+  CardNavBar,
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import Logs from './applicationLogs'
 import { LoanDetailsTableView } from './applicationsDetails'
 import { GuarantorTableView } from './guarantorDetails'
@@ -47,12 +50,6 @@ import { cancelApplication } from '../../Services/APIs/loanApplication/stateHand
 import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment'
 import store from '../../../Shared/redux/store'
 import UploadDocuments from './uploadDocuments'
-import {
-  getIscore,
-  getIscoreCached,
-  getSMECachedIscore,
-  getSMEIscore,
-} from '../../Services/APIs/iScore/iScore'
 import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan'
 import { doubtLoan } from '../../Services/APIs/Loan/doubtLoan'
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt'
@@ -63,11 +60,9 @@ import { getManualOtherPayments } from '../../Services/APIs/Payment/getManualOth
 import { rejectManualOtherPayment } from '../../Services/APIs/Payment/rejectManualOtherPayment'
 import { approveManualOtherPayment } from '../../Services/APIs/Payment/approveManualOtherPayment'
 import { numTo2Decimal } from '../CIB/textFiles'
-import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
 import { FollowUpStatementView } from './followupStatementView'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares'
-import { getWriteOffReasons } from '../../Services/APIs/configApis/config'
 import { InfoBox, LtsIcon, ProfileActions } from '../../../Shared/Components'
 
 import {
@@ -86,7 +81,7 @@ import {
   SmeLoanContract,
   SolidarityGuarantee,
 } from '../pdfTemplates/smeLoanContract'
-import { Score } from '../CustomerCreation/customerProfile'
+import { Score } from '../CustomerCreation/CustomerProfile'
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
 
 import { getEarlyPaymentPdfData } from './utils'
@@ -96,6 +91,14 @@ import {
 } from '../../Models/Payment'
 import NanoLoanContract from '../pdfTemplates/nanoLoanContract/nanoLoanContract'
 import { PromissoryNoteMicro } from '../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
+import {
+  getIscore,
+  getIscoreCached,
+  getSMECachedIscore,
+  getSMEIscore,
+} from '../../../Shared/Services/APIs/iScore'
+import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
+import { getWriteOffReasons } from '../../../Shared/Services/APIs/config'
 
 export interface IndividualWithInstallments {
   installmentTable: {

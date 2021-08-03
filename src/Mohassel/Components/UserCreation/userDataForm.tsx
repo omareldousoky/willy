@@ -10,13 +10,13 @@ import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../config/Can'
 import { checkIssueDate, getErrorMessage } from '../../../Shared/Services/utils'
 import { Values, Errors, Touched } from './userCreationinterfaces'
-import { checkNationalIdDuplicates } from '../../Services/APIs/User-Creation/checkNationalIdDup'
-import { checkUsernameDuplicates } from '../../Services/APIs/User-Creation/checkUsernameDup'
-import { checkHRCodeDuplicates } from '../../Services/APIs/User-Creation/checkHRCodeDUP'
+import { checkNationalIdDuplicates } from '../../../Shared/Services/APIs/User-Creation/checkNationalIdDup'
+import { checkUsernameDuplicates } from '../../../Shared/Services/APIs/User-Creation/checkUsernameDup'
+import { checkHRCodeDuplicates } from '../../../Shared/Services/APIs/User-Creation/checkHRCodeDUP'
 import {
   getBirthdateFromNationalId,
   getGenderFromNationalId,
-} from '../../Services/nationalIdValidation'
+} from '../../../Shared/Services/nationalIdValidation'
 
 interface Props {
   values: Values

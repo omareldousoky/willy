@@ -16,14 +16,15 @@ import Can from '../../config/Can'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { loading } from '../../../Shared/redux/loading/actions'
-import HeaderWithCards, { Tab } from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards, {
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from './manageLegalAffairsInitials'
 import {
   getErrorMessage,
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
 import CustomerSearch from '../CustomerSearch/customerSearchTable'
-import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer'
 import { Customer } from '../../../Shared/Services/interfaces'
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan'
 import { Application } from '../LoanApplication/loanApplicationStates'
@@ -40,6 +41,7 @@ import DefaultingCustomersPdfTemplate, {
   ReportDefaultedCustomer,
 } from '../pdfTemplates/defaultingCustomers/DefaultingCustomers'
 import { LtsIcon } from '../../../Shared/Components'
+import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 
 interface Review {
   at: number

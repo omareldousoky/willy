@@ -9,16 +9,16 @@ import { InfoBox, Profile, ProfileActions } from '..'
 
 import * as local from '../../Assets/ar.json'
 import ability from '../../../Mohassel/config/ability'
-import { getCustomerByID } from '../../../Mohassel/Services/APIs/Customer-Creation/getCustomer'
-import { getSMECachedIscore } from '../../../Mohassel/Services/APIs/iScore/iScore'
 import { getErrorMessage } from '../../Services/utils'
 
 import { TabDataProps } from '../Profile/types'
-import { Tab } from '../../../Mohassel/Components/HeaderWithCards/cardNavbar'
+import { Tab } from '../HeaderWithCards/cardNavbar'
 import { Customer } from '../../Services/interfaces'
-import { Score } from '../../../Mohassel/Components/CustomerCreation/customerProfile'
+import { Score } from '../../../Mohassel/Components/CustomerCreation/CustomerProfile'
 import { getCompanyInfo } from '../../Services/formatCustomersInfo'
-import { blockCustomer } from '../../../Mohassel/Services/APIs/blockCustomer/blockCustomer'
+import { getCustomerByID } from '../../Services/APIs/customer/getCustomer'
+import { getSMECachedIscore } from '../../Services/APIs/iScore'
+import { blockCustomer } from '../../Services/APIs/customer/blockCustomer'
 
 export interface CompanyProfileProps {
   data: any

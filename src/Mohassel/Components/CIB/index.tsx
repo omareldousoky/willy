@@ -12,7 +12,7 @@ import { changeSourceFund } from '../../Services/APIs/loanApplication/changeSour
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import { manageLoansArray } from '../LoanList/manageLoansInitials'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { CIBProps, CIBState } from './types'
 import { CibLoan } from '../../Models/CIB'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'

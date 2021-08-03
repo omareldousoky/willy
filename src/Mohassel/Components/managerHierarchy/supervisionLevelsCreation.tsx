@@ -17,8 +17,8 @@ import {
   ManagerHierarchyUser,
   OfficersGroup,
 } from '../../../Shared/Services/interfaces'
-import { searchUsers } from '../../Services/APIs/Users/searchUsers'
-import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
+import { searchUsers } from '../../../Shared/Services/APIs/Users/searchUsers'
+import { searchLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import { Group, SupervisionLevelsCreationProps } from './types'
 import { SupervisionGroup } from './supervisionGroup'
 import { LtsIcon } from '../../../Shared/Components'

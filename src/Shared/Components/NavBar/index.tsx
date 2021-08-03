@@ -236,20 +236,23 @@ class NavBar extends Component<Props, State> {
         <Navbar expand="lg" style={{ background: '#f5f5f5', padding: 0 }}>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="logo-navbar">
+              <Navbar.Brand className="ml-4">
+                <img
+                  alt="navbar-logo"
+                  className={this.props.isLTS ? '' : 'px-4'}
+                  src={
+                    this.props.isLTS
+                      ? require('../../Assets/Logo.svg')
+                      : require('../../Assets/HalanLogo.svg')
+                  }
+                />
+              </Navbar.Brand>
               {this.props.isLTS && (
-                <>
-                  <Navbar.Brand className="ml-4">
-                    <img
-                      alt="navbar-logo"
-                      src={require('../../Assets/Logo.svg')}
-                    />
-                  </Navbar.Brand>
-                  <Navbar.Text className="mx-5">
-                    <h5 className="text-primary font-weight-bold">
-                      {local.lowRateLoan}
-                    </h5>
-                  </Navbar.Text>
-                </>
+                <Navbar.Text className="mx-5">
+                  <h5 className="text-primary font-weight-bold">
+                    {local.lowRateLoan}
+                  </h5>
+                </Navbar.Text>
               )}
               <div style={{ flex: 2, display: 'flex', width: '100%' }}>
                 <div className="info-navbar">

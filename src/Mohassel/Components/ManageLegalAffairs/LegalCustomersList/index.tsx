@@ -29,7 +29,7 @@ import Can from '../../../config/Can'
 import DynamicTable from '../../../../Shared/Components/DynamicTable/dynamicTable'
 import local from '../../../../Shared/Assets/ar.json'
 import Search from '../../../../Shared/Components/Search/search'
-import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from '../manageLegalAffairsInitials'
 import {
   ConvictedReportRequest,
@@ -53,7 +53,7 @@ import AppForm from '../Form'
 import UploadLegalCustomers from './UploadCustomersForm'
 import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
 import { Branch } from '../../../../Shared/Services/interfaces'
-import { getBranch } from '../../../Services/APIs/Branch/getBranch'
+import { getBranch } from '../../../../Shared/Services/APIs/Branch/getBranch'
 import managerTypes from '../configs/managerTypes'
 import { LegalHistory } from './LegalHistory'
 import {

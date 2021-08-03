@@ -2,16 +2,17 @@ import React from 'react'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import ability from '../../config/ability'
 import Can from '../../config/Can'
 import local from '../../Assets/ar.json'
 
-interface Props extends RouteComponentProps {
+interface Props {
   hide?: boolean
 }
 
-const LtsNavbar = (props: Props) => {
+export const LtsNav = ({ hide }: Props) => {
+  const history = useHistory()
   return (
     <Navbar.Collapse id="basic-navbar-nav">
       <Nav
@@ -28,53 +29,49 @@ const LtsNavbar = (props: Props) => {
           <NavDropdown title={local.customers} id="basic-nav-dropdown">
             <NavDropdown.Item
               className="primary"
-              onClick={() => props.history.push('/customers')}
+              onClick={() => history.push('/customers')}
             >
               {local.persons}
             </NavDropdown.Item>
             <Can I="getCompany" a="customer">
               <NavDropdown.Item
                 className="primary"
-                onClick={() => props.history.push('/company')}
+                onClick={() => history.push('/company')}
               >
                 {local.companies}
               </NavDropdown.Item>
             </Can>
           </NavDropdown>
-        ) : !props.hide && ability.can('changeOfficer', 'customer') ? (
+        ) : !hide && ability.can('changeOfficer', 'customer') ? (
           <NavDropdown title={local.customers} id="basic-nav-dropdown">
             <NavDropdown.Item
               className="primary"
-              onClick={() => props.history.push('/customers/move-customers')}
+              onClick={() => history.push('/customers/move-customers')}
             >
               {local.persons}
             </NavDropdown.Item>
             <NavDropdown.Item
               className="primary"
-              onClick={() => props.history.push('/company/move-company')}
+              onClick={() => history.push('/company/move-company')}
             >
               {local.companies}
             </NavDropdown.Item>
           </NavDropdown>
         ) : null}
-        {!props.hide && ability.can('getLoanProduct', 'product') ? (
+        {!hide && ability.can('getLoanProduct', 'product') ? (
+          <Nav.Link onClick={() => history.push('/manage-loans/loan-products')}>
+            {local.loans}
+          </Nav.Link>
+        ) : !hide && ability.can('getCalculationFormula', 'product') ? (
           <Nav.Link
-            onClick={() => props.history.push('/manage-loans/loan-products')}
+            onClick={() => history.push('/manage-loans/calculation-formulas')}
           >
             {local.loans}
           </Nav.Link>
-        ) : !props.hide && ability.can('getCalculationFormula', 'product') ? (
+        ) : !hide && ability.can('assignProductToBranch', 'product') ? (
           <Nav.Link
             onClick={() =>
-              props.history.push('/manage-loans/calculation-formulas')
-            }
-          >
-            {local.loans}
-          </Nav.Link>
-        ) : !props.hide && ability.can('assignProductToBranch', 'product') ? (
-          <Nav.Link
-            onClick={() =>
-              props.history.push('/manage-loans/assign-products-branches')
+              history.push('/manage-loans/assign-products-branches')
             }
           >
             {local.assignProductToBranch}
@@ -84,7 +81,7 @@ const LtsNavbar = (props: Props) => {
           <NavDropdown title={local.loanApplications} id="basic-nav-dropdown">
             <NavDropdown.Item
               className="primary"
-              onClick={() => props.history.push('/track-loan-applications')}
+              onClick={() => history.push('/track-loan-applications')}
             >
               {local.persons}
             </NavDropdown.Item>
@@ -92,7 +89,7 @@ const LtsNavbar = (props: Props) => {
               <NavDropdown.Item
                 className="primary"
                 onClick={() =>
-                  props.history.push('/track-loan-applications', {
+                  history.push('/track-loan-applications', {
                     sme: true,
                   })
                 }
@@ -101,13 +98,12 @@ const LtsNavbar = (props: Props) => {
               </NavDropdown.Item>
             </Can>
           </NavDropdown>
-        ) : !props.hide &&
-          ability.can('approveLoanApplication', 'application') ? (
+        ) : !hide && ability.can('approveLoanApplication', 'application') ? (
           <NavDropdown title={local.loanApplications} id="basic-nav-dropdown">
             <NavDropdown.Item
               className="primary"
               onClick={() =>
-                props.history.push('/track-loan-applications/bulk-approvals')
+                history.push('/track-loan-applications/bulk-approvals')
               }
             >
               {local.persons}
@@ -116,24 +112,21 @@ const LtsNavbar = (props: Props) => {
               <NavDropdown.Item
                 className="primary"
                 onClick={() =>
-                  props.history.push(
-                    '/track-loan-applications/bulk-approvals',
-                    {
-                      sme: true,
-                    }
-                  )
+                  history.push('/track-loan-applications/bulk-approvals', {
+                    sme: true,
+                  })
                 }
               >
                 {local.companies}
               </NavDropdown.Item>
             </Can>
           </NavDropdown>
-        ) : !props.hide && ability.can('createLoan', 'application') ? (
+        ) : !hide && ability.can('createLoan', 'application') ? (
           <NavDropdown title={local.loanApplications} id="basic-nav-dropdown">
             <NavDropdown.Item
               className="primary"
               onClick={() =>
-                props.history.push('/track-loan-applications/bulk-creation')
+                history.push('/track-loan-applications/bulk-creation')
               }
             >
               {local.persons}
@@ -142,7 +135,7 @@ const LtsNavbar = (props: Props) => {
               <NavDropdown.Item
                 className="primary"
                 onClick={() =>
-                  props.history.push('/track-loan-applications/bulk-creation', {
+                  history.push('/track-loan-applications/bulk-creation', {
                     sme: true,
                   })
                 }
@@ -152,62 +145,56 @@ const LtsNavbar = (props: Props) => {
             </Can>
           </NavDropdown>
         ) : null}
-        {!props.hide && ability.can('loanUsage', 'config') ? (
+        {!hide && ability.can('loanUsage', 'config') ? (
           <Nav.Link
-            onClick={() => props.history.push('/manage-loan-details/loan-uses')}
+            onClick={() => history.push('/manage-loan-details/loan-uses')}
           >
             {local.manageLoanDetails}
           </Nav.Link>
-        ) : !props.hide && ability.can('viewBusinessSectorConfig', 'config') ? (
+        ) : !hide && ability.can('viewBusinessSectorConfig', 'config') ? (
           <Nav.Link
             onClick={() =>
-              props.history.push('/manage-loan-details/business-activities')
+              history.push('/manage-loan-details/business-activities')
             }
           >
             {local.manageLoanDetails}
           </Nav.Link>
         ) : null}
-        {!props.hide && ability.can('getRoles', 'user') ? (
-          <Nav.Link
-            onClick={() => props.history.push('/manage-accounts/roles')}
-          >
+        {!hide && ability.can('getRoles', 'user') ? (
+          <Nav.Link onClick={() => history.push('/manage-accounts/roles')}>
             {local.manageAccounts}
           </Nav.Link>
-        ) : !props.hide && ability.can('getUser', 'user') ? (
-          <Nav.Link
-            onClick={() => props.history.push('/manage-accounts/users')}
-          >
+        ) : !hide && ability.can('getUser', 'user') ? (
+          <Nav.Link onClick={() => history.push('/manage-accounts/users')}>
             {local.manageAccounts}
           </Nav.Link>
-        ) : !props.hide && ability.can('getBranch', 'branch') ? (
-          <Nav.Link
-            onClick={() => props.history.push('/manage-accounts/branches')}
-          >
+        ) : !hide && ability.can('getBranch', 'branch') ? (
+          <Nav.Link onClick={() => history.push('/manage-accounts/branches')}>
             {local.manageAccounts}
           </Nav.Link>
-        ) : !props.hide && ability.can('updateLoanOfficer', 'user') ? (
+        ) : !hide && ability.can('updateLoanOfficer', 'user') ? (
           <Nav.Link
-            onClick={() => props.history.push('/manage-accounts/loan-officers')}
+            onClick={() => history.push('/manage-accounts/loan-officers')}
           >
             {local.manageAccounts}
           </Nav.Link>
         ) : null}
-        {!props.hide && ability.can('documentTypes', 'config') ? (
-          <Nav.Link onClick={() => props.history.push('/tools/encoding-files')}>
+        {!hide && ability.can('documentTypes', 'config') ? (
+          <Nav.Link onClick={() => history.push('/tools/encoding-files')}>
             {local.tools}
           </Nav.Link>
-        ) : !props.hide && ability.can('geoArea', 'config') ? (
-          <Nav.Link onClick={() => props.history.push('/tools/geo-areas')}>
+        ) : !hide && ability.can('geoArea', 'config') ? (
+          <Nav.Link onClick={() => history.push('/tools/geo-areas')}>
             {local.tools}
           </Nav.Link>
-        ) : !props.hide && ability.can('createMaxPrincipal', 'config') ? (
-          <Nav.Link onClick={() => props.history.push('/tools/principalRange')}>
+        ) : !hide && ability.can('createMaxPrincipal', 'config') ? (
+          <Nav.Link onClick={() => history.push('/tools/principalRange')}>
             {local.tools}
           </Nav.Link>
         ) : null}
-        {props.hide && (
+        {hide && (
           <Can I="documentTypes" a="config">
-            <Nav.Link onClick={() => props.history.push('/encoding-files')}>
+            <Nav.Link onClick={() => history.push('/encoding-files')}>
               {local.tools}
             </Nav.Link>
           </Can>
@@ -217,7 +204,7 @@ const LtsNavbar = (props: Props) => {
           <NavDropdown title={local.issuedLoans} id="basic-nav-dropdown">
             <NavDropdown.Item
               className="primary"
-              onClick={() => props.history.push('/loans')}
+              onClick={() => history.push('/loans')}
             >
               {local.persons}
             </NavDropdown.Item>
@@ -225,7 +212,7 @@ const LtsNavbar = (props: Props) => {
               <NavDropdown.Item
                 className="primary"
                 onClick={() =>
-                  props.history.push('/loans', {
+                  history.push('/loans', {
                     sme: true,
                   })
                 }
@@ -234,83 +221,75 @@ const LtsNavbar = (props: Props) => {
               </NavDropdown.Item>
             </Can>
           </NavDropdown>
-        ) : !props.hide && ability.can('cibScreen', 'report') ? (
-          <Nav.Link onClick={() => props.history.push('/loans/cib')}>
+        ) : !hide && ability.can('cibScreen', 'report') ? (
+          <Nav.Link onClick={() => history.push('/loans/cib')}>
             {local.issuedLoans}
           </Nav.Link>
-        ) : !props.hide && ability.can('cibScreen', 'report') ? (
-          <Nav.Link onClick={() => props.history.push('/loans/source-of-fund')}>
+        ) : !hide && ability.can('cibScreen', 'report') ? (
+          <Nav.Link onClick={() => history.push('/loans/source-of-fund')}>
             {local.issuedLoans}
           </Nav.Link>
         ) : null}
-        {!props.hide && (
+        {!hide && (
           <Can I="viewActionLogs" a="user">
-            <Nav.Link onClick={() => props.history.push('/logs')}>
+            <Nav.Link onClick={() => history.push('/logs')}>
               {local.logs}
             </Nav.Link>
           </Can>
         )}
-        {!props.hide && (
+        {!hide && (
           <Can I="viewReports" a="report">
-            <Nav.Link onClick={() => props.history.push('/reports')}>
+            <Nav.Link onClick={() => history.push('/reports')}>
               {local.reports}
             </Nav.Link>
           </Can>
         )}
-        {!props.hide && (
+        {!hide && (
           <Can I="getLead" a="halanuser">
-            <Nav.Link
-              onClick={() => props.history.push('/halan-integration/leads')}
-            >
+            <Nav.Link onClick={() => history.push('/halan-integration/leads')}>
               {local.halan}
             </Nav.Link>
           </Can>
         )}
-        {!props.hide && (
+        {!hide && (
           <Can I="getClearance" a="application">
-            <Nav.Link onClick={() => props.history.push('/clearances')}>
+            <Nav.Link onClick={() => history.push('/clearances')}>
               {local.clearances}
             </Nav.Link>
           </Can>
         )}
-        {!props.hide && (
+        {!hide && (
           <Can I="getOfficersGroups" a="branch">
-            <Nav.Link
-              onClick={() => props.history.push('/supervisions-levels')}
-            >
+            <Nav.Link onClick={() => history.push('/supervisions-levels')}>
               {local.levelsOfSupervision}
             </Nav.Link>
           </Can>
         )}
-        {!props.hide && ability.can('getTerrorist', 'customer') ? (
+        {!hide && ability.can('getTerrorist', 'customer') ? (
           <Nav.Link
             onClick={() =>
-              props.history.push('/manage-anti-terrorism/anti-terrorism')
+              history.push('/manage-anti-terrorism/anti-terrorism')
             }
           >
             {local.antiTerrorism}
           </Nav.Link>
         ) : null}
-        {!props.hide && ability.can('financialBlocking', 'application') ? (
+        {!hide && ability.can('financialBlocking', 'application') ? (
           <Nav.Link
-            onClick={() =>
-              props.history.push('/financial-closing/lts-blocking')
-            }
+            onClick={() => history.push('/financial-closing/lts-blocking')}
           >
             {local.manageFinancialTransaction}
           </Nav.Link>
-        ) : !props.hide && ability.can('financialClosing', 'application') ? (
+        ) : !hide && ability.can('financialClosing', 'application') ? (
           <Nav.Link
-            onClick={() => props.history.push('/financial-closing/lts-closing')}
+            onClick={() => history.push('/financial-closing/lts-closing')}
           >
             {local.manageFinancialTransaction}
           </Nav.Link>
         ) : null}
-        {!props.hide && (
+        {!hide && (
           <Can I="getDefaultingCustomer" a="legal">
-            <Nav.Link
-              onClick={() => props.history.push('/legal-affairs/late-list')}
-            >
+            <Nav.Link onClick={() => history.push('/legal-affairs/late-list')}>
               {local.legalAffairs}
             </Nav.Link>
           </Can>
@@ -319,5 +298,3 @@ const LtsNavbar = (props: Props) => {
     </Navbar.Collapse>
   )
 }
-
-export const LtsNav = withRouter(LtsNavbar)

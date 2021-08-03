@@ -1,0 +1,21 @@
+import axios from '../../axiosInstance'
+
+export const searchCustomer = async (data: object) => {
+  const url = process.env.REACT_APP_BASE_URL + `/search/customer`
+  try {
+    const res = await axios.post(url, data)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
+}
+
+export const searchCompany = async (data: object) => {
+  const url = process.env.REACT_APP_BASE_URL + `/search/company`
+  try {
+    const res = await axios.post(url, data)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
+}

@@ -23,13 +23,13 @@ import {
   AsyncLoanOfficersDropDown,
   AsyncManagersDropDown,
   BranchesDropDown,
-} from '../dropDowns/allDropDowns'
+} from '../../../Shared/Components/dropDowns/allDropDowns'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Branch } from '../../../Shared/Services/interfaces'
-import DateField from '../Common/FormikFields/dateField'
+import DateField from '../../../Shared/Components/Common/FormikFields/dateField'
 import { required } from '../../../Shared/validations'
 import { DateFromToField } from './Fields/dateFromTo'
-import TextField from '../Common/FormikFields/textField'
+import TextField from '../../../Shared/Components/Common/FormikFields/textField'
 
 import {
   generateArrayOfYears,

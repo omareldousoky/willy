@@ -28,7 +28,7 @@ import {
   manageApplicationsArray,
   manageSMEApplicationsArray,
 } from '../TrackLoanApplications/manageApplicationInitials'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 
 interface Product {
   productName: string

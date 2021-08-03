@@ -11,11 +11,11 @@ import { Formik, Field, FormikValues, Form, useFormikContext } from 'formik'
 import * as Yup from 'yup'
 import Swal from 'sweetalert2'
 import * as local from '../../../../Shared/Assets/ar.json'
-import DateField from '../../Common/FormikFields/dateField'
+import DateField from '../../../../Shared/Components/Common/FormikFields/dateField'
 import { search, searchFilters } from '../../../../Shared/redux/search/actions'
 import { loading } from '../../../../Shared/redux/loading/actions'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
-import TextField from '../../Common/FormikFields/textField'
+import TextField from '../../../../Shared/Components/Common/FormikFields/textField'
 import { theme } from '../../../../Shared/theme'
 
 interface Props {

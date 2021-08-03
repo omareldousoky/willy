@@ -9,14 +9,14 @@ import { checkIssueDate, getErrorMessage } from '../../../Shared/Services/utils'
 import {
   getBirthdateFromNationalId,
   getGenderFromNationalId,
-} from '../../Services/nationalIdValidation'
-import Map from '../Map/map'
+} from '../../../Shared/Services/nationalIdValidation'
+import Map from '../../../Shared/Components/Map/map'
 import * as local from '../../../Shared/Assets/ar.json'
-import { checkDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup'
 import Can from '../../config/Can'
 import ability from '../../config/ability'
-import { getGovernorates } from '../../Services/APIs/configApis/config'
 import { Governorate, District } from './StepTwoForm'
+import { getGovernorates } from '../../../Shared/Services/APIs/config'
+import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
 
 function calculateAge(dateOfBirth: number) {
   if (dateOfBirth) {
