@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../axiosInstance'
 
 export const assignProductsToBranches = async (data: object) => {
   const url = process.env.REACT_APP_BASE_URL + `/branch/assign-to-product-bulk`

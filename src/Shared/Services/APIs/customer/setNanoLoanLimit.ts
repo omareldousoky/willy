@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../axiosInstance'
 
 export const setNanoLoanLimit = async (data: FormData) => {
   const url = process.env.REACT_APP_BASE_URL + `/customer/nano-loans-limit`

@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../axiosInstance'
 
 export const checkNationalIdDuplicates = async (nationalId: string) => {
   const url =
