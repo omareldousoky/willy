@@ -19,6 +19,7 @@ import { TabDataProps } from '../../../Shared/Components/Profile/types'
 import HalanLinkageModal from './halanLinkageModal'
 import { blockCustomer } from '../../Services/APIs/blockCustomer/blockCustomer'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
+import LoanLimitModal from './LoanLimitModal'
 
 export interface Score {
   id?: string // commercialRegisterNumber
@@ -84,6 +85,7 @@ export const CustomerProfile = () => {
   const [showHalanLinkageModal, setShowHalanLinkageModal] = useState<boolean>(
     false
   )
+  const [showLoanLimitModal, setShowLoanLimitModal] = useState(false)
   const location = useLocation<LocationState>()
   const history = useHistory()
 
@@ -476,6 +478,17 @@ export const CustomerProfile = () => {
         permission: true,
         onActionClick: () => setShowHalanLinkageModal(true),
       },
+      {
+        title: local.nanoCustomerLimit,
+        icon: 'principal-range',
+        permission:
+          ability.can('editCustomerNanoLoansLimit', 'customer') &&
+          ability.can('getMaximumNanoLoansLimit', 'application') &&
+          ability.can('getCustomerNanoLoansLimitDocument', 'customer'),
+        onActionClick: () => {
+          setShowLoanLimitModal(true)
+        },
+      },
     ]
   }
   return (
@@ -501,6 +514,16 @@ export const CustomerProfile = () => {
             show={showHalanLinkageModal}
             hideModal={() => setShowHalanLinkageModal(false)}
             customer={customerDetails}
+          />
+        )}
+
+        {showLoanLimitModal && customerDetails && (
+          <LoanLimitModal
+            show={showLoanLimitModal}
+            hideModal={() => setShowLoanLimitModal(false)}
+            customer={customerDetails}
+            loanLimit={customerDetails?.nanoLoansLimit ?? 0}
+            onSuccess={() => getCustomerDetails()}
           />
         )}
       </Container>

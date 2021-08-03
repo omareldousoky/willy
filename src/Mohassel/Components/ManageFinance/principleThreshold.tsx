@@ -109,7 +109,7 @@ class PrincipleThreshold extends Component<RouteComponentProps, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('principalRange')}
+            .indexOf('principal-range')}
         />
         <Loader type="fullscreen" open={this.state.loading} />
         <Card className="main-card">

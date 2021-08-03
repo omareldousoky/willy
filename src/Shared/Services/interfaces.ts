@@ -86,6 +86,7 @@ export interface Customer {
   }[]
   customerType?: string
   legalStructure?: string
+  nanoLoansLimit?: number
 }
 export interface Installment {
   id: number
@@ -320,6 +321,7 @@ export interface Document {
   valid: boolean
   delete?: boolean
   selected?: boolean
+  file?: File
 }
 
 export interface LoanOfficer {

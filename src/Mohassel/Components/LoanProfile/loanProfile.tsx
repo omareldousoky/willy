@@ -94,6 +94,7 @@ import {
   CalculateEarlyPaymentResponse,
   RemainingLoanResponse,
 } from '../../Models/Payment'
+import NanoLoanContract from '../pdfTemplates/nanoLoanContract/nanoLoanContract'
 import { PromissoryNoteMicro } from '../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
 
 export interface IndividualWithInstallments {
@@ -703,6 +704,7 @@ class LoanProfile extends Component<Props, State> {
         isLeader: false,
         getIscore: (data) => this.getIscore(data),
         applicationStatus: this.state.application.status,
+        productType: this.state.application.product.type,
       })
       return [info]
     }
@@ -1466,7 +1468,13 @@ class LoanProfile extends Component<Props, State> {
               branchDetails={this.state.branchDetails}
               customer={this.state.application.customer}
             />
-            {this.state.application.product.beneficiaryType === 'individual' ? (
+            {this.state.application.product.type === 'nano' ? (
+              <NanoLoanContract
+                data={this.state.application}
+                branchDetails={this.state.branchDetails}
+              />
+            ) : this.state.application.product.beneficiaryType ===
+              'individual' ? (
               <LoanContract
                 data={this.state.application}
                 branchDetails={this.state.branchDetails}

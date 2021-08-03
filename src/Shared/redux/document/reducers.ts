@@ -39,7 +39,19 @@ export const DocumentsReducer = produce(
   (draft: any[] = [], action: DocumentActionType) => {
     switch (action.type) {
       case GET_DOCUMENTS: {
-        return action.payload
+        const actionDocument = action.payload[0]
+
+        const stateSlice = draft.find(
+          (doc) => doc?.docName === actionDocument?.docName
+        )
+
+        if (stateSlice) {
+          stateSlice.imagesFiles = actionDocument.imagesFiles
+        } else {
+          draft.push(actionDocument)
+        }
+
+        break
       }
       case ADD_TO_DOCUMENTS: {
         draft.forEach((doc) => {
@@ -71,6 +83,9 @@ export const DocumentsReducer = produce(
             )
             if (index > -1) {
               doc.imagesFiles[index].valid = false
+              if (doc.imagesFiles[index].file) {
+                delete doc.imagesFiles[index].file
+              }
             }
           }
         })
