@@ -1,4 +1,3 @@
-import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer'
 import { searchBranches } from '../../Services/APIs/Branch/searchBranches'
 import { searchUsers } from '../../Services/APIs/Users/searchUsers'
 import { searchLoan } from '../../../Mohassel/Services/APIs/Loan/searchLoan'
@@ -19,6 +18,7 @@ import {
 import { searchFinancialBlocking } from '../../../Mohassel/Services/APIs/loanApplication/financialClosing'
 import { cibReport } from '../../../Mohassel/Services/APIs/loanApplication/cibReport'
 import { searchWarnings } from '../../../Mohassel/Services/APIs/LegalAffairs/warning'
+import { searchCustomer } from '../../Services/APIs/customer/searchCustomer'
 
 const searchWrapper = (
   request: any,

@@ -13,7 +13,6 @@ import {
   LegalWarningRequest,
   LegalWarningType,
 } from '../../Models/LegalAffairs'
-import { searchCustomer } from '../../../Shared/Services/APIs/Customer-Creation/searchCustomer'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan'
 import { Application } from '../LoanApplication/loanApplicationStates'
@@ -23,6 +22,7 @@ import {
   createWarning,
 } from '../../Services/APIs/LegalAffairs/warning'
 import { addeddSuccessfully } from '../../localUtils'
+import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 
 export const WarningCreationModal = ({
   showModal,

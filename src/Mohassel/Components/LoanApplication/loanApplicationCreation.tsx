@@ -21,8 +21,6 @@ import {
   EntitledToSignIds,
 } from './loanApplicationStates'
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm'
-import { getCustomerByID } from '../../../Shared/Services/APIs/Customer-Creation/getCustomer'
-import { searchCustomer } from '../../../Shared/Services/APIs/Customer-Creation/searchCustomer'
 import { Loader } from '../../../Shared/Components/Loader'
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas'
 import { getProduct } from '../../Services/APIs/loanProduct/getProduct'
@@ -45,18 +43,20 @@ import {
   getFullCustomerKey,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
-import { getMaxPrinciples } from '../../../Shared/Services/APIs/configApis/config'
 import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationGuarantorForm'
 import DualBox from '../../../Shared/Components/DualListBox/dualListBox'
 import InfoBox from '../userInfoBox'
 import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
-import { getCustomersBalances } from '../../../Shared/Services/APIs/Customer-Creation/customerLoans'
 
 import { theme } from '../../../Shared/theme'
 import { Customer } from '../../../Shared/Services/interfaces'
 import Can from '../../config/Can'
 import { LtsIcon } from '../../../Shared/Components'
+import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
+import { getMaxPrinciples } from '../../../Shared/Services/APIs/config'
+import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
+import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 
 interface LoanApplicationCreationRouteState {
   id?: string

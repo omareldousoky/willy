@@ -1,4 +1,4 @@
-import { CustomerScore } from '../../Services/APIs/Customer-Creation/customerCategorization'
+import { CustomerScore } from '../../Services/APIs/customer/customerCategorization'
 
 export interface FieldProps {
   fieldTitle: string

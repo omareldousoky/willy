@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 
 import * as React from 'react'
-import CustomerCreation from '../Components/CustomerCreation/CustomerCreation'
+import CustomerCreation from '../Components/CustomerCreation'
 import UserCreation from '../Components/UserCreation/userCreation'
 import FormulaCreation from '../Components/LoanFormulaCreation/loanFormulaCreation'
 import FormulaTest from '../Components/LoanFormulaCreation/loanFormulaTest'
@@ -22,7 +22,7 @@ import RolesList from '../Components/ManageAccounts/rolesList'
 import Can from '../config/Can'
 import UserDetails from '../Components/userDetails/user-details'
 import CreateBranch from '../Components/BranchCreation/createBranch'
-import CustomersList from '../Components/CustomerCreation/customersList'
+import CustomersList from '../Components/CustomerCreation/CustomersList'
 import LoanProducts from '../Components/ManageLoans/productsList'
 import FormulaList from '../Components/ManageLoans/calculationFormulaList'
 import * as local from '../../Shared/Assets/ar.json'

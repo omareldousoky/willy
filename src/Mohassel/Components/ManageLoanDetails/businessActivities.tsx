@@ -15,12 +15,12 @@ import {
 } from './manageLoanDetailsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { CRUDList, CrudOption } from '../CRUDList/crudList'
+import ability from '../../config/ability'
 import {
   createBusinessActivity,
   editBusinessActivity,
   getBusinessSectors,
-} from '../../../Shared/Services/APIs/configApis/config'
-import ability from '../../config/ability'
+} from '../../../Shared/Services/APIs/config'
 
 interface State {
   sector: BusinessSector

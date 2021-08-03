@@ -5,18 +5,23 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
-import { checkIssueDate, getErrorMessage } from '../../../Shared/Services/utils'
+import {
+  checkIssueDate,
+  getErrorMessage,
+  numbersToArabic,
+} from '../../../Shared/Services/utils'
 import {
   getBirthdateFromNationalId,
   getGenderFromNationalId,
 } from '../../../Shared/Services/nationalIdValidation'
 import Map from '../../../Shared/Components/Map/map'
 import * as local from '../../../Shared/Assets/ar.json'
-import { checkDuplicates } from '../../../Shared/Services/APIs/Customer-Creation/checkNationalIdDup'
 import Can from '../../../Shared/config/Can'
 import ability from '../../../Shared/config/ability'
-import { getGovernorates } from '../../../Shared/Services/APIs/configApis/config'
 import { Governorate, District } from './StepTwoForm'
+import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
+import { getGovernorates } from '../../../Shared/Services/APIs/config'
+import { getCustomerLimitFromMonthlyIncome } from '../../../Shared/Services/APIs/customer/getCustomerConsumerLimit'
 
 function calculateAge(dateOfBirth: number) {
   if (dateOfBirth) {
@@ -57,6 +62,21 @@ export const StepOneForm = (props: any) => {
       setGovernorates(resGov.body.governorates)
     } else {
       Swal.fire('Error !', getErrorMessage(resGov.error.error), 'error')
+    }
+  }
+
+  const getCustomerLimitFromIncome = async (income) => {
+    setLoading(true)
+    const limitRes = await getCustomerLimitFromMonthlyIncome(income)
+    if (limitRes.status === 'success') {
+      setFieldValue(
+        'customerConsumerFinanceMaxLimit',
+        limitRes.body.maximumCFLimit
+      )
+      setLoading(false)
+    } else {
+      Swal.fire('Error !', getErrorMessage(limitRes.error.error), 'error')
+      setLoading(false)
     }
   }
 
@@ -261,6 +281,59 @@ export const StepOneForm = (props: any) => {
             >
               {errors.nationalIdIssueDate ||
                 checkIssueDate(values.nationalIdIssueDate)}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
+        <Col sm={6}>
+          <Form.Group controlId="monthlyIncome">
+            <Form.Label className="customer-form-label">
+              {local.monthlyIncome}
+            </Form.Label>
+            <Form.Control
+              type="number"
+              name="monthlyIncome"
+              data-qc="monthlyIncome"
+              value={values.monthlyIncome}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setFieldValue('monthlyIncome', event.currentTarget.value)
+                getCustomerLimitFromIncome(event.currentTarget.value)
+              }}
+              onBlur={handleBlur}
+              isInvalid={errors.monthlyIncome && touched.monthlyIncome}
+            />
+            {values.customerConsumerFinanceMaxLimit > 0 && (
+              <div className="valid-feedback d-block">
+                `{local.maxConsumerFinanceLimit}{' '}
+                {numbersToArabic(values.customerConsumerFinanceMaxLimit)}`
+              </div>
+            )}
+            <Form.Control.Feedback type="invalid">
+              {errors.monthlyIncome}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+        <Col sm={6}>
+          <Form.Group controlId="initialConsumerFinanceLimit">
+            <Form.Label className="customer-form-label">
+              {local.initialConsumerFinanceLimit}
+            </Form.Label>
+            <Form.Control
+              type="number"
+              name="initialConsumerFinanceLimit"
+              data-qc="initialConsumerFinanceLimit"
+              value={values.initialConsumerFinanceLimit}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              disabled={values.customerConsumerFinanceMaxLimit === 0}
+              isInvalid={
+                errors.initialConsumerFinanceLimit &&
+                touched.initialConsumerFinanceLimit
+              }
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.initialConsumerFinanceLimit}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>

@@ -10,9 +10,9 @@ import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import BackButton from '../../../Shared/Components/BackButton/back-button'
 import { removeMemberFromGroup } from '../../Services/APIs/loanApplication/removeMemberFromGroup'
-import { getSeperationReasons } from '../../../Shared/Services/APIs/configApis/config'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { Customer } from '../../../Shared/Services/interfaces'
+import { getSeperationReasons } from '../../../Shared/Services/APIs/config'
 
 interface Member {
   type: string

@@ -14,11 +14,13 @@ import {
   documentTypeCreationValidation,
   documentTypeEditValidation,
 } from './documnetTypeinitialState'
-import { createDocumentsType } from '../../Services/APIs/encodingFiles/createDocumentType'
-import { editDocumentsType } from '../../Services/APIs/encodingFiles/editDocumentType'
 
 import * as local from '../../../Shared/Assets/ar.json'
 import { getErrorMessage } from '../../../Shared/Services/utils'
+import {
+  createDocumentsType,
+  editDocumentsType,
+} from '../../../Shared/Services/APIs/encodingFiles/documentType'
 
 interface Props
   extends RouteComponentProps<{}, {}, { documentType: DocumentType }> {

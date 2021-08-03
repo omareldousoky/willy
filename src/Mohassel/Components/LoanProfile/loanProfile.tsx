@@ -50,12 +50,6 @@ import { cancelApplication } from '../../Services/APIs/loanApplication/stateHand
 import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment'
 import store from '../../../Shared/redux/store'
 import UploadDocuments from './uploadDocuments'
-import {
-  getIscore,
-  getIscoreCached,
-  getSMECachedIscore,
-  getSMEIscore,
-} from '../../Services/APIs/iScore/iScore'
 import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan'
 import { doubtLoan } from '../../Services/APIs/Loan/doubtLoan'
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt'
@@ -66,11 +60,9 @@ import { getManualOtherPayments } from '../../Services/APIs/Payment/getManualOth
 import { rejectManualOtherPayment } from '../../Services/APIs/Payment/rejectManualOtherPayment'
 import { approveManualOtherPayment } from '../../Services/APIs/Payment/approveManualOtherPayment'
 import { numTo2Decimal } from '../CIB/textFiles'
-import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
 import { FollowUpStatementView } from './followupStatementView'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares'
-import { getWriteOffReasons } from '../../../Shared/Services/APIs/configApis/config'
 import { InfoBox, LtsIcon, ProfileActions } from '../../../Shared/Components'
 
 import {
@@ -98,6 +90,14 @@ import {
   RemainingLoanResponse,
 } from '../../Models/Payment'
 import { PromissoryNoteMicro } from '../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
+import {
+  getIscore,
+  getIscoreCached,
+  getSMECachedIscore,
+  getSMEIscore,
+} from '../../../Shared/Services/APIs/iScore'
+import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
+import { getWriteOffReasons } from '../../../Shared/Services/APIs/config'
 
 export interface IndividualWithInstallments {
   installmentTable: {

@@ -13,7 +13,6 @@ import { Lead } from './leadInterface'
 import { Loader } from '../../../Shared/Components/Loader'
 import { editLead } from '../../Services/APIs/Leads/editLead'
 import { Governorate } from '../CustomerCreation/StepTwoForm'
-import { getGovernorates } from '../../../Shared/Services/APIs/configApis/config'
 import {
   leadStepOne,
   leadStepTwo,
@@ -26,6 +25,7 @@ import {
 } from '../../../Shared/Services/utils'
 import local from '../../../Shared/Assets/ar.json'
 import './leads.scss'
+import { getGovernorates } from '../../../Shared/Services/APIs/config'
 
 export interface LeadStepOne {
   customerName: string

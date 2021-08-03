@@ -23,8 +23,6 @@ import {
   LoanOfficersDropDown,
 } from '../../../Shared/Components/dropDowns/allDropDowns'
 import Can from '../../config/Can'
-import { searchCustomer } from '../../../Shared/Services/APIs/Customer-Creation/searchCustomer'
-import { moveCustomerToOfficer } from '../../../Shared/Services/APIs/Customer-Creation/moveCustomerToOfficer'
 import {
   manageCustomersArray,
   manageCompaniesArray,
@@ -32,6 +30,8 @@ import {
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { Customer } from '../../../Shared/Services/interfaces'
 import { Pagination } from '../../../Shared/Components/Common/Pagination'
+import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
+import { moveCustomerToOfficer } from '../../../Shared/Services/APIs/customer/moveCustomerToOfficer'
 
 interface State {
   customers: Array<Customer>

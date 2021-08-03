@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react'
-import * as local from '../../../Shared/Assets/ar.json'
+import * as local from '../../Assets/ar.json'
 
 const mapStyles = {
   margin: '20px',
