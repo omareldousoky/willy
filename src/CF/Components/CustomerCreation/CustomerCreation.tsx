@@ -29,11 +29,15 @@ import { createCustomer } from '../../../Shared/Services/APIs/customer/createCus
 import { editCustomer } from '../../../Shared/Services/APIs/customer/editCustomer'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 import { getMaxPrinciples } from '../../../Shared/Services/APIs/config'
+import { getCustomerLimitFromMonthlyIncome } from '../../../Shared/Services/APIs/customer/getCustomerConsumerLimit'
 
 interface CustomerInfo {
   birthDate: number
   customerName?: string
   nationalIdIssueDate: number
+  monthlyIncome: number
+  initialConsumerFinanceLimit: number
+  customerConsumerFinanceMaxLimit: number
   homePostalCode: number
   nationalId?: string
   customerHomeAddress?: string
@@ -74,6 +78,9 @@ interface State {
   step1: {
     birthDate: number
     nationalIdIssueDate: number
+    monthlyIncome: number
+    initialConsumerFinanceLimit: number
+    customerConsumerFinanceMaxLimit: number
     homePostalCode: number
     customerAddressLatLong: string
     customerAddressLatLongNumber: {
@@ -176,6 +183,18 @@ class CustomerCreation extends Component<Props, State> {
     }
   }
 
+  async getCustomerLimitFromIncome(income) {
+    this.setState({ loading: true })
+    const limitRes = await getCustomerLimitFromMonthlyIncome(income)
+    if (limitRes.status === 'success') {
+      this.setState({ loading: false })
+      return limitRes.body.maximumCFLimit
+    }
+    this.setState({ loading: false })
+    Swal.fire('Error !', getErrorMessage(limitRes.error.error), 'error')
+    return 0
+  }
+
   async getCustomerById() {
     this.setState({ loading: true })
     const res = await getCustomerByID(this.props.location.state.id)
@@ -186,6 +205,12 @@ class CustomerCreation extends Component<Props, State> {
         birthDate: timeToDateyyymmdd(res.body.birthDate),
         gender: res.body.gender,
         nationalIdIssueDate: timeToDateyyymmdd(res.body.nationalIdIssueDate),
+        monthlyIncome: res.body.monthlyIncome,
+        initialConsumerFinanceLimit: await this.getCustomerLimitFromIncome(
+          res.body.monthlyIncome
+        ),
+        customerConsumerFinanceMaxLimit:
+          res.body.customerConsumerFinanceMaxLimit,
         homePostalCode: res.body.homePostalCode,
         customerHomeAddress: res.body.customerHomeAddress,
         currentHomeAddress: res.body.currentHomeAddress,
