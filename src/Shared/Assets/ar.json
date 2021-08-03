@@ -1140,6 +1140,7 @@
   "printSettlementType": "طباعة طلب حالةالتصالح",
   "customerAddress": "عنوان العميل",
   "productApplicationsReport": "تقرير طلبات القروض لنوع قرض",
+  "iscoreIssuingAuthorities": "جهه اصدار السجل التجاري",
   "nanoCustomerLimit": "Nano الحد الائتماني لعميل ال",
   "loanLimit": "الحد الائتماني",
   "nanoLimitDocument": "صوره وصل الحد الائتماني",

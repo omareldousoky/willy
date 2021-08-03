@@ -64,6 +64,7 @@ export const step1Company = {
   legalStructure: '',
   commercialRegisterExpiryDate: '',
   customerType: 'company',
+  governorate: '',
 }
 export const step3 = {
   geographicalDistribution: '',

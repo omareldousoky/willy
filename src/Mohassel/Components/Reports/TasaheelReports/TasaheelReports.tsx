@@ -5,32 +5,37 @@ import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
-import {
-  getIscoreReportStatus,
-  timeToArabicDate,
-} from '../../../../Shared/Services/utils'
 import Can from '../../../config/Can'
 import ability from '../../../config/ability'
 import * as local from '../../../../Shared/Assets/ar.json'
+import { downloadFile } from '../../../../Shared/Services/utils'
 
 import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
 import { Loader } from '../../../../Shared/Components/Loader'
 import ReportsModal from '../reportsModal'
 import { RisksReport } from './RisksReport'
 import { DebtsAgingReport } from './DebtsAgingReport'
+import { Tab } from '../../HeaderWithCards/cardNavbar'
+import { ReportsList } from '../../../../Shared/Components/ReportsList'
+import MonthlyReport from '../../pdfTemplates/monthlyReport/monthlyReport'
+import QuarterlyReport from '../../pdfTemplates/quarterlyReport/quarterlyReport'
 
 import {
   getAllLoanAge,
   getAllTasaheelRisks,
+  getAllMonthlyReport,
+  getAllQuarterlyReport,
   generateTasaheelRisksReport,
   generateLoanAgeReport,
+  generateMonthlyReport,
+  generateQuarterlyReport,
   getTasaheelRisksReport,
   getLoanAgeReport,
+  getMonthlyReport,
+  getQuarterlyReport,
 } from '../../../Services/APIs/Reports/tasaheelRisksReports'
 
 import { Report, ReportDetails } from './types'
-import { Tab } from '../../HeaderWithCards/cardNavbar'
-import { LtsIcon } from '../../../../Shared/Components'
 
 export const TasaheelReports = () => {
   const reportsRequests = {
@@ -45,6 +50,18 @@ export const TasaheelReports = () => {
       requestReport: generateLoanAgeReport,
       getReportDetails: getLoanAgeReport,
       printComponent: DebtsAgingReport,
+    },
+    monthlyReport: {
+      getAll: getAllMonthlyReport,
+      requestReport: generateMonthlyReport,
+      getReportDetails: getMonthlyReport,
+      printComponent: MonthlyReport,
+    },
+    quarterlyReport: {
+      getAll: getAllQuarterlyReport,
+      requestReport: generateQuarterlyReport,
+      getReportDetails: getQuarterlyReport,
+      printComponent: QuarterlyReport,
     },
   }
   const [tabs, setTabs] = useState<any[]>([])
@@ -68,6 +85,23 @@ export const TasaheelReports = () => {
         permission: 'debtsAging',
         permissionKey: 'report',
       })
+
+    ability.can('monthlyReport', 'report') &&
+      allowedTabs.push({
+        header: local.monthlyReport,
+        stringKey: 'monthlyReport',
+        permission: 'monthlyReport',
+        permissionKey: 'report',
+      })
+
+    ability.can('quarterlyReport', 'report') &&
+      allowedTabs.push({
+        header: local.quarterReport,
+        stringKey: 'quarterlyReport',
+        permission: 'quarterlyReport',
+        permissionKey: 'report',
+      })
+
     setTabs(allowedTabs)
     setActiveTabKey(allowedTabs[0]?.stringKey || '')
   }, [])
@@ -92,22 +126,39 @@ export const TasaheelReports = () => {
 
     if (res.status === 'success') {
       setIsLoading(false)
-      setReports(res.body.files)
+      setReports(
+        res.body.files ||
+          res.body.reportFiles ||
+          res.body.monthlyReportFiles ||
+          res.body.quarterlyReportFiles
+      )
     } else {
       setIsLoading(false)
       Swal.fire('error', local.searchError, 'error')
     }
   }
+  const formatValues = (values) => {
+    if (!values) return ''
+    if (tabs[activeTabIndex()].stringKey === 'quarterlyReport') {
+      return {
+        quarter: `${values.year}-${values.quarterNumber}`,
+      }
+    }
+    return { date: values.date + '-01' }
+  }
 
   useEffect(() => {
     tabs.length > 0 && activeTabKey && getAllReports()
+    setReports([])
+    setPrint(false)
   }, [tabs, activeTabKey])
 
   const requestReport = async (values) => {
     setIsLoading(true)
-    const res = await reportsRequests[activeTabKey].requestReport({
-      date: values.date + '-01',
-    })
+    const formattedValues = formatValues(values)
+    const res = await reportsRequests[activeTabKey].requestReport(
+      formattedValues
+    )
 
     if (res.status === 'success') {
       Swal.fire('success', local.fileQueuedSuccess, 'success')
@@ -124,9 +175,20 @@ export const TasaheelReports = () => {
     const res = await reportsRequests[activeTabKey].getReportDetails(id)
 
     if (res.status === 'success') {
-      setReportDetails(res.body)
-      setPrint(true)
-      window.print()
+      if (
+        tabs[activeTabIndex()].stringKey === 'monthlyReport' ||
+        tabs[activeTabIndex()].stringKey === 'quarterlyReport'
+      ) {
+        downloadFile(res.body.fileKey)
+        setReportDetails(res.body.response)
+        setPrint(true)
+        window.print()
+      } else {
+        setReportDetails(res.body)
+        setPrint(true)
+        window.print()
+      }
+
       setIsLoading(false)
     } else {
       setIsLoading(false)
@@ -150,7 +212,10 @@ export const TasaheelReports = () => {
             pdf={{
               key: activeTabKey,
               local: tabs[activeTabIndex()].header,
-              inputs: ['month'],
+              inputs:
+                tabs[activeTabIndex()].stringKey === 'quarterlyReport'
+                  ? ['year', 'quarterNumber']
+                  : ['month'],
               permission: tabs[activeTabIndex()].permission || '',
             }}
             show={modalIsOpen}
@@ -173,73 +238,40 @@ export const TasaheelReports = () => {
                   <Button
                     type="button"
                     variant="primary"
-                    onClick={() => setModalIsOpen(true)}
+                    onClick={() => {
+                      switch (tabs[activeTabIndex()].stringKey) {
+                        case 'tasaheelRisks':
+                          setModalIsOpen(true)
+                          break
+                        case 'loanAge':
+                          setModalIsOpen(true)
+                          break
+                        case 'monthlyReport':
+                          requestReport('')
+                          break
+                        case 'quarterlyReport':
+                          setModalIsOpen(true)
+                          break
+                        default:
+                          break
+                      }
+                    }}
                   >
                     {local.requestNewreport}
                   </Button>
                 </Can>
               </div>
             )}
-            {reports?.length > 0 ? (
-              reports.map((report, index) => (
-                <Card key={index} className="mx-0">
-                  <Card.Body>
-                    <div className="d-flex justify-content-between font-weight-bold">
-                      <div className="d-flex">
-                        <span className="mr-5 text-secondary">
-                          #{index + 1}
-                        </span>
-                        <span className="mr-5 d-flex flex-start flex-column">
-                          <span>{local.loanAppCreationDate}</span>
-                          {timeToArabicDate(report.created?.at, true)}
-                        </span>
-                        <span
-                          className={`mr-5  text-${
-                            report.status === 'created'
-                              ? 'success'
-                              : report.status === 'queued'
-                              ? 'warning'
-                              : 'danger'
-                          } `}
-                        >
-                          {getIscoreReportStatus(report.status)}
-                        </span>
-
-                        {report.status === 'created' && (
-                          <span className="mr-5 d-flex flex-start flex-column">
-                            <span>{local.creationDate}</span>
-                            {timeToArabicDate(report.generatedAt, true)}
-                          </span>
-                        )}
-                      </div>
-                      {report.status === 'created' && (
-                        <Button
-                          type="button"
-                          variant="default"
-                          onClick={() => downloadGeneratedReport(report._id)}
-                          title="download"
-                        >
-                          <LtsIcon
-                            name="download"
-                            size="40px"
-                            color="#7dc356"
-                          />
-                        </Button>
-                      )}
-                    </div>
-                  </Card.Body>
-                </Card>
-              ))
-            ) : (
-              <div className="d-flex align-items-center justify-content-center">
-                {local.noResults}
-              </div>
-            )}
+            <ReportsList
+              list={reports}
+              onClickDownload={(itemId) => downloadGeneratedReport(itemId)}
+            />
           </Card.Body>
         </Card>
       </div>
       {activeTabKey &&
         print &&
+        reportsRequests[activeTabKey].printComponent &&
         reportsRequests[activeTabKey].printComponent(reportDetails)}
     </>
   )

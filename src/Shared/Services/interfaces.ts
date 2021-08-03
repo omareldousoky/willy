@@ -582,3 +582,10 @@ export interface TerroristUnResponse {
   created: Signature
   updated: Signature
 }
+
+export interface IscoreAuthority {
+  id: string
+  code: string
+  nameEnglish: string
+  nameArabic: string
+}
