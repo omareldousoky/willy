@@ -1138,5 +1138,8 @@
   "printSettlementType": "طباعة طلب حالةالتصالح",
   "customerAddress": "عنوان العميل",
   "productApplicationsReport": "تقرير طلبات القروض لنوع قرض",
-  "consumerFinance": "CF"
+  "consumerFinance": "CF",
+  "monthlyIncome": "الدخل الشهري",
+  "initialConsumerFinanceLimit": "الحد المبدئي للعميل",
+  "maxConsumerFinanceLimit": "الحد الأقصي للعميل"
 }

@@ -9,6 +9,9 @@ export const step1: any = {
   birthDate: '',
   gender: '',
   nationalIdIssueDate: '',
+  monthlyIncome: 0,
+  initialConsumerFinanceLimit: 0,
+  customerConsumerFinanceMaxLimit: 0,
   customerAddressLatLong: '',
   customerAddressLatLongNumber: {
     lat: 0,
@@ -49,42 +52,8 @@ export const step2 = {
   industryRegisterNumber: '',
   taxCardNumber: '',
 }
-export const step1Company = {
-  businessName: '',
-  businessAddress: '',
-  businessCharacteristic: '',
-  businessSector: '',
-  businessActivityDetails: '',
-  businessLicenseNumber: '',
-  // businessLicenseIssuePlace: '',
-  businessLicenseIssueDate: '',
-  commercialRegisterNumber: '',
-  // industryRegisterNumber: '',
-  taxCardNumber: '',
-  legalStructure: '',
-  commercialRegisterExpiryDate: '',
-  customerType: 'company',
-}
+
 export const step3 = {
-  geographicalDistribution: '',
-  geoAreaId: '',
-  representative: '',
-  newRepresentative: '',
-  representativeName: '',
-  applicationDate: timeToDateyyymmdd(-1),
-  permanentEmployeeCount: '',
-  partTimeEmployeeCount: '',
-  comments: '',
-  guarantorMaxLoans: 1,
-  maxLoansAllowed: 1,
-  maxPrincipal: 0,
-  principals: {
-    maxIndividualPrincipal: 0,
-    maxGroupIndividualPrincipal: 0,
-    maxGroupPrincipal: 0,
-  },
-}
-export const step2Company = {
   geographicalDistribution: '',
   geoAreaId: '',
   representative: '',
@@ -143,6 +112,20 @@ export const customerCreationValidationStepOne = Yup.object().shape({
     .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
       return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
     })
+    .required(local.required),
+  monthlyIncome: Yup.number()
+    .min(1, local.mustBeGreaterThanZero)
+    .required(local.required),
+  initialConsumerFinanceLimit: Yup.number()
+    .min(1, local.mustBeGreaterThanZero)
+    .test(
+      'initialConsumerFinanceLimit',
+      local.customerMaxPrincipalError,
+      function (this: any, value: any) {
+        const { customerConsumerFinanceMaxLimit } = this.parent
+        return value <= customerConsumerFinanceMaxLimit
+      }
+    )
     .required(local.required),
   customerHomeAddress: Yup.string()
     .trim()
