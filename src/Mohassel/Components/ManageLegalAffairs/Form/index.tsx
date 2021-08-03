@@ -6,17 +6,19 @@ import Button from 'react-bootstrap/Button'
 import './style.scss'
 
 import FormFields, { FormFieldPairs } from './FormFields'
-import { AppFormProps } from './types'
+import { AppFormProps, FormField } from './types'
 import local from '../../../../Shared/Assets/ar.json'
 import { createFormFieldsInitValue, createValidationSchema } from './utils'
 
 interface FormContext {
   defaultValues: {}
   onPhotoChange?: (name: string, value: string | File) => void
+  formFields: FormField[]
 }
 
 export const AppFormContext = createContext<FormContext>({
   defaultValues: {},
+  formFields: [],
 })
 
 // TODO: change the naming
@@ -59,6 +61,7 @@ const AppForm: FunctionComponent<AppFormProps> = ({
               value={{
                 defaultValues,
                 onPhotoChange,
+                formFields,
               }}
             >
               {renderPairs ? (

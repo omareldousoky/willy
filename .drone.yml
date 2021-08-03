@@ -2,6 +2,7 @@ kind: pipeline
 type: kubernetes
 name: notify-pipeline-start
 
+
 steps:
 - name: notify-start
   image: plugins/slack
@@ -83,11 +84,11 @@ steps:
     build_args_from_env:
       - REACT_APP_GOOGLE_MAP_KEY
     build_args:
-      - REACT_APP_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
-      - REACT_APP_MOHASSEL_URL=https://mohassel.${DRONE_BRANCH}.halan.io
+      - API_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
+      - REACT_APP_URL=https://mohassel.${DRONE_BRANCH}.halan.io
       - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
       - REACT_APP_DOMAIN=.${DRONE_BRANCH}.halan.io
-      - REACT_APP_LTS_SUBDOMAIN=mohassel.${DRONE_BRANCH}.halan.io
+      - REACT_APP_SUBDOMAIN=mohassel.${DRONE_BRANCH}.halan.io
     tags:
       - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_BRANCH}
@@ -103,6 +104,42 @@ steps:
       - push
 
 
+- name: publish-login-cf
+  image: plugins/ecr
+  environment:
+    REACT_APP_GOOGLE_MAP_KEY:
+      from_secret: REACT_APP_GOOGLE_MAP_KEY
+  settings:
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    dockerfile: Docker/login.Dockerfile
+    mirror: http://docker-cache.fintech.halan.io:7000
+    repo: fintech/${DRONE_REPO_NAME}/login
+    registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    region: us-east-1
+    build_args_from_env:
+      - REACT_APP_GOOGLE_MAP_KEY
+    build_args:
+      - API_BASE_URL=https://api.${DRONE_BRANCH}-cf.halan.io
+      - REACT_APP_URL=https://cf.${DRONE_BRANCH}-cf.halan.io
+      - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}-cf.halan.io
+      - REACT_APP_DOMAIN=.${DRONE_BRANCH}-cf.halan.io
+      - REACT_APP_SUBDOMAIN=cf.${DRONE_BRANCH}-cf.halan.io
+    tags:
+      - ${DRONE_BRANCH}-cf-${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}-cf
+  when:
+    branch:
+    - dev
+    - master
+    - staging
+    - test
+    - fintech
+    - ds
+    event:
+      - push
 
 - name: publish-login-prod
   image: plugins/ecr
@@ -122,11 +159,11 @@ steps:
     build_args_from_env:
       - REACT_APP_GOOGLE_MAP_KEY
     build_args:
-      - REACT_APP_BASE_URL=https://api.fintech.halan.io
-      - REACT_APP_MOHASSEL_URL=https://mohassel.fintech.halan.io
+      - API_BASE_URL=https://api.fintech.halan.io
+      - REACT_APP_URL=https://mohassel.fintech.halan.io
       - REACT_APP_LOGIN_URL=https://login.fintech.halan.io
       - REACT_APP_DOMAIN=.fintech.halan.io
-      - REACT_APP_LTS_SUBDOMAIN=mohassel.fintech.halan.io
+      - REACT_APP_SUBDOMAIN=mohassel.fintech.halan.io
     tags:
       - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_BRANCH}
@@ -136,6 +173,37 @@ steps:
     event:
       - push
 
+- name: publish-login-prod-cf
+  image: plugins/ecr
+  environment:
+    REACT_APP_GOOGLE_MAP_KEY:
+      from_secret: REACT_APP_GOOGLE_MAP_KEY
+  settings:
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    dockerfile: Docker/login.Dockerfile
+    mirror: http://docker-cache.fintech.halan.io:7000
+    repo: fintech/${DRONE_REPO_NAME}/login
+    registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    region: us-east-1
+    build_args_from_env:
+      - REACT_APP_GOOGLE_MAP_KEY
+    build_args:
+      - API_BASE_URL=https://api.cf.halan.io
+      - REACT_APP_URL=https://cf.cf.halan.io
+      - REACT_APP_LOGIN_URL=https://login.cf.halan.io
+      - REACT_APP_DOMAIN=.cf.halan.io
+      - REACT_APP_SUBDOMAIN=cf.cf.halan.io
+    tags:
+      - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}
+  when:
+    branch:
+    - prod
+    event:
+      - push
 
 
 - name: publish-mohassel
@@ -155,11 +223,11 @@ steps:
     build_args_from_env:
       - REACT_APP_GOOGLE_MAP_KEY
     build_args:
-      - REACT_APP_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
-      - REACT_APP_MOHASSEL_URL=https://mohassel.${DRONE_BRANCH}.halan.io
+      - API_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
+      - REACT_APP_URL=https://mohassel.${DRONE_BRANCH}.halan.io
       - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
       - REACT_APP_DOMAIN=.${DRONE_BRANCH}.halan.io
-      - REACT_APP_LTS_SUBDOMAIN=mohassel.${DRONE_BRANCH}.halan.io
+      - REACT_APP_SUBDOMAIN=mohassel.${DRONE_BRANCH}.halan.io
     region: us-east-1
     tags:
       - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
@@ -192,11 +260,11 @@ steps:
     build_args_from_env:
       - REACT_APP_GOOGLE_MAP_KEY
     build_args:
-      - REACT_APP_BASE_URL=https://api.fintech.halan.io
-      - REACT_APP_MOHASSEL_URL=https://mohassel.fintech.halan.io
+      - API_BASE_URL=https://api.fintech.halan.io
+      - REACT_APP_URL=https://mohassel.fintech.halan.io
       - REACT_APP_LOGIN_URL=https://login.fintech.halan.io
       - REACT_APP_DOMAIN=.fintech.halan.io
-      - REACT_APP_LTS_SUBDOMAIN=mohassel.fintech.halan.io
+      - REACT_APP_SUBDOMAIN=mohassel.fintech.halan.io
     region: us-east-1
     tags:
       - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
@@ -224,10 +292,10 @@ steps:
     build_args_from_env:
       - REACT_APP_GOOGLE_MAP_KEY
     build_args:
-      - REACT_APP_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
+      - API_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
       - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
       - REACT_APP_DOMAIN=.${DRONE_BRANCH}.halan.io
-      - REACT_APP_LTS_SUBDOMAIN=documents.${DRONE_BRANCH}.halan.io
+      - REACT_APP_SUBDOMAIN=documents.${DRONE_BRANCH}.halan.io
       - REACT_APP_DOCUMENTS_URL=documents.${DRONE_BRANCH}.halan.io
     region: us-east-1
     tags:
@@ -261,10 +329,10 @@ steps:
     build_args_from_env:
       - REACT_APP_GOOGLE_MAP_KEY
     build_args:
-      - REACT_APP_BASE_URL=https://api.fintech.halan.io
+      - API_BASE_URL=https://api.fintech.halan.io
       - REACT_APP_LOGIN_URL=https://login.fintech.halan.io
       - REACT_APP_DOMAIN=.fintech.halan.io
-      - REACT_APP_LTS_SUBDOMAIN=documents.fintech.halan.io
+      - REACT_APP_SUBDOMAIN=documents.fintech.halan.io
       - REACT_APP_DOCUMENTS_URL=documents.fintech.halan.io
     region: us-east-1
     tags:
@@ -275,6 +343,81 @@ steps:
     - prod
     event:
       - push
+
+
+
+
+- name: publish-cf
+  image: plugins/ecr
+  environment:
+    REACT_APP_GOOGLE_MAP_KEY:
+      from_secret: REACT_APP_GOOGLE_MAP_KEY
+  settings:
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    dockerfile: Docker/cf.Dockerfile
+    mirror: http://docker-cache.fintech.halan.io:7000
+    repo: fintech/${DRONE_REPO_NAME}/cf
+    registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    build_args_from_env:
+      - REACT_APP_GOOGLE_MAP_KEY
+    build_args:
+      - API_BASE_URL=https://api.${DRONE_BRANCH}-cf.halan.io
+      - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}-cf.halan.io
+      - REACT_APP_DOMAIN=.${DRONE_BRANCH}-cf.halan.io
+      - REACT_APP_SUBDOMAIN=cf.${DRONE_BRANCH}-cf.halan.io
+      - REACT_APP_DOCUMENTS_URL=documents.${DRONE_BRANCH}-cf.halan.io
+    region: us-east-1
+    tags:
+      - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}
+  when:
+    branch:
+    - dev
+    - master
+    - staging
+    - test
+    - fintech
+    - ds
+    event:
+      - push
+
+
+- name: publish-cf-prod
+  image: plugins/ecr
+  environment:
+    REACT_APP_GOOGLE_MAP_KEY:
+      from_secret: REACT_APP_GOOGLE_MAP_KEY
+  settings:
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    dockerfile: Docker/cf.Dockerfile
+    mirror: http://docker-cache.fintech.halan.io:7000
+    repo: fintech/${DRONE_REPO_NAME}/cf
+    registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    build_args_from_env:
+      - REACT_APP_GOOGLE_MAP_KEY
+    build_args:
+      - API_BASE_URL=https://api.cf.halan.io
+      - REACT_APP_LOGIN_URL=https://login.cf.halan.io
+      - REACT_APP_DOMAIN=.cf.halan.io
+      - REACT_APP_SUBDOMAIN=cf.cf.halan.io
+      - REACT_APP_DOCUMENTS_URL=documents.cf.halan.io
+    region: us-east-1
+    tags:
+      - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}
+  when:
+    branch:
+    - prod
+    event:
+      - push
+
+
 depends_on:
   - unit-test
 
@@ -301,6 +444,29 @@ steps:
     repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/login
     container: fe-login
     tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
+
+  when:
+    branch:
+    - dev
+    - test
+    - staging
+    event:
+      - push
+
+- name: deploy-login-cf
+  image: quay.io/honestbee/drone-kubernetes
+  settings:
+    KUBERNETES_SERVER:
+     from_secret: kubernetes_server
+    KUBERNETES_TOKEN:
+      from_secret: kubernetes_token
+    KUBERNETES_CERT:
+      from_secret: kubernetes_cert
+    namespace: ${DRONE_BRANCH}-cf
+    deployment: fe-login
+    repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/login
+    container: fe-login
+    tag: "${DRONE_BRANCH}-cf-${DRONE_COMMIT_SHA:0:8}"
 
   when:
     branch:
@@ -354,6 +520,33 @@ steps:
     - staging
     event:
       - push
+
+
+
+- name: deploy-cf
+  image: quay.io/honestbee/drone-kubernetes
+  settings:
+    KUBERNETES_SERVER:
+     from_secret: kubernetes_server
+    KUBERNETES_TOKEN:
+      from_secret: kubernetes_token
+    KUBERNETES_CERT:
+      from_secret: kubernetes_cert
+    namespace: ${DRONE_BRANCH}-cf
+    deployment: fe-cf
+    repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/cf
+    container: fe-cf
+    tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
+
+  when:
+    branch:
+    - dev
+    - test
+    - staging
+    event:
+      - push
+
+
 
 depends_on:
   - unit-test

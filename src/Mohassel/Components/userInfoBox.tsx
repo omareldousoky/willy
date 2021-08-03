@@ -65,6 +65,7 @@ class InfoBox extends Component<Props> {
           </Form.Group>
           {this.props.iScores &&
             this.props.iScores.length > 0 &&
+            iscore.nationalId &&
             iscore.nationalId.length > 0 && (
               <Form.Group as={Col} md="4">
                 <Row>

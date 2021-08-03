@@ -94,6 +94,7 @@ import {
   CalculateEarlyPaymentResponse,
   RemainingLoanResponse,
 } from '../../Models/Payment'
+import NanoLoanContract from '../pdfTemplates/nanoLoanContract/nanoLoanContract'
 import { PromissoryNoteMicro } from '../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
 
 export interface IndividualWithInstallments {
@@ -325,7 +326,7 @@ class LoanProfile extends Component<Props, State> {
       }
       application.customer.customerType === 'company'
         ? commercialRegisterNumbers.push(
-            application.customer.commercialRegisterNumber
+            `${application.customer.governorate}-${application.customer.commercialRegisterNumber}`
           )
         : ids.push(application.customer.nationalId)
     }
@@ -683,7 +684,7 @@ class LoanProfile extends Component<Props, State> {
         const smeScore = this.state.iscores.filter(
           (score) =>
             score.id ===
-            this.state.application.customer.commercialRegisterNumber
+            `${this.state.application.customer.governorate}-${this.state.application.customer.commercialRegisterNumber}`
         )[0]
         const info: FieldProps[] = getCompanyInfo({
           company: this.state.application.customer,
@@ -703,6 +704,7 @@ class LoanProfile extends Component<Props, State> {
         isLeader: false,
         getIscore: (data) => this.getIscore(data),
         applicationStatus: this.state.application.status,
+        productType: this.state.application.product.type,
       })
       return [info]
     }
@@ -734,7 +736,7 @@ class LoanProfile extends Component<Props, State> {
             productId: '104',
             amount: `${this.state.application.principal}`,
             name: `${data.businessName}`,
-            idSource: '901',
+            idSource: `${this.state.application.customer.governorate}`,
             idValue: `${data.commercialRegisterNumber}`,
           }
         : {
@@ -1466,7 +1468,13 @@ class LoanProfile extends Component<Props, State> {
               branchDetails={this.state.branchDetails}
               customer={this.state.application.customer}
             />
-            {this.state.application.product.beneficiaryType === 'individual' ? (
+            {this.state.application.product.type === 'nano' ? (
+              <NanoLoanContract
+                data={this.state.application}
+                branchDetails={this.state.branchDetails}
+              />
+            ) : this.state.application.product.beneficiaryType ===
+              'individual' ? (
               <LoanContract
                 data={this.state.application}
                 branchDetails={this.state.branchDetails}
