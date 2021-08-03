@@ -62,8 +62,10 @@ class Login extends React.PureComponent<Props, State> {
             <h1>{local.welcomeTo}</h1>
             {this.props.isCF ? (
               <>
-                <h1>{local.systemForLoanTracking}</h1>
-                <h3>{local.lowRateLoan}</h3>
+                <h1>{local.commerceTrackingSystem}</h1>
+                <h3>
+                  {local.from} {local.halan}
+                </h3>
               </>
             ) : (
               <>

@@ -333,7 +333,7 @@ const DualBox = (props: Props) => {
                       <span>
                         <img
                           alt="delete"
-                          src={require('../../../Shared/Assets/deleteIcon.svg')}
+                          src={require('../../Assets/deleteIcon.svg')}
                         />
                       </span>
                       <span>{local.deleteAll}</span>

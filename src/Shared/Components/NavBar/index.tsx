@@ -247,13 +247,14 @@ class NavBar extends Component<Props, State> {
                   }
                 />
               </Navbar.Brand>
-              {this.props.isLTS && (
-                <Navbar.Text className="mx-5">
-                  <h5 className="text-primary font-weight-bold">
-                    {local.lowRateLoan}
-                  </h5>
-                </Navbar.Text>
-              )}
+
+              <Navbar.Text className="mx-5">
+                <h5 className="text-primary font-weight-bold">
+                  {this.props.isLTS
+                    ? local.lowRateLoan
+                    : local.commerceTrackingSystem}
+                </h5>
+              </Navbar.Text>
               <div style={{ flex: 2, display: 'flex', width: '100%' }}>
                 <div className="info-navbar">
                   <span>{local.currentPeriodStartsIn}</span>
