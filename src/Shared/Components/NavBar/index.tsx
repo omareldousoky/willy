@@ -239,7 +239,6 @@ class NavBar extends Component<Props, State> {
               <Navbar.Brand className="ml-4">
                 <img
                   alt="navbar-logo"
-                  className={this.props.isLTS ? '' : 'px-4'}
                   src={
                     this.props.isLTS
                       ? require('../../Assets/Logo.svg')
