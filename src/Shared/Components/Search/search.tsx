@@ -30,6 +30,7 @@ import { getActionsList } from '../../../Mohassel/Services/APIs/ActionLogs/getAc
 import Can from '../../../Mohassel/config/Can'
 import { SearchInitialFormikState, SearchProps, SearchState } from './types'
 import { WarningTypeDropDown } from '../../../Mohassel/Components/dropDowns/WarningTypeDropDown'
+import ability from '../../config/ability'
 
 class Search extends Component<SearchProps, SearchState> {
   constructor(props) {
@@ -826,10 +827,17 @@ class Search extends Component<SearchProps, SearchState> {
                         value: 'micro',
                         text: local.micro,
                       },
-                      {
-                        value: 'nano',
-                        text: local.nano,
-                      },
+                      ...((ability.can('getNanoLoan', 'application') &&
+                        this.props.url === 'loan') ||
+                      (ability.can('getNanoApplication', 'application') &&
+                        this.props.url === 'application')
+                        ? [
+                            {
+                              value: 'nano',
+                              text: local.nano,
+                            },
+                          ]
+                        : []),
                     ],
                     'type',
                     local.productName
