@@ -16,7 +16,7 @@ import {
   searchFilters,
   issuedLoansSearchFilters,
 } from '../../redux/search/actions'
-import { BranchesDropDown } from '../../../Mohassel/Components/dropDowns/allDropDowns'
+import { BranchesDropDown } from '../dropDowns/allDropDowns'
 import {
   getFullCustomerKey,
   parseJwt,
@@ -28,7 +28,7 @@ import { loading } from '../../redux/loading/actions'
 import { getActionsList } from '../../../Mohassel/Services/APIs/ActionLogs/getActionsList'
 import Can from '../../../Mohassel/config/Can'
 import { SearchInitialFormikState, SearchProps, SearchState } from './types'
-import { WarningTypeDropDown } from '../../../Mohassel/Components/dropDowns/WarningTypeDropDown'
+import { WarningTypeDropDown } from '../dropDowns/WarningTypeDropDown'
 import { getGovernorates } from '../../Services/APIs/config'
 
 class Search extends Component<SearchProps, SearchState> {

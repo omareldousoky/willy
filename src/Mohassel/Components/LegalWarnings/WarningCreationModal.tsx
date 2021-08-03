@@ -16,7 +16,7 @@ import {
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan'
 import { Application } from '../LoanApplication/loanApplicationStates'
-import { WarningTypeDropDown } from '../dropDowns/WarningTypeDropDown'
+import { WarningTypeDropDown } from '../../../Shared/Components/dropDowns/WarningTypeDropDown'
 import {
   fetchWarning,
   createWarning,

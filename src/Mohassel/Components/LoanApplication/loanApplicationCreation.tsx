@@ -24,7 +24,7 @@ import { LoanApplicationCreationForm } from './loanApplicationCreationForm'
 import { Loader } from '../../../Shared/Components/Loader'
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas'
 import { getProduct } from '../../Services/APIs/loanProduct/getProduct'
-import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches'
+import { getProductsByBranch } from '../../../Shared/Services/APIs/Branch/getBranches'
 import { getGenderFromNationalId } from '../../../Shared/Services/nationalIdValidation'
 import {
   newApplication,
@@ -36,7 +36,7 @@ import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
 import {
   getLoanOfficer,
   searchLoanOfficer,
-} from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
+} from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import {
   parseJwt,
   getAge,
@@ -44,7 +44,7 @@ import {
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationGuarantorForm'
-import DualBox from '../DualListBox/dualListBox'
+import DualBox from '../../../Shared/Components/DualListBox/dualListBox'
 import InfoBox from '../userInfoBox'
 import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import Wizard from '../../../Shared/Components/wizard/Wizard'

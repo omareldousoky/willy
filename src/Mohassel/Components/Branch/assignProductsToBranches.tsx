@@ -12,14 +12,14 @@ import { getProducts } from '../../Services/APIs/loanProduct/getProduct'
 import {
   assignProductsToBranches,
   unassignProductsToBranches,
-} from '../../Services/APIs/Branch/assignProductsToBranches'
+} from '../../../Shared/Services/APIs/Branch/assignProductsToBranches'
 import {
   customFilterOption,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
-import DualBox from '../DualListBox/dualListBox'
+import DualBox from '../../../Shared/Components/DualListBox/dualListBox'
 import { theme } from '../../../Shared/theme'
-import { getBranchesByProducts } from '../../Services/APIs/Branch/getBranches'
+import { getBranchesByProducts } from '../../../Shared/Services/APIs/Branch/getBranches'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageLoansArray } from '../ManageLoans/manageLoansInitials'
 import { LtsIcon } from '../../../Shared/Components'

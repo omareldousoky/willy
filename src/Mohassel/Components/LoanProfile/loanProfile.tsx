@@ -15,7 +15,7 @@ import {
   BranchDetails,
   BranchDetailsResponse,
   getBranch,
-} from '../../Services/APIs/Branch/getBranch'
+} from '../../../Shared/Services/APIs/Branch/getBranch'
 import Payment from '../Payment/payment'
 import { englishToArabic } from '../../Services/statusLanguage'
 import local from '../../../Shared/Assets/ar.json'

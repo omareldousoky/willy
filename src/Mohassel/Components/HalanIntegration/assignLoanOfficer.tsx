@@ -14,7 +14,7 @@ import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWi
 import { Loader } from '../../../Shared/Components/Loader'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import Search from '../../../Shared/Components/Search/search'
-import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
+import { searchLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import { assignLeadToLO } from '../../Services/APIs/Leads/assignLeadToLO'
 import { search } from '../../../Shared/redux/search/actions'
 import { loading } from '../../../Shared/redux/loading/actions'

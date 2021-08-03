@@ -1,5 +1,5 @@
 import { Application, Customer } from '../../../../Shared/Services/interfaces'
-import { BranchDetails } from '../../../Services/APIs/Branch/getBranch'
+import { BranchDetails } from '../../../../Shared/Services/APIs/Branch/getBranch'
 
 export interface AcknowledgmentAndPledgeProps {
   entitledToSign: {

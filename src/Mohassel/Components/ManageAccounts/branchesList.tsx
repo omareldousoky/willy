@@ -17,7 +17,7 @@ import { getCookie } from '../../../Shared/Services/getCookie'
 import {
   BranchDetailsResponse,
   getBranch,
-} from '../../Services/APIs/Branch/getBranch'
+} from '../../../Shared/Services/APIs/Branch/getBranch'
 import { LtsIcon } from '../../../Shared/Components'
 
 interface State {

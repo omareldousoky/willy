@@ -6,7 +6,7 @@ import Swal from 'sweetalert2'
 import local from '../../../Shared/Assets/ar.json'
 import { englishToArabic } from '../../Services/statusLanguage'
 import { GuarantorTableView } from './guarantorDetails'
-import { getLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
+import { getLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
 import {
   beneficiaryType,

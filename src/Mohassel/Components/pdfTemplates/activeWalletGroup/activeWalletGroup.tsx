@@ -1,6 +1,6 @@
 import React from 'react'
 import './activeWalletGroup.scss'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 import store from '../../../../Shared/redux/store'
 
 interface ActiveWalletGroupResponse {

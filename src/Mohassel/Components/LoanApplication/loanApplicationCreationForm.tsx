@@ -10,7 +10,7 @@ import Col from 'react-bootstrap/Col'
 
 import * as local from '../../../Shared/Assets/ar.json'
 import GroupInfoBox from '../LoanProfile/groupInfoBox'
-import { searchLoanOfficerAndManager } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
+import { searchLoanOfficerAndManager } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import { getCookie } from '../../../Shared/Services/getCookie'
 import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils'
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction'

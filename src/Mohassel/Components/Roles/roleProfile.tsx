@@ -13,10 +13,10 @@ import {
   Tab,
 } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import RoleTable from './roleTable'
-import { getPermissions } from '../../Services/APIs/Roles/roles'
+import { getPermissions } from '../../../Shared/Services/APIs/Roles/roles'
 import { Section } from './roleCreation'
 import RoleUsers from './roleUsers'
-import BackButton from '../BackButton/back-button'
+import BackButton from '../../../Shared/Components/BackButton/back-button'
 
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { LtsIcon } from '../../../Shared/Components'

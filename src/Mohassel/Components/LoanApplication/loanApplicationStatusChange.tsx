@@ -16,7 +16,7 @@ import {
   BranchDetails,
   BranchDetailsResponse,
   getBranch,
-} from '../../Services/APIs/Branch/getBranch'
+} from '../../../Shared/Services/APIs/Branch/getBranch'
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 
 interface State {

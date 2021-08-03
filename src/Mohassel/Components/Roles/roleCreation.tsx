@@ -15,7 +15,7 @@ import {
   getPermissions,
   createRole,
   editRole,
-} from '../../Services/APIs/Roles/roles'
+} from '../../../Shared/Services/APIs/Roles/roles'
 import { Loader } from '../../../Shared/Components/Loader'
 import { step1, roleCreationStep1Validation } from './roleStates'
 import Wizard from '../../../Shared/Components/wizard/Wizard'

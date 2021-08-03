@@ -21,9 +21,9 @@ import {
   changeLeadState,
   changeInReviewLeadState,
 } from '../../Services/APIs/Leads/changeLeadState'
-import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
+import { searchLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import { assignLeadToLO } from '../../Services/APIs/Leads/assignLeadToLO'
-import { searchBranches } from '../../Services/APIs/Branch/searchBranches'
+import { searchBranches } from '../../../Shared/Services/APIs/Branch/searchBranches'
 import { changeLeadBranch } from '../../Services/APIs/Leads/changeLeadBranch'
 import { search } from '../../../Shared/redux/search/actions'
 import { loading } from '../../../Shared/redux/loading/actions'

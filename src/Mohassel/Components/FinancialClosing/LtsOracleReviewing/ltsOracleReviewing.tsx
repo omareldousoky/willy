@@ -83,7 +83,7 @@ class LtsOracleReviewing extends Component<{}, State> {
                     <div className="file-review-container">
                       <div className="d-flex align-items-center">
                         <span className="mx-3">#{index + 1}</span>
-                        <span className="file-date-container mx-5">
+                        <span className="d-flex flex-column justify-content-start mx-5">
                           <span>{local.closeDate}</span>
                           {file.toDate
                             ? timeToArabicDate(file.toDate, true)
@@ -92,7 +92,7 @@ class LtsOracleReviewing extends Component<{}, State> {
                         <span className="mx-5">{file.fileName}</span>
                         <span className="mx-5">{local[file.status]}</span>
                         {file.status === 'created' && (
-                          <span className="file-date-container mx-5">
+                          <span className="d-flex flex-column justify-content-start mx-5">
                             <span>{local.creationDate}</span>
                             {file.fileGeneratedAt
                               ? timeToArabicDate(file.fileGeneratedAt, true)
