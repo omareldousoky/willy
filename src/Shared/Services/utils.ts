@@ -807,3 +807,5 @@ export const getDateAndTime = (date: number) => {
   const dateString = new Date(date).toLocaleTimeString('ar-EG', options)
   return dateString
 }
+
+export const isCF = process.env.API_BASE_URL?.includes('cf') ?? false
