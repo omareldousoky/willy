@@ -12,34 +12,5 @@ export const manageLoansArray = (): Card[] => {
       path: '/loans',
     })
   }
-  if (ability.can('cibScreen', 'report')) {
-    manageLoanArr.push({
-      icon: 'cib',
-      header: local.cib,
-      desc: local.cib,
-      path: '/loans/cib',
-    })
-  }
-  if (ability.can('cibScreen', 'report')) {
-    manageLoanArr.push({
-      icon: 'change-source-of-fund',
-      header: local.changeSourceOfFund,
-      desc: local.changeSourceOfFund,
-      path: '/loans/source-of-fund',
-    })
-  }
-  return manageLoanArr
-}
-
-export const manageSMELoansArray = (): Card[] => {
-  const manageLoanArr: Card[] = []
-  if (ability.can('getIssuedSMELoan', 'application')) {
-    manageLoanArr.push({
-      icon: 'issued-loans',
-      header: local.issuedLoans,
-      desc: local.companies,
-      path: '/loans',
-    })
-  }
   return manageLoanArr
 }
