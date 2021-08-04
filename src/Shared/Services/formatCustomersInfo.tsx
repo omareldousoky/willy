@@ -39,6 +39,7 @@ interface CustomerInfo extends IscoreInfo {
   isLeader?: boolean
   customerDetails: Customer
   productType?: string
+  isCF?: boolean
 }
 interface CompanyInfo extends IscoreInfo {
   company: Customer
@@ -169,6 +170,7 @@ export const getCustomerInfo = ({
   customerDetails,
   score,
   isLeader,
+  isCF,
   getIscore,
   applicationStatus,
   productType,
@@ -193,6 +195,8 @@ export const getCustomerInfo = ({
     mobilePhoneNumber,
     branchName,
     representativeName,
+    monthlyIncome,
+    initialConsumerFinanceLimit,
   } = customerDetails
   const info: FieldProps[] = [
     {
@@ -304,6 +308,29 @@ export const getCustomerInfo = ({
       showFieldCondition: true,
     },
   ]
+
+  // monthlyIncome && initialConsumerFinanceLimit
+  const cfFields: FieldProps[] = [
+    // hidden field to display both fields in a new row
+    // TODO: make a better way
+    {
+      fieldTitle: local.monthlyIncome,
+      fieldData: monthlyIncome || 0,
+      showFieldCondition: false,
+    },
+    {
+      fieldTitle: local.monthlyIncome,
+      fieldData: monthlyIncome || 0,
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.initialConsumerFinanceLimit,
+      fieldData: initialConsumerFinanceLimit || 0,
+      showFieldCondition: true,
+    },
+  ]
+
+  if (isCF) return [...info, ...cfFields]
 
   return info
 }

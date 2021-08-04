@@ -166,7 +166,12 @@ export const CustomerProfile = () => {
     }
   }
   const mainInfo = customerDetails && [
-    getCustomerInfo({ customerDetails, score: iScoreDetails, isLeader: false }),
+    getCustomerInfo({
+      customerDetails,
+      score: iScoreDetails,
+      isLeader: false,
+      isCF: true,
+    }),
   ]
 
   const tabsData: TabDataProps = {
