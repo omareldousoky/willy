@@ -1146,5 +1146,6 @@
   "nano": "نانو",
   "sme": "شركات",
   "micro": "ميكرو",
-  "transactionAmount": "قيمه الحركه"
+  "transactionAmount": "قيمه الحركه",
+  "transactionsSum": "اجمالي قيمه الحركات"
 }

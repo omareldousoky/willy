@@ -871,7 +871,7 @@ class Reports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: res.body.result,
+            data: res.body,
             showModal: false,
             print: 'raseedyTransactions',
             loading: false,

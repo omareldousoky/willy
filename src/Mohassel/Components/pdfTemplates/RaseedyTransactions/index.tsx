@@ -17,7 +17,7 @@ interface RaseedyTransactionsModel {
 const RaseedyTransactionsReport = ({
   data,
 }: {
-  data: RaseedyTransactionsModel[]
+  data: { result: RaseedyTransactionsModel[]; transactionAmountSum: number }
 }) => {
   const tableColumns = [
     {
@@ -59,7 +59,7 @@ const RaseedyTransactionsReport = ({
           </tr>
         </thead>
         <tbody>
-          {data.map((transaction, i) => (
+          {data.result.map((transaction, i) => (
             <tr key={i}>
               {tableColumns.map((item, j) => (
                 <td key={j}>
@@ -72,6 +72,11 @@ const RaseedyTransactionsReport = ({
           ))}
         </tbody>
       </Table>
+
+      <div className="mt-4">
+        <span className="font-weight-bold h4">{local.transactionsSum}: </span>
+        <span className="h4">{numbersToArabic(data.transactionAmountSum)}</span>
+      </div>
     </>
   )
 }
