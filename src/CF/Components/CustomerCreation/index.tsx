@@ -80,7 +80,7 @@ interface State {
     nationalIdIssueDate: number
     monthlyIncome: number
     initialConsumerFinanceLimit: number
-    customerConsumerFinanceMaxLimit: number
+    customerConsumerFinanceMaxLimit?: number
     homePostalCode: number
     customerAddressLatLong: string
     customerAddressLatLongNumber: {
@@ -428,6 +428,7 @@ class CustomerCreation extends Component<Props, State> {
       objToSubmit.maxLoansAllowed = Number(objToSubmit.maxLoansAllowed)
     else objToSubmit.maxLoansAllowed = 1
     delete objToSubmit.principals
+    delete objToSubmit.customerConsumerFinanceMaxLimit
     if (this.props.edit) {
       const res = await editCustomer(
         objToSubmit,
