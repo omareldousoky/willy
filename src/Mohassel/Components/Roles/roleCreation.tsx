@@ -26,7 +26,7 @@ import {
   customFilterOption,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
-import { Role } from '../UserDetails/userDetailsInterfaces'
+import { Role } from '../userDetails/userDetailsInterfaces'
 import { LtsIcon } from '../../../Shared/Components'
 
 export interface Section {
