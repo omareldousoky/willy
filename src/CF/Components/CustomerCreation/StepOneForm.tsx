@@ -289,7 +289,7 @@ export const StepOneForm = (props: any) => {
         <Col sm={6}>
           <Form.Group controlId="monthlyIncome">
             <Form.Label className="customer-form-label">
-              {local.monthlyIncome}
+              {`${local.monthlyIncome}*`}
             </Form.Label>
             <Form.Control
               type="number"
@@ -297,7 +297,10 @@ export const StepOneForm = (props: any) => {
               data-qc="monthlyIncome"
               value={values.monthlyIncome}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setFieldValue('monthlyIncome', event.currentTarget.value)
+                setFieldValue(
+                  'monthlyIncome',
+                  Number(event.currentTarget.value)
+                )
                 getCustomerLimitFromIncome(event.currentTarget.value)
               }}
               onBlur={handleBlur}
@@ -317,7 +320,7 @@ export const StepOneForm = (props: any) => {
         <Col sm={6}>
           <Form.Group controlId="initialConsumerFinanceLimit">
             <Form.Label className="customer-form-label">
-              {local.initialConsumerFinanceLimit}
+              {`${local.initialConsumerFinanceLimit}*`}
             </Form.Label>
             <Form.Control
               type="number"
