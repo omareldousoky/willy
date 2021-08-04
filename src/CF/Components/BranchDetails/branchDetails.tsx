@@ -14,7 +14,6 @@ import { getBranchById } from '../../../Shared/redux/branch/actions'
 import { BranchBasicsView } from './branchDetailsInterfaces'
 import UsersList from '../ManageAccounts/usersList'
 import CustomersList from '../CustomerCreation/CustomersList'
-import TrackLoanApplications from '../TrackLoanApplications/trackLoanApplications'
 import LoanList from '../LoanList/loanList'
 import { getProductsByBranch } from '../../../Shared/Services/APIs/Branch/getBranches'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -92,12 +91,6 @@ class BranchDetails extends Component<Props, State> {
       tabsToRender.push({
         header: local.customers,
         stringKey: 'customers',
-      })
-    }
-    if (ability.can('getLoanApplication', 'application')) {
-      tabsToRender.push({
-        header: local.loanApplication,
-        stringKey: 'loanApplication',
       })
     }
     if (ability.can('getIssuedLoan', 'application')) {
@@ -181,12 +174,6 @@ class BranchDetails extends Component<Props, State> {
         return (
           <Can I="getCustomer" a="customer">
             <CustomersList {...{ branchId: this.state._id }} />
-          </Can>
-        )
-      case 'loanApplication':
-        return (
-          <Can I="getLoanApplication" a="application">
-            <TrackLoanApplications {...{ branchId: this.state._id }} />
           </Can>
         )
       case 'issuedLoan':
