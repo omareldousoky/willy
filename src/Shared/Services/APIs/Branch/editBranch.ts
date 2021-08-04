@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../axiosInstance'
 
 export const editBranch = async (data: object, _id: string) => {
   const url = process.env.REACT_APP_BASE_URL + `/branch/${_id}`

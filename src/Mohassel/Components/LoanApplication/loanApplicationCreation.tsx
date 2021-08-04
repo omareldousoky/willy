@@ -29,6 +29,7 @@ import { getGenderFromNationalId } from '../../../Shared/Services/nationalIdVali
 import {
   newApplication,
   editApplication,
+  newNanoApplication,
 } from '../../Services/APIs/loanApplication/newApplication'
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication'
 import { getCookie } from '../../../Shared/Services/getCookie'
@@ -101,6 +102,7 @@ interface State {
   searchGroupCustomerKey: string
   showModal: boolean
   customerToView: Customer
+  isNano: boolean
 }
 const date = new Date()
 
@@ -377,10 +379,16 @@ class LoanApplicationCreation extends Component<Props, State> {
   }
 
   setCustomerType(type) {
+    const isNano = type === 'nano'
+    const filteredroducts = this.state.products.filter((product) =>
+      isNano ? product.type === 'nano' : product.type !== 'nano'
+    )
     this.setState(
       produce<State>((draftState) => {
-        draftState.customerType = type
-        draftState.application.beneficiaryType = type
+        draftState.products = filteredroducts
+        draftState.customerType = isNano ? 'individual' : type
+        draftState.application.beneficiaryType = isNano ? 'individual' : type
+        draftState.isNano = isNano
       })
     )
   }
@@ -723,6 +731,8 @@ class LoanApplicationCreation extends Component<Props, State> {
         entitledToSignIds: [],
         entitledToSign: [],
         customerType: '',
+        productType: '',
+        nanoLoansLimit: 0,
       },
       customerType: '',
       loading: false,
@@ -747,6 +757,7 @@ class LoanApplicationCreation extends Component<Props, State> {
       prevId: '',
       showModal: false,
       customerToView: {},
+      isNano: false,
     }
   }
 
@@ -833,6 +844,14 @@ class LoanApplicationCreation extends Component<Props, State> {
   selectCustomer = async (customer) => {
     let customerIsBlockerError = ''
     let customerLoanOrAgeError = ''
+
+    const invalidNanoLimit = this.state.isNano && !customer.nanoLoansLimit
+
+    if (invalidNanoLimit) {
+      Swal.fire(local.error, 'برجاء تحديد الحد الائتماني', 'error')
+      return
+    }
+
     this.setState({ loading: true })
     const selectedCustomer = await getCustomerByID(customer._id)
     if (selectedCustomer.status === 'success') {
@@ -1066,7 +1085,11 @@ class LoanApplicationCreation extends Component<Props, State> {
         Swal.fire('error', local.selectTwoGuarantors, 'error')
       } else if (!this.props.edit) {
         this.setState({ loading: true })
-        const res = await newApplication(objToSubmit)
+
+        const res = await (this.state.isNano
+          ? newNanoApplication(objToSubmit)
+          : newApplication(objToSubmit))
+
         if (res.status === 'success') {
           this.setState({ loading: false })
           Swal.fire(
@@ -1243,6 +1266,7 @@ class LoanApplicationCreation extends Component<Props, State> {
         app.branchManagerAndDate = selectedProductDetails.branchManagerAndDate
         app.branchManagerId = ''
         app.managerVisitDate = ''
+        app.productType = selectedProductDetails.type
       })
     )
   }
@@ -1290,6 +1314,7 @@ class LoanApplicationCreation extends Component<Props, State> {
         app.permanentEmployeeCount = response.permanentEmployeeCount
         app.partTimeEmployeeCount = response.partTimeEmployeeCount
         app.representative = response.representative
+        app.nanoLoansLimit = response.nanoLoansLimit
       })
     )
   }
@@ -1365,9 +1390,24 @@ class LoanApplicationCreation extends Component<Props, State> {
         merged.forEach((customer) => {
           if (!guarantor) {
             if (
+              customer.nanoLoanIds?.length ||
+              customer.nanoApplicationIds?.length
+            ) {
+              validationObject[customer._id] = {
+                customerName: customer.customerName,
+                ...(customer.nanoLoanIds && {
+                  nanoLoanIds: customer.nanoLoanIds,
+                }),
+                ...(customer.nanoApplicationIds && {
+                  nanoApplicationIds: customer.nanoApplicationIds,
+                }),
+              }
+            }
+            if (
               customer.applicationIds &&
               !customer.loanIds &&
-              customer.applicationIds.length >= customer.maxLoansAllowed
+              (this.state.isNano ||
+                customer.applicationIds.length >= customer.maxLoansAllowed)
             ) {
               validationObject[customer._id] = {
                 customerName: customer.customerName,
@@ -1377,7 +1417,8 @@ class LoanApplicationCreation extends Component<Props, State> {
             if (
               customer.loanIds &&
               !customer.applicationIds &&
-              customer.loanIds.length >= customer.maxLoansAllowed
+              (this.state.isNano ||
+                customer.loanIds.length >= customer.maxLoansAllowed)
             ) {
               if (Object.keys(validationObject).includes(customer._id)) {
                 validationObject[customer._id] = {
@@ -1779,6 +1820,19 @@ class LoanApplicationCreation extends Component<Props, State> {
                       onClick={() => this.setCustomerType('group')}
                     >
                       {local.group}
+                    </Button>
+                  </div>
+                  <div
+                    className="d-flex flex-column m-5"
+                    style={{ margin: '20px 60px' }}
+                  >
+                    <LtsIcon name="coins" size="100px" color="#7dc356" />
+
+                    <Button
+                      className="my-4"
+                      onClick={() => this.setCustomerType('nano')}
+                    >
+                      {local.nano}
                     </Button>
                   </div>
                 </>

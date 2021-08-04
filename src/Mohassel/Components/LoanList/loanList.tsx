@@ -86,14 +86,14 @@ class LoanList extends Component<Props, State> {
             }
           >
             {data.application.product.beneficiaryType === 'individual' &&
-            data.application.product.type === 'micro' ? (
+            ['micro', 'nano'].includes(data.application.product.type) ? (
               data.application.customer.customerName
             ) : data.application.product.beneficiaryType === 'individual' &&
               data.application.product.type === 'sme' ? (
               data.application.customer.businessName
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {data.application.group?.individualsInGroup.map((member) =>
+                {data.application.group?.individualsInGroup?.map((member) =>
                   member.type === 'leader' ? (
                     <span key={member.customer._id}>
                       {member.customer.customerName}
@@ -178,23 +178,26 @@ class LoanList extends Component<Props, State> {
     } else {
       this.props.setIssuedLoanSearchFilters({})
     }
+
+    const productType =
+      this.props.location.state && this.props.location.state.sme
+        ? 'sme'
+        : this.props.issuedLoansSearchFilters.type
+        ? this.props.issuedLoansSearchFilters.type
+        : 'micro'
+
     let query = {
       ...searchFiltersQuery,
       size: this.state.size,
       from: this.state.from,
       url: 'loan',
       sort: 'issueDate',
-      type:
-        this.props.location.state && this.props.location.state.sme
-          ? 'sme'
-          : 'micro',
+      type: productType,
     }
+
     query = removeEmptyArg(query)
     this.props.setIssuedLoanSearchFilters({
-      type:
-        this.props.location.state && this.props.location.state.sme
-          ? 'sme'
-          : 'micro',
+      type: productType,
     })
     this.props.search(query).then(() => {
       if (this.props.error)
@@ -328,6 +331,7 @@ class LoanList extends Component<Props, State> {
       dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
     } else {
       dropDownKeys.push('nationalId')
+      searchKeys.splice(4, 0, 'loanType')
     }
     return (
       <>

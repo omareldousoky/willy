@@ -110,6 +110,8 @@ export interface Application {
   entitledToSignIds: EntitledToSignIds[]
   entitledToSign: Array<EntitledToSign>
   customerType: string
+  productType: string
+  nanoLoansLimit: number
 }
 export const LoanApplicationValidation = Yup.object().shape({
   productID: Yup.string().required(local.required),
@@ -171,8 +173,12 @@ export const LoanApplicationValidation = Yup.object().shape({
           customerMaxPrincipal,
           principals,
           beneficiaryType,
+          productType,
+          nanoLoansLimit,
         } = this.parent
+        const isNano = productType === 'nano'
         if (
+          !isNano &&
           customerMaxPrincipal &&
           customerMaxPrincipal > 0 &&
           value <= customerMaxPrincipal
@@ -180,6 +186,7 @@ export const LoanApplicationValidation = Yup.object().shape({
           return true
         }
         if (
+          !isNano &&
           customerMaxPrincipal === 0 &&
           value <=
             (beneficiaryType === 'group'
@@ -188,6 +195,7 @@ export const LoanApplicationValidation = Yup.object().shape({
         ) {
           return true
         }
+        if (isNano && value <= nanoLoansLimit) return true
         return false
       }
     )

@@ -402,15 +402,16 @@ export const GuarantorTableView = (props: Props) => {
                         props.iScores.length > 0 &&
                         props.getIscore &&
                         props.status &&
-                        ![
-                          'approved',
-                          'created',
-                          'issued',
-                          'rejected',
-                          'paid',
-                          'pending',
-                          'canceled',
-                        ].includes(props.status) && (
+                        (props.application.product.type === 'nano' ||
+                          ![
+                            'approved',
+                            'created',
+                            'issued',
+                            'rejected',
+                            'paid',
+                            'pending',
+                            'canceled',
+                          ].includes(props.status)) && (
                           <Can I="getIscore" a="customer">
                             <td>
                               <span

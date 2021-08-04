@@ -1139,7 +1139,15 @@
   "customerAddress": "عنوان العميل",
   "productApplicationsReport": "تقرير طلبات القروض لنوع قرض",
   "consumerFinance": "CF",
+  "iscoreIssuingAuthorities": "جهه اصدار السجل التجاري",
+  "nanoCustomerLimit": "Nano الحد الائتماني لعميل ال",
+  "loanLimit": "الحد الائتماني",
+  "nanoLimitDocument": "صوره وصل الحد الائتماني",
+  "nano": "نانو",
+  "sme": "شركات",
+  "micro": "ميكرو",
   "monthlyIncome": "الدخل الشهري",
   "initialConsumerFinanceLimit": "الحد المبدئي للعميل",
-  "maxConsumerFinanceLimit": "الحد الأقصي للعميل"
+  "maxConsumerFinanceLimit": "الحد الأقصي للعميل",
+	"commerceTrackingSystem": "نظام تتبع المشتريات"
 }

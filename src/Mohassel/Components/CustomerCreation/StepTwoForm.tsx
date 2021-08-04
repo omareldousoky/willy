@@ -11,9 +11,11 @@ import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../config/Can'
 import { getErrorMessage } from '../../../Shared/Services/utils'
+import { IscoreAuthority } from '../../../Shared/Services/interfaces'
 import {
   getBusinessSectors,
   getGovernorates,
+  getIscoreIssuingAuthorities,
 } from '../../../Shared/Services/APIs/config'
 import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
 
@@ -89,11 +91,16 @@ export const StepTwoForm = (props: any) => {
       ],
     },
   ])
+  const [authorities, setAuthorities] = useState<Array<IscoreAuthority>>([])
   async function getConfig() {
     setLoading(true)
-    const resGov = await getGovernorates()
+    const resGov = isCompany
+      ? await getIscoreIssuingAuthorities()
+      : await getGovernorates()
     if (resGov.status === 'success') {
-      setGovernorates(resGov.body.governorates)
+      isCompany
+        ? setAuthorities(resGov.body.data)
+        : setGovernorates(resGov.body.governorates)
     } else Swal.fire('Error !', getErrorMessage(resGov.error.error), 'error')
 
     const resBS = await getBusinessSectors()
@@ -171,7 +178,7 @@ export const StepTwoForm = (props: any) => {
       </Row>
       {isCompany && (
         <Row>
-          <Col sm={12}>
+          <Col sm={6}>
             <Form.Group controlId="businessCharacteristic">
               <Form.Label className="customer-form-label">{`${local.businessCharacteristic}*`}</Form.Label>
               <Form.Control
@@ -189,6 +196,32 @@ export const StepTwoForm = (props: any) => {
               <Form.Control.Feedback type="invalid">
                 {errors.businessCharacteristic}
               </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col sm={6}>
+            <Form.Group controlId="governorate">
+              <Form.Label className="customer-form-label">
+                {local.iscoreIssuingAuthorities}
+              </Form.Label>
+              <Form.Control
+                as="select"
+                type="select"
+                name="governorate"
+                data-qc="governorate"
+                value={values.governorate}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                isInvalid={errors.governorate && touched.governorate}
+              >
+                <option value="" disabled />
+                {authorities.map((authority, index) => {
+                  return (
+                    <option key={index} value={authority.code}>
+                      {authority.nameArabic}
+                    </option>
+                  )
+                })}
+              </Form.Control>
             </Form.Group>
           </Col>
         </Row>

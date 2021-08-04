@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../axiosInstance'
 
 export const checkBranchNameDuplicates = async (branchName: object) => {
   const url = process.env.REACT_APP_BASE_URL + '/branch/check-branch-name'

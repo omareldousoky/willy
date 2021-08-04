@@ -17,6 +17,7 @@ import { LegalSettlementFormProps, SettlementFormValues } from '../types'
 import settlementForm from '../configs/settlementForm'
 import { mapFieldsToReadOnly, isSettlementReviewed } from '../utils'
 import { Loader } from '../../../../Shared/Components/Loader'
+import { mapFormFieldsToFormData } from '../Form/utils'
 
 const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
   settlementInfo,
@@ -56,14 +57,7 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
   const isReviewed = isSettlementReviewed(customerSettlement)
 
   const handleSubmit = async (values: SettlementFormValues) => {
-    const formData = new FormData()
-    const formFields = Object.keys(values)
-
-    formFields.forEach((fieldKey) => {
-      if (values[fieldKey] !== undefined) {
-        formData.append(fieldKey, values[fieldKey])
-      }
-    })
+    const formData = mapFormFieldsToFormData(values)
 
     setIsSubmitting(true)
 

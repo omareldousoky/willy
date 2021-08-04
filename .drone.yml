@@ -2,6 +2,7 @@ kind: pipeline
 type: kubernetes
 name: notify-pipeline-start
 
+
 steps:
 - name: notify-start
   image: plugins/slack
@@ -196,7 +197,7 @@ steps:
       - REACT_APP_DOMAIN=.cf.halan.io
       - REACT_APP_SUBDOMAIN=cf.cf.halan.io
     tags:
-      - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}-cf-${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_BRANCH}
   when:
     branch:

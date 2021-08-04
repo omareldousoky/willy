@@ -11,6 +11,7 @@ import { Profile, InfoBox, ProfileActions } from '../../../Shared/Components'
 import { TabDataProps } from '../../../Shared/Components/Profile/types'
 import HalanLinkageModal from './HalanLinkageModal'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
+import LoanLimitModal from './LoanLimitModal'
 import {
   CustomerScore,
   getCustomerCategorization,
@@ -25,7 +26,7 @@ export interface Score {
   customerName?: string
   activeLoans?: string
   iscore: string
-  nationalId: string
+  nationalId?: string
   url?: string
   bankCodes?: string[]
 }
@@ -84,6 +85,7 @@ export const CustomerProfile = () => {
   const [showHalanLinkageModal, setShowHalanLinkageModal] = useState<boolean>(
     false
   )
+  const [showLoanLimitModal, setShowLoanLimitModal] = useState(false)
   const location = useLocation<LocationState>()
   const history = useHistory()
 
@@ -476,6 +478,17 @@ export const CustomerProfile = () => {
         permission: true,
         onActionClick: () => setShowHalanLinkageModal(true),
       },
+      {
+        title: local.nanoCustomerLimit,
+        icon: 'principal-range',
+        permission:
+          ability.can('editCustomerNanoLoansLimit', 'customer') &&
+          ability.can('getMaximumNanoLoansLimit', 'application') &&
+          ability.can('getCustomerNanoLoansLimitDocument', 'customer'),
+        onActionClick: () => {
+          setShowLoanLimitModal(true)
+        },
+      },
     ]
   }
   return (
@@ -501,6 +514,16 @@ export const CustomerProfile = () => {
             show={showHalanLinkageModal}
             hideModal={() => setShowHalanLinkageModal(false)}
             customer={customerDetails}
+          />
+        )}
+
+        {showLoanLimitModal && customerDetails && (
+          <LoanLimitModal
+            show={showLoanLimitModal}
+            hideModal={() => setShowLoanLimitModal(false)}
+            customer={customerDetails}
+            loanLimit={customerDetails?.nanoLoansLimit ?? 0}
+            onSuccess={() => getCustomerDetails()}
           />
         )}
       </Container>

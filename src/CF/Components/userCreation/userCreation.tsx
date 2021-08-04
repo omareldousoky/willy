@@ -7,7 +7,6 @@ import Card from 'react-bootstrap/Card'
 
 import { UserDataForm } from './userDataForm'
 import * as local from '../../../Shared/Assets/ar.json'
-import Wizard from '../Wizard/Wizard'
 import { Loader } from '../../../Shared/Components/Loader'
 import {
   initialStep1,
@@ -34,6 +33,7 @@ import { getUserDetails } from '../../../Shared/Services/APIs/Users/userDetails'
 import { getUserRolesAndBranches } from '../../../Shared/Services/APIs/User-Creation/getUserRolesAndBranches'
 import { createUser } from '../../../Shared/Services/APIs/User-Creation/createUser'
 import { editUser } from '../../../Shared/Services/APIs/User-Creation/editUser'
+import Wizard from '../../../Shared/Components/wizard/Wizard'
 
 interface Props extends RouteComponentProps<{}, {}, { details: string }> {
   edit: boolean

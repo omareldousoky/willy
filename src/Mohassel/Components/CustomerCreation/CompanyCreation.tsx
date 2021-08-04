@@ -134,6 +134,7 @@ class CompanyCreation extends Component<Props, State> {
         commercialRegisterNumber: res.body.commercialRegisterNumber,
         // industryRegisterNumber: res.body.industryRegisterNumber,
         taxCardNumber: res.body.taxCardNumber,
+        governorate: res.body.governorate,
       }
       const customerExtraDetails = {
         geographicalDistribution: res.body.geographicalDistribution,

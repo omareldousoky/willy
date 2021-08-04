@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-
-import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
 
 import Swal from 'sweetalert2'
 import { Loader } from '../../../../Shared/Components/Loader'
@@ -90,7 +89,17 @@ class LtsOracleReviewing extends Component<{}, State> {
                             : ''}
                         </span>
                         <span className="mx-5">{file.fileName}</span>
-                        <span className="mx-5">{local[file.status]}</span>
+                        <span
+                          className={`mx-5  text-${
+                            file.status === 'created'
+                              ? 'success'
+                              : file.status === 'queued'
+                              ? 'warning'
+                              : 'danger'
+                          } `}
+                        >
+                          {local[file.status]}
+                        </span>
                         {file.status === 'created' && (
                           <span className="d-flex flex-column justify-content-start mx-5">
                             <span>{local.creationDate}</span>
@@ -109,8 +118,8 @@ class LtsOracleReviewing extends Component<{}, State> {
                         >
                           <LtsIcon
                             name="download"
-                            size="40px"
                             color="#7dc356"
+                            size="40px"
                           />
                         </Button>
                       )}

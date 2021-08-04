@@ -369,6 +369,8 @@ export const getIscoreReportStatus = (status: string) => {
       return local.created
     case 'failed':
       return local.failed
+    case 'emptyResponse':
+      return local.noResults
     default:
       return ''
   }
@@ -782,6 +784,14 @@ export const removeEmptyArg = (obj) => {
   return obj
 }
 
+export const generateArrayOfYears = () => {
+  const currentYear = new Date().getFullYear()
+  const years = Array.from({ length: 40 }).map(
+    (_, index) => currentYear - index
+  )
+
+  return years
+}
 export const getRenderDate = (date: number) => {
   const today = new Date(date)
   let dd: string | number = today.getDate()

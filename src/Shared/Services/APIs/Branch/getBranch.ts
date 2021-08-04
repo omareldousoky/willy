@@ -1,5 +1,5 @@
 import { ApiResponse, Trace } from '../../../../Mohassel/Models/common'
-import axios from '../../../../Mohassel/Services/APIs/axios-instance'
+import axios from '../../axiosInstance'
 
 export interface BranchDetails {
   branchCode: number

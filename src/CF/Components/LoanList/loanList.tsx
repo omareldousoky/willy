@@ -19,7 +19,7 @@ import {
   getFullCustomerKey,
   removeEmptyArg,
 } from '../../../Shared/Services/utils'
-import { manageLoansArray, manageSMELoansArray } from './manageLoansInitials'
+import { manageLoansArray } from './manageLoansInitials'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { ActionsIconGroup } from '../../../Shared/Components'
 
@@ -88,9 +88,6 @@ class LoanList extends Component<Props, State> {
             {data.application.product.beneficiaryType === 'individual' &&
             data.application.product.type === 'micro' ? (
               data.application.customer.customerName
-            ) : data.application.product.beneficiaryType === 'individual' &&
-              data.application.product.type === 'sme' ? (
-              data.application.customer.businessName
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {data.application.group?.individualsInGroup.map((member) =>
@@ -291,11 +288,7 @@ class LoanList extends Component<Props, State> {
   }
 
   render() {
-    const smePermission =
-      (this.props.location.state && this.props.location.state.sme) || false
-    const manageLoansTabs = smePermission
-      ? manageSMELoansArray()
-      : manageLoansArray()
+    const manageLoansTabs = manageLoansArray()
     const searchKeys = [
       'keyword',
       'dateFromTo',
@@ -310,25 +303,9 @@ class LoanList extends Component<Props, State> {
       'customerKey',
       'customerCode',
       'customerShortenedCode',
+      'nationalId',
     ]
-    const filteredMappers = smePermission
-      ? this.mappers.filter((mapper) => mapper.key !== 'nationalId')
-      : this.mappers
-    if (smePermission) {
-      filteredMappers.splice(3, 0, {
-        title: local.commercialRegisterNumber,
-        key: 'commercialRegisterNumber',
-        render: (data) => data.application.customer.commercialRegisterNumber,
-      })
-      filteredMappers.splice(4, 0, {
-        title: local.taxCardNumber,
-        key: 'taxCardNumber',
-        render: (data) => data.application.customer.taxCardNumber,
-      })
-      dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
-    } else {
-      dropDownKeys.push('nationalId')
-    }
+
     return (
       <>
         <HeaderWithCards
@@ -342,7 +319,7 @@ class LoanList extends Component<Props, State> {
         />
         <Card className="m-4">
           <Loader type="fullsection" open={this.props.loading} />
-          <Card.Body style={{ padding: 0 }}>
+          <Card.Body className="p-0">
             <div className="d-flex justify-content-between m-3">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
@@ -373,7 +350,7 @@ class LoanList extends Component<Props, State> {
               size={this.state.size}
               url="loan"
               totalCount={this.props.totalCount}
-              mappers={filteredMappers}
+              mappers={this.mappers}
               pagination
               data={this.props.data}
               changeNumber={(key: string, number: number) => {

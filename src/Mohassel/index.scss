@@ -104,11 +104,6 @@ code {
   color: #fff;
 }
 
-.full-width {
-  width: 100%;
-  margin: auto;
-}
-
 .error div {
   border-color: #d51b1b;
 }
@@ -431,6 +426,10 @@ code {
   &:focus {
     box-shadow: none;
   }
+}
+
+.text-mixed-lang {
+	unicode-bidi: plaintext,
 }
 
 // this will be replaced later by icon font, but now to avoid redundant requests

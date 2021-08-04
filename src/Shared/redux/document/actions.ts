@@ -23,14 +23,17 @@ import { uploadDeathCertificate } from '../../../Mohassel/Services/APIs/DeathCer
 import { getDeathCertificate } from '../../../Mohassel/Services/APIs/DeathCerificate/getDeathCertificate'
 import { deleteDeathCertificate } from '../../../Mohassel/Services/APIs/DeathCerificate/deleteDeathCertificate'
 import { Document } from '../../Services/interfaces'
-import { getCustomerDocuments } from '../../Services/APIs/customer/getDocuments'
+import {
+  getCustomerDocuments,
+  getNanoLimitDocument,
+} from '../../Services/APIs/customer/getDocuments'
 
 const handleDocuments = (docs: any[], id, type) => {
   const documents: DocumentsState = []
-  if (type === 'deathCertificate') {
+  if (type === 'deathCertificate' || type === 'nanoLimitDocument') {
     if (docs)
       documents.push({
-        docName: 'deathCertificate',
+        docName: type,
         imagesFiles: docs,
       })
   } else {
@@ -181,7 +184,7 @@ export const getDocuments = (obj) => {
           dispatch({
             type: GET_DOCUMENTS,
             payload: handleDocuments(
-              res.body.docs,
+              res.body.docs ?? [],
               obj.customerId,
               documentType
             ),
@@ -200,7 +203,7 @@ export const getDocuments = (obj) => {
           dispatch({
             type: GET_DOCUMENTS,
             payload: handleDocuments(
-              res.body.docs,
+              res.body.docs ?? [],
               obj.applicationId,
               documentType
             ),
@@ -218,8 +221,26 @@ export const getDocuments = (obj) => {
           dispatch({
             type: GET_DOCUMENTS,
             payload: handleDocuments(
-              res.body.docs,
+              res.body.docs ?? [],
               obj.applicationId,
+              documentType
+            ),
+          })
+        } else {
+          Swal.fire('error!', res.error)
+        }
+      }
+    case 'nanoLimitDocument':
+      return async (dispatch) => {
+        dispatch({ type: 'SET_LOADING', payload: true })
+        const res = await getNanoLimitDocument(obj.customerId)
+        dispatch({ type: 'SET_LOADING', payload: false })
+        if (res.status === 'success') {
+          dispatch({
+            type: GET_DOCUMENTS,
+            payload: handleDocuments(
+              res.body.docs ?? [],
+              obj.customerId,
               documentType
             ),
           })

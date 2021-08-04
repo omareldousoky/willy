@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
-import Button from 'react-bootstrap/Button'
 import { Loader } from '../../../Shared/Components/Loader'
 import ReportsModal from './reportsModal'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -66,7 +65,6 @@ import {
   getLoanApplicationFeesExcel,
 } from '../../Services/APIs/Reports/loanApplicationFees'
 import LoanApplicationFees from '../pdfTemplates/loanApplicationFees/loanApplicationFees'
-import Can from '../../config/Can'
 import {
   doubtfulLoans,
   postDoubtfulLoansExcel,
@@ -83,7 +81,7 @@ import { downloadFile } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import CustomerTransactionReport from '../pdfTemplates/customerTransactionReport/customerTransactionReport'
 import { getCustomerTransactions } from '../../Services/APIs/Reports/customerTransactions'
-import { LtsIcon } from '../../../Shared/Components'
+import { PDFList } from '../../../Shared/Components/PdfList'
 
 export interface PDF {
   key?: string
@@ -95,7 +93,7 @@ export interface PDF {
 interface State {
   showModal?: boolean
   print?: string
-  pdfsArray?: Array<PDF>
+  pdfsArray: Array<PDF>
   selectedPdf: PDF
   data: any
   loading: boolean
@@ -916,42 +914,10 @@ class Reports extends Component<{}, State> {
                 </Card.Title>
               </div>
             </div>
-            {this.state.pdfsArray?.map((pdf, index) => {
-              return (
-                <Can I={pdf.permission} a="report" key={index}>
-                  <Card key={index}>
-                    <Card.Body>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          padding: '0px 20px',
-                          fontWeight: 'bold',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <div>
-                          <span style={{ marginLeft: 40 }}>#{index + 1}</span>
-                          <span>{pdf.local}</span>
-                        </div>
-                        <Button
-                          type="button"
-                          variant="default"
-                          onClick={() => this.handlePrint(pdf)}
-                          title="download"
-                        >
-                          <LtsIcon
-                            name="download"
-                            size="40px"
-                            color="#7dc356"
-                          />
-                        </Button>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                </Can>
-              )
-            })}
+            <PDFList
+              list={this.state.pdfsArray}
+              onClickDownload={(item) => this.handlePrint(item)}
+            />
           </Card.Body>
         </Card>
         {this.state.showModal && (
