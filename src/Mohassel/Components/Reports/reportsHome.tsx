@@ -5,12 +5,13 @@ import MonthlyQuarterlyReports from './monthlyQuarterlyReports'
 import * as local from '../../../Shared/Assets/ar.json'
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import Reports from './reports'
-import IscoreReports from './iscoreReports'
+import IscoreReports from './IscoreReports'
 import OracleIntegration from './oracleIntegration'
 import OperationsReports from './operationsReports'
 import { TasaheelReports } from './TasaheelReports/TasaheelReports'
 import LaundryReports from './laundryReports'
 import OfficersProductivityReports from './officersProductivityReports'
+import ability from '../../config/ability'
 
 interface State {
   activeTab: string
@@ -80,7 +81,11 @@ class ReportsHome extends Component<{}, State> {
       case 'financialReports':
         return <Reports />
       case 'iScoreReports':
-        return <IscoreReports />
+        return (
+          // TODO: Add one more permission after backend
+          ability.can('downloadIscoreFile', 'report') &&
+          ability.can('createIscoreFile', 'report') && <IscoreReports />
+        )
       case 'cibTPAYReport':
         return <CIBReports />
       case 'oracleIntegration':
