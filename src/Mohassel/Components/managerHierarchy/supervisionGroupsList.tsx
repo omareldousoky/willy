@@ -419,7 +419,7 @@ class SupervisionGroupsList extends Component<
               <tbody>
                 {this.state.currentGroup?.officers?.map((officer, index) => (
                   <tr key={index} className="border-0">
-                    <td>{officer.name}</td>
+                    <td className="text-break">{officer.name}</td>
                   </tr>
                 ))}
               </tbody>
