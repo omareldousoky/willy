@@ -10,7 +10,6 @@ import * as local from '../../../Shared/Assets/ar.json'
 import { UsersSearch } from './usersSearch'
 import { getManagerHierarchy } from '../../Services/APIs/ManagerHierarchy/getManagerHierarchy'
 import { updateManagerHierarchy } from '../../Services/APIs/ManagerHierarchy/updateManagersHierarchy'
-import { searchUsers } from '../../../Shared/Services/APIs/Users/searchUsers'
 import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../config/Can'
 import { getErrorMessage } from '../../../Shared/Services/utils'
@@ -28,17 +27,6 @@ const ManagersCreation: FunctionComponent<ManagersCreationProps> = ({
     areaSupervisor: { id: '', name: '' },
     centerManager: { id: '', name: '' },
   })
-  const [users, setUsers] = useState([])
-
-  const getUsers = async () => {
-    setLoading(true)
-    const query = { from: 0, size: 100, status: 'active' }
-    const res = await searchUsers(query)
-    if (res.status === 'success' && res.body.data) {
-      setUsers(res.body.data)
-    }
-    setLoading(false)
-  }
 
   const getManagers = async () => {
     const res = await getManagerHierarchy(branchId)
@@ -59,12 +47,12 @@ const ManagersCreation: FunctionComponent<ManagersCreationProps> = ({
       }
       setValues(newValues)
     }
+    setLoading(false)
   }
 
   useEffect(() => {
     setLoading(true)
     getManagers()
-    getUsers()
   }, [])
 
   const prepareManagers = () => {
@@ -103,7 +91,7 @@ const ManagersCreation: FunctionComponent<ManagersCreationProps> = ({
           </Form.Label>
           <Row>
             <UsersSearch
-              usersInitial={users}
+              usersInitial={[]}
               objectKey="operationsManager"
               item={values.operationsManager}
               updateItem={(newOperationsManager?: ManagerHierarchyUser) =>
@@ -127,8 +115,8 @@ const ManagersCreation: FunctionComponent<ManagersCreationProps> = ({
           <Row>
             <UsersSearch
               isClearable
-              usersInitial={users}
-              objectKey="areaManager"
+              usersInitial={[]}
+              objectKey="districtManager"
               item={values.areaManager}
               updateItem={(newAreaManager?: ManagerHierarchyUser) =>
                 setValues({
@@ -150,8 +138,8 @@ const ManagersCreation: FunctionComponent<ManagersCreationProps> = ({
           <Row>
             <UsersSearch
               isClearable
-              usersInitial={users}
-              objectKey="areaSupervisor"
+              usersInitial={[]}
+              objectKey="districtSupervisor"
               item={values.areaSupervisor}
               updateItem={(newAreaSupervisor?: ManagerHierarchyUser) =>
                 setValues({
@@ -169,7 +157,7 @@ const ManagersCreation: FunctionComponent<ManagersCreationProps> = ({
           <Row>
             <UsersSearch
               isClearable
-              usersInitial={users}
+              usersInitial={[]}
               objectKey="centerManager"
               item={values.centerManager}
               updateItem={(newCenterManager?: ManagerHierarchyUser) =>
@@ -188,7 +176,7 @@ const ManagersCreation: FunctionComponent<ManagersCreationProps> = ({
           <Row>
             <UsersSearch
               isClearable
-              usersInitial={users}
+              usersInitial={[]}
               objectKey="branchManager"
               item={values.branchManager}
               updateItem={(newBranchManager?: ManagerHierarchyUser) =>
