@@ -42,6 +42,15 @@ export const CfNavbar = () => {
             {local.manageAccounts}
           </Nav.Link>
         ) : null}
+        {ability.can('documentTypes', 'config') ? (
+          <Nav.Link onClick={() => history.push('/tools/encoding-files')}>
+            {local.tools}
+          </Nav.Link>
+        ) : ability.can('geoArea', 'config') ? (
+          <Nav.Link onClick={() => history.push('/tools/geo-areas')}>
+            {local.tools}
+          </Nav.Link>
+        ) : null}
       </Nav>
     </Navbar.Collapse>
   )

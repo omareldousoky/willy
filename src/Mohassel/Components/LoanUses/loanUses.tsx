@@ -8,7 +8,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageLoanDetailsArray } from '../ManageLoanDetails/manageLoanDetailsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { CRUDList } from '../CRUDList/crudList'
+import { CRUDList } from '../../../Shared/Components/CRUDList/crudList'
 
 interface LoanUse {
   name: string

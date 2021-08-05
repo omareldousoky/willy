@@ -14,7 +14,10 @@ import {
   manageLoanDetailsArray,
 } from './manageLoanDetailsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { CRUDList, CrudOption } from '../CRUDList/crudList'
+import {
+  CRUDList,
+  CrudOption,
+} from '../../../Shared/Components/CRUDList/crudList'
 import ability from '../../config/ability'
 import {
   createBusinessActivity,

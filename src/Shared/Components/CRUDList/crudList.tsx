@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
-import * as local from '../../../Shared/Assets/ar.json'
-import { LtsIcon } from '../../../Shared/Components'
+import * as local from '../../Assets/ar.json'
+import { LtsIcon } from '../LtsIcon'
 
 export interface CrudOption {
   name: string
