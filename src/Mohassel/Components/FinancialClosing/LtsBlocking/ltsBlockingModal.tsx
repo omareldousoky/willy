@@ -14,7 +14,7 @@ import { getErrorMessage } from '../../../../Shared/Services/utils'
 import {
   financialBlocking,
   FinancialClosingRequest,
-} from '../../../Services/APIs/loanApplication/financialClosing'
+} from '../../../../Shared/Services/APIs/loanApplication/financialClosing'
 import { Loader } from '../../../../Shared/Components/Loader'
 
 interface Props {

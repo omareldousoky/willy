@@ -9,7 +9,7 @@ import {
   downloadOracleReviewFile,
   getOracleReviewFiles,
   ReviewFilesResponse,
-} from '../../../Services/APIs/loanApplication/financialClosing'
+} from '../../../../Shared/Services/APIs/loanApplication/financialClosing'
 import {
   downloadFile,
   getErrorMessage,

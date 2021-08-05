@@ -17,7 +17,7 @@ import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { loading } from '../../../Shared/redux/loading/actions'
 import { Loader } from '../../../Shared/Components/Loader'
-import { bulkReview } from '../../Services/APIs/loanApplication/bulkReview'
+import { bulkReview } from '../../../Shared/Services/APIs/loanApplication/bulkReview'
 import { bulkApplicationReviewValidation } from './bulkApplicationReviewValidation'
 import {
   timeToDateyyymmdd,

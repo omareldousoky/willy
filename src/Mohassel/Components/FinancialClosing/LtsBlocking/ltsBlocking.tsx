@@ -19,7 +19,7 @@ import DynamicTable from '../../../../Shared/Components/DynamicTable/dynamicTabl
 import { search, searchFilters } from '../../../../Shared/redux/search/actions'
 import { loading } from '../../../../Shared/redux/loading/actions'
 import LtsBlockingModal from './ltsBlockingModal'
-import { financialUnlBlocking } from '../../../Services/APIs/loanApplication/financialClosing'
+import { financialUnlBlocking } from '../../../../Shared/Services/APIs/loanApplication/financialClosing'
 import { Pagination } from '../../../../Shared/Components/Common/Pagination'
 
 interface Props extends RouteComponentProps {
