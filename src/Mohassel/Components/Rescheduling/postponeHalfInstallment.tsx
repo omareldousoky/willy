@@ -11,7 +11,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 import {
   testPostponeHalfInstallment,
   postponeHalfInstallment,
-} from '../../Services/APIs/loanApplication/postponeHalfInstallment'
+} from '../../../Shared/Services/APIs/loanApplication/postponeHalfInstallment'
 import { reschedulingValidation } from './reschedulingValidations'
 import { Loader } from '../../../Shared/Components/Loader'
 import {

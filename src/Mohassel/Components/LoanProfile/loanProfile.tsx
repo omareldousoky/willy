@@ -8,7 +8,7 @@ import * as Barcode from 'react-barcode'
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 
-import { getApplication } from '../../Services/APIs/loanApplication/getApplication'
+import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
 import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions'
 import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment'
 import {
@@ -46,7 +46,7 @@ import {
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import { payment } from '../../../Shared/redux/payment/actions'
-import { cancelApplication } from '../../Services/APIs/loanApplication/stateHandler'
+import { cancelApplication } from '../../../Shared/Services/APIs/loanApplication/stateHandler'
 import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment'
 import store from '../../../Shared/redux/store'
 import UploadDocuments from './uploadDocuments'

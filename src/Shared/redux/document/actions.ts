@@ -15,10 +15,10 @@ import {
   REMOVE_FROM_SELECTION_ARRAY,
 } from './types'
 import { uploadDocument as customerUploadDocument } from '../../Services/APIs/customer/uploadDocument'
-import { uploadDocument as applicationUploadDocument } from '../../../Mohassel/Services/APIs/loanApplication/uploadDocument'
+import { uploadDocument as applicationUploadDocument } from '../../Services/APIs/loanApplication/uploadDocument'
 import { deleteDocument as customerDeleteDocument } from '../../Services/APIs/customer/deleteDocument'
-import { deleteDocument as applicationDeleteDocument } from '../../../Mohassel/Services/APIs/loanApplication/deleteDocument'
-import { getApplicationDocuments } from '../../../Mohassel/Services/APIs/loanApplication/getDocuments'
+import { deleteDocument as applicationDeleteDocument } from '../../Services/APIs/loanApplication/deleteDocument'
+import { getApplicationDocuments } from '../../Services/APIs/loanApplication/getDocuments'
 import { uploadDeathCertificate } from '../../../Mohassel/Services/APIs/DeathCerificate/uploadDeathCertificate'
 import { getDeathCertificate } from '../../../Mohassel/Services/APIs/DeathCerificate/getDeathCertificate'
 import { deleteDeathCertificate } from '../../../Mohassel/Services/APIs/DeathCerificate/deleteDeathCertificate'

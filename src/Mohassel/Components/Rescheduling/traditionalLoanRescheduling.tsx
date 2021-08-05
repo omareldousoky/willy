@@ -11,7 +11,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 import {
   testTraditionalRescheduling,
   traditionalRescheduling,
-} from '../../Services/APIs/loanApplication/traditionalRescheduling'
+} from '../../../Shared/Services/APIs/loanApplication/traditionalRescheduling'
 import { traditionalReschedulingValidation } from './reschedulingValidations'
 import { Loader } from '../../../Shared/Components/Loader'
 import {

@@ -13,6 +13,7 @@ import {
   timeToArabicDate,
   timeToDateyyymmdd,
   getDateAndTime,
+  numbersToArabic,
 } from './utils'
 import Can from '../../Mohassel/config/Can'
 import { FieldProps } from '../Components/Profile/types'
@@ -314,18 +315,18 @@ export const getCustomerInfo = ({
     // hidden field to display both fields in a new row
     // TODO: make a better way
     {
-      fieldTitle: local.monthlyIncome,
-      fieldData: monthlyIncome || 0,
+      fieldTitle: 'empty dummy field',
+      fieldData: 0,
       showFieldCondition: false,
     },
     {
       fieldTitle: local.monthlyIncome,
-      fieldData: monthlyIncome || 0,
+      fieldData: numbersToArabic(monthlyIncome || 0),
       showFieldCondition: true,
     },
     {
       fieldTitle: local.initialConsumerFinanceLimit,
-      fieldData: initialConsumerFinanceLimit || 0,
+      fieldData: numbersToArabic(initialConsumerFinanceLimit || 0),
       showFieldCondition: true,
     },
   ]

@@ -13,7 +13,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 import {
   getRollableActionsById,
   rollbackActionByID,
-} from '../../Services/APIs/loanApplication/rollBack'
+} from '../../../Shared/Services/APIs/loanApplication/rollBack'
 import { Loader } from '../../../Shared/Components/Loader'
 import {
   timeToDateyyymmdd,

@@ -150,3 +150,35 @@ input[type=radio] {
   margin: auto;
 }
 
+.document-upload-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  flex: 1;
+  background-color: #ffffff;
+  text-align: center;
+  min-width: 250px;
+  min-height: 250px;
+  max-width: 250px;
+  max-height: 250px;
+  justify-content: center;
+  align-items: center;
+  border: #e5e5e5 dashed 1px;
+  opacity: 1;
+}
+
+.document-actions {
+  justify-content: space-between;
+  height: 40px;
+  width: 250px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.document-action-icon {
+  width: 20px;
+  height: 20px;
+}

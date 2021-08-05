@@ -21,7 +21,7 @@ import {
   timeToDateyyymmdd,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
-import { bulkCreation } from '../../Services/APIs/loanApplication/bulkCreation'
+import { bulkCreation } from '../../../Shared/Services/APIs/loanApplication/bulkCreation'
 import { bulkApplicationCreationValidation } from './bulkApplicationCreationValidation'
 import Search from '../../../Shared/Components/Search/search'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'

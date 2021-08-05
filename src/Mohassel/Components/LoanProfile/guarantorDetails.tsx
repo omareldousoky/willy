@@ -17,7 +17,7 @@ import {
 import Can from '../../config/Can'
 import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import { Loader } from '../../../Shared/Components/Loader'
-import { editGuarantors } from '../../Services/APIs/loanApplication/editGuarantors'
+import { editGuarantors } from '../../../Shared/Services/APIs/loanApplication/editGuarantors'
 import ability from '../../config/ability'
 import { Customer } from '../../../Shared/Services/interfaces'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'

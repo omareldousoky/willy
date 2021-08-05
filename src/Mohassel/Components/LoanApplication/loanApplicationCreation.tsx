@@ -30,8 +30,8 @@ import {
   newApplication,
   editApplication,
   newNanoApplication,
-} from '../../Services/APIs/loanApplication/newApplication'
-import { getApplication } from '../../Services/APIs/loanApplication/getApplication'
+} from '../../../Shared/Services/APIs/loanApplication/newApplication'
+import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
 import { getCookie } from '../../../Shared/Services/getCookie'
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
 import {
