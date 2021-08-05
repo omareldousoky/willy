@@ -30,6 +30,7 @@ import { getActionsList } from '../../../Mohassel/Services/APIs/ActionLogs/getAc
 import Can from '../../../Mohassel/config/Can'
 import { SearchInitialFormikState, SearchProps, SearchState } from './types'
 import { WarningTypeDropDown } from '../../../Mohassel/Components/dropDowns/WarningTypeDropDown'
+import ability from '../../config/ability'
 
 class Search extends Component<SearchProps, SearchState> {
   constructor(props) {
@@ -103,7 +104,7 @@ class Search extends Component<SearchProps, SearchState> {
         case 'printed':
           initialState.printed = false
           break
-        case 'sme':
+        case 'loanType':
           initialState.type =
             this.props.url === 'loan'
               ? this.props.issuedLoansSearchFilters.type
@@ -226,7 +227,7 @@ class Search extends Component<SearchProps, SearchState> {
     if (!['application', 'loan'].includes(url)) {
       delete obj.type
     } else {
-      obj.type = this.props.sme ? 'sme' : 'micro'
+      obj.type = this.props.sme ? 'sme' : obj.type ? obj.type : 'micro'
     }
 
     if (obj.lastDates) {
@@ -815,6 +816,31 @@ class Search extends Component<SearchProps, SearchState> {
                         />
                       </Form.Group>
                     </Col>
+                  )
+                }
+                if (searchKey === 'loanType') {
+                  return this.statusDropdown(
+                    formikProps,
+                    index,
+                    [
+                      {
+                        value: 'micro',
+                        text: local.micro,
+                      },
+                      ...((ability.can('getNanoLoan', 'application') &&
+                        this.props.url === 'loan') ||
+                      (ability.can('getNanoApplication', 'application') &&
+                        this.props.url === 'application')
+                        ? [
+                            {
+                              value: 'nano',
+                              text: local.nano,
+                            },
+                          ]
+                        : []),
+                    ],
+                    'type',
+                    local.productName
                   )
                 }
                 if (searchKey === 'warningType') {

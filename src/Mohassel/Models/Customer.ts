@@ -77,4 +77,5 @@ export interface Customer {
   businessActivityDetails?: string
   currHomeAddressGov?: string
   policeStation?: string
+  nanoLoansLimit?: number
 }

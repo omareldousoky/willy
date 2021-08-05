@@ -17,7 +17,7 @@ import { getApplication } from '../../Services/APIs/loanApplication/getApplicati
 import { bulkCreation } from '../../Services/APIs/loanApplication/bulkCreation'
 import { issueLoan } from '../../Services/APIs/createIssueLoan/issueLoan'
 import { testCalculateApplication } from '../../Services/APIs/createIssueLoan/testCalculateApplication'
-import * as local from '../../../Shared/Assets/ar.json'
+import local from '../../../Shared/Assets/ar.json'
 import {
   timeToDateyyymmdd,
   beneficiaryType,
@@ -39,6 +39,7 @@ interface CustomerData {
   entryDate: number
   status: string
   businessName: string
+  productType?: 'nano' | 'micro' | 'sme'
 }
 interface State {
   loanCreationDate: string
@@ -142,6 +143,7 @@ class LoanCreation extends Component<
             entryDate: res.body.entryDate,
             status: res.body.status,
             businessName: res.body.customer.businessName,
+            productType: res.body.product.type,
           },
         }))
         if (type === 'issue') {
@@ -255,6 +257,7 @@ class LoanCreation extends Component<
               <tr>
                 <th>{local.customerType}</th>
                 <th>{local.customerName}</th>
+                <th>{local.productName}</th>
                 <th>{local.principal}</th>
                 <th>{local.currency}</th>
                 <th>{local.noOfInstallments}</th>
@@ -282,6 +285,10 @@ class LoanCreation extends Component<
                       )?.customer?.customerName
                     : this.state.customerData.customerName ||
                       this.state.customerData.businessName}
+                </td>
+                <td>
+                  {this.state.customerData.productType &&
+                    local[this.state.customerData.productType]}
                 </td>
                 <td>{this.state.customerData.principal}</td>
                 <td>{this.getCurrency()}</td>

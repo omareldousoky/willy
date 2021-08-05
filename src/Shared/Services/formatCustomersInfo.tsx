@@ -38,6 +38,7 @@ interface IscoreInfo {
 interface CustomerInfo extends IscoreInfo {
   isLeader?: boolean
   customerDetails: Customer
+  productType?: string
 }
 interface CompanyInfo extends IscoreInfo {
   company: Customer
@@ -47,6 +48,7 @@ const iscoreField = ({
   getIscore,
   applicationStatus,
   customerDetails,
+  productType = '',
 }) => {
   return (
     <>
@@ -74,15 +76,16 @@ const iscoreField = ({
       )}
       {applicationStatus &&
         ability.can('viewIscore', 'customer') &&
-        ![
-          'approved',
-          'created',
-          'issued',
-          'rejected',
-          'paid',
-          'pending',
-          'canceled',
-        ].includes(applicationStatus) &&
+        (productType === 'nano' ||
+          ![
+            'approved',
+            'created',
+            'issued',
+            'rejected',
+            'paid',
+            'pending',
+            'canceled',
+          ].includes(applicationStatus)) &&
         getIscore && (
           <Col>
             <Can I="getIscore" a="customer">
@@ -168,6 +171,7 @@ export const getCustomerInfo = ({
   isLeader,
   getIscore,
   applicationStatus,
+  productType,
 }: CustomerInfo) => {
   const {
     customerName,
@@ -213,6 +217,7 @@ export const getCustomerInfo = ({
         getIscore,
         applicationStatus,
         customerDetails,
+        productType,
       }),
       showFieldCondition: !!score,
     },

@@ -6,15 +6,15 @@ import TrackLoanApplications from '../Components/TrackLoanApplications/trackLoan
 import LoanList from '../Components/LoanList/loanList'
 import UploadDocuments from '../Components/LoanList/uploadDocuments'
 import EncodingFiles from '../Components/Tools/encodingFiles'
-import Landing from '../Components/Landing/landing'
 import local from '../../Shared/Assets/ar.json'
 import { generateAppRoutes } from '../../Shared/Services/utils'
+import { Landing } from '../../Shared/Components/Landing'
 
 const appRoutes = [
   {
     path: '/',
     label: local.mohassel,
-    component: Landing,
+    render: () => <Landing appName="LTS Documents" />,
     routes: [
       {
         path: '/customers',

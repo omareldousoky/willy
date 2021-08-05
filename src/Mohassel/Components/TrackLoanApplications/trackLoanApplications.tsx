@@ -129,14 +129,14 @@ class TrackLoanApplications extends Component<Props, State> {
         sortable: true,
         render: (data) =>
           data.application.product.beneficiaryType === 'individual' &&
-          data.application.product.type === 'micro' ? (
+          ['micro', 'nano'].includes(data.application.product.type) ? (
             data.application.customer.customerName
           ) : data.application.product.beneficiaryType === 'individual' &&
             data.application.product.type === 'sme' ? (
             data.application.customer.businessName
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {data.application.group?.individualsInGroup.map((member) =>
+              {data.application.group?.individualsInGroup?.map((member) =>
                 member.type === 'leader' ? (
                   <span key={member.customer._id}>
                     {member.customer.customerName}
@@ -262,7 +262,7 @@ class TrackLoanApplications extends Component<Props, State> {
     } else {
       ids.push(
         smeCheck
-          ? application.customer.commercialRegisterNumber
+          ? `${application.customer.governorate}-${application.customer.commercialRegisterNumber}`
           : application.customer.nationalId
       )
     }
@@ -505,6 +505,7 @@ class TrackLoanApplications extends Component<Props, State> {
       dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
     } else {
       dropDownKeys.push('nationalId')
+      searchKeys.push('loanType')
     }
     return (
       <>
