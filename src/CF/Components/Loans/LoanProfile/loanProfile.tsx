@@ -51,7 +51,7 @@ import { payment } from '../../../../Shared/redux/payment/actions'
 import { cancelApplication } from '../../../../Shared/Services/APIs/loanApplication/stateHandler'
 import { rejectManualPayment } from '../../../../Mohassel/Services/APIs/Loan/rejectManualPayment'
 import store from '../../../../Shared/redux/store'
-// import UploadDocuments from './uploadDocuments'
+import UploadDocuments from './uploadDocuments'
 import { writeOffLoan } from '../../../../Mohassel/Services/APIs/Loan/writeOffLoan'
 import { doubtLoan } from '../../../../Mohassel/Services/APIs/Loan/doubtLoan'
 import PaymentReceipt from '../../../../Shared/Components/pdfTemplates/paymentReceipt'
@@ -1059,9 +1059,6 @@ class LoanProfile extends Component<Props, State> {
               )
             }
             setReceiptData={(data) => this.setState({ receiptData: data })}
-            // setEarlyPaymentData={(data) =>
-            //   this.setState({ earlyPaymentData: data })
-            // }
             application={this.state.application}
             installments={
               this.state.application.installmentsObject.installments
@@ -1072,7 +1069,6 @@ class LoanProfile extends Component<Props, State> {
             manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="normal"
-            // randomPendingActions={this.state.randomPendingActions}
           />
         )
       case 'customerCard':
@@ -1107,8 +1103,8 @@ class LoanProfile extends Component<Props, State> {
         )
       case 'loanReschedulingTest':
         return <Rescheduling application={this.state.application} test />
-      // case 'documents':
-      //   return <UploadDocuments application={this.state.application} />
+      case 'documents':
+        return <UploadDocuments application={this.state.application} />
       case 'financialTransactions':
         return (
           <Payment
@@ -1122,9 +1118,6 @@ class LoanProfile extends Component<Props, State> {
               )
             }
             setReceiptData={(data) => this.setState({ receiptData: data })}
-            // setEarlyPaymentData={(data) =>
-            //   this.setState({ earlyPaymentData: data })
-            // }
             application={this.state.application}
             installments={
               this.state.application.installmentsObject.installments
@@ -1135,7 +1128,6 @@ class LoanProfile extends Component<Props, State> {
             manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="random"
-            // randomPendingActions={this.state.randomPendingActions}
           />
         )
       case 'penalties':
@@ -1151,9 +1143,6 @@ class LoanProfile extends Component<Props, State> {
               )
             }
             setReceiptData={(data) => this.setState({ receiptData: data })}
-            // setEarlyPaymentData={(data) =>
-            //   this.setState({ earlyPaymentData: data })
-            // }
             application={this.state.application}
             installments={
               this.state.application.installmentsObject.installments
@@ -1164,7 +1153,6 @@ class LoanProfile extends Component<Props, State> {
             manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="penalties"
-            // randomPendingActions={this.state.randomPendingActions}
           />
         )
       default:

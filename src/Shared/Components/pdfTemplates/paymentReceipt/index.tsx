@@ -38,9 +38,8 @@ const PaymentReceipt = (props) => {
                       <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
                     </th>
                     <th colSpan={6}>
-                      {isCF
-                        ? ''
-                        : 'ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنة 2015'}
+                      ترخيص ممارسة نشاط التمويل متناهي الصغر رقم&nbsp;
+                      {isCF ? '(٢٣) بتاريخ ٢٠٢١/٥/٣١' : '(2) لسنة 2015'}
                     </th>
                   </tr>
                   <tr style={{ height: '10px' }} />
