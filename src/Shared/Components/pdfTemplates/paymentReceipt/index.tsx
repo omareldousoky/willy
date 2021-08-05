@@ -1,13 +1,11 @@
 import React from 'react'
 import './paymentReceipt.scss'
 import Tafgeet from 'tafgeetjs'
-import * as local from '../../../../Shared/Assets/ar.json'
-import {
-  numbersToArabic,
-  extractGMTDate,
-} from '../../../../Shared/Services/utils'
+import * as local from '../../../Assets/ar.json'
+import { numbersToArabic, extractGMTDate } from '../../../Services/utils'
 
 const PaymentReceipt = (props) => {
+  const { isCF } = props
   function getPurpose(installmentSerial: number) {
     switch (installmentSerial) {
       case 0:
@@ -37,17 +35,19 @@ const PaymentReceipt = (props) => {
                   <tr style={{ height: '10px' }} />
                   <tr className="w-100 d-flex flex-row justify-content-between">
                     <th colSpan={6}>
-                      <div className="logo-print-tb" />
+                      <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
                     </th>
                     <th colSpan={6}>
-                      ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنة 2015
+                      {isCF
+                        ? ''
+                        : 'ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنة 2015'}
                     </th>
                   </tr>
                   <tr style={{ height: '10px' }} />
                 </tbody>
               </table>
               <div className="receipt-header">
-                <h5>{local.tasaheelName}</h5>
+                <h5>{isCF ? local.cfName : local.tasaheelName}</h5>
                 <h5>{local.paymentReceipt}</h5>
               </div>
               <div className="receipt-data">

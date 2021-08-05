@@ -209,43 +209,6 @@ code {
   margin: 40px 0;
 }
 
-.warning-container {
-  border: 1px solid #edb600;
-  color: #edb600;
-  background-color: #fffaeb;
-  display: flex;
-  padding: 20px 40px;
-  border-radius: 6px;
-  margin-top: 20px;
-  align-items: center;
-  justify-content: space-between;
-
-  & .info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #000;
-  }
-
-  & .submit {
-    background: #000;
-    color: #fff;
-    padding: 5px 40px;
-    font-size: 12px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-
-  & .cancel {
-    background: #d51b1b;
-    color: #fff;
-    padding: 5px 40px;
-    font-size: 12px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-}
-
 .swal-table {
   width: 100%;
   border: 1px #7dc356 solid;

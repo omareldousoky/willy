@@ -16,7 +16,7 @@ import {
   BranchDetailsResponse,
   getBranch,
 } from '../../../../Shared/Services/APIs/Branch/getBranch'
-import Payment from '../../../../Mohassel/Components/Payment/payment'
+import Payment from '../../Payment'
 import { englishToArabic } from '../../../../Mohassel/Services/statusLanguage'
 import local from '../../../../Shared/Assets/ar.json'
 import { Loader } from '../../../../Shared/Components/Loader'
@@ -54,7 +54,7 @@ import store from '../../../../Shared/redux/store'
 // import UploadDocuments from './uploadDocuments'
 import { writeOffLoan } from '../../../../Mohassel/Services/APIs/Loan/writeOffLoan'
 import { doubtLoan } from '../../../../Mohassel/Services/APIs/Loan/doubtLoan'
-import PaymentReceipt from '../../../../Mohassel/Components/pdfTemplates/paymentReceipt/paymentReceipt'
+import PaymentReceipt from '../../../../Shared/Components/pdfTemplates/paymentReceipt'
 import RandomPaymentReceipt from '../../../../Mohassel/Components/pdfTemplates/randomPaymentReceipt/randomPaymentReceipt'
 import { calculatePenalties } from '../../../../Mohassel/Services/APIs/Payment/calculatePenalties'
 import ManualRandomPaymentsActions from './manualRandomPaymentsActions'
@@ -383,10 +383,28 @@ class LoanProfile extends Component<Props, State> {
         header: local.loanInfo,
         stringKey: 'loanDetails',
       },
+      {
+        header: local.documents,
+        stringKey: 'documents',
+      },
     ]
     const customerCardTab = {
       header: local.customerCard,
       stringKey: 'customerCard',
+    }
+
+    const paymentTab = {
+      header: local.payments,
+      stringKey: 'loanPayments',
+      permission: ['payInstallment', 'payEarly', 'payByInsurance'],
+      permissionKey: 'application',
+    }
+
+    const logsTab = {
+      header: local.logs,
+      stringKey: 'loanLogs',
+      permission: 'viewActionLogs',
+      permissionKey: 'user',
     }
 
     if (application.body.status === 'paid') tabsToRender.push(customerCardTab)
@@ -395,7 +413,9 @@ class LoanProfile extends Component<Props, State> {
       application.body.status === 'pending'
     ) {
       tabsToRender.push(customerCardTab)
+      tabsToRender.push(paymentTab)
     }
+    tabsToRender.push(logsTab)
 
     if (application.body.status === 'pending') {
       this.setState({ activeTab: 'loanDetails' })
@@ -1039,9 +1059,9 @@ class LoanProfile extends Component<Props, State> {
               )
             }
             setReceiptData={(data) => this.setState({ receiptData: data })}
-            setEarlyPaymentData={(data) =>
-              this.setState({ earlyPaymentData: data })
-            }
+            // setEarlyPaymentData={(data) =>
+            //   this.setState({ earlyPaymentData: data })
+            // }
             application={this.state.application}
             installments={
               this.state.application.installmentsObject.installments
@@ -1052,7 +1072,7 @@ class LoanProfile extends Component<Props, State> {
             manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="normal"
-            randomPendingActions={this.state.randomPendingActions}
+            // randomPendingActions={this.state.randomPendingActions}
           />
         )
       case 'customerCard':
@@ -1102,9 +1122,9 @@ class LoanProfile extends Component<Props, State> {
               )
             }
             setReceiptData={(data) => this.setState({ receiptData: data })}
-            setEarlyPaymentData={(data) =>
-              this.setState({ earlyPaymentData: data })
-            }
+            // setEarlyPaymentData={(data) =>
+            //   this.setState({ earlyPaymentData: data })
+            // }
             application={this.state.application}
             installments={
               this.state.application.installmentsObject.installments
@@ -1115,7 +1135,7 @@ class LoanProfile extends Component<Props, State> {
             manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="random"
-            randomPendingActions={this.state.randomPendingActions}
+            // randomPendingActions={this.state.randomPendingActions}
           />
         )
       case 'penalties':
@@ -1131,9 +1151,9 @@ class LoanProfile extends Component<Props, State> {
               )
             }
             setReceiptData={(data) => this.setState({ receiptData: data })}
-            setEarlyPaymentData={(data) =>
-              this.setState({ earlyPaymentData: data })
-            }
+            // setEarlyPaymentData={(data) =>
+            //   this.setState({ earlyPaymentData: data })
+            // }
             application={this.state.application}
             installments={
               this.state.application.installmentsObject.installments
@@ -1144,7 +1164,7 @@ class LoanProfile extends Component<Props, State> {
             manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="penalties"
-            randomPendingActions={this.state.randomPendingActions}
+            // randomPendingActions={this.state.randomPendingActions}
           />
         )
       default:
@@ -1494,6 +1514,7 @@ class LoanProfile extends Component<Props, State> {
         )}
         {this.state.print === 'payment' && (
           <PaymentReceipt
+            isCF
             receiptData={this.state.receiptData}
             data={this.state.application}
             companyReceipt={

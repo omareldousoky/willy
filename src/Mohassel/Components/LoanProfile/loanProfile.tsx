@@ -52,7 +52,7 @@ import store from '../../../Shared/redux/store'
 import UploadDocuments from './uploadDocuments'
 import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan'
 import { doubtLoan } from '../../Services/APIs/Loan/doubtLoan'
-import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt'
+import PaymentReceipt from '../../../Shared/Components/pdfTemplates/paymentReceipt'
 import RandomPaymentReceipt from '../pdfTemplates/randomPaymentReceipt/randomPaymentReceipt'
 import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties'
 import ManualRandomPaymentsActions from './manualRandomPaymentsActions'
@@ -380,10 +380,6 @@ class LoanProfile extends Component<Props, State> {
       {
         header: local.loanInfo,
         stringKey: 'loanDetails',
-      },
-      {
-        header: local.documents,
-        stringKey: 'documents',
       },
     ]
     const guarantorsTab = {
