@@ -576,7 +576,7 @@ class LoanProfile extends Component<Props, State> {
             ability.can('rollbackIssueLoan', 'application')) &&
           !['reviewed', 'underReview'].includes(this.state.application.status),
         onActionClick: () =>
-          this.props.history.push('/track-loan-applications/loan-roll-back', {
+          this.props.history.push('/loans/loan-roll-back', {
             id: this.props.location.state.id,
             status: this.state.application.status,
           }),
