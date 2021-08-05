@@ -26,7 +26,6 @@ import {
 } from '../../../../Shared/Components/HeaderWithCards/cardNavbar'
 import Logs from './applicationLogs'
 import { LoanDetailsTableView } from './applicationsDetails'
-import { GuarantorTableView } from './guarantorDetails'
 import { CustomerCardView } from './customerCard'
 import Rescheduling from '../../../../Mohassel/Components/Rescheduling/rescheduling'
 import ability from '../../../../Shared/config/ability'
@@ -384,100 +383,24 @@ class LoanProfile extends Component<Props, State> {
         header: local.loanInfo,
         stringKey: 'loanDetails',
       },
-      // {
-      //   header: local.documents,
-      //   stringKey: 'documents',
-      // },
     ]
-    // const guarantorsTab = {
-    //   header: local.guarantorInfo,
-    //   stringKey: 'loanGuarantors',
-    // }
     const customerCardTab = {
       header: local.customerCard,
       stringKey: 'customerCard',
     }
-    // const followUpStatementTab = {
-    //   header: local.followUpStatement,
-    //   stringKey: 'followUpStatement',
-    //   permission: 'followUpStatement',
-    //   permissionKey: 'application',
-    // }
-    // const paymentTab = {
-    //   header: local.payments,
-    //   stringKey: 'loanPayments',
-    //   permission: ['payInstallment', 'payEarly', 'payByInsurance'],
-    //   permissionKey: 'application',
-    // }
-    // const reschedulingTab = {
-    //   header: local.rescheduling,
-    //   stringKey: 'loanRescheduling',
-    //   permission: [
-    //     'pushInstallment',
-    //     'traditionRescheduling',
-    //     'freeRescheduling',
-    //   ],
-    //   permissionKey: 'application',
-    // }
-    // const financialTransactionsTab = {
-    //   header: local.financialTransactions,
-    //   stringKey: 'financialTransactions',
-    //   permission: 'payInstallment',
-    //   permissionKey: 'application',
-    // }
-    // const penaltiesTab = {
-    //   header: local.penalties,
-    //   stringKey: 'penalties',
-    //   permission: ['payInstallment', 'cancelPenalty'],
-    //   permissionKey: 'application',
-    // }
-    // const logsTab = {
-    //   header: local.logs,
-    //   stringKey: 'loanLogs',
-    //   permission: 'viewActionLogs',
-    //   permissionKey: 'user',
-    // }
-    // const entitledToSignTab = {
-    //   header: local.SMEviceCustomersInfo,
-    //   stringKey: 'entitledToSign',
-    // }
-    // if (application.body.product.beneficiaryType === 'individual')
-    //   tabsToRender.push(guarantorsTab)
-    // if (application.body.product.type === 'sme')
-    //   tabsToRender.push(entitledToSignTab)
+
     if (application.body.status === 'paid') tabsToRender.push(customerCardTab)
     if (
       application.body.status === 'issued' ||
       application.body.status === 'pending'
     ) {
       tabsToRender.push(customerCardTab)
-      // tabsToRender.push(reschedulingTab)
-      // tabsToRender.push(paymentTab)
-    }
-    if (
-      (application.body.status === 'issued' ||
-        application.body.status === 'pending') &&
-      !this.state.individualsWithInstallments.rescheduled
-    ) {
-      // tabsToRender.push(followUpStatementTab)
-    }
-    if (
-      application.body.status === 'issued' ||
-      application.body.status === 'paid' ||
-      application.body.status === 'pending'
-    ) {
-      // tabsToRender.push(financialTransactionsTab)
-      // tabsToRender.push(penaltiesTab)
     }
 
     if (application.body.status === 'pending') {
       this.setState({ activeTab: 'loanDetails' })
       this.getPendingActions()
     }
-    if (application.body.status === 'canceled') {
-      // tabsToRender.push(financialTransactionsTab)
-    }
-    // tabsToRender.push(logsTab)
     this.getGeoAreas(application.body.branchId)
     this.setState({
       application: application.body,
@@ -1101,18 +1024,6 @@ class LoanProfile extends Component<Props, State> {
             branchName={this.state.branchDetails?.name}
           />
         )
-      case 'loanGuarantors':
-        return (
-          <GuarantorTableView
-            guarantors={this.state.application.guarantors}
-            customerId={this.state.application.customer._id}
-            application={this.state.application}
-            getGeoArea={(area) => this.getCustomerGeoArea(area)}
-            getIscore={(data) => this.getIscore(data)}
-            iScores={this.state.iscores}
-            status={this.state.application.status}
-          />
-        )
       case 'loanLogs':
         return <Logs id={this.props.location.state.id} />
       case 'loanPayments':
@@ -1234,21 +1145,6 @@ class LoanProfile extends Component<Props, State> {
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="penalties"
             randomPendingActions={this.state.randomPendingActions}
-          />
-        )
-      case 'entitledToSign':
-        return (
-          <GuarantorTableView
-            guarantors={this.state.application.entitledToSign.map(
-              this.mapEntitledToSignToCustomer
-            )}
-            customerId={this.state.application.customer._id}
-            application={this.state.application}
-            getGeoArea={(area) => this.getCustomerGeoArea(area)}
-            getIscore={(data) => this.getIscore(data)}
-            iScores={this.state.iscores}
-            status={this.state.application.status}
-            entitledToSign
           />
         )
       default:

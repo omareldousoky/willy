@@ -5,7 +5,6 @@ import Col from 'react-bootstrap/Col'
 import Swal from 'sweetalert2'
 import local from '../../../../Shared/Assets/ar.json'
 import { englishToArabic } from '../../../../Mohassel/Services/statusLanguage'
-import { GuarantorTableView } from './guarantorDetails'
 import { getLoanOfficer } from '../../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import { getLoanUsage } from '../../../../Mohassel/Services/APIs/LoanUsage/getLoanUsage'
 import {
@@ -477,17 +476,6 @@ export const CustomerLoanDetailsBoxView = ({
             <Form.Label>{remainingTotal}</Form.Label>
           </Form.Group>
         </Form.Row>
-        {application.guarantors &&
-          application.guarantors.length > 0 &&
-          application.product.beneficiaryType === 'individual' && (
-            <Form.Row>
-              <GuarantorTableView
-                guarantors={application.guarantors}
-                getGeoArea={(area) => getGeoArea && getGeoArea(area)}
-                application={application}
-              />
-            </Form.Row>
-          )}
       </Form>
     </div>
   )
