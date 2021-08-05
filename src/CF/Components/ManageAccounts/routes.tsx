@@ -5,8 +5,8 @@ import Can from '../../../Shared/config/Can'
 import { CreateBranch } from '../BranchCreation'
 import { BranchDetails } from '../BranchDetails'
 import { RoleCreation, RoleProfile } from '../Roles'
-import { UserCreation } from '../UserCreation'
-import { UserDetails } from '../UserDetails'
+import { UserCreation } from '../userCreation'
+import { UserDetails } from '../userDetails'
 
 export const manageAccountsRoute = {
   path: '/manage-accounts',
