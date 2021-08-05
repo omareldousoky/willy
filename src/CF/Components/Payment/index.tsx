@@ -351,56 +351,36 @@ class Payment extends Component<Props, State> {
   }
 
   setManualPaymentValues() {
-    // const pendingAction = this.props.randomPendingActions.find(
-    //   (el) => el._id === this.props.manualPaymentEditId
-    // )
-    if (false) {
-      // this.setState({
-      //   // randomPaymentType: pendingAction.transactions[0].action,
-      //   payAmount: pendingAction.transactions[0].transactionAmount,
-      //   payerType: pendingAction.payerType,
-      //   payerNationalId: pendingAction.payerNationalId,
-      //   payerName: pendingAction.transactions[0].payerName,
-      //   payerId: pendingAction.transactions[0].payerId,
-      //   receiptNumber: pendingAction.receiptNumber,
-      //   installmentNumber: pendingAction.transactions[0].installmentSerial,
-      //   truthDate: timeToDateyyymmdd(pendingAction.transactions[0].truthDate),
-      // })
-    } else {
-      const payAmount = this.props.pendingActions.transactions?.reduce(
-        (accumulator, pendingAct) => {
-          return accumulator + pendingAct.transactionAmount
-        },
-        0
-      )
-      this.setState({
-        // randomPaymentType: '',
-        payAmount: payAmount || 0,
-        payerType: this.props.pendingActions.payerType
-          ? this.props.pendingActions.payerType
-          : '',
-        payerNationalId: this.props.pendingActions.payerNationalId
-          ? this.props.pendingActions.payerNationalId
-          : '',
-        payerName: this.props.pendingActions.payerName
-          ? this.props.pendingActions.payerName
-          : '',
-        payerId: this.props.pendingActions.payerId
-          ? this.props.pendingActions.payerId
-          : '',
-        receiptNumber: this.props.pendingActions.receiptNumber
-          ? this.props.pendingActions.receiptNumber
-          : '',
-        installmentNumber: this.props.pendingActions.transactions
-          ? this.props.pendingActions.transactions[0].installmentSerial
-          : -1,
-        truthDate: this.props.pendingActions.transactions
-          ? timeToDateyyymmdd(
-              this.props.pendingActions.transactions[0].truthDate
-            )
-          : timeToDateyyymmdd(-1),
-      })
-    }
+    const payAmount = this.props.pendingActions.transactions?.reduce(
+      (accumulator, pendingAct) => {
+        return accumulator + pendingAct.transactionAmount
+      },
+      0
+    )
+    this.setState({
+      payAmount: payAmount || 0,
+      payerType: this.props.pendingActions.payerType
+        ? this.props.pendingActions.payerType
+        : '',
+      payerNationalId: this.props.pendingActions.payerNationalId
+        ? this.props.pendingActions.payerNationalId
+        : '',
+      payerName: this.props.pendingActions.payerName
+        ? this.props.pendingActions.payerName
+        : '',
+      payerId: this.props.pendingActions.payerId
+        ? this.props.pendingActions.payerId
+        : '',
+      receiptNumber: this.props.pendingActions.receiptNumber
+        ? this.props.pendingActions.receiptNumber
+        : '',
+      installmentNumber: this.props.pendingActions.transactions
+        ? this.props.pendingActions.transactions[0].installmentSerial
+        : -1,
+      truthDate: this.props.pendingActions.transactions
+        ? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate)
+        : timeToDateyyymmdd(-1),
+    })
   }
 
   renderPaymentMethods() {
