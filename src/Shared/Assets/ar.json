@@ -1149,6 +1149,6 @@
   "monthlyIncome": "الدخل الشهري",
   "initialConsumerFinanceLimit": "الحد المبدئي للعميل",
   "maxConsumerFinanceLimit": "الحد الأقصي للعميل",
-	"commerceTrackingSystem": "نظام تتبع المشتريات",
-	"cfName": "حالا للتمويل الاستهلاكي"
+  "commerceTrackingSystem": "نظام تتبع المشتريات",
+  "cfName": "حالا للتمويل الاستهلاكي"
 }
