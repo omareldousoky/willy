@@ -390,10 +390,7 @@ export const LoanDetailsBoxView = ({ application }: Props) => {
   )
 }
 // this is used in the customer Card/status
-export const CustomerLoanDetailsBoxView = ({
-  application,
-  getGeoArea,
-}: Props) => {
+export const CustomerLoanDetailsBoxView = ({ application }: Props) => {
   const [officer, changeOfficerName] = useState('')
   const [remainingTotal, changeRemaining] = useState(0)
   async function getOfficerName(id) {
