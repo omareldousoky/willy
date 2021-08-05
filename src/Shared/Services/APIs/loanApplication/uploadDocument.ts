@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../axiosInstance'
 
 export const uploadDocument = async (data: FormData) => {
   const url = process.env.REACT_APP_BASE_URL + `/application/document`

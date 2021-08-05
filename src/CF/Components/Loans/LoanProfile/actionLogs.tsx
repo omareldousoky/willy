@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
-import { Loader } from '../../../Shared/Components/Loader'
-import { getApplicationTransactionLogs } from '../../../Shared/Services/APIs/loanApplication/applicationLogs'
-import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-import * as local from '../../../Shared/Assets/ar.json'
-import { getErrorMessage, getDateAndTime } from '../../../Shared/Services/utils'
+import { Loader } from '../../../../Shared/Components/Loader'
+import { getApplicationLogs } from '../../../../Shared/Services/APIs/loanApplication/applicationLogs'
+import DynamicTable from '../../../../Shared/Components/DynamicTable/dynamicTable'
+import * as local from '../../../../Shared/Assets/ar.json'
+import {
+  getErrorMessage,
+  getDateAndTime,
+} from '../../../../Shared/Services/utils'
 
 interface Props {
   id: string
@@ -13,9 +16,9 @@ interface Props {
 interface State {
   loading: boolean
   data: any
+  from: number
   size: number
   totalCount: number
-  pageToken: string
 }
 const mappers = [
   {
@@ -24,29 +27,19 @@ const mappers = [
     render: (data) => (data.action ? data.action : ''),
   },
   {
-    title: local.manualPayment,
-    key: 'manualPayment',
-    render: (data) => (data.manualPayment ? local.yes : local.no),
-  },
-  {
     title: local.author,
     key: 'authorName',
-    render: (data) => (data?.created.userName ? data.created.userName : ''),
+    render: (data) => (data.trace?.userName ? data.trace.userName : ''),
   },
   {
-    title: local.amount,
-    key: 'amount',
-    render: (data) => (data?.transactionAmount ? data.transactionAmount : 0),
-  },
-  {
-    title: local.installmentSerialNumber,
-    key: 'installmentSerial',
-    render: (data) => data.installmentSerial || '-',
+    title: local.authorId,
+    key: 'authorId',
+    render: (data) => (data.trace?.by ? data.trace.by : ''),
   },
   {
     title: local.createdAt,
     key: 'createdAt',
-    render: (data) => getDateAndTime(data.created.at),
+    render: (data) => (data.trace?.at ? getDateAndTime(data.trace.at) : ''),
   },
   // {
   //   title: local.customerId,
@@ -59,15 +52,15 @@ const mappers = [
   //     render: data => data.customerBranchId
   //   },
 ]
-class TransactionLogs extends Component<Props, State> {
+class ActionLogs extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
       loading: false,
       data: [],
-      size: 10,
+      size: 5,
+      from: 0,
       totalCount: 0,
-      pageToken: '',
     }
   }
 
@@ -77,16 +70,11 @@ class TransactionLogs extends Component<Props, State> {
 
   async getLogs(id) {
     this.setState({ loading: true })
-    const res = await getApplicationTransactionLogs(
-      id,
-      this.state.size,
-      this.state.pageToken
-    )
+    const res = await getApplicationLogs(id, this.state.size, this.state.from)
     if (res.status === 'success') {
       this.setState({
         data: res.body.data ? res.body.data : [],
         totalCount: res.body.totalCount,
-        pageToken: res.body.pageToken,
         loading: false,
       })
     } else {
@@ -119,4 +107,4 @@ class TransactionLogs extends Component<Props, State> {
     )
   }
 }
-export default TransactionLogs
+export default ActionLogs

@@ -8,68 +8,71 @@ import * as Barcode from 'react-barcode'
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 
-import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
-import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions'
-import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment'
+import { getApplication } from '../../../../Shared/Services/APIs/loanApplication/getApplication'
+import { getPendingActions } from '../../../../Mohassel/Services/APIs/Loan/getPendingActions'
+import { approveManualPayment } from '../../../../Mohassel/Services/APIs/Loan/approveManualPayment'
 import {
   BranchDetails,
   BranchDetailsResponse,
   getBranch,
-} from '../../../Shared/Services/APIs/Branch/getBranch'
-import Payment from '../Payment/payment'
-import { englishToArabic } from '../../Services/statusLanguage'
-import local from '../../../Shared/Assets/ar.json'
-import { Loader } from '../../../Shared/Components/Loader'
+} from '../../../../Shared/Services/APIs/Branch/getBranch'
+import Payment from '../../../../Mohassel/Components/Payment/payment'
+import { englishToArabic } from '../../../../Mohassel/Services/statusLanguage'
+import local from '../../../../Shared/Assets/ar.json'
+import { Loader } from '../../../../Shared/Components/Loader'
 import {
   CardNavBar,
   Tab,
-} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
+} from '../../../../Shared/Components/HeaderWithCards/cardNavbar'
 import Logs from './applicationLogs'
 import { LoanDetailsTableView } from './applicationsDetails'
 import { GuarantorTableView } from './guarantorDetails'
 import { CustomerCardView } from './customerCard'
-import Rescheduling from '../Rescheduling/rescheduling'
-import ability from '../../config/ability'
-import CustomerCardPDF from '../pdfTemplates/customerCard/customerCard'
-import CashReceiptPDF from '../pdfTemplates/cashReceipt/cashReceipt'
-import CustomerCardAttachments from '../pdfTemplates/customerCardAttachments/customerCardAttachments'
-import FollowUpStatementPDF from '../pdfTemplates/followUpStatment/followUpStatement'
-import LoanContract from '../pdfTemplates/loanContract/loanContract'
-import LoanContractForGroup from '../pdfTemplates/loanContractForGroup/loanContractForGroup'
-import EarlyPaymentReceipt from '../pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt'
-import Can from '../../config/Can'
-import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment'
-import { Customer, PendingActions } from '../../../Shared/Services/interfaces'
+import Rescheduling from '../../../../Mohassel/Components/Rescheduling/rescheduling'
+import ability from '../../../../Shared/config/ability'
+import CustomerCardPDF from '../../../../Mohassel/Components/pdfTemplates/customerCard/customerCard'
+import CashReceiptPDF from '../../../../Mohassel/Components/pdfTemplates/cashReceipt/cashReceipt'
+import CustomerCardAttachments from '../../../../Mohassel/Components/pdfTemplates/customerCardAttachments/customerCardAttachments'
+import FollowUpStatementPDF from '../../../../Mohassel/Components/pdfTemplates/followUpStatment/followUpStatement'
+import LoanContract from '../../../../Mohassel/Components/pdfTemplates/loanContract/loanContract'
+import LoanContractForGroup from '../../../../Mohassel/Components/pdfTemplates/loanContractForGroup/loanContractForGroup'
+import EarlyPaymentReceipt from '../../../../Mohassel/Components/pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt'
+import Can from '../../../../Shared/config/Can'
+import EarlyPaymentPDF from '../../../../Mohassel/Components/pdfTemplates/earlyPayment/earlyPayment'
+import {
+  Customer,
+  PendingActions,
+} from '../../../../Shared/Services/interfaces'
 import {
   timeToDateyyymmdd,
   iscoreDate,
   getErrorMessage,
-} from '../../../Shared/Services/utils'
-import { payment } from '../../../Shared/redux/payment/actions'
-import { cancelApplication } from '../../../Shared/Services/APIs/loanApplication/stateHandler'
-import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment'
-import store from '../../../Shared/redux/store'
-import UploadDocuments from './uploadDocuments'
-import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan'
-import { doubtLoan } from '../../Services/APIs/Loan/doubtLoan'
-import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt'
-import RandomPaymentReceipt from '../pdfTemplates/randomPaymentReceipt/randomPaymentReceipt'
-import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties'
+} from '../../../../Shared/Services/utils'
+import { payment } from '../../../../Shared/redux/payment/actions'
+import { cancelApplication } from '../../../../Shared/Services/APIs/loanApplication/stateHandler'
+import { rejectManualPayment } from '../../../../Mohassel/Services/APIs/Loan/rejectManualPayment'
+import store from '../../../../Shared/redux/store'
+// import UploadDocuments from './uploadDocuments'
+import { writeOffLoan } from '../../../../Mohassel/Services/APIs/Loan/writeOffLoan'
+import { doubtLoan } from '../../../../Mohassel/Services/APIs/Loan/doubtLoan'
+import PaymentReceipt from '../../../../Mohassel/Components/pdfTemplates/paymentReceipt/paymentReceipt'
+import RandomPaymentReceipt from '../../../../Mohassel/Components/pdfTemplates/randomPaymentReceipt/randomPaymentReceipt'
+import { calculatePenalties } from '../../../../Mohassel/Services/APIs/Payment/calculatePenalties'
 import ManualRandomPaymentsActions from './manualRandomPaymentsActions'
-import { getManualOtherPayments } from '../../Services/APIs/Payment/getManualOtherPayments'
-import { rejectManualOtherPayment } from '../../Services/APIs/Payment/rejectManualOtherPayment'
-import { approveManualOtherPayment } from '../../Services/APIs/Payment/approveManualOtherPayment'
-import { numTo2Decimal } from '../CIB/textFiles'
+import { getManualOtherPayments } from '../../../../Mohassel/Services/APIs/Payment/getManualOtherPayments'
+import { rejectManualOtherPayment } from '../../../../Mohassel/Services/APIs/Payment/rejectManualOtherPayment'
+import { approveManualOtherPayment } from '../../../../Mohassel/Services/APIs/Payment/approveManualOtherPayment'
+import { numTo2Decimal } from '../../../../Mohassel/Components/CIB/textFiles'
 import { FollowUpStatementView } from './followupStatementView'
-import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
-import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares'
-import { InfoBox, LtsIcon, ProfileActions } from '../../../Shared/Components'
+import { remainingLoan } from '../../../../Mohassel/Services/APIs/Loan/remainingLoan'
+import { getGroupMemberShares } from '../../../../Mohassel/Services/APIs/Loan/groupMemberShares'
+import { InfoBox, LtsIcon, ProfileActions } from '../../../../Shared/Components'
 
 import {
   getCompanyInfo,
   getCustomerInfo,
-} from '../../../Shared/Services/formatCustomersInfo'
-import { FieldProps } from '../../../Shared/Components/Profile/types'
+} from '../../../../Shared/Services/formatCustomersInfo'
+import { FieldProps } from '../../../../Shared/Components/Profile/types'
 import {
   AcknowledgmentAndPledge,
   AcknowledgmentOfCommitment,
@@ -80,25 +83,25 @@ import {
   PromissoryNote,
   SmeLoanContract,
   SolidarityGuarantee,
-} from '../pdfTemplates/smeLoanContract'
-import { Score } from '../CustomerCreation/CustomerProfile'
-import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
+} from '../../../../Mohassel/Components/pdfTemplates/smeLoanContract'
+import { Score } from '../../../../Mohassel/Components/CustomerCreation/CustomerProfile'
+import { getLoanUsage } from '../../../../Mohassel/Services/APIs/LoanUsage/getLoanUsage'
 
 import { getEarlyPaymentPdfData } from './utils'
 import {
   CalculateEarlyPaymentResponse,
   RemainingLoanResponse,
-} from '../../Models/Payment'
-import NanoLoanContract from '../pdfTemplates/nanoLoanContract/nanoLoanContract'
-import { PromissoryNoteMicro } from '../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
+} from '../../../../Mohassel/Models/Payment'
+import NanoLoanContract from '../../../../Mohassel/Components/pdfTemplates/nanoLoanContract/nanoLoanContract'
+import { PromissoryNoteMicro } from '../../../../Mohassel/Components/pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
 import {
   getIscore,
   getIscoreCached,
   getSMECachedIscore,
   getSMEIscore,
-} from '../../../Shared/Services/APIs/iScore'
-import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
-import { getWriteOffReasons } from '../../../Shared/Services/APIs/config'
+} from '../../../../Shared/Services/APIs/iScore'
+import { getGeoAreasByBranch } from '../../../../Shared/Services/APIs/geoAreas/getGeoAreas'
+import { getWriteOffReasons } from '../../../../Shared/Services/APIs/config'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -381,90 +384,90 @@ class LoanProfile extends Component<Props, State> {
         header: local.loanInfo,
         stringKey: 'loanDetails',
       },
-      {
-        header: local.documents,
-        stringKey: 'documents',
-      },
+      // {
+      //   header: local.documents,
+      //   stringKey: 'documents',
+      // },
     ]
-    const guarantorsTab = {
-      header: local.guarantorInfo,
-      stringKey: 'loanGuarantors',
-    }
+    // const guarantorsTab = {
+    //   header: local.guarantorInfo,
+    //   stringKey: 'loanGuarantors',
+    // }
     const customerCardTab = {
       header: local.customerCard,
       stringKey: 'customerCard',
     }
-    const followUpStatementTab = {
-      header: local.followUpStatement,
-      stringKey: 'followUpStatement',
-      permission: 'followUpStatement',
-      permissionKey: 'application',
-    }
-    const paymentTab = {
-      header: local.payments,
-      stringKey: 'loanPayments',
-      permission: ['payInstallment', 'payEarly', 'payByInsurance'],
-      permissionKey: 'application',
-    }
-    const reschedulingTab = {
-      header: local.rescheduling,
-      stringKey: 'loanRescheduling',
-      permission: [
-        'pushInstallment',
-        'traditionRescheduling',
-        'freeRescheduling',
-      ],
-      permissionKey: 'application',
-    }
-    const financialTransactionsTab = {
-      header: local.financialTransactions,
-      stringKey: 'financialTransactions',
-      permission: 'payInstallment',
-      permissionKey: 'application',
-    }
-    const penaltiesTab = {
-      header: local.penalties,
-      stringKey: 'penalties',
-      permission: ['payInstallment', 'cancelPenalty'],
-      permissionKey: 'application',
-    }
-    const logsTab = {
-      header: local.logs,
-      stringKey: 'loanLogs',
-      permission: 'viewActionLogs',
-      permissionKey: 'user',
-    }
-    const entitledToSignTab = {
-      header: local.SMEviceCustomersInfo,
-      stringKey: 'entitledToSign',
-    }
-    if (application.body.product.beneficiaryType === 'individual')
-      tabsToRender.push(guarantorsTab)
-    if (application.body.product.type === 'sme')
-      tabsToRender.push(entitledToSignTab)
+    // const followUpStatementTab = {
+    //   header: local.followUpStatement,
+    //   stringKey: 'followUpStatement',
+    //   permission: 'followUpStatement',
+    //   permissionKey: 'application',
+    // }
+    // const paymentTab = {
+    //   header: local.payments,
+    //   stringKey: 'loanPayments',
+    //   permission: ['payInstallment', 'payEarly', 'payByInsurance'],
+    //   permissionKey: 'application',
+    // }
+    // const reschedulingTab = {
+    //   header: local.rescheduling,
+    //   stringKey: 'loanRescheduling',
+    //   permission: [
+    //     'pushInstallment',
+    //     'traditionRescheduling',
+    //     'freeRescheduling',
+    //   ],
+    //   permissionKey: 'application',
+    // }
+    // const financialTransactionsTab = {
+    //   header: local.financialTransactions,
+    //   stringKey: 'financialTransactions',
+    //   permission: 'payInstallment',
+    //   permissionKey: 'application',
+    // }
+    // const penaltiesTab = {
+    //   header: local.penalties,
+    //   stringKey: 'penalties',
+    //   permission: ['payInstallment', 'cancelPenalty'],
+    //   permissionKey: 'application',
+    // }
+    // const logsTab = {
+    //   header: local.logs,
+    //   stringKey: 'loanLogs',
+    //   permission: 'viewActionLogs',
+    //   permissionKey: 'user',
+    // }
+    // const entitledToSignTab = {
+    //   header: local.SMEviceCustomersInfo,
+    //   stringKey: 'entitledToSign',
+    // }
+    // if (application.body.product.beneficiaryType === 'individual')
+    //   tabsToRender.push(guarantorsTab)
+    // if (application.body.product.type === 'sme')
+    //   tabsToRender.push(entitledToSignTab)
     if (application.body.status === 'paid') tabsToRender.push(customerCardTab)
     if (
       application.body.status === 'issued' ||
       application.body.status === 'pending'
     ) {
       tabsToRender.push(customerCardTab)
-      tabsToRender.push(reschedulingTab)
-      tabsToRender.push(paymentTab)
+      // tabsToRender.push(reschedulingTab)
+      // tabsToRender.push(paymentTab)
     }
     if (
       (application.body.status === 'issued' ||
         application.body.status === 'pending') &&
       !this.state.individualsWithInstallments.rescheduled
     ) {
-      tabsToRender.push(followUpStatementTab)
+      // tabsToRender.push(followUpStatementTab)
     }
     if (
       application.body.status === 'issued' ||
       application.body.status === 'paid' ||
       application.body.status === 'pending'
     ) {
-      tabsToRender.push(financialTransactionsTab)
-      tabsToRender.push(penaltiesTab)
+      // tabsToRender.push(financialTransactionsTab)
+      // tabsToRender.push(penaltiesTab)
     }
 
     if (application.body.status === 'pending') {
@@ -472,9 +475,9 @@ class LoanProfile extends Component<Props, State> {
       this.getPendingActions()
     }
     if (application.body.status === 'canceled') {
-      tabsToRender.push(financialTransactionsTab)
+      // tabsToRender.push(financialTransactionsTab)
     }
-    tabsToRender.push(logsTab)
+    // tabsToRender.push(logsTab)
     this.getGeoAreas(application.body.branchId)
     this.setState({
       application: application.body,
@@ -1173,8 +1176,8 @@ class LoanProfile extends Component<Props, State> {
         )
       case 'loanReschedulingTest':
         return <Rescheduling application={this.state.application} test />
-      case 'documents':
-        return <UploadDocuments application={this.state.application} />
+      // case 'documents':
+      //   return <UploadDocuments application={this.state.application} />
       case 'financialTransactions':
         return (
           <Payment

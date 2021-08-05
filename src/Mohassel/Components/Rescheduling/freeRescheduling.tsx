@@ -12,7 +12,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 import {
   testFreeRescheduling,
   freeRescheduling,
-} from '../../Services/APIs/loanApplication/freeRescheduling'
+} from '../../../Shared/Services/APIs/loanApplication/freeRescheduling'
 import { freeReschedulingValidation } from './reschedulingValidations'
 import { Loader } from '../../../Shared/Components/Loader'
 import {

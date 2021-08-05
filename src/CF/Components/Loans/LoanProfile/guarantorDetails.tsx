@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Table from 'react-bootstrap/Table'
 
-import * as local from '../../../Shared/Assets/ar.json'
+import * as local from '../../../../Shared/Assets/ar.json'
 import {
   downloadFile,
   getErrorMessage,
@@ -13,16 +13,17 @@ import {
   iscoreBank,
   iscoreStatusColor,
   orderLocal,
-} from '../../../Shared/Services/utils'
-import Can from '../../config/Can'
-import CustomerSearch from '../CustomerSearch/customerSearchTable'
-import { Loader } from '../../../Shared/Components/Loader'
-import { editGuarantors } from '../../../Shared/Services/APIs/loanApplication/editGuarantors'
-import ability from '../../config/ability'
-import { Customer } from '../../../Shared/Services/interfaces'
-import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
-import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
-import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
+} from '../../../../Shared/Services/utils'
+import Can from '../../../../Shared/config/Can'
+import CustomerSearch from '../../../../Mohassel/Components/CustomerSearch/customerSearchTable'
+import { Loader } from '../../../../Shared/Components/Loader'
+import { editGuarantors } from '../../../../Shared/Services/APIs/loanApplication/editGuarantors'
+import ability from '../../../../Shared/config/ability'
+import { Customer } from '../../../../Shared/Services/interfaces'
+import { searchCustomer } from '../../../../Shared/Services/APIs/customer/searchCustomer'
+import { getCustomersBalances } from '../../../../Shared/Services/APIs/customer/customerLoans'
+import { getCustomerByID } from '../../../../Shared/Services/APIs/customer/getCustomer'
+import { LtsIcon } from '../../../../Shared/Components'
 
 type Guarantor = Customer & { position?: string }
 interface Props {
@@ -442,11 +443,11 @@ export const GuarantorTableView = (props: Props) => {
                               'application'
                             ))) && (
                           <td style={{ cursor: 'pointer', padding: 10 }}>
-                            <img
-                              src={require('../../../Shared/Assets/deleteIcon.svg')}
-                              alt={local.delete}
+                            <Button
                               onClick={() => removeGuarantor(guar.guarantor)}
-                            />
+                            >
+                              <LtsIcon name="trash" />
+                            </Button>
                           </td>
                         )}
                     </tr>
@@ -610,13 +611,13 @@ export const GuarantorTableView = (props: Props) => {
                                     'application'
                                   ))) && (
                                 <td style={{ cursor: 'pointer', padding: 10 }}>
-                                  <img
-                                    src={require('../../../Shared/Assets/deleteIcon.svg')}
-                                    alt={local.delete}
+                                  <Button
                                     onClick={() =>
                                       removeGuarantor(guar.guarantor)
                                     }
-                                  />
+                                  >
+                                    <LtsIcon name="trash" />
+                                  </Button>
                                 </td>
                               )}
                           </tr>

@@ -8,21 +8,21 @@ import Col from 'react-bootstrap/Col'
 import { Formik } from 'formik'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
-import BackButton from '../../../Shared/Components/BackButton/back-button'
-import * as local from '../../../Shared/Assets/ar.json'
+import BackButton from '../../../../Shared/Components/BackButton/back-button'
+import * as local from '../../../../Shared/Assets/ar.json'
 import {
   getRollableActionsById,
   rollbackActionByID,
-} from '../../../Shared/Services/APIs/loanApplication/rollBack'
-import { Loader } from '../../../Shared/Components/Loader'
+} from '../../../../Shared/Services/APIs/loanApplication/rollBack'
+import { Loader } from '../../../../Shared/Components/Loader'
 import {
   timeToDateyyymmdd,
   getDateString,
   getErrorMessage,
   getDateAndTime,
-} from '../../../Shared/Services/utils'
-import { rollbackValidation } from '../Payment/paymentValidation'
-import { LtsIcon } from '../../../Shared/Components'
+} from '../../../../Shared/Services/utils'
+import { rollbackValidation } from '../../../../Mohassel/Components/Payment/paymentValidation'
+import { LtsIcon } from '../../../../Shared/Components'
 
 interface State {
   loading: boolean

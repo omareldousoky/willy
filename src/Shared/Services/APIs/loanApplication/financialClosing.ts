@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
-import { ApiResponse } from '../../interfaces'
-import axios from '../axios-instance'
+import { ApiResponse } from '../../../../Mohassel/Services/interfaces'
+import axios from '../../axiosInstance'
 
 interface FinancialClosingData {
   closeDate: number

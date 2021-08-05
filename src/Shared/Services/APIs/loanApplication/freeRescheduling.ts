@@ -1,12 +1,9 @@
-import axios from '../axios-instance'
+import axios from '../../axiosInstance'
 
-export const testPostponeHalfInstallment = async (
-  applicationId: string,
-  obj
-) => {
+export const testFreeRescheduling = async (applicationId: string, obj) => {
   const url =
     process.env.REACT_APP_BASE_URL +
-    `/loan/test-push-half-installment/${applicationId}`
+    `/loan/calculate-free-rescheduling/${applicationId}`
   try {
     const res = await axios.put(url, obj)
     return { status: 'success', body: res.data }
@@ -14,10 +11,9 @@ export const testPostponeHalfInstallment = async (
     return { status: 'error', error: error.response.data }
   }
 }
-export const postponeHalfInstallment = async (applicationId: string, obj) => {
+export const freeRescheduling = async (applicationId: string, obj) => {
   const url =
-    process.env.REACT_APP_BASE_URL +
-    `/loan/push-half-installment/${applicationId}`
+    process.env.REACT_APP_BASE_URL + `/loan/free-rescheduling/${applicationId}`
   try {
     const res = await axios.put(url, obj)
     return { status: 'success', body: res.data }

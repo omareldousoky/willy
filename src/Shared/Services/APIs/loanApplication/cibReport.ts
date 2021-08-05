@@ -1,5 +1,5 @@
-import { CIBReportRequest } from '../../../Models/CIB'
-import axios from '../axios-instance'
+import { CIBReportRequest } from '../../../../Mohassel/Models/CIB'
+import axios from '../../axiosInstance'
 
 export const cibReport = async (request: CIBReportRequest) => {
   const url = `${process.env.REACT_APP_BASE_URL}/report/cib-screen`
