@@ -1,7 +1,7 @@
 import React from 'react'
 import local from '../../../Shared/Assets/ar.json'
 import Can from '../../../Shared/config/Can'
-import { LoanList, LoanProfile } from '.'
+import { LoanList, LoanProfile, LoanRollBack } from '.'
 
 export const loansRoute = {
   path: '/loans',
@@ -21,6 +21,11 @@ export const loansRoute = {
           <LoanProfile {...props} />
         </Can>
       ),
+    },
+    {
+      path: '/loan-roll-back',
+      label: local.previousActions,
+      render: (props) => <LoanRollBack {...props} />,
     },
   ],
 }
