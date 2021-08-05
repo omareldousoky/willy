@@ -3,25 +3,25 @@ import Card from 'react-bootstrap/Card'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Swal from 'sweetalert2'
-import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-import { Loader } from '../../../Shared/Components/Loader'
-import * as local from '../../../Shared/Assets/ar.json'
-import Search from '../../../Shared/Components/Search/search'
+import DynamicTable from '../../../../Shared/Components/DynamicTable/dynamicTable'
+import { Loader } from '../../../../Shared/Components/Loader'
+import * as local from '../../../../Shared/Assets/ar.json'
+import Search from '../../../../Shared/Components/Search/search'
 import {
   issuedLoansSearchFilters,
   search,
   searchFilters,
-} from '../../../Shared/redux/search/actions'
+} from '../../../../Shared/redux/search/actions'
 import {
   timeToDateyyymmdd,
   beneficiaryType,
   getErrorMessage,
   getFullCustomerKey,
   removeEmptyArg,
-} from '../../../Shared/Services/utils'
+} from '../../../../Shared/Services/utils'
 import { manageLoansArray } from './manageLoansInitials'
-import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
-import { ActionsIconGroup } from '../../../Shared/Components'
+import HeaderWithCards from '../../../../Shared/Components/HeaderWithCards/headerWithCards'
+import { ActionsIconGroup } from '../../../../Shared/Components'
 
 interface Props
   extends RouteComponentProps<{}, {}, { sme?: boolean; id?: string }> {

@@ -1,6 +1,6 @@
-import * as local from '../../../Shared/Assets/ar.json'
-import { Card } from '../ManageAccounts/manageAccountsInitials'
-import ability from '../../../Shared/config/ability'
+import * as local from '../../../../Shared/Assets/ar.json'
+import { Card } from '../../ManageAccounts/manageAccountsInitials'
+import ability from '../../../../Shared/config/ability'
 
 export const manageLoansArray = (): Card[] => {
   const manageLoanArr: Card[] = []

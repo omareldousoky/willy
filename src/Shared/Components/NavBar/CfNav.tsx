@@ -42,6 +42,11 @@ export const CfNavbar = () => {
             {local.manageAccounts}
           </Nav.Link>
         ) : null}
+        {ability.can('getIssuedLoan', 'application') && (
+          <Nav.Link onClick={() => history.push('/loans')}>
+            {local.issuedLoans}
+          </Nav.Link>
+        )}
       </Nav>
     </Navbar.Collapse>
   )
