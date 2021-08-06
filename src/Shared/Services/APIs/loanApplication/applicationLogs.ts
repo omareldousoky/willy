@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
 export const getApplicationLogs = async (
@@ -6,8 +7,7 @@ export const getApplicationLogs = async (
   from: number
 ) => {
   const url =
-    process.env.REACT_APP_BASE_URL +
-    `/search/log/loan/${applicationId}?size=${size}&from=${from}`
+    API_BASE_URL + `/search/log/loan/${applicationId}?size=${size}&from=${from}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }
@@ -21,7 +21,7 @@ export const getApplicationTransactionLogs = async (
   pageToken: string
 ) => {
   const url =
-    process.env.REACT_APP_BASE_URL +
+    API_BASE_URL +
     `/application/${applicationId}/transactions?size=${size}&pageToken=${pageToken}`
   try {
     const res = await axios.get(url)

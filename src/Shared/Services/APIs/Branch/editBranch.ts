@@ -1,7 +1,8 @@
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
 export const editBranch = async (data: object, _id: string) => {
-  const url = process.env.REACT_APP_BASE_URL + `/branch/${_id}`
+  const url = API_BASE_URL + `/branch/${_id}`
   try {
     const res = await axios.put(url, data)
     return { status: 'success', body: res.data }

@@ -4,6 +4,7 @@ import { saveAs } from 'file-saver'
 import Swal from 'sweetalert2'
 import * as local from '../Assets/ar.json'
 import errorMessages from '../Assets/errorMessages.json'
+import { API_BASE_URL } from '../envConfig'
 
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
@@ -818,4 +819,4 @@ export const getDateAndTime = (date: number) => {
   return dateString
 }
 
-export const isCF = process.env.REACT_APP_BASE_URL?.includes('cf') ?? false
+export const isCF = API_BASE_URL?.includes('cf') ?? false

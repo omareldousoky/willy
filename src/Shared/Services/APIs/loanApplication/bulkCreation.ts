@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
 interface BulkCreationObj {
@@ -6,7 +7,7 @@ interface BulkCreationObj {
 }
 
 export const bulkCreation = async (data: BulkCreationObj) => {
-  const url = process.env.REACT_APP_BASE_URL + `/application/bulk-create`
+  const url = API_BASE_URL + `/application/bulk-create`
   try {
     const res = await axios.put(url, data)
     return { status: 'success', body: res.data }

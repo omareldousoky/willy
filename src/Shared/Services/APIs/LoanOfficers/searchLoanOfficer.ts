@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
 interface SearchLOAndManager {
@@ -7,7 +8,7 @@ interface SearchLOAndManager {
   name: string
 }
 export const searchLoanOfficer = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + `/search/loan-officer`
+  const url = API_BASE_URL + `/search/loan-officer`
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -17,7 +18,7 @@ export const searchLoanOfficer = async (data: object) => {
 }
 
 export const getLoanOfficer = async (id: string) => {
-  const url = process.env.REACT_APP_BASE_URL + `/user/loan-officer?id=${id}`
+  const url = API_BASE_URL + `/user/loan-officer?id=${id}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }
@@ -28,7 +29,7 @@ export const getLoanOfficer = async (id: string) => {
 
 export const searchLoanOfficerAndManager = async (data: SearchLOAndManager) => {
   const url =
-    process.env.REACT_APP_BASE_URL +
+    API_BASE_URL +
     `/search/branch-employees/${data.branchId}?size=${data.size}&from=${data.from}&name=${data.name}`
   try {
     const res = await axios.get(url)

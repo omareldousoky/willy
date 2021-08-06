@@ -1,7 +1,8 @@
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
 export const createUser = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + '/user'
+  const url = API_BASE_URL + '/user'
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }

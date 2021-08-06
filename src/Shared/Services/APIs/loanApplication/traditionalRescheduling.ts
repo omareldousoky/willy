@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
 export const testTraditionalRescheduling = async (
@@ -5,8 +6,7 @@ export const testTraditionalRescheduling = async (
   obj
 ) => {
   const url =
-    process.env.REACT_APP_BASE_URL +
-    `/loan/calculate-traditional-rescheduling/${applicationId}`
+    API_BASE_URL + `/loan/calculate-traditional-rescheduling/${applicationId}`
   try {
     const res = await axios.put(url, obj)
     return { status: 'success', body: res.data }
@@ -15,9 +15,7 @@ export const testTraditionalRescheduling = async (
   }
 }
 export const traditionalRescheduling = async (applicationId: string, obj) => {
-  const url =
-    process.env.REACT_APP_BASE_URL +
-    `/loan/traditional-rescheduling/${applicationId}`
+  const url = API_BASE_URL + `/loan/traditional-rescheduling/${applicationId}`
   try {
     const res = await axios.put(url, obj)
     return { status: 'success', body: res.data }

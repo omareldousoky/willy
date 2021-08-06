@@ -1,7 +1,8 @@
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
 export const getPermissions = async (id: string) => {
-  const url = process.env.REACT_APP_BASE_URL + `/user/role/actions?id=${id}`
+  const url = API_BASE_URL + `/user/role/actions?id=${id}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }
@@ -10,7 +11,7 @@ export const getPermissions = async (id: string) => {
   }
 }
 export const getRoles = async () => {
-  const url = process.env.REACT_APP_BASE_URL + `/user/role`
+  const url = API_BASE_URL + `/user/role`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }
@@ -20,7 +21,7 @@ export const getRoles = async () => {
 }
 
 export const createRole = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + `/user/role`
+  const url = API_BASE_URL + `/user/role`
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -30,7 +31,7 @@ export const createRole = async (data: object) => {
 }
 
 export const editRole = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + `/user/role/permissions`
+  const url = API_BASE_URL + `/user/role/permissions`
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -40,7 +41,7 @@ export const editRole = async (data: object) => {
 }
 
 export const getUserCountPerRole = async (id: string) => {
-  const url = process.env.REACT_APP_BASE_URL + `/user/role/count?id=${id}`
+  const url = API_BASE_URL + `/user/role/count?id=${id}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }

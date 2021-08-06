@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios'
 import { ApiResponse } from '../../../../Mohassel/Services/interfaces'
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
 interface FinancialClosingData {
@@ -33,7 +34,7 @@ export interface ReviewFilesResponse {
   reviewFiles?: ReviewFileResponse[]
 }
 export const financialClosing = async (data: FinancialClosingData) => {
-  const url = process.env.REACT_APP_BASE_URL + '/application/financial-close'
+  const url = API_BASE_URL + '/application/financial-close'
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -43,7 +44,7 @@ export const financialClosing = async (data: FinancialClosingData) => {
 }
 
 export const financialBlocking = async (data: FinancialClosingRequest) => {
-  const url = process.env.REACT_APP_BASE_URL + '/application/financial-block'
+  const url = API_BASE_URL + '/application/financial-block'
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -54,7 +55,7 @@ export const financialBlocking = async (data: FinancialClosingRequest) => {
 export const financialUnlBlocking = async (
   data: FinancialUnBlockingRequest
 ) => {
-  const url = process.env.REACT_APP_BASE_URL + '/application/financial-unblock'
+  const url = API_BASE_URL + '/application/financial-unblock'
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -63,7 +64,7 @@ export const financialUnlBlocking = async (
   }
 }
 export const searchFinancialBlocking = async (data: BlockingSearchRequest) => {
-  const url = process.env.REACT_APP_BASE_URL + '/search/financial-blocking'
+  const url = API_BASE_URL + '/search/financial-blocking'
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -74,7 +75,7 @@ export const searchFinancialBlocking = async (data: BlockingSearchRequest) => {
 export const getOracleReviewFiles = async (): Promise<
   ApiResponse<ReviewFilesResponse>
 > => {
-  const url = process.env.REACT_APP_BASE_URL + '/oracle/review-files'
+  const url = API_BASE_URL + '/oracle/review-files'
   try {
     const res: AxiosResponse<ReviewFilesResponse> = await axios.get(url)
     return { status: 'success', body: res.data }
@@ -86,8 +87,7 @@ export const getOracleReviewFiles = async (): Promise<
 export const downloadOracleReviewFile = async (
   id: string
 ): Promise<ApiResponse<{ presignedUrl: string }>> => {
-  const url =
-    process.env.REACT_APP_BASE_URL + `/oracle/download-review-file/${id}`
+  const url = API_BASE_URL + `/oracle/download-review-file/${id}`
   try {
     const res: AxiosResponse<{ presignedUrl: string }> = await axios.get(url)
     return { status: 'success', body: res.data }
