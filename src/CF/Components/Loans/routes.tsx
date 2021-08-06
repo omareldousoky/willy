@@ -9,7 +9,7 @@ export const loansRoute = {
   disableLink: true,
   render: (props) => (
     <Can I="getIssuedLoan" a="application">
-      <LoanList {...props} />{' '}
+      <LoanList {...props} />
     </Can>
   ),
   routes: [

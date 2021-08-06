@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
 import { Formik } from 'formik'
 import { connect } from 'react-redux'
+import Button from 'react-bootstrap/Button'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import { manualPaymentValidation } from './paymentValidation'
@@ -11,47 +12,23 @@ import {
   getErrorMessage,
   timeToDateyyymmdd,
 } from '../../../Shared/Services/utils'
-import { PendingActions } from '../../../Shared/Services/interfaces'
+import {
+  Installment,
+  PendingActions,
+} from '../../../Shared/Services/interfaces'
 import { payment } from '../../../Shared/redux/payment/actions'
 import PayInstallment from './payInstallment'
 import {
   manualPayment,
   payFutureInstallment,
   payInstallment,
-} from '../../../Shared/Services/APIs/Payment'
+} from '../../../Shared/Services/APIs/payment'
 import * as local from '../../../Shared/Assets/ar.json'
 import './styles.scss'
 import PaymentIcons from './paymentIcons'
 import ManualPayment from './manualPayment'
 import { LtsIcon } from '../../../Shared/Components'
-import { randomManualPayment } from '../../../Mohassel/Services/APIs/Payment/randomManualPayment'
 
-interface Installment {
-  id: number
-  installmentResponse: number
-  principalInstallment: number
-  feesInstallment: number
-  totalPaid: number
-  principalPaid: number
-  feesPaid: number
-  dateOfPayment: number
-  status: string
-}
-interface PenaltiesActionLogObject {
-  action: string
-  id: string
-  reference: PenaltiesActionLogObjectReference
-  trace: PenaltiesActionLogObjectTrace
-  type: string
-}
-interface PenaltiesActionLogObjectReference {
-  branchId: string
-  customerId: string
-}
-interface PenaltiesActionLogObjectTrace {
-  at: number
-  by: string
-}
 interface Props {
   installments: Array<Installment>
   currency: string
@@ -63,7 +40,7 @@ interface Props {
   setReceiptData: (data) => void
   print: (data) => void
   refreshPayment: () => void
-  manualPaymentEditId: string
+  // manualPaymentEditId: string
   paymentType: string
 }
 export interface Employee {
@@ -82,8 +59,8 @@ interface State {
   remainingPrincipal: number
   requiredAmount: number
   installmentNumber: number
-  penalty: number
-  penaltyAction: string
+  // penalty: number
+  // penaltyAction: string
   payerType: string
   payerNationalId: string
   payerName: string
@@ -154,8 +131,6 @@ class Payment extends Component<Props, State> {
       remainingPrincipal: 0,
       requiredAmount: 0,
       installmentNumber: -1,
-      penalty: -1,
-      penaltyAction: '',
       payerType: '',
       payerNationalId: '',
       payerName: '',
@@ -165,17 +140,17 @@ class Payment extends Component<Props, State> {
     this.mappers = normalTableMappers
   }
 
-  componentDidMount() {
-    if (this.props.manualPaymentEditId) {
-      this.setManualPaymentValues()
-    }
-  }
+  // componentDidMount() {
+  //   if (this.props.manualPaymentEditId) {
+  //     this.setManualPaymentValues()
+  //   }
+  // }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.manualPaymentEditId !== this.props.manualPaymentEditId) {
-      this.setManualPaymentValues()
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.manualPaymentEditId !== this.props.manualPaymentEditId) {
+  //     this.setManualPaymentValues()
+  //   }
+  // }
 
   componentWillUnmount() {
     this.props.changePaymentState(0)
@@ -259,64 +234,6 @@ class Payment extends Component<Props, State> {
         }
       }
     } else if (this.props.paymentType === 'normal') {
-      if (this.props.manualPaymentEditId === '') {
-        const obj = {
-          id: this.props.applicationId,
-          receiptNumber: values.receiptNumber,
-          truthDate: new Date(values.truthDate).valueOf(),
-          payAmount: values.payAmount,
-          payerType: values.payerType,
-          payerId: values.payerId,
-          payerName: values.payerName,
-          payerNationalId: values.payerNationalId.toString(),
-          installmentNumber:
-            values.installmentNumber !== -1
-              ? Number(values.installmentNumber)
-              : undefined,
-          futurePayment: values.installmentNumber !== -1 || undefined,
-        }
-        const res = await manualPayment(obj)
-        if (res.status === 'success') {
-          this.setState({ loadingFullScreen: false })
-          Swal.fire('', local.manualPaymentSuccess, 'success').then(() =>
-            this.props.refreshPayment()
-          )
-        } else {
-          this.setState({ loadingFullScreen: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-          )
-        }
-      }
-      // edit logic
-      // else {
-      //   const obj = {
-      //     id: this.props.applicationId,
-      //     payAmount: values.payAmount,
-      //     receiptNumber: values.receiptNumber,
-      //     truthDate: new Date(values.truthDate).valueOf(),
-      //     payerType: values.payerType,
-      //     payerId: values.payerId,
-      //     payerName: values.payerName,
-      //     payerNationalId: values.payerNationalId.toString(),
-      //     installmentNumber:
-      //       values.installmentNumber !== -1
-      //         ? Number(values.installmentNumber)
-      //         : undefined,
-      //     futurePayment: values.installmentNumber !== -1 || undefined,
-      //   }
-      //   const res = await editManualPayment(obj)
-      //   if (res.status === 'success') {
-      //     this.setState({ loadingFullScreen: false })
-      //     Swal.fire('', local.editManualPaymentSuccess, 'success').then(() =>
-      //       this.props.refreshPayment()
-      //     )
-      //   } else {
-      //     this.setState({ loadingFullScreen: false }, () =>
-      //       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      //     )
-      //   }
-      // }
-    } else {
       const obj = {
         id: this.props.applicationId,
         receiptNumber: values.receiptNumber,
@@ -325,28 +242,26 @@ class Payment extends Component<Props, State> {
         payerType: values.payerType,
         payerId: values.payerId,
         payerName: values.payerName,
-        payerNationalId: values.payerNationalId
-          ? values.payerNationalId.toString()
-          : '',
-        type: values.randomPaymentType,
-        actionId: this.props.manualPaymentEditId
-          ? this.props.manualPaymentEditId
-          : '',
+        payerNationalId: values.payerNationalId.toString(),
+        installmentNumber:
+          values.installmentNumber !== -1
+            ? Number(values.installmentNumber)
+            : undefined,
+        futurePayment: values.installmentNumber !== -1 || undefined,
       }
-      if (this.props.manualPaymentEditId === '') {
-        const res = await randomManualPayment(obj)
-        if (res.status === 'success') {
-          this.setState({ loadingFullScreen: false })
-          Swal.fire('', local.manualPaymentSuccess, 'success').then(() =>
-            this.props.refreshPayment()
-          )
-        } else {
-          this.setState({ loadingFullScreen: false }, () =>
-            Swal.fire('', getErrorMessage(res.error.error), 'error')
-          )
-        }
+      const res = await manualPayment(obj)
+      if (res.status === 'success') {
+        this.setState({ loadingFullScreen: false })
+        Swal.fire('', local.manualPaymentSuccess, 'success').then(() =>
+          this.props.refreshPayment()
+        )
+      } else {
+        this.setState({ loadingFullScreen: false }, () =>
+          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        )
       }
     }
+
     this.props.changePaymentState(0)
   }
 
@@ -396,7 +311,7 @@ class Payment extends Component<Props, State> {
       case 1:
         return (
           <PayInstallment
-            penalty={this.state.penalty}
+            penalty={0}
             installments={this.props.installments}
             application={this.props.application}
             handleSubmit={this.handleSubmit}
@@ -410,16 +325,15 @@ class Payment extends Component<Props, State> {
           <Card className="payment-menu">
             <div className="payment-info" style={{ textAlign: 'center' }}>
               <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
-
-              <h6
-                style={{ cursor: 'pointer' }}
+              <Button
+                variant="default"
                 onClick={() => this.props.changePaymentState(0)}
               >
-                <span className="fa fa-long-arrow-alt-right" />
-                <span className="font-weight-bolder">
+                <span className="font-weight-bolder text-primary">&#8702;</span>
+                <small className="text-primary font-weight-bolder">
                   &nbsp;{local.manualPayment}
-                </span>
-              </h6>
+                </small>
+              </Button>
             </div>
             <div className="verticalLine" />
             <div style={{ width: '100%', padding: 20 }}>
@@ -435,9 +349,7 @@ class Payment extends Component<Props, State> {
                   paymentType: this.props.paymentType,
                 }}
                 onSubmit={this.handleSubmit}
-                validationSchema={() =>
-                  manualPaymentValidation(this.state.penalty)
-                }
+                validationSchema={manualPaymentValidation}
                 validateOnBlur
                 validateOnChange
               >

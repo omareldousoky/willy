@@ -21,18 +21,7 @@ import { Installment } from '../../../Shared/Services/interfaces'
 interface State {
   employees: Array<Employee>
 }
-interface FormValues {
-  truthDate: string
-  payAmount: number
-  max: number
-  dueDate: string
-  receiptNumber: string
-  payerType: string
-  payerNationalId: string
-  payerName: string
-  payerId: string
-  paymentType: string
-}
+
 interface Member {
   customer: {
     customerName: string
