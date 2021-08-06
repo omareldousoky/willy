@@ -570,7 +570,7 @@
   "applicationCancelError": "حصل خطا في إلغاء طلب القرض",
   "number": "رقم",
   "installmentPaymentConfirmation": "تأكيد سداد قسط",
-  "confirmPayment": "تآكيد سداد",
+  "confirmPayment": "تأكيد سداد",
   "applicationCode": "كود طلب القرض",
   "tools": "إعدادات النظام",
   "encodingFiles": "ملفات تكويد",
