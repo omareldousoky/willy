@@ -39,7 +39,7 @@ const template = (
       {numbersToArabic(
         application
           ? application.installmentsObject?.totalInstallments.installmentSum
-          : 3000
+          : customer.nanoLoansLimit
       )}
     </p>
     <p>
@@ -49,13 +49,13 @@ const template = (
       {numbersToArabic(
         application
           ? application.installmentsObject?.totalInstallments.installmentSum
-          : 3000
+          : customer.nanoLoansLimit
       )}
       &nbsp;جنيه (
       {new Tafgeet(
         application
           ? application.installmentsObject?.totalInstallments.installmentSum
-          : 3000,
+          : customer.nanoLoansLimit,
         'EGP'
       ).parse()}
       ) &nbsp; والقيمة وصلتنا نقداً ويستحق علينا عوائد من تاريخ تحرير السند وحتى

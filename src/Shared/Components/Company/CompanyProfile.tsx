@@ -32,10 +32,10 @@ export const CompanyProfile = () => {
   const history = useHistory()
 
   const { viewCompany, documents } = local
-  const getiScores = async (id) => {
+  const getiScores = async (companyObj) => {
     setIsLoading(true)
     const iScores = await getSMECachedIscore({
-      ids: [id],
+      ids: [`${companyObj.governorate}-${companyObj.commercialRegisterNumber}`],
     })
     if (iScores.status === 'success') {
       setScore(iScores?.body?.data[0])
@@ -52,8 +52,7 @@ export const CompanyProfile = () => {
     if (res.status === 'success') {
       await setCompany(res.body)
       setIsLoading(false)
-      if (ability.can('viewIscore', 'customer'))
-        await getiScores(res.body.commercialRegisterNumber)
+      if (ability.can('viewIscore', 'customer')) await getiScores(res.body)
     } else {
       setIsLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')

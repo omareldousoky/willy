@@ -26,6 +26,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.lts-coins {
+  &:before {
+    content: $lts-coins;
+  }
+}
+
 .lts-trash {
   &:before {
     content: $lts-trash;

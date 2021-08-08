@@ -527,6 +527,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                     isInvalid={
                       errors.noOfInstallments && touched.noOfInstallments
                     }
+                    disabled={values.productType === 'nano'}
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.noOfInstallments === 'outOfRange'

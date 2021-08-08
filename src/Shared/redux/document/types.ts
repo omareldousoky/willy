@@ -15,7 +15,7 @@ export const ADD_ALL_TO_SELECTION_ARRAY = 'ADD_ALL_TO_SELECTION_ARRAY'
 export interface DocumentState {
   document: Document
 }
-interface DocumentsType {
+export interface DocumentsType {
   imagesFiles: Document[]
   docName: string
 }

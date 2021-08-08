@@ -31,7 +31,10 @@ import { required } from '../../../Shared/validations'
 import { DateFromToField } from './Fields/dateFromTo'
 import TextField from '../Common/FormikFields/textField'
 
-import { getFullCustomerKey } from '../../../Shared/Services/utils'
+import {
+  generateArrayOfYears,
+  getFullCustomerKey,
+} from '../../../Shared/Services/utils'
 import { CurrentHierarchiesSingleResponse } from '../../Models/OfficersProductivityReport'
 
 interface InitialFormikState {
@@ -53,6 +56,7 @@ interface InitialFormikState {
   defaultingCustomerStatus?: string
   managers?: Array<CurrentHierarchiesSingleResponse>
   creditInquiryStatus?: string
+  year?: string
 }
 
 interface Props {
@@ -179,6 +183,9 @@ const ReportsModal = (props: Props) => {
           break
         case 'creditInquiryStatus':
           initValues.creditInquiryStatus = creditInquiryStatuses[0].value
+          break
+        case 'year':
+          initValues.year = ''
           break
         default:
           break
@@ -749,6 +756,40 @@ const ReportsModal = (props: Props) => {
                                   data-qc={option.label}
                                 >
                                   {option.label}
+                                </option>
+                              ))}
+                            </Form.Control>
+                          </div>
+                        </Col>
+                      )
+                    }
+                    if (input === 'year') {
+                      return (
+                        <Col key={input} sm={6}>
+                          <div className="dropdown-container">
+                            <p className="dropdown-label mr-2 text-center">
+                              {local.year}
+                            </p>
+                            <Form.Control
+                              as="select"
+                              className="dropdown-select"
+                              data-qc="year"
+                              name="year"
+                              value={formikProps.values.year}
+                              onChange={(e) => {
+                                formikProps.setFieldValue(
+                                  'year',
+                                  e.currentTarget.value
+                                )
+                              }}
+                            >
+                              {generateArrayOfYears().map((option) => (
+                                <option
+                                  key={option}
+                                  value={option}
+                                  data-qc={option}
+                                >
+                                  {option}
                                 </option>
                               ))}
                             </Form.Control>
