@@ -1145,5 +1145,7 @@
   "nanoLimitDocument": "صوره وصل الحد الائتماني",
   "nano": "نانو",
   "sme": "شركات",
-  "micro": "ميكرو"
+  "micro": "ميكرو",
+  "transactionAmount": "قيمه الحركه",
+  "transactionsSum": "اجمالي قيمه الحركات"
 }
