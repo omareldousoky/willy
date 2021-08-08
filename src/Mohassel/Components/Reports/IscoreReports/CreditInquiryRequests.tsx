@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
+import Swal from 'sweetalert2'
 import local from '../../../../Shared/Assets/ar.json'
 import { LtsIcon } from '../../../../Shared/Components'
 import { Loader } from '../../../../Shared/Components/Loader'
@@ -9,7 +10,6 @@ import { Loader } from '../../../../Shared/Components/Loader'
 import Can from '../../../config/Can'
 
 import ReportsModal from '../reportsModal'
-import Swal from 'sweetalert2'
 import {
   downloadFile,
   getErrorMessage,
