@@ -1,8 +1,9 @@
-import axios from '../axios-instance'
-import { getCookie } from '../../../../Shared/Services/getCookie'
+import { API_BASE_URL, REACT_APP_DOMAIN } from '../../../envConfig'
+import axios from '../../axiosInstance'
+import { getCookie } from '../../getCookie'
 
 export const authMe = async () => {
-  const url = process.env.REACT_APP_BASE_URL + '/auth/me'
+  const url = API_BASE_URL + '/auth/me'
   try {
     const res = await axios.get(url)
     if (!getCookie('ltsbranch')) {
@@ -10,12 +11,10 @@ export const authMe = async () => {
         document.cookie =
           'ltsbranch=' +
           JSON.stringify(res.data.validBranches[0]) +
-          (process.env.REACT_APP_DOMAIN
-            ? `;domain=${process.env.REACT_APP_DOMAIN}`
-            : '') +
+          (REACT_APP_DOMAIN ? `;domain=${REACT_APP_DOMAIN}` : '') +
           ';path=/;'
       } else {
-        document.cookie = `ltsbranch=;domain=${process.env.REACT_APP_DOMAIN};path=/;`
+        document.cookie = `ltsbranch=;domain=${REACT_APP_DOMAIN};path=/;`
       }
     } else {
       const currentBranch = JSON.parse(getCookie('ltsbranch'))._id
@@ -27,13 +26,11 @@ export const authMe = async () => {
           document.cookie =
             'ltsbranch=' +
             JSON.stringify(res.data.validBranches[0]) +
-            (process.env.REACT_APP_DOMAIN
-              ? `;domain=${process.env.REACT_APP_DOMAIN}`
-              : '') +
+            (REACT_APP_DOMAIN ? `;domain=${REACT_APP_DOMAIN}` : '') +
             ';path=/;'
         }
       } else {
-        document.cookie = `ltsbranch=;domain=${process.env.REACT_APP_DOMAIN};path=/;`
+        document.cookie = `ltsbranch=;domain=${REACT_APP_DOMAIN};path=/;`
       }
     }
     return { status: 'success', body: res.data }
