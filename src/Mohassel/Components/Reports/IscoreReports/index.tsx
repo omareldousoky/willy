@@ -86,6 +86,16 @@ class IscoreReports extends Component<{}, State> {
     }
   }
 
+  handleSelectTab = (activeTabStringKey: string) => {
+    const activeKeyIndex = this.tabs.findIndex(
+      ({ stringKey }) => stringKey === activeTabStringKey
+    )
+
+    this.setState({
+      activeTabIndex: activeKeyIndex,
+    })
+  }
+
   async generateReport() {
     this.setState({ loading: true })
     const res = await generateiScoreReport()
@@ -104,16 +114,6 @@ class IscoreReports extends Component<{}, State> {
       Swal.fire('error', local.fileQueuedError, 'error')
       console.log(res)
     }
-  }
-
-  handleSelectTab = (activeTabStringKey: string) => {
-    const activeKeyIndex = this.tabs.findIndex(
-      ({ stringKey }) => stringKey === activeTabStringKey
-    )
-
-    this.setState({
-      activeTabIndex: activeKeyIndex,
-    })
   }
 
   render() {
