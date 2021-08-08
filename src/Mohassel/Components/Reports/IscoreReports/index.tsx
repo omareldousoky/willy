@@ -18,6 +18,7 @@ import Can from '../../../config/Can'
 import { LtsIcon } from '../../../../Shared/Components'
 import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
 import CreditInquiryRequests from './CreditInquiryRequests'
+import ability from '../../../config/ability'
 
 interface State {
   data: any
@@ -26,17 +27,18 @@ interface State {
 }
 class IscoreReports extends Component<{}, State> {
   tabs = [
-    {
-      header: local.iScoreReports,
-      stringKey: 'iScoreReports',
-      permission: 'debtsAging', // TODO: Replace with permission from backend
-      permissionKey: 'report',
-    },
+    ...(ability.can('createIscoreFile', 'report') ||
+    ability.can('downloadIscoreFile', 'report')
+      ? [
+          {
+            header: local.iScoreReports,
+            stringKey: 'iScoreReports',
+          },
+        ]
+      : []),
     {
       header: local.creditInquiryRequestsReport,
-      stringKey: 'creditInquiryRequestsReport', // TODO: Replace with permission from backend
-      permission: 'debtsAging',
-      permissionKey: 'report',
+      stringKey: 'creditInquiryRequestsReport',
     },
   ]
 
@@ -111,8 +113,6 @@ class IscoreReports extends Component<{}, State> {
     const activeKeyIndex = this.tabs.findIndex(
       ({ stringKey }) => stringKey === activeTabStringKey
     )
-
-    console.log({ activeTabStringKey })
 
     this.setState({
       activeTabIndex: activeKeyIndex,
@@ -197,18 +197,20 @@ class IscoreReports extends Component<{}, State> {
                             )}
                           </div>
                           {pdf.status === 'created' && (
-                            <Button
-                              type="button"
-                              variant="default"
-                              onClick={() => this.getFile(pdf)}
-                              title="download"
-                            >
-                              <LtsIcon
-                                name="download"
-                                size="40px"
-                                color="#7dc356"
-                              />
-                            </Button>
+                            <Can I="downloadIscoreFile" a="report">
+                              <Button
+                                type="button"
+                                variant="default"
+                                onClick={() => this.getFile(pdf)}
+                                title="download"
+                              >
+                                <LtsIcon
+                                  name="download"
+                                  size="40px"
+                                  color="#7dc356"
+                                />
+                              </Button>
+                            </Can>
                           )}
                         </div>
                       </Card.Body>

@@ -1140,5 +1140,6 @@
   "printSettlementType": "طباعة طلب حالةالتصالح",
   "customerAddress": "عنوان العميل",
   "productApplicationsReport": "تقرير طلبات القروض لنوع قرض",
-  "creditInquiryRequestsReport": "تقرير طلبات الاستعلام الائتماني ( فردي – جماعي )"
+  "creditInquiryRequestsReport": "تقرير طلبات الاستعلام الائتماني",
+  "individualAndGroup": "(فردي - جماعي)"
 }

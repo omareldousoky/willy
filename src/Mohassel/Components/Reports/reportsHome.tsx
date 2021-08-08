@@ -11,7 +11,6 @@ import OperationsReports from './operationsReports'
 import { TasaheelReports } from './TasaheelReports/TasaheelReports'
 import LaundryReports from './laundryReports'
 import OfficersProductivityReports from './officersProductivityReports'
-import ability from '../../config/ability'
 
 interface State {
   activeTab: string
@@ -30,7 +29,11 @@ class ReportsHome extends Component<{}, State> {
         {
           header: local.iScoreReports,
           stringKey: 'iScoreReports',
-          permission: 'downloadIscoreFile',
+          permission: [
+            'downloadIscoreFile',
+            'createIscoreFile',
+            'generateIscoreReport',
+          ],
           permissionKey: 'report',
         },
         {
@@ -81,11 +84,7 @@ class ReportsHome extends Component<{}, State> {
       case 'financialReports':
         return <Reports />
       case 'iScoreReports':
-        return (
-          // TODO: Add one more permission after backend
-          ability.can('downloadIscoreFile', 'report') &&
-          ability.can('createIscoreFile', 'report') && <IscoreReports />
-        )
+        return <IscoreReports />
       case 'cibTPAYReport':
         return <CIBReports />
       case 'oracleIntegration':

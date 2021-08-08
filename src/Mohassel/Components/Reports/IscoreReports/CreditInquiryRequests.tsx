@@ -14,70 +14,56 @@ import {
   downloadFile,
   getErrorMessage,
 } from '../../../../Shared/Services/utils'
+import {
+  getCreditInquiryExcel,
+  postCreditInquiryExcel,
+} from '../../../Services/APIs/Reports/creditInquiryRequests'
+
+interface Report {
+  key: string
+  local: string
+  inputs: string[]
+  permission: string
+  handlePdfPrint?: (values: any) => void
+  handleExcel: {
+    post: (values) => any
+    get: (id) => any
+  }
+}
 
 const CreditInquiryRequests = () => {
-  const reports = [
+  const reports: Report[] = [
     {
-      key: 'monthlyReport',
-      local: 'التقرير الشهري',
-      inputs: [],
-      permission: 'monthlyReport',
-      handlePdfPrint: (values) => {
-        console.log('Print PDF', { values })
-      },
+      key: 'creditInquiryRequests',
+      local: `${local.creditInquiryRequestsReport} ${local.individualAndGroup}`,
+      inputs: ['branch', 'dateFromTo', 'creditInquiryStatus'],
+      permission: 'generateIscoreReport',
       handleExcel: {
-        post: (values) => {
-          console.log('Post EXCEL', { values })
-
-          return {
-            status: 'success',
-            body: {
-              fileId: '9909',
-            },
-            error: {
-              error: 'Error XX',
-            },
-          }
-        },
-        get: (id) => {
-          console.log('Get EXCEL', { id })
-
-          return {
-            status: 'success',
-            body: {
-              status: 'success',
-              fileId: '9909',
-              presignedUrl: '',
-            },
-            error: {
-              error: 'Error XX',
-            },
-          }
-        },
+        post: postCreditInquiryExcel,
+        get: getCreditInquiryExcel,
       },
     },
   ]
 
-  const [selectedReport, setSelectedReport] = useState(reports[0])
+  const [selectedReport, setSelectedReport] = useState<Report | null>(null)
 
   const [loading, setLoading] = useState(false)
-  const [showModal, setShowModal] = useState(false)
 
   const handleSubmit = (values) => {
-    selectedReport.handlePdfPrint(values)
+    selectedReport?.handlePdfPrint && selectedReport.handlePdfPrint(values)
   }
 
   const getExcelPoll = async (id, pollStart) => {
     const pollInstant = new Date().valueOf()
 
     if (pollInstant - pollStart < 300000) {
-      const file = await selectedReport.handleExcel.get(id)
+      const file = await selectedReport?.handleExcel.get(id)
       if (file.status === 'success') {
         if (['created', 'failed'].includes(file.body.status)) {
           if (file.body.status === 'created')
             downloadFile(file.body.presignedUrl)
           if (file.body.status === 'failed') Swal.fire('error', local.failed)
-          setShowModal(false)
+          setSelectedReport(null)
         } else {
           setTimeout(() => getExcelPoll(id, pollStart), 10000)
         }
@@ -91,9 +77,16 @@ const CreditInquiryRequests = () => {
 
   const getExcel = async (values) => {
     setLoading(true)
-    setShowModal(false)
+    setSelectedReport(null)
 
-    const res = await selectedReport.handleExcel.post(values)
+    const excelRequestModel = {
+      startDate: new Date(values.fromDate).valueOf(),
+      endDate: new Date(values.toDate).valueOf(),
+      branch: values.branches?._id,
+      status: values.creditInquiryStatus,
+    }
+
+    const res = await selectedReport?.handleExcel.post(excelRequestModel)
 
     if (res.status === 'success') {
       if (Object.keys(res.body).length === 0) {
@@ -118,7 +111,7 @@ const CreditInquiryRequests = () => {
         <Card.Body style={{ padding: 15 }}>
           <div className="custom-card-header">
             <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-              {local.monthlyQuarterlyReports}
+              {local.creditInquiryRequestsReport}
             </Card.Title>
           </div>
           {reports?.map((report, index) => {
@@ -139,14 +132,20 @@ const CreditInquiryRequests = () => {
                         <span style={{ marginLeft: 40 }}>#{index + 1}</span>
                         <span style={{ marginLeft: 40 }}>{report.local}</span>
                       </div>
-                      <Button
-                        type="button"
-                        variant="default"
-                        onClick={() => setSelectedReport(report)}
-                        title="download"
-                      >
-                        <LtsIcon name="download" size="40px" color="#7dc356" />
-                      </Button>
+                      <Can I="generateIscoreReport" a="report">
+                        <Button
+                          type="button"
+                          variant="default"
+                          onClick={() => setSelectedReport(report)}
+                          title="download"
+                        >
+                          <LtsIcon
+                            name="download"
+                            size="40px"
+                            color="#7dc356"
+                          />
+                        </Button>
+                      </Can>
                     </div>
                   </Card.Body>
                 </Card>
@@ -155,19 +154,15 @@ const CreditInquiryRequests = () => {
           })}
         </Card.Body>
       </Card>
-      {showModal && (
+      {!!selectedReport && (
         <ReportsModal
           pdf={selectedReport}
-          show={showModal}
-          hideModal={() => setShowModal(false)}
+          show={!!selectedReport}
+          hideModal={() => setSelectedReport(null)}
           submit={(values) => handleSubmit(values)}
           getExcel={(values) => getExcel(values)}
         />
       )}
-
-      {/* {print === 'monthly' && data && (
-        <MonthlyReport data={data as MonthReport} />
-      )} */}
     </>
   )
 }
