@@ -1150,5 +1150,7 @@
   "initialConsumerFinanceLimit": "الحد المبدئي للعميل",
   "maxConsumerFinanceLimit": "الحد الأقصي للعميل",
   "commerceTrackingSystem": "نظام تتبع المشتريات",
-  "cfName": "حالا للتمويل الاستهلاكي"
+  "cfName": "حالا للتمويل الاستهلاكي",
+  "transactionAmount": "قيمه الحركه",
+  "transactionsSum": "اجمالي قيمه الحركات"
 }
