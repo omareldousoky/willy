@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 import { LoanApplicationReportRequest } from '../../interfaces'
 
 export const getReviewedApplications = async (

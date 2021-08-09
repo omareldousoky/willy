@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const doubtLoan = async (id: any, obj: any) => {
   const url = process.env.REACT_APP_BASE_URL + `/loan/doubtful/${id}`

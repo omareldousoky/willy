@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const getAllTasaheelRisks = async () => {
   const url = process.env.REACT_APP_BASE_URL + `/report/tasaheel-risks`

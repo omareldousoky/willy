@@ -1,4 +1,4 @@
-import axios from '../../../Mohassel/Services/APIs/axios-instance'
+import axios from '../../../Shared/Services/axiosInstance'
 
 interface Config {
   isHidden: boolean

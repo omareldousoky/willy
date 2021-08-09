@@ -1,5 +1,5 @@
 import { InstallmentsDuePerOfficerCustomerCardRequest } from '../../interfaces'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const installmentsDuePerOfficerCustomerCard = async (
   request: InstallmentsDuePerOfficerCustomerCardRequest

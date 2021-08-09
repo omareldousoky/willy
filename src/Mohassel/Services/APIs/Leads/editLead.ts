@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 import { Lead } from '../../../Components/HalanIntegration/leadInterface'
 
 export const editLead = async (obj: Lead) => {

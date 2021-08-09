@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const getPendingActions = async (id: string) => {
   const url = process.env.REACT_APP_BASE_URL + `/loan/pending-actions/${id}`

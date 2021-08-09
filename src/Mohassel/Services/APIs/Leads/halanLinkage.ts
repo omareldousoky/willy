@@ -4,7 +4,7 @@ import {
   CheckLinkageResponse,
   ConfirmLinkageRequest,
 } from '../../interfaces'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 const { REACT_APP_BASE_URL } = process.env
 const checkLinkageUrl = `${REACT_APP_BASE_URL}/lead/check-linkage/:customerId`

@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 import {
   ReviewedDefaultingCustomersReq,
   DefaultedCustomer,
