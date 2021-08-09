@@ -14,7 +14,7 @@ export const createDocumentsType = async (data: any) => {
 
 export const editDocumentsType = async (data: any) => {
   try {
-    const res = await axios.put(`/${documentTypeUrl}/${data.id}`, data)
+    const res = await axios.put(`${documentTypeUrl}/${data.id}`, data)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
