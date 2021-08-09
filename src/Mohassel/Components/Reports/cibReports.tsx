@@ -126,43 +126,29 @@ class CIBReports extends Component<{}, State> {
                 return (
                   <Card key={index}>
                     <Card.Body>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          padding: '0px 20px',
-                          fontWeight: 'bold',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                          <span style={{ marginLeft: 40 }}>#{index + 1}</span>
-                          <span
-                            style={{
-                              marginLeft: 40,
-                              display: 'flex',
-                              flexDirection: 'column',
-                              alignItems: 'flex-start',
-                            }}
-                          >
+                      <div className="d-flex justify-content-between font-weight-bold">
+                        <div className="d-flex">
+                          <span className="mr-5 text-secondary">
+                            #{index + 1}
+                          </span>
+                          <span className="mr-5 d-flex flex-start flex-column">
                             <span>{local.loanAppCreationDate}</span>
                             {timeToArabicDate(pdf.created.at, true)}
                           </span>
-                          <span style={{ marginLeft: 40 }}>
-                            {pdf.key.split('/')[1]}
-                          </span>
-                          <span style={{ marginLeft: 40 }}>
+                          <span className="mr-5">{pdf.key.split('/')[1]}</span>
+                          <span
+                            className={`mr-5  text-${
+                              pdf.status === 'created'
+                                ? 'success'
+                                : pdf.status === 'processing'
+                                ? 'warning'
+                                : 'danger'
+                            } `}
+                          >
                             {getIscoreReportStatus(pdf.status)}
                           </span>
                           {pdf.status === 'created' && (
-                            <span
-                              style={{
-                                marginLeft: 40,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-start',
-                              }}
-                            >
+                            <span className="mr-5 d-flex flex-start flex-column">
                               <span>{local.creationDate}</span>
                               {timeToArabicDate(pdf.created?.at, true)}
                             </span>
@@ -177,8 +163,8 @@ class CIBReports extends Component<{}, State> {
                           >
                             <LtsIcon
                               name="download"
-                              size="40px"
                               color="#7dc356"
+                              size="40px"
                             />
                           </Button>
                         )}
@@ -189,7 +175,7 @@ class CIBReports extends Component<{}, State> {
               })
             ) : (
               <div className="d-flex align-items-center justify-content-center">
-                {local.noResults}
+                {local.noResults}{' '}
               </div>
             )}
           </Card.Body>

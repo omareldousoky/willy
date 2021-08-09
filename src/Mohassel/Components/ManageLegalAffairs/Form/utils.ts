@@ -62,3 +62,16 @@ export const createFormFieldsInitValue = (
     }
   }, {})
 }
+
+export const mapFormFieldsToFormData = (values: object): FormData => {
+  const formData = new FormData()
+  const formFields = Object.keys(values)
+
+  formFields.forEach((fieldKey) => {
+    if (values[fieldKey] !== undefined) {
+      formData.append(fieldKey, values[fieldKey])
+    }
+  })
+
+  return formData
+}

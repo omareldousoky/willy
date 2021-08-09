@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
-import Button from 'react-bootstrap/Button'
 import { Loader } from '../../../Shared/Components/Loader'
 import ReportsModal from './reportsModal'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -66,7 +65,6 @@ import {
   getLoanApplicationFeesExcel,
 } from '../../Services/APIs/Reports/loanApplicationFees'
 import { LoanApplicationFees } from '../pdfTemplates/loanApplicationFees'
-import Can from '../../config/Can'
 import {
   doubtfulLoans,
   postDoubtfulLoansExcel,
@@ -83,7 +81,10 @@ import { downloadFile } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import { CustomerTransactionReport } from '../pdfTemplates/customerTransactionReport'
 import { getCustomerTransactions } from '../../Services/APIs/Reports/customerTransactions'
-import { LtsIcon } from '../../../Shared/Components'
+import { fetchRaseedyTransactions } from '../../Services/APIs/Reports/raseedyTransactions'
+import { PdfPortal } from '../Common/PdfPortal'
+import RaseedyTransactionsReport from '../pdfTemplates/RaseedyTransactions'
+import { PDFList } from '../../../Shared/Components/PdfList'
 
 export interface PDF {
   key?: string
@@ -95,7 +96,7 @@ export interface PDF {
 interface State {
   showModal?: boolean
   print?: string
-  pdfsArray?: Array<PDF>
+  pdfsArray: Array<PDF>
   selectedPdf: PDF
   data: any
   loading: boolean
@@ -201,6 +202,12 @@ class Reports extends Component<{}, State> {
           inputs: ['applicationKey'],
           permission: 'loanTransactionReport',
         },
+        {
+          key: 'raseedyTransactions',
+          local: 'مدفوعات رصيدي',
+          inputs: ['dateFromTo'],
+          permission: 'raseedyTransactions',
+        },
       ],
       selectedPdf: { permission: '' },
       data: {},
@@ -251,6 +258,8 @@ class Reports extends Component<{}, State> {
         return this.getManualPayments(values)
       case 'customerTransactionReport':
         return this.getCustomerTransactions(values)
+      case 'raseedyTransactions':
+        return this.getRaseedyTransactions(values)
       default:
         return null
     }
@@ -859,6 +868,34 @@ class Reports extends Component<{}, State> {
     }
   }
 
+  async getRaseedyTransactions(values) {
+    this.setState({ loading: true, showModal: false })
+
+    const res = await fetchRaseedyTransactions({
+      startDate: values.fromDate,
+      endDate: values.toDate,
+    })
+
+    if (res.status === 'success') {
+      if (!res.body || !Object.keys(res.body).length) {
+        this.setState({ loading: false })
+        Swal.fire('error', local.noResults)
+      } else {
+        this.setState(
+          {
+            data: res.body,
+            showModal: false,
+            print: 'raseedyTransactions',
+            loading: false,
+          },
+          () => window.print()
+        )
+      }
+    } else {
+      this.setState({ loading: false })
+    }
+  }
+
   async getExcelFile(func, pollFunc, values) {
     this.setState({
       loading: true,
@@ -869,7 +906,9 @@ class Reports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branches: values.branches.some((branch) => branch._id === '')
+      branches: !values.branches
+        ? undefined
+        : values.branches.some((branch) => branch._id === '')
         ? []
         : values.branches.map((branch) => branch._id),
     }
@@ -928,42 +967,10 @@ class Reports extends Component<{}, State> {
                 </Card.Title>
               </div>
             </div>
-            {this.state.pdfsArray?.map((pdf, index) => {
-              return (
-                <Can I={pdf.permission} a="report" key={index}>
-                  <Card key={index}>
-                    <Card.Body>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          padding: '0px 20px',
-                          fontWeight: 'bold',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <div>
-                          <span style={{ marginLeft: 40 }}>#{index + 1}</span>
-                          <span>{pdf.local}</span>
-                        </div>
-                        <Button
-                          type="button"
-                          variant="default"
-                          onClick={() => this.handlePrint(pdf)}
-                          title="download"
-                        >
-                          <LtsIcon
-                            name="download"
-                            size="40px"
-                            color="#7dc356"
-                          />
-                        </Button>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                </Can>
-              )
-            })}
+            <PDFList
+              list={this.state.pdfsArray}
+              onClickDownload={(item) => this.handlePrint(item)}
+            />
           </Card.Body>
         </Card>
         {this.state.showModal && (
@@ -1042,6 +1049,12 @@ class Reports extends Component<{}, State> {
         )}
         {this.state.print === 'customerTransactionReport' && (
           <CustomerTransactionReport result={this.state.data} />
+        )}
+
+        {this.state.print === 'raseedyTransactions' && (
+          <PdfPortal
+            component={<RaseedyTransactionsReport data={this.state.data} />}
+          />
         )}
       </>
     )

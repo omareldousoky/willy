@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import '../Shared/Assets/scss/bootstrap-rtl-mohassel.scss'
+import '../Shared/Assets/scss/bootstrap-rtl-app.scss'
 import '../Shared/Assets/scss/app.scss'
 import { Provider } from 'react-redux'
 import store from '../Shared/redux/store'
