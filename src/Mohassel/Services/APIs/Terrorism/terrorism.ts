@@ -4,7 +4,7 @@ import {
   TerroristUnResponse,
 } from '../../../../Shared/Services/interfaces'
 import { ApiResponse } from '../../../Models/common'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 const { REACT_APP_BASE_URL } = process.env
 const fetchSearchLocalTerroristUrl = `${REACT_APP_BASE_URL}/search/local-terrorist`

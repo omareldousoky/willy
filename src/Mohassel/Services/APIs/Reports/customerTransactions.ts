@@ -4,7 +4,7 @@ import {
   CustomerApplicationTransactionsRequest,
   CustomerApplicationTransactionsResponse,
 } from '../../interfaces'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 const { REACT_APP_BASE_URL } = process.env
 const getCustomerTransactionsURL = `${REACT_APP_BASE_URL}/report/loan-transactions`

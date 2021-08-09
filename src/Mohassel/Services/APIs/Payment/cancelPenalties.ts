@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const cancelPenalties = async ({ id, data }) => {
   const url = process.env.REACT_APP_BASE_URL + `/loan/cancel-penalties/${id}`

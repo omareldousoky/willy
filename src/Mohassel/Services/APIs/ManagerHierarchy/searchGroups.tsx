@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const searchGroups = async (data: object) => {
   const url = process.env.REACT_APP_BASE_URL + '/search/branch-officers-groups'

@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const getFormula = async (formulaId: string) => {
   const url =

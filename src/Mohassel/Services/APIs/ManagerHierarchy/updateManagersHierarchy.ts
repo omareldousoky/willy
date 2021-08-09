@@ -1,4 +1,4 @@
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const updateManagerHierarchy = async (data: object, id: string) => {
   const url =

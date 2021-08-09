@@ -5,7 +5,7 @@ import {
   LegalWarningsSearchRequest,
   LegalWarningsSearchResponse,
 } from '../../../Models/LegalAffairs'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 const baseUrl = process.env.REACT_APP_BASE_URL
 const legalService = `${baseUrl}/legal`

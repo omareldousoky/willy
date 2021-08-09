@@ -4,7 +4,7 @@ import {
   DueInstallmentsResponse,
   OperationsReportRequest,
 } from '../../interfaces'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 const { REACT_APP_BASE_URL } = process.env
 const fetchDueInstallments = `${REACT_APP_BASE_URL}/report/due-installments`

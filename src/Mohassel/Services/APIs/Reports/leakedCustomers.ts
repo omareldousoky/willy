@@ -4,7 +4,7 @@ import {
   LeakedCustomersReportRequest,
   LeakedCustomersReportResponse,
 } from '../../interfaces'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 const { REACT_APP_BASE_URL } = process.env
 const fetchLeakedCustomersURL = `${REACT_APP_BASE_URL}/report/churned-customers`

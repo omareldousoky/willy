@@ -5,7 +5,7 @@ import {
   OfficersProductivityRequest,
   OfficersProductivityResponse,
 } from '../../../Models/OfficersProductivityReport'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 const { REACT_APP_BASE_URL } = process.env
 const fetchOfficersProductivityUrl = `${REACT_APP_BASE_URL}/report/officer-productivity`
