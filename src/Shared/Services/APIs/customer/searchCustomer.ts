@@ -1,9 +1,12 @@
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
+const searchCustomerUrl = `${API_BASE_URL}/search/customer`
+const searchCompanyUrl = `${API_BASE_URL}/search/company`
+
 export const searchCustomer = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + `/search/customer`
   try {
-    const res = await axios.post(url, data)
+    const res = await axios.post(searchCustomerUrl, data)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
@@ -11,9 +14,8 @@ export const searchCustomer = async (data: object) => {
 }
 
 export const searchCompany = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + `/search/company`
   try {
-    const res = await axios.post(url, data)
+    const res = await axios.post(searchCompanyUrl, data)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }

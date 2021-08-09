@@ -1,7 +1,8 @@
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
 export const getBranches = async () => {
-  const url = process.env.REACT_APP_BASE_URL + '/branch'
+  const url = API_BASE_URL + '/branch'
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }
@@ -11,7 +12,7 @@ export const getBranches = async () => {
 }
 
 export const getBranchesByProducts = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + `/branch/by-products`
+  const url = API_BASE_URL + `/branch/by-products`
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -21,7 +22,7 @@ export const getBranchesByProducts = async (data: object) => {
 }
 
 export const getProductsByBranch = async (branchid: string) => {
-  const url = process.env.REACT_APP_BASE_URL + `/product/branch/${branchid}`
+  const url = API_BASE_URL + `/product/branch/${branchid}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }

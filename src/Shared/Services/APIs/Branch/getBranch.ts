@@ -1,4 +1,5 @@
 import { ApiResponse, Trace } from '../../../../Mohassel/Models/common'
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
 export interface BranchDetails {
@@ -25,7 +26,7 @@ export interface BranchDetailsResponse extends Trace {
 export const getBranch = async (
   _id: string
 ): Promise<ApiResponse<BranchDetailsResponse>> => {
-  const url = process.env.REACT_APP_BASE_URL + `/branch/${_id}`
+  const url = API_BASE_URL + `/branch/${_id}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }

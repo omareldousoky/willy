@@ -1,10 +1,8 @@
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
 export const getUserRolesAndBranches = async () => {
-  const urls = [
-    process.env.REACT_APP_BASE_URL + `/user/role`,
-    process.env.REACT_APP_BASE_URL + '/branch',
-  ]
+  const urls = [API_BASE_URL + `/user/role`, API_BASE_URL + '/branch']
   try {
     return await Promise.all(
       urls.map(async (url) => {

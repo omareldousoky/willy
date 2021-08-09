@@ -570,7 +570,7 @@
   "applicationCancelError": "حصل خطا في إلغاء طلب القرض",
   "number": "رقم",
   "installmentPaymentConfirmation": "تأكيد سداد قسط",
-  "confirmPayment": "تآكيد سداد",
+  "confirmPayment": "تأكيد سداد",
   "applicationCode": "كود طلب القرض",
   "tools": "إعدادات النظام",
   "encodingFiles": "ملفات تكويد",
@@ -1149,5 +1149,8 @@
   "monthlyIncome": "الدخل الشهري",
   "initialConsumerFinanceLimit": "الحد المبدئي للعميل",
   "maxConsumerFinanceLimit": "الحد الأقصي للعميل",
-	"commerceTrackingSystem": "نظام تتبع المشتريات"
+  "commerceTrackingSystem": "نظام تتبع المشتريات",
+  "cfName": "حالا للتمويل الاستهلاكي",
+  "transactionAmount": "قيمه الحركه",
+  "transactionsSum": "اجمالي قيمه الحركات"
 }

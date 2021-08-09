@@ -1,9 +1,11 @@
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
+const documentTypeUrl = `${API_BASE_URL}/config/document-type`
+
 export const createDocumentsType = async (data: any) => {
-  const url = process.env.REACT_APP_BASE_URL + '/config/document-type'
   try {
-    const res = await axios.post(url, data)
+    const res = await axios.post(documentTypeUrl, data)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
@@ -11,10 +13,8 @@ export const createDocumentsType = async (data: any) => {
 }
 
 export const editDocumentsType = async (data: any) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + `/config/document-type/${data.id}`
   try {
-    const res = await axios.put(url, data)
+    const res = await axios.put(`/${documentTypeUrl}/${data.id}`, data)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
@@ -26,10 +26,9 @@ export const getDocumentsTypes = async (
   hidden?: boolean,
   customerType?: string
 ) => {
-  const url = process.env.REACT_APP_BASE_URL + `/config/document-type`
   const params = { type, hidden, customerType }
   try {
-    const res = await axios.get(url, { params })
+    const res = await axios.get(documentTypeUrl, { params })
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }

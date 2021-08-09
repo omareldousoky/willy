@@ -3,20 +3,18 @@ import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import * as Barcode from 'react-barcode'
 
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 
 import { getApplication } from '../../../../Shared/Services/APIs/loanApplication/getApplication'
 import { getPendingActions } from '../../../../Mohassel/Services/APIs/Loan/getPendingActions'
-import { approveManualPayment } from '../../../../Mohassel/Services/APIs/Loan/approveManualPayment'
 import {
   BranchDetails,
   BranchDetailsResponse,
   getBranch,
 } from '../../../../Shared/Services/APIs/Branch/getBranch'
-import Payment from '../../../../Mohassel/Components/Payment/payment'
+import Payment from '../../Payment'
 import { englishToArabic } from '../../../../Mohassel/Services/statusLanguage'
 import local from '../../../../Shared/Assets/ar.json'
 import { Loader } from '../../../../Shared/Components/Loader'
@@ -27,7 +25,6 @@ import {
 import Logs from './applicationLogs'
 import { LoanDetailsTableView } from './applicationsDetails'
 import { CustomerCardView } from './customerCard'
-import Rescheduling from '../../../../Mohassel/Components/Rescheduling/rescheduling'
 import ability from '../../../../Shared/config/ability'
 import CustomerCardPDF from '../../../../Mohassel/Components/pdfTemplates/customerCard/customerCard'
 import CashReceiptPDF from '../../../../Mohassel/Components/pdfTemplates/cashReceipt/cashReceipt'
@@ -35,9 +32,7 @@ import CustomerCardAttachments from '../../../../Mohassel/Components/pdfTemplate
 import FollowUpStatementPDF from '../../../../Mohassel/Components/pdfTemplates/followUpStatment/followUpStatement'
 import LoanContract from '../../../../Mohassel/Components/pdfTemplates/loanContract/loanContract'
 import LoanContractForGroup from '../../../../Mohassel/Components/pdfTemplates/loanContractForGroup/loanContractForGroup'
-import EarlyPaymentReceipt from '../../../../Mohassel/Components/pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt'
 import Can from '../../../../Shared/config/Can'
-import EarlyPaymentPDF from '../../../../Mohassel/Components/pdfTemplates/earlyPayment/earlyPayment'
 import {
   Customer,
   PendingActions,
@@ -49,18 +44,12 @@ import {
 } from '../../../../Shared/Services/utils'
 import { payment } from '../../../../Shared/redux/payment/actions'
 import { cancelApplication } from '../../../../Shared/Services/APIs/loanApplication/stateHandler'
-import { rejectManualPayment } from '../../../../Mohassel/Services/APIs/Loan/rejectManualPayment'
 import store from '../../../../Shared/redux/store'
-// import UploadDocuments from './uploadDocuments'
+import UploadDocuments from './uploadDocuments'
 import { writeOffLoan } from '../../../../Mohassel/Services/APIs/Loan/writeOffLoan'
 import { doubtLoan } from '../../../../Mohassel/Services/APIs/Loan/doubtLoan'
-import PaymentReceipt from '../../../../Mohassel/Components/pdfTemplates/paymentReceipt/paymentReceipt'
-import RandomPaymentReceipt from '../../../../Mohassel/Components/pdfTemplates/randomPaymentReceipt/randomPaymentReceipt'
+import PaymentReceipt from '../../../../Shared/Components/pdfTemplates/paymentReceipt'
 import { calculatePenalties } from '../../../../Mohassel/Services/APIs/Payment/calculatePenalties'
-import ManualRandomPaymentsActions from './manualRandomPaymentsActions'
-import { getManualOtherPayments } from '../../../../Mohassel/Services/APIs/Payment/getManualOtherPayments'
-import { rejectManualOtherPayment } from '../../../../Mohassel/Services/APIs/Payment/rejectManualOtherPayment'
-import { approveManualOtherPayment } from '../../../../Mohassel/Services/APIs/Payment/approveManualOtherPayment'
 import { numTo2Decimal } from '../../../../Mohassel/Components/CIB/textFiles'
 import { FollowUpStatementView } from './followupStatementView'
 import { remainingLoan } from '../../../../Mohassel/Services/APIs/Loan/remainingLoan'
@@ -72,35 +61,21 @@ import {
   getCustomerInfo,
 } from '../../../../Shared/Services/formatCustomersInfo'
 import { FieldProps } from '../../../../Shared/Components/Profile/types'
-import {
-  AcknowledgmentAndPledge,
-  AcknowledgmentOfCommitment,
-  AcknowledgmentWasSignedInFront,
-  AuthorizationToFillCheck,
-  AuthorizationToFillInfo,
-  KnowYourCustomer,
-  PromissoryNote,
-  SmeLoanContract,
-  SolidarityGuarantee,
-} from '../../../../Mohassel/Components/pdfTemplates/smeLoanContract'
 import { Score } from '../../../../Mohassel/Components/CustomerCreation/CustomerProfile'
 import { getLoanUsage } from '../../../../Mohassel/Services/APIs/LoanUsage/getLoanUsage'
 
-import { getEarlyPaymentPdfData } from './utils'
-import {
-  CalculateEarlyPaymentResponse,
-  RemainingLoanResponse,
-} from '../../../../Mohassel/Models/Payment'
-import NanoLoanContract from '../../../../Mohassel/Components/pdfTemplates/nanoLoanContract/nanoLoanContract'
+import { RemainingLoanResponse } from '../../../../Mohassel/Models/Payment'
 import { PromissoryNoteMicro } from '../../../../Mohassel/Components/pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
 import {
   getIscore,
   getIscoreCached,
-  getSMECachedIscore,
-  getSMEIscore,
 } from '../../../../Shared/Services/APIs/iScore'
 import { getGeoAreasByBranch } from '../../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { getWriteOffReasons } from '../../../../Shared/Services/APIs/config'
+import {
+  approveManualPayment,
+  rejectManualPayment,
+} from '../../../../Shared/Services/APIs/payment'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -123,19 +98,18 @@ interface State {
   tabsArray: Array<Tab>
   loading: boolean
   print: string
-  earlyPaymentData?: CalculateEarlyPaymentResponse
   pendingActions: PendingActions
-  manualPaymentEditId: string
+  // manualPaymentEditId: string
   branchDetails: BranchDetails
   receiptData: any
   iscores: any
   penalty: number
-  randomPendingActions: Array<any>
+  // randomPendingActions: Array<any>
   geoAreas: Array<any>
-  remainingTotal: number
+  // remainingTotal: number
   remainingLoan?: RemainingLoanResponse
   individualsWithInstallments: IndividualWithInstallments
-  loanUsage: string
+  // loanUsage: string
 }
 
 interface LoanProfileRouteState {
@@ -159,17 +133,17 @@ class LoanProfile extends Component<Props, State> {
       loading: false,
       print: '',
       pendingActions: {},
-      manualPaymentEditId: '',
+      // manualPaymentEditId: '',
       receiptData: {},
       iscores: [],
       penalty: 0,
-      randomPendingActions: [],
+      // randomPendingActions: [],
       geoAreas: [],
-      remainingTotal: 0,
+      // remainingTotal: 0,
       individualsWithInstallments: {
         installmentTable: [],
       },
-      loanUsage: '',
+      // loanUsage: '',
       branchDetails: {
         branchCode: 0,
         _id: '',
@@ -190,7 +164,7 @@ class LoanProfile extends Component<Props, State> {
       const uses = res.body.usages
       const value = uses.find((use) => use.id === this.state.application.usage)
         ?.name
-      this.setState({ loanUsage: value, loading: false })
+      this.setState({ loading: false })
       return value
     }
     Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
@@ -198,41 +172,15 @@ class LoanProfile extends Component<Props, State> {
     return ''
   }
 
-  async getManualOtherPayments(appId) {
-    if (ability.can('pendingAction', 'application')) {
-      this.setState({ loading: true })
-      const res = await getManualOtherPayments(appId)
-      if (res.status === 'success') {
-        this.setState({
-          randomPendingActions: res.body.pendingActions
-            ? res.body.pendingActions
-            : [],
-          loading: false,
-        })
-      } else {
-        this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-        )
-      }
-    }
-  }
-
   async getAppByID(id) {
     await this.getMembersShare(id)
     this.setState({
       loading: true,
       activeTab: 'loanDetails',
-      manualPaymentEditId: '',
+      // manualPaymentEditId: '',
     })
     const application = await getApplication(id)
     this.getBranchData(application.body.branchId)
-    if (
-      application.body.status === 'paid' ||
-      application.body.status === 'pending' ||
-      application.body.status === 'canceled' ||
-      application.body.status === 'issued'
-    )
-      this.getManualOtherPayments(id)
     if (application.status === 'success') {
       if (store.getState().auth.clientPermissions === {}) {
         store.subscribe(() => {
@@ -294,22 +242,8 @@ class LoanProfile extends Component<Props, State> {
     return []
   }
 
-  async getCachedSMEiScores(obj) {
-    this.setState({ loading: true })
-    const iScores = await getSMECachedIscore(obj)
-    if (iScores.status === 'success') {
-      this.setState({ loading: false })
-      return iScores.body.data
-    }
-    this.setState({ loading: false }, () =>
-      Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
-    )
-    return []
-  }
-
   async getCachediScores(application) {
     const ids: string[] = []
-    const commercialRegisterNumbers: string[] = []
     const entitledToSign = application.entitledToSign?.map(
       this.mapEntitledToSignToCustomer
     )
@@ -320,26 +254,15 @@ class LoanProfile extends Component<Props, State> {
       )
     } else {
       if (application.guarantors.length > 0) {
-        application.guarantors.forEach((guar) =>
-          guar.customerType === 'company'
-            ? commercialRegisterNumbers.push(guar.commercialRegisterNumber)
-            : ids.push(guar.nationalId)
-        )
+        application.guarantors.forEach((guar) => ids.push(guar.nationalId))
       }
       if (entitledToSign && entitledToSign.length > 0) {
         entitledToSign.forEach((cust) => ids.push(cust.nationalId))
       }
-      application.customer.customerType === 'company'
-        ? commercialRegisterNumbers.push(
-            `${application.customer.governorate}-${application.customer.commercialRegisterNumber}`
-          )
-        : ids.push(application.customer.nationalId)
+      ids.push(application.customer.nationalId)
     }
     const obj: { nationalIds: string[]; date?: Date } = {
       nationalIds: ids,
-    }
-    const smeObj: { ids: string[]; date?: Date } = {
-      ids: commercialRegisterNumbers,
     }
     if (
       [
@@ -365,15 +288,10 @@ class LoanProfile extends Component<Props, State> {
           ? this.state.application.updated.at
           : 0
       // paid & canceled => updated.at, pending,issued =>issuedDate
-      smeObj.date = obj.date
     }
     let iscores: Array<Score> = []
     if (obj.nationalIds.length > 0)
       iscores = await this.getCachedIndividualIScores(obj)
-    if (smeObj.ids.length > 0) {
-      const smeScores: Array<Score> = await this.getCachedSMEiScores(smeObj)
-      iscores.push(...smeScores)
-    }
     this.setState({ iscores })
   }
 
@@ -383,10 +301,28 @@ class LoanProfile extends Component<Props, State> {
         header: local.loanInfo,
         stringKey: 'loanDetails',
       },
+      {
+        header: local.documents,
+        stringKey: 'documents',
+      },
     ]
     const customerCardTab = {
       header: local.customerCard,
       stringKey: 'customerCard',
+    }
+
+    const paymentTab = {
+      header: local.payments,
+      stringKey: 'loanPayments',
+      permission: ['payInstallment', 'payByInsurance'],
+      permissionKey: 'application',
+    }
+
+    const logsTab = {
+      header: local.logs,
+      stringKey: 'loanLogs',
+      permission: 'viewActionLogs',
+      permissionKey: 'user',
     }
 
     if (application.body.status === 'paid') tabsToRender.push(customerCardTab)
@@ -395,7 +331,9 @@ class LoanProfile extends Component<Props, State> {
       application.body.status === 'pending'
     ) {
       tabsToRender.push(customerCardTab)
+      tabsToRender.push(paymentTab)
     }
+    tabsToRender.push(logsTab)
 
     if (application.body.status === 'pending') {
       this.setState({ activeTab: 'loanDetails' })
@@ -486,18 +424,18 @@ class LoanProfile extends Component<Props, State> {
           )
         },
       },
-      {
-        icon: 'edit',
-        title: local.editLoan,
-        permission:
-          this.state.application.status === 'underReview' &&
-          ability.can('assignProductToCustomer', 'application'),
-        onActionClick: () =>
-          this.props.history.push(
-            '/track-loan-applications/edit-loan-application',
-            { id: this.props.location.state.id, action: 'edit' }
-          ),
-      },
+      // {
+      //   icon: 'edit',
+      //   title: local.editLoan,
+      //   permission:
+      //     this.state.application.status === 'underReview' &&
+      //     ability.can('assignProductToCustomer', 'application'),
+      //   onActionClick: () =>
+      //     this.props.history.push(
+      //       '/track-loan-applications/edit-loan-application',
+      //       { id: this.props.location.state.id, action: 'edit' }
+      //     ),
+      // },
       {
         icon: 'bulk-loan-applications-review',
         title: local.reviewLoan,
@@ -581,26 +519,26 @@ class LoanProfile extends Component<Props, State> {
             status: this.state.application.status,
           }),
       },
-      {
-        icon: 'close',
-        title: local.writeOffLoan,
-        permission:
-          this.state.application.status === 'issued' &&
-          this.state.application.isDoubtful &&
-          !this.state.application.writeOff &&
-          ability.can('writeOff', 'application'),
-        onActionClick: () => this.writeOffApplication(),
-      },
-      {
-        icon: 'minus',
-        title: local.doubtLoan,
-        permission:
-          this.state.application.status === 'issued' &&
-          !this.state.application.isDoubtful &&
-          !this.state.application.writeOff &&
-          ability.can('setDoubtfulLoan', 'application'),
-        onActionClick: () => this.doubtApplication(),
-      },
+      // {
+      //   icon: 'close',
+      //   title: local.writeOffLoan,
+      //   permission:
+      //     this.state.application.status === 'issued' &&
+      //     this.state.application.isDoubtful &&
+      //     !this.state.application.writeOff &&
+      //     ability.can('writeOff', 'application'),
+      //   onActionClick: () => this.writeOffApplication(),
+      // },
+      // {
+      //   icon: 'minus',
+      //   title: local.doubtLoan,
+      //   permission:
+      //     this.state.application.status === 'issued' &&
+      //     !this.state.application.isDoubtful &&
+      //     !this.state.application.writeOff &&
+      //     ability.can('setDoubtfulLoan', 'application'),
+      //   onActionClick: () => this.doubtApplication(),
+      // },
     ]
   }
 
@@ -659,33 +597,21 @@ class LoanProfile extends Component<Props, State> {
 
   async getIscore(data) {
     this.setState({ loading: true })
-    const obj =
-      data.customerType === 'company'
-        ? {
-            productId: '104',
-            amount: `${this.state.application.principal}`,
-            name: `${data.businessName}`,
-            idSource: `${this.state.application.customer.governorate}`,
-            idValue: `${data.commercialRegisterNumber}`,
-          }
-        : {
-            requestNumber: '148',
-            reportId: '3004',
-            product: '023',
-            loanAccountNumber: `${data.key}`,
-            number: '1703943',
-            date: '02/12/2014',
-            amount: `${this.state.application.principal}`,
-            lastName: `${data.customerName}`,
-            idSource: '003',
-            idValue: `${data.nationalId}`,
-            gender: data.gender === 'male' ? '001' : '002',
-            dateOfBirth: iscoreDate(data.birthDate),
-          }
-    const iScore =
-      data.customerType === 'company'
-        ? await getSMEIscore(obj)
-        : await getIscore(obj)
+    const obj = {
+      requestNumber: '148',
+      reportId: '3004',
+      product: '023',
+      loanAccountNumber: `${data.key}`,
+      number: '1703943',
+      date: '02/12/2014',
+      amount: `${this.state.application.principal}`,
+      lastName: `${data.customerName}`,
+      idSource: '003',
+      idValue: `${data.nationalId}`,
+      gender: data.gender === 'male' ? '001' : '002',
+      dateOfBirth: iscoreDate(data.birthDate),
+    }
+    const iScore = await getIscore(obj)
     if (iScore.status === 'success') {
       this.getCachediScores(this.state.application)
       this.setState({ loading: false })
@@ -833,54 +759,45 @@ class LoanProfile extends Component<Props, State> {
     })
   }
 
-  editManualPayment(randomPendingActionId: string) {
-    this.props.changePaymentState(3)
-    window.scrollTo(0, document.body.scrollHeight)
-    if (randomPendingActionId !== '') {
-      this.setState((prevState) => {
-        const pendingAction = prevState.randomPendingActions.find(
-          (el) => el._id === randomPendingActionId
-        )
-        const tab =
-          pendingAction.transactions[0].action === 'penalty'
-            ? 'penalties'
-            : 'financialTransactions'
-        return {
-          activeTab: tab,
-          manualPaymentEditId: pendingAction._id,
-        }
-      })
-    } else {
-      this.setState((prevState) => ({
-        activeTab: 'loanPayments',
-        manualPaymentEditId: prevState.pendingActions?._id || '',
-      }))
-    }
-  }
+  // editManualPayment(randomPendingActionId: string) {
+  //   this.props.changePaymentState(3)
+  //   window.scrollTo(0, document.body.scrollHeight)
+  //   if (randomPendingActionId !== '') {
+  //     this.setState((prevState) => {
+  //       const pendingAction = prevState.randomPendingActions.find(
+  //         (el) => el._id === randomPendingActionId
+  //       )
+  //       const tab =
+  //         pendingAction.transactions[0].action === 'penalty'
+  //           ? 'penalties'
+  //           : 'financialTransactions'
+  //       return {
+  //         activeTab: tab,
+  //         manualPaymentEditId: pendingAction._id,
+  //       }
+  //     })
+  //   } else {
+  //     this.setState({
+  //       activeTab: 'loanPayments',
+  //       // manualPaymentEditId: prevState.pendingActions?._id || '',
+  //     })
+  //   }
+  // }
 
-  async approveManualPayment(randomPendingActionId: string) {
+  async approveManualPayment() {
     let receiptNumber = 0
     let truthDate = 0
     let actualDate = 0
     let transactionAmount = 0
-    if (randomPendingActionId !== '') {
-      const pendingAction = this.state.randomPendingActions.find(
-        (el) => el._id === randomPendingActionId
-      )
-      receiptNumber = pendingAction.receiptNumber
-      truthDate = pendingAction.transactions[0].truthDate
-      actualDate = pendingAction.transactions[0].actualDate
-      transactionAmount = pendingAction.transactions[0].transactionAmount
-    } else {
-      receiptNumber = Number(this.state.pendingActions.receiptNumber)
-      truthDate = this.state.pendingActions.transactions
-        ? this.state.pendingActions.transactions[0].truthDate
-        : 0
-      actualDate = this.state.pendingActions.transactions
-        ? this.state.pendingActions.transactions[0].actualDate
-        : 0
-      transactionAmount = Number(this.getSumOfPendingActions())
-    }
+    receiptNumber = Number(this.state.pendingActions.receiptNumber)
+    truthDate = this.state.pendingActions.transactions
+      ? this.state.pendingActions.transactions[0].truthDate
+      : 0
+    actualDate = this.state.pendingActions.transactions
+      ? this.state.pendingActions.transactions[0].actualDate
+      : 0
+    transactionAmount = Number(this.getSumOfPendingActions())
+
     const table = document.createElement('table')
     table.className = 'swal-table'
     table.innerHTML = `<thead><tr><th>${local.receiptNumber}</th><th>${
@@ -904,10 +821,7 @@ class LoanProfile extends Component<Props, State> {
     }).then(async (isConfirm) => {
       if (isConfirm.value) {
         this.setState({ loading: true })
-        const res =
-          randomPendingActionId !== ''
-            ? await approveManualOtherPayment(randomPendingActionId)
-            : await approveManualPayment(this.props.location.state.id)
+        const res = await approveManualPayment(this.props.location.state.id)
         if (res.status === 'success') {
           this.setState({ loading: false })
           Swal.fire('', local.manualPaymentApproveSuccess, 'success').then(() =>
@@ -936,36 +850,18 @@ class LoanProfile extends Component<Props, State> {
       )
   }
 
-  async rejectManualPayment(randomPendingActionId: string) {
+  async rejectManualPayment() {
     this.setState({ loading: true })
-    if (randomPendingActionId !== '') {
-      const res = await rejectManualOtherPayment(randomPendingActionId)
-      if (res.status === 'success') {
-        this.setState((prevState) => ({
-          loading: false,
-          randomPendingActions: prevState.randomPendingActions.filter(
-            (el) => el._id !== randomPendingActionId
-          ),
-        }))
-        Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() =>
-          this.getManualOtherPayments(this.props.location.state.id)
-        )
-      } else
-        this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-        )
-    } else {
-      const res = await rejectManualPayment(this.props.location.state.id)
-      if (res.status === 'success') {
-        this.setState({ loading: false, pendingActions: {} })
-        Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() =>
-          this.getAppByID(this.props.location.state.id)
-        )
-      } else
-        this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-        )
-    }
+    const res = await rejectManualPayment(this.props.location.state.id)
+    if (res.status === 'success') {
+      this.setState({ loading: false, pendingActions: {} })
+      Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() =>
+        this.getAppByID(this.props.location.state.id)
+      )
+    } else
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
   }
 
   async doubtApplication() {
@@ -1030,18 +926,9 @@ class LoanProfile extends Component<Props, State> {
         return (
           <Payment
             print={(data) =>
-              this.setState(
-                (prevState) => ({
-                  print: data.print,
-                  earlyPaymentData: { ...prevState.earlyPaymentData, ...data },
-                }),
-                () => window.print()
-              )
+              this.setState({ print: data.print }, () => window.print())
             }
             setReceiptData={(data) => this.setState({ receiptData: data })}
-            setEarlyPaymentData={(data) =>
-              this.setState({ earlyPaymentData: data })
-            }
             application={this.state.application}
             installments={
               this.state.application.installmentsObject.installments
@@ -1049,10 +936,9 @@ class LoanProfile extends Component<Props, State> {
             currency={this.state.application.product.currency}
             applicationId={this.state.application._id}
             pendingActions={this.state.pendingActions}
-            manualPaymentEditId={this.state.manualPaymentEditId}
+            // manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="normal"
-            randomPendingActions={this.state.randomPendingActions}
           />
         )
       case 'customerCard':
@@ -1081,30 +967,15 @@ class LoanProfile extends Component<Props, State> {
             members={this.state.individualsWithInstallments}
           />
         )
-      case 'loanRescheduling':
-        return (
-          <Rescheduling application={this.state.application} test={false} />
-        )
-      case 'loanReschedulingTest':
-        return <Rescheduling application={this.state.application} test />
-      // case 'documents':
-      //   return <UploadDocuments application={this.state.application} />
+      case 'documents':
+        return <UploadDocuments application={this.state.application} />
       case 'financialTransactions':
         return (
           <Payment
             print={(data) =>
-              this.setState(
-                (prevState) => ({
-                  print: data.print,
-                  earlyPaymentData: { ...prevState.earlyPaymentData, ...data },
-                }),
-                () => window.print()
-              )
+              this.setState({ print: data.print }, () => window.print())
             }
             setReceiptData={(data) => this.setState({ receiptData: data })}
-            setEarlyPaymentData={(data) =>
-              this.setState({ earlyPaymentData: data })
-            }
             application={this.state.application}
             installments={
               this.state.application.installmentsObject.installments
@@ -1112,28 +983,18 @@ class LoanProfile extends Component<Props, State> {
             currency={this.state.application.product.currency}
             applicationId={this.state.application._id}
             pendingActions={this.state.pendingActions}
-            manualPaymentEditId={this.state.manualPaymentEditId}
+            // manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="random"
-            randomPendingActions={this.state.randomPendingActions}
           />
         )
       case 'penalties':
         return (
           <Payment
             print={(data) =>
-              this.setState(
-                (prevState) => ({
-                  print: data.print,
-                  earlyPaymentData: { ...prevState.earlyPaymentData, ...data },
-                }),
-                () => window.print()
-              )
+              this.setState({ print: data.print }, () => window.print())
             }
             setReceiptData={(data) => this.setState({ receiptData: data })}
-            setEarlyPaymentData={(data) =>
-              this.setState({ earlyPaymentData: data })
-            }
             application={this.state.application}
             installments={
               this.state.application.installmentsObject.installments
@@ -1141,10 +1002,9 @@ class LoanProfile extends Component<Props, State> {
             currency={this.state.application.product.currency}
             applicationId={this.state.application._id}
             pendingActions={this.state.pendingActions}
-            manualPaymentEditId={this.state.manualPaymentEditId}
+            // manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="penalties"
-            randomPendingActions={this.state.randomPendingActions}
           />
         )
       default:
@@ -1263,7 +1123,7 @@ class LoanProfile extends Component<Props, State> {
                   <span>{this.state.pendingActions?.receiptNumber}</span>
                 </div>
                 <div className="status-chip pending">{local.pending}</div>
-                <Can I="payInstallment" a="application">
+                {/* <Can I="payInstallment" a="application">
                   <div
                     style={{ color: '#000', cursor: 'pointer' }}
                     data-qc="editManualPayment"
@@ -1272,13 +1132,13 @@ class LoanProfile extends Component<Props, State> {
                     <span className="fa fa-pencil" style={{ marginLeft: 5 }} />
                     {local.edit}
                   </div>
-                </Can>
+                </Can> */}
                 <Can I="payInstallment" a="application">
                   <div
                     className="cancel"
                     data-qc="rejectManualPayment"
                     onClick={() => {
-                      this.rejectManualPayment('')
+                      this.rejectManualPayment()
                     }}
                   >
                     {local.cancel}
@@ -1289,7 +1149,7 @@ class LoanProfile extends Component<Props, State> {
                     className="submit"
                     data-qc="approveManualPayment"
                     onClick={() => {
-                      this.approveManualPayment('')
+                      this.approveManualPayment()
                     }}
                   >
                     {local.submit}
@@ -1297,20 +1157,6 @@ class LoanProfile extends Component<Props, State> {
                 </Can>
               </div>
             ) : null}
-            {this.state.randomPendingActions.length > 0 && (
-              <ManualRandomPaymentsActions
-                pendingActions={this.state.randomPendingActions}
-                rejectManualPayment={(randomPaymentId: string) =>
-                  this.rejectManualPayment(randomPaymentId)
-                }
-                approveManualPayment={(randomPaymentId: string) =>
-                  this.approveManualPayment(randomPaymentId)
-                }
-                editManualPayment={(randomPaymentId: string) =>
-                  this.editManualPayment(randomPaymentId)
-                }
-              />
-            )}
             <div style={{ marginTop: 15 }}>
               <InfoBox
                 info={this.getInfo()}
@@ -1327,13 +1173,10 @@ class LoanProfile extends Component<Props, State> {
                 array={this.state.tabsArray}
                 active={this.state.activeTab}
                 selectTab={(index: string) =>
-                  this.setState(
-                    { activeTab: index, manualPaymentEditId: '' },
-                    () => {
-                      if (index === 'customerCard') this.calculatePenalties()
-                      this.props.changePaymentState(0)
-                    }
-                  )
+                  this.setState({ activeTab: index }, () => {
+                    if (index === 'customerCard') this.calculatePenalties()
+                    this.props.changePaymentState(0)
+                  })
                 }
               />
               <div style={{ padding: 20, marginTop: 15 }}>
@@ -1370,13 +1213,7 @@ class LoanProfile extends Component<Props, State> {
               branchDetails={this.state.branchDetails}
               customer={this.state.application.customer}
             />
-            {this.state.application.product.type === 'nano' ? (
-              <NanoLoanContract
-                data={this.state.application}
-                branchDetails={this.state.branchDetails}
-              />
-            ) : this.state.application.product.beneficiaryType ===
-              'individual' ? (
+            {this.state.application.product.beneficiaryType === 'individual' ? (
               <LoanContract
                 data={this.state.application}
                 branchDetails={this.state.branchDetails}
@@ -1389,82 +1226,7 @@ class LoanProfile extends Component<Props, State> {
             )}
           </>
         )}
-        {this.state.print === 'allSME' && (
-          <>
-            <AcknowledgmentAndPledge
-              entitledToSign={this.state.application.entitledToSign}
-              application={this.state.application}
-            />
-            <KnowYourCustomer
-              application={this.state.application}
-              loanUsage={this.state.loanUsage}
-            />
-            <AcknowledgmentWasSignedInFront
-              application={this.state.application}
-              branchDetails={this.state.branchDetails}
-            />
-            <CustomerCardPDF
-              data={this.state.application}
-              getGeoArea={(area) => this.getCustomerGeoArea(area)}
-              penalty={this.state.penalty}
-              branchDetails={this.state.branchDetails}
-              remainingTotal={this.state.remainingTotal}
-              members={this.state.individualsWithInstallments}
-            />
-            <AcknowledgmentOfCommitment
-              application={this.state.application}
-              branchDetails={this.state.branchDetails}
-            />
-            {this.state.application.guarantors?.map((person, index) => (
-              <div key={index}>
-                <SolidarityGuarantee
-                  application={this.state.application}
-                  person={person}
-                />
-                <PromissoryNote
-                  noteKind="individual"
-                  application={this.state.application}
-                  branchDetails={this.state.branchDetails}
-                  person={person}
-                />
-              </div>
-            ))}
-            {this.state.application.entitledToSign?.map((person, index) => (
-              <div key={index}>
-                <SolidarityGuarantee
-                  application={this.state.application}
-                  person={person.customer}
-                  personPosition={person.position}
-                />
-                <PromissoryNote
-                  noteKind="individual"
-                  application={this.state.application}
-                  branchDetails={this.state.branchDetails}
-                  person={person.customer}
-                  personPosition={person.position}
-                />
-                <PromissoryNote
-                  noteKind="sme"
-                  application={this.state.application}
-                  branchDetails={this.state.branchDetails}
-                  person={person.customer}
-                  personPosition={person.position}
-                />
-              </div>
-            ))}
-            <AuthorizationToFillCheck application={this.state.application} />
-            <AuthorizationToFillInfo application={this.state.application} />
-            <SmeLoanContract
-              data={this.state.application}
-              branchDetails={this.state.branchDetails}
-            />
-            <div className="text-center loan-contract">
-              <Barcode
-                value={this.state.application.loanApplicationKey.toString()}
-              />
-            </div>
-          </>
-        )}
+
         {this.state.print === 'followUpStatement' && (
           <FollowUpStatementPDF
             data={this.state.application}
@@ -1482,18 +1244,10 @@ class LoanProfile extends Component<Props, State> {
             members={this.state.individualsWithInstallments}
           />
         )}
-        {this.state.print === 'earlyPayment' && (
-          <EarlyPaymentPDF
-            application={this.state.application}
-            earlyPaymentPdfData={getEarlyPaymentPdfData(
-              this.state.application,
-              this.state.remainingLoan
-            )}
-            branchDetails={this.state.branchDetails}
-          />
-        )}
+
         {this.state.print === 'payment' && (
           <PaymentReceipt
+            isCF
             receiptData={this.state.receiptData}
             data={this.state.application}
             companyReceipt={
@@ -1501,21 +1255,6 @@ class LoanProfile extends Component<Props, State> {
             }
           />
         )}
-        {this.state.print === 'payEarly' && (
-          <EarlyPaymentReceipt
-            receiptData={this.state.receiptData}
-            branchDetails={this.state.branchDetails}
-            earlyPaymentData={this.state.earlyPaymentData}
-            data={this.state.application}
-          />
-        )}
-        {this.state.print === 'randomPayment' ||
-        this.state.print === 'penalty' ? (
-          <RandomPaymentReceipt
-            receiptData={this.state.receiptData}
-            data={this.state.application}
-          />
-        ) : null}
       </Container>
     )
   }

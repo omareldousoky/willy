@@ -1,7 +1,8 @@
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
 export const uploadDocument = async (data: FormData) => {
-  const url = process.env.REACT_APP_BASE_URL + `/customer/document`
+  const url = API_BASE_URL + `/customer/document`
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }

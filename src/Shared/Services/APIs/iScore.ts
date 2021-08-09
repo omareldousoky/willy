@@ -1,7 +1,8 @@
+import { API_BASE_URL } from '../../envConfig'
 import axios from '../axiosInstance'
 
 export const getIscore = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + `/iscore`
+  const url = API_BASE_URL + `/iscore`
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -10,7 +11,7 @@ export const getIscore = async (data: object) => {
   }
 }
 export const getIscoreCached = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + `/iscore/cached`
+  const url = API_BASE_URL + `/iscore/cached`
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -19,7 +20,7 @@ export const getIscoreCached = async (data: object) => {
   }
 }
 export const getSMEIscore = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + `/iscore/sme`
+  const url = API_BASE_URL + `/iscore/sme`
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -28,7 +29,7 @@ export const getSMEIscore = async (data: object) => {
   }
 }
 export const getSMECachedIscore = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + `/iscore/cached-sme`
+  const url = API_BASE_URL + `/iscore/cached-sme`
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
 // TODO: move to model
@@ -11,14 +12,15 @@ export interface CustomerScore {
 export interface CustomerCategorizationResponse {
   customerScores: Array<CustomerScore>
 }
-const { REACT_APP_BASE_URL } = process.env
-const customerCategorizationURL = `${REACT_APP_BASE_URL}/customer/categorization/`
+const customerCategorizationUrl = `${API_BASE_URL}/customer/categorization/:customerId`
 
 export const getCustomerCategorization = async (
   request: CustomerCategorizationRequest
 ) => {
   try {
-    const res = await axios.get(customerCategorizationURL + request.customerId)
+    const res = await axios.get(
+      customerCategorizationUrl.replace(':customerId', request.customerId)
+    )
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }

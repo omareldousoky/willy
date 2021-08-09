@@ -1,7 +1,8 @@
+import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
 export const setNanoLoanLimit = async (data: FormData) => {
-  const url = process.env.REACT_APP_BASE_URL + `/customer/nano-loans-limit`
+  const url = API_BASE_URL + `/customer/nano-loans-limit`
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }

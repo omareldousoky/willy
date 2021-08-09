@@ -39,17 +39,23 @@ export const DocumentsReducer = produce(
   (draft: any[] = [], action: DocumentActionType) => {
     switch (action.type) {
       case GET_DOCUMENTS: {
-        const actionDocument = action.payload[0]
-
-        const stateSlice = draft.find(
-          (doc) => doc?.docName === actionDocument?.docName
-        )
-
-        if (stateSlice) {
-          stateSlice.imagesFiles = actionDocument.imagesFiles
-        } else {
-          draft.push(actionDocument)
+        if (!action.payload?.length) {
+          draft.map((doc) => {
+            doc.imagesFiles = []
+          })
         }
+
+        action.payload.map((actionDocument) => {
+          const stateSlice = draft.find(
+            (doc) => doc?.docName === actionDocument?.docName
+          )
+
+          if (stateSlice) {
+            stateSlice.imagesFiles = actionDocument.imagesFiles
+          } else {
+            draft.push(actionDocument)
+          }
+        })
 
         break
       }
