@@ -308,8 +308,8 @@ export const StepOneForm = (props: any) => {
             />
             {values.customerConsumerFinanceMaxLimit > 0 && (
               <div className="valid-feedback d-block">
-                `{local.maxConsumerFinanceLimit}{' '}
-                {numbersToArabic(values.customerConsumerFinanceMaxLimit)}`
+                {local.maxConsumerFinanceLimit}{' '}
+                {numbersToArabic(values.customerConsumerFinanceMaxLimit)}
               </div>
             )}
             <Form.Control.Feedback type="invalid">
