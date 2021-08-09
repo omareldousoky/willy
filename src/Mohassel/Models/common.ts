@@ -24,6 +24,8 @@ export interface SearchRequest {
   nationalId?: string
   key?: number
   url?: string // for FE ONLY
+  type?: 'sme' | 'micro' | 'nano'
+  beneficiaryType?: 'individual' | 'group'
 }
 
 export interface PaginatedResponse {

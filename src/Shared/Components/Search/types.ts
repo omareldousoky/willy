@@ -15,6 +15,7 @@ export interface SearchInitialFormikState {
   lastDates?: 'day' | 'week' | 'month' | ''
   type?: string
   warningType?: LegalWarningType | ''
+  beneficiaryType?: 'individual' | 'group'
 }
 
 export interface SearchProps {
@@ -31,6 +32,8 @@ export interface SearchProps {
   dropDownKeys?: Array<string>
   issuedLoansSearchFilters: any
   chosenStatus?: string
+  type?: 'sme' | 'micro' | 'nano' // type of product
+  beneficiaryType?: 'individual' | 'group'
   resetSelectedItems?: () => void
   setFrom?: (from: number) => void
   search: (data) => void

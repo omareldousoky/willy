@@ -113,6 +113,16 @@ class Search extends Component<SearchProps, SearchState> {
         case 'warningType':
           initialState.warningType = ''
           break
+        case 'type':
+          initialState.type =
+            this.props.url === 'product' ? this.props.type : 'micro'
+          break
+        case 'beneficiaryType':
+          initialState.type =
+            this.props.url === 'product'
+              ? this.props.beneficiaryType
+              : 'individual'
+          break
         default:
           break
       }
@@ -855,6 +865,41 @@ class Search extends Component<SearchProps, SearchState> {
                       }
                       defaultValue={formikProps.values.warningType}
                     />
+                  )
+                }
+                if (searchKey === 'beneficiaryType') {
+                  return (
+                    <Col
+                      key={index}
+                      sm={6}
+                      style={{ marginTop: index < 2 ? 0 : 20 }}
+                    >
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.customerType}</p>
+                        <Form.Control
+                          as="select"
+                          className="dropdown-select"
+                          data-qc="beneficiaryType"
+                          value={formikProps.values.beneficiaryType}
+                          onChange={(e) => {
+                            formikProps.setFieldValue(
+                              'beneficiaryType',
+                              e.currentTarget.value
+                            )
+                          }}
+                        >
+                          {[
+                            { value: '', text: local.all },
+                            { value: 'individual', text: local.individual },
+                            { value: 'week', text: local.group },
+                          ].map(({ value, text }) => (
+                            <option key={value} value={value} data-qc={value}>
+                              {text}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </div>
+                    </Col>
                   )
                 }
               })}
