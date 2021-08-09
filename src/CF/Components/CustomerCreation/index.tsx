@@ -206,11 +206,10 @@ class CustomerCreation extends Component<Props, State> {
         gender: res.body.gender,
         nationalIdIssueDate: timeToDateyyymmdd(res.body.nationalIdIssueDate),
         monthlyIncome: res.body.monthlyIncome,
-        initialConsumerFinanceLimit: await this.getCustomerLimitFromIncome(
+        initialConsumerFinanceLimit: res.body.initialConsumerFinanceLimit,
+        customerConsumerFinanceMaxLimit: await this.getCustomerLimitFromIncome(
           res.body.monthlyIncome
         ),
-        customerConsumerFinanceMaxLimit:
-          res.body.customerConsumerFinanceMaxLimit,
         homePostalCode: res.body.homePostalCode,
         customerHomeAddress: res.body.customerHomeAddress,
         currentHomeAddress: res.body.currentHomeAddress,
