@@ -6,6 +6,7 @@ import { LoginForm } from './loginForm'
 import { loginCred, loginCredValidation } from './loginState'
 import * as local from '../../Shared/Assets/ar.json'
 import { setToken } from '../../Shared/token'
+import { API_BASE_URL } from '../../Shared/envConfig'
 
 interface User {
   username: string
@@ -38,7 +39,7 @@ class Login extends React.PureComponent<Props, State> {
       password: values.password,
     }
     axios({
-      url: `${process.env.REACT_APP_BASE_URL}/auth/login`,
+      url: `${API_BASE_URL}/auth/login`,
       method: 'post',
       data,
     }).then(

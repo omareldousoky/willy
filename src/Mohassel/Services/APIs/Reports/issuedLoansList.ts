@@ -1,7 +1,8 @@
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 import axios from '../../../../Shared/Services/axiosInstance'
 
 export const getIssuedLoanList = async (obj) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/loans-issued`
+  const url = API_BASE_URL + `/report/loans-issued`
   try {
     const res = await axios.post(url, obj)
     return { status: 'success', body: res.data }
@@ -10,7 +11,7 @@ export const getIssuedLoanList = async (obj) => {
   }
 }
 export const postIssuedLoansExcel = async (obj) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/excel/loans-issued`
+  const url = API_BASE_URL + `/report/excel/loans-issued`
   try {
     const res = await axios.post(url, obj)
     return { status: 'success', body: res.data }
@@ -19,8 +20,7 @@ export const postIssuedLoansExcel = async (obj) => {
   }
 }
 export const getIssuedLoansExcel = async (id) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + `/report/excel/loans-issued/${id}`
+  const url = API_BASE_URL + `/report/excel/loans-issued/${id}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }

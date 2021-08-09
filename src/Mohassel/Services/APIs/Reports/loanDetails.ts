@@ -1,7 +1,8 @@
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 import axios from '../../../../Shared/Services/axiosInstance'
 
 export const getLoanDetails = async (customerKey: string) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/loan-details`
+  const url = API_BASE_URL + `/report/loan-details`
   try {
     const res = await axios.post(url, { customerKey })
     return { status: 'success', body: res.data }

@@ -5,10 +5,10 @@ import {
   LaundryReportRequest,
 } from '../../../Models/LaundryReports'
 import { ApiResponse } from '../../../Models/common'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 
-const { REACT_APP_BASE_URL } = process.env
-const fetchEarlyPaymentsUrl = `${REACT_APP_BASE_URL}/report/early-payments`
-const fetchEarlyPayments4MonthsUrl = `${REACT_APP_BASE_URL}/report/early-payments-4-months`
+const fetchEarlyPaymentsUrl = `${API_BASE_URL}/report/early-payments`
+const fetchEarlyPayments4MonthsUrl = `${API_BASE_URL}/report/early-payments-4-months`
 
 export const fetchEarlyPaymentsReport = async (
   request: LaundryReportRequest,

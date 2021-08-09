@@ -1,7 +1,8 @@
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 import axios from '../../../../Shared/Services/axiosInstance'
 
 export const getAllTasaheelRisks = async () => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/tasaheel-risks`
+  const url = API_BASE_URL + `/report/tasaheel-risks`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }
@@ -10,7 +11,7 @@ export const getAllTasaheelRisks = async () => {
   }
 }
 export const getAllLoanAge = async () => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/debts-aging`
+  const url = API_BASE_URL + `/report/debts-aging`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }
@@ -19,7 +20,7 @@ export const getAllLoanAge = async () => {
   }
 }
 export const getAllMonthlyReport = async () => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/monthly-report-files`
+  const url = API_BASE_URL + `/report/monthly-report-files`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }
@@ -28,7 +29,7 @@ export const getAllMonthlyReport = async () => {
   }
 }
 export const getAllQuarterlyReport = async () => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/quarterly-report-files`
+  const url = API_BASE_URL + `/report/quarterly-report-files`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }
@@ -38,7 +39,7 @@ export const getAllQuarterlyReport = async () => {
 }
 
 export const generateTasaheelRisksReport = async (date: { date: string }) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/tasaheel-risks`
+  const url = API_BASE_URL + `/report/tasaheel-risks`
   try {
     const res = await axios.post(url, date)
     return { status: 'success', body: res.data }
@@ -47,7 +48,7 @@ export const generateTasaheelRisksReport = async (date: { date: string }) => {
   }
 }
 export const generateLoanAgeReport = async (date: { date: string }) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/debts-aging`
+  const url = API_BASE_URL + `/report/debts-aging`
   try {
     const res = await axios.post(url, date)
     return { status: 'success', body: res.data }
@@ -56,7 +57,7 @@ export const generateLoanAgeReport = async (date: { date: string }) => {
   }
 }
 export const generateMonthlyReport = async () => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/excel/monthly-report`
+  const url = API_BASE_URL + `/report/excel/monthly-report`
   try {
     const res = await axios.post(url)
     return { status: 'success', body: res.data }
@@ -65,7 +66,7 @@ export const generateMonthlyReport = async () => {
   }
 }
 export const generateQuarterlyReport = async (quarter: { quarter: string }) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/excel/quarterly-report`
+  const url = API_BASE_URL + `/report/excel/quarterly-report`
   try {
     const res = await axios.post(url, quarter)
     return { status: 'success', body: res.data }
@@ -75,7 +76,7 @@ export const generateQuarterlyReport = async (quarter: { quarter: string }) => {
 }
 
 export const getTasaheelRisksReport = async (id: string) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/tasaheel-risks`
+  const url = API_BASE_URL + `/report/tasaheel-risks`
   try {
     const res = await axios.get(url, { params: { id } })
     return { status: 'success', body: res.data }
@@ -84,7 +85,7 @@ export const getTasaheelRisksReport = async (id: string) => {
   }
 }
 export const getLoanAgeReport = async (id: string) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/debts-aging`
+  const url = API_BASE_URL + `/report/debts-aging`
   try {
     const res = await axios.get(url, { params: { id } })
     return { status: 'success', body: res.data }
@@ -93,7 +94,7 @@ export const getLoanAgeReport = async (id: string) => {
   }
 }
 export const getMonthlyReport = async (id: string) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/monthly-report`
+  const url = API_BASE_URL + `/report/monthly-report`
   try {
     const res = await axios.get(url, { params: { fileKey: id } })
     return { status: 'success', body: res.data }
@@ -103,7 +104,7 @@ export const getMonthlyReport = async (id: string) => {
 }
 
 export const getQuarterlyReport = async (id: string) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/quarterly-report`
+  const url = API_BASE_URL + `/report/quarterly-report`
   try {
     const res = await axios.get(url, { params: { fileKey: id } })
     return { status: 'success', body: res.data }
