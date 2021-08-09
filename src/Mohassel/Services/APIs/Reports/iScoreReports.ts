@@ -20,8 +20,7 @@ export const generateiScoreReport = async () => {
   }
 }
 export const getiScoreReport = async (id: string) => {
-  const url =
-    API_BASE_URL + `/report/download-iscore-file/${id}`
+  const url = API_BASE_URL + `/report/download-iscore-file/${id}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }
