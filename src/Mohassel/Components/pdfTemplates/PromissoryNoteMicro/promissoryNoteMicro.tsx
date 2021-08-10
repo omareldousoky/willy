@@ -20,76 +20,86 @@ const template = (
   customer: Customer,
   branchDetails,
   application?: ApplicationResponse
-) => (
-  <div className="promissory-note-micro" dir="rtl" lang="ar">
-    <Header title="سند لأمر" showCurrentUser={false} showCurrentTime={false} />
-    <p>
-      تاريخ الاصدار : &nbsp;
-      {timeToArabicDate(
-        application ? application.creationDate : new Date().valueOf(),
-        false
-      )}
-    </p>
-    <p>
-      مكان الاصدار: {branchDetails.name} - {branchDetails.address}
-    </p>
-    <p>تاريخ الاستحقاق : &nbsp; / &nbsp; / &nbsp; &nbsp;</p>
-    <p>
-      المبلغ :&nbsp;
-      {numbersToArabic(
-        application
-          ? application.installmentsObject?.totalInstallments.installmentSum
-          : customer.nanoLoansLimit
-      )}
-    </p>
-    <p>
-      نتعهد نحن الموقعين ادناه تعهداً نهائيا وبدون اى قيد او شرط بأن ندفع فى
-      تاريخ الاستحقاق لأمر واذن شركة تساهيل للتمويل متناهي الصغر مبلغ وقدره
-      &nbsp;
-      {numbersToArabic(
-        application
-          ? application.installmentsObject?.totalInstallments.installmentSum
-          : customer.nanoLoansLimit
-      )}
-      &nbsp;جنيه (
-      {new Tafgeet(
-        application
-          ? application.installmentsObject?.totalInstallments.installmentSum
-          : customer.nanoLoansLimit,
-        'EGP'
-      ).parse()}
-      ) &nbsp; والقيمة وصلتنا نقداً ويستحق علينا عوائد من تاريخ تحرير السند وحتى
-      تاريخ السداد بواقع .... % سنوياً ، كما يستحق علينا عوائد تأخير بواقع
-      ......... % علاوة على سعر العائد المطبق من تاريخ الاستحقاق حتى تمام السداد
-      وذلك بدون حاجة الى تنبيه او انذار.
-    </p>
-    <p>
-      وعلى ان يتم الوفاء بمبلغ السند بمقر الشركة الكائن فى&nbsp;
-      {branchDetails.name} - {branchDetails.address}
-    </p>
-    <p>
-      ويحق لحامل هذا السند الرجوع علينا بدون مصروفات او اخطار او عمل احتجاج لعدم
-      الوفاء، ونفوض الشركة فى ملء أية بيانات او مبالغ طالما ان السند موقع منا
-      ونلتزم بما ورد فى السند ولا يجوز لنا الاعتراض.
-    </p>
-    <p>
-      ولا تبرأ ذمتنا من هذا المبلغ الا باستلامنا أصل هذا السند مؤشرا عليه من
-      شركة تساهيل للتمويل متناهي الصغر بتمام السداد
-    </p>
-    <p>
-      يخضع هذا السند لاحكام القانون المصري ويكون اي نزاع ينشأ عنه او يتصل به
-      الفصل فيه والتقاضي يكون من اختصاص وامام محاكم ( الجيزة ) على اختلاف
-      درجاتها وانواعها.
-    </p>
-    <p>
-      <u>المدين</u>
-    </p>
-    <p>الاسم : {customer.customerName}</p>
-    <p>بطاقة الرقم القومى : {customer.nationalId}</p>
-    <p>العنوان: {customer.customerHomeAddress}</p>
-    <p>التوقيع :</p>
-    {application?.product.type === 'micro' &&
-      application.guarantors.length > 0 && (
+) => {
+  const hasGuarantors = application && application.guarantors?.length > 0
+
+  return (
+    <div className="promissory-note-micro" dir="rtl" lang="ar">
+      <Header
+        title="سند لأمر"
+        showCurrentUser={false}
+        showCurrentTime={false}
+      />
+      <p>
+        تاريخ الاصدار : &nbsp;
+        {timeToArabicDate(
+          application ? application.creationDate : new Date().valueOf(),
+          false
+        )}
+      </p>
+      <p>
+        مكان الاصدار: {branchDetails.name} - {branchDetails.address}
+      </p>
+      <p>تاريخ الاستحقاق : &nbsp; / &nbsp; / &nbsp; &nbsp;</p>
+      <p>
+        المبلغ :&nbsp;
+        {numbersToArabic(
+          application
+            ? application.installmentsObject?.totalInstallments.installmentSum
+            : customer.nanoLoansLimit
+        )}
+      </p>
+      <p>
+        <span>{hasGuarantors ? 'نتعهد نحن الموقعين' : 'اتعهد انا الموقع'}</span>{' '}
+        ادناه تعهداً نهائيا وبدون اى قيد او شرط بأن{' '}
+        <span>{hasGuarantors ? 'ندفع' : 'ادفع'}</span> فى تاريخ الاستحقاق لأمر
+        واذن شركة تساهيل للتمويل متناهي الصغر مبلغ وقدره &nbsp;
+        {numbersToArabic(
+          application
+            ? application.installmentsObject?.totalInstallments.installmentSum
+            : customer.nanoLoansLimit
+        )}
+        &nbsp;جنيه (
+        {new Tafgeet(
+          application
+            ? application.installmentsObject?.totalInstallments.installmentSum
+            : customer.nanoLoansLimit,
+          'EGP'
+        ).parse()}
+        ) &nbsp; والقيمة <span>{hasGuarantors ? 'وصلتنا' : 'وصلتني'}</span>{' '}
+        نقداً ويستحق علينا عوائد من تاريخ تحرير السند وحتى تاريخ السداد بواقع
+        .... % سنوياً ، كما يستحق علينا عوائد تأخير بواقع ......... % علاوة على
+        سعر العائد المطبق من تاريخ الاستحقاق حتى تمام السداد وذلك بدون حاجة الى
+        تنبيه او انذار.
+      </p>
+      <p>
+        وعلى ان يتم الوفاء بمبلغ السند بمقر الشركة الكائن فى&nbsp;
+        {branchDetails.name} - {branchDetails.address}
+      </p>
+      <p>
+        ويحق لحامل هذا السند الرجوع علينا بدون مصروفات او اخطار او عمل احتجاج
+        لعدم الوفاء، ونفوض الشركة فى ملء أية بيانات او مبالغ طالما ان السند موقع
+        منا ونلتزم بما ورد فى السند ولا يجوز{' '}
+        <span>{hasGuarantors ? 'لنا' : 'لي'}</span> الاعتراض.
+      </p>
+      <p>
+        ولا تبرأ <span>{hasGuarantors ? 'ذمتنا' : 'ذمتي'}</span> من هذا المبلغ
+        الا <span>{hasGuarantors ? 'باستلامنا' : 'باستلامي'}</span> أصل هذا
+        السند مؤشرا عليه من شركة تساهيل للتمويل متناهي الصغر بتمام السداد
+      </p>
+      <p>
+        يخضع هذا السند لاحكام القانون المصري ويكون اي نزاع ينشأ عنه او يتصل به
+        الفصل فيه والتقاضي يكون من اختصاص وامام محاكم ( الجيزة ) على اختلاف
+        درجاتها وانواعها.
+      </p>
+      <p>
+        <u>المدين</u>
+      </p>
+      <p>الاسم : {customer.customerName}</p>
+      <p>بطاقة الرقم القومى : {customer.nationalId}</p>
+      <p>العنوان: {customer.customerHomeAddress}</p>
+      <p>التوقيع :</p>
+      {application?.product.type === 'micro' && hasGuarantors && (
         <div className="d-flex justify-content-between flex-wrap">
           {application.guarantors.map((guarantor, i) => (
             <div className="mt-5">
@@ -104,8 +114,9 @@ const template = (
           ))}
         </div>
       )}
-  </div>
-)
+    </div>
+  )
+}
 export const PromissoryNoteMicro = ({
   application,
   branchDetails,
