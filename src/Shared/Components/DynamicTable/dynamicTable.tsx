@@ -1,32 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactNode } from 'react'
 import Table from 'react-bootstrap/Table'
 import Form from 'react-bootstrap/Form'
 import './styles.scss'
 import { connect } from 'react-redux'
 import * as local from '../../Assets/ar.json'
 import { searchFilters, search } from '../../redux/search/actions'
+import { DynamicTableProps } from './types'
 
-interface PaginationProps {
-  pagesList?: number[]
-  size?: number
-}
-
-interface Props {
-  mappers: Array<any>
-  pagination: boolean
-  customPagination?: PaginationProps
-  data: Array<any>
-  totalCount: number
-  changeNumber?: (key: string, number: number) => void | undefined
-  search: (data) => void
-  setSearchFilters: (data) => void
-  searchFilters: any
-  size?: number
-  from?: number
-  url?: string
-}
-
-const DynamicTable = (props: Props) => {
+const DynamicTable = (props: DynamicTableProps) => {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(
     props.pagination ? props?.customPagination?.size || 10 : props.data.length
@@ -158,10 +139,12 @@ const DynamicTable = (props: Props) => {
                         key={i}
                         style={{ width: 'fit-content', maxWidth: '300px' }}
                       >
-                        {(mapper.render || ((data) => data[mapper.key]))(
-                          item,
-                          i
-                        )}
+                        {
+                          (mapper.render || ((data) => data[mapper.key]))(
+                            item,
+                            i
+                          ) as ReactNode
+                        }
                       </td>
                     )
                   })}

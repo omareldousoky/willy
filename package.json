@@ -1,5 +1,5 @@
 {
-  "name": "mohassel",
+  "name": "mnt",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -7,10 +7,12 @@
     "start-login": "webpack-dev-server --mode development --env.development --config ./config/webpack.login.js --hot",
     "start-mohassel": "webpack-dev-server --mode development --env.development --config ./config/webpack.mohassel.js --hot",
     "start-documents": "webpack-dev-server --mode development --env.development --config ./config/webpack.documents.js --hot",
+    "start-cf": "webpack-dev-server --mode development --env.development --config ./config/webpack.cf.js --hot",
     "build": "npm run build-login && npm run build-mohassel && npm run build-documents",
     "build-login": "webpack --mode production --env.production --config ./config/webpack.login.js",
     "build-mohassel": "webpack --mode production --env.production --config ./config/webpack.mohassel.js",
     "build-documents": "webpack --mode production --env.production --config ./config/webpack.documents.js",
+    "build-cf": "webpack --mode production --env.production --config ./config/webpack.cf.js",
     "lint-login": "eslint --cache src/Login --ext .ts,.tsx --no-error-on-unmatched-pattern",
     "lint-login:fix": "eslint --cache src/Login --ext .ts,.tsx --no-error-on-unmatched-pattern --fix",
     "lint-mohassel": "eslint --cache src/Mohassel --ext .ts,.tsx --no-error-on-unmatched-pattern",
@@ -18,7 +20,9 @@
     "lint-documents": "eslint --cache src/Documents --ext .ts,.tsx --no-error-on-unmatched-pattern",
     "lint-documents:fix": "eslint --cache src/Documents --ext .ts,.tsx --no-error-on-unmatched-pattern --fix",
     "lint-shared": "eslint --cache src/Shared --ext .ts,.tsx --no-error-on-unmatched-pattern",
-    "lint-shared:fix": "eslint --cache src/Shared --ext .ts,.tsx --no-error-on-unmatched-pattern --fix"
+    "lint-shared:fix": "eslint --cache src/Shared --ext .ts,.tsx --no-error-on-unmatched-pattern --fix",
+		"lint-cf": "eslint --cache src/CF --ext .ts,.tsx --no-error-on-unmatched-pattern",
+    "lint-cf:fix": "eslint --cache src/CF --ext .ts,.tsx --no-error-on-unmatched-pattern --fix"
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.1",

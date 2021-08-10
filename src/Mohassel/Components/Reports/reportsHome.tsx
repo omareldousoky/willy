@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import CIBReports from './cibReports'
-import MonthlyQuarterlyReports from './monthlyQuarterlyReports'
 import * as local from '../../../Shared/Assets/ar.json'
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import Reports from './reports'
@@ -49,10 +48,6 @@ class ReportsHome extends Component<{}, State> {
         //     permissionKey: 'oracleIntegration'
         // },
         {
-          header: local.monthlyQuarterlyReports,
-          stringKey: 'monthlyQuarterlyReports',
-        },
-        {
           header: local.tasaheelReports,
           stringKey: 'tasaheelReports',
         },
@@ -87,8 +82,6 @@ class ReportsHome extends Component<{}, State> {
         return <OracleIntegration />
       case 'operationsReports':
         return <OperationsReports />
-      case 'monthlyQuarterlyReports':
-        return <MonthlyQuarterlyReports />
       case 'tasaheelReports':
         return <TasaheelReports />
       case 'laundryReports':

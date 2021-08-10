@@ -19,7 +19,6 @@ import RoleProfile from '../Components/Roles/roleProfile'
 import UsersList from '../Components/ManageAccounts/usersList'
 import BranchesList from '../Components/ManageAccounts/branchesList'
 import RolesList from '../Components/ManageAccounts/rolesList'
-import { Landing } from '../Components/Landing/landing'
 import Can from '../config/Can'
 import UserDetails from '../Components/userDetails/user-details'
 import CreateBranch from '../Components/BranchCreation/createBranch'
@@ -68,12 +67,14 @@ import FinancialReviewing from '../Components/FinancialClosing/FinancialReviewin
 import { CompanyList, CompanyProfile } from '../../Shared/Components'
 import CompanyCreation from '../Components/CustomerCreation/companyCreation'
 import { LegalCalendar } from '../Components/LegalCalendar'
+import { Landing } from '../../Shared/Components/Landing'
+import { legalWarningRoute } from '../Components/LegalWarnings/routes'
 
 const appRoutes = [
   {
     path: '/',
     label: local.mohassel,
-    component: Landing,
+    render: () => <Landing appName={local.mohassel} />,
     routes: [
       {
         path: '/customers',
@@ -822,6 +823,7 @@ const appRoutes = [
               </Can>
             ),
           },
+          legalWarningRoute,
         ],
       },
     ],

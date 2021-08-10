@@ -29,6 +29,8 @@ import { loading } from '../../redux/loading/actions'
 import { getActionsList } from '../../../Mohassel/Services/APIs/ActionLogs/getActionsList'
 import Can from '../../../Mohassel/config/Can'
 import { SearchInitialFormikState, SearchProps, SearchState } from './types'
+import { WarningTypeDropDown } from '../../../Mohassel/Components/dropDowns/WarningTypeDropDown'
+import ability from '../../config/ability'
 
 class Search extends Component<SearchProps, SearchState> {
   constructor(props) {
@@ -102,11 +104,14 @@ class Search extends Component<SearchProps, SearchState> {
         case 'printed':
           initialState.printed = false
           break
-        case 'sme':
+        case 'loanType':
           initialState.type =
             this.props.url === 'loan'
               ? this.props.issuedLoansSearchFilters.type
               : 'micro'
+          break
+        case 'warningType':
+          initialState.warningType = ''
           break
         default:
           break
@@ -222,7 +227,7 @@ class Search extends Component<SearchProps, SearchState> {
     if (!['application', 'loan'].includes(url)) {
       delete obj.type
     } else {
-      obj.type = this.props.sme ? 'sme' : 'micro'
+      obj.type = this.props.sme ? 'sme' : obj.type ? obj.type : 'micro'
     }
 
     if (obj.lastDates) {
@@ -269,6 +274,10 @@ class Search extends Component<SearchProps, SearchState> {
       searchQuery.branchId = values.branchId || ''
     } else searchQuery.from = 0
 
+    if (url === 'legal-warning') {
+      searchQuery.customerBranchId = values.branchId
+      delete searchQuery.branchId
+    }
     if (this.props.resetSelectedItems) this.props.resetSelectedItems()
     this.props.search(searchQuery)
   }
@@ -807,6 +816,45 @@ class Search extends Component<SearchProps, SearchState> {
                         />
                       </Form.Group>
                     </Col>
+                  )
+                }
+                if (searchKey === 'loanType') {
+                  return this.statusDropdown(
+                    formikProps,
+                    index,
+                    [
+                      {
+                        value: 'micro',
+                        text: local.micro,
+                      },
+                      ...((ability.can('getNanoLoan', 'application') &&
+                        this.props.url === 'loan') ||
+                      (ability.can('getNanoApplication', 'application') &&
+                        this.props.url === 'application')
+                        ? [
+                            {
+                              value: 'nano',
+                              text: local.nano,
+                            },
+                          ]
+                        : []),
+                    ],
+                    'type',
+                    local.productName
+                  )
+                }
+                if (searchKey === 'warningType') {
+                  return (
+                    <WarningTypeDropDown
+                      key={index}
+                      onChange={(option) =>
+                        formikProps.setFieldValue(
+                          'warningType',
+                          option?.value || undefined
+                        )
+                      }
+                      defaultValue={formikProps.values.warningType}
+                    />
                   )
                 }
               })}

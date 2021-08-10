@@ -24,7 +24,12 @@ export const ProfileActions = ({ actions }: ProfileActionsProps) => {
               onClick={onActionClick}
             >
               {action.icon && <LtsIcon name={action.icon} />}
-              <span style={{ margin: 'auto 8px' }}>{title}</span>
+              <span
+                style={{ margin: 'auto 8px' }}
+                className="text-mixed-lang text-nowrap"
+              >
+                {title}
+              </span>
             </Button>
           )
         )
