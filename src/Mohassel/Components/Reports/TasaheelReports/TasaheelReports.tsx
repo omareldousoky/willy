@@ -9,7 +9,6 @@ import Can from '../../../config/Can'
 import ability from '../../../config/ability'
 import * as local from '../../../../Shared/Assets/ar.json'
 import {
-  downloadFile,
   getIscoreReportStatus,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
@@ -180,14 +179,9 @@ export const TasaheelReports = () => {
 
     if (res.status === 'success') {
       if (
-        tabs[activeTabIndex()].stringKey === 'monthlyReport' ||
-        tabs[activeTabIndex()].stringKey === 'quarterlyReport'
+        tabs[activeTabIndex()].stringKey === 'tasaheelRisks' ||
+        tabs[activeTabIndex()].stringKey === 'loanAge'
       ) {
-        downloadFile(res.body.fileKey)
-        setReportDetails(res.body.response)
-        setPrint(true)
-        window.print()
-      } else {
         setReportDetails(res.body)
         setPrint(true)
         window.print()
@@ -302,18 +296,62 @@ export const TasaheelReports = () => {
                         )}
                       </div>
                       {report.status === 'created' && (
-                        <Button
-                          type="button"
-                          variant="default"
-                          onClick={() => downloadGeneratedReport(report._id)}
-                          title="download"
-                        >
-                          <LtsIcon
-                            name="download"
-                            size="40px"
-                            color="#7dc356"
-                          />
-                        </Button>
+                        <>
+                          {tabs[activeTabIndex()].stringKey.includes(
+                            'monthlyReport'
+                          ) ||
+                          tabs[activeTabIndex()].stringKey.includes(
+                            'quarterlyReport'
+                          ) ? (
+                            <div className="d-flex ">
+                              <Button
+                                type="button"
+                                variant="default"
+                                onClick={() => {
+                                  setReportDetails(report.response)
+                                  setPrint(true)
+                                  window.print()
+                                }}
+                                title="download"
+                              >
+                                <LtsIcon
+                                  name="printer"
+                                  size="30px"
+                                  color="#7dc356"
+                                />
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="default"
+                                onClick={() =>
+                                  downloadGeneratedReport(report.key)
+                                }
+                                title="download-excel"
+                              >
+                                <LtsIcon
+                                  name="download-big-file"
+                                  size="30px"
+                                  color="#7dc356"
+                                />
+                              </Button>
+                            </div>
+                          ) : (
+                            <Button
+                              type="button"
+                              variant="default"
+                              onClick={() =>
+                                downloadGeneratedReport(report._id)
+                              }
+                              title="download"
+                            >
+                              <LtsIcon
+                                name="download"
+                                size="40px"
+                                color="#7dc356"
+                              />
+                            </Button>
+                          )}
+                        </>
                       )}
                     </div>
                   </Card.Body>
