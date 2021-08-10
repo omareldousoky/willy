@@ -14,6 +14,7 @@ import { getIscoreCached } from '../../../Shared/Services/APIs/iScore'
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCustomer'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
+import BondContract from '../PdfTemplates/BondContractCF/BondContract'
 
 export interface Score {
   id?: string // commercialRegisterNumber
@@ -53,8 +54,18 @@ export const CustomerProfile = () => {
   const [customerDetails, setCustomerDetails] = useState<Customer>()
   const [iScoreDetails, setIScoreDetails] = useState<Score>()
   const [activeTab, setActiveTab] = useState('workInfo')
+  const [print, setPrint] = useState('')
   const location = useLocation<LocationState>()
   const history = useHistory()
+
+  useEffect(() => {
+    if (print.length > 0) {
+      window.print()
+    }
+    window.onafterprint = () => {
+      setPrint('')
+    }
+  }, [print])
 
   async function getCachediScores(id) {
     setLoading(true)
@@ -403,6 +414,14 @@ export const CustomerProfile = () => {
   const getProfileActions = () => {
     return [
       {
+        icon: 'download',
+        title: local.downloadPDF,
+        permission: true,
+        onActionClick: () => {
+          setPrint('all')
+        },
+      },
+      {
         icon: 'edit',
         title: local.edit,
         permission:
@@ -446,6 +465,11 @@ export const CustomerProfile = () => {
           tabsData={tabsData}
         />
       </Container>
+      {print === 'all' && (
+        <>
+          <BondContract data={customerDetails} remainingTotal={0} />
+        </>
+      )}
     </>
   )
 }
