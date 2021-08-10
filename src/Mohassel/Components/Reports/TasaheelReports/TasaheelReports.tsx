@@ -8,7 +8,11 @@ import Button from 'react-bootstrap/Button'
 import Can from '../../../config/Can'
 import ability from '../../../config/ability'
 import * as local from '../../../../Shared/Assets/ar.json'
-import { downloadFile } from '../../../../Shared/Services/utils'
+import {
+  downloadFile,
+  getIscoreReportStatus,
+  timeToArabicDate,
+} from '../../../../Shared/Services/utils'
 
 import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
 import { Loader } from '../../../../Shared/Components/Loader'
@@ -16,7 +20,6 @@ import ReportsModal from '../reportsModal'
 import { RisksReport } from './RisksReport'
 import { DebtsAgingReport } from './DebtsAgingReport'
 import { Tab } from '../../HeaderWithCards/cardNavbar'
-import { ReportsList } from '../../../../Shared/Components/ReportsList'
 import MonthlyReport from '../../pdfTemplates/monthlyReport/monthlyReport'
 import QuarterlyReport from '../../pdfTemplates/quarterlyReport/quarterlyReport'
 
@@ -36,6 +39,7 @@ import {
 } from '../../../Services/APIs/Reports/tasaheelRisksReports'
 
 import { Report, ReportDetails } from './types'
+import { LtsIcon } from '../../../../Shared/Components'
 
 export const TasaheelReports = () => {
   const reportsRequests = {
@@ -320,10 +324,6 @@ export const TasaheelReports = () => {
                 {local.noResults}
               </div>
             )}
-            <ReportsList
-              list={reports}
-              onClickDownload={(itemId) => downloadGeneratedReport(itemId)}
-            />
           </Card.Body>
         </Card>
       </div>
