@@ -208,7 +208,10 @@ export const TasaheelReports = () => {
                         {report.status === 'created' && (
                           <span className="mr-5 d-flex flex-start flex-column">
                             <span>{local.creationDate}</span>
-                            {timeToArabicDate(report.generatedAt, true)}
+                            {timeToArabicDate(
+                              report.generatedAt || report.fileGeneratedAt,
+                              true
+                            )}
                           </span>
                         )}
                       </div>

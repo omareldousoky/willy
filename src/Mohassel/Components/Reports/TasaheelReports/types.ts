@@ -5,6 +5,7 @@ export interface Report {
     userName: string
   }
   generatedAt: number
+  fileGeneratedAt: number
   status: 'created' | 'queued' | 'failed'
   _id: string
 }
