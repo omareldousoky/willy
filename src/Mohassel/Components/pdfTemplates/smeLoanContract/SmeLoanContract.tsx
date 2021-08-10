@@ -164,7 +164,7 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                           </div>
                         ))}
                       </div>
-                      <p className="d-flex justify-content-end my-3">
+                      <p className="d-flex justify-content-end my-3 pt-4">
                         &quot;طرف ثان - مقترض&quot;
                       </p>
                       <p>
@@ -194,18 +194,22 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                               </span>
                             </div>
                             <div>
+                              <b>العنوان: </b>
+                              <span>{guarantor.businessAddress} عام</span>
+                            </div>
+                            <div>
                               <b>السن: </b>
                               <span>{getAge(guarantor.birthDate)} عام</span>
                             </div>
                             <div>
                               <b> المهنه : </b>
                             </div>
+                            <p className="d-flex justify-content-end my-3 pt-4">
+                              &quot;طرف ثالث ضامن متضامن&quot;
+                            </p>
                           </div>
                         ))}
                       </div>
-                      <p className="d-flex justify-content-end my-3">
-                        &quot;طرف ثالث ضامن متضامن&quot;
-                      </p>
                     </section>
 
                     <section>
