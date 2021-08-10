@@ -47,6 +47,10 @@ export const LoanApplicationDetails = (props) => {
         return ''
     }
   }
+
+  const { customerType } = props.data
+  const isCompany = customerType === 'company'
+
   return (
     <div className="loan-application-details" lang="ar">
       <table
@@ -137,123 +141,142 @@ export const LoanApplicationDetails = (props) => {
                 <thead>
                   <tr>
                     <th className="frame gray" colSpan={100}>
-                      بيانات العميل
+                      بيانات {isCompany ? 'الشركة' : 'العميل'}
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th>الرقم القومي</th>
-                    <td>{props.data.nationalId}</td>
-                    <th>فاكس رقم</th>
-                  </tr>
-                  <tr>
-                    <th>العنوان</th>
-                    <td>{props.data.customerHomeAddress}</td>
-                    <th>النوع</th>
-                    <td>{arabicGender(props.data.customerGender)}</td>
-                  </tr>
-                  <tr>
-                    <th>تاريخ الميلاد</th>
-                    <td>{props.data.customerBirthDate}</td>
-                    <th>التليفون</th>
-                    <td>
-                      {props.data.customerWorkPhone === 'None'
-                        ? props.data.homePhoneNumber === 'None'
-                          ? ''
-                          : props.data.homePhoneNumber
-                        : props.data.customerWorkPhone}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>تاريخ الاصدار</th>
-                    <td>{props.data.nationalIdIssueDate}</td>
-                    <th>الرقم البريدي</th>
-                  </tr>
-                  <tr>
-                    <th>البريد الالكتروني</th>
-                  </tr>
-                  <tr>
-                    <th>تليفون محمول</th>
-                    <td>
-                      {(props.data.mobilePhoneNumber
-                        ? props.data.mobilePhoneNumber
-                        : '') +
-                        ' - ' +
-                        (props.data.homePhoneNumber
-                          ? props.data.homePhoneNumber
-                          : '')}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>الموقع الالكتروني</th>
-                  </tr>
+                  {isCompany ? (
+                    <>
+                      <tr>
+                        <th>البطاقة الضريبية</th>
+                        <td>{props.data.businessLicenseNumber}</td>
+                        <th>السجل التجاري</th>
+                        <td>{props.data.commercialRegisterNumber}</td>
+                      </tr>
+                      <tr>
+                        <th>العنوان</th>
+                        <td>{props.data.customerHomeAddress}</td>
+                      </tr>
+                    </>
+                  ) : (
+                    <>
+                      <tr>
+                        <th>الرقم القومي</th>
+                        <td>{props.data.nationalId}</td>
+                        <th>فاكس رقم</th>
+                      </tr>
+                      <tr>
+                        <th>العنوان</th>
+                        <td>{props.data.customerHomeAddress}</td>
+                        <th>النوع</th>
+                        <td>{arabicGender(props.data.customerGender)}</td>
+                      </tr>
+                      <tr>
+                        <th>تاريخ الميلاد</th>
+                        <td>{props.data.customerBirthDate}</td>
+                        <th>التليفون</th>
+                        <td>
+                          {props.data.customerWorkPhone === 'None'
+                            ? props.data.homePhoneNumber === 'None'
+                              ? ''
+                              : props.data.homePhoneNumber
+                            : props.data.customerWorkPhone}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>تاريخ الاصدار</th>
+                        <td>{props.data.nationalIdIssueDate}</td>
+                        <th>الرقم البريدي</th>
+                      </tr>
+                      <tr>
+                        <th>البريد الالكتروني</th>
+                      </tr>
+                      <tr>
+                        <th>تليفون محمول</th>
+                        <td>
+                          {(props.data.mobilePhoneNumber
+                            ? props.data.mobilePhoneNumber
+                            : '') +
+                            ' - ' +
+                            (props.data.homePhoneNumber
+                              ? props.data.homePhoneNumber
+                              : '')}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>الموقع الالكتروني</th>
+                      </tr>
+                    </>
+                  )}
                   <tr>
                     <th colSpan={100} className="horizontal-line" />
                   </tr>
                 </tbody>
               </table>
 
-              <table>
-                <thead>
-                  <tr>
-                    <th className="frame gray" colSpan={100}>
-                      بيانات العمل
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th>اسم المنشأه</th>
-                    <td>{props.data.customerWorkName}</td>
-                    <th>تليفون العمل</th>
-                    <td>
-                      {props.data.customerWorkPhone === 'None'
-                        ? ''
-                        : props.data.customerWorkPhone}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>رقم الرخصه</th>
-                    <td />
-                    <th>منطقة العمل</th>
-                    <td>{props.data.customerGeo}</td>
-                  </tr>
-                  <tr>
-                    <th>عمال دائمين</th>
-                    <td>0</td>
-                    <th>عمال مؤقتين</th>
-                    <td>0</td>
-                  </tr>
-                  <tr>
-                    <th>مكان الترخيص</th>
-                    <td />
-                    <th>الرقم البريدي</th>
-                    <td />
-                  </tr>
-                  <tr>
-                    <th>تاريخ الترخيص</th>
-                    <td />
-                    <th>بطاقه ضريبيه</th>
-                    <td />
-                  </tr>
-                  <tr>
-                    <th>العنوان</th>
-                    <td>{props.data.customerWorkAddress}</td>
-                    <th>السجل التجارى</th>
-                    <td />
-                  </tr>
-                  <tr>
-                    <th>قطاع العمل والنشاط والتخصص</th>
-                    <td>{props.data.customerActivity}</td>
-                    <th>السجل الصناعي</th>
-                    <td />
-                  </tr>
-                  <tr>
-                    <th colSpan={100} className="horizontal-line" />
-                  </tr>
-                </tbody>
-              </table>
+              {!isCompany && (
+                <table>
+                  <thead>
+                    <tr>
+                      <th className="frame gray" colSpan={100}>
+                        بيانات العمل
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>اسم المنشأه</th>
+                      <td>{props.data.customerWorkName}</td>
+                      <th>تليفون العمل</th>
+                      <td>
+                        {props.data.customerWorkPhone === 'None'
+                          ? ''
+                          : props.data.customerWorkPhone}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>رقم الرخصه</th>
+                      <td />
+                      <th>منطقة العمل</th>
+                      <td>{props.data.customerGeo}</td>
+                    </tr>
+                    <tr>
+                      <th>عمال دائمين</th>
+                      <td>0</td>
+                      <th>عمال مؤقتين</th>
+                      <td>0</td>
+                    </tr>
+                    <tr>
+                      <th>مكان الترخيص</th>
+                      <td />
+                      <th>الرقم البريدي</th>
+                      <td />
+                    </tr>
+                    <tr>
+                      <th>تاريخ الترخيص</th>
+                      <td />
+                      <th>بطاقه ضريبيه</th>
+                      <td />
+                    </tr>
+                    <tr>
+                      <th>العنوان</th>
+                      <td>{props.data.customerWorkAddress}</td>
+                      <th>السجل التجارى</th>
+                      <td />
+                    </tr>
+                    <tr>
+                      <th>قطاع العمل والنشاط والتخصص</th>
+                      <td>{props.data.customerActivity}</td>
+                      <th>السجل الصناعي</th>
+                      <td />
+                    </tr>
+                    <tr>
+                      <th colSpan={100} className="horizontal-line" />
+                    </tr>
+                  </tbody>
+                </table>
+              )}
 
               <table>
                 <thead>

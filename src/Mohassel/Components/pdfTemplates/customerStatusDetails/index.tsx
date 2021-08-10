@@ -30,8 +30,10 @@ export const CustomerStatusDetails = (props) => {
     nationalId,
     nationalIdIssueDate,
     officerName,
+    customerType,
   } = props.data
 
+  const isCompany = customerType === 'company'
   const checkLoanLegalStatus = (loan) => {
     const { isWrittenOff, isDoubtful } = loan
 
@@ -116,7 +118,7 @@ export const CustomerStatusDetails = (props) => {
                         <tbody>
                           <tr>
                             <th className="frame gray" colSpan={100}>
-                              بيانات العميل
+                              بيانات {isCompany ? 'الشركة' : 'العميل'}
                             </th>
                           </tr>
                           <tr>
@@ -127,34 +129,42 @@ export const CustomerStatusDetails = (props) => {
                             <th>المندوب الحالي</th>
                             <td>{officerName}</td>
                           </tr>
-                          <tr>
-                            <th>الرقم القومي</th>
-                            <td>{numbersToArabic(nationalId)}</td>
-                            <th>بتاريخ</th>
-                            <td>
-                              {timeToArabicDate(nationalIdIssueDate, false)}
-                            </td>
-                            <th>النوع</th>
-                            <td>{arabicGender(gender)}</td>
-                          </tr>
-                          <tr>
-                            <th>تاريخ الميلاد</th>
-                            <td>{timeToArabicDate(birthDate, false)}</td>
-                            <th>البطاقه</th>
-                            <td>{numbersToArabic(nationalId)}</td>
-                            <th>صادره من</th>
-                            <td />
-                          </tr>
-                          <tr>
-                            <th>الموبيل</th>
-                            <td>{numbersToArabic(MobilePhoneNumber) || ''}</td>
-                            <th>تليفون المنزل</th>
-                            <td>{numbersToArabic(HomePhoneNumber) || ''}</td>
-                            <th>تليفون العمل</th>
-                            <td>
-                              {numbersToArabic(BusinessPhoneNumber) || ''}
-                            </td>
-                          </tr>
+                          {!isCompany && (
+                            <>
+                              <tr>
+                                <th>الرقم القومي</th>
+                                <td>{numbersToArabic(nationalId)}</td>
+                                <th>بتاريخ</th>
+                                <td>
+                                  {timeToArabicDate(nationalIdIssueDate, false)}
+                                </td>
+                                <th>النوع</th>
+                                <td>{arabicGender(gender)}</td>
+                              </tr>
+                              <tr>
+                                <th>تاريخ الميلاد</th>
+                                <td>{timeToArabicDate(birthDate, false)}</td>
+                                <th>البطاقه</th>
+                                <td>{numbersToArabic(nationalId)}</td>
+                                <th>صادره من</th>
+                                <td />
+                              </tr>
+                              <tr>
+                                <th>الموبيل</th>
+                                <td>
+                                  {numbersToArabic(MobilePhoneNumber) || ''}
+                                </td>
+                                <th>تليفون المنزل</th>
+                                <td>
+                                  {numbersToArabic(HomePhoneNumber) || ''}
+                                </td>
+                                <th>تليفون العمل</th>
+                                <td>
+                                  {numbersToArabic(BusinessPhoneNumber) || ''}
+                                </td>
+                              </tr>
+                            </>
+                          )}
                           <tr>
                             <th>ملاحظات</th>
                             <td colSpan={3}>{Comments || ''}</td>
