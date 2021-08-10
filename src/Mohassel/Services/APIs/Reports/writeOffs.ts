@@ -1,7 +1,8 @@
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 import axios from '../../../../Shared/Services/axiosInstance'
 
 export const writeOffs = async (data) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/write-offs`
+  const url = API_BASE_URL + `/report/write-offs`
   try {
     const res = await axios({
       method: 'POST',
@@ -14,7 +15,7 @@ export const writeOffs = async (data) => {
   }
 }
 export const postWriteOffsExcel = async (obj) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/excel/write-offs`
+  const url = API_BASE_URL + `/report/excel/write-offs`
   try {
     const res = await axios.post(url, obj)
     return { status: 'success', body: res.data }
@@ -23,7 +24,7 @@ export const postWriteOffsExcel = async (obj) => {
   }
 }
 export const getWriteOffsExcel = async (id) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/excel/write-offs/${id}`
+  const url = API_BASE_URL + `/report/excel/write-offs/${id}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }

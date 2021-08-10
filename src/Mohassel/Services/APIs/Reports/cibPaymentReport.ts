@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 import axios from '../../../../Shared/Services/axiosInstance'
 
 interface ChangeFundObj {
@@ -5,7 +6,7 @@ interface ChangeFundObj {
 }
 
 export const cibPaymentReport = async (data: ChangeFundObj) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/cib-payments`
+  const url = API_BASE_URL + `/report/cib-payments`
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -15,7 +16,7 @@ export const cibPaymentReport = async (data: ChangeFundObj) => {
 }
 
 export const getTpayFiles = async () => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/tpay-files`
+  const url = API_BASE_URL + `/report/tpay-files`
   try {
     const res = await axios.get(url, { params: {} })
     return { status: 'success', body: res.data }

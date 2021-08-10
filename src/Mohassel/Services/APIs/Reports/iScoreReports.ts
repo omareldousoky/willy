@@ -1,7 +1,8 @@
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 import axios from '../../../../Shared/Services/axiosInstance'
 
 export const getiScoreReportRequests = async () => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/iscore-files`
+  const url = API_BASE_URL + `/report/iscore-files`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }
@@ -10,7 +11,7 @@ export const getiScoreReportRequests = async () => {
   }
 }
 export const generateiScoreReport = async () => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/create-iscore-file`
+  const url = API_BASE_URL + `/report/create-iscore-file`
   try {
     const res = await axios.post(url)
     return { status: 'success', body: res.data }
@@ -19,8 +20,7 @@ export const generateiScoreReport = async () => {
   }
 }
 export const getiScoreReport = async (id: string) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + `/report/download-iscore-file/${id}`
+  const url = API_BASE_URL + `/report/download-iscore-file/${id}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }

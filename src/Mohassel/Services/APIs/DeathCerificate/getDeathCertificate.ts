@@ -1,9 +1,8 @@
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 import axios from '../../../../Shared/Services/axiosInstance'
 
 export const getDeathCertificate = async (customerId: string) => {
-  const url =
-    process.env.REACT_APP_BASE_URL +
-    `/customer/death-certificate?id=${customerId}`
+  const url = API_BASE_URL + `/customer/death-certificate?id=${customerId}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }

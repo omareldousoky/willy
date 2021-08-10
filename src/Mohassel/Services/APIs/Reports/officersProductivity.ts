@@ -6,11 +6,11 @@ import {
   OfficersProductivityResponse,
 } from '../../../Models/OfficersProductivityReport'
 import axios from '../../../../Shared/Services/axiosInstance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 
-const { REACT_APP_BASE_URL } = process.env
-const fetchOfficersProductivityUrl = `${REACT_APP_BASE_URL}/report/officer-productivity`
+const fetchOfficersProductivityUrl = `${API_BASE_URL}/report/officer-productivity`
 // for officers productivity input preparation
-const fetchCurrentHierarchiesUrl = `${REACT_APP_BASE_URL}/branch/current-hierarchies`
+const fetchCurrentHierarchiesUrl = `${API_BASE_URL}/branch/current-hierarchies`
 
 export const fetchOfficersProductivityReport = async (
   request: OfficersProductivityRequest

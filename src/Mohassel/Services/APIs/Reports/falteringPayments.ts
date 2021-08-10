@@ -5,9 +5,9 @@ import {
   LaundryReportRequest,
 } from '../../../Models/LaundryReports'
 import { ApiResponse } from '../../../Models/common'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 
-const { REACT_APP_BASE_URL } = process.env
-const fetchFalteringPaymentsUrl = `${REACT_APP_BASE_URL}/report/faltering-payments`
+const fetchFalteringPaymentsUrl = `${API_BASE_URL}/report/faltering-payments`
 
 export const fetchFalteringPaymentsReport = async (
   request: LaundryReportRequest
