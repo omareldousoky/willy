@@ -55,7 +55,7 @@ interface InitialFormikState {
   loanApplicationKey?: string
   defaultingCustomerStatus?: string
   managers?: Array<CurrentHierarchiesSingleResponse>
-  year?: string
+  year?: number
 }
 
 interface Props {
@@ -168,7 +168,7 @@ const ReportsModal = (props: Props) => {
           initValues.date = ''
           break
         case 'year':
-          initValues.year = ''
+          initValues.year = new Date().getFullYear()
           break
         default:
           break
@@ -772,6 +772,7 @@ const ReportsModal = (props: Props) => {
                     'loanDetails',
                     'cibPaymentReport',
                     'customerTransactionReport',
+                    'raseedyTransactions',
                   ].includes(props.pdf.key) &&
                   props.getExcel && (
                     <Button
