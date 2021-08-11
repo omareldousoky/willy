@@ -56,7 +56,13 @@ export const PromissoryNote = ({
         منا ونلتزم بما ورد فى السند ولا يجوز لنا الاعتراض.
       </p>
       <p>
-        والدفع والتقاضى يكون امام محاكم ( الجيزه ) على اختلاف درجاتها وانواعها.
+        ولا تبرأ ذمتنا من هذا المبلغ الا باستلامنا أصل هذا السند مؤشرا عليه من
+        شركة تساهيل للتمويل متناهي الصغر بتمام السداد
+      </p>
+      <p>
+        يخضع هذا السند لاحكام القانون المصري ويكون اي نزاع ينشأ عنه او يتصل به
+        الفصل فيه والتقاضي يكون من اختصاص وامام محاكم ( الجيزة ) على اختلاف
+        درجاتها وانواعها.
       </p>
       <section>
         <p>
@@ -73,7 +79,12 @@ export const PromissoryNote = ({
             ? ` السجل التجاري: ${application.customer?.commercialRegisterNumber} `
             : `بطاقة الرقم القومى: ${person?.nationalId} `}
         </p>
-        <p>العنوان: {person?.currentHomeAddress}</p>
+        <p>
+          العنوان:{' '}
+          {noteKind === 'sme'
+            ? application.customer?.businessAddress
+            : person?.customerHomeAddress}
+        </p>
         <p>التوقيع :</p>
       </section>
     </div>
