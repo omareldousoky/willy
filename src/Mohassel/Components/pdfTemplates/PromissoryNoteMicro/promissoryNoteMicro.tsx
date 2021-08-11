@@ -7,7 +7,7 @@ import {
 } from '../../../../Shared/Services/utils'
 import { ApplicationResponse } from '../../../Models/Application'
 import { Customer } from '../../../Models/Customer'
-import { BranchDetails } from '../../../Services/APIs/Branch/getBranch'
+import { BranchDetails } from '../../../../Shared/Services/APIs/Branch/getBranch'
 import { Header } from '../pdfTemplateCommon/header'
 import './promissoryNoteMicro.scss'
 

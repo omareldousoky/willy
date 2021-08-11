@@ -8,16 +8,19 @@ const Breadcrumbs = ({ route }) => {
       {pathTo(route).map(
         (crumb, index, breadcrumbs) =>
           crumb.path && (
-            <div key={index} className="item">
-              {index < breadcrumbs.length - 1 ? (
-                crumb.disableLink ? (
-                  crumb.label
-                ) : (
-                  <NavLink to={crumb.path}>{crumb.label}</NavLink>
-                )
-              ) : null}
-              {index === breadcrumbs.length - 1 && crumb.label}
-            </div>
+            <React.Fragment key={index}>
+              <div className="item">
+                {index < breadcrumbs.length - 1 ? (
+                  crumb.disableLink ? (
+                    crumb.label
+                  ) : (
+                    <NavLink to={crumb.path}>{crumb.label}</NavLink>
+                  )
+                ) : null}
+                {index === breadcrumbs.length - 1 && crumb.label}
+              </div>
+              {index < breadcrumbs.length - 1 && <i className="arrow-left" />}
+            </React.Fragment>
           )
       )}
     </nav>

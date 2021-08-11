@@ -7,7 +7,7 @@ import Container from 'react-bootstrap/Container'
 import * as local from '../../../Shared/Assets/ar.json'
 import { theme } from '../../../Shared/theme'
 import { RolesBranchesValues } from './userCreationinterfaces'
-import DualBox from '../DualListBox/dualListBox'
+import DualBox from '../../../Shared/Components/DualListBox/dualListBox'
 import { customFilterOption } from '../../../Shared/Services/utils'
 import { LtsIcon } from '../../../Shared/Components'
 

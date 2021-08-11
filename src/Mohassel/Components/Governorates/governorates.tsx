@@ -1,10 +1,10 @@
 import React from 'react'
 import Select from 'react-select'
 import Swal from 'sweetalert2'
-import { getGovernorates } from '../../Services/APIs/configApis/config'
 import { theme } from '../../../Shared/theme'
 import { Loader } from '../../../Shared/Components/Loader'
 import { getErrorMessage } from '../../../Shared/Services/utils'
+import { getGovernorates } from '../../../Shared/Services/APIs/config'
 
 interface Village {
   villageName: { ar: string }

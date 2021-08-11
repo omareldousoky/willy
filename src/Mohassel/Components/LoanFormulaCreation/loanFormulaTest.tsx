@@ -21,7 +21,7 @@ import {
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import { getCookie } from '../../../Shared/Services/getCookie'
-import BackButton from '../BackButton/back-button'
+import BackButton from '../../../Shared/Components/BackButton/back-button'
 import store from '../../../Shared/redux/store'
 
 interface Props {

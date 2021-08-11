@@ -1,8 +1,7 @@
-import { searchCustomer } from '../../../Mohassel/Services/APIs/Customer-Creation/searchCustomer'
-import { searchBranches } from '../../../Mohassel/Services/APIs/Branch/searchBranches'
-import { searchUsers } from '../../../Mohassel/Services/APIs/Users/searchUsers'
+import { searchBranches } from '../../Services/APIs/Branch/searchBranches'
+import { searchUsers } from '../../Services/APIs/Users/searchUsers'
 import { searchLoan } from '../../../Mohassel/Services/APIs/Loan/searchLoan'
-import { searchApplication } from '../../../Mohassel/Services/APIs/loanApplication/searchApplication'
+import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication'
 import { searchActionLogs } from '../../../Mohassel/Services/APIs/ActionLogs/searchActionLogs'
 import { searchLeads } from '../../../Mohassel/Services/APIs/Leads/searchLeads'
 import { searchClearance } from '../../../Mohassel/Services/APIs/clearance/searchClearance'
@@ -11,14 +10,15 @@ import {
   searchTerrorists,
   searchUnTerrorists,
 } from '../../../Mohassel/Services/APIs/Terrorism/terrorism'
-import { searchLoanOfficer } from '../../../Mohassel/Services/APIs/LoanOfficers/searchLoanOfficer'
+import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import {
   searchDefaultingCustomers,
   searchLegalAffairsCustomers,
 } from '../../../Mohassel/Services/APIs/LegalAffairs/defaultingCustomers'
-import { searchFinancialBlocking } from '../../../Mohassel/Services/APIs/loanApplication/financialClosing'
-import { cibReport } from '../../../Mohassel/Services/APIs/loanApplication/cibReport'
+import { searchFinancialBlocking } from '../../Services/APIs/loanApplication/financialClosing'
+import { cibReport } from '../../Services/APIs/loanApplication/cibReport'
 import { searchWarnings } from '../../../Mohassel/Services/APIs/LegalAffairs/warning'
+import { searchCustomer } from '../../Services/APIs/customer/searchCustomer'
 
 const searchWrapper = (
   request: any,
