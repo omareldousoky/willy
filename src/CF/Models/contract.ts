@@ -5,7 +5,7 @@ export interface ConsumerFinanceContractData {
   customerHomeAddress: string
   mobilePhoneNumber: string
   initialConsumerFinanceLimit: number
-  guarantors?: {
+  customerGuarantors?: {
     name: string
     address: string
     nationalId: string

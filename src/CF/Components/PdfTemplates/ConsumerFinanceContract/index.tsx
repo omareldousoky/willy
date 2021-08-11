@@ -1,7 +1,11 @@
 import React from 'react'
+import Tafgeet from 'tafgeetjs'
 import {
   dayToArabic,
+  guarantorOrderLocal,
+  orderLocal,
   timeToArabicDate,
+  addYearToTimeStamp,
 } from '../../../../Shared/Services/utils'
 import { ConsumerFinanceContractData } from '../../../Models/contract'
 import './styles.scss'
@@ -41,31 +45,29 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
       </div>
       <div>
         <p>
-          ثانيا: السيد/ ............................ الكائن في:
-          .............................. يحمل بطاقة رقم قومي:
-          ........................
+          ثانيا: السيد/ {props.contractData.customerName} الكائن في:
+          {props.contractData.customerHomeAddress}. يحمل بطاقة رقم قومي:{' '}
+          {props.contractData.nationalId}
           <sub>&quot;يشار إليه فيما بعد بالطرف الثاني&quot;</sub>
         </p>
       </div>
       <div />
-      <div>
-        <p>
-          ثالثا: السيد/ ............................ الكائن في:
-          .............................. يحمل بطاقة رقم قومي:
-          .........................
-          <sub>&quot;يشار إليه فيما بعد بالطرف الثالث (الضامن الأول)&quot;</sub>
-        </p>
-      </div>
-      <div>
-        <p>
-          رابعا: السيد/ ............................ الكائن في:
-          .............................. يحمل بطاقة رقم قومي:
-          .........................
-          <sub>
-            &quot;يشار إليه فيما بعد بالطرف الرابع (الضامن الثاني)&quot;
-          </sub>
-        </p>
-      </div>
+      {props.contractData.customerGuarantors?.map((guarantor, index) => {
+        return (
+          <div key={index}>
+            <p>
+              {index === 0 ? 'ثالثا' : 'رابعا'} : السيد/ {guarantor.name}
+              الكائن في: {guarantor.address}
+              {guarantor.nationalId} يحمل بطاقة رقم قومي:
+              <sub>
+                &quot;يشار إليه فيما بعد بالطرف {orderLocal[index + 2]} (
+                {guarantorOrderLocal[index]}
+                )&quot;
+              </sub>
+            </p>
+          </div>
+        )
+      })}
       <div title="terms">
         <p className="head-title">تمهيد</p>
         <p>
@@ -161,8 +163,13 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
             <p>البند الرابع</p>
             <p>قيمة التمويل وسعر العائد</p>
             <p>
-              4/1 الحد الاقصى لمبلغ التمويل : ×××× حم ( فقط
-              .................................... لا غير )
+              4/1 الحد الاقصى لمبلغ التمويل :{' '}
+              {props.contractData.initialConsumerFinanceLimit} حم ( فقط
+              {new Tafgeet(
+                props.contractData.initialConsumerFinanceLimit,
+                'EGP'
+              ).parse()}{' '}
+              لا غير )
             </p>
             <p>4/2 متوسط سعر العائد: 23% (ثابت/سنويا)</p>
             <p>
@@ -189,12 +196,15 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
             <p>مدة العقد</p>
           </div>
           <p>
-            5/1 مدة هذا العقد سنة تبدأ من ..../...../2021م وتنتهي في
-            ...../...../2022م، ويجدد تلقائياً لمدة أو لمدد أخرى متساوية ما لم
-            يخطر أحد الطرفين الآخر كتابياً بعدم رغبته في التجديد قبل نهاية مدة
-            العقد أو أي مدة أخرى مجددة بشهرين على الأقل. 5/2 في كافة الأحوال لا
-            يتم إنهاء التعاقد إلا بعد تسوية المديونية المترتبة علي هذا العقد،
-            وتسليم الطرف الثاني مخالصة نهائية بسداد كامل الاقساط.
+            5/1 مدة هذا العقد سنة تبدأ من{' '}
+            {timeToArabicDate(props.contractData.customerCreationDate, false)}م
+            وتنتهي في
+            {addYearToTimeStamp(props.contractData.customerCreationDate, true)}
+            م، ويجدد تلقائياً لمدة أو لمدد أخرى متساوية ما لم يخطر أحد الطرفين
+            الآخر كتابياً بعدم رغبته في التجديد قبل نهاية مدة العقد أو أي مدة
+            أخرى مجددة بشهرين على الأقل. 5/2 في كافة الأحوال لا يتم إنهاء
+            التعاقد إلا بعد تسوية المديونية المترتبة علي هذا العقد، وتسليم الطرف
+            الثاني مخالصة نهائية بسداد كامل الاقساط.
           </p>
         </section>
         <section className="term-container" title="sixth-term">
@@ -478,7 +488,7 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
           </p>
           <p>
             15/4 يقر العميل بأن رقم المحمول الذي يرغب في التعامل عليه هو
-            ..............................................................................
+            {props.contractData.mobilePhoneNumber}
             على أن يقوم بابلاغ الشركة كتابة حال تغييره دون أدنى مسئولية على
             الشركة مع التزامه الكامل بكافة المعاملات التي تمت من خلال هذا الرقم.
           </p>
@@ -630,22 +640,21 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
             </div>
             <div>
               <p>الطرف الثاني</p>
-              <p> الأسم/ .........................</p>
+              <p> الأسم/ {props.contractData.customerName}</p>
               <p> التوقيع/ .......................</p>
             </div>
           </div>
-          <div className="d-flex justify-content-between">
-            <div>
-              <p>الطرف الثالث</p>
-              <p> الأسم/ .........................</p>
-              <p> التوقيع/ .......................</p>
-            </div>
-            <div>
-              <p>الطرف الرابع</p>
-              <p> الأسم/ .........................</p>
-              <p> التوقيع/ .......................</p>
-            </div>
-          </div>
+          {props.contractData.customerGuarantors?.map((guarnator, index) => {
+            return (
+              <div className="d-flex justify-content-between" key={index}>
+                <div>
+                  <p>الطرف {orderLocal[index + 2]}</p>
+                  <p> الأسم/ {guarnator.name}</p>
+                  <p> التوقيع/ .......................</p>
+                </div>
+              </div>
+            )
+          })}
         </section>
       </div>
     </div>

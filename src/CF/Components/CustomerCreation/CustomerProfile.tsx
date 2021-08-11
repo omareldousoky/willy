@@ -16,6 +16,7 @@ import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCusto
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 import BondContract from '../PdfTemplates/BondContractCF/BondContract'
 import { ConsumerFinanceContract } from '../PdfTemplates/ConsumerFinanceContract'
+import { ConsumerFinanceContractData } from '../../Models/contract'
 
 export interface Score {
   id?: string // commercialRegisterNumber
@@ -53,6 +54,10 @@ const tabs: Array<Tab> = [
 export const CustomerProfile = () => {
   const [loading, setLoading] = useState(false)
   const [customerDetails, setCustomerDetails] = useState<Customer>()
+  const [
+    customerCFContract,
+    setCustomerCFContract,
+  ] = useState<ConsumerFinanceContractData>()
   const [iScoreDetails, setIScoreDetails] = useState<Score>()
   const [activeTab, setActiveTab] = useState('workInfo')
   const [print, setPrint] = useState('')
@@ -96,11 +101,24 @@ export const CustomerProfile = () => {
       Swal.fire('Error !', getErrorMessage(resGeo.error.error), 'error')
     }
   }
+  function setCustomerContractData(customer: Customer) {
+    setCustomerCFContract({
+      customerCreationDate: customer.created?.at || 0,
+      customerName: customer.customerName || '',
+      nationalId: customer.nationalId || '',
+      customerHomeAddress: customer.currentHomeAddress || '',
+      mobilePhoneNumber: customer.mobilePhoneNumber || '',
+      initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
+      customerGuarantors: customer.customerGuarantors || [],
+    })
+  }
+
   async function getCustomerDetails() {
     setLoading(true)
     const res = await getCustomerByID(location.state.id)
     if (res.status === 'success') {
       await setCustomerDetails(res.body)
+      setCustomerContractData(res.body)
       if (ability.can('viewIscore', 'customer'))
         await getCachediScores(res.body.nationalId)
       await getGeoArea(res.body.geoAreaId, res.body.branchId)
@@ -109,8 +127,6 @@ export const CustomerProfile = () => {
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
   }
-  function setCustomerContract(customerDetais) {}
-
   useEffect(() => {
     getCustomerDetails()
   }, [])
@@ -470,7 +486,9 @@ export const CustomerProfile = () => {
       {print === 'all' && (
         <>
           <BondContract data={customerDetails} remainingTotal={0} />
-          <ConsumerFinanceContract />
+          <ConsumerFinanceContract
+            contractData={customerCFContract as ConsumerFinanceContractData}
+          />
         </>
       )}
     </>

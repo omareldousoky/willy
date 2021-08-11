@@ -89,6 +89,11 @@ export interface Customer {
   nanoLoansLimit?: number
   monthlyIncome?: number
   initialConsumerFinanceLimit?: number
+  customerGuarantors?: {
+    name: string
+    address: string
+    nationalId: string
+  }[]
 }
 export interface Installment {
   id: number
