@@ -19,6 +19,7 @@ import { logout } from '../../Services/APIs/Auth/logout'
 import ChangePasswordModal from '../changePasswordModal/changePasswordModal'
 import { LtsNav } from './LtsNav'
 import { CfNav } from './CfNav'
+import { LtsIcon } from '../LtsIcon'
 
 interface Props extends RouteComponentProps {
   auth: Auth
@@ -141,8 +142,8 @@ class NavBar extends Component<Props, State> {
       <div className="navbar-branch-list">
         <InputGroup style={{ marginLeft: 20 }}>
           <InputGroup.Append>
-            <InputGroup.Text className="bg-white rounded-0 p-3">
-              <span className="fa fa-search fa-rotate-90" />
+            <InputGroup.Text className="bg-white rounded-0 px-3 py-2">
+              <LtsIcon name="search" />
             </InputGroup.Text>
           </InputGroup.Append>
           <Form.Control
@@ -169,14 +170,13 @@ class NavBar extends Component<Props, State> {
                   >
                     <div style={{ display: 'flex' }}>
                       <div className="pin-icon">
-                        <span className="fa fa-map-marker-alt fa-lg" />
+                        <LtsIcon name="branch-location" />
                       </div>
                       <div className="branch-name">
                         <span className="text-muted">{local.goToBranch}</span>
                         <h6>{branch.name}</h6>
                       </div>
                     </div>
-                    <span className="fa fa-arrow-left" />
                   </div>
                   <hr style={{ margin: 0 }} />
                 </div>
@@ -277,7 +277,7 @@ class NavBar extends Component<Props, State> {
                 >
                   <div className="selected-branch">
                     <div className="pin-icon">
-                      <span className="fa fa-map-marker-alt fa-lg" />
+                      <LtsIcon name="branch-location" />
                     </div>
                     <span className="text-white font-weight-bold">
                       {this.state.selectedBranch._id === ''

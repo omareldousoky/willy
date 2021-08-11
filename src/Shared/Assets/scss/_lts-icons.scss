@@ -26,6 +26,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.lts-branch-location {
+  &:before {
+    content: $lts-branch-location;
+  }
+}
+
 .lts-coins {
   &:before {
     content: $lts-coins;

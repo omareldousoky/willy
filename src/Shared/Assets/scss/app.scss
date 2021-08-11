@@ -40,6 +40,10 @@ h6,
 	color: inherit
 }
 
+.btn-primary {
+  color: #fff;
+}
+
 .form-check>.form-check-input,
 input[type=checkbox],
 input[type=radio] {
@@ -245,4 +249,10 @@ input[type=radio] {
   & td {
     background-color: #f7fff2;
   }
+}
+
+.btn-cancel-prev {
+  background-color: #fff;
+  border-color: #7dc356;
+  color: #7dc356;
 }
