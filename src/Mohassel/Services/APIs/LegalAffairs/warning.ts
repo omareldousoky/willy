@@ -5,15 +5,15 @@ import {
   LegalWarningsSearchRequest,
   LegalWarningsSearchResponse,
 } from '../../../Models/LegalAffairs'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 
-const baseUrl = process.env.REACT_APP_BASE_URL
-const legalService = `${baseUrl}/legal`
+const legalService = `${API_BASE_URL}/legal`
 
 const fetchWarningUrl = `${legalService}/get-warning`
 const createWarningUrl = `${legalService}/warning`
 const setPrintWarningFlagUrl = `${legalService}/print-warning`
-const searchWarningsUrl = `${baseUrl}/search/legal-warnings`
+const searchWarningsUrl = `${API_BASE_URL}/search/legal-warnings`
 
 export const fetchWarning = async (
   request: LegalWarningRequest

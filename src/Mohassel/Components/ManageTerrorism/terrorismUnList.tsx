@@ -17,7 +17,9 @@ import Can from '../../config/Can'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import Search from '../../../Shared/Components/Search/search'
 import { loading } from '../../../Shared/redux/loading/actions'
-import HeaderWithCards, { Tab } from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards, {
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { antiTerrorismArray, fullEnglishDate } from './terrorismInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { uploadTerroristUnDocument } from '../../Services/APIs/Terrorism/terrorism'

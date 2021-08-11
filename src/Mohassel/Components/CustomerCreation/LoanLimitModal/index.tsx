@@ -11,19 +11,19 @@ import { Loader } from '../../../../Shared/Components/Loader'
 import { LtsIcon } from '../../../../Shared/Components'
 import AppForm from '../../ManageLegalAffairs/Form'
 import { FormField } from '../../ManageLegalAffairs/Form/types'
-import { PdfPortal } from '../../Common/PdfPortal'
 import { mapFormFieldsToFormData } from '../../ManageLegalAffairs/Form/utils'
 import { maxValue, minValue } from '../../../localUtils'
-import { getCustomerMaxNanoLoan } from '../../../Services/APIs/Customer-Creation/getCustomer'
-import { setNanoLoanLimit } from '../../../Services/APIs/Customer-Creation/setNanoLoanLimit'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
 import { Customer as CustomerModel } from '../../../Models/Customer'
 import { PromissoryNoteMicro } from '../../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
+import { LoanLimitModalProps, LoanLimitForm } from './types'
+import { getCustomerMaxNanoLoan } from '../../../../Shared/Services/APIs/customer/getCustomer'
+import { setNanoLoanLimit } from '../../../../Shared/Services/APIs/customer/setNanoLoanLimit'
 import {
   BranchDetails,
   getBranch,
-} from '../../../Services/APIs/Branch/getBranch'
-import { LoanLimitModalProps, LoanLimitForm } from './types'
+} from '../../../../Shared/Services/APIs/Branch/getBranch'
+import { PdfPortal } from '../../../../Shared/Components/Common/PdfPortal'
 
 const LoanLimitModal: FunctionComponent<LoanLimitModalProps> = ({
   show,

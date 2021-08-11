@@ -13,8 +13,8 @@ import {
   loanCreationValidation,
   loanIssuanceValidation,
 } from './loanCreationValidation'
-import { getApplication } from '../../Services/APIs/loanApplication/getApplication'
-import { bulkCreation } from '../../Services/APIs/loanApplication/bulkCreation'
+import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
+import { bulkCreation } from '../../../Shared/Services/APIs/loanApplication/bulkCreation'
 import { issueLoan } from '../../Services/APIs/createIssueLoan/issueLoan'
 import { testCalculateApplication } from '../../Services/APIs/createIssueLoan/testCalculateApplication'
 import local from '../../../Shared/Assets/ar.json'
@@ -23,7 +23,7 @@ import {
   beneficiaryType,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
-import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt'
+import PaymentReceipt from '../../../Shared/Components/pdfTemplates/paymentReceipt'
 
 interface CustomerData {
   id: string

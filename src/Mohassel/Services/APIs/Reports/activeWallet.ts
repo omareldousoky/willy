@@ -1,10 +1,10 @@
 import { AxiosResponse } from 'axios'
 import { ApiResponse } from '../../../Models/common'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 
-const { REACT_APP_BASE_URL } = process.env
-const fetchActiveWalletIndividualUrl = `${REACT_APP_BASE_URL}/report/individual-active-wallets`
-const fetchActiveWalletGroupUrl = `${REACT_APP_BASE_URL}/report/group-active-wallets`
+const fetchActiveWalletIndividualUrl = `${API_BASE_URL}/report/individual-active-wallets`
+const fetchActiveWalletGroupUrl = `${API_BASE_URL}/report/group-active-wallets`
 
 export interface ActiveWalletRequest {
   date: string

@@ -2,22 +2,22 @@ import React, { Component } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Container from 'react-bootstrap/Container'
-import { getApplication } from '../../Services/APIs/loanApplication/getApplication'
+import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
 import { Loader } from '../../../Shared/Components/Loader'
 import StatusHelper from './statusHelper'
 import {
   rejectApplication,
   undoreviewApplication,
   reviewApplication,
-} from '../../Services/APIs/loanApplication/stateHandler'
+} from '../../../Shared/Services/APIs/loanApplication/stateHandler'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import {
   BranchDetails,
   BranchDetailsResponse,
   getBranch,
-} from '../../Services/APIs/Branch/getBranch'
+} from '../../../Shared/Services/APIs/Branch/getBranch'
+import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 
 interface State {
   loading: boolean

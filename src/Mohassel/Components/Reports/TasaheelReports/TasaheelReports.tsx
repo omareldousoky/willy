@@ -13,12 +13,11 @@ import {
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
 
-import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { Loader } from '../../../../Shared/Components/Loader'
 import ReportsModal from '../reportsModal'
 import { RisksReport } from './RisksReport'
 import { DebtsAgingReport } from './DebtsAgingReport'
-import { Tab } from '../../HeaderWithCards/cardNavbar'
 import MonthlyReport from '../../pdfTemplates/monthlyReport/monthlyReport'
 import QuarterlyReport from '../../pdfTemplates/quarterlyReport/quarterlyReport'
 
@@ -38,6 +37,7 @@ import {
 } from '../../../Services/APIs/Reports/tasaheelRisksReports'
 
 import { Report, ReportDetails } from './types'
+import { Tab } from '../../../../Shared/Components/HeaderWithCards/cardNavbar'
 import { LtsIcon } from '../../../../Shared/Components'
 
 export const TasaheelReports = () => {

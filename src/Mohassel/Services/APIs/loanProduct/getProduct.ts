@@ -1,8 +1,8 @@
-import axios from '../axios-instance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const getProduct = async (productId: string) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + `/product/loan-product/${productId}`
+  const url = API_BASE_URL + `/product/loan-product/${productId}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }
@@ -11,7 +11,7 @@ export const getProduct = async (productId: string) => {
   }
 }
 export const getProducts = async () => {
-  const url = process.env.REACT_APP_BASE_URL + '/product/loan-product'
+  const url = API_BASE_URL + '/product/loan-product'
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }
@@ -20,7 +20,7 @@ export const getProducts = async () => {
   }
 }
 export const getDetailedProducts = async () => {
-  const url = process.env.REACT_APP_BASE_URL + '/product'
+  const url = API_BASE_URL + '/product'
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }

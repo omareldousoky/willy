@@ -12,11 +12,12 @@ import {
   iscoreStatusColor,
   timeToArabicDate,
   timeToDateyyymmdd,
+  getDateAndTime,
+  numbersToArabic,
 } from './utils'
-import { Score } from '../../Mohassel/Components/CustomerCreation/customerProfile'
-import { getDateAndTime } from '../../Mohassel/Services/getRenderDate'
 import Can from '../../Mohassel/config/Can'
 import { FieldProps } from '../Components/Profile/types'
+import { Score } from '../../Mohassel/Components/CustomerCreation/CustomerProfile'
 
 const {
   companyName,
@@ -39,6 +40,7 @@ interface CustomerInfo extends IscoreInfo {
   isLeader?: boolean
   customerDetails: Customer
   productType?: string
+  isCF?: boolean
 }
 interface CompanyInfo extends IscoreInfo {
   company: Customer
@@ -169,6 +171,7 @@ export const getCustomerInfo = ({
   customerDetails,
   score,
   isLeader,
+  isCF,
   getIscore,
   applicationStatus,
   productType,
@@ -193,6 +196,8 @@ export const getCustomerInfo = ({
     mobilePhoneNumber,
     branchName,
     representativeName,
+    monthlyIncome,
+    initialConsumerFinanceLimit,
   } = customerDetails
   const info: FieldProps[] = [
     {
@@ -304,6 +309,29 @@ export const getCustomerInfo = ({
       showFieldCondition: true,
     },
   ]
+
+  // monthlyIncome && initialConsumerFinanceLimit
+  const cfFields: FieldProps[] = [
+    // hidden field to display both fields in a new row
+    // TODO: make a better way
+    {
+      fieldTitle: 'empty dummy field',
+      fieldData: 0,
+      showFieldCondition: false,
+    },
+    {
+      fieldTitle: local.monthlyIncome,
+      fieldData: numbersToArabic(monthlyIncome || 0),
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.initialConsumerFinanceLimit,
+      fieldData: numbersToArabic(initialConsumerFinanceLimit || 0),
+      showFieldCondition: true,
+    },
+  ]
+
+  if (isCF) return [...info, ...cfFields]
 
   return info
 }

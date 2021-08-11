@@ -87,6 +87,8 @@ export interface Customer {
   customerType?: string
   legalStructure?: string
   nanoLoansLimit?: number
+  monthlyIncome?: number
+  initialConsumerFinanceLimit?: number
 }
 export interface Installment {
   id: number

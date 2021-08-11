@@ -1,7 +1,8 @@
-import axios from '../axios-instance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const getManualPayments = async (obj) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/manual-payments`
+  const url = API_BASE_URL + `/report/manual-payments`
   try {
     const res = await axios.post(url, obj)
     return { status: 'success', body: res.data }
@@ -10,7 +11,7 @@ export const getManualPayments = async (obj) => {
   }
 }
 export const postManualPaymentsExcel = async (obj) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/excel/manual-payments`
+  const url = API_BASE_URL + `/report/excel/manual-payments`
   try {
     const res = await axios.post(url, obj)
     return { status: 'success', body: res.data }
@@ -19,8 +20,7 @@ export const postManualPaymentsExcel = async (obj) => {
   }
 }
 export const getManualPaymentsExcel = async (id) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + `/report/excel/manual-payments/${id}`
+  const url = API_BASE_URL + `/report/excel/manual-payments/${id}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }

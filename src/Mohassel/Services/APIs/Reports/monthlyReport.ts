@@ -1,7 +1,8 @@
-import axios from '../axios-instance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const monthlyReport = async () => {
-  const url = process.env.REACT_APP_BASE_URL + '/report/monthly-report'
+  const url = API_BASE_URL + '/report/monthly-report'
   try {
     const res = await axios.post(url)
     return { status: 'success', body: res.data }
@@ -10,7 +11,7 @@ export const monthlyReport = async () => {
   }
 }
 export const postMonthlyReportExcel = async () => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/excel/monthly-report`
+  const url = API_BASE_URL + `/report/excel/monthly-report`
   try {
     const res = await axios.post(url)
     return { status: 'success', body: res.data }
@@ -19,8 +20,7 @@ export const postMonthlyReportExcel = async () => {
   }
 }
 export const getMonthlyReportExcel = async (id) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + `/report/excel/monthly-report/${id}`
+  const url = API_BASE_URL + `/report/excel/monthly-report/${id}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }
