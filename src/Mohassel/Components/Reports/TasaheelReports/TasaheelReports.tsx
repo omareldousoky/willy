@@ -18,7 +18,6 @@ import { Loader } from '../../../../Shared/Components/Loader'
 import ReportsModal from '../reportsModal'
 import { RisksReport } from './RisksReport'
 import { DebtsAgingReport } from './DebtsAgingReport'
-import { ReportsList } from '../../../../Shared/Components/ReportsList'
 import MonthlyReport from '../../pdfTemplates/monthlyReport/monthlyReport'
 import QuarterlyReport from '../../pdfTemplates/quarterlyReport/quarterlyReport'
 
