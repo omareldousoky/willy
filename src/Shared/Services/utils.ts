@@ -792,3 +792,21 @@ export const generateArrayOfYears = () => {
 
   return years
 }
+export const getIndexInArabic = (index: number) => {
+  switch (index) {
+    case 0:
+      return ['ثالثا', 'ثالث']
+    case 1:
+      return ['رابعا', 'رابع']
+    case 2:
+      return ['خامسا', 'خامس']
+    case 3:
+      return ['سادسا', 'سادس']
+    case 4:
+      return ['سابعا', 'سابع']
+    case 5:
+      return ['ثامنا', 'ثامن']
+    default:
+      return ['', '']
+  }
+}
