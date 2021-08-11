@@ -200,7 +200,7 @@ export const SolidarityGuarantee = ({
       <p className="font-weight-bolder my-0">الكفيل المتضامن</p>
       <p>الاسم : {person.customerName ?? ''}</p>
       <p>بطاقة الرقم القومى: {person.nationalId ?? ''}</p>
-      {personPosition && <p>الصفة : {personPosition}</p>}
+      {/* {personPosition && <p>الصفة : {personPosition}</p>} */}
       <p>التاريخ: {timeToArabicDate(application.creationDate, false)}</p>
       <p>العنوان : {person.customerHomeAddress ?? ''}</p>
       <p>التوقيع :</p>
