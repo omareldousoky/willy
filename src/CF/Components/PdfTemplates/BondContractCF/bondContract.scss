@@ -1,0 +1,119 @@
+@media screen,
+print {
+    .loan-contract {
+        text-align: right;
+        font-size: 12px;
+        line-height: 1.5em;
+        margin: 8px;
+        page-break-after: always;
+        font-family: Arial;
+        font-weight: 600;
+        & .headtitle {
+            font-size: 14px;
+            font-weight: bolder;
+            line-height: 1.5em;
+            margin-top: 1em;
+        }
+    
+        & table {
+            width: 100%;
+        }
+    
+        & div.divHeader {
+            position: fixed;
+            top: 0;
+        }
+    
+        & .bottomborder {
+            border-bottom: 1px solid black;
+            margin-bottom: 3px;
+        }
+    
+        & .textcenter {
+            text-align: center;
+        }
+    
+        & section {
+            margin-top: 1em;
+            page-break-inside: avoid;
+        }
+    
+        & div.title {
+            text-align: center;
+            font-weight: bold;
+        }
+    
+        & .main {
+            page-break-inside: avoid;
+            page-break-after: always;
+        }
+    
+        & .sign {
+            margin-right: auto;
+            text-align: left;
+            width: 100%;
+            padding-left: 100px;
+        }
+    
+        & .bold {
+            font-weight: bold;
+        }
+    
+        & thead.report-header {
+            display: table-header-group;
+        }
+    
+        & table.endorsement_table {
+            border-collapse: collapse;
+            width: 70%;
+            margin: auto;
+            & tr td, tr th {
+                border: 1px black solid;
+                text-align: center;
+            }
+        }
+    
+        & table.stakeholders td {
+            vertical-align: top;
+            & .word-break {
+                word-break: break-all;
+            }
+        }
+        & table.signature_space {
+            margin-top: 1em;
+        }
+        & table.signature_space td {
+            padding-top: 1em;
+        }
+    
+        & table.sign tr {
+            line-height: 4em;
+        }
+    
+        & .last {
+            display: grid;
+            height: 100vh;
+            place-items: center center;
+            width: auto;
+        }
+    
+        & .title_last {
+            font-size: 20px;
+            line-height: 2em;
+            width: 100%;
+            text-align: center;
+        }
+    }
+}
+
+@media screen {
+    .loan-contract {
+        max-width: 624px;
+        display: none;
+        & .main {
+            border: 1px black solid;
+            padding: 30px;
+            margin: 20px;
+        }
+    }
+}
