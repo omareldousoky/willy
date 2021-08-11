@@ -9,6 +9,7 @@ import Can from '../../../config/Can'
 import ability from '../../../config/ability'
 import * as local from '../../../../Shared/Assets/ar.json'
 import {
+  downloadFile,
   getIscoreReportStatus,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
@@ -179,9 +180,11 @@ export const TasaheelReports = () => {
 
     if (res.status === 'success') {
       if (
-        tabs[activeTabIndex()].stringKey === 'tasaheelRisks' ||
-        tabs[activeTabIndex()].stringKey === 'loanAge'
+        tabs[activeTabIndex()].stringKey === 'monthlyReport' ||
+        tabs[activeTabIndex()].stringKey === 'quarterlyReport'
       ) {
+        downloadFile(res.body.url)
+      } else {
         setReportDetails(res.body)
         setPrint(true)
         window.print()
