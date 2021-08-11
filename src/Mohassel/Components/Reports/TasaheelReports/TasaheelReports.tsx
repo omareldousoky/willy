@@ -306,13 +306,13 @@ export const TasaheelReports = () => {
                       </div>
                       {report.status === 'created' && (
                         <>
-                          {tabs[activeTabIndex()].stringKey.includes(
+                          {report.response &&
+                          (tabs[activeTabIndex()].stringKey.includes(
                             'monthlyReport'
                           ) ||
-                          (tabs[activeTabIndex()].stringKey.includes(
-                            'quarterlyReport'
-                          ) &&
-                            report.response) ? (
+                            tabs[activeTabIndex()].stringKey.includes(
+                              'quarterlyReport'
+                            )) ? (
                             <div className="d-flex ">
                               <Button
                                 type="button"
