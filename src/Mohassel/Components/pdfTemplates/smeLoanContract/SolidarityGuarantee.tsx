@@ -11,7 +11,6 @@ import { SolidarityGuaranteeProps } from './types'
 export const SolidarityGuarantee = ({
   application,
   person,
-  personPosition,
 }: SolidarityGuaranteeProps) => (
   <>
     <div className="contract-container m-0 p-0" dir="rtl" lang="ar">
