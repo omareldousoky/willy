@@ -40,6 +40,10 @@ import {
 
 import { Report, ReportDetails } from './types'
 import { LtsIcon } from '../../../../Shared/Components'
+import {
+  MonthReport,
+  QuarterReport,
+} from '../../../../Shared/Services/interfaces'
 
 export const TasaheelReports = () => {
   const reportsRequests = {
@@ -115,7 +119,9 @@ export const TasaheelReports = () => {
   const [print, setPrint] = useState<boolean>(false)
 
   const [reports, setReports] = useState<Report[]>([])
-  const [reportDetails, setReportDetails] = useState<ReportDetails>()
+  const [reportDetails, setReportDetails] = useState<
+    ReportDetails | MonthReport | QuarterReport
+  >()
 
   const activeTabIndex = useCallback(() => {
     const calculatedActiveTabIndex = tabs.findIndex(
@@ -303,15 +309,20 @@ export const TasaheelReports = () => {
                           {tabs[activeTabIndex()].stringKey.includes(
                             'monthlyReport'
                           ) ||
-                          tabs[activeTabIndex()].stringKey.includes(
+                          (tabs[activeTabIndex()].stringKey.includes(
                             'quarterlyReport'
-                          ) ? (
+                          ) &&
+                            report.response) ? (
                             <div className="d-flex ">
                               <Button
                                 type="button"
                                 variant="default"
-                                onClick={() => {
-                                  setReportDetails(report.response)
+                                onClick={async () => {
+                                  setIsLoading(true)
+
+                                  await setReportDetails(report.response)
+                                  setIsLoading(false)
+
                                   setPrint(true)
                                   window.print()
                                 }}
