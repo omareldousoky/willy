@@ -1,7 +1,17 @@
 import React from 'react'
+import {
+  dayToArabic,
+  timeToArabicDate,
+} from '../../../../Shared/Services/utils'
+import { ConsumerFinanceContractData } from '../../../Models/contract'
 import './styles.scss'
 
-export const ConsumerFinanceContract = () => {
+interface ConsumerFinanceContractProps {
+  contractData: ConsumerFinanceContractData
+}
+export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
+  props
+) => {
   return (
     <div className="cf-contract-container">
       <div>
@@ -11,7 +21,14 @@ export const ConsumerFinanceContract = () => {
           الاستهلاكي
         </p>
       </div>
-      <p> انه في يوم الموافق / /</p>
+      <p>
+        انه في يوم &nbsp;
+        {dayToArabic(
+          new Date(props.contractData.customerCreationDate).getDay()
+        )}{' '}
+        &nbsp; الموافق &nbsp;
+        {timeToArabicDate(props.contractData.customerCreationDate, false)}
+      </p>
       <p>حرر هذا العقد بين كلا من:</p>
       <div>
         <p>

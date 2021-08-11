@@ -1,15 +1,5 @@
 import { Signature } from '../../Shared/Models/common'
 
-interface Blocked {
-  isBlocked?: boolean
-  reason?: string
-}
-
-interface Suspect {
-  id?: string
-  type?: string
-}
-
 export interface Customer {
   _id: string
   customerName: string
@@ -65,8 +55,6 @@ export interface Customer {
   representativeName: string
   geoAreaId?: string
   maxPrincipal?: number
-  blocked?: Blocked
-  suspects?: Suspect[]
   socialStatus?: string
   qualification?: string
   currentHomeAddress?: string

@@ -15,6 +15,7 @@ import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getG
 import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCustomer'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 import BondContract from '../PdfTemplates/BondContractCF/BondContract'
+import { ConsumerFinanceContract } from '../PdfTemplates/ConsumerFinanceContract'
 
 export interface Score {
   id?: string // commercialRegisterNumber
@@ -108,6 +109,7 @@ export const CustomerProfile = () => {
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
   }
+  function setCustomerContract(customerDetais) {}
 
   useEffect(() => {
     getCustomerDetails()
@@ -468,6 +470,7 @@ export const CustomerProfile = () => {
       {print === 'all' && (
         <>
           <BondContract data={customerDetails} remainingTotal={0} />
+          <ConsumerFinanceContract />
         </>
       )}
     </>

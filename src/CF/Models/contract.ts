@@ -1,5 +1,5 @@
-export interface ConsumerFinanceContractProps {
-  customerCreationDate: string
+export interface ConsumerFinanceContractData {
+  customerCreationDate: number
   customerName: string
   nationalId: string
   customerHomeAddress: string

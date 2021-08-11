@@ -1,4 +1,4 @@
-import { Signature } from './common'
+import { Signature } from '../../Shared/Models/common'
 import { Customer } from './Customer'
 
 interface CalculationFormulaResponse {

@@ -1,4 +1,4 @@
-import { Signature } from '../../Mohassel/Models/common'
+import { Signature } from '../Models/common'
 
 export interface Branch {
   longitude?: number
