@@ -164,12 +164,12 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
             <p>قيمة التمويل وسعر العائد</p>
             <p>
               4/1 الحد الاقصى لمبلغ التمويل :{' '}
-              {props.contractData.initialConsumerFinanceLimit} حم ( فقط
+              {props.contractData.initialConsumerFinanceLimit} حم (
               {new Tafgeet(
                 props.contractData.initialConsumerFinanceLimit,
                 'EGP'
               ).parse()}{' '}
-              لا غير )
+              )
             </p>
             <p>4/2 متوسط سعر العائد: 23% (ثابت/سنويا)</p>
             <p>
@@ -199,7 +199,7 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
             5/1 مدة هذا العقد سنة تبدأ من{' '}
             {timeToArabicDate(props.contractData.customerCreationDate, false)}م
             وتنتهي في
-            {addYearToTimeStamp(props.contractData.customerCreationDate, true)}
+            {addYearToTimeStamp(props.contractData.customerCreationDate)}
             م، ويجدد تلقائياً لمدة أو لمدد أخرى متساوية ما لم يخطر أحد الطرفين
             الآخر كتابياً بعدم رغبته في التجديد قبل نهاية مدة العقد أو أي مدة
             أخرى مجددة بشهرين على الأقل. 5/2 في كافة الأحوال لا يتم إنهاء
