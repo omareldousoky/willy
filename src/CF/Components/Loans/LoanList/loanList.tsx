@@ -61,11 +61,7 @@ class LoanList extends Component<Props, State> {
         title: local.customerType,
         key: 'customerType',
         render: (data) =>
-          beneficiaryType(
-            data.application.customer.customerType === 'company'
-              ? 'company'
-              : data.application.product.beneficiaryType
-          ),
+          beneficiaryType(data.application.product.beneficiaryType),
       },
       {
         title: local.loanCode,
@@ -86,7 +82,7 @@ class LoanList extends Component<Props, State> {
             }
           >
             {data.application.product.beneficiaryType === 'individual' &&
-            data.application.product.type === 'micro' ? (
+            data.application.product.type === 'consumerFinance' ? (
               data.application.customer.customerName
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -164,6 +160,7 @@ class LoanList extends Component<Props, State> {
   }
 
   componentDidMount() {
+    // TODO: remove sme logic
     let searchFiltersQuery = {}
     if (
       (this.props.location.state?.sme &&
@@ -184,14 +181,14 @@ class LoanList extends Component<Props, State> {
       type:
         this.props.location.state && this.props.location.state.sme
           ? 'sme'
-          : 'micro',
+          : 'consumerFinance',
     }
     query = removeEmptyArg(query)
     this.props.setIssuedLoanSearchFilters({
       type:
         this.props.location.state && this.props.location.state.sme
           ? 'sme'
-          : 'micro',
+          : 'consumerFinance',
     })
     this.props.search(query).then(() => {
       if (this.props.error)
@@ -208,7 +205,7 @@ class LoanList extends Component<Props, State> {
         type:
           this.props.location.state && this.props.location.state.sme
             ? 'sme'
-            : 'micro',
+            : 'consumerFinance',
       })
       let query = {
         size: this.state.size,
@@ -218,7 +215,7 @@ class LoanList extends Component<Props, State> {
         type:
           this.props.location.state && this.props.location.state.sme
             ? 'sme'
-            : 'micro',
+            : 'consumerFinance',
       }
       query = removeEmptyArg(query)
       this.props.search(query).then(() => {
@@ -294,8 +291,8 @@ class LoanList extends Component<Props, State> {
       'dateFromTo',
       'status',
       'branch',
-      'doubtful',
-      'writtenOff',
+      // 'doubtful',
+      // 'writtenOff',
     ]
     const dropDownKeys = [
       'name',
@@ -333,6 +330,7 @@ class LoanList extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Search
+              cf
               searchKeys={searchKeys}
               dropDownKeys={dropDownKeys}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
@@ -341,9 +339,7 @@ class LoanList extends Component<Props, State> {
               url="loan"
               from={this.state.from}
               size={this.state.size}
-              submitClassName="mt-0"
               hqBranchIdRequest={this.props.branchId}
-              sme={this.props.location.state && this.props.location.state.sme}
             />
             <DynamicTable
               from={this.state.from}
