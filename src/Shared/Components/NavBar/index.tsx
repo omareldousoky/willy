@@ -168,7 +168,7 @@ class NavBar extends Component<Props, State> {
                     className="item"
                     onClick={() => this.goToBranch(branch, true)}
                   >
-                    <div style={{ display: 'flex' }}>
+                    <div className="d-flex">
                       <div className="pin-icon">
                         <LtsIcon name="branch-location" />
                       </div>
@@ -178,7 +178,7 @@ class NavBar extends Component<Props, State> {
                       </div>
                     </div>
                   </div>
-                  <hr style={{ margin: 0 }} />
+                  <hr className="m-0" />
                 </div>
               )
             })}
@@ -219,10 +219,7 @@ class NavBar extends Component<Props, State> {
   renderNoResults() {
     return (
       <div className="no-branches-container">
-        <img
-          alt="no-branches-found"
-          src={require('../../Assets/noBranchesFound.svg')}
-        />
+        <LtsIcon name="no-branches-found" size="100px" color="#6c757d" />
         <h4>{local.noResults}</h4>
         <h6 className="text-muted">{local.looksLikeYouCantFindResults}</h6>
       </div>
@@ -275,7 +272,7 @@ class NavBar extends Component<Props, State> {
                     }))
                   }
                 >
-                  <div className="selected-branch">
+                  <div className="selected-branch pr-4">
                     <div className="pin-icon">
                       <LtsIcon name="branch-location" />
                     </div>
@@ -285,11 +282,12 @@ class NavBar extends Component<Props, State> {
                         : this.state.selectedBranch.name}
                     </span>
                   </div>
-                  <img
-                    className="mx-2"
-                    style={{ width: '40px' }}
-                    alt="drop-down-arrow"
-                    src={require('../../Assets/dropDownArrow.svg')}
+                  <LtsIcon
+                    name={`arrow-${
+                      this.state.openBranchList ? 'left' : 'right'
+                    }`}
+                    color="#626262"
+                    style={{ transform: `rotate(90deg)` }}
                   />
                 </div>
                 {this.state.openBranchList ? this.renderBranchList() : null}
