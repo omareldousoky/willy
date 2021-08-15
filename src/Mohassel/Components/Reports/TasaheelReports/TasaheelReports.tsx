@@ -9,6 +9,7 @@ import Can from '../../../config/Can'
 import ability from '../../../config/ability'
 import * as local from '../../../../Shared/Assets/ar.json'
 import {
+  downloadFile,
   getIscoreReportStatus,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
@@ -39,6 +40,10 @@ import {
 import { Report, ReportDetails } from './types'
 import { Tab } from '../../../../Shared/Components/HeaderWithCards/cardNavbar'
 import { LtsIcon } from '../../../../Shared/Components'
+import {
+  MonthReport,
+  QuarterReport,
+} from '../../../../Shared/Services/interfaces'
 
 export const TasaheelReports = () => {
   const reportsRequests = {
@@ -114,7 +119,9 @@ export const TasaheelReports = () => {
   const [print, setPrint] = useState<boolean>(false)
 
   const [reports, setReports] = useState<Report[]>([])
-  const [reportDetails, setReportDetails] = useState<ReportDetails>()
+  const [reportDetails, setReportDetails] = useState<
+    ReportDetails | MonthReport | QuarterReport
+  >()
 
   const activeTabIndex = useCallback(() => {
     const calculatedActiveTabIndex = tabs.findIndex(
@@ -179,9 +186,11 @@ export const TasaheelReports = () => {
 
     if (res.status === 'success') {
       if (
-        tabs[activeTabIndex()].stringKey === 'tasaheelRisks' ||
-        tabs[activeTabIndex()].stringKey === 'loanAge'
+        tabs[activeTabIndex()].stringKey === 'monthlyReport' ||
+        tabs[activeTabIndex()].stringKey === 'quarterlyReport'
       ) {
+        downloadFile(res.body.url)
+      } else {
         setReportDetails(res.body)
         setPrint(true)
         window.print()
@@ -297,18 +306,23 @@ export const TasaheelReports = () => {
                       </div>
                       {report.status === 'created' && (
                         <>
-                          {tabs[activeTabIndex()].stringKey.includes(
+                          {report.response &&
+                          (tabs[activeTabIndex()].stringKey.includes(
                             'monthlyReport'
                           ) ||
-                          tabs[activeTabIndex()].stringKey.includes(
-                            'quarterlyReport'
-                          ) ? (
+                            tabs[activeTabIndex()].stringKey.includes(
+                              'quarterlyReport'
+                            )) ? (
                             <div className="d-flex ">
                               <Button
                                 type="button"
                                 variant="default"
-                                onClick={() => {
-                                  setReportDetails(report.response)
+                                onClick={async () => {
+                                  setIsLoading(true)
+
+                                  await setReportDetails(report.response)
+                                  setIsLoading(false)
+
                                   setPrint(true)
                                   window.print()
                                 }}
