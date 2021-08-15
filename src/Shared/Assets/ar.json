@@ -1152,5 +1152,6 @@
   "commerceTrackingSystem": "نظام تتبع المشتريات",
   "cfName": "حالا للتمويل الاستهلاكي",
   "transactionAmount": "قيمه الحركه",
-  "transactionsSum": "اجمالي قيمه الحركات"
+  "transactionsSum": "اجمالي قيمه الحركات",
+  "cfMobileNumber": "محمول الحد الائتماني"
 }
