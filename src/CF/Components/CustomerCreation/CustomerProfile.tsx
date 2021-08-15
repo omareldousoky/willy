@@ -118,7 +118,6 @@ export const CustomerProfile = () => {
     const res = await getCustomerByID(location.state.id)
     if (res.status === 'success') {
       await setCustomerDetails(res.body)
-      setCustomerContractData(res.body)
       if (ability.can('viewIscore', 'customer'))
         await getCachediScores(res.body.nationalId)
       await getGeoArea(res.body.geoAreaId, res.body.branchId)
@@ -436,6 +435,7 @@ export const CustomerProfile = () => {
         title: local.downloadPDF,
         permission: true,
         onActionClick: () => {
+          setCustomerContractData(customerDetails as Customer)
           setPrint('all')
         },
       },

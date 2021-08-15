@@ -45,7 +45,7 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
       </div>
       <div>
         <p>
-          ثانيا: السيد/ {props.contractData.customerName} الكائن في:
+          ثانيا: السيد/ {props.contractData.customerName} الكائن في:{' '}
           {props.contractData.customerHomeAddress}. يحمل بطاقة رقم قومي:{' '}
           {props.contractData.nationalId}
           <sub>&quot;يشار إليه فيما بعد بالطرف الثاني&quot;</sub>
