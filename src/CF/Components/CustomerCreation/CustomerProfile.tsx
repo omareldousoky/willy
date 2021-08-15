@@ -8,7 +8,10 @@ import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
 import ability from '../../../Shared/config/ability'
 import { Profile, InfoBox, ProfileActions } from '../../../Shared/Components'
-import { CFGuarantorTableViewProp, TabDataProps } from '../../../Shared/Components/Profile/types'
+import {
+  CFGuarantorTableViewProp,
+  TabDataProps,
+} from '../../../Shared/Components/Profile/types'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
 import { getIscoreCached } from '../../../Shared/Services/APIs/iScore'
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
@@ -434,10 +437,13 @@ export const CustomerProfile = () => {
     cfGuarantors: [
       {
         fieldTitle: 'cfGuarantors',
-        fieldData: {customerId: customerDetails?._id, guarantors: customerDetails?.guarantors || []} as CFGuarantorTableViewProp,
+        fieldData: {
+          customerId: customerDetails?._id,
+          guarantors: customerDetails?.customerGuarantors || [],
+        } as CFGuarantorTableViewProp,
         showFieldCondition: true,
       },
-    ]
+    ],
   }
   const getProfileActions = () => {
     return [

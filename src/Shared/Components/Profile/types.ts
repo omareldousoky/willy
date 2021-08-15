@@ -1,5 +1,5 @@
-import { CustomerGuarantor } from '../../../CF/Components/CustomerCreation/GuarantorDetails'
 import { CustomerScore } from '../../Services/APIs/customer/customerCategorization'
+import { CustomerGuarantor } from '../../Services/interfaces'
 
 export interface FieldProps {
   fieldTitle: string
