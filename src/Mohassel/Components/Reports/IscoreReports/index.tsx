@@ -13,7 +13,7 @@ import { downloadFile } from '../../../../Shared/Services/utils'
 import Can from '../../../config/Can'
 
 import { ReportsList } from '../../../../Shared/Components/ReportsList'
-import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../../Shared/Components/HeaderWithCards/headerWithCards'
 import CreditInquiryRequests from './CreditInquiryRequests'
 import ability from '../../../config/ability'
 
