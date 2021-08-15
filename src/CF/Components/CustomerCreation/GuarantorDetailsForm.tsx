@@ -8,6 +8,7 @@ import { FieldArray } from 'formik'
 
 import * as local from '../../../Shared/Assets/ar.json'
 import { getBirthdateFromNationalId } from '../../../Shared/Services/nationalIdValidation'
+import { getDateString } from '../../../Shared/Services/utils'
 
 export const CustomerGuarantorsForm = (props: any) => {
   const {
@@ -168,7 +169,14 @@ export const CustomerGuarantorsForm = (props: any) => {
                             type="text"
                             name={`guarantors.${index}.birthDate`}
                             data-qc="birthDate"
-                            value={values.guarantors[index].birthDate}
+                            value={
+                              typeof values.guarantors[index].birthDate ===
+                              'string'
+                                ? values.guarantors[index].birthDate
+                                : getDateString(
+                                    values.guarantors[index].birthDate
+                                  )
+                            }
                             disabled
                           />
                         </Col>
