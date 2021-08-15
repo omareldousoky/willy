@@ -62,7 +62,7 @@ export const GuarantorTableView = (props: Props) => {
   return (
     <>
       <div className="d-flex flex-column align-items-start justify-content-center">
-        {ability.can('editApplicationGuarantors', 'application') && (
+        {ability.can('addCustomerGuarantors', 'customer') && (
           <div className="mt-5 mb-5">
             <Button variant="primary" onClick={() => changeModal(true)}>
               {local.addEditOrRemoveGuarantor}
