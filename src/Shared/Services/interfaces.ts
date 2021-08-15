@@ -17,6 +17,13 @@ export interface Branch {
   _id?: string
 }
 
+export interface CustomerGuarantor {
+  name: string
+  birthDate: number
+  nationalId: string
+  address: string
+}
+
 export interface Customer {
   accountBranch?: string
   accountNumber?: string
@@ -89,11 +96,7 @@ export interface Customer {
   nanoLoansLimit?: number
   monthlyIncome?: number
   initialConsumerFinanceLimit?: number
-  customerGuarantors?: {
-    name: string
-    address: string
-    nationalId: string
-  }[]
+  customerGuarantors?: CustomerGuarantor[]
 }
 export interface Installment {
   id: number
