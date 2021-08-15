@@ -1,0 +1,37 @@
+@media screen, print {
+  .cf-contract-container {
+    -webkit-print-color-adjust: exact;
+    page-break-after: always;
+    font-size: 16px;
+    line-height: 1.5em;
+    font-weight: bold;
+    font-family: Arial;
+    margin: 8px;
+  }
+  .term-container {
+    page-break-inside: avoid;
+  }
+  p {
+    padding: 0.3em;
+  }
+  ul,
+  li {
+    padding: 0.5em;
+    margin-right: 0.5em;
+  }
+  .head-title {
+    text-align: center;
+    font-weight: bolder;
+    text-decoration: underline;
+  }
+  sub {
+    font-size: 18px;
+    font-weight: bolder;
+    margin: 2rem;
+  }
+}
+@media screen {
+  .cf-contract-container {
+    display: none;
+  }
+}
