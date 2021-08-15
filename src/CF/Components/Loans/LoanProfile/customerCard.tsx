@@ -112,19 +112,7 @@ export const CustomerCardView = (props: Props) => {
     },
   ]
   return (
-    <div style={{ textAlign: 'right' }}>
-      <Button
-        variant="primary"
-        disabled={props.rescheduled}
-        style={{ float: 'left' }}
-        onClick={() => props.print()}
-      >
-        <span
-          className="fa fa-download"
-          style={{ margin: '0px 0px 0px 5px' }}
-        />
-        {local.downloadPDF}
-      </Button>
+    <div>
       <CustomerLoanDetailsBoxView
         application={props.application}
         getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)}

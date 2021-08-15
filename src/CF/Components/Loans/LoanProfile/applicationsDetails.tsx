@@ -151,10 +151,6 @@ export const LoanDetailsTableView = ({
           <td>{application.product.adminFees}</td>
         </tr>
         <tr>
-          <td>{local.usage}</td>
-          <td>{loanUse}</td>
-        </tr>
-        <tr>
           <td>{local.representative}</td>
           <td>
             {application.product.beneficiaryType === 'group'
@@ -164,78 +160,10 @@ export const LoanDetailsTableView = ({
               : application.customer.representativeName}
           </td>
         </tr>
-        <tr>
-          <td>
-            {application.product.type === 'sme'
-              ? local.researcher
-              : local.enquiror}
-          </td>
-          <td>
-            {application.product.type === 'sme'
-              ? application.researcherName
-              : application.enquirerName}
-          </td>
-        </tr>
-        <tr>
-          <td>{local.visitationDate}</td>
-          <td>{timeToArabicDate(application.visitationDate, false)}</td>
-        </tr>
         {application.branchManagerName.length > 0 && (
           <tr>
             <td>{local.branchManager}</td>
             <td>{application.branchManagerName}</td>
-          </tr>
-        )}
-        {application.managerVisitDate > 0 && (
-          <tr>
-            <td>{local.branchManagerVisitation}</td>
-            <td>{timeToArabicDate(application.managerVisitDate, false)}</td>
-          </tr>
-        )}
-        <tr>
-          <td>{local.entryDate}</td>
-          <td>{timeToArabicDate(application.entryDate, false)}</td>
-        </tr>
-        {application.reviewedDate > 0 && (
-          <tr>
-            <td>{local.reviewDate}</td>
-            <td>{timeToArabicDate(application.reviewedDate, false)}</td>
-          </tr>
-        )}
-        {application.secondReviewDate > 0 && (
-          <tr>
-            <td>{local.secondReviewDate}</td>
-            <td>{timeToArabicDate(application.secondReviewDate, false)}</td>
-          </tr>
-        )}
-        {application.thirdReviewDate > 0 && (
-          <tr>
-            <td>{local.thirdReviewDate}</td>
-            <td>{timeToArabicDate(application.thirdReviewDate, false)}</td>
-          </tr>
-        )}
-        {application.undoReviewDate > 0 && (
-          <tr>
-            <td>{local.unreviewDate}</td>
-            <td>{timeToArabicDate(application.undoReviewDate, false)}</td>
-          </tr>
-        )}
-        {application.rejectionDate > 0 && (
-          <tr>
-            <td>{local.decisionDate}</td>
-            <td>{timeToArabicDate(application.rejectionDate, false)}</td>
-          </tr>
-        )}
-        {application.approvalDate > 0 && (
-          <tr>
-            <td>{local.loanApprovalDate}</td>
-            <td>{timeToArabicDate(application.approvalDate, false)}</td>
-          </tr>
-        )}
-        {application.creationDate > 0 && (
-          <tr>
-            <td>{local.loanCreationDate}</td>
-            <td>{timeToArabicDate(application.creationDate, false)}</td>
           </tr>
         )}
         {application.issueDate > 0 && (
@@ -465,12 +393,6 @@ export const CustomerLoanDetailsBoxView = ({ application }: Props) => {
               {local.representative}
             </Form.Label>
             <Form.Label>{officer}</Form.Label>
-          </Form.Group>
-          <Form.Group as={Col} md="3" className="d-flex flex-column">
-            <Form.Label style={{ color: '#6e6e6e' }}>
-              {local.customerBalance}
-            </Form.Label>
-            <Form.Label>{remainingTotal}</Form.Label>
           </Form.Group>
         </Form.Row>
       </Form>
