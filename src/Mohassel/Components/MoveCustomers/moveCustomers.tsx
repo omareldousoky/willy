@@ -32,6 +32,7 @@ import { Customer } from '../../../Shared/Services/interfaces'
 import { Pagination } from '../../../Shared/Components/Common/Pagination'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 import { moveCustomerToOfficer } from '../../../Shared/Services/APIs/customer/moveCustomerToOfficer'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface State {
   customers: Array<Customer>
@@ -301,7 +302,7 @@ class MoveCustomers extends Component<{ isCompany?: false }, State> {
                   <InputGroup className="mb-3">
                     <InputGroup.Append>
                       <InputGroup.Text className="bg-white">
-                        <span className="fa fa-search fa-rotate-90" />
+                        <LtsIcon name="search" />
                       </InputGroup.Text>
                     </InputGroup.Append>
                     <Form.Control

@@ -7,3 +7,13 @@ export interface Action {
 export interface ActionWithIcon extends Action {
   actionIcon: string
 }
+export interface Signature {
+  by?: string
+  at?: number
+  userName?: string
+}
+
+export interface Trace {
+  created: Signature
+  updated: Signature
+}

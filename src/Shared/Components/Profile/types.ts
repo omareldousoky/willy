@@ -1,8 +1,14 @@
 import { CustomerScore } from '../../Services/APIs/customer/customerCategorization'
+import { CustomerGuarantor } from '../../Services/interfaces'
 
 export interface FieldProps {
   fieldTitle: string
-  fieldData: string | number | CustomerScore[] | React.ReactElement
+  fieldData:
+    | string
+    | number
+    | CustomerScore[]
+    | React.ReactElement
+    | CFGuarantorTableViewProp
   showFieldCondition: boolean
   fieldDataStyle?: React.CSSProperties
   fieldTitleStyle?: React.CSSProperties
@@ -30,4 +36,9 @@ export interface ProfileProps {
   editPermission?: boolean
   editOnClick?(): void
   tabsData: TabDataProps
+}
+
+export interface CFGuarantorTableViewProp {
+  customerId: string
+  guarantors: Array<CustomerGuarantor>
 }

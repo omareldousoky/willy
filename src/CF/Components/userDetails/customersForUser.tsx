@@ -26,6 +26,7 @@ import Can from '../../../Shared/config/Can'
 import { LoanOfficersDropDown } from '../../../Shared/Components/dropDowns/allDropDowns'
 import { moveCustomerToOfficer } from '../../../Shared/Services/APIs/customer/moveCustomerToOfficer'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
+import { LtsIcon } from '../../../Shared/Components'
 
 interface Props {
   id: string
@@ -302,7 +303,7 @@ class CustomersForUser extends Component<Props, State> {
           />
           <InputGroup.Append>
             <InputGroup.Text style={{ background: '#fff' }}>
-              <span className="fa fa-search fa-rotate-90" />
+              <LtsIcon name="search" />
             </InputGroup.Text>
           </InputGroup.Append>
           <Col sm={12} dir="rtl" className="p-0 mt-3">

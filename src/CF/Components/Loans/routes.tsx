@@ -6,7 +6,6 @@ import { LoanList, LoanProfile, LoanRollBack } from '.'
 export const loansRoute = {
   path: '/loans',
   label: local.issuedLoans,
-  disableLink: true,
   render: (props) => (
     <Can I="getIssuedLoan" a="application">
       <LoanList {...props} />
