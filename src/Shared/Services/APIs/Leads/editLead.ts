@@ -1,6 +1,6 @@
-import { API_BASE_URL } from '../../../../Shared/envConfig'
-import axios from '../../../../Shared/Services/axiosInstance'
-import { Lead } from '../../../Components/HalanIntegration/leadInterface'
+import { API_BASE_URL } from '../../../envConfig'
+import axios from '../../axiosInstance'
+import { Lead } from '../../../../Mohassel/Components/HalanIntegration/leadInterface'
 
 export const editLead = async (obj: Lead) => {
   const url = API_BASE_URL + `/lead/edit-lead`
