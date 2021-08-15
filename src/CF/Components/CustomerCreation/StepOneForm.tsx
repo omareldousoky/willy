@@ -564,7 +564,7 @@ export const StepOneForm = (props: any) => {
 
       <Form.Group controlId="mobilePhoneNumber">
         <Form.Label className="customer-form-label">
-          {local.mobilePhoneNumber}
+          {local.mobilePhoneNumber}*
         </Form.Label>
         <Form.Control
           type="text"
