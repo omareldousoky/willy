@@ -111,7 +111,7 @@ export const CustomerCardView = (props: Props) => {
     },
   ]
   return (
-    <div>
+    <>
       <CustomerLoanDetailsBoxView
         application={props.application}
         getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)}
@@ -153,6 +153,6 @@ export const CustomerCardView = (props: Props) => {
         data={props.application.installmentsObject.installments}
         mappers={mappers}
       />
-    </div>
+    </>
   )
 }
