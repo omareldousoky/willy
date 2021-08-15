@@ -1,12 +1,12 @@
-import axios from '../axios-instance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const changeLeadBranch = async (
   phoneNumber: string,
   branchId: string,
   uuid: string
 ) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + `/lead/lead-branch/${phoneNumber}`
+  const url = API_BASE_URL + `/lead/lead-branch/${phoneNumber}`
   try {
     const res = await axios.put(url, { branchId, uuid })
     return { status: 'success', body: res.data }

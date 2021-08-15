@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col'
 import InputGroup from 'react-bootstrap/InputGroup'
 
 import * as local from '../../../../Shared/Assets/ar.json'
-import DateField from '../../Common/FormikFields/dateField'
+import DateField from '../../../../Shared/Components/Common/FormikFields/dateField'
 
 interface DateFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string

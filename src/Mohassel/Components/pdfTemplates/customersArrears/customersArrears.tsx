@@ -11,7 +11,7 @@ import {
   CustomersArrearsResponse,
   CustomersArrearsSingleResponse,
 } from '../../../Services/interfaces'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 import './customersArrears.scss'
 
 interface CustomersArrearsProps {

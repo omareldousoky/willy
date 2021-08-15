@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import CIBReports from './cibReports'
 import * as local from '../../../Shared/Assets/ar.json'
-import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
+import {
+  CardNavBar,
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import Reports from './reports'
 import IscoreReports from './IscoreReports'
 import OracleIntegration from './oracleIntegration'

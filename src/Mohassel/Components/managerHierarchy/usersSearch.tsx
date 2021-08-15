@@ -8,8 +8,8 @@ import Select from 'react-select'
 import { theme } from '../../../Shared/theme'
 import * as local from '../../../Shared/Assets/ar.json'
 import { UsersSearchProps } from './types'
-import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
-import { searchUsers } from '../../Services/APIs/Users/searchUsers'
+import { searchLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
+import { searchUsers } from '../../../Shared/Services/APIs/Users/searchUsers'
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction'
 import {
   LoanOfficer,

@@ -23,13 +23,13 @@ import {
   AsyncLoanOfficersDropDown,
   AsyncManagersDropDown,
   BranchesDropDown,
-} from '../dropDowns/allDropDowns'
+} from '../../../Shared/Components/dropDowns/allDropDowns'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Branch } from '../../../Shared/Services/interfaces'
-import DateField from '../Common/FormikFields/dateField'
+import DateField from '../../../Shared/Components/Common/FormikFields/dateField'
 import { required } from '../../../Shared/validations'
 import { DateFromToField } from './Fields/dateFromTo'
-import TextField from '../Common/FormikFields/textField'
+import TextField from '../../../Shared/Components/Common/FormikFields/textField'
 
 import {
   generateArrayOfYears,
@@ -56,7 +56,7 @@ interface InitialFormikState {
   defaultingCustomerStatus?: string
   managers?: Array<CurrentHierarchiesSingleResponse>
   creditInquiryStatus?: string
-  year?: string
+  year?: number
 }
 
 interface Props {
@@ -185,7 +185,7 @@ const ReportsModal = (props: Props) => {
           initValues.creditInquiryStatus = creditInquiryStatuses[0].value
           break
         case 'year':
-          initValues.year = ''
+          initValues.year = new Date().getFullYear()
           break
         default:
           break
@@ -816,6 +816,7 @@ const ReportsModal = (props: Props) => {
                     'loanDetails',
                     'cibPaymentReport',
                     'customerTransactionReport',
+                    'raseedyTransactions',
                   ].includes(props.pdf.key) &&
                   props.getExcel && (
                     <Button

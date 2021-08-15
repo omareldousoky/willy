@@ -6,11 +6,11 @@ import {
   OfficersBranchPercentPaymentRequest,
   OfficersPercentPaymentRequest,
 } from '../../interfaces'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 
-const { REACT_APP_BASE_URL } = process.env
-const fetchOfficerPercentPaymentUrl = `${REACT_APP_BASE_URL}/report/officer-percent-payment`
-const fetchOfficerBranchPercentPaymentUrl = `${REACT_APP_BASE_URL}/report/officer-branch-percent-payment`
+const fetchOfficerPercentPaymentUrl = `${API_BASE_URL}/report/officer-percent-payment`
+const fetchOfficerBranchPercentPaymentUrl = `${API_BASE_URL}/report/officer-branch-percent-payment`
 
 export const fetchOfficersPercentPaymentReport = async (
   request: OfficersPercentPaymentRequest

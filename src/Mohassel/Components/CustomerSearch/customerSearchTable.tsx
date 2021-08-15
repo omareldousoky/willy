@@ -7,10 +7,12 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import FormControl from 'react-bootstrap/FormControl'
 import InputGroup from 'react-bootstrap/InputGroup'
 
-import { getRenderDate } from '../../Services/getRenderDate'
 import * as local from '../../../Shared/Assets/ar.json'
 
-import { getFullCustomerKey } from '../../../Shared/Services/utils'
+import {
+  getFullCustomerKey,
+  getRenderDate,
+} from '../../../Shared/Services/utils'
 import { InfoBox } from '../../../Shared/Components'
 import {
   getCompanyInfo,

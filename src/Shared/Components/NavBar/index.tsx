@@ -11,11 +11,11 @@ import * as local from '../../Assets/ar.json'
 import { Loader } from '../Loader'
 import { clearAllCookies, getCookie } from '../../Services/getCookie'
 import { parseJwt, timeToDateyyymmdd } from '../../Services/utils'
-import { contextBranch } from '../../../Mohassel/Services/APIs/Login/contextBranch'
+import { contextBranch } from '../../Services/APIs/Auth/contextBranch'
 import './styles.scss'
 import { setToken } from '../../token'
 import { Auth } from '../../redux/auth/types'
-import { logout } from '../../../Mohassel/Services/APIs/Auth/logout'
+import { logout } from '../../Services/APIs/Auth/logout'
 import ChangePasswordModal from '../changePasswordModal/changePasswordModal'
 import { LtsNav } from './LtsNav'
 import { CfNav } from './CfNav'
@@ -236,21 +236,24 @@ class NavBar extends Component<Props, State> {
         <Navbar expand="lg" style={{ background: '#f5f5f5', padding: 0 }}>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="logo-navbar">
-              {this.props.isLTS && (
-                <>
-                  <Navbar.Brand className="ml-4">
-                    <img
-                      alt="navbar-logo"
-                      src={require('../../Assets/Logo.svg')}
-                    />
-                  </Navbar.Brand>
-                  <Navbar.Text className="mx-5">
-                    <h5 className="text-primary font-weight-bold">
-                      {local.lowRateLoan}
-                    </h5>
-                  </Navbar.Text>
-                </>
-              )}
+              <Navbar.Brand className="ml-4">
+                <img
+                  alt="navbar-logo"
+                  src={
+                    this.props.isLTS
+                      ? require('../../Assets/Logo.svg')
+                      : require('../../Assets/HalanLogo.svg')
+                  }
+                />
+              </Navbar.Brand>
+
+              <Navbar.Text className="mx-5">
+                <h5 className="text-primary font-weight-bold">
+                  {this.props.isLTS
+                    ? local.lowRateLoan
+                    : local.commerceTrackingSystem}
+                </h5>
+              </Navbar.Text>
               <div style={{ flex: 2, display: 'flex', width: '100%' }}>
                 <div className="info-navbar">
                   <span>{local.currentPeriodStartsIn}</span>

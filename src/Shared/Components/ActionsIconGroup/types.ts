@@ -1,4 +1,4 @@
-import { ActionWithIcon } from '../../../Mohassel/Models/common'
+import { ActionWithIcon } from '../../Models/common'
 
 export interface ActionsIconGroupProps {
   currentId: string

@@ -5,3 +5,144 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.row-nowrap {
+  display: flex;
+  flex-wrap: nowrap !important;
+}
+
+.btn-cancel-prev {
+  background-color: #fff;
+  border-color: #7dc356;
+  color: #7dc356;
+}
+
+.error div {
+  border-color: #d51b1b;
+}
+
+.customer-form-label {
+  margin-right: 0px;
+  padding-right: 0px;
+  display: block;
+  text-align: right;
+  font-size: 16px;
+}
+
+.dashed-line {
+  border-top: 1px dashed #e5e5e5;
+}
+
+.dropdown-container {
+  display: flex;
+  border: 1px #ced4da solid;
+  border-radius: 5px;
+
+  & .dropdown-label {
+    margin: 0;
+    background: #e9ecef;
+    color: #495057;
+    padding: 0.375rem 0.75rem;
+    border-left: 1px solid #ced4da;
+    white-space: nowrap;
+  }
+
+  & .dropdown-select {
+    height: auto;
+    border: 0;
+    cursor: pointer;
+  }
+
+  & select {
+    margin: 0 0.5rem;
+    padding: 0;
+
+    &:disabled {
+      margin: 0;
+      cursor: default;
+    }
+  }
+}
+
+.input-group {
+  & .dropdown.input-group-append {
+    background: #e9ecef;
+    color: #495057;
+
+    & .dropdown-toggle.btn {
+      color: #495057;
+      border-color: #ced4da;
+      background: #e9ecef;
+
+      &:focus {
+        box-shadow: none;
+      }
+    }
+  }
+
+  & .dropdown-select {
+    padding: 0;
+  }
+}
+
+.data-form {
+  text-align: right;
+}
+
+.data-group {
+  padding: 20px 10px;
+}
+
+.data-label {
+  font-weight: bold;
+  margin: 10px 0;
+  font-size: 14px;
+  text-align: right;
+}
+
+.data-check-label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.selected-check {
+  color: #7dc356;
+}
+
+.invalid-document {
+  position: absolute;
+  padding: 5px;
+  top: 120px;
+  left: 120px;
+  border-radius: 10px;
+  cursor: not-allowed;
+}
+
+.sort-icons {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.btn-default {
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.custom-card-header {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px;
+}
+
+.big-button {
+  width: 200px;
+}
+
+.btn-primary {
+  color: #fff;
+}

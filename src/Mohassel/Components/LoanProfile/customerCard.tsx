@@ -6,9 +6,8 @@ import Button from 'react-bootstrap/Button'
 
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getRenderDate } from '../../Services/getRenderDate'
 import { CustomerLoanDetailsBoxView } from './applicationsDetails'
-import { numbersToArabic } from '../../../Shared/Services/utils'
+import { numbersToArabic, getRenderDate } from '../../../Shared/Services/utils'
 
 interface Props {
   application: any

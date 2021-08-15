@@ -7,9 +7,8 @@ import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import DocumentUploader from '../../../Shared/Components/documentUploader/documentUploader'
-import { getDocumentsTypes } from '../../../Mohassel/Services/APIs/encodingFiles/getDocumentsTypes'
-import { getApplicationDocuments } from '../../../Mohassel/Services/APIs/loanApplication/getDocuments'
-import { getApplication } from '../../../Mohassel/Services/APIs/loanApplication/getApplication'
+import { getApplicationDocuments } from '../../../Shared/Services/APIs/loanApplication/getDocuments'
+import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import {
@@ -19,6 +18,7 @@ import {
 } from '../../../Shared/redux/document/actions'
 import { Image } from '../../../Shared/redux/document/types'
 import { downloadAsZip, getErrorMessage } from '../../../Shared/Services/utils'
+import { getDocumentsTypes } from '../../../Shared/Services/APIs/encodingFiles/documentType'
 
 interface Props extends RouteComponentProps<{}, {}, { id: string }> {
   getDocuments: typeof getDocuments

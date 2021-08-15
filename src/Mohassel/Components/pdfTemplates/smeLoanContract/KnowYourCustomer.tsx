@@ -133,7 +133,7 @@ export const KnowYourCustomer = ({
             <p>الوظيفة الحاليــــــة :-</p>
             <p>
               عنوان جهة العمـل :-
-              {person.businessAddress ?? ''}
+              {person.currentHomeAddress ?? ''}
             </p>
           </div>
         ))}

@@ -5,10 +5,10 @@ import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
 import { addLoanUsage } from '../../Services/APIs/LoanUsage/addLoanUsage'
 import { updateLoanUsage } from '../../Services/APIs/LoanUsage/updateLoanUsage'
 import * as local from '../../../Shared/Assets/ar.json'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageLoanDetailsArray } from '../ManageLoanDetails/manageLoanDetailsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { CRUDList } from '../CRUDList/crudList'
+import { CRUDList } from '../../../Shared/Components/CRUDList/crudList'
 
 interface LoanUse {
   name: string

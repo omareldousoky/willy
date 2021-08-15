@@ -16,7 +16,6 @@ import {
 } from './loanApplicationStates'
 import GroupInfoBox from '../LoanProfile/groupInfoBox'
 import { LoanDetailsTableView } from '../LoanProfile/applicationsDetails'
-import { getRejectionReasons } from '../../Services/APIs/configApis/config'
 import { guarantorOrderLocal } from '../../../Shared/Services/utils'
 import { InfoBox } from '../../../Shared/Components'
 import {
@@ -24,6 +23,7 @@ import {
   getCustomerInfo,
 } from '../../../Shared/Services/formatCustomersInfo'
 import { Customer } from '../../../Shared/Services/interfaces'
+import { getRejectionReasons } from '../../../Shared/Services/APIs/config'
 
 interface Props {
   status: string
