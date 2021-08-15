@@ -846,3 +846,4 @@ export const addYearToTimeStamp = (timeStamp: number) => {
   )
 
   return nextYearDate.toLocaleDateString('ar-EG')
+}
