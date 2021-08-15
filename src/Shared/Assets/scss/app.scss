@@ -40,6 +40,10 @@ h6,
 	color: inherit
 }
 
+.btn-primary {
+  color: #fff;
+}
+
 .form-check>.form-check-input,
 input[type=checkbox],
 input[type=radio] {
@@ -54,13 +58,13 @@ input[type=radio] {
 	&[type=checkbox]::after,
 	input[type=checkbox]::after {
 		font-family: "lts-icons" !important;
-		content: "\e901";
+		content: "\e916";
 		color: #495057;
 	}
 
 	&[type=checkbox]:checked::after,
 	input[type=checkbox]:checked::after {
-		content: "\e900";
+		content: "\e915";
 		color: $green;
 	}
 
@@ -73,13 +77,13 @@ input[type=radio] {
 	&[type=radio]::after,
 	input[type=radio]::after {
 		font-family: "lts-icons" !important;
-		content: "\e903";
+		content: "\e936";
 		color: #495057;
 	}
 
 	&[type=radio]:checked::after,
 	input[type=radio]:checked::after {
-		content: "\e902";
+		content: "\e935";
 		color: $green;
 	}
 
@@ -101,18 +105,6 @@ input[type=radio] {
 .breadcrumbs .item {
   display: inline-block;
   margin: 5px 20px;
-}
-
-.arrow {
-  border: solid #afafaf;
-  border-width: 0 1.5px 1.5px 0;
-  display: inline-block;
-  padding: 2px;
-}
-
-.arrow-left {
-	@extend .arrow;
-  transform: rotate(135deg);
 }
 
 /*Loader Component*/
@@ -245,4 +237,10 @@ input[type=radio] {
   & td {
     background-color: #f7fff2;
   }
+}
+
+.btn-cancel-prev {
+  background-color: #fff;
+  border-color: #7dc356;
+  color: #7dc356;
 }

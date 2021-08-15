@@ -56,6 +56,11 @@ export const CfNavbar = () => {
             {local.tools}
           </Nav.Link>
         ) : null}
+        {ability.can('getLead', 'halanuser') && (
+          <Nav.Link onClick={() => history.push('/halan-integration/leads')}>
+            {local.halan}
+          </Nav.Link>
+        )}
       </Nav>
     </Navbar.Collapse>
   )

@@ -11,6 +11,7 @@ export const LtsIcon = ({
   color,
   tooltipText,
   tooltipPlacement,
+  style,
 }: LtsIconProps) => {
   return tooltipText ? (
     <OverlayTrigger
@@ -20,10 +21,16 @@ export const LtsIcon = ({
         <Tooltip id={`tooltip-${tooltipPlacement}`}>{tooltipText}</Tooltip>
       }
     >
-      <span className={`lts lts-${name}`} style={{ fontSize: size, color }} />
+      <span
+        className={`lts lts-${name}`}
+        style={{ fontSize: size, color, ...style }}
+      />
     </OverlayTrigger>
   ) : (
-    <span className={`lts lts-${name}`} style={{ fontSize: size, color }} />
+    <span
+      className={`lts lts-${name}`}
+      style={{ fontSize: size, color, ...style }}
+    />
   )
 }
 

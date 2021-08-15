@@ -6,7 +6,6 @@ import Swal from 'sweetalert2'
 import local from '../../../../Shared/Assets/ar.json'
 import { englishToArabic } from '../../../../Mohassel/Services/statusLanguage'
 import { getLoanOfficer } from '../../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
-import { getLoanUsage } from '../../../../Mohassel/Services/APIs/LoanUsage/getLoanUsage'
 import {
   beneficiaryType,
   currency,
@@ -16,7 +15,6 @@ import {
   timeToArabicDate,
   getRenderDate,
 } from '../../../../Shared/Services/utils'
-import { remainingLoan } from '../../../../Mohassel/Services/APIs/Loan/remainingLoan'
 
 interface Props {
   application: any
@@ -33,22 +31,6 @@ export const LoanDetailsTableView = ({
   application,
   branchName,
 }: LoanDetailsProps) => {
-  const [loanUse, changeUse] = useState('')
-
-  async function getLoanUsages() {
-    const res = await getLoanUsage()
-    if (res.status === 'success') {
-      const uses = res.body.usages
-      const value = uses.find((use) => use.id === application.usage).name
-      changeUse(value)
-    } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      return ''
-    }
-  }
-  useEffect(() => {
-    getLoanUsages()
-  }, [])
   return (
     <Table striped bordered style={{ textAlign: 'right' }}>
       <tbody>
@@ -151,10 +133,6 @@ export const LoanDetailsTableView = ({
           <td>{application.product.adminFees}</td>
         </tr>
         <tr>
-          <td>{local.usage}</td>
-          <td>{loanUse}</td>
-        </tr>
-        <tr>
           <td>{local.representative}</td>
           <td>
             {application.product.beneficiaryType === 'group'
@@ -164,78 +142,10 @@ export const LoanDetailsTableView = ({
               : application.customer.representativeName}
           </td>
         </tr>
-        <tr>
-          <td>
-            {application.product.type === 'sme'
-              ? local.researcher
-              : local.enquiror}
-          </td>
-          <td>
-            {application.product.type === 'sme'
-              ? application.researcherName
-              : application.enquirerName}
-          </td>
-        </tr>
-        <tr>
-          <td>{local.visitationDate}</td>
-          <td>{timeToArabicDate(application.visitationDate, false)}</td>
-        </tr>
         {application.branchManagerName.length > 0 && (
           <tr>
             <td>{local.branchManager}</td>
             <td>{application.branchManagerName}</td>
-          </tr>
-        )}
-        {application.managerVisitDate > 0 && (
-          <tr>
-            <td>{local.branchManagerVisitation}</td>
-            <td>{timeToArabicDate(application.managerVisitDate, false)}</td>
-          </tr>
-        )}
-        <tr>
-          <td>{local.entryDate}</td>
-          <td>{timeToArabicDate(application.entryDate, false)}</td>
-        </tr>
-        {application.reviewedDate > 0 && (
-          <tr>
-            <td>{local.reviewDate}</td>
-            <td>{timeToArabicDate(application.reviewedDate, false)}</td>
-          </tr>
-        )}
-        {application.secondReviewDate > 0 && (
-          <tr>
-            <td>{local.secondReviewDate}</td>
-            <td>{timeToArabicDate(application.secondReviewDate, false)}</td>
-          </tr>
-        )}
-        {application.thirdReviewDate > 0 && (
-          <tr>
-            <td>{local.thirdReviewDate}</td>
-            <td>{timeToArabicDate(application.thirdReviewDate, false)}</td>
-          </tr>
-        )}
-        {application.undoReviewDate > 0 && (
-          <tr>
-            <td>{local.unreviewDate}</td>
-            <td>{timeToArabicDate(application.undoReviewDate, false)}</td>
-          </tr>
-        )}
-        {application.rejectionDate > 0 && (
-          <tr>
-            <td>{local.decisionDate}</td>
-            <td>{timeToArabicDate(application.rejectionDate, false)}</td>
-          </tr>
-        )}
-        {application.approvalDate > 0 && (
-          <tr>
-            <td>{local.loanApprovalDate}</td>
-            <td>{timeToArabicDate(application.approvalDate, false)}</td>
-          </tr>
-        )}
-        {application.creationDate > 0 && (
-          <tr>
-            <td>{local.loanCreationDate}</td>
-            <td>{timeToArabicDate(application.creationDate, false)}</td>
           </tr>
         )}
         {application.issueDate > 0 && (
@@ -248,151 +158,9 @@ export const LoanDetailsTableView = ({
     </Table>
   )
 }
-// this is used in rescheduling
-export const LoanDetailsBoxView = ({ application }: Props) => {
-  const [loanUse, changeUse] = useState('')
-
-  async function getLoanUsages() {
-    const res = await getLoanUsage()
-    if (res.status === 'success') {
-      const uses = res.body.usages
-      const value = uses.find((use) => use.id === application.usage).name
-      changeUse(value)
-    } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      return ''
-    }
-  }
-  useEffect(() => {
-    getLoanUsages()
-  }, [])
-  return (
-    <Form>
-      <Form.Row>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>
-            {local.productName}
-          </Form.Label>
-          <Form.Label>{application.product.productName}</Form.Label>
-        </Form.Group>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>{local.currency}</Form.Label>
-          <Form.Label>{currency(application.product.currency)} </Form.Label>
-        </Form.Group>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>
-            {local.calculationFormulaId}
-          </Form.Label>
-          <Form.Label>{application.product.calculationFormula.name}</Form.Label>
-        </Form.Group>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>{local.interest}</Form.Label>
-          <Form.Label>
-            {application.product.interest +
-              ' ' +
-              interestPeriod(application.product.interestPeriod)}
-          </Form.Label>
-        </Form.Group>
-      </Form.Row>
-      <Form.Row>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>
-            {local.inAdvanceFees}
-          </Form.Label>
-          <Form.Label>{application.product.inAdvanceFees} </Form.Label>
-        </Form.Group>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>
-            {local.periodLengthEvery}
-          </Form.Label>
-          <Form.Label>
-            {application.product.periodLength +
-              ' ' +
-              periodType(application.product.periodType)}
-          </Form.Label>
-        </Form.Group>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>
-            {local.gracePeriod}
-          </Form.Label>
-          <Form.Label>{application.product.gracePeriod} </Form.Label>
-        </Form.Group>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>
-            {local.pushPayment}
-          </Form.Label>
-          <Form.Label>{application.product.pushPayment} </Form.Label>
-        </Form.Group>
-      </Form.Row>
-      <Form.Row>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>
-            {local.noOfInstallments}
-          </Form.Label>
-          <Form.Label>{application.product.noOfInstallments} </Form.Label>
-        </Form.Group>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>
-            {local.principal}
-          </Form.Label>
-          <Form.Label>{application.principal} </Form.Label>
-        </Form.Group>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>
-            {local.applicationFee}
-          </Form.Label>
-          <Form.Label>{application.product.applicationFee} </Form.Label>
-        </Form.Group>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>
-            {local.adminFees}
-          </Form.Label>
-          <Form.Label>{application.product.adminFees} </Form.Label>
-        </Form.Group>
-      </Form.Row>
-      <Form.Row>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>
-            {local.entryDate}
-          </Form.Label>
-          <Form.Label>{getRenderDate(application.entryDate)} </Form.Label>
-        </Form.Group>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>{local.usage}</Form.Label>
-          <Form.Label>{loanUse} </Form.Label>
-        </Form.Group>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>
-            {local.representative}
-          </Form.Label>
-          <Form.Label>
-            {application.product.beneficiaryType === 'group'
-              ? application.group.individualsInGroup.find(
-                  (member) => member.type === 'leader'
-                ).customer.representativeName
-              : application.customer.representativeName}
-          </Form.Label>
-        </Form.Group>
-        <Form.Group as={Col} md="3" className="d-flex flex-column">
-          <Form.Label style={{ color: '#6e6e6e' }}>
-            {application.product.type === 'sme'
-              ? local.researcher
-              : local.enquiror}
-          </Form.Label>
-          <Form.Label>
-            {application.product.type === 'sme'
-              ? application.researcherName
-              : application.enquirerName}
-          </Form.Label>
-        </Form.Group>
-      </Form.Row>
-    </Form>
-  )
-}
 // this is used in the customer Card/status
 export const CustomerLoanDetailsBoxView = ({ application }: Props) => {
   const [officer, changeOfficerName] = useState('')
-  const [remainingTotal, changeRemaining] = useState(0)
   async function getOfficerName(id) {
     const res = await getLoanOfficer(id)
     if (res.status === 'success') {
@@ -404,24 +172,9 @@ export const CustomerLoanDetailsBoxView = ({ application }: Props) => {
     }
   }
 
-  async function getRemainingLoan(id: string, status: string) {
-    if (status === 'pending' || (status === 'issued' && id)) {
-      const res = await remainingLoan(id)
-      if (res.status === 'success') {
-        changeRemaining(res.body.remainingTotal)
-      } else {
-        changeRemaining(0)
-      }
-    }
-  }
   useEffect(() => {
     application.customer.representative &&
       getOfficerName(application.customer.representative)
-    const id =
-      application.product.beneficiaryType === 'group'
-        ? application?.group?.individualsInGroup[0]?.customer?._id
-        : application.customer._id
-    getRemainingLoan(id, application.status)
   }, [])
   return (
     <div>
@@ -465,12 +218,6 @@ export const CustomerLoanDetailsBoxView = ({ application }: Props) => {
               {local.representative}
             </Form.Label>
             <Form.Label>{officer}</Form.Label>
-          </Form.Group>
-          <Form.Group as={Col} md="3" className="d-flex flex-column">
-            <Form.Label style={{ color: '#6e6e6e' }}>
-              {local.customerBalance}
-            </Form.Label>
-            <Form.Label>{remainingTotal}</Form.Label>
           </Form.Group>
         </Form.Row>
       </Form>

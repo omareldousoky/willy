@@ -820,6 +820,15 @@ export const getDateAndTime = (date: number) => {
 }
 
 export const isCF = API_BASE_URL?.includes('cf') ?? false
+
+export const addYearToTimeStamp = (timeStamp: number) => {
+  const currDate = new Date(timeStamp)
+  const nextYearDate = new Date(
+    currDate.setFullYear(currDate.getFullYear() + 1)
+  )
+
+  return nextYearDate.toLocaleDateString('ar-EG')
+}
 export const getIndexInArabic = (index: number) => {
   switch (index) {
     case 0:
