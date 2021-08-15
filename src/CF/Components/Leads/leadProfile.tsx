@@ -73,11 +73,14 @@ const LeadProfile = (
                   <td>{local.name}</td>
                   <td>{leadDetails.customerName}</td>
                 </tr>
+
                 <tr>
                   <td>{local.age}</td>
-                  <td>{`${local.from} ${
-                    leadDetails.minAge ? leadDetails.minAge : 1
-                  } ${local.to} ${leadDetails.maxAge} ${local.year}`}</td>
+                  {leadDetails.maxAge && (
+                    <td>{`${local.from} ${
+                      leadDetails.minAge ? leadDetails.minAge : 1
+                    } ${local.to} ${leadDetails.maxAge} ${local.year}`}</td>
+                  )}
                 </tr>
                 <tr>
                   <td>{local.mobilePhoneNumber}</td>
@@ -108,15 +111,20 @@ const LeadProfile = (
                 </tr>
                 <tr>
                   <td>{local.activityPeriod}</td>
-                  <td>{getPeriod(leadDetails.maxBusinessDate)}</td>
+                  <td>
+                    {leadDetails.maxBusinessDate &&
+                      getPeriod(leadDetails.maxBusinessDate)}
+                  </td>
                 </tr>
                 <tr>
                   <td>{local.businessAddress}</td>
                   <td>{`${
-                    leadDetails.businessStreet ? leadDetails.businessStreet : ''
-                  }, ${leadDetails.businessArea}, ${
-                    leadDetails.businessCity
-                  }, ${leadDetails.businessGovernate}`}</td>
+                    leadDetails.businessStreet
+                      ? leadDetails.businessStreet + ','
+                      : ''
+                  } ${leadDetails.businessArea ?? ''} ${
+                    leadDetails.businessCity ?? ''
+                  } ${leadDetails.businessGovernate ?? ''}`}</td>
                 </tr>
                 <tr>
                   <td>{local.addressDescription}</td>

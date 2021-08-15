@@ -10,7 +10,6 @@ export const leadStepOne: LeadStepOne = {
   phoneNumber: '',
   customerNationalId: '',
   nationalIdIssueDate: '',
-  loanOwner: false,
 }
 
 export const leadStepTwo: LeadStepTwo = {
