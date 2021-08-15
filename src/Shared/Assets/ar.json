@@ -1153,5 +1153,7 @@
   "cfName": "حالا للتمويل الاستهلاكي",
   "transactionAmount": "قيمه الحركه",
   "transactionsSum": "اجمالي قيمه الحركات",
-  "addEditOrRemoveGuarantor": "إضافة / تعديل ضمان"
+  "creditInquiryRequestsReport": "تقرير طلبات الاستعلام الائتماني",
+  "individualAndGroup": "(فردي - جماعي)",
+	"addEditOrRemoveGuarantor": "إضافة / تعديل ضمان"
 }

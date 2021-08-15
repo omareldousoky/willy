@@ -4,4 +4,5 @@ export interface LtsIconProps {
   tooltipPlacement?: 'top' | 'right' | 'bottom' | 'left'
   size?: string
   color?: string
+  style?: React.CSSProperties
 }

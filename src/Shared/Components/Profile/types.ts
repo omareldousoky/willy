@@ -21,7 +21,7 @@ export interface TabProps {
   header?: string
   desc?: string
   stringKey: string
-  permission?: string
+  permission?: string | string[]
   permissionKey?: string
 }
 export interface ProfileProps {

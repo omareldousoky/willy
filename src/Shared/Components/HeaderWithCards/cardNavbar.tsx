@@ -8,7 +8,7 @@ export interface Tab {
   header?: string
   desc?: string
   stringKey: string
-  permission?: string
+  permission?: string | string[]
   permissionKey?: string
 }
 interface Props {

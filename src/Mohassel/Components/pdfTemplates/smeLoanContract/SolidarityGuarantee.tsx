@@ -11,7 +11,6 @@ import { SolidarityGuaranteeProps } from './types'
 export const SolidarityGuarantee = ({
   application,
   person,
-  personPosition,
 }: SolidarityGuaranteeProps) => (
   <>
     <div className="contract-container m-0 p-0" dir="rtl" lang="ar">
@@ -200,7 +199,7 @@ export const SolidarityGuarantee = ({
       <p className="font-weight-bolder my-0">الكفيل المتضامن</p>
       <p>الاسم : {person.customerName ?? ''}</p>
       <p>بطاقة الرقم القومى: {person.nationalId ?? ''}</p>
-      {personPosition && <p>الصفة : {personPosition}</p>}
+      {/* {personPosition && <p>الصفة : {personPosition}</p>} */}
       <p>التاريخ: {timeToArabicDate(application.creationDate, false)}</p>
       <p>العنوان : {person.customerHomeAddress ?? ''}</p>
       <p>التوقيع :</p>

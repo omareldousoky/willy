@@ -7,6 +7,7 @@ import {
   numbersToArabic,
   timeToArabicDate,
   dayToArabic,
+  getIndexInArabic,
 } from '../../../../Shared/Services/utils'
 
 const LoanContract = (props) => {
@@ -65,24 +66,7 @@ const LoanContract = (props) => {
         return ''
     }
   }
-  function getIndexInArabic(index: number) {
-    switch (index) {
-      case 0:
-        return ['ثالثا', 'ثالث']
-      case 1:
-        return ['رابعا', 'رابع']
-      case 2:
-        return ['خامسا', 'خامس']
-      case 3:
-        return ['سادسا', 'سادس']
-      case 4:
-        return ['سابعا', 'سابع']
-      case 5:
-        return ['ثامنا', 'ثامن']
-      default:
-        return ['', '']
-    }
-  }
+
   return (
     <>
       <div className="loan-contract" dir="rtl" lang="ar">

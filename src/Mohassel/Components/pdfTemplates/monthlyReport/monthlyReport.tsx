@@ -2,7 +2,7 @@ import React from 'react'
 import { MonthReport } from '../../../../Shared/Services/interfaces'
 import './monthlyReport.scss'
 
-const MonthlyReport = (props: { data: MonthReport }) => {
+const MonthlyReport = (props: MonthReport) => {
   return (
     <div className="monthly-report" lang="ar" dir="rtl">
       {/* page one */}
@@ -102,16 +102,16 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                 <tr>
                   <td className="td-head"> الفترة :</td>
                   <td className="label"> من</td>
-                  <td className="td-body">{props.data.fromDate}</td>
+                  <td className="td-body">{props.fromDate}</td>
                   <td className="label" style={{ paddingRight: 10 }}>
                     الي
                   </td>
-                  <td className="td-body">{props.data.toDate}</td>
+                  <td className="td-body">{props.toDate}</td>
                 </tr>
                 <tr>
                   <td className="td-head"> تاريخ الاعداد:</td>
                   <td />
-                  <td className="td-body">{props.data.createdAt}</td>
+                  <td className="td-body">{props.createdAt}</td>
                 </tr>
               </tbody>
             </table>
@@ -133,12 +133,12 @@ const MonthlyReport = (props: { data: MonthReport }) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body">{props.data.fromDate}</td>
+                  <td className="td-body">{props.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
                     إلى:
                   </td>
-                  <td className="td-body">{props.data.toDate}</td>
+                  <td className="td-body">{props.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -166,93 +166,93 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.1</td>
                   <td>إجمالى عدد عملاء تمويل أفراد</td>
-                  <td>{props.data.totalIndividualCount.onGoingCutomer}</td>
-                  <td>{props.data.totalIndividualCount.newCustomer}</td>
-                  <td>{props.data.totalIndividualCount.total}</td>
+                  <td>{props.totalIndividualCount.onGoingCutomer}</td>
+                  <td>{props.totalIndividualCount.newCustomer}</td>
+                  <td>{props.totalIndividualCount.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.2</td>
                   <td>منهم عدد العملاء – ذكور</td>
-                  <td>{props.data.maleIndividualCount.onGoingCutomer}</td>
-                  <td>{props.data.maleIndividualCount.newCustomer}</td>
-                  <td>{props.data.maleIndividualCount.total}</td>
+                  <td>{props.maleIndividualCount.onGoingCutomer}</td>
+                  <td>{props.maleIndividualCount.newCustomer}</td>
+                  <td>{props.maleIndividualCount.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.3</td>
                   <td>منهم عدد العملاء - إناث</td>
-                  <td>{props.data.femaleIndividualCount.onGoingCutomer}</td>
-                  <td>{props.data.femaleIndividualCount.newCustomer}</td>
-                  <td>{props.data.femaleIndividualCount.total}</td>
+                  <td>{props.femaleIndividualCount.onGoingCutomer}</td>
+                  <td>{props.femaleIndividualCount.newCustomer}</td>
+                  <td>{props.femaleIndividualCount.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.4</td>
                   <td>إجمالى قيمة أرصدة تمويل أفراد</td>
-                  <td>{props.data.totalIndividualCredit.onGoingCutomer}</td>
-                  <td>{props.data.totalIndividualCredit.newCustomer}</td>
-                  <td>{props.data.totalIndividualCredit.total}</td>
+                  <td>{props.totalIndividualCredit.onGoingCutomer}</td>
+                  <td>{props.totalIndividualCredit.newCustomer}</td>
+                  <td>{props.totalIndividualCredit.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.5</td>
                   <td>منها أرصدة تمويل لعملاء – ذكور</td>
-                  <td>{props.data.maleIndividualCredit.onGoingCutomer}</td>
-                  <td>{props.data.maleIndividualCredit.newCustomer}</td>
-                  <td>{props.data.maleIndividualCredit.total}</td>
+                  <td>{props.maleIndividualCredit.onGoingCutomer}</td>
+                  <td>{props.maleIndividualCredit.newCustomer}</td>
+                  <td>{props.maleIndividualCredit.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.6</td>
                   <td>منها أرصدة تمويل لعملاء - إناث</td>
-                  <td>{props.data.femaleIndividualCredit.onGoingCutomer}</td>
-                  <td>{props.data.femaleIndividualCredit.newCustomer}</td>
-                  <td>{props.data.femaleIndividualCredit.total}</td>
+                  <td>{props.femaleIndividualCredit.onGoingCutomer}</td>
+                  <td>{props.femaleIndividualCredit.newCustomer}</td>
+                  <td>{props.femaleIndividualCredit.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.7</td>
                   <td>إجمالى عدد عقود تمويل جماعى</td>
-                  <td>{props.data.totalGroupLoansCount.onGoingCutomer}</td>
-                  <td>{props.data.totalGroupLoansCount.newCustomer}</td>
-                  <td>{props.data.totalGroupLoansCount.total}</td>
+                  <td>{props.totalGroupLoansCount.onGoingCutomer}</td>
+                  <td>{props.totalGroupLoansCount.newCustomer}</td>
+                  <td>{props.totalGroupLoansCount.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.8</td>
                   <td>إجمالى عدد عملاء عقود تمويل جماعى</td>
-                  <td>{props.data.totalGroupCount.onGoingCutomer}</td>
-                  <td>{props.data.totalGroupCount.newCustomer}</td>
-                  <td>{props.data.totalGroupCount.total}</td>
+                  <td>{props.totalGroupCount.onGoingCutomer}</td>
+                  <td>{props.totalGroupCount.newCustomer}</td>
+                  <td>{props.totalGroupCount.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.9</td>
                   <td>منهم عدد العملاء – ذكور</td>
-                  <td>{props.data.maleGroupCount.onGoingCutomer}</td>
-                  <td>{props.data.maleGroupCount.newCustomer}</td>
-                  <td>{props.data.maleGroupCount.total}</td>
+                  <td>{props.maleGroupCount.onGoingCutomer}</td>
+                  <td>{props.maleGroupCount.newCustomer}</td>
+                  <td>{props.maleGroupCount.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.10</td>
                   <td>منهم عدد العملاء - إناث</td>
-                  <td>{props.data.femaleGroupCount.onGoingCutomer}</td>
-                  <td>{props.data.femaleGroupCount.newCustomer}</td>
-                  <td>{props.data.femaleGroupCount.total}</td>
+                  <td>{props.femaleGroupCount.onGoingCutomer}</td>
+                  <td>{props.femaleGroupCount.newCustomer}</td>
+                  <td>{props.femaleGroupCount.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.11</td>
                   <td>إجمالى قيمة أرصدة تمويل جماعى</td>
-                  <td>{props.data.totalGroupCredit.onGoingCutomer}</td>
-                  <td>{props.data.totalGroupCredit.newCustomer}</td>
-                  <td>{props.data.totalGroupCredit.total}</td>
+                  <td>{props.totalGroupCredit.onGoingCutomer}</td>
+                  <td>{props.totalGroupCredit.newCustomer}</td>
+                  <td>{props.totalGroupCredit.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.12</td>
                   <td>منها أرصدة تمويل لعملاء – ذكور</td>
-                  <td>{props.data.maleGroupCredit.onGoingCutomer}</td>
-                  <td>{props.data.maleGroupCredit.newCustomer}</td>
-                  <td>{props.data.maleGroupCredit.total}</td>
+                  <td>{props.maleGroupCredit.onGoingCutomer}</td>
+                  <td>{props.maleGroupCredit.newCustomer}</td>
+                  <td>{props.maleGroupCredit.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.13</td>
                   <td>منها أرصدة تمويل لعملاء - إناث</td>
-                  <td>{props.data.femaleGroupCredit.onGoingCutomer}</td>
-                  <td>{props.data.femaleGroupCredit.newCustomer}</td>
-                  <td>{props.data.femaleGroupCredit.total}</td>
+                  <td>{props.femaleGroupCredit.onGoingCutomer}</td>
+                  <td>{props.femaleGroupCredit.newCustomer}</td>
+                  <td>{props.femaleGroupCredit.total}</td>
                 </tr>
               </tbody>
             </table>
@@ -269,7 +269,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                   جماعي)
                 </p>
               </div>
-              <div className="big-number">{props.data.totalCredit}</div>
+              <div className="big-number">{props.totalCredit}</div>
             </div>
             <div className="totals">
               <div className="lines">
@@ -279,7 +279,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                   جماعي)
                 </p>
               </div>
-              <div className="big-number">{props.data.totalCount}</div>
+              <div className="big-number">{props.totalCount}</div>
             </div>
           </div>
         </div>
@@ -299,12 +299,12 @@ const MonthlyReport = (props: { data: MonthReport }) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body">{props.data.fromDate}</td>
+                  <td className="td-body">{props.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
                     إلى:
                   </td>
-                  <td className="td-body">{props.data.toDate}</td>
+                  <td className="td-body">{props.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -334,10 +334,10 @@ const MonthlyReport = (props: { data: MonthReport }) => {
               <tbody>
                 <tr style={{ textAlign: 'center' }}>
                   <td> قرض</td>
-                  <td>{props.data.commercialCredit}</td>
-                  <td>{props.data.productionCredit}</td>
-                  <td>{props.data.serviceCredit}</td>
-                  <td>{props.data.agriculturalCredit}</td>
+                  <td>{props.commercialCredit}</td>
+                  <td>{props.productionCredit}</td>
+                  <td>{props.serviceCredit}</td>
+                  <td>{props.agriculturalCredit}</td>
                 </tr>
               </tbody>
             </table>
@@ -352,7 +352,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                 <p>(إجمالي قيمة أرصدة تمويل تجاري+إنتاجي/حرفي+خدمي+زراعي)</p>
               </div>
               <div className="big-number">
-                {props.data.fundingWalletAnalysisSheetCredit}
+                {props.fundingWalletAnalysisSheetCredit}
               </div>
             </div>
             <div className="totals">
@@ -367,7 +367,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                 </p>
               </div>
               <div className="big-number">
-                {props.data.fundingWalletAnalysisCreditValidation === 'matching'
+                {props.fundingWalletAnalysisCreditValidation === 'matching'
                   ? 'مطابق'
                   : 'غير مطابق'}
               </div>
@@ -393,17 +393,17 @@ const MonthlyReport = (props: { data: MonthReport }) => {
               <tbody>
                 <tr style={{ textAlign: 'center' }}>
                   <td> قرض</td>
-                  <td>{props.data.commercialCount}</td>
-                  <td>{props.data.productionCount}</td>
-                  <td>{props.data.serviceCount}</td>
-                  <td>{props.data.agriculturalCount}</td>
+                  <td>{props.commercialCount}</td>
+                  <td>{props.productionCount}</td>
+                  <td>{props.serviceCount}</td>
+                  <td>{props.agriculturalCount}</td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td> إجمالى</td>
-                  <td>{props.data.commercialCount}</td>
-                  <td>{props.data.productionCount}</td>
-                  <td>{props.data.serviceCount}</td>
-                  <td>{props.data.agriculturalCount}</td>
+                  <td>{props.commercialCount}</td>
+                  <td>{props.productionCount}</td>
+                  <td>{props.serviceCount}</td>
+                  <td>{props.agriculturalCount}</td>
                 </tr>
               </tbody>
             </table>
@@ -421,7 +421,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                 </p>
               </div>
               <div className="big-number">
-                {props.data.fundingWalletAnalysisSheetCount}
+                {props.fundingWalletAnalysisSheetCount}
               </div>
             </div>
             <div className="totals">
@@ -436,7 +436,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                 </p>
               </div>
               <div className="big-number">
-                {props.data.fundingWalletAnalysisCountValidation === 'matching'
+                {props.fundingWalletAnalysisCountValidation === 'matching'
                   ? 'مطابق'
                   : 'غير مطابق'}
               </div>
@@ -459,12 +459,12 @@ const MonthlyReport = (props: { data: MonthReport }) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body"> {props.data.fromDate}</td>
+                  <td className="td-body"> {props.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
                     إلى:
                   </td>
-                  <td className="td-body">{props.data.toDate}</td>
+                  <td className="td-body">{props.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -491,9 +491,9 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                 </tr>
               </thead>
               <tbody>
-                {props.data.arrears.map((arrear, index) => {
+                {props.arrears.map((arrear, index) => {
                   return (
-                    <>
+                    <div key={index}>
                       {arrear.tier === '0-7' && (
                         <tr key={index} style={{ textAlign: 'center' }}>
                           <td>3.1</td>
@@ -575,7 +575,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                           <td>{arrear.provision}</td>
                         </tr>
                       )}
-                    </>
+                    </div>
                   )
                 })}
                 <tr style={{ textAlign: 'center' }}>
@@ -590,11 +590,11 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                 <tr style={{ textAlign: 'center' }}>
                   <td>3.9</td>
                   <td>إجمالى أرصدة التمويل</td>
-                  <td>{props.data.totalCustomers}</td>
-                  <td>{props.data.totalArrears}</td>
-                  <td>{props.data.totalWallet}</td>
+                  <td>{props.totalCustomers}</td>
+                  <td>{props.totalArrears}</td>
+                  <td>{props.totalWallet}</td>
                   <td />
-                  <td>{props.data.totalProvision}</td>
+                  <td>{props.totalProvision}</td>
                 </tr>
               </tbody>
             </table>
@@ -614,7 +614,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                   أقساط (مرحلة + معاد جدولتها)
                 </p>
               </div>
-              <div className="big-number">{props.data.totalCustomers}</div>
+              <div className="big-number">{props.totalCustomers}</div>
             </div>
             <div className="totals">
               <div className="lines">
@@ -628,7 +628,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                 </p>
               </div>
               <div className="big-number">
-                {props.data.arrearsCountValidation === 'matching'
+                {props.arrearsCountValidation === 'matching'
                   ? 'مطابق'
                   : 'غير مطابق'}
               </div>
@@ -649,7 +649,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                   أقساط (مرحلة + معاد جدولتها)
                 </p>
               </div>
-              <div className="big-number">{props.data.totalArrears}</div>
+              <div className="big-number">{props.totalArrears}</div>
             </div>
             <div className="totals">
               <div className="lines">
@@ -663,7 +663,7 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                 </p>
               </div>
               <div className="big-number">
-                {props.data.arrearsCreditValidation === 'matching'
+                {props.arrearsCreditValidation === 'matching'
                   ? 'مطابق'
                   : 'غير مطابق'}
               </div>
@@ -686,12 +686,12 @@ const MonthlyReport = (props: { data: MonthReport }) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body">{props.data.fromDate}</td>
+                  <td className="td-body">{props.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
                     إلى:
                   </td>
-                  <td className="td-body">{props.data.toDate}</td>
+                  <td className="td-body">{props.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -718,38 +718,38 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                 <tr style={{ textAlign: 'center' }}>
                   <td>4.1</td>
                   <td>إجمالى عدد أرصدة معدومة عملاء تمويل أفراد</td>
-                  <td>{props.data.individualWrittenOffLoansCount.month}</td>
-                  <td>{props.data.individualWrittenOffLoansCount.year}</td>
+                  <td>{props.individualWrittenOffLoansCount.month}</td>
+                  <td>{props.individualWrittenOffLoansCount.year}</td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td>4.2</td>
                   <td>إجمالى قيمة أرصدة تمويل معدومة لعملاء أفراد</td>
-                  <td>{props.data.individualWrittenOffLoansCredit.month}</td>
-                  <td>{props.data.individualWrittenOffLoansCredit.year}</td>
+                  <td>{props.individualWrittenOffLoansCredit.month}</td>
+                  <td>{props.individualWrittenOffLoansCredit.year}</td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td>4.3</td>
                   <td>إجمالى عدد أرصدة معدومة تمويل جماعى</td>
-                  <td>{props.data.groupWrittenOffLoansCount.month}</td>
-                  <td>{props.data.groupWrittenOffLoansCount.year}</td>
+                  <td>{props.groupWrittenOffLoansCount.month}</td>
+                  <td>{props.groupWrittenOffLoansCount.year}</td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td>4.4</td>
                   <td>إجمالى قيمة أرصدة معدومة تمويل جماعى</td>
-                  <td>{props.data.groupWrittenOffLoansCredit.month}</td>
-                  <td>{props.data.groupWrittenOffLoansCredit.year}</td>
+                  <td>{props.groupWrittenOffLoansCredit.month}</td>
+                  <td>{props.groupWrittenOffLoansCredit.year}</td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td>4.5</td>
                   <td>إجمالى عدد أرصدة معدومة لكافة أنواع العملاء</td>
-                  <td>{props.data.writtenOffLoansCount.month}</td>
-                  <td>{props.data.writtenOffLoansCount.year}</td>
+                  <td>{props.writtenOffLoansCount.month}</td>
+                  <td>{props.writtenOffLoansCount.year}</td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td>4.6</td>
                   <td>إجمالى قيمة أرصدة معدومة لكافة أنواع العملاء</td>
-                  <td>{props.data.writtenOffLoansCredit.month}</td>
-                  <td>{props.data.writtenOffLoansCredit.year}</td>
+                  <td>{props.writtenOffLoansCredit.month}</td>
+                  <td>{props.writtenOffLoansCredit.year}</td>
                 </tr>
               </tbody>
             </table>
@@ -770,12 +770,12 @@ const MonthlyReport = (props: { data: MonthReport }) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body">{props.data.fromDate}</td>
+                  <td className="td-body">{props.fromDate}</td>
                   <td />
                   <td className="td-head" style={{ paddingRight: 10 }}>
                     إلى:
                   </td>
-                  <td className="td-body">{props.data.toDate}</td>
+                  <td className="td-body">{props.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -802,14 +802,14 @@ const MonthlyReport = (props: { data: MonthReport }) => {
                 <tr style={{ textAlign: 'center' }}>
                   <td>5.1</td>
                   <td>إجمالى عدد أرصدة تمويل لكافة أنواع العملاء </td>
-                  <td>{props.data.collectedWrittenOffLoansCount.month}</td>
-                  <td>{props.data.collectedWrittenOffLoansCount.year}</td>
+                  <td>{props.collectedWrittenOffLoansCount.month}</td>
+                  <td>{props.collectedWrittenOffLoansCount.year}</td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td>5.2</td>
                   <td>إجمالى قيمة أرصدة تمويل لكافة أنواع العملاء </td>
-                  <td>{props.data.collectedWrittenOffLoansCredit.month}</td>
-                  <td>{props.data.collectedWrittenOffLoansCredit.year}</td>
+                  <td>{props.collectedWrittenOffLoansCredit.month}</td>
+                  <td>{props.collectedWrittenOffLoansCredit.year}</td>
                 </tr>
               </tbody>
             </table>
