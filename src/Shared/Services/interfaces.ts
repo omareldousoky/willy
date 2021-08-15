@@ -1,4 +1,4 @@
-import { Signature } from '../../Mohassel/Models/common'
+import { Signature } from '../Models/common'
 
 export interface Branch {
   longitude?: number
@@ -89,6 +89,11 @@ export interface Customer {
   nanoLoansLimit?: number
   monthlyIncome?: number
   initialConsumerFinanceLimit?: number
+  customerGuarantors?: {
+    name: string
+    address: string
+    nationalId: string
+  }[]
 }
 export interface Installment {
   id: number
