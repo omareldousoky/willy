@@ -1154,5 +1154,6 @@
   "transactionAmount": "قيمه الحركه",
   "transactionsSum": "اجمالي قيمه الحركات",
   "creditInquiryRequestsReport": "تقرير طلبات الاستعلام الائتماني",
-  "individualAndGroup": "(فردي - جماعي)"
+  "individualAndGroup": "(فردي - جماعي)",
+	"addEditOrRemoveGuarantor": "إضافة / تعديل ضمان"
 }

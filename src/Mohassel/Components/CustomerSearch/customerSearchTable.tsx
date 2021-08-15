@@ -13,7 +13,7 @@ import {
   getFullCustomerKey,
   getRenderDate,
 } from '../../../Shared/Services/utils'
-import { InfoBox } from '../../../Shared/Components'
+import { InfoBox, LtsIcon } from '../../../Shared/Components'
 import {
   getCompanyInfo,
   getCustomerInfo,
@@ -169,7 +169,7 @@ class CustomerSearch extends Component<Props, State> {
                 </DropdownButton>
                 <InputGroup.Append>
                   <InputGroup.Text className="bg-white rounded-0">
-                    <span className="fa fa-search fa-rotate-90" />
+                    <LtsIcon name="search" />
                   </InputGroup.Text>
                 </InputGroup.Append>
                 <FormControl

@@ -15,6 +15,7 @@ import {
   LoanOfficer,
   ManagerHierarchyUser,
 } from '../../../Shared/Services/interfaces'
+import { LtsIcon } from '../../../Shared/Components'
 
 const dropDownKeys = ['name', 'hrCode', 'nationalId']
 
@@ -127,7 +128,7 @@ export const UsersSearch: FunctionComponent<UsersSearchProps> = ({
       ) : null}
       <InputGroup.Append>
         <InputGroup.Text className="bg-white rounded-0">
-          <span className="fa fa-search fa-rotate-90" />
+          <LtsIcon name="search" />
         </InputGroup.Text>
       </InputGroup.Append>
       <div style={{ margin: 0, width: '60%' }}>

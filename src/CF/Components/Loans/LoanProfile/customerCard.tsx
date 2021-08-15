@@ -2,7 +2,6 @@ import React from 'react'
 
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
 
 import DynamicTable from '../../../../Shared/Components/DynamicTable/dynamicTable'
 import * as local from '../../../../Shared/Assets/ar.json'
@@ -112,19 +111,7 @@ export const CustomerCardView = (props: Props) => {
     },
   ]
   return (
-    <div style={{ textAlign: 'right' }}>
-      <Button
-        variant="primary"
-        disabled={props.rescheduled}
-        style={{ float: 'left' }}
-        onClick={() => props.print()}
-      >
-        <span
-          className="fa fa-download"
-          style={{ margin: '0px 0px 0px 5px' }}
-        />
-        {local.downloadPDF}
-      </Button>
+    <>
       <CustomerLoanDetailsBoxView
         application={props.application}
         getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)}
@@ -166,6 +153,6 @@ export const CustomerCardView = (props: Props) => {
         data={props.application.installmentsObject.installments}
         mappers={mappers}
       />
-    </div>
+    </>
   )
 }

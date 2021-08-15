@@ -1,4 +1,4 @@
-import { Signature } from '../../Mohassel/Models/common'
+import { Signature } from '../Models/common'
 
 export interface Branch {
   longitude?: number
@@ -15,6 +15,13 @@ export interface Branch {
   costCenter: string
   licenseNumber: string
   _id?: string
+}
+
+export interface CustomerGuarantor {
+  name: string
+  birthDate: number
+  nationalId: string
+  address: string
 }
 
 export interface Customer {
@@ -89,6 +96,7 @@ export interface Customer {
   nanoLoansLimit?: number
   monthlyIncome?: number
   initialConsumerFinanceLimit?: number
+  customerGuarantors?: CustomerGuarantor[]
 }
 export interface Installment {
   id: number
