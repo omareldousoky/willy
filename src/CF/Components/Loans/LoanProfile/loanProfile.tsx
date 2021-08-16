@@ -62,7 +62,6 @@ import {
 } from '../../../../Shared/Services/formatCustomersInfo'
 import { FieldProps } from '../../../../Shared/Components/Profile/types'
 import { Score } from '../../../../Mohassel/Components/CustomerCreation/CustomerProfile'
-import { getLoanUsage } from '../../../../Mohassel/Services/APIs/LoanUsage/getLoanUsage'
 
 import { RemainingLoanResponse } from '../../../../Mohassel/Models/Payment'
 import { PromissoryNoteMicro } from '../../../../Mohassel/Components/pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
