@@ -17,9 +17,12 @@ import { getIscoreCached } from '../../../Shared/Services/APIs/iScore'
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCustomer'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
-import BondContract from '../PdfTemplates/BondContractCF/BondContract'
+import { BondContract } from '../PdfTemplates/BondContractCF'
 import { ConsumerFinanceContract } from '../PdfTemplates/ConsumerFinanceContract'
 import { ConsumerFinanceContractData } from '../../Models/contract'
+import { AcknowledgmentWasSignedInFront } from '../PdfTemplates/AcknowledgmentWasSignedInFront'
+import { PromissoryNote } from '../PdfTemplates/PromissoryNote'
+import { AuthorizationToFillInfo } from '../PdfTemplates/AuthorizationToFillInfo'
 
 export interface Score {
   id?: string // commercialRegisterNumber
@@ -439,7 +442,7 @@ export const CustomerProfile = () => {
         fieldTitle: 'cfGuarantors',
         fieldData: {
           customerId: customerDetails?._id,
-          guarantors: customerDetails?.customerGuarantors || [],
+          customerGuarantors: customerDetails?.customerGuarantors || [],
         } as CFGuarantorTableViewProp,
         showFieldCondition: true,
       },
@@ -502,9 +505,52 @@ export const CustomerProfile = () => {
       </Container>
       {print === 'all' && (
         <>
-          <BondContract data={customerDetails} remainingTotal={0} />
+          <BondContract
+            customerCreationDate={customerDetails?.created?.at || 0}
+            customerName={customerDetails?.customerName || ''}
+            customerHomeAddress={customerDetails?.customerHomeAddress || ''}
+            nationalId={customerDetails?.nationalId || ''}
+            initialConsumerFinanceLimit={
+              customerDetails?.initialConsumerFinanceLimit || 0
+            }
+          />
+          {customerDetails?.customerGuarantors &&
+            customerDetails?.customerGuarantors?.length > 0 &&
+            customerDetails?.customerGuarantors.map((guarantor) => (
+              <BondContract
+                customerCreationDate={customerDetails?.created?.at || 0}
+                customerName={guarantor?.name || ''}
+                customerHomeAddress={guarantor?.address || ''}
+                nationalId={guarantor?.nationalId || ''}
+                initialConsumerFinanceLimit={
+                  customerDetails?.initialConsumerFinanceLimit || 0
+                }
+              />
+            ))}
+          <PromissoryNote
+            customerCreationDate={customerDetails?.created?.at || 0}
+            customerName={customerDetails?.customerName || ''}
+            customerHomeAddress={customerDetails?.customerHomeAddress || ''}
+            nationalId={customerDetails?.nationalId || ''}
+            initialConsumerFinanceLimit={
+              customerDetails?.initialConsumerFinanceLimit || 0
+            }
+            customerGuarantors={customerDetails?.customerGuarantors}
+          />
           <ConsumerFinanceContract
             contractData={customerCFContract as ConsumerFinanceContractData}
+          />
+          <AcknowledgmentWasSignedInFront
+            customerCreationDate={customerDetails?.created?.at || 0}
+            customerName={customerDetails?.customerName || ''}
+            nationalId={customerDetails?.nationalId || ''}
+            customerGuarantors={customerDetails?.customerGuarantors}
+          />
+          <AuthorizationToFillInfo
+            customerCreationDate={customerDetails?.created?.at || 0}
+            customerName={customerDetails?.customerName || ''}
+            customerHomeAddress={customerDetails?.customerHomeAddress || ''}
+            customerGuarantors={customerDetails?.customerGuarantors}
           />
         </>
       )}
