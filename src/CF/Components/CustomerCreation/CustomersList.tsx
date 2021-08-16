@@ -212,15 +212,23 @@ class CustomersList extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['keyword', 'dateFromTo', 'governorate']}
+              searchKeys={[
+                'keyword',
+                'dateFromTo',
+                'governorate',
+                'phoneNumber',
+              ]}
               dropDownKeys={[
                 'name',
                 'nationalId',
                 'key',
                 'code',
                 'customerShortenedCode',
+                'phoneNumber',
               ]}
-              searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+              searchPlaceholder={
+                local.searchByBranchNameOrNationalIdOrCodeOrPhone
+              }
               url="customer"
               from={this.state.from}
               size={this.state.size}
