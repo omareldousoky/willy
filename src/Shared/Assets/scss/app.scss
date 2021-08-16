@@ -244,3 +244,12 @@ input[type=radio] {
   border-color: #7dc356;
   color: #7dc356;
 }
+
+.profile-action-btn {
+	padding: 0px 8px;
+	margin: 10px 0;
+	border-radius: 0;
+	&:not(:first-of-type) {
+		border-right: 2px solid #2b3390;
+	}
+}

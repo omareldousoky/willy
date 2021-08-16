@@ -76,6 +76,9 @@ import {
   approveManualPayment,
   rejectManualPayment,
 } from '../../../../Shared/Services/APIs/payment'
+import { getRollableActionsById } from '../../../../Shared/Services/APIs/loanApplication/rollBack'
+import { returnItem } from '../../../Services/APIs/loan'
+import { doneSuccessfully } from '../../../../Shared/localUtils'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -109,7 +112,7 @@ interface State {
   // remainingTotal: number
   remainingLoan?: RemainingLoanResponse
   individualsWithInstallments: IndividualWithInstallments
-  // loanUsage: string
+  canReturnItem?: boolean
 }
 
 interface LoanProfileRouteState {
@@ -157,21 +160,6 @@ class LoanProfile extends Component<Props, State> {
     this.getAppByID(appId)
   }
 
-  async getLoanUsages() {
-    this.setState({ loading: true })
-    const res = await getLoanUsage()
-    if (res.status === 'success') {
-      const uses = res.body.usages
-      const value = uses.find((use) => use.id === this.state.application.usage)
-        ?.name
-      this.setState({ loading: false })
-      return value
-    }
-    Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    this.setState({ loading: false })
-    return ''
-  }
-
   async getAppByID(id) {
     await this.getMembersShare(id)
     this.setState({
@@ -189,11 +177,15 @@ class LoanProfile extends Component<Props, State> {
       } else this.setTabsToRender(application)
       if (ability.can('viewIscore', 'customer'))
         this.getCachediScores(application.body)
-      await this.getLoanUsages()
-    } else {
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(application.error.error), 'error')
+
+      if (
+        application.body.status === 'issued' &&
+        ability.can('returnCFItem', 'cfApplication')
       )
+        this.getAppRollableActionsByID(application.body._id)
+      else this.setState({ canReturnItem: false })
+    } else {
+      this.failureHandler(application)
     }
     if (
       application.body.status === 'pending' ||
@@ -236,9 +228,7 @@ class LoanProfile extends Component<Props, State> {
       this.setState({ loading: false })
       return iScores.body.data
     }
-    this.setState({ loading: false }, () =>
-      Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
-    )
+    this.failureHandler(iScores)
     return []
   }
 
@@ -352,10 +342,7 @@ class LoanProfile extends Component<Props, State> {
     const resGeo = await getGeoAreasByBranch(branch)
     if (resGeo.status === 'success') {
       this.setState({ loading: false, geoAreas: resGeo.body.data })
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(resGeo.error.error), 'error')
-      )
+    } else this.failureHandler(resGeo)
   }
 
   getCustomerGeoArea(geoArea) {
@@ -373,10 +360,7 @@ class LoanProfile extends Component<Props, State> {
     const res = await getPendingActions(this.props.location.state.id)
     if (res.status === 'success') {
       this.setState({ loading: false, pendingActions: res.body })
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
+    } else this.failureHandler(res)
   }
 
   async getBranchData(branchId: string) {
@@ -391,8 +375,24 @@ class LoanProfile extends Component<Props, State> {
     }
   }
 
+  async getAppRollableActionsByID(id) {
+    const actions = await getRollableActionsById(id)
+    if (actions.status === 'success') {
+      this.setState({ canReturnItem: Object.keys(actions.body).length === 0 })
+    } else {
+      this.setState({ canReturnItem: true })
+    }
+  }
+
   getProfileActions = () => {
     return [
+      {
+        icon: 'rollback',
+        title: local.returnItem,
+        permission: !!this.state.canReturnItem,
+        onActionClick: () => this.returnItem(),
+        isLoading: this.state.canReturnItem === undefined,
+      },
       {
         icon: 'deactivate-doc',
         title: local.memberSeperation,
@@ -616,9 +616,7 @@ class LoanProfile extends Component<Props, State> {
       this.getCachediScores(this.state.application)
       this.setState({ loading: false })
     } else {
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(iScore.error.error), 'error')
-      )
+      this.failureHandler(iScore)
     }
   }
 
@@ -635,10 +633,7 @@ class LoanProfile extends Component<Props, State> {
     const res = await getGroupMemberShares(id)
     if (res.status === 'success') {
       this.setState({ loading: false, individualsWithInstallments: res.body })
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
+    } else this.failureHandler(res)
   }
 
   async getWriteOffReasons() {
@@ -663,10 +658,46 @@ class LoanProfile extends Component<Props, State> {
       }
       return options
     }
+    this.failureHandler(res)
+    return {}
+  }
+
+  successHandler(successMsg: string, callback?: () => void) {
+    this.setState({ loading: false })
+    Swal.fire('', successMsg, 'success').then(() =>
+      callback ? callback() : undefined
+    )
+  }
+
+  failureHandler(res: any) {
     this.setState({ loading: false }, () =>
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     )
-    return {}
+  }
+
+  async returnItem() {
+    await Swal.fire({
+      title: local.areYouSure,
+      text: local.returnItem,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#7dc356',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: local.returnItem,
+      cancelButtonText: local.cancel,
+    }).then(async (result) => {
+      if (result.value) {
+        this.setState({ loading: true })
+        const res = await returnItem(this.props.location.state.id)
+        if (res.status === 'success') {
+          this.successHandler(doneSuccessfully('returnItem'), () =>
+            window.location.reload()
+          )
+        } else {
+          this.failureHandler(res)
+        }
+      }
+    })
   }
 
   mapEntitledToSignToCustomer({
@@ -689,8 +720,8 @@ class LoanProfile extends Component<Props, State> {
       input: 'select',
       inputOptions: options,
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#7dc356',
+      cancelButtonColor: '#6c757d',
       confirmButtonText: local.writeOffLoan,
       cancelButtonText: local.cancel,
       inputValidator: (value) => {
@@ -706,8 +737,8 @@ class LoanProfile extends Component<Props, State> {
         text: `${local.loanWillBeWrittenOff}`,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: '#7dc356',
+        cancelButtonColor: '#6c757d',
         confirmButtonText: local.writeOffLoan,
         cancelButtonText: local.cancel,
       }).then(async (result) => {
@@ -717,14 +748,11 @@ class LoanProfile extends Component<Props, State> {
             writeOffReason: text,
           })
           if (res.status === 'success') {
-            this.setState({ loading: false })
-            Swal.fire('', local.loanWriteOffSuccess, 'success').then(() =>
+            this.successHandler(local.loanWriteOffSuccess, () =>
               window.location.reload()
             )
           } else {
-            this.setState({ loading: false }, () =>
-              Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-            )
+            this.failureHandler(res)
           }
         }
       })
@@ -737,8 +765,8 @@ class LoanProfile extends Component<Props, State> {
       text: `${local.applicationWillBeCancelled}`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#7dc356',
+      cancelButtonColor: '#6c757d',
       confirmButtonText: local.cancelApplication,
       cancelButtonText: local.cancel,
     }).then(async (result) => {
@@ -746,14 +774,11 @@ class LoanProfile extends Component<Props, State> {
         this.setState({ loading: true })
         const res = await cancelApplication(this.props.location.state.id)
         if (res.status === 'success') {
-          this.setState({ loading: false })
-          Swal.fire('', local.applicationCancelSuccess, 'success').then(() =>
+          this.successHandler(local.applicationCancelSuccess, () =>
             window.location.reload()
           )
         } else {
-          this.setState({ loading: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-          )
+          this.failureHandler(res)
         }
       }
     })
@@ -817,20 +842,17 @@ class LoanProfile extends Component<Props, State> {
       confirmButtonText: local.confirmPayment,
       cancelButtonText: local.cancel,
       confirmButtonColor: '#7dc356',
-      cancelButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
     }).then(async (isConfirm) => {
       if (isConfirm.value) {
         this.setState({ loading: true })
         const res = await approveManualPayment(this.props.location.state.id)
         if (res.status === 'success') {
-          this.setState({ loading: false })
-          Swal.fire('', local.manualPaymentApproveSuccess, 'success').then(() =>
+          this.successHandler(local.manualPaymentApproveSuccess, () =>
             this.getAppByID(this.props.location.state.id)
           )
         } else {
-          this.setState({ loading: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-          )
+          this.failureHandler(res)
         }
       }
     })
@@ -844,24 +866,20 @@ class LoanProfile extends Component<Props, State> {
     })
     if (res.body) {
       this.setState({ penalty: res.body.penalty, loading: false })
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
+    } else this.failureHandler(res)
   }
 
   async rejectManualPayment() {
     this.setState({ loading: true })
     const res = await rejectManualPayment(this.props.location.state.id)
     if (res.status === 'success') {
-      this.setState({ loading: false, pendingActions: {} })
-      Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() =>
+      this.setState({ pendingActions: {} })
+      this.successHandler(local.rejectManualPaymentSuccess, () =>
         this.getAppByID(this.props.location.state.id)
       )
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
+    } else {
+      this.failureHandler(res)
+    }
   }
 
   async doubtApplication() {
@@ -869,8 +887,8 @@ class LoanProfile extends Component<Props, State> {
       title: local.doubtReason,
       input: 'text',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#7dc356',
+      cancelButtonColor: '#6c757d',
       confirmButtonText: local.doubtLoan,
       cancelButtonText: local.cancel,
       inputValidator: (value) => {
@@ -886,8 +904,8 @@ class LoanProfile extends Component<Props, State> {
         text: `${local.loanWillBeDoubted}`,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: '#7dc356',
+        cancelButtonColor: '#6c757d',
         confirmButtonText: local.doubtLoan,
         cancelButtonText: local.cancel,
       }).then(async (result) => {
@@ -897,14 +915,11 @@ class LoanProfile extends Component<Props, State> {
             doubtReason: text,
           })
           if (res.status === 'success') {
-            this.setState({ loading: false })
-            Swal.fire('', local.loanDoubtSuccess, 'success').then(() =>
+            this.successHandler(local.loanDoubtSuccess, () =>
               window.location.reload()
             )
           } else {
-            this.setState({ loading: false }, () =>
-              Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-            )
+            this.failureHandler(res)
           }
         }
       })
