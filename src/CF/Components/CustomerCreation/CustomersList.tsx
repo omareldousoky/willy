@@ -226,9 +226,7 @@ class CustomersList extends Component<Props, State> {
                 'customerShortenedCode',
                 'phoneNumber',
               ]}
-              searchPlaceholder={
-                local.searchByBranchNameOrNationalIdOrCodeOrPhone
-              }
+              searchPlaceholder={local.searchPlaceholder}
               url="customer"
               from={this.state.from}
               size={this.state.size}
