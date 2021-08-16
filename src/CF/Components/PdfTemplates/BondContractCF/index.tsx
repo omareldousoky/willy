@@ -66,7 +66,9 @@ export const BondContract: React.FC<BondContractProps> = (props) => {
                 style={{ textAlign: 'right' }}
               >
                 <div className="main">
-                  <div className="headtitle textcenter">عقد وديعة</div>
+                  <div className="headtitle textcenter">
+                    <u>عقد وديعة</u>
+                  </div>
                   <div>
                     انه في يوم &nbsp;
                     {dayToArabic(
