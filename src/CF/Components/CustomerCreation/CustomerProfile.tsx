@@ -505,6 +505,9 @@ export const CustomerProfile = () => {
       </Container>
       {print === 'all' && (
         <>
+          <ConsumerFinanceContract
+            contractData={customerCFContract as ConsumerFinanceContractData}
+          />
           <BondContract
             customerCreationDate={customerDetails?.created?.at || 0}
             customerName={customerDetails?.customerName || ''}
@@ -537,19 +540,16 @@ export const CustomerProfile = () => {
             }
             customerGuarantors={customerDetails?.customerGuarantors}
           />
-          <ConsumerFinanceContract
-            contractData={customerCFContract as ConsumerFinanceContractData}
+          <AuthorizationToFillInfo
+            customerCreationDate={customerDetails?.created?.at || 0}
+            customerName={customerDetails?.customerName || ''}
+            customerHomeAddress={customerDetails?.customerHomeAddress || ''}
+            customerGuarantors={customerDetails?.customerGuarantors}
           />
           <AcknowledgmentWasSignedInFront
             customerCreationDate={customerDetails?.created?.at || 0}
             customerName={customerDetails?.customerName || ''}
             nationalId={customerDetails?.nationalId || ''}
-            customerGuarantors={customerDetails?.customerGuarantors}
-          />
-          <AuthorizationToFillInfo
-            customerCreationDate={customerDetails?.created?.at || 0}
-            customerName={customerDetails?.customerName || ''}
-            customerHomeAddress={customerDetails?.customerHomeAddress || ''}
             customerGuarantors={customerDetails?.customerGuarantors}
           />
         </>
