@@ -12,7 +12,8 @@ import DeathCertificate from '../../../Mohassel/Components/CustomerCreation/deat
 import { CustomerCategorization } from '../../../Mohassel/Components/CustomerCreation/customerCategorization'
 import { ProfileActions } from '../ProfileActions'
 import { CustomerReportsTab } from '../../../Mohassel/Components/CustomerCreation/customerReportsTab'
-import { ProfileProps } from './types'
+import { CFGuarantorTableViewProp, ProfileProps } from './types'
+import { GuarantorTableView } from '../../../CF/Components/CustomerCreation/GuarantorDetails'
 
 export const Profile = ({
   source,
@@ -132,6 +133,19 @@ export const Profile = ({
                     edit
                     view={false}
                     customerId={fieldData}
+                  />
+                )
+              )
+            })}
+          {activeTab === 'cfGuarantors' &&
+            tabsData[activeTab].map((field, index) => {
+              const fieldData = field.fieldData as CFGuarantorTableViewProp
+              return (
+                Object.keys(fieldData).length > 0 && (
+                  <GuarantorTableView
+                    key={index}
+                    customerId={fieldData.customerId}
+                    guarantors={fieldData.guarantors}
                   />
                 )
               )

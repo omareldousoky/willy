@@ -15,26 +15,26 @@ import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWi
 import { Loader } from '../../../Shared/Components/Loader'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import Search from '../../../Shared/Components/Search/search'
-import Can from '../../config/Can'
 import { getCookie } from '../../../Shared/Services/getCookie'
-import {
-  changeLeadState,
-  changeInReviewLeadState,
-} from '../../../Shared/Services/APIs/Leads/changeLeadState'
 import { searchLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
-import { assignLeadToLO } from '../../../Shared/Services/APIs/Leads/assignLeadToLO'
 import { searchBranches } from '../../../Shared/Services/APIs/Branch/searchBranches'
-import { changeLeadBranch } from '../../../Shared/Services/APIs/Leads/changeLeadBranch'
 import { search } from '../../../Shared/redux/search/actions'
 import { loading } from '../../../Shared/redux/loading/actions'
 import local from '../../../Shared/Assets/ar.json'
 import './leads.scss'
 import { getErrorMessage, getDateAndTime } from '../../../Shared/Services/utils'
 import { theme } from '../../../Shared/theme'
-import ability from '../../config/ability'
 import { ActionsGroup } from '../../../Shared/Components/ActionsGroup'
 import { LtsIcon } from '../../../Shared/Components'
 import { Action } from '../../../Shared/Models/common'
+import Can from '../../../Shared/config/Can'
+import ability from '../../../Shared/config/ability'
+import {
+  changeLeadState,
+  changeInReviewLeadState,
+} from '../../../Shared/Services/APIs/Leads/changeLeadState'
+import { assignLeadToLO } from '../../../Shared/Services/APIs/Leads/assignLeadToLO'
+import { changeLeadBranch } from '../../../Shared/Services/APIs/Leads/changeLeadBranch'
 
 interface Props extends RouteComponentProps {
   data: any

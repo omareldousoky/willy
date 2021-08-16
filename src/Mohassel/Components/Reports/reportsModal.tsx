@@ -55,6 +55,7 @@ interface InitialFormikState {
   loanApplicationKey?: string
   defaultingCustomerStatus?: string
   managers?: Array<CurrentHierarchiesSingleResponse>
+  creditInquiryStatus?: string
   year?: number
 }
 
@@ -97,6 +98,18 @@ const ReportsModal = (props: Props) => {
       key: 'legal',
     },
   ]
+
+  const creditInquiryStatuses = [
+    { value: 'underReview', label: local.underReview },
+    { value: 'reviewed', label: local.reviewed },
+    { value: 'secondReview', label: local.secondReviewed },
+    { value: 'thirdReview', label: local.thirdReviewed },
+    { value: 'approved', label: local.approved },
+    { value: 'created', label: local.created },
+    { value: 'issued', label: local.issued },
+    { value: 'not_associated', label: local.newCustomer },
+  ]
+
   const getIds = (list: Record<string, string>[]): string[] =>
     list?.length ? list.map((item) => item._id || item.id) : []
   const getCustomerKey = (key?: string): string | undefined => {
@@ -125,6 +138,7 @@ const ReportsModal = (props: Props) => {
           initValues.toDate = ''
           break
         case 'branches':
+        case 'branch':
           initValues.branches = []
           break
         case 'customerKey':
@@ -166,6 +180,9 @@ const ReportsModal = (props: Props) => {
           break
         case 'month':
           initValues.date = ''
+          break
+        case 'creditInquiryStatus':
+          initValues.creditInquiryStatus = creditInquiryStatuses[0].value
           break
         case 'year':
           initValues.year = new Date().getFullYear()
@@ -264,11 +281,11 @@ const ReportsModal = (props: Props) => {
                         />
                       )
                     }
-                    if (input === 'branches') {
+                    if (input === 'branches' || input === 'branch') {
                       return (
                         <Col key={input} sm={12}>
                           <BranchesDropDown
-                            isMulti
+                            isMulti={input === 'branches'}
                             onlyValidBranches
                             onSelectBranch={(branches) => {
                               if (branches === null) {
@@ -719,6 +736,33 @@ const ReportsModal = (props: Props) => {
                         />
                       )
                     }
+                    if (input === 'creditInquiryStatus') {
+                      return (
+                        <Col key={input} sm={12}>
+                          <div className="dropdown-container">
+                            <p className="dropdown-label">{local.status}</p>
+                            <Form.Control
+                              as="select"
+                              className="dropdown-select"
+                              data-qc="creditInquiryStatus"
+                              name="creditInquiryStatus"
+                              value={formikProps.values.creditInquiryStatus}
+                              onChange={formikProps.handleChange}
+                            >
+                              {creditInquiryStatuses.map((option) => (
+                                <option
+                                  key={option.value}
+                                  value={option.value}
+                                  data-qc={option.label}
+                                >
+                                  {option.label}
+                                </option>
+                              ))}
+                            </Form.Control>
+                          </div>
+                        </Col>
+                      )
+                    }
                     if (input === 'year') {
                       return (
                         <Col key={input} sm={6}>
@@ -795,9 +839,11 @@ const ReportsModal = (props: Props) => {
                       {local.downloadExcel}
                     </Button>
                   )}
-                <Button type="submit" variant="primary">
-                  {props.submitButtonText || local.downloadPDF}
-                </Button>
+                {props.pdf.key !== 'creditInquiryRequests' && (
+                  <Button type="submit" variant="primary">
+                    {props.submitButtonText || local.downloadPDF}
+                  </Button>
+                )}
               </Modal.Footer>
             </Form>
           )

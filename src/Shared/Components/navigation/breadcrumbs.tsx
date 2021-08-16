@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { pathTo } from '../../Services/utils'
+import { LtsIcon } from '../LtsIcon'
 
 const Breadcrumbs = ({ route }) => {
   return (
@@ -19,7 +20,9 @@ const Breadcrumbs = ({ route }) => {
                 ) : null}
                 {index === breadcrumbs.length - 1 && crumb.label}
               </div>
-              {index < breadcrumbs.length - 1 && <i className="arrow-left" />}
+              {index < breadcrumbs.length - 1 && (
+                <LtsIcon name="arrow-left" size="12px" color="#afafaf" />
+              )}
             </React.Fragment>
           )
       )}

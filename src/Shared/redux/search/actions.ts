@@ -3,7 +3,7 @@ import { searchUsers } from '../../Services/APIs/Users/searchUsers'
 import { searchLoan } from '../../../Mohassel/Services/APIs/Loan/searchLoan'
 import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication'
 import { searchActionLogs } from '../../../Mohassel/Services/APIs/ActionLogs/searchActionLogs'
-import { searchLeads } from '../../../Mohassel/Services/APIs/Leads/searchLeads'
+import { searchLeads } from '../../Services/APIs/Leads/searchLeads'
 import { searchClearance } from '../../../Mohassel/Services/APIs/clearance/searchClearance'
 import { searchGroups } from '../../../Mohassel/Services/APIs/ManagerHierarchy/searchGroups'
 import {

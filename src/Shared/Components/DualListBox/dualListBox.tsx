@@ -169,7 +169,7 @@ const DualBox = (props: Props) => {
                 ) : null}
                 <InputGroup.Append>
                   <InputGroup.Text className="bg-white rounded-0 border-bottom-0">
-                    <span className="fa fa-search fa-rotate-90" />
+                    <LtsIcon name="search" />
                   </InputGroup.Text>
                 </InputGroup.Append>
                 <Form.Control
@@ -306,7 +306,7 @@ const DualBox = (props: Props) => {
                 <InputGroup>
                   <InputGroup.Append>
                     <InputGroup.Text className="bg-white rounded-0 border-bottom-0">
-                      <span className="fa fa-search fa-rotate-90" />
+                      <LtsIcon name="search" />
                     </InputGroup.Text>
                   </InputGroup.Append>
                   <Form.Control

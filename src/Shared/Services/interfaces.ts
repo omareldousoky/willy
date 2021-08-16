@@ -17,6 +17,13 @@ export interface Branch {
   _id?: string
 }
 
+export interface CustomerGuarantor {
+  name: string
+  birthDate: number
+  nationalId: string
+  address: string
+}
+
 export interface Customer {
   accountBranch?: string
   accountNumber?: string
@@ -89,11 +96,7 @@ export interface Customer {
   nanoLoansLimit?: number
   monthlyIncome?: number
   initialConsumerFinanceLimit?: number
-  customerGuarantors?: {
-    name: string
-    address: string
-    nationalId: string
-  }[]
+  customerGuarantors?: CustomerGuarantor[]
 }
 export interface Installment {
   id: number
@@ -476,46 +479,45 @@ export interface MonthReport {
   agriculturalCount: number
   agriculturalCredit: number
   individualWrittenOffLoansCount: {
-    month: number
+    month?: number
     year: number
   }
   individualWrittenOffLoansCredit: {
-    month: number
+    month?: number
     year: number
   }
   groupWrittenOffLoansCount: {
-    month: number
+    month?: number
     year: number
   }
   groupWrittenOffLoansCredit: {
-    month: number
+    month?: number
     year: number
   }
   writtenOffLoansCount: {
-    month: number
+    month?: number
     year: number
   }
   writtenOffLoansCredit: {
-    month: number
+    month?: number
     year: number
   }
   collectedWrittenOffLoansCount: {
-    month: number
+    month?: number
     year: number
   }
   collectedWrittenOffLoansCredit: {
     month: number
     year: number
   }
-  arrears: [
-    {
-      tier: string
-      customers: number
-      arrears: number
-      wallet: number
-      provision: number
-    }
-  ]
+  arrears: {
+    tier: string
+    customers: number
+    arrears: number
+    wallet: number
+    provision: number
+  }[]
+
   totalCustomers: number
   totalArrears: number
   totalWallet: number
