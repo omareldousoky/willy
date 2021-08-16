@@ -70,7 +70,12 @@ export interface Customer {
   customerBusiness: CustomerBusiness
   customerExtraDetails: CustomerExtraDetails
 }
-interface Props extends RouteComponentProps<{}, {}, { id: string }> {
+interface Props
+  extends RouteComponentProps<
+    {},
+    {},
+    { id: string; uuid: string; phoneNumber: string }
+  > {
   edit: boolean
   fromLeads?: boolean
 }
@@ -316,6 +321,8 @@ class CustomerCreation extends Component<Props, State> {
       )
     }
   }
+
+  async convertLeadToCustomer() {}
 
   async getGlobalPrinciple() {
     this.setState({ loading: true })

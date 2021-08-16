@@ -1,11 +1,11 @@
 import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
-import { Lead } from '../../../../Mohassel/Components/HalanIntegration/leadInterface'
 
-export const editLead = async (obj: Lead) => {
-  const url = API_BASE_URL + `/lead/get/`
+export const getLead = async (uuid: string, phoneNumber: string) => {
+  const url =
+    API_BASE_URL + `/lead/edit-lead/${uuid}?phoneNumber=${phoneNumber}`
   try {
-    const res = await axios.put(url, obj)
+    const res = await axios.get(url)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
