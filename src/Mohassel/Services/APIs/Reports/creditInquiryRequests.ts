@@ -1,6 +1,7 @@
 import axios from '../../../../Shared/Services/axiosInstance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 
-const creditInquiryRequestsURL = `${process.env.REACT_APP_BASE_URL}/report/excel/iscore-report`
+const creditInquiryRequestsURL = `${API_BASE_URL}/report/excel/iscore-report`
 
 export const postCreditInquiryExcel = async (requestModel: {
   startDate: number
