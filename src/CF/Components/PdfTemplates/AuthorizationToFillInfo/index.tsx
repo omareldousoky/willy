@@ -1,8 +1,8 @@
 import React from 'react'
 import { timeToArabicDate } from '../../../../Shared/Services/utils'
 import { AuthorizationToFillInfoProps } from '../../../Models/contract'
+import { Header } from '../pdfTemplatesCommon/header'
 import './styles.scss'
-// import { Header } from '../pdfTemplateCommon/header'
 
 export const AuthorizationToFillInfo = ({
   customerCreationDate,
@@ -12,12 +12,10 @@ export const AuthorizationToFillInfo = ({
 }: AuthorizationToFillInfoProps) => (
   <>
     <div className="contract-container" dir="rtl" lang="ar">
-      {/* <Header
-        title="تفويض بملء بيانات"
-        showCurrentUser={false}
-        showCurrentTime={false}
-        sme
-      /> */}
+      <Header />
+      <div>
+        <p className="head-title">تفويض بملء بيانات</p>
+      </div>
       <p>التاريخ : {timeToArabicDate(customerCreationDate, false)} </p>
       <p>
         {customerGuarantors && customerGuarantors.length > 0

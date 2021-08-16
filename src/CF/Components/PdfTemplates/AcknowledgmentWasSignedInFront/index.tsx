@@ -4,7 +4,7 @@ import {
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
 import { AcknowledgmentWasSignedInFrontProps } from '../../../Models/contract'
-// import { Header } from '../pdfTemplateCommon/header'
+import { Header } from '../pdfTemplatesCommon/header'
 import './styles.scss'
 
 export const AcknowledgmentWasSignedInFront = ({
@@ -16,12 +16,10 @@ export const AcknowledgmentWasSignedInFront = ({
   return (
     <>
       <div className="contract-container" dir="rtl" lang="ar">
-        {/* <Header
-          title="إقرار تم التوقيع أمامي "
-          showCurrentUser={false}
-          showCurrentTime={false}
-          sme
-        /> */}
+        <Header />
+        <div>
+          <p className="head-title">إقرار تم التوقيع امامي</p>
+        </div>
         <p>التاريخ : {timeToArabicDate(customerCreationDate, false)} </p>
         <p>نقر نحن الموقعان أدناه :-</p>
         <div className="d-flex justify-content-between">

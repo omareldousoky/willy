@@ -6,7 +6,7 @@ import {
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
 import { PromissoryNoteProps } from '../../../Models/contract'
-// import { Header } from '../pdfTemplateCommon/header'
+import { Header } from '../pdfTemplatesCommon/header'
 import './styles.scss'
 
 export const PromissoryNote = ({
@@ -18,7 +18,10 @@ export const PromissoryNote = ({
   nationalId,
 }: PromissoryNoteProps) => (
   <div className="promissory-note" dir="rtl" lang="ar">
-    {/* <Header title="سند لأمر" showCurrentUser={false} showCurrentTime={false} /> */}
+    <Header />
+    <div>
+      <p className="head-title">سند لأمر</p>
+    </div>
     <p>
       تاريخ الاصدار : &nbsp;
       {timeToArabicDate(customerCreationDate, false)}
