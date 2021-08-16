@@ -4,10 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start-login": "webpack-dev-server --mode development --env.development --config ./config/webpack.login.js --hot",
-    "start-mohassel": "webpack-dev-server --mode development --env.development --config ./config/webpack.mohassel.js --hot",
-    "start-documents": "webpack-dev-server --mode development --env.development --config ./config/webpack.documents.js --hot",
-    "start-cf": "webpack-dev-server --mode development --env.development --config ./config/webpack.cf.js --hot",
+    "start-login": "webpack-dev-server --mode development --env.development --config ./config/webpack.login.js --hot --port 8080",
+    "start-mohassel": "webpack-dev-server --mode development --env.development --config ./config/webpack.mohassel.js --hot --port 8081",
+    "start-documents": "webpack-dev-server --mode development --env.development --config ./config/webpack.documents.js --hot --port 8082",
+    "start-cf": "webpack-dev-server --mode development --env.development --config ./config/webpack.cf.js --hot --port 8081",
     "build": "npm run build-mohassel && npm run build-cf && npm run build-login && npm run build-documents",
     "build-login": "webpack --mode production --env.production --config ./config/webpack.login.js",
     "build-mohassel": "webpack --mode production --env.production --config ./config/webpack.mohassel.js",
@@ -22,7 +22,13 @@
     "lint-shared": "eslint --cache src/Shared --ext .ts,.tsx --no-error-on-unmatched-pattern",
     "lint-shared:fix": "eslint --cache src/Shared --ext .ts,.tsx --no-error-on-unmatched-pattern --fix",
 		"lint-cf": "eslint --cache src/CF --ext .ts,.tsx --no-error-on-unmatched-pattern",
-    "lint-cf:fix": "eslint --cache src/CF --ext .ts,.tsx --no-error-on-unmatched-pattern --fix"
+    "lint-cf:fix": "eslint --cache src/CF --ext .ts,.tsx --no-error-on-unmatched-pattern --fix",
+		"cf-dev": "sh ./dev-env.sh cf dev",
+		"cf-test": "sh ./dev-env.sh cf test",
+		"lts-dev": "sh ./dev-env.sh lts dev",
+		"lts-test": "sh ./dev-env.sh lts test",
+		"lts-docs-dev": "sh ./dev-env.sh lts-docs dev",
+		"lts-docs-test": "sh ./dev-env.sh lts-docs test"
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.1",
