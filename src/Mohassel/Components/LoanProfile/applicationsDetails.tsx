@@ -4,10 +4,9 @@ import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Swal from 'sweetalert2'
 import local from '../../../Shared/Assets/ar.json'
-import { getRenderDate } from '../../Services/getRenderDate'
 import { englishToArabic } from '../../Services/statusLanguage'
 import { GuarantorTableView } from './guarantorDetails'
-import { getLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
+import { getLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
 import {
   beneficiaryType,
@@ -16,6 +15,7 @@ import {
   interestPeriod,
   periodType,
   timeToArabicDate,
+  getRenderDate,
 } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 

@@ -6,7 +6,7 @@ import {
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
 import { CustomerApplicationTransactionsResponse } from '../../../Services/interfaces'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 import './customerTransactionReport.scss'
 
 interface CustomerTransactionsProps {

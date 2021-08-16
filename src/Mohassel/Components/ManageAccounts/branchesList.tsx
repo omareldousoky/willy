@@ -5,20 +5,19 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Swal from 'sweetalert2'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-import { getDateAndTime } from '../../Services/getRenderDate'
 import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../config/Can'
 import * as local from '../../../Shared/Assets/ar.json'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageAccountsArray } from './manageAccountsInitials'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import { getErrorMessage, getDateAndTime } from '../../../Shared/Services/utils'
 import { getCookie } from '../../../Shared/Services/getCookie'
 import {
   BranchDetailsResponse,
   getBranch,
-} from '../../Services/APIs/Branch/getBranch'
+} from '../../../Shared/Services/APIs/Branch/getBranch'
 import { LtsIcon } from '../../../Shared/Components'
 
 interface State {

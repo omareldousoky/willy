@@ -4,6 +4,7 @@ import { saveAs } from 'file-saver'
 import Swal from 'sweetalert2'
 import * as local from '../Assets/ar.json'
 import errorMessages from '../Assets/errorMessages.json'
+import { API_BASE_URL } from '../envConfig'
 
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
@@ -797,4 +798,58 @@ export const generateArrayOfYears = () => {
   )
 
   return years
+}
+export const getRenderDate = (date: number) => {
+  const today = new Date(date)
+  let dd: string | number = today.getDate()
+  let mm: string | number = today.getMonth() + 1
+  const yyyy = today.getFullYear()
+  if (dd < 10) {
+    dd = '0' + dd
+  }
+
+  if (mm < 10) {
+    mm = '0' + mm
+  }
+  return dd + '-' + mm + '-' + yyyy
+}
+
+export const getDateAndTime = (date: number) => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
+  }
+  const dateString = new Date(date).toLocaleTimeString('ar-EG', options)
+  return dateString
+}
+
+export const isCF = API_BASE_URL?.includes('cf') ?? false
+
+export const addYearToTimeStamp = (timeStamp: number) => {
+  const currDate = new Date(timeStamp)
+  const nextYearDate = new Date(
+    currDate.setFullYear(currDate.getFullYear() + 1)
+  )
+
+  return nextYearDate.toLocaleDateString('ar-EG')
+}
+export const getIndexInArabic = (index: number) => {
+  switch (index) {
+    case 0:
+      return ['ثالثا', 'ثالث']
+    case 1:
+      return ['رابعا', 'رابع']
+    case 2:
+      return ['خامسا', 'خامس']
+    case 3:
+      return ['سادسا', 'سادس']
+    case 4:
+      return ['سابعا', 'سابع']
+    case 5:
+      return ['ثامنا', 'ثامن']
+    default:
+      return ['', '']
+  }
 }

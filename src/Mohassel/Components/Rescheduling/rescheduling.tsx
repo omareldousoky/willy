@@ -4,7 +4,7 @@ import PostponeInstallments from './postponeInstallments'
 import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
 import TraditionalLoanRescheduling from './traditionalLoanRescheduling'
 import FreeRescheduling from './freeRescheduling'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import Can from '../../config/Can'
 import PostponeHalfInstallment from './postponeHalfInstallment'
 

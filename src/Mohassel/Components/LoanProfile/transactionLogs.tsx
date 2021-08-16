@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
-import { getApplicationTransactionLogs } from '../../Services/APIs/loanApplication/applicationLogs'
+import { getApplicationTransactionLogs } from '../../../Shared/Services/APIs/loanApplication/applicationLogs'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getDateAndTime } from '../../Services/getRenderDate'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import { getErrorMessage, getDateAndTime } from '../../../Shared/Services/utils'
 
 interface Props {
   id: string

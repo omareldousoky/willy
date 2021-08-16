@@ -8,7 +8,7 @@ import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import Search from '../../../Shared/Components/Search/search'
 import TotalWrittenChecksPDF from '../PDF/totalWrittenChecks/totalWrittenChecks'
 import Can from '../../../Mohassel/config/Can'
-import { getApplication } from '../../../Mohassel/Services/APIs/loanApplication/getApplication'
+import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import {
   timeToDateyyymmdd,

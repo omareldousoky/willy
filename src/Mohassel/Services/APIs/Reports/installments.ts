@@ -1,7 +1,8 @@
-import axios from '../axios-instance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const installments = async (obj: any) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/installments`
+  const url = API_BASE_URL + `/report/installments`
   try {
     const res = await axios.post(url, obj)
     return { status: 'success', body: res.data }
@@ -10,7 +11,7 @@ export const installments = async (obj: any) => {
   }
 }
 export const postInstallmentsExcel = async (obj) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/excel/installments`
+  const url = API_BASE_URL + `/report/excel/installments`
   try {
     const res = await axios.post(url, obj)
     return { status: 'success', body: res.data }
@@ -19,8 +20,7 @@ export const postInstallmentsExcel = async (obj) => {
   }
 }
 export const getInstallmentsExcel = async (id) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + `/report/excel/installments/${id}`
+  const url = API_BASE_URL + `/report/excel/installments/${id}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }

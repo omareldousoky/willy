@@ -1,8 +1,8 @@
-import axios from '../axios-instance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const rejectManualOtherPayment = async (id: string) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + `/loan/reject-manual-other-payment`
+  const url = API_BASE_URL + `/loan/reject-manual-other-payment`
   try {
     const res = await axios.put(url, { id })
     return { status: 'success', body: res.data }

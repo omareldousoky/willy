@@ -10,15 +10,15 @@ import Col from 'react-bootstrap/Col'
 import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../config/Can'
 import local from '../../../Shared/Assets/ar.json'
-import { getDocumentsTypes } from '../../Services/APIs/encodingFiles/getDocumentsTypes'
 import { DocumentType } from '../../../Shared/Services/interfaces'
 import {
   documentTypeLocalization,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import { manageToolsArray } from './manageToolsInitials'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { LtsIcon } from '../../../Shared/Components'
+import { getDocumentsTypes } from '../../../Shared/Services/APIs/encodingFiles/documentType'
 
 interface State {
   documentTypes: DocumentType[]

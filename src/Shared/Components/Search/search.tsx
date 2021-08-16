@@ -16,7 +16,7 @@ import {
   searchFilters,
   issuedLoansSearchFilters,
 } from '../../redux/search/actions'
-import { BranchesDropDown } from '../../../Mohassel/Components/dropDowns/allDropDowns'
+import { BranchesDropDown } from '../dropDowns/allDropDowns'
 import {
   getFullCustomerKey,
   parseJwt,
@@ -24,13 +24,13 @@ import {
   timeToDateyyymmdd,
 } from '../../Services/utils'
 import { getCookie } from '../../Services/getCookie'
-import { getGovernorates } from '../../../Mohassel/Services/APIs/configApis/config'
 import { loading } from '../../redux/loading/actions'
 import { getActionsList } from '../../../Mohassel/Services/APIs/ActionLogs/getActionsList'
-import Can from '../../../Mohassel/config/Can'
 import { SearchInitialFormikState, SearchProps, SearchState } from './types'
-import { WarningTypeDropDown } from '../../../Mohassel/Components/dropDowns/WarningTypeDropDown'
 import ability from '../../config/ability'
+import { WarningTypeDropDown } from '../dropDowns/WarningTypeDropDown'
+import { getGovernorates } from '../../Services/APIs/config'
+import Can from '../../config/Can'
 
 class Search extends Component<SearchProps, SearchState> {
   constructor(props) {
@@ -227,7 +227,9 @@ class Search extends Component<SearchProps, SearchState> {
     if (!['application', 'loan'].includes(url)) {
       delete obj.type
     } else {
-      obj.type = this.props.sme ? 'sme' : obj.type ? obj.type : 'micro'
+      obj.type = this.props.sme
+        ? 'sme'
+        : obj.type || (this.props.cf ? 'consumerFinance' : 'micro')
     }
 
     if (obj.lastDates) {

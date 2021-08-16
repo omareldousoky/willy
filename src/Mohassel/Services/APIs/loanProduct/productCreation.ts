@@ -1,9 +1,9 @@
-import axios from '../axios-instance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
+import axios from '../../../../Shared/Services/axiosInstance'
 
-const { REACT_APP_BASE_URL } = process.env
-const createProductUrl = `${REACT_APP_BASE_URL}/product/loan-product`
-const editProductUrl = `${REACT_APP_BASE_URL}/product/loan-product`
-const getProductApplicationsUrl = `${REACT_APP_BASE_URL}/report/product-applications`
+const createProductUrl = `${API_BASE_URL}/product/loan-product`
+const editProductUrl = `${API_BASE_URL}/product/loan-product`
+const getProductApplicationsUrl = `${API_BASE_URL}/report/product-applications`
 export const createProduct = async (data: object) => {
   try {
     const res = await axios.post(createProductUrl, data)

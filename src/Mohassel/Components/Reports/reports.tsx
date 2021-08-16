@@ -82,7 +82,7 @@ import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import { CustomerTransactionReport } from '../pdfTemplates/customerTransactionReport'
 import { getCustomerTransactions } from '../../Services/APIs/Reports/customerTransactions'
 import { fetchRaseedyTransactions } from '../../Services/APIs/Reports/raseedyTransactions'
-import { PdfPortal } from '../Common/PdfPortal'
+import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
 import RaseedyTransactionsReport from '../pdfTemplates/RaseedyTransactions'
 import { PDFList } from '../../../Shared/Components/PdfList'
 

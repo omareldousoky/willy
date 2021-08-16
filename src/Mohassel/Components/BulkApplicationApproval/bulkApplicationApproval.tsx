@@ -17,7 +17,7 @@ import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { loading } from '../../../Shared/redux/loading/actions'
 import { Loader } from '../../../Shared/Components/Loader'
-import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval'
+import { bulkApproval } from '../../../Shared/Services/APIs/loanApplication/bulkApproval'
 import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalValidation'
 import {
   timeToDateyyymmdd,
@@ -28,7 +28,7 @@ import {
   manageApplicationsArray,
   manageSMEApplicationsArray,
 } from '../TrackLoanApplications/manageApplicationInitials'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 
 interface Product {
   productName: string

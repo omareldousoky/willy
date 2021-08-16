@@ -5,8 +5,11 @@ export interface Report {
     userName: string
   }
   generatedAt: number
+  fileGeneratedAt: number
   status: 'created' | 'queued' | 'failed'
   _id: string
+  key: string
+  response?: any
 }
 export interface RisksRow {
   customersCount: number
