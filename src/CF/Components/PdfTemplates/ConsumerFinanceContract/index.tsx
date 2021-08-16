@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Tafgeet from 'tafgeetjs'
 import {
   dayToArabic,
@@ -9,6 +9,7 @@ import {
   getNumbersOfGuarantor,
 } from '../../../../Shared/Services/utils'
 import { ConsumerFinanceContractData } from '../../../Models/contract'
+import { Header } from '../pdfTemplatesCommon/header'
 import './styles.scss'
 
 interface ConsumerFinanceContractProps {
@@ -17,11 +18,7 @@ interface ConsumerFinanceContractProps {
 export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
   props
 ) => {
-  const [noOfGuarantors, setNoOfGuarantors] = useState<number>(0)
-  useEffect(() => {
-    if (props.contractData.customerGuarantors?.length)
-      setNoOfGuarantors(props.contractData.customerGuarantors?.length)
-  }, [props])
+  const noOfGuarantors = props.contractData.customerGuarantors?.length as number
   const term19Condition = (guarantorsLength: number) => {
     switch (guarantorsLength) {
       case 0:
@@ -37,6 +34,7 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
   }
   return (
     <div className="cf-contract-container">
+      <Header />
       <div>
         <p className="head-title">عقد تمويل استهلاكي</p>
         <p className="head-title">
@@ -202,7 +200,7 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
             من خلال بطاقات المدفوعات التجارية او احدي وسائل الدفع التي يقرها
             البنك المركزي.
           </p>
-          {noOfGuarantors && (
+          {noOfGuarantors ? (
             <p>
               4/5 يلتزم {noOfGuarantors > 1 ? 'الاطراف' : 'الطرفان'} الثاني و{' '}
               {getNumbersOfGuarantor('and', noOfGuarantors)} بصفتهم ضامنين
@@ -211,6 +209,8 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
               او خصما من رصيده بأي محفظة ويعد التوقيع علي هذا العقد تفويض منه
               للشركة بذلك.
             </p>
+          ) : (
+            ''
           )}
         </section>
         <section className="term-container" title="fifth-term">
