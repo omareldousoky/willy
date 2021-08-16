@@ -72,6 +72,7 @@ export interface Customer {
 }
 interface Props extends RouteComponentProps<{}, {}, { id: string }> {
   edit: boolean
+  fromLeads?: boolean
 }
 interface State {
   step: number
@@ -180,6 +181,8 @@ class CustomerCreation extends Component<Props, State> {
   componentDidMount() {
     if (this.props.edit) {
       this.getCustomerById()
+    } else if (this.props.fromLeads) {
+      console.log('from leads')
     }
   }
 
