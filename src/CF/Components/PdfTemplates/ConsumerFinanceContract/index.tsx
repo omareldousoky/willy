@@ -35,9 +35,9 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
   return (
     <div className="cf-contract-container">
       <Header />
-      <div>
-        <p className="head-title">عقد تمويل استهلاكي</p>
-        <p className="head-title">
+      <div className="head-title">
+        <p>عقد تمويل استهلاكي</p>
+        <p>
           طبقا لأحكام القانون رقم 18 لسنة 2020 بشأن تنظيم نشاط التمويل
           الاستهلاكي
         </p>
@@ -818,20 +818,27 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
             <div>
               <p>الطرف الثاني</p>
               <p> الأسم/ {props.contractData.customerName}</p>
-              <p> التوقيع/ .......................</p>
+              <p> التوقيع/ ..........................</p>
             </div>
           </div>
-          {props.contractData.customerGuarantors?.map((guarnator, index) => {
-            return (
-              <div className="d-flex justify-content-between" key={index}>
-                <div>
-                  <p>الطرف {orderLocal[index + 2]}</p>
-                  <p> الأسم/ {guarnator.name}</p>
-                  <p> التوقيع/ .......................</p>
-                </div>
-              </div>
-            )
-          })}
+          <br />
+          {noOfGuarantors ? (
+            <div className="d-flex  justify-content-between">
+              {props.contractData.customerGuarantors?.map(
+                (guarnator, index) => {
+                  return (
+                    <div key={index}>
+                      <p>الطرف {orderLocal[index + 2]}</p>
+                      <p> الأسم/ {guarnator.name}</p>
+                      <p> التوقيع/ ..........................</p>
+                    </div>
+                  )
+                }
+              )}
+            </div>
+          ) : (
+            ''
+          )}
         </section>
       </div>
     </div>
