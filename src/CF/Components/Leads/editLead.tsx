@@ -35,7 +35,6 @@ export interface LeadStepOne {
   phoneNumber: string
   customerNationalId: string
   nationalIdIssueDate: string
-  loanOwner: boolean
 }
 export interface LeadStepTwo {
   businessSector: string
@@ -82,7 +81,6 @@ class EditLead extends Component<
         customerNationalId: lead.customerNationalId || '',
         nationalIdIssueDate:
           timeToDateyyymmdd(Number(lead.nationalIdIssueDate)) || '',
-        loanOwner: lead.loanOwner,
       },
       stepTwo: {
         businessSector: lead.businessSector,
@@ -324,38 +322,6 @@ class EditLead extends Component<
                     <Form.Control.Feedback type="invalid">
                       {formikProps.errors.nationalIdIssueDate}
                     </Form.Control.Feedback>
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={4}>
-                  <Form.Group controlId="loanOwner">
-                    <Form.Label
-                      className="customer-form-label"
-                      column
-                    >{`${local.loanOwner}*`}</Form.Label>
-                    <div className="age-range-container">
-                      <div
-                        onClick={() => {
-                          formikProps.setFieldValue('loanOwner', true)
-                        }}
-                        className={`item ${
-                          formikProps.values.loanOwner ? 'active' : ''
-                        }`}
-                      >
-                        {local.personal}
-                      </div>
-                      <div
-                        onClick={() => {
-                          formikProps.setFieldValue('loanOwner', false)
-                        }}
-                        className={`item ${
-                          formikProps.values.loanOwner ? '' : 'active'
-                        }`}
-                      >
-                        {local.notPersonal}
-                      </div>
-                    </div>
                   </Form.Group>
                 </Col>
               </Row>
@@ -638,7 +604,7 @@ class EditLead extends Component<
               <Form.Group as={Row} className="branch-data-group">
                 <Col>
                   <Button
-                    className="btn-cancel-prev"
+                    variant="danger"
                     style={{ width: '60%' }}
                     onClick={() => {
                       this.setState({

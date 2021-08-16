@@ -22,7 +22,7 @@ import {
   checkLinkage,
   confirmLinkage,
   removeLinkage,
-} from '../../Services/APIs/Leads/halanLinkage'
+} from '../../../Shared/Services/APIs/Leads/halanLinkage'
 import {
   CheckLinkageResponse,
   LinkageStatusEnum,
