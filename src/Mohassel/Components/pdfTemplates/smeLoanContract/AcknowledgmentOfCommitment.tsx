@@ -63,12 +63,12 @@ export const AcknowledgmentOfCommitment = ({
         <p style={{ textAlign: 'center' }}>وهذا أقرار منا بذلك</p>
         <p>المقرين بما فيه</p>
         <p>شركة / {application.customer?.businessName}</p>
-        <p>
-          الاسم /{' '}
-          {application.entitledToSign &&
-            application.entitledToSign[0]?.customer?.customerName}{' '}
-        </p>
-        <p className="py-3">التوقيع/</p>
+        {application.entitledToSign?.map((entitledToSign) => (
+          <>
+            <p>الاسم / {entitledToSign.customer?.customerName} </p>
+            <p className="py-3">التوقيع/</p>
+          </>
+        ))}
         {application.guarantors?.map((person, index) => (
           <div key={index}>
             <p>
