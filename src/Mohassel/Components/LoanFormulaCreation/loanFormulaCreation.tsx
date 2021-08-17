@@ -13,7 +13,7 @@ import { LoanFormulaCreationForm } from './loanFormulaCreationForm'
 import { createFormula } from '../../Services/APIs/LoanFormula/createFromula'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-import BackButton from '../BackButton/back-button'
+import BackButton from '../../../Shared/Components/BackButton/back-button'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 
 interface Props extends RouteComponentProps {

@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import * as local from '../../../Shared/Assets/ar.json'
-import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
+import {
+  CardNavBar,
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import Can from '../../config/Can'
 import ActionLogs from './actionLogs'
 import TransactionLogs from './transactionLogs'

@@ -1,8 +1,8 @@
-import axios from '../axios-instance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const unApproveOfficersGroups = async (data: object) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + '/branch/unapprove-officers-group'
+  const url = API_BASE_URL + '/branch/unapprove-officers-group'
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }

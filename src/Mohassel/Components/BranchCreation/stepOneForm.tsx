@@ -10,8 +10,8 @@ import Form from 'react-bootstrap/Form'
 import * as local from '../../../Shared/Assets/ar.json'
 import Governorates from '../Governorates/governorates'
 import { Loader } from '../../../Shared/Components/Loader'
-import Map from '../Map/map'
-import { checkBranchNameDuplicates } from '../../Services/APIs/Branch/checkBranchNameDuplicates'
+import Map from '../../../Shared/Components/Map/map'
+import { checkBranchNameDuplicates } from '../../../Shared/Services/APIs/Branch/checkBranchNameDuplicates'
 
 import {
   BasicErrors,

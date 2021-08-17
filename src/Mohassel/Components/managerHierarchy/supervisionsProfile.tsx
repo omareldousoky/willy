@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card'
 
 import Swal from 'sweetalert2'
 import './managerHierarchy.scss'
-import { CardNavBar } from '../HeaderWithCards/cardNavbar'
+import { CardNavBar } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import local from '../../../Shared/Assets/ar.json'
 import { SupervisionLevelsCreation } from './supervisionLevelsCreation'
 import { BranchBasicsCard } from './branchBasicsCard'

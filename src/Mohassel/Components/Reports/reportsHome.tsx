@@ -2,9 +2,12 @@ import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import CIBReports from './cibReports'
 import * as local from '../../../Shared/Assets/ar.json'
-import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
+import {
+  CardNavBar,
+  Tab,
+} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import Reports from './reports'
-import IscoreReports from './iscoreReports'
+import IscoreReports from './IscoreReports'
 import OracleIntegration from './oracleIntegration'
 import OperationsReports from './operationsReports'
 import { TasaheelReports } from './TasaheelReports/TasaheelReports'
@@ -28,7 +31,11 @@ class ReportsHome extends Component<{}, State> {
         {
           header: local.iScoreReports,
           stringKey: 'iScoreReports',
-          permission: 'downloadIscoreFile',
+          permission: [
+            'downloadIscoreFile',
+            'createIscoreFile',
+            'generateIscoreReport',
+          ],
           permissionKey: 'report',
         },
         {

@@ -4,10 +4,10 @@ import {
   MonthComparisonReportResponse,
   OperationsReportRequest,
 } from '../../interfaces'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 
-const { REACT_APP_BASE_URL } = process.env
-const fetchMonthComparison = `${REACT_APP_BASE_URL}/report/month-comparison`
+const fetchMonthComparison = `${API_BASE_URL}/report/month-comparison`
 
 export const fetchMonthComparisonReport = async (
   request: OperationsReportRequest

@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2'
-import { authMe } from '../../../Mohassel/Services/APIs/Auth/authMe'
+import { authMe } from '../../Services/APIs/Auth/authMe'
 import { getErrorMessage } from '../../Services/utils'
 
 export const getAuthData = () => {

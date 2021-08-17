@@ -1,7 +1,8 @@
-import axios from '../axios-instance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export const searchLoan = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + `/search/loan`
+  const url = API_BASE_URL + `/search/loan`
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }

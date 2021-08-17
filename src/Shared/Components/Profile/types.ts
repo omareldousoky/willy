@@ -1,8 +1,14 @@
-import { CustomerScore } from '../../../Mohassel/Services/APIs/Customer-Creation/customerCategorization'
+import { CustomerScore } from '../../Services/APIs/customer/customerCategorization'
+import { CustomerGuarantor } from '../../Services/interfaces'
 
 export interface FieldProps {
   fieldTitle: string
-  fieldData: string | number | CustomerScore[] | React.ReactElement
+  fieldData:
+    | string
+    | number
+    | CustomerScore[]
+    | React.ReactElement
+    | CFGuarantorTableViewProp
   showFieldCondition: boolean
   fieldDataStyle?: React.CSSProperties
   fieldTitleStyle?: React.CSSProperties
@@ -15,7 +21,7 @@ export interface TabProps {
   header?: string
   desc?: string
   stringKey: string
-  permission?: string
+  permission?: string | string[]
   permissionKey?: string
 }
 export interface ProfileProps {
@@ -30,4 +36,9 @@ export interface ProfileProps {
   editPermission?: boolean
   editOnClick?(): void
   tabsData: TabDataProps
+}
+
+export interface CFGuarantorTableViewProp {
+  customerId: string
+  guarantors: Array<CustomerGuarantor>
 }

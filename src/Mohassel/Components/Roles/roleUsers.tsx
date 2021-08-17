@@ -9,8 +9,10 @@ import * as local from '../../../Shared/Assets/ar.json'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import Can from '../../config/Can'
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
-import { getDateAndTime } from '../../Services/getRenderDate'
+import {
+  timeToDateyyymmdd,
+  getDateAndTime,
+} from '../../../Shared/Services/utils'
 import { LtsIcon } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps {

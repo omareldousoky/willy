@@ -8,12 +8,11 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Swal from 'sweetalert2'
-import Wizard from '../wizard/Wizard'
+import Wizard from '../../../Shared/Components/wizard/Wizard'
 import { Lead } from './leadInterface'
 import { Loader } from '../../../Shared/Components/Loader'
-import { editLead } from '../../Services/APIs/Leads/editLead'
+import { editLead } from '../../../Shared/Services/APIs/Leads/editLead'
 import { Governorate } from '../CustomerCreation/StepTwoForm'
-import { getGovernorates } from '../../Services/APIs/configApis/config'
 import {
   leadStepOne,
   leadStepTwo,
@@ -26,6 +25,7 @@ import {
 } from '../../../Shared/Services/utils'
 import local from '../../../Shared/Assets/ar.json'
 import './leads.scss'
+import { getGovernorates } from '../../../Shared/Services/APIs/config'
 
 export interface LeadStepOne {
   customerName: string

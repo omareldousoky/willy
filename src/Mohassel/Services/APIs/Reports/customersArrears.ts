@@ -4,10 +4,10 @@ import {
   CustomersArrearsRequest,
   CustomersArrearsResponse,
 } from '../../interfaces'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 
-const { REACT_APP_BASE_URL } = process.env
-const fetchCustomersArrears = `${REACT_APP_BASE_URL}/report/customers-arrears`
+const fetchCustomersArrears = `${API_BASE_URL}/report/customers-arrears`
 
 export const fetchCustomersArrearsReport = async (
   request: CustomersArrearsRequest
