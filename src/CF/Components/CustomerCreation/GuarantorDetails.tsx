@@ -21,6 +21,7 @@ import ability from '../../../Shared/config/ability'
 import { CustomerGuarantor } from '../../../Shared/Services/interfaces'
 import { CustomerGuarantorsForm } from './GuarantorDetailsForm'
 import { addGuarantorsToCustomer } from '../../Services/APIs/Customer/customerGuarantors'
+import { CFGuarantorTableViewProp } from '../../../Shared/Components/Profile/types'
 
 interface Props {
   guarantors: Array<CustomerGuarantor>
@@ -43,7 +44,7 @@ export const GuarantorTableView = (props: Props) => {
     const obj = {
       customerId: props.customerId,
       customerGuarantors: values.guarantors,
-    }
+    } as CFGuarantorTableViewProp
     const res = await addGuarantorsToCustomer(obj)
     if (res.status === 'success') {
       changeLoading(false)

@@ -7,6 +7,9 @@ import {
   numbersToArabic,
   timeToArabicDate,
   dayToArabic,
+  getIndexInArabic,
+  getNumbersOfGuarantor,
+  getIndexOfGuarantorInAr,
 } from '../../../../Shared/Services/utils'
 
 const NanoLoanContract = (props) => {
@@ -18,68 +21,6 @@ const NanoLoanContract = (props) => {
   const installments = installmentsObject?.installments?.filter(
     (installment) => installment.id !== 0
   )
-
-  function getNumbersOfGuarantor(str: string) {
-    let modifiedStr = str
-    if (modifiedStr === 'and') modifiedStr = 'و'
-    else modifiedStr = 'او'
-    switch (guarantors.length) {
-      case 1:
-        return ` الثالث`
-      case 2:
-        return ` الثالث ${modifiedStr} الرابع`
-      case 3:
-        return ` الثالث ${modifiedStr} الرابع ${modifiedStr} الخامس`
-      case 4:
-        return `الثالث ${modifiedStr} الرابع ${modifiedStr} الخامس ${modifiedStr} السادس `
-      case 5:
-        return `الثالث ${modifiedStr} الرابع ${modifiedStr} الخامس ${modifiedStr} السادس ${modifiedStr} السابع `
-      case 6:
-        return `الثالث ${modifiedStr} الرابع ${modifiedStr} الخامس ${modifiedStr} السادس ${modifiedStr} السابع ${modifiedStr} الثامن `
-      default:
-        return ''
-    }
-  }
-  function getIndexOfGuarantorInAr(index: number) {
-    switch (index) {
-      case -2:
-        return 'الأول'
-      case -1:
-        return 'الثاني'
-      case 0:
-        return 'الثالث'
-      case 1:
-        return 'الرابع'
-      case 2:
-        return 'الخامس'
-      case 3:
-        return 'السادس'
-      case 4:
-        return 'السابع'
-      case 5:
-        return 'الثامن'
-      default:
-        return ''
-    }
-  }
-  function getIndexInArabic(index: number) {
-    switch (index) {
-      case 0:
-        return ['ثالثا', 'ثالث']
-      case 1:
-        return ['رابعا', 'رابع']
-      case 2:
-        return ['خامسا', 'خامس']
-      case 3:
-        return ['سادسا', 'سادس']
-      case 4:
-        return ['سابعا', 'سابع']
-      case 5:
-        return ['ثامنا', 'ثامن']
-      default:
-        return ['', '']
-    }
-  }
   return (
     <>
       <div className="loan-contract" dir="rtl" lang="ar">
@@ -343,7 +284,8 @@ const NanoLoanContract = (props) => {
                       الثاني{' '}
                       {guarantors.length
                         ? `و ${getNumbersOfGuarantor(
-                            'and'
+                            'and',
+                            guarantors.length
                           )} ضامنين متضامنين فيما بينهم `
                         : ' '}
                       بسداد اجمالي قيمة القرض البالغة{' '}
@@ -428,7 +370,10 @@ const NanoLoanContract = (props) => {
                       يقر <span>{guarantors.length ? 'الطرفان' : 'الطرف'}</span>{' '}
                       الثاني{' '}
                       {guarantors.length
-                        ? `و ${getNumbersOfGuarantor('and')} ضامنين متضامنين `
+                        ? `و ${getNumbersOfGuarantor(
+                            'and',
+                            guarantors.length
+                          )} ضامنين متضامنين `
                         : ' '}{' '}
                       بسداد كافه المبالغ الوارده بالبند السابق وفقا للمواعيد
                       المذكوره به وان هذه المبالغ تعد قيمه القرض وكافه مصروفاته
@@ -444,7 +389,8 @@ const NanoLoanContract = (props) => {
                       الثاني{' '}
                       {guarantors.length
                         ? `و ${getNumbersOfGuarantor(
-                            'and'
+                            'and',
+                            guarantors.length
                           )} ضامنين متضامنين فيما بينهم `
                         : ' '}{' '}
                       بسداد اقساط القرض وفقا لما هو وارد بالبند الثالث من هذا
@@ -483,7 +429,7 @@ const NanoLoanContract = (props) => {
                       <span>{guarantors.length ? 'الطرفان' : 'الطرف'}</span>{' '}
                       الثاني
                       {guarantors.length
-                        ? `و ${getNumbersOfGuarantor('and')}`
+                        ? `و ${getNumbersOfGuarantor('and', guarantors.length)}`
                         : ''}
                       <span>{guarantors.length ? 'مخفقان' : 'مخفق'}</span> في
                       الوفاء بالتزاماتهم التعاقديه والقانونيه ويعتبر هذا العقد
@@ -492,7 +438,10 @@ const NanoLoanContract = (props) => {
                       <span>
                         {guarantors.length
                           ? `أى من الطرفين
-                      الثاني أو ${getNumbersOfGuarantor('and')} أو الاثنين معا
+                      الثاني أو ${getNumbersOfGuarantor(
+                        'and',
+                        guarantors.length
+                      )} أو الاثنين معا
                       جميعهم`
                           : 'الطرف الثاني'}
                       </span>{' '}
@@ -513,7 +462,10 @@ const NanoLoanContract = (props) => {
                       ٧/٣ في حالة تقديم الطرف الثاني{' '}
                       <span>
                         {guarantors.length
-                          ? `أو ${getNumbersOfGuarantor('or')}`
+                          ? `أو ${getNumbersOfGuarantor(
+                              'or',
+                              guarantors.length
+                            )}`
                           : ''}
                       </span>{' '}
                       بيانات أو معلومات مخالفه للواقع او غير سليمه وذلك الي
@@ -523,7 +475,10 @@ const NanoLoanContract = (props) => {
                       ٧/٤ في حاله فقد الطرف الثاني{' '}
                       <span>
                         {guarantors.length
-                          ? `أو ${getNumbersOfGuarantor('or')}`
+                          ? `أو ${getNumbersOfGuarantor(
+                              'or',
+                              guarantors.length
+                            )}`
                           : ''}
                       </span>{' '}
                       اهليته أو اشهار افلاسه او اعساره او وفاته او وضعه تحت
@@ -541,7 +496,10 @@ const NanoLoanContract = (props) => {
                       ٧/٦ في حالة عدم قدرة الطرف الثاني{' '}
                       <span>
                         {guarantors.length
-                          ? `أو ${getNumbersOfGuarantor('or')}`
+                          ? `أو ${getNumbersOfGuarantor(
+                              'or',
+                              guarantors.length
+                            )}`
                           : ''}
                       </span>{' '}
                       عن سداد الاقساط في مواعيدها او توقف اعمال المشروع الممول
@@ -550,7 +508,10 @@ const NanoLoanContract = (props) => {
                     <div>
                       ٧/٧ يلتزم{' '}
                       {guarantors.length > 0
-                        ? `الاطراف الثاني و${getNumbersOfGuarantor('and')} `
+                        ? `الاطراف الثاني و${getNumbersOfGuarantor(
+                            'and',
+                            guarantors.length
+                          )} `
                         : 'الطرف الثاني '}
                       بسداد كافة المصروفات و المصاريف القضائية بكافة انواعها
                     </div>
