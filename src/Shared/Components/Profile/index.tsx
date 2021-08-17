@@ -145,7 +145,7 @@ export const Profile = ({
                   <GuarantorTableView
                     key={index}
                     customerId={fieldData.customerId}
-                    guarantors={fieldData.guarantors}
+                    guarantors={fieldData.customerGuarantors}
                   />
                 )
               )
