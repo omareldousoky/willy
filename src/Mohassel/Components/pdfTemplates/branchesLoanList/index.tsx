@@ -1,7 +1,7 @@
 import React from 'react'
 import './branchesLoanList.scss'
 import { Header } from '../pdfTemplateCommon/header'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 import { LoanTypeSection } from './LoanTypeSection'
 import { BranchesLoanListProps } from './types'
 

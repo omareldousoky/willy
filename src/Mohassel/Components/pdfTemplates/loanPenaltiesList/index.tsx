@@ -2,11 +2,12 @@ import React from 'react'
 import './loanPenaltiesList.scss'
 import * as local from '../../../../Shared/Assets/ar.json'
 import { timeToArabicDate } from '../../../../Shared/Services/utils'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 
 export const LoanPenaltiesList = (props) => {
   const { data } = props
   const { days } = data
+  console.log({ data })
   const totalNumberOfTransactions = Number(data.totalNumberOfTransactions)
   const totalTransactionAmount = Number(data.totalTransactionAmount)
   const startDate = timeToArabicDate(props.data.startDate, false)

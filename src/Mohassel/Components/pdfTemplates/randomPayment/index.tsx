@@ -2,7 +2,7 @@ import React from 'react'
 import './randomPayment.scss'
 import { RandomPaymentProps } from './types'
 import { Header } from '../pdfTemplateCommon/header'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 
 const actionsLocalization = (action: string) => {
   switch (action) {

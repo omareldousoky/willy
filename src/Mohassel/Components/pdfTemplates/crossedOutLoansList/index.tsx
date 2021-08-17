@@ -2,7 +2,7 @@ import React from 'react'
 import './crossedOutLoansList.scss'
 import * as local from '../../../../Shared/Assets/ar.json'
 import { timeToArabicDate } from '../../../../Shared/Services/utils'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 
 export const CrossedOutLoansList = (props) => {
   const { data } = props.data

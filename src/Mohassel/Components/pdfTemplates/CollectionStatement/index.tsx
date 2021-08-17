@@ -1,7 +1,7 @@
 import React from 'react'
 import './CollectionStatement.scss'
 import Table from 'react-bootstrap/Table'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 import { Header } from '../pdfTemplateCommon/header'
 
 export const CollectionStatement = ({ data }) => {

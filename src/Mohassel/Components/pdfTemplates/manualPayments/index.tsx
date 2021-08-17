@@ -4,7 +4,7 @@ import {
   timeToArabicDate,
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 import { ManualPaymentsProps } from './types'
 
 const statusLocalization = (status: string) => {

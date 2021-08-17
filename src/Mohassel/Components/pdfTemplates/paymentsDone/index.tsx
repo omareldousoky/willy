@@ -6,7 +6,7 @@ import {
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
 import * as local from '../../../../Shared/Assets/ar.json'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 
 export const PaymentsDone = (props) => {
   const tempData = props.data.data

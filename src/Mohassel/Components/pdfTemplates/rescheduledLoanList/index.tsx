@@ -6,7 +6,7 @@ import {
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
 import { englishToArabic } from '../../../Services/statusLanguage'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 
 export const RescheduledLoanList = (props) => {
   const tempData = props.data.data

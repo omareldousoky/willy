@@ -5,7 +5,7 @@ import {
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
 import { LoanApplicationFeesProps } from './types'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 import { stringPlaceholder } from '../pdfTemplateCommon/reportLocal'
 
 const statusLocalization = (status: string) => {

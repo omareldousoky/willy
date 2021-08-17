@@ -6,7 +6,7 @@ import {
   getTimestamp,
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 
 export const LoanCreationList = (props) => {
   const tempData = props.data.data

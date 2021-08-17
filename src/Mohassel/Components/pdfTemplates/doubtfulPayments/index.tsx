@@ -7,7 +7,7 @@ import {
 } from '../../../../Shared/Services/utils'
 import * as local from '../../../../Shared/Assets/ar.json'
 import { loanStatusLocal } from '../pdfTemplateCommon/reportLocal'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 
 export const DoubtfulPayments = (props) => {
   const tempData = props.data.data
