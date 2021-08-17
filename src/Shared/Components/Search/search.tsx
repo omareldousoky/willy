@@ -113,6 +113,9 @@ class Search extends Component<SearchProps, SearchState> {
         case 'warningType':
           initialState.warningType = ''
           break
+        case 'phoneNumber':
+          initialState.phoneNumber = ''
+          break
         default:
           break
       }
@@ -170,6 +173,7 @@ class Search extends Component<SearchProps, SearchState> {
       businessName: local.companyName,
       taxCardNumber: local.taxCardNumber,
       commercialRegisterNumber: local.commercialRegisterNumber,
+      phoneNumber: local.phoneNumber,
       default: '',
     }
     return arDropDownValue[key]
@@ -516,12 +520,19 @@ class Search extends Component<SearchProps, SearchState> {
                   )
                 }
                 if (searchKey === 'status') {
-                  return this.statusDropdown(formikProps, index, [
+                  const statusOptions = [
                     { value: '', text: local.all },
                     { value: 'paid', text: local.paid },
                     { value: 'issued', text: local.issued },
                     { value: 'pending', text: local.pending },
-                  ])
+                  ]
+                  if (this.props.cf)
+                    statusOptions.push({
+                      value: 'canceled',
+                      text: local.cancelled,
+                    })
+
+                  return this.statusDropdown(formikProps, index, statusOptions)
                 }
                 if (searchKey === 'status-application') {
                   return this.statusDropdown(formikProps, index, [

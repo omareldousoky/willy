@@ -40,5 +40,5 @@ export interface ProfileProps {
 
 export interface CFGuarantorTableViewProp {
   customerId: string
-  guarantors: Array<CustomerGuarantor>
+  customerGuarantors: Array<CustomerGuarantor>
 }

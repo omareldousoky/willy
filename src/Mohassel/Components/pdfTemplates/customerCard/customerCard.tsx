@@ -519,7 +519,12 @@ class CustomerCardPDF extends Component<Props, State> {
               الاداره غير مسؤله عن اي مبالغ يتم دفعها لاي شخص بدون ايصال رسمي
               مختوم من خزينة الفرع
             </li>
-            {this.props.data.product.beneficiaryType === 'individual' ? (
+            {this.props.data.product.type === 'nano' ? (
+              <li>
+                يلتزم العميل بسداد غرامة تأخير قدرها 2 جنيه (فقط اثنان جنيها لا
+                غير) عن اليوم الواحد ابتدأ من اليوم التالي لتاريخ استحقاق القسط
+              </li>
+            ) : this.props.data.product.beneficiaryType === 'individual' ? (
               <>
                 <li>
                   يلتزم العميل بسداد غرامه تاخير قدرها ٥% من قيمه القسط في اليوم

@@ -1,4 +1,4 @@
-import local from '../Shared/Assets/ar.json'
+import local from './Assets/ar.json'
 
 export const missingKey = (key: string) => `${local[key]} غير موجود`
 
@@ -9,3 +9,6 @@ export const minValue = (value: number | string) =>
 
 export const addeddSuccessfully = (entity: string) =>
   `تم إضافة ${local[entity]} بنجاح`
+
+export const doneSuccessfully = (entity?: string) =>
+  `تم ${entity ? local[entity] : ''} بنجاح`
