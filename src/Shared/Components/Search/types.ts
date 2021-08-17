@@ -39,6 +39,7 @@ export interface SearchProps {
   setLoading: (data) => void
   submitClassName?: string
   sme?: boolean
+  cf?: boolean
 }
 
 export interface SearchState {

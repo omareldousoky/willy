@@ -7,7 +7,9 @@ import Tafgeet from 'tafgeetjs'
 import {
   dayToArabic,
   getAge,
+  getIndexInArabic,
   numbersToArabic,
+  orderLocal,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
 import * as local from '../../../../Shared/Assets/ar.json'
@@ -164,18 +166,19 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                           </div>
                         ))}
                       </div>
-                      <p className="d-flex justify-content-end my-3">
+                      <p className="d-flex justify-content-end my-3 pt-4">
                         &quot;طرف ثان - مقترض&quot;
                       </p>
-                      <p>
-                        <b>ثالثأ:-</b>
-                      </p>
+
                       <div>
                         {data.guarantors.map((guarantor, index) => (
                           <div
                             key={index}
                             className="d-flex justify-content-between "
                           >
+                            <p>
+                              <b> {getIndexInArabic(index)[0]}:-</b>
+                            </p>
                             <div>
                               <b className="word-break">السيد: </b>
                               <span>{guarantor.customerName}</span>
@@ -194,18 +197,23 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                               </span>
                             </div>
                             <div>
+                              <b>العنوان: </b>
+                              <span>{guarantor.customerHomeAddress} </span>
+                            </div>
+                            <div>
                               <b>السن: </b>
                               <span>{getAge(guarantor.birthDate)} عام</span>
                             </div>
                             <div>
                               <b> المهنه : </b>
                             </div>
+                            <p className="d-flex justify-content-end my-3 pt-4">
+                              &quot;طرف {getIndexInArabic(index)[1]} ضامن
+                              متضامن&quot;
+                            </p>
                           </div>
                         ))}
                       </div>
-                      <p className="d-flex justify-content-end my-3">
-                        &quot;طرف ثالث ضامن متضامن&quot;
-                      </p>
                     </section>
 
                     <section>
@@ -554,26 +562,38 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                                       <b>الطرف الثانى ( المدين )</b>
                                     </div>
                                     <div style={{ marginBottom: 30 }}>
-                                      <b>الأسم:</b>
+                                      <b>
+                                        الأسم:{' '}
+                                        {
+                                          data.entitledToSign[0].customer
+                                            .customerName
+                                        }
+                                      </b>
                                     </div>
                                     <div>
                                       <b>التوقيع:</b>
                                     </div>
                                   </td>
                                 </tr>
-                                <tr>
-                                  <td style={{ paddingBottom: 70 }}>
-                                    <div>
-                                      <b> الطرف الثالث ( الضامن المتضامن )</b>
-                                    </div>
-                                    <div style={{ marginBottom: 30 }}>
-                                      <b>الأسم:</b>
-                                    </div>
-                                    <div>
-                                      <b>التوقيع:</b>
-                                    </div>
-                                  </td>
-                                </tr>
+                                {data.guarantors.map((guarantor, index) => (
+                                  <tr key={index}>
+                                    <td style={{ paddingBottom: 70 }}>
+                                      <div>
+                                        <b>
+                                          {' '}
+                                          الطرف {orderLocal[index + 2]}( الضامن
+                                          المتضامن )
+                                        </b>
+                                      </div>
+                                      <div style={{ marginBottom: 30 }}>
+                                        <b>الأسم: {guarantor.customerName}</b>
+                                      </div>
+                                      <div>
+                                        <b>التوقيع:</b>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                ))}
                               </tbody>
                             </table>
                           </td>

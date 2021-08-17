@@ -181,20 +181,20 @@ class PayInstallment extends Component<Props, State> {
     return (
       <Card className="payment-menu">
         <div className="payment-info" style={{ textAlign: 'center' }}>
-          {/* <img
-            alt={this.state.sidePaymentInfo.image}
-            src={require(`../../Assets/${this.state.sidePaymentInfo.image}.svg`)}
-          /> */}
-          <LtsIcon name={this.state.sidePaymentInfo.image} />
-          <h6
-            style={{ cursor: 'pointer' }}
+          <LtsIcon
+            name={this.state.sidePaymentInfo.image}
+            size="90px"
+            color="#7dc255"
+          />
+          <Button
+            variant="default"
             onClick={() => this.props.changePaymentState(0)}
           >
-            <span className="fa fa-long-arrow-alt-right" />
-            <span className="font-weight-bolder text-nowrap">
+            <span className="font-weight-bolder text-primary">&#8702;</span>
+            <small className="font-weight-bolder text-nowrap text-primary">
               &nbsp;{this.state.sidePaymentInfo.local}
-            </span>
-          </h6>
+            </small>
+          </Button>
         </div>
         <div className="verticalLine" />
         <div style={{ width: '100%', padding: 20 }}>

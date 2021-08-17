@@ -26,9 +26,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.lts-coins {
+.lts-warning {
   &:before {
-    content: $lts-coins;
+    content: $lts-warning;
+  }
+}
+
+.lts-view {
+  &:before {
+    content: $lts-view;
+  }
+}
+
+.lts-user {
+  &:before {
+    content: $lts-user;
   }
 }
 
@@ -38,129 +50,9 @@
   }
 }
 
-.lts-printer {
+.lts-terrorists {
   &:before {
-    content: $lts-printer;
-  }
-}
-
-.lts-image-placeholder {
-  &:before {
-    content: $lts-image-placeholder;
-  }
-}
-
-.lts-no-branches-found {
-  &:before {
-    content: $lts-no-branches-found;
-  }
-}
-
-.lts-refresh {
-  &:before {
-    content: $lts-refresh;
-  }
-}
-
-.lts-home {
-  &:before {
-    content: $lts-home;
-  }
-}
-
-.lts-deactivate-doc {
-  &:before {
-    content: $lts-deactivate-doc;
-  }
-}
-
-.lts-location {
-  &:before {
-    content: $lts-location;
-  }
-}
-
-.lts-back {
-  &:before {
-    content: $lts-back;
-  }
-}
-
-.lts-cancel-penalty {
-  &:before {
-    content: $lts-cancel-penalty;
-  }
-}
-
-.lts-check-circle {
-  &:before {
-    content: $lts-check-circle;
-  }
-}
-
-.lts-clearance {
-  &:before {
-    content: $lts-clearance;
-  }
-}
-
-.lts-early-payment {
-  &:before {
-    content: $lts-early-payment;
-  }
-}
-
-.lts-warning {
-  &:before {
-    content: $lts-warning;
-  }
-}
-
-.lts-add {
-  &:before {
-    content: $lts-add;
-  }
-}
-
-.lts-group {
-  &:before {
-    content: $lts-group;
-  }
-}
-
-.lts-pay-installment {
-  &:before {
-    content: $lts-pay-installment;
-  }
-}
-
-.lts-pay-penalty {
-  &:before {
-    content: $lts-pay-penalty;
-  }
-}
-
-.lts-permissions {
-  &:before {
-    content: $lts-permissions;
-  }
-}
-
-.lts-plus {
-  &:before {
-    content: $lts-plus;
-  }
-}
-
-.lts-role {
-  &:before {
-    content: $lts-role;
-  }
-}
-
-.lts-rollback {
-  &:before {
-    content: $lts-rollback;
+    content: $lts-terrorists;
   }
 }
 
@@ -176,45 +68,51 @@
   }
 }
 
-.lts-terrorists {
+.lts-rollback {
   &:before {
-    content: $lts-terrorists;
+    content: $lts-rollback;
   }
 }
 
-.lts-legal-actions {
+.lts-role {
   &:before {
-    content: $lts-legal-actions;
+    content: $lts-role;
   }
 }
 
-.lts-branches {
+.lts-reschedule {
   &:before {
-    content: $lts-branches;
+    content: $lts-reschedule;
   }
 }
 
-.lts-business-specialities {
+.lts-remove {
   &:before {
-    content: $lts-business-specialities;
+    content: $lts-remove;
   }
 }
 
-.lts-business-activities {
+.lts-refresh {
   &:before {
-    content: $lts-business-activities;
+    content: $lts-refresh;
   }
 }
 
-.lts-loan-uses {
+.lts-radio-unchecked {
   &:before {
-    content: $lts-loan-uses;
+    content: $lts-radio-unchecked;
   }
 }
 
-.lts-user {
+.lts-radio-checked {
   &:before {
-    content: $lts-user;
+    content: $lts-radio-checked;
+  }
+}
+
+.lts-printer {
+  &:before {
+    content: $lts-printer;
   }
 }
 
@@ -224,9 +122,99 @@
   }
 }
 
-.lts-branch-areas {
+.lts-plus {
   &:before {
-    content: $lts-branch-areas;
+    content: $lts-plus;
+  }
+}
+
+.lts-permissions {
+  &:before {
+    content: $lts-permissions;
+  }
+}
+
+.lts-pay-penalty {
+  &:before {
+    content: $lts-pay-penalty;
+  }
+}
+
+.lts-pay-installment {
+  &:before {
+    content: $lts-pay-installment;
+  }
+}
+
+.lts-no-branches-found {
+  &:before {
+    content: $lts-no-branches-found;
+  }
+}
+
+.lts-minus {
+  &:before {
+    content: $lts-minus;
+  }
+}
+
+.lts-location {
+  &:before {
+    content: $lts-location;
+  }
+}
+
+.lts-loan-uses {
+  &:before {
+    content: $lts-loan-uses;
+  }
+}
+
+.lts-loan-products {
+  &:before {
+    content: $lts-loan-products;
+  }
+}
+
+.lts-legal-actions {
+  &:before {
+    content: $lts-legal-actions;
+  }
+}
+
+.lts-issued-loans {
+  &:before {
+    content: $lts-issued-loans;
+  }
+}
+
+.lts-image-placeholder {
+  &:before {
+    content: $lts-image-placeholder;
+  }
+}
+
+.lts-i-score {
+  &:before {
+    content: $lts-i-score;
+  }
+}
+
+.lts-home {
+  &:before {
+    content: $lts-home;
+  }
+}
+
+.lts-group {
+  &:before {
+    content: $lts-group;
+  }
+}
+
+.lts-exchange {
+  &:before {
+    content: $lts-exchange;
   }
 }
 
@@ -236,15 +224,99 @@
   }
 }
 
-.lts-blocking {
+.lts-edit {
   &:before {
-    content: $lts-blocking;
+    content: $lts-edit;
   }
 }
 
-.lts-assign-product-to-branch {
+.lts-early-payment {
   &:before {
-    content: $lts-assign-product-to-branch;
+    content: $lts-early-payment;
+  }
+}
+
+.lts-download-big-file {
+  &:before {
+    content: $lts-download-big-file;
+  }
+}
+
+.lts-download {
+  &:before {
+    content: $lts-download;
+  }
+}
+
+.lts-deactivate-user {
+  &:before {
+    content: $lts-deactivate-user;
+  }
+}
+
+.lts-deactivate-doc {
+  &:before {
+    content: $lts-deactivate-doc;
+  }
+}
+
+.lts-customers {
+  &:before {
+    content: $lts-customers;
+  }
+}
+
+.lts-coins {
+  &:before {
+    content: $lts-coins;
+  }
+}
+
+.lts-close {
+  &:before {
+    content: $lts-close;
+  }
+}
+
+.lts-clearance {
+  &:before {
+    content: $lts-clearance;
+  }
+}
+
+.lts-cib {
+  &:before {
+    content: $lts-cib;
+  }
+}
+
+.lts-checkbox-unchecked {
+  &:before {
+    content: $lts-checkbox-unchecked;
+  }
+}
+
+.lts-checkbox-checked {
+  &:before {
+    content: $lts-checkbox-checked;
+  }
+}
+
+.lts-check-circle {
+  &:before {
+    content: $lts-check-circle;
+  }
+}
+
+.lts-change-source-of-fund {
+  &:before {
+    content: $lts-change-source-of-fund;
+  }
+}
+
+.lts-cancel-penalty {
+  &:before {
+    content: $lts-cancel-penalty;
   }
 }
 
@@ -260,51 +332,15 @@
   }
 }
 
-.lts-loan-products {
+.lts-business-specialities {
   &:before {
-    content: $lts-loan-products;
+    content: $lts-business-specialities;
   }
 }
 
-.lts-arrow-right {
+.lts-business-activities {
   &:before {
-    content: $lts-arrow-right;
-  }
-}
-
-.lts-arrow-left {
-  &:before {
-    content: $lts-arrow-left;
-  }
-}
-
-.lts-download-big-file {
-  &:before {
-    content: $lts-download-big-file;
-  }
-}
-
-.lts-i-score {
-  &:before {
-    content: $lts-i-score;
-  }
-}
-
-.lts-issued-loans {
-  &:before {
-    content: $lts-issued-loans;
-  }
-}
-
-.lts-cib {
-  &:before {
-    content: $lts-cib;
-  }
-}
-
-.lts-change-source-of-fund {
-  &:before {
-    content: $lts-change-source-of-fund;
+    content: $lts-business-activities;
   }
 }
 
@@ -326,98 +362,68 @@
   }
 }
 
+.lts-buildings {
+  &:before {
+    content: $lts-buildings;
+  }
+}
+
+.lts-branches {
+  &:before {
+    content: $lts-branches;
+  }
+}
+
+.lts-branch-location {
+  &:before {
+    content: $lts-branch-location;
+  }
+}
+
+.lts-branch-areas {
+  &:before {
+    content: $lts-branch-areas;
+  }
+}
+
+.lts-blocking {
+  &:before {
+    content: $lts-blocking;
+  }
+}
+
+.lts-back {
+  &:before {
+    content: $lts-back;
+  }
+}
+
+.lts-assign-product-to-branch {
+  &:before {
+    content: $lts-assign-product-to-branch;
+  }
+}
+
+.lts-arrow-right {
+  &:before {
+    content: $lts-arrow-right;
+  }
+}
+
+.lts-arrow-left {
+  &:before {
+    content: $lts-arrow-left;
+  }
+}
+
 .lts-applications {
   &:before {
     content: $lts-applications;
   }
 }
 
-.lts-company {
+.lts-add {
   &:before {
-    content: $lts-company;
-  }
-}
-
-.lts-reschedule {
-  &:before {
-    content: $lts-reschedule;
-  }
-}
-
-.lts-download {
-  &:before {
-    content: $lts-download;
-  }
-}
-
-.lts-minus {
-  &:before {
-    content: $lts-minus;
-  }
-}
-
-.lts-close {
-  &:before {
-    content: $lts-close;
-  }
-}
-
-.lts-deactivate-user {
-  &:before {
-    content: $lts-deactivate-user;
-  }
-}
-
-.lts-remove {
-  &:before {
-    content: $lts-remove;
-  }
-}
-
-.lts-edit {
-  &:before {
-    content: $lts-edit;
-  }
-}
-
-.lts-view {
-  &:before {
-    content: $lts-view;
-  }
-}
-
-.lts-exchange {
-  &:before {
-    content: $lts-exchange;
-  }
-}
-
-.lts-customers {
-  &:before {
-    content: $lts-customers;
-  }
-}
-
-.lts-checkbox-checked {
-  &:before {
-    content: $lts-checkbox-checked;
-  }
-}
-
-.lts-checkbox-unchecked {
-  &:before {
-    content: $lts-checkbox-unchecked;
-  }
-}
-
-.lts-radio-checked {
-  &:before {
-    content: $lts-radio-checked;
-  }
-}
-
-.lts-radio-unchecked {
-  &:before {
-    content: $lts-radio-unchecked;
+    content: $lts-add;
   }
 }

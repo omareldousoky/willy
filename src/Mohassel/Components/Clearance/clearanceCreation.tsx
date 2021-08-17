@@ -7,7 +7,6 @@ import Card from 'react-bootstrap/Card'
 import { Formik } from 'formik'
 import Swal from 'sweetalert2'
 import CustomerBasicsCard from './basicInfoCustomer'
-import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
 import { ClearanceCreationForm } from './clearanceCreationForm'
 import {
   clearanceStep1CreationValidation,
@@ -20,7 +19,6 @@ import {
   ClearanceRequest,
 } from './clearanceFormIntialState'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans'
 import {
   getErrorMessage,
   timeToDateyyymmdd,
@@ -31,8 +29,10 @@ import { getClearance } from '../../Services/APIs/clearance/getClearance'
 import { updateClearance } from '../../Services/APIs/clearance/updateClearance'
 import { Loader } from '../../../Shared/Components/Loader'
 import PenaltyStrike from './penaltyStrike'
-import Wizard from '../wizard/Wizard'
+import Wizard from '../../../Shared/Components/wizard/Wizard'
 import ClearanceCreationDocuments from './clearanceCreationDocuments'
+import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
+import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 
 interface CreateClearanceRouteState {
   customerId?: string

@@ -6,7 +6,7 @@ import Table from 'react-bootstrap/Table'
 import { Loader } from '../../../Shared/Components/Loader'
 import { getFormula } from '../../Services/APIs/LoanFormula/getFormula'
 import * as local from '../../../Shared/Assets/ar.json'
-import BackButton from '../BackButton/back-button'
+import BackButton from '../../../Shared/Components/BackButton/back-button'
 import {
   interestType,
   installmentType,

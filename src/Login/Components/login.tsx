@@ -6,6 +6,7 @@ import { LoginForm } from './loginForm'
 import { loginCred, loginCredValidation } from './loginState'
 import * as local from '../../Shared/Assets/ar.json'
 import { setToken } from '../../Shared/token'
+import { API_BASE_URL } from '../../Shared/envConfig'
 
 interface User {
   username: string
@@ -13,6 +14,7 @@ interface User {
 }
 interface Props {
   title: string
+  isCF: boolean
 }
 interface State {
   credentials: User
@@ -37,7 +39,7 @@ class Login extends React.PureComponent<Props, State> {
       password: values.password,
     }
     axios({
-      url: `${process.env.REACT_APP_BASE_URL}/auth/login`,
+      url: `${API_BASE_URL}/auth/login`,
       method: 'post',
       data,
     }).then(
@@ -59,16 +61,31 @@ class Login extends React.PureComponent<Props, State> {
         <div className="right-hero">
           <div className="texts">
             <h1>{local.welcomeTo}</h1>
-            <h1>{local.systemForLoanTracking}</h1>
-            <h3>{local.lowRateLoan}</h3>
+            {this.props.isCF ? (
+              <>
+                <h1>{local.commerceTrackingSystem}</h1>
+                <h3>
+                  {local.from} {local.halan}
+                </h3>
+              </>
+            ) : (
+              <>
+                <h1>{local.systemForLoanTracking}</h1>
+                <h3>{local.lowRateLoan}</h3>
+              </>
+            )}
           </div>
           <img alt="login" src={require('../Assets/loginPhotos.png')} />
         </div>
         <div className="left-hero">
           <img
-            alt="login-log"
+            alt="logo"
             className="login-logo"
-            src={require('../../Shared/Assets/Logo.svg')}
+            src={
+              this.props.isCF
+                ? require('../../Shared/Assets/HalanLogo.svg')
+                : require('../../Shared/Assets/Logo.svg')
+            }
           />
           <div className="login-form">
             <h2>{local.login}</h2>

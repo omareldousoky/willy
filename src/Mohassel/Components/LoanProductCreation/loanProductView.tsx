@@ -5,7 +5,7 @@ import Swal from 'sweetalert2'
 import Table from 'react-bootstrap/Table'
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'
-import BackButton from '../BackButton/back-button'
+import BackButton from '../../../Shared/Components/BackButton/back-button'
 import {
   beneficiaryType,
   loanNature,

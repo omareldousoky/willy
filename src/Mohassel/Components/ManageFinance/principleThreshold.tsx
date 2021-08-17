@@ -9,13 +9,13 @@ import * as Yup from 'yup'
 import Col from 'react-bootstrap/Col'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
+import { manageToolsArray } from '../Tools/manageToolsInitials'
+import { getErrorMessage } from '../../../Shared/Services/utils'
 import {
   getMaxPrinciples,
   setMaxPrinciples,
-} from '../../Services/APIs/configApis/config'
-import { manageToolsArray } from '../Tools/manageToolsInitials'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+} from '../../../Shared/Services/APIs/config'
 
 interface Principals {
   maxIndividualPrincipal: number

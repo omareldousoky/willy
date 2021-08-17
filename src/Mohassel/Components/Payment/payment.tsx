@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
 import { Formik } from 'formik'
 import { connect } from 'react-redux'
+import Button from 'react-bootstrap/Button'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import {
@@ -649,15 +650,15 @@ class Payment extends Component<Props, State> {
             <Loader type="fullsection" open={this.state.loading} />
             <div className="payment-info" style={{ textAlign: 'center' }}>
               <LtsIcon name="early-payment" size="90px" color="#7dc255" />
-              <h6
-                style={{ cursor: 'pointer' }}
+              <Button
+                variant="default"
                 onClick={() => this.props.changePaymentState(0)}
               >
-                <span className="fa fa-long-arrow-alt-right" />
-                <span className="font-weight-bolder">
+                <span className="font-weight-bolder text-primary">&#8702;</span>
+                <small className="font-weight-bolder text-primary">
                   &nbsp;{local.earlyPayment}
-                </span>
-              </h6>
+                </small>
+              </Button>
             </div>
             <div className="verticalLine" />
             <div style={{ width: '100%', padding: 20 }}>
@@ -720,15 +721,15 @@ class Payment extends Component<Props, State> {
             <div className="payment-info" style={{ textAlign: 'center' }}>
               <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
 
-              <h6
-                style={{ cursor: 'pointer' }}
+              <Button
+                variant="default"
                 onClick={() => this.props.changePaymentState(0)}
               >
-                <span className="fa fa-long-arrow-alt-right" />
-                <span className="font-weight-bolder">
+                <span className="font-weight-bolder text-primary">&#8702;</span>
+                <small className="font-weight-bolder text-primary">
                   &nbsp;{local.manualPayment}
-                </span>
-              </h6>
+                </small>
+              </Button>
             </div>
             <div className="verticalLine" />
             <div style={{ width: '100%', padding: 20 }}>
@@ -776,15 +777,15 @@ class Payment extends Component<Props, State> {
             <div className="payment-info" style={{ textAlign: 'center' }}>
               <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
 
-              <h6
-                style={{ cursor: 'pointer' }}
+              <Button
+                variant="default"
                 onClick={() => this.props.changePaymentState(0)}
               >
-                <span className="fa fa-long-arrow-alt-right" />
-                <span className="font-weight-bolder">
+                <span className="font-weight-bolder text-primary">&#8702;</span>
+                <small className="font-weight-bolder text-primary">
                   &nbsp;{local.bankPayment}
-                </span>
-              </h6>
+                </small>
+              </Button>
             </div>
             <div className="verticalLine" />
             <div style={{ width: '100%', padding: 20 }}>

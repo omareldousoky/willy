@@ -15,10 +15,10 @@ import {
   getPermissions,
   createRole,
   editRole,
-} from '../../Services/APIs/Roles/roles'
+} from '../../../Shared/Services/APIs/Roles/roles'
 import { Loader } from '../../../Shared/Components/Loader'
 import { step1, roleCreationStep1Validation } from './roleStates'
-import Wizard from '../wizard/Wizard'
+import Wizard from '../../../Shared/Components/wizard/Wizard'
 import * as local from '../../../Shared/Assets/ar.json'
 import RoleTable from './roleTable'
 

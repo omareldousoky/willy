@@ -1,5 +1,6 @@
 /// search/user-by-action?size=1000&from=0&serviceKey=halan.com/branch&action=getBranch&branchId=5e79ee0ba92c135c57399330
-import axios from '../axios-instance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 interface SearchUserByActionObj {
   size: number
@@ -18,7 +19,7 @@ export const searchUserByAction = async (obj: SearchUserByActionObj) => {
     branchId: obj.branchId ? obj.branchId : '',
     name: obj.name ? obj.name : '',
   }
-  const url = process.env.REACT_APP_BASE_URL + `/search/user-by-action`
+  const url = API_BASE_URL + `/search/user-by-action`
   try {
     const res = await axios.get(url, { params })
     return { status: 'success', body: res.data }
