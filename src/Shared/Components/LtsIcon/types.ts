@@ -5,4 +5,5 @@ export interface LtsIconProps {
   size?: string
   color?: string
   style?: React.CSSProperties
+  className?: string
 }
