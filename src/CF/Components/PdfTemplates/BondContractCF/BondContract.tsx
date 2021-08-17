@@ -14,7 +14,6 @@ const BondContract = (props) => {
       <div className="loan-contract" dir="rtl" lang="ar">
         <table className="report-container">
           <Header />
-
           <tbody className="report-content">
             <tr>
               <td
