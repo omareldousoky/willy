@@ -445,7 +445,6 @@ class Reports extends Component<{}, State> {
       startdate: values.fromDate,
       enddate: values.toDate,
       branches: branches.includes('') ? [''] : branches,
-      all: branches.includes('') || branches === [] ? '1' : '0',
       loanType: values.loanType,
     }
     const res = await installments(obj)
@@ -482,7 +481,6 @@ class Reports extends Component<{}, State> {
       startdate: values.fromDate,
       enddate: values.toDate,
       branches: branches.includes('') ? [''] : branches,
-      all: branches.includes('') ? '1' : '0',
       loanType: values.loanType,
     }
     const res = await getRandomPayments(obj)
@@ -642,8 +640,7 @@ class Reports extends Component<{}, State> {
     const res = await collectionReport({
       startDate: values.fromDate,
       endDate: values.toDate,
-      all: values.branches.some((branch) => branch._id === '') ? '1' : '0',
-      branchList: values.branches.some((branch) => branch._id === '')
+      branches: values.branches.some((branch) => branch._id === '')
         ? []
         : values.branches.map((branch) => branch._id),
       loanType: values.loanType,
@@ -675,13 +672,12 @@ class Reports extends Component<{}, State> {
   }
 
   async getLoanPenaltiesReport(values) {
-    const branches = values.branches.map((branch) => branch._id)
     this.setState({ loading: true, showModal: false })
+    const branches = values.branches.map((branch) => branch._id)
     const res = await penalties({
       startDate: values.fromDate,
       endDate: values.toDate,
-      all: branches.includes('') || branches === [] ? '1' : '0',
-      branchList: branches.includes('') ? [''] : branches,
+      branches: branches.includes('') ? [] : branches,
       loanType: values.loanType,
     })
     if (res.status === 'success') {
@@ -714,12 +710,10 @@ class Reports extends Component<{}, State> {
 
   async getDoubtfulLoansReport(values) {
     this.setState({ loading: true, showModal: false })
-    const branches = values.branches.map((branch) => branch._id)
     const res = await doubtfulLoans({
       startDate: values.fromDate,
       endDate: values.toDate,
-      all: branches.includes('') || branches === [] ? '1' : '0',
-      branchList: values.branches
+      branches: values.branches
         .filter((branch) => branch._id !== '')
         .map((branch) => branch._id),
       loanType: values.loanType,
@@ -751,12 +745,10 @@ class Reports extends Component<{}, State> {
 
   async getWriteOffsReport(values) {
     this.setState({ loading: true, showModal: false })
-    const branches = values.branches.map((branch) => branch._id)
     const res = await writeOffs({
       startDate: values.fromDate,
       endDate: values.toDate,
-      all: branches.includes('') || branches === [] ? '1' : '0',
-      branchList: values.branches
+      branches: values.branches
         .filter((branch) => branch._id !== '')
         .map((branch) => branch._id),
       loanType: values.loanType,
@@ -814,8 +806,7 @@ class Reports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branchList: branches.includes('') ? [''] : branches,
-      all: branches.includes('') || branches === [] ? '1' : '0',
+      branches: branches.includes('') ? [] : branches,
       loanType: values.loanType,
     }
     const res = await getManualPayments(obj)
