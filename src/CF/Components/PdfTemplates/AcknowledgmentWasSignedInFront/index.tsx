@@ -1,6 +1,7 @@
 import React from 'react'
 import {
   guarantorOrderLocal,
+  numbersToArabic,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
 import { AcknowledgmentWasSignedInFrontProps } from '../../../Models/contract'
@@ -59,13 +60,13 @@ export const AcknowledgmentWasSignedInFront = ({
                 <td>العميل</td>
               )}
               <td>{customerName}</td>
-              <td>{nationalId}</td>
+              <td>{numbersToArabic(nationalId)}</td>
             </tr>
             {customerGuarantors?.map((person, index) => (
               <tr key={index}>
                 <td>{guarantorOrderLocal[index]}</td>
                 <td>{person.name ?? ''} </td>
-                <td>{person.nationalId}</td>
+                <td>{numbersToArabic(person.nationalId)}</td>
               </tr>
             ))}
           </tbody>

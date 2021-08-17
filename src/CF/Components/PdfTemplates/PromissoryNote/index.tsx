@@ -67,7 +67,7 @@ export const PromissoryNote = ({
       <u>المدين</u>
     </p>
     <p>الاسم : {customerName}</p>
-    <p>بطاقة الرقم القومى : {nationalId}</p>
+    <p>بطاقة الرقم القومى : {numbersToArabic(nationalId)}</p>
     <p>العنوان: {customerHomeAddress}</p>
     <p>التوقيع :</p>
     {customerGuarantors && customerGuarantors.length > 0 && (
@@ -78,7 +78,7 @@ export const PromissoryNote = ({
               <u>{guarantorOrderLocal[i && i > 10 ? 'default' : i]}</u>
             </p>
             <p>الاسم : {guarantor.name}</p>
-            <p>بطاقة الرقم القومى : {guarantor.nationalId}</p>
+            <p>بطاقة الرقم القومى : {numbersToArabic(guarantor.nationalId)}</p>
             <p>العنوان: {guarantor.address}</p>
             <p>التوقيع :</p>
           </div>

@@ -53,8 +53,8 @@ export const AuthorizationToFillInfo = ({
             </p>
           )}
           <p>الاسم : {person.name ?? ''}</p>
-          <p>العنوان : {person.address ?? ''}</p>
           <p>التوقيع :</p>
+          <p>العنوان : {person.address ?? ''}</p>
         </div>
       ))}
     </div>
