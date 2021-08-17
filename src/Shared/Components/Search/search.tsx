@@ -113,6 +113,9 @@ class Search extends Component<SearchProps, SearchState> {
         case 'warningType':
           initialState.warningType = ''
           break
+        case 'phoneNumber':
+          initialState.phoneNumber = ''
+          break
         default:
           break
       }
@@ -170,6 +173,7 @@ class Search extends Component<SearchProps, SearchState> {
       businessName: local.companyName,
       taxCardNumber: local.taxCardNumber,
       commercialRegisterNumber: local.commercialRegisterNumber,
+      phoneNumber: local.phoneNumber,
       default: '',
     }
     return arDropDownValue[key]
