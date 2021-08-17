@@ -687,8 +687,10 @@ class Reports extends Component<{}, State> {
       } else {
         const data = {
           days: res.body.days,
-          totalNumberOfTransactions: res.body.numTrx,
-          totalTransactionAmount: res.body.transactionAmount,
+          totalNumberOfTransactions: Number(res.body.numTrx),
+          totalTransactionAmount: Number(res.body.transactionAmount),
+          totalCancelledAmount: Number(res.body.rbAmount),
+          totalPaidAmount: Number(res.body.netAmount),
           startDate: values.fromDate,
           endDate: values.toDate,
         }

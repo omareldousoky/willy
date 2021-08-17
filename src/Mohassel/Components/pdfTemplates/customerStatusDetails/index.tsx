@@ -11,8 +11,10 @@ import {
   arabicGender,
   timeToArabicDateNow,
   guarantorOrderLocal,
+  orderLocal,
 } from '../../../../Shared/Services/utils'
 import { CustomerIsBlocked, CustomerStatusLocal } from './types'
+import local from '../../../../Shared/Assets/ar.json'
 
 export const CustomerStatusDetails = (props) => {
   const {
@@ -276,106 +278,197 @@ export const CustomerStatusDetails = (props) => {
                       </table>
 
                       {loan.beneficiaryType === 'individual' && (
-                        <table>
-                          <tbody>
-                            <tr>
-                              {loan.guarantors.length > 0 &&
-                                loan.guarantors.map(
-                                  (guarantor, guarantorIndex) => {
-                                    return (
-                                      <td key={guarantorIndex}>
-                                        <table>
-                                          <thead>
-                                            <tr>
-                                              <th
-                                                className="frame gray"
-                                                colSpan={100}
-                                              >
-                                                {
-                                                  guarantorOrderLocal[
-                                                    index > 10
-                                                      ? 'default'
-                                                      : index
-                                                  ]
-                                                }
-                                              </th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            <tr>
-                                              <th>الأسم</th>
-                                              <td>{guarantor.customerName}</td>
-                                              <th>النوع</th>
-                                              <td>
-                                                {arabicGender(guarantor.gender)}
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <th>الرقم القومي</th>
-                                              <td>
-                                                {numbersToArabic(
-                                                  guarantor.nationalId
-                                                )}
-                                              </td>
-                                              <th>تاريخ الأصدار</th>
-                                              <td>
-                                                {guarantor.nationalIdIssueDate
-                                                  ? timeToArabicDate(
-                                                      guarantor.nationalIdIssueDate,
-                                                      false
-                                                    )
-                                                  : ''}
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <th>تاريخ الميلاد</th>
-                                              <td>
-                                                {guarantor.birthDate
-                                                  ? timeToArabicDate(
-                                                      guarantor.birthDate,
-                                                      false
-                                                    )
-                                                  : ''}
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <th>العنوان</th>
-                                              <td>
-                                                {guarantor.customerHomeAddress}
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <th>التليفون</th>
-                                              <td>
-                                                {numbersToArabic(
-                                                  guarantor.mobilePhoneNumber
-                                                )}
-                                              </td>
-                                              <th>الرقم البريدي</th>
-                                              <td>
-                                                {numbersToArabic(
-                                                  guarantor.homePostalCode
-                                                )}
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <th>البطاقه صادره من</th>
-                                              <td />
-                                              <th>الرقم المطبوع</th>
-                                              <td />
-                                            </tr>
-                                          </tbody>
-                                        </table>
+                        <div className="d-flex flex-wrap">
+                          {loan.guarantors.length > 0 &&
+                            loan.guarantors.map((guarantor, guarantorIndex) => {
+                              // TODO: change check on adding `type` key
+                              const isCompanyGuarantor = !!guarantor?.commercialRegisterNumber
+                              return (
+                                <table
+                                  key={guarantorIndex}
+                                  className={`${
+                                    loan.guarantors.length > 1 ? 'multi-tb' : ''
+                                  }`}
+                                >
+                                  <thead>
+                                    <tr>
+                                      <th className="frame gray" colSpan={100}>
+                                        {
+                                          guarantorOrderLocal[
+                                            guarantorIndex > 10
+                                              ? 'default'
+                                              : guarantorIndex
+                                          ]
+                                        }
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <th>الاسم</th>
+                                      <td>{guarantor.customerName}</td>
+                                      {!isCompanyGuarantor && (
+                                        <>
+                                          <th>النوع</th>
+                                          <td>
+                                            {arabicGender(guarantor.gender)}
+                                          </td>
+                                        </>
+                                      )}
+                                    </tr>
+                                    {isCompanyGuarantor ? (
+                                      <>
+                                        <tr>
+                                          <th>البطاقة الضريبية</th>
+                                          <td>
+                                            {numbersToArabic(
+                                              guarantor?.taxCardNumber ?? 0
+                                            )}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>السجل التجاري</th>
+                                          <td>
+                                            {numbersToArabic(
+                                              guarantor?.commercialRegisterNumber ??
+                                                0
+                                            )}
+                                          </td>
+                                        </tr>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <tr>
+                                          <th>الرقم القومي</th>
+                                          <td>
+                                            {numbersToArabic(
+                                              guarantor?.nationalId
+                                            )}
+                                          </td>
+                                          <th>تاريخ الأصدار</th>
+                                          <td>
+                                            {guarantor.nationalIdIssueDate
+                                              ? timeToArabicDate(
+                                                  guarantor.nationalIdIssueDate,
+                                                  false
+                                                )
+                                              : ''}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>تاريخ الميلاد</th>
+                                          <td>
+                                            {guarantor.birthDate
+                                              ? timeToArabicDate(
+                                                  guarantor.birthDate,
+                                                  false
+                                                )
+                                              : ''}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>العنوان</th>
+                                          <td>
+                                            {guarantor.customerHomeAddress}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>التليفون</th>
+                                          <td>
+                                            {numbersToArabic(
+                                              guarantor.mobilePhoneNumber
+                                            )}
+                                          </td>
+                                          <th>الرقم البريدي</th>
+                                          <td>
+                                            {numbersToArabic(
+                                              guarantor.homePostalCode
+                                            )}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>البطاقه صادره من</th>
+                                          <td />
+                                          <th>الرقم المطبوع</th>
+                                          <td />
+                                        </tr>
+                                      </>
+                                    )}
+                                  </tbody>
+                                </table>
+                              )
+                            })}
+                        </div>
+                      )}
+
+                      {loan.beneficiaryType === 'individual' && (
+                        <div className="d-flex flex-wrap">
+                          {loan.entitled.length > 0 &&
+                            loan.entitled.map((entitled, entitledIndex) => {
+                              return (
+                                <table
+                                  key={entitledIndex}
+                                  className={`${
+                                    loan.entitled.length > 1 ? 'multi-tb' : ''
+                                  }`}
+                                >
+                                  <thead>
+                                    <tr>
+                                      <th className="frame gray" colSpan={100}>
+                                        {local.entitledToSign}&nbsp; (
+                                        {
+                                          orderLocal[
+                                            entitledIndex > 10
+                                              ? 'default'
+                                              : entitledIndex
+                                          ]
+                                        }
+                                        )
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <th>الاسم</th>
+                                      <td>{entitled.customerName}</td>
+                                      <th>النوع</th>
+                                      <td>{arabicGender(entitled.gender)}</td>
+                                    </tr>
+                                    <tr>
+                                      <th>الرقم القومي</th>
+                                      <td>
+                                        {numbersToArabic(entitled?.nationalId)}
                                       </td>
-                                    )
-                                  }
-                                )}
-                            </tr>
-                            <tr>
-                              <td colSpan={100} className="horizontal-line" />
-                            </tr>
-                          </tbody>
-                        </table>
+                                      <th>تاريخ الإصدار</th>
+                                      <td>
+                                        {entitled.nationalIdIssueDate
+                                          ? timeToArabicDate(
+                                              entitled.nationalIdIssueDate,
+                                              false
+                                            )
+                                          : ''}
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th>تاريخ الميلاد</th>
+                                      <td>
+                                        {entitled.birthDate
+                                          ? timeToArabicDate(
+                                              entitled.birthDate,
+                                              false
+                                            )
+                                          : ''}
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th>العنوان</th>
+                                      <td>{entitled.customerHomeAddress}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              )
+                            })}
+                        </div>
                       )}
 
                       {loan.beneficiaryType === 'group' && (

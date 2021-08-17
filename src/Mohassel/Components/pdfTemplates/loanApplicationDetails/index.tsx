@@ -9,6 +9,9 @@ import {
   periodType,
   timeToArabicDateNow,
   guarantorOrderLocal,
+  numbersToArabic,
+  orderLocal,
+  timeToArabicDate,
 } from '../../../../Shared/Services/utils'
 
 export const LoanApplicationDetails = (props) => {
@@ -150,9 +153,13 @@ export const LoanApplicationDetails = (props) => {
                     <>
                       <tr>
                         <th>البطاقة الضريبية</th>
-                        <td>{props.data.businessLicenseNumber}</td>
+                        <td>
+                          {numbersToArabic(props.data.businessLicenseNumber)}
+                        </td>
                         <th>السجل التجاري</th>
-                        <td>{props.data.commercialRegisterNumber}</td>
+                        <td>
+                          {numbersToArabic(props.data.commercialRegisterNumber)}
+                        </td>
                       </tr>
                       <tr>
                         <th>العنوان</th>
@@ -163,7 +170,7 @@ export const LoanApplicationDetails = (props) => {
                     <>
                       <tr>
                         <th>الرقم القومي</th>
-                        <td>{props.data.nationalId}</td>
+                        <td>{numbersToArabic(props.data.nationalId)}</td>
                         <th>فاكس رقم</th>
                       </tr>
                       <tr>
@@ -186,7 +193,14 @@ export const LoanApplicationDetails = (props) => {
                       </tr>
                       <tr>
                         <th>تاريخ الاصدار</th>
-                        <td>{props.data.nationalIdIssueDate}</td>
+                        <td>
+                          {props.data.nationalIdIssueDate
+                            ? timeToArabicDate(
+                                props.data.nationalIdIssueDate,
+                                false
+                              )
+                            : ''}
+                        </td>
                         <th>الرقم البريدي</th>
                       </tr>
                       <tr>
@@ -400,145 +414,260 @@ export const LoanApplicationDetails = (props) => {
                 </tbody>
               </table>
 
-              <table>
-                <tbody>
-                  <tr>
-                    {loan.beneficiaryType === 'individual' &&
-                      loan.guarantors &&
-                      loan.guarantors.length > 0 &&
-                      Object.keys(loan.guarantors[0]).length > 0 &&
-                      loan.guarantors.map((guarantor, guarantorIndex) => {
-                        return (
-                          <td key={guarantorIndex}>
-                            <table>
-                              <thead>
-                                <tr>
-                                  <th className="frame gray" colSpan={100}>
-                                    {
-                                      guarantorOrderLocal[
-                                        guarantorIndex > 10
-                                          ? 'default'
-                                          : guarantorIndex
-                                      ]
-                                    }
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <th>الأسم</th>
-                                  <td>{guarantor.customerName}</td>
-                                </tr>
-                                <tr>
-                                  <th>الرقم القومي</th>
-                                  <td>{guarantor.nationalId}</td>
-                                  <th>تاريخ الأصدار</th>
-                                  <td>{guarantor.nationalIdIssueDate}</td>
-                                </tr>
-                                <tr>
-                                  <th>النوع</th>
-                                  <td>{arabicGender(guarantor.gender)}</td>
-                                  <th>تاريخ الميلاد</th>
-                                  <td>{guarantor.customerBirthDate}</td>
-                                </tr>
-                                <tr>
-                                  <th>التليفون</th>
-                                  <td>{`${
-                                    guarantor.homePhoneNumber
-                                      ? guarantor.homePhoneNumber
-                                      : ''
-                                  } ${
-                                    guarantor.mobilePhoneNumber
-                                      ? ` - ${guarantor.mobilePhoneNumber}`
-                                      : ''
-                                  }`}</td>
-                                  <th>الرقم البريدي</th>
-                                  <td>{guarantor.homePostalCode}</td>
-                                </tr>
-                                <tr>
-                                  <th>العنوان</th>
-                                  <td>{guarantor.customerHomeAddress}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </td>
-                        )
-                      })}
-                    {loan.beneficiaryType === 'group' &&
-                      loan.members &&
-                      loan.members.map((member, memberIndex) => {
-                        return (
-                          <td key={memberIndex}>
-                            <table>
-                              <thead>
-                                <tr>
-                                  <th className="frame gray" colSpan={100}>
-                                    عضو المجموعة
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <th>الأسم</th>
-                                  <td>{member.customerName}</td>
-                                </tr>
-                                <tr>
-                                  <th>الرقم القومي</th>
-                                  <td>{member.nationalId}</td>
-                                </tr>
-                                <tr>
-                                  <th>النوع</th>
-                                  <td>{arabicGender(member.gender)}</td>
-                                </tr>
-                                <tr>
-                                  <th>تاريخ الميلاد</th>
-                                  <td>{member.customerBirthDate}</td>
-                                </tr>
-                                <tr>
-                                  <th>التليفون</th>
-                                  <td>
-                                    {member.homePhoneNumber +
-                                    member.mobilePhoneNumber
-                                      ? ` - ${member.mobilePhoneNumber}`
-                                      : ''}
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th>الرقم البريدي</th>
-                                  <td>{member.homePostalCode}</td>
-                                </tr>
-                                <tr>
-                                  <th>العنوان</th>
-                                  <td>{member.customerHomeAddress}</td>
-                                </tr>
-                                <tr>
-                                  <th>قطاع العمل</th>
-                                  <td>{member.businessSector}</td>
-                                </tr>
-                                <tr>
-                                  <th>النشاط</th>
-                                  <td>{member.businessActivity}</td>
-                                </tr>
-                                <tr>
-                                  <th>التخصص</th>
-                                  <td>{member.businessSpecialty}</td>
-                                </tr>
-                                <tr>
-                                  <th>حصة العضو من قيمة القرض</th>
-                                  <td>{member.amount}</td>
-                                </tr>
-                                <tr>
-                                  <th>تاريخ الأصدار</th>
-                                  <td>{member.nationalIdIssueDate}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </td>
-                        )
-                      })}
-                  </tr>
-                </tbody>
-              </table>
+              <div className="d-flex flex-wrap">
+                {loan.beneficiaryType === 'individual' &&
+                  loan.guarantors &&
+                  loan.guarantors.length > 0 &&
+                  Object.keys(loan.guarantors[0]).length > 0 &&
+                  loan.guarantors.map((guarantor, guarantorIndex) => {
+                    // TODO: change check on adding `type` key
+                    const isCompanyGuarantor = !!guarantor?.commercialRegisterNumber
+
+                    return (
+                      <table
+                        key={guarantorIndex}
+                        className={`${
+                          loan.guarantors.length > 1 ? 'multi-tb' : ''
+                        }`}
+                      >
+                        <thead>
+                          <tr>
+                            <th className="frame gray" colSpan={100}>
+                              {
+                                guarantorOrderLocal[
+                                  guarantorIndex > 10
+                                    ? 'default'
+                                    : guarantorIndex
+                                ]
+                              }
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th>الاسم</th>
+                            <td>{guarantor.customerName}</td>
+                          </tr>
+                          {isCompanyGuarantor ? (
+                            <>
+                              <tr>
+                                <th>البطاقة الضريبية</th>
+                                <td>
+                                  {numbersToArabic(
+                                    guarantor?.taxCardNumber ?? 0
+                                  )}
+                                </td>
+                              </tr>
+                              <tr>
+                                <th>السجل التجاري</th>
+                                <td>
+                                  {numbersToArabic(
+                                    guarantor?.commercialRegisterNumber ?? 0
+                                  )}
+                                </td>
+                              </tr>
+                            </>
+                          ) : (
+                            <>
+                              <tr>
+                                <th>الرقم القومي</th>
+                                <td>{numbersToArabic(guarantor.nationalId)}</td>
+                                <th>تاريخ الإصدار</th>
+                                <td>
+                                  {guarantor.nationalIdIssueDate
+                                    ? timeToArabicDate(
+                                        guarantor.nationalIdIssueDate,
+                                        false
+                                      )
+                                    : ''}
+                                </td>
+                              </tr>
+                              <tr>
+                                <th>النوع</th>
+                                <td>{arabicGender(guarantor.gender)}</td>
+                                <th>تاريخ الميلاد</th>
+                                <td>
+                                  {guarantor.customerBirthDate
+                                    ? timeToArabicDate(
+                                        guarantor.customerBirthDate,
+                                        false
+                                      )
+                                    : ''}
+                                </td>
+                              </tr>
+                              <tr>
+                                <th>التليفون</th>
+                                <td>{`${
+                                  guarantor.homePhoneNumber
+                                    ? guarantor.homePhoneNumber
+                                    : ''
+                                } ${
+                                  guarantor.mobilePhoneNumber
+                                    ? ` - ${guarantor.mobilePhoneNumber}`
+                                    : ''
+                                }`}</td>
+                                <th>الرقم البريدي</th>
+                                <td>{guarantor.homePostalCode}</td>
+                              </tr>
+                              <tr>
+                                <th>العنوان</th>
+                                <td>{guarantor.customerHomeAddress}</td>
+                              </tr>
+                            </>
+                          )}
+                        </tbody>
+                      </table>
+                    )
+                  })}
+
+                {loan.beneficiaryType === 'individual' &&
+                  loan.entitled &&
+                  loan.entitled.length > 0 &&
+                  Object.keys(loan.entitled[0]).length > 0 &&
+                  loan.entitled.map((entitled, entitledIndex) => {
+                    return (
+                      <table
+                        key={entitledIndex}
+                        className={`${
+                          loan.entitled.length > 1 ? 'multi-tb' : ''
+                        }`}
+                      >
+                        <thead>
+                          <tr>
+                            <th className="frame gray" colSpan={100}>
+                              {local.entitledToSign}&nbsp; (
+                              {
+                                orderLocal[
+                                  entitledIndex > 10 ? 'default' : entitledIndex
+                                ]
+                              }
+                              )
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th>الاسم</th>
+                            <td>{entitled.customerName}</td>
+                          </tr>
+                          <tr>
+                            <th>الرقم القومي</th>
+                            <td>{numbersToArabic(entitled.nationalId)}</td>
+                            <th>تاريخ الإصدار</th>
+                            <td>
+                              {entitled.nationalIdIssueDate
+                                ? timeToArabicDate(
+                                    entitled.nationalIdIssueDate,
+                                    false
+                                  )
+                                : ''}
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>النوع</th>
+                            <td>{arabicGender(entitled.gender)}</td>
+                            <th>تاريخ الميلاد</th>
+                            <td>
+                              {' '}
+                              {entitled.birthDate
+                                ? timeToArabicDate(entitled.birthDate, false)
+                                : ''}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    )
+                  })}
+
+                {loan.beneficiaryType === 'group' &&
+                  loan.members &&
+                  loan.members.map((member, memberIndex) => {
+                    return (
+                      <table
+                        key={memberIndex}
+                        className={`${
+                          loan.members.length > 1 ? 'multi-tb' : ''
+                        }`}
+                      >
+                        <thead>
+                          <tr>
+                            <th className="frame gray" colSpan={100}>
+                              عضو المجموعة
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th>الأسم</th>
+                            <td>{member.customerName}</td>
+                          </tr>
+                          <tr>
+                            <th>الرقم القومي</th>
+                            <td>{numbersToArabic(member.nationalId)}</td>
+                          </tr>
+                          <tr>
+                            <th>النوع</th>
+                            <td>{arabicGender(member.gender)}</td>
+                          </tr>
+                          <tr>
+                            <th>تاريخ الميلاد</th>
+                            <td>
+                              {member.customerBirthDate
+                                ? timeToArabicDate(
+                                    member.customerBirthDate,
+                                    false
+                                  )
+                                : ''}
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>التليفون</th>
+                            <td>
+                              {member.homePhoneNumber + member.mobilePhoneNumber
+                                ? ` - ${member.mobilePhoneNumber}`
+                                : ''}
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>الرقم البريدي</th>
+                            <td>{member.homePostalCode}</td>
+                          </tr>
+                          <tr>
+                            <th>العنوان</th>
+                            <td>{member.customerHomeAddress}</td>
+                          </tr>
+                          <tr>
+                            <th>قطاع العمل</th>
+                            <td>{member.businessSector}</td>
+                          </tr>
+                          <tr>
+                            <th>النشاط</th>
+                            <td>{member.businessActivity}</td>
+                          </tr>
+                          <tr>
+                            <th>التخصص</th>
+                            <td>{member.businessSpecialty}</td>
+                          </tr>
+                          <tr>
+                            <th>حصة العضو من قيمة القرض</th>
+                            <td>{numbersToArabic(member.amount)}</td>
+                          </tr>
+                          <tr>
+                            <th>تاريخ الأصدار</th>
+                            <td>
+                              {member.nationalIdIssueDate
+                                ? timeToArabicDate(
+                                    member.nationalIdIssueDate,
+                                    false
+                                  )
+                                : ''}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    )
+                  })}
+              </div>
             </div>
           )
         })

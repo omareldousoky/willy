@@ -1157,5 +1157,6 @@
   "creditInquiryRequestsReport": "تقرير طلبات الاستعلام الائتماني",
   "individualAndGroup": "(فردي - جماعي)",
   "cfMobileNumber": "محمول الحد الائتماني",
-  "addEditOrRemoveGuarantor": "إضافة / تعديل ضمان"
+  "addEditOrRemoveGuarantor": "إضافة / تعديل ضمان",
+	"entitledToSign": "من له حق التوقيع"
 }

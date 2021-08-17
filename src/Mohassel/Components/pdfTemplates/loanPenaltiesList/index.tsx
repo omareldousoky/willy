@@ -7,9 +7,6 @@ import Orientation from '../../../../Shared/Components/Common/orientation'
 export const LoanPenaltiesList = (props) => {
   const { data } = props
   const { days } = data
-  console.log({ data })
-  const totalNumberOfTransactions = Number(data.totalNumberOfTransactions)
-  const totalTransactionAmount = Number(data.totalTransactionAmount)
   const startDate = timeToArabicDate(props.data.startDate, false)
   const endDate = timeToArabicDate(props.data.endDate, false)
   const getStatus = (value) => {
@@ -220,21 +217,23 @@ export const LoanPenaltiesList = (props) => {
               <td className="gray horizontal-line">جنيه مصري</td>
               <td />
               <td className="horizontal-line">إجمالي عدد الحركات</td>
-              <td className="horizontal-line">{totalNumberOfTransactions}</td>
+              <td className="horizontal-line">
+                {data.totalNumberOfTransactions}
+              </td>
               <td />
               <td className="horizontal-line">إجمالي المبلغ</td>
-              <td className="horizontal-line">{totalTransactionAmount}</td>
+              <td className="horizontal-line">{data.totalTransactionAmount}</td>
             </tr>
 
             <tr>
               <td colSpan={8} />
               <td className="horizontal-line">القيمة الملغاه</td>
-              <td className="horizontal-line">{data.rbAmount}</td>
+              <td className="horizontal-line">{data.totalCancelledAmount}</td>
             </tr>
             <tr>
               <td colSpan={8} />
               <td className="horizontal-line">القيمة المسدده</td>
-              <td className="horizontal-line">{data.netAmount}</td>
+              <td className="horizontal-line">{data.totalPaidAmount}</td>
             </tr>
           </tbody>
         </table>

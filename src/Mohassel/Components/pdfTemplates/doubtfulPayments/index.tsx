@@ -119,7 +119,7 @@ export const DoubtfulPayments = (props) => {
                       <td colSpan={1}>{transaction.transactionInterest}</td>
                       <td>{transaction.transactionAmount}</td>
                       <td colSpan={2}>
-                        {transaction.canceled === 1
+                        {transaction.canceled === '1'
                           ? local.cancelledTransaction
                           : null}
                       </td>

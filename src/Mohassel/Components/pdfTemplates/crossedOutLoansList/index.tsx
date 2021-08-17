@@ -113,7 +113,7 @@ export const CrossedOutLoansList = (props) => {
             <td>{row.transactionInterest}</td>
             <td colSpan={1}>{row.transactionAmount}</td>
             <td colSpan={2}>
-              {row.canceled === 1 ? local.cancelledTransaction : null}
+              {row.canceled === '1' ? local.cancelledTransaction : null}
             </td>
             <td>{row?.loanType || ''}</td>
           </tr>

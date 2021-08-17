@@ -56,7 +56,7 @@ interface InitialFormikState {
   defaultingCustomerStatus?: string
   managers?: Array<CurrentHierarchiesSingleResponse>
   loanType?: 'sme' | 'micro' | 'all'
-  year?: string
+  year?: number
   creditInquiryStatus?: string
 }
 

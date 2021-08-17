@@ -30,10 +30,15 @@ export const IssuedLoanList = (props) => {
             <th
               colSpan={6}
               style={{ backgroundColor: 'white', listStyleType: 'none' }}
+              className="border-0"
             >
               <div className="logo-print-tb" />
             </th>
-            <th colSpan={6} style={{ backgroundColor: 'white' }}>
+            <th
+              colSpan={6}
+              style={{ backgroundColor: 'white' }}
+              className="border-0"
+            >
               ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
             </th>
           </tr>

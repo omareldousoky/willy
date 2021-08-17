@@ -2,7 +2,7 @@
 print {
   .loan-application-details {
     font-size: 10px;
-		font-weight: bold;
+    font-weight: bold;
     page-break-after: always;
     font-family: Arial, Helvetica, sans-serif;
 
@@ -51,6 +51,11 @@ print {
     & .horizontal-line {
       border-bottom: 1px solid black;
     }
+
+    & .multi-tb {
+      flex: 0 0 50%;
+    }
+
   }
 }
 
