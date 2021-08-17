@@ -7,6 +7,7 @@ import {
   timeToArabicDate,
   addYearToTimeStamp,
   getNumbersOfGuarantor,
+  numbersToArabic,
 } from '../../../../Shared/Services/utils'
 import { ConsumerFinanceContractData } from '../../../Models/contract'
 import { Header } from '../pdfTemplatesCommon/header'
@@ -33,7 +34,7 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
     }
   }
   return (
-    <div className="cf-contract-container">
+    <table className="cf-contract-container">
       <Header />
       <div className="head-title">
         <p>عقد تمويل استهلاكي</p>
@@ -46,8 +47,8 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
         انه في يوم &nbsp;
         {dayToArabic(
           new Date(props.contractData.customerCreationDate).getDay()
-        )}{' '}
-        &nbsp; الموافق &nbsp;
+        )}
+        &nbsp; &nbsp; الموافق &nbsp;
         {timeToArabicDate(props.contractData.customerCreationDate, false)}
       </p>
       <p>حرر هذا العقد بين كلا من:</p>
@@ -62,9 +63,18 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
       </div>
       <div>
         <p>
-          ثانيا: السيد/ {props.contractData.customerName} الكائن في:{' '}
-          {props.contractData.customerHomeAddress}. يحمل بطاقة رقم قومي:{' '}
-          {props.contractData.nationalId}
+          <span>ثانيا: السيد/ {props.contractData.customerName || ' '}</span>
+          &nbsp;
+          <span>
+            {' '}
+            الكائن في: {props.contractData.customerHomeAddress || ' '}
+          </span>
+          &nbsp;
+          <span>
+            يحمل بطاقة رقم قومي:{' '}
+            {numbersToArabic(props.contractData.nationalId) || ' '}
+          </span>
+          &nbsp;
           <sub>&quot;يشار إليه فيما بعد بالطرف الثاني&quot;</sub>
         </p>
       </div>
@@ -75,7 +85,7 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
             <p>
               {index === 0 ? 'ثالثا' : 'رابعا'} : السيد/ {guarantor.name}
               الكائن في: {guarantor.address}
-              {guarantor.nationalId} يحمل بطاقة رقم قومي:
+              {numbersToArabic(guarantor.nationalId)} يحمل بطاقة رقم قومي:
               <sub>
                 &quot;يشار إليه فيما بعد بالطرف {orderLocal[index + 2]} (
                 {guarantorOrderLocal[index]}
@@ -167,9 +177,11 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
           </p>
         </section>
         <section className="term-container" title="third-term">
-          <p className="head-title">البند الثالث</p>
-          <p>موضوع العقد</p>
-          <p className="head-title">
+          <div className="head-title">
+            <p>البند الثالث</p>
+            <p>موضوع العقد</p>
+          </div>
+          <p>
             تقوم الشركة بتوفير التمويل اللازم لشراء السلع او الخدمات الاستهلاكية
             والجائز تمويلها وفقا لأحكام قانون التمويل الاستهلاكي والقرارات
             الصادرة عن الهيئة وذلك بناء علي طلب العميل.
@@ -181,13 +193,14 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
             <p>قيمة التمويل وسعر العائد</p>
           </div>
           <p>
-            4/1 الحد الاقصى لمبلغ التمويل :{' '}
-            {props.contractData.initialConsumerFinanceLimit} حم (
+            4/1 الحد الاقصى لمبلغ التمويل :&nbsp;
+            {numbersToArabic(props.contractData.initialConsumerFinanceLimit)} حم
+            (
             {new Tafgeet(
               props.contractData.initialConsumerFinanceLimit,
               'EGP'
-            ).parse()}{' '}
-            )
+            ).parse()}
+            &nbsp; )
           </p>
           <p>4/2 متوسط سعر العائد: 23% (ثابت/سنويا)</p>
           <p>
@@ -202,7 +215,8 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
           </p>
           {noOfGuarantors ? (
             <p>
-              4/5 يلتزم {noOfGuarantors > 1 ? 'الاطراف' : 'الطرفان'} الثاني و{' '}
+              4/5 يلتزم {noOfGuarantors > 1 ? 'الاطراف' : 'الطرفان'} الثاني
+              و&nbsp;
               {getNumbersOfGuarantor('and', noOfGuarantors)} بصفتهم ضامنين
               متضامنين فيما بينهم بسداد إجمالي قيمة وأقساط التمويل وكافة
               المصروفات وتكاليف التمويل إلي الطرف الأول علي النحو السالف ذكره،
@@ -219,7 +233,7 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
             <p>مدة العقد</p>
           </div>
           <p>
-            5/1 مدة هذا العقد سنة تبدأ من{' '}
+            5/1 مدة هذا العقد سنة تبدأ من&nbsp;
             {timeToArabicDate(props.contractData.customerCreationDate, false)}م
             وتنتهي في
             {addYearToTimeStamp(props.contractData.customerCreationDate)}
@@ -531,7 +545,7 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
           <p>
             {noOfGuarantors ? (
               <>
-                في حالة عدم إلتزام الطرف الثاني أو{' '}
+                في حالة عدم إلتزام الطرف الثاني أو&nbsp;
                 {noOfGuarantors > 1 ? 'الضامنين' : 'الضامن المتضامن'} بأي من
                 إلتزاماتهم التعاقدية أو القانونية الواردة بهذا العقد وملحقاته
                 ومرفقاته الموقعة (إن وجدت) وبالقوانين السارية في أي وقت من
@@ -555,21 +569,22 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
                 بباقي قيمة التمويل وكافة مصروفاته وتكاليف تمويله ومن حالات
                 الإخفاق علي سبيل المثال وليس الحصرعلي ما يلي:
               </>
-            )}{' '}
+            )}
+            &nbsp;
           </p>
           <p>
             14/1 عدم سداد أي قسط من الأقساط طبقا للشروط والضوابط الواردة بهذا
             العقد.
           </p>
           <p>
-            14/2 في حالة تقديم أي من الاطراف الثاني أو{' '}
+            14/2 في حالة تقديم أي من الاطراف الثاني أو&nbsp;
             {getNumbersOfGuarantor('or', noOfGuarantors)} بيانات أو معلومات
             مخالفة للواقع أو غير سليمة للطرف الأول.
           </p>
           <p>
             {noOfGuarantors > 1 ? (
               <>
-                14/3 في حالة فقد أي من الاطراف الثاني أو{' '}
+                14/3 في حالة فقد أي من الاطراف الثاني أو&nbsp;
                 {getNumbersOfGuarantor('or', noOfGuarantors)} أهليتهم أو إشهار
                 إفلاسهم أو إعسارهم أو وفاتهم أو وضعهم تحت الحراسة أو توقيع الحجز
                 علي أموالهم أو وضع أموالهم تحت التحفظ ومنعهم من التصرف فيها أو
@@ -591,7 +606,7 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
           <p>
             {noOfGuarantors > 1 ? (
               <>
-                14/5 في حالة إخلال الأطراف الثاني أو{' '}
+                14/5 في حالة إخلال الأطراف الثاني أو&nbsp;
                 {getNumbersOfGuarantor('or', noOfGuarantors)} بأي من التزاماتهم
                 الأخرى الواردة بهذا العقد.
               </>
@@ -623,7 +638,7 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
             فيما بعد ويكون مسئولا جنائيا ومدنيا واعتباره ملتزما بأداء جميع
             الاقساط الناشئة عن تلك العمليات مع عدم الاخلال بحق الشركة في
             المطالبة بتوقيع العقوبات المقررة قانونا ولحين سداد إجمالي أقساط
-            التمويل.{' '}
+            التمويل.&nbsp;
           </p>
           <p>
             15/3 يلتزم العميل بإبلاغ المورد بالبيانات التكميلية للسلع/الخدمات
@@ -841,6 +856,6 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
           )}
         </section>
       </div>
-    </div>
+    </table>
   )
 }
