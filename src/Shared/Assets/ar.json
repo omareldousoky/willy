@@ -1157,5 +1157,6 @@
   "individualAndGroup": "(فردي - جماعي)",
   "cfMobileNumber": "محمول الحد الائتماني",
   "addEditOrRemoveGuarantor": "إضافة / تعديل ضمان",
-  "searchPlaceholder": " البحث بإسم الفرع او برقم البطاقة أو الكود او رقم التليفون"
+  "searchPlaceholder": " البحث بإسم الفرع او برقم البطاقة أو الكود او رقم التليفون",
+  "returnItem": "استرجاع المنتج"
 }

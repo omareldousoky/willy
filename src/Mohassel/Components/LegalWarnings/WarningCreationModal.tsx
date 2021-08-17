@@ -21,7 +21,7 @@ import {
   fetchWarning,
   createWarning,
 } from '../../Services/APIs/LegalAffairs/warning'
-import { addeddSuccessfully } from '../../localUtils'
+import { addeddSuccessfully } from '../../../Shared/localUtils'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 
 export const WarningCreationModal = ({
