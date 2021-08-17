@@ -444,7 +444,7 @@ class Reports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branches: branches.includes('') ? [''] : branches,
+      branches: branches.includes('') ? [] : branches,
       loanType: values.loanType,
     }
     const res = await installments(obj)
@@ -480,7 +480,7 @@ class Reports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branches: branches.includes('') ? [''] : branches,
+      branches: branches.includes('') ? [] : branches,
       loanType: values.loanType,
     }
     const res = await getRandomPayments(obj)
