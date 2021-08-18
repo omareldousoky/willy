@@ -11,7 +11,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const {
   CleanWebpackPlugin
 } = require('clean-webpack-plugin');
-const { ESBuildMinifyPlugin } = require('esbuild-loader')
+const TerserPlugin = require("terser-webpack-plugin")
 
 const CF_APP_DIR = resolve(__dirname, '../src/CF/')
 const SHARED_DIR = resolve(__dirname, '../src/Shared/')
@@ -71,10 +71,10 @@ module.exports = (env) => {
     },
     optimization: {
       minimize: isProd,
-      minimizer: [isProd ? new ESBuildMinifyPlugin({
-        target: 'es2015',
-        css: true  // Apply minification to CSS assets
-    	}) : false].filter(Boolean),
+			minimizer: [isProd ? new TerserPlugin({
+				parallel: true,
+				extractComments: true
+			}) : false].filter(Boolean),
       splitChunks: {
         cacheGroups: {
           vendor: {
