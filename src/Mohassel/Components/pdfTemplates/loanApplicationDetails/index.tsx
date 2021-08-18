@@ -568,9 +568,11 @@ export const LoanApplicationDetails = (props) => {
                             <td>{arabicGender(entitled.gender)}</td>
                             <th>تاريخ الميلاد</th>
                             <td>
-                              {' '}
-                              {entitled.birthDate
-                                ? timeToArabicDate(entitled.birthDate, false)
+                              {entitled.customerBirthDate
+                                ? timeToArabicDate(
+                                    entitled.customerBirthDate,
+                                    false
+                                  )
                                 : ''}
                             </td>
                           </tr>
