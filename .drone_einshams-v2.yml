@@ -33,13 +33,13 @@ type: kubernetes
 name: unit-test
 
 steps:
-- name: build
+- name: type-check
   image: node:12.16.1-alpine
   commands:
   - echo -e "https://nl.alpinelinux.org/alpine/v3.5/main\nhttps://nl.alpinelinux.org/alpine/v3.5/community" > /etc/apk/repositories
   - apk add --no-cache git
   - npm i
-  - npm run build
+  - npm run type-check
 
 
 
