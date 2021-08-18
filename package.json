@@ -8,7 +8,7 @@
     "start-mohassel": "webpack-dev-server --mode development --env.development --config ./config/webpack.mohassel.js --hot --port 8081",
     "start-documents": "webpack-dev-server --mode development --env.development --config ./config/webpack.documents.js --hot --port 8081",
     "start-cf": "webpack-dev-server --mode development --env.development --config ./config/webpack.cf.js --hot --port 8081",
-    "build": "npm run build-mohassel && npm run build-cf && npm run build-login && npm run build-documents",
+    "build": "npm run build-mohassel & npm run build-cf & npm run build-login & npm run build-documents",
     "build-login": "webpack --mode production --env.production --config ./config/webpack.login.js",
     "build-mohassel": "webpack --mode production --env.production --config ./config/webpack.mohassel.js",
     "type-check-login": "webpack --mode development --env.development --config ./config/webpack.login.js",
