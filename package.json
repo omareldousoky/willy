@@ -15,7 +15,7 @@
     "type-check-mohassel": "webpack --mode development --env.development --config ./config/webpack.mohassel.js",
     "type-check-documents": "webpack --mode development --env.development --config ./config/webpack.documents.js",
     "type-check-cf": "webpack --mode development --env.development --config ./config/webpack.cf.js",
-    "type-check": "npm run type-check-mohassel & npm run type-check-cf && npm run type-check-login && npm run type-check-documents",
+    "type-check": "npm run type-check-mohassel & npm run type-check-cf & npm run type-check-login & npm run type-check-documents",
     "build-documents": "webpack --mode production --env.production --config ./config/webpack.documents.js",
     "build-cf": "webpack --mode production --env.production --config ./config/webpack.cf.js",
     "lint-login": "eslint --cache src/Login --ext .ts,.tsx --no-error-on-unmatched-pattern",
