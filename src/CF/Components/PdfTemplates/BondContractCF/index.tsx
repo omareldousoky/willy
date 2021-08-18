@@ -1,63 +1,20 @@
 import React from 'react'
-import './bondContract.scss'
+import './styles.scss'
 import Tafgeet from 'tafgeetjs'
 import {
   numbersToArabic,
   timeToArabicDate,
   dayToArabic,
 } from '../../../../Shared/Services/utils'
+import { Header } from '../pdfTemplatesCommon/header'
+import { BondContractProps } from '../../../Models/contract'
 
-const BondContract = (props) => {
+export const BondContract: React.FC<BondContractProps> = (props) => {
   return (
     <>
       <div className="loan-contract" dir="rtl" lang="ar">
         <table className="report-container">
-          <thead className="report-header">
-            <tr>
-              <th className="report-header-cell">
-                <div className="header-info">
-                  <table className="textcenter bottomborder">
-                    <thead>
-                      <tr>
-                        <table
-                          style={{
-                            fontSize: '12px',
-                            margin: '10px 0px',
-                            textAlign: 'center',
-                            width: '100%',
-                          }}
-                        >
-                          <thead>
-                            <tr style={{ height: '10px' }} />
-                            <tr
-                              style={{
-                                width: '100%',
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                              }}
-                            >
-                              <th colSpan={4}>
-                                <div className="cf-logo-print-tb" />
-                              </th>
-                              <th colSpan={4}>
-                                ترخيص رقم 23 بتاريخ 31/05/2021
-                              </th>
-                              <th colSpan={4}>
-                                حالا للتمويل الاستهلاكي ش. م. م.
-                              </th>
-                            </tr>
-                            <tr style={{ height: '10px' }} />
-                          </thead>
-                        </table>
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
-              </th>
-            </tr>
-          </thead>
-
+          <Header />
           <tbody className="report-content">
             <tr>
               <td
@@ -65,12 +22,16 @@ const BondContract = (props) => {
                 style={{ textAlign: 'right' }}
               >
                 <div className="main">
-                  <div className="headtitle textcenter">عقد وديعة</div>
+                  <div className="headtitle textcenter">
+                    <u>عقد وديعة</u>
+                  </div>
                   <div>
                     انه في يوم &nbsp;
-                    {dayToArabic(new Date(props.data.created.at).getDay())}{' '}
+                    {dayToArabic(
+                      new Date(props.customerCreationDate).getDay()
+                    )}{' '}
                     &nbsp; الموافق &nbsp;
-                    {timeToArabicDate(props.data.created.at, false)}
+                    {timeToArabicDate(props.customerCreationDate, false)}
                   </div>
                   <div>تم الاتفاق بين كل من :-</div>
                   <table className="stakeholders">
@@ -98,21 +59,19 @@ const BondContract = (props) => {
                         <td>
                           <div>
                             <b>ثانيا:- السيد :-&nbsp;</b>
-                            <span>{props.data.customerName}</span>
+                            <span>{props.customerName}</span>
                           </div>
                         </td>
                         <td style={{ width: '30%' }}>
                           <div>
                             <b>المقيم:&nbsp;</b>
-                            <span>{props.data.customerHomeAddress}</span>
+                            <span>{props.customerHomeAddress}</span>
                           </div>
                         </td>
                         <td>
                           <div>
                             <b className="word-break">و يحمل بطاقة رقم قومي</b>
-                            <span>
-                              {numbersToArabic(props.data.nationalId)}
-                            </span>
+                            <span>{numbersToArabic(props.nationalId)}</span>
                           </div>
                         </td>
                       </tr>
@@ -136,9 +95,9 @@ const BondContract = (props) => {
                       حيث ان الطرف الاول المودع قد اودع للطرف الثاني المودع له
                       مبلغ وقدره{' '}
                       {`${numbersToArabic(
-                        props.data.initialConsumerFinanceLimit
+                        props.initialConsumerFinanceLimit
                       )} جنيه (${new Tafgeet(
-                        props.data.initialConsumerFinanceLimit,
+                        props.initialConsumerFinanceLimit,
                         'EGP'
                       ).parse()})`}{' '}
                       بحسابه والتي تستخدم في منح التمويل الاستهلاكي بشراء سلع /
@@ -172,9 +131,9 @@ const BondContract = (props) => {
                       الطرف الاول المودع لحساب الطرف الثاني المودع له مبلغ وقدره
                       &nbsp;
                       {`${numbersToArabic(
-                        props.data.initialConsumerFinanceLimit
+                        props.initialConsumerFinanceLimit
                       )} جنيه (${new Tafgeet(
-                        props.data.initialConsumerFinanceLimit,
+                        props.initialConsumerFinanceLimit,
                         'EGP'
                       ).parse()})`}
                       &nbsp; على ان يلتزم المودع له برد قيمه الوديعة على اقساط
@@ -250,7 +209,7 @@ const BondContract = (props) => {
                             <b>الطرف الثاني ( المودع له )</b>
                           </div>
                           <div>
-                            <b>الأسم: {props.data.customerName}</b>
+                            <b>الأسم: {props.customerName}</b>
                           </div>
                           <div>
                             <b>التوقيع:</b>
@@ -268,5 +227,3 @@ const BondContract = (props) => {
     </>
   )
 }
-
-export default BondContract

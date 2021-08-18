@@ -15,6 +15,7 @@ export interface SearchInitialFormikState {
   lastDates?: 'day' | 'week' | 'month' | ''
   type?: string
   warningType?: LegalWarningType | ''
+  phoneNumber?: string
 }
 
 export interface SearchProps {

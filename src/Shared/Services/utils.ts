@@ -583,6 +583,20 @@ export const guarantorOrderLocal = {
   default: 'الضامن',
 }
 
+export const promissoryNoteGuarantorOrderLocal = {
+  0: 'ضامن متضامن أول',
+  1: 'ضامن متضامن ثان',
+  2: 'ضامن متضامن ثالث',
+  3: 'ضامن متضامن رابع',
+  4: 'ضامن متضامن خامس',
+  5: 'ضامن متضامن سادس',
+  6: 'ضامن متضامن سابع',
+  7: 'ضامن متضامن ثامن',
+  8: 'ضامن متضامن تاسع',
+  9: 'ضامن متضامن عاشر',
+  default: 'ضامن متضامن',
+}
+
 export const orderLocal = {
   0: 'الاول',
   1: 'الثاني',
@@ -851,5 +865,52 @@ export const getIndexInArabic = (index: number) => {
       return ['ثامنا', 'ثامن']
     default:
       return ['', '']
+  }
+}
+
+export const getNumbersOfGuarantor = (
+  str: string,
+  guarantorsLength: number
+) => {
+  let modifiedStr = str
+  if (modifiedStr === 'and') modifiedStr = 'و'
+  else modifiedStr = 'او'
+  switch (guarantorsLength) {
+    case 1:
+      return ` الثالث`
+    case 2:
+      return ` الثالث ${modifiedStr} الرابع`
+    case 3:
+      return ` الثالث ${modifiedStr} الرابع ${modifiedStr} الخامس`
+    case 4:
+      return `الثالث ${modifiedStr} الرابع ${modifiedStr} الخامس ${modifiedStr} السادس `
+    case 5:
+      return `الثالث ${modifiedStr} الرابع ${modifiedStr} الخامس ${modifiedStr} السادس ${modifiedStr} السابع `
+    case 6:
+      return `الثالث ${modifiedStr} الرابع ${modifiedStr} الخامس ${modifiedStr} السادس ${modifiedStr} السابع ${modifiedStr} الثامن `
+    default:
+      return ''
+  }
+}
+export const getIndexOfGuarantorInAr = (index: number) => {
+  switch (index) {
+    case -2:
+      return 'الأول'
+    case -1:
+      return 'الثاني'
+    case 0:
+      return 'الثالث'
+    case 1:
+      return 'الرابع'
+    case 2:
+      return 'الخامس'
+    case 3:
+      return 'السادس'
+    case 4:
+      return 'السابع'
+    case 5:
+      return 'الثامن'
+    default:
+      return ''
   }
 }

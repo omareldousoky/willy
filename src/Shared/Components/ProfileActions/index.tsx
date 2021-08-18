@@ -2,32 +2,28 @@ import React from 'react'
 import Button from 'react-bootstrap/Button'
 
 import { LtsIcon } from '..'
+import { Loader } from '../Loader'
 import { ProfileActionsProps } from './types'
 
 export const ProfileActions = ({ actions }: ProfileActionsProps) => {
   return (
     <div className="d-flex justify-content-end" style={{ width: '65%' }}>
       {actions.map((action, index) => {
-        const { title, permission, onActionClick } = action
-        return (
+        const { title, permission, onActionClick, isLoading } = action
+        return isLoading ? (
+          <Loader type="inline" open />
+        ) : (
           permission && (
             <Button
               variant="default"
               key={index}
-              style={{
-                cursor: 'pointer',
-                borderRight: '2px solid #2b3390',
-                padding: '0px 8px',
-                margin: '10px 0',
-                borderRadius: 0,
-              }}
+              className="profile-action-btn"
               onClick={onActionClick}
             >
-              {action.icon && <LtsIcon name={action.icon} />}
-              <span
-                style={{ margin: 'auto 8px' }}
-                className="text-mixed-lang text-nowrap"
-              >
+              {action.icon && (
+                <LtsIcon name={action.icon} className="align-middle pr-2" />
+              )}
+              <span className="text-mixed-lang text-nowrap mx-auto my-2">
                 {title}
               </span>
             </Button>
