@@ -45,7 +45,7 @@ export const leadsRoutes = {
           label: local.convertToCustomer,
           render: (props) => (
             <Can I="getLead" a="halanuser">
-              <CustomerCreation {...props} fromLeads />
+              <CustomerCreation {...props} isFromLead />
             </Can>
           ),
         },

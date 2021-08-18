@@ -82,7 +82,7 @@ interface Props
     { id: string; uuid: string; phoneNumber: string }
   > {
   edit: boolean
-  fromLeads?: boolean
+  isFromLead?: boolean
 }
 interface State {
   step: number
@@ -191,7 +191,7 @@ class CustomerCreation extends Component<Props, State> {
   componentDidMount() {
     if (this.props.edit) {
       this.getCustomerById()
-    } else if (this.props.fromLeads) {
+    } else if (this.props.isFromLead) {
       this.convertLeadToCustomer()
     }
   }
