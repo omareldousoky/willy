@@ -32,7 +32,7 @@ export const AcknowledgmentAndPledge = ({
           وهذا إقرار منا بذلك ولا يحق لنا الرجوع فيه حاليا أو مستقبلا .
         </p>
         <p>
-          تحربرا في &emsp; {timeToArabicDate(application.creationDate, false)}{' '}
+          تحريرا في &emsp; {timeToArabicDate(application.creationDate, false)}{' '}
           &emsp;
         </p>
         <p className="text-center">المقرون بما فيه</p>

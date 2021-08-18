@@ -1,0 +1,28 @@
+@media screen, print {
+  .promissory-note {
+    page-break-after: always;
+    font-family: Arial;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1041; // To overlap Modal's backdrop shadow
+    position: relative;
+    th,
+    td {
+      border: 1px solid black;
+    }
+    table {
+      border-spacing: 10px;
+    }
+    .head-title {
+      text-align: center;
+      font-weight: bolder;
+      text-decoration: underline;
+    }
+  }
+}
+@media screen {
+  .promissory-note {
+    max-width: 700px;
+    display: none;
+  }
+}
