@@ -34,8 +34,8 @@ module.exports = (env) => {
           test: /\.tsx?$/,
           loader: 'esbuild-loader',
           options: {
-						loader: 'tsx',
-						target: 'es2015'
+            loader: 'tsx',
+            target: 'es2015'
           },
           exclude: /node_modules/,
         },
@@ -71,10 +71,10 @@ module.exports = (env) => {
     },
     optimization: {
       minimize: isProd,
-			minimizer: [isProd ? new TerserPlugin({
-				parallel: true,
-				extractComments: true
-			}) : false].filter(Boolean),
+      minimizer: [isProd ? new TerserPlugin({
+        parallel: true,
+        extractComments: true
+      }) : false].filter(Boolean),
       splitChunks: {
         cacheGroups: {
           vendor: {
@@ -115,10 +115,10 @@ module.exports = (env) => {
           REACT_APP_DOMAIN: JSON.stringify(config.REACT_APP_DOMAIN),
           REACT_APP_SUBDOMAIN: JSON.stringify(config.REACT_APP_SUBDOMAIN),
         },
-			}),
-			!isProd ? new ForkTsCheckerWebpackPlugin({
-				eslint: true,
-			}) : false,
+      }),
+      !isProd ? new ForkTsCheckerWebpackPlugin({
+        eslint: true,
+      }) : false,
       // to clean build dir
       isProd ? new CleanWebpackPlugin() : false,
       isProd ? new OptimizeCssAssetsPlugin({

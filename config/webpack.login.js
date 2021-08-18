@@ -36,7 +36,7 @@ module.exports = (env) => {
 					options: {
 						loader: 'tsx',
 						target: 'es2015'
-				},
+					},
 					exclude: /node_modules/,
 				},
 				{
