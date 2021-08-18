@@ -39,12 +39,13 @@ type: kubernetes
 name: unit-test
 
 steps:
-- name: type-check
+- name: build
   image: node:12.16.1-alpine
   commands:
   - apk add git
   - npm i
   - npm run type-check
+  - npm run build
 
 
 trigger:
