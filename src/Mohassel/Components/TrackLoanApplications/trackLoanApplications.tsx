@@ -61,11 +61,6 @@ interface Application {
   principal: number
   status: string
 }
-interface LoanItem {
-  id: string
-  branchId: string
-  application: Application
-}
 interface State {
   print: boolean
   size: number
@@ -411,6 +406,7 @@ class TrackLoanApplications extends Component<Props, State> {
       endDate: filters.toDate,
       loanStatus: filters.status ? [filters.status] : [],
       branch: hasBranch ? details.branch : filters.branchId || '',
+      loanType: 'micro',
     }
     this.setState({ loading: true })
     const res = await getReviewedApplications(obj)
