@@ -3,6 +3,7 @@ export interface Action {
   title: string
   permission: boolean
   onActionClick(): void
+  isLoading?: boolean
 }
 export interface ProfileActionsProps {
   actions: Action[]

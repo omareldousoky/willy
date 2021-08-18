@@ -199,26 +199,6 @@ code {
   margin: 40px 0;
 }
 
-.uploaded-image {
-  width: 250px;
-  height: 200px;
-  object-fit: fill;
-}
-
-.invalid-image {
-  opacity: 0.7;
-  pointer-events: all;
-}
-
-.invalid-document {
-  position: absolute;
-  padding: 5px;
-  top: 120px;
-  left: 120px;
-  border-radius: 10px;
-  cursor: not-allowed;
-}
-
 .sort-icons {
   vertical-align: middle;
   margin-right: 5px;
@@ -336,7 +316,7 @@ code {
 }
 
 .text-mixed-lang {
-	unicode-bidi: plaintext,
+  unicode-bidi: plaintext;
 }
 
 // this will be replaced later by icon font, but now to avoid redundant requests

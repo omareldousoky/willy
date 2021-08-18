@@ -57,7 +57,7 @@ class IscoreReports extends Component<{}, State> {
     const res = await getiScoreReportRequests()
     if (res.status === 'success') {
       this.setState({
-        data: res.body.iscoreFiles ? res.body.iscoreFiles : [],
+        data: res.body?.iscoreFiles ?? [],
         loading: false,
       })
     } else {
