@@ -11,7 +11,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const {
 	CleanWebpackPlugin
 } = require('clean-webpack-plugin');
-const TerserPlugin = require("terser-webpack-plugin");
+const { ESBuildMinifyPlugin } = require('esbuild-loader')
 
 const LOGIN_APP_DIR = resolve(__dirname, '../src/Login/')
 const SHARED_DIR = resolve(__dirname, '../src/Shared/')
@@ -32,11 +32,11 @@ module.exports = (env) => {
 		module: {
 			rules: [{
 					test: /\.tsx?$/,
-					loader: 'ts-loader',
+					loader: 'esbuild-loader',
 					options: {
-						// disable type checker - we will use it in fork plugin
-						transpileOnly: true
-					},
+						loader: 'tsx',
+						target: 'es2015'
+				},
 					exclude: /node_modules/,
 				},
 				{
@@ -71,9 +71,9 @@ module.exports = (env) => {
 		},
 		optimization: {
 			minimize: isProd,
-			minimizer: [isProd ? new TerserPlugin({
-				parallel: true,
-				extractComments: true
+			minimizer: [isProd ? new ESBuildMinifyPlugin({
+				target: 'es2015',
+				css: true  // Apply minification to CSS assets
 			}) : false].filter(Boolean),
 			splitChunks: {
 				cacheGroups: {
@@ -111,9 +111,9 @@ module.exports = (env) => {
 					REACT_APP_SUBDOMAIN: JSON.stringify(config.REACT_APP_SUBDOMAIN),
 				},
 			}),
-			new ForkTsCheckerWebpackPlugin({
-				eslint: true
-			}),
+			!isProd ? new ForkTsCheckerWebpackPlugin({
+				eslint: true,
+			}) : false,
 			// to clean build dir
 			isProd ? new CleanWebpackPlugin() : false,
 			isProd ? new OptimizeCssAssetsPlugin({
