@@ -148,7 +148,7 @@ export const LegalWarnings = () => {
       setSelectedWarnings(validSelectedWarnings)
       setValidSelectedWarningsLength(validSelectedWarnings.length)
     } else {
-      setSelectedWarnings(undefined)
+      setSelectWarnings(undefined)
     }
   }
 

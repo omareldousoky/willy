@@ -11,6 +11,7 @@
     "build": "npm run build-mohassel && npm run build-cf && npm run build-login && npm run build-documents",
     "build-login": "webpack --mode production --env.production --config ./config/webpack.login.js",
     "build-mohassel": "webpack --mode production --env.production --config ./config/webpack.mohassel.js",
+    "check-type-mohassel": "webpack --mode development --env.development --config ./config/webpack.mohassel.js",
     "build-documents": "webpack --mode production --env.production --config ./config/webpack.documents.js",
     "build-cf": "webpack --mode production --env.production --config ./config/webpack.cf.js",
     "lint-login": "eslint --cache src/Login --ext .ts,.tsx --no-error-on-unmatched-pattern",
@@ -21,7 +22,7 @@
     "lint-documents:fix": "eslint --cache src/Documents --ext .ts,.tsx --no-error-on-unmatched-pattern --fix",
     "lint-shared": "eslint --cache src/Shared --ext .ts,.tsx --no-error-on-unmatched-pattern",
     "lint-shared:fix": "eslint --cache src/Shared --ext .ts,.tsx --no-error-on-unmatched-pattern --fix",
-		"lint-cf": "eslint --cache src/CF --ext .ts,.tsx --no-error-on-unmatched-pattern",
+    "lint-cf": "eslint --cache src/CF --ext .ts,.tsx --no-error-on-unmatched-pattern",
     "lint-cf:fix": "eslint --cache src/CF --ext .ts,.tsx --no-error-on-unmatched-pattern --fix"
   },
   "devDependencies": {
@@ -38,6 +39,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^5.2.4",
     "dotenv": "^8.2.0",
+    "esbuild-loader": "^2.15.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.1.0",
@@ -76,7 +78,7 @@
     "google-maps-react": "^2.0.2",
     "iconv-lite": "^0.6.2",
     "immer": "^9.0.1",
-    "jszip": "^3.5.0",
+    "jszip": "^3.7.1",
     "jwt-decode": "^2.2.0",
     "react": "^16.13.0",
     "react-barcode": "^1.4.0",
