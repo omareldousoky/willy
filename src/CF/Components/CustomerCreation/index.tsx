@@ -30,6 +30,11 @@ import { editCustomer } from '../../../Shared/Services/APIs/customer/editCustome
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 import { getMaxPrinciples } from '../../../Shared/Services/APIs/config'
 import { getCustomerLimitFromMonthlyIncome } from '../../../Shared/Services/APIs/customer/getCustomerConsumerLimit'
+import { getLead } from '../../../Shared/Services/APIs/Leads/getLead'
+import {
+  getBirthdateFromNationalId,
+  getGenderFromNationalId,
+} from '../../../Shared/Services/nationalIdValidation'
 
 interface CustomerInfo {
   birthDate: number
@@ -187,7 +192,7 @@ class CustomerCreation extends Component<Props, State> {
     if (this.props.edit) {
       this.getCustomerById()
     } else if (this.props.fromLeads) {
-      console.log('from leads')
+      this.convertLeadToCustomer()
     }
   }
 
@@ -312,7 +317,6 @@ class CustomerCreation extends Component<Props, State> {
             hasLoan: res.body.hasLoan,
             isGuarantor: res.body.isGuarantor,
             oldRepresentative: res.body.representative,
-            branchId: res.body.branchId,
           } as any)
       )
     } else {
@@ -321,8 +325,6 @@ class CustomerCreation extends Component<Props, State> {
       )
     }
   }
-
-  async convertLeadToCustomer() {}
 
   async getGlobalPrinciple() {
     this.setState({ loading: true })
@@ -392,6 +394,80 @@ class CustomerCreation extends Component<Props, State> {
       }
   }
 
+  async convertLeadToCustomer() {
+    this.setState({ loading: true })
+    const res = await getLead(
+      this.props.location.state.uuid,
+      this.props.location.state.phoneNumber
+    )
+    if (res.status === 'success') {
+      const birthDate = res.body.customerNationalId
+        ? await getBirthdateFromNationalId(res.body.customerNationalId)
+        : null
+      const gender = res.body.customerNationalId
+        ? await getGenderFromNationalId(res.body.customerNationalId)
+        : null
+      const customerInfo = {
+        customerName: res.body.customerName?.trim(),
+        nationalId: res.body.customerNationalId,
+        birthDate,
+        gender,
+        nationalIdIssueDate: timeToDateyyymmdd(res.body.nationalIdIssueDate),
+        mobilePhoneNumber: res.body.phoneNumber,
+      }
+      const customerBusiness = {
+        businessAddressLatLong: res.body.businessAddressLatLong,
+        businessAddressLatLongNumber: {
+          lat: res.body.businessAddressLatLong
+            ? Number(res.body.businessAddressLatLong.split(',')[0])
+            : 0,
+          lng: res.body.businessAddressLatLong
+            ? Number(res.body.businessAddressLatLong.split(',')[1])
+            : 0,
+        },
+        businessAddress: res.body.businessAddressDescription || '',
+        governorate: res.body.businessGovernate || '',
+        district: res.body.businessCity || '',
+        village: res.body.businessArea || '',
+
+        businessSector: res.body.businessSector,
+      }
+
+      this.formikStep1 = {
+        values: { ...this.state.step1, ...customerInfo },
+        errors: {},
+        isValid: true,
+      }
+      this.formikStep2 = {
+        values: { ...this.state.step2, ...customerBusiness },
+        errors: {},
+        isValid: true,
+      }
+      this.formikStep3 = {
+        errors: {},
+        values: { ...this.state.step3 },
+        isValid: true,
+      }
+      this.setState(
+        (prevState) =>
+          ({
+            loading: false,
+            selectedCustomer: res.body,
+            step1: { ...prevState.step1, ...customerInfo },
+            step2: { ...prevState.step2, ...customerBusiness },
+            step3: { ...prevState.step3 },
+            hasLoan: res.body.hasLoan,
+            isGuarantor: res.body.isGuarantor,
+            oldRepresentative: res.body.representative,
+            branchId: res.body.branchId,
+          } as any)
+      )
+    } else {
+      Swal.fire('error', getErrorMessage(res.error), 'error')
+    }
+    this.setState({ loading: false })
+  }
+
   async createEditCustomer() {
     const objToSubmit = {
       ...this.state.step1,
@@ -410,9 +486,9 @@ class CustomerCreation extends Component<Props, State> {
     this.state.step2.businessAddressLatLongNumber?.lng === 0
       ? (objToSubmit.businessAddressLatLong = '')
       : (objToSubmit.businessAddressLatLong = `${this.state.step2.businessAddressLatLongNumber?.lat},${this.state.step2.businessAddressLatLongNumber?.lng}`)
-    objToSubmit.businessLicenseIssueDate = new Date(
-      objToSubmit.businessLicenseIssueDate
-    ).valueOf()
+    objToSubmit.businessLicenseIssueDate = objToSubmit.businessLicenseIssueDate
+      ? new Date(objToSubmit.businessLicenseIssueDate).valueOf()
+      : 0
     objToSubmit.applicationDate = new Date(
       objToSubmit.applicationDate
     ).valueOf()
