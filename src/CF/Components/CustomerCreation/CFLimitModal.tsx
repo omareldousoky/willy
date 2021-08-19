@@ -14,14 +14,14 @@ import {
 import { Customer } from '../../../Shared/Services/interfaces'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 
-export interface LoanLimitModalProps {
+interface CFLimitModalProps {
   show: boolean
   hideModal: () => void
   customer: Customer
   onSuccess: () => void
 }
 
-const CFLimitModal: FunctionComponent<LoanLimitModalProps> = ({
+const CFLimitModal: FunctionComponent<CFLimitModalProps> = ({
   show,
   hideModal,
   customer,
