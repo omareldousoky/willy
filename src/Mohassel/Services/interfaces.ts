@@ -15,6 +15,7 @@ export interface LoanApplicationReportRequest {
   endDate: string
   branch: string
   loanStatus: string[]
+  loanType: 'micro'
 }
 
 interface LoansBriefRow {

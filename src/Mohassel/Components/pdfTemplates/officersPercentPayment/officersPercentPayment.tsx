@@ -80,8 +80,8 @@ const OfficerPercentPayment = (props: OfficerPercentPaymentProps) => {
     officersTotal?: OfficerPercentPaymentTotalRow
   ): JSX.Element => (
     <>
-      {officers.map((officer) => (
-        <tr key={officer.officerName}>
+      {officers.map((officer, index) => (
+        <tr key={index}>
           <td colSpan={4} className="text-right">
             {officer.officerName}
           </td>
@@ -111,11 +111,9 @@ const OfficerPercentPayment = (props: OfficerPercentPaymentProps) => {
       />
       {data.response
         ? data.response.map((branchData, i) => (
-            <>
-              <p className="branch-name" key={branchData.branchName}>
-                {branchData.branchName}
-              </p>
-              <table className="body" key={branchData.branchName}>
+            <React.Fragment key={i}>
+              <p className="branch-name">{branchData.branchName}</p>
+              <table className="body">
                 <thead>
                   <tr>
                     <th colSpan={4} />
@@ -178,7 +176,7 @@ const OfficerPercentPayment = (props: OfficerPercentPaymentProps) => {
                     populateTotalRow(data.total)}
                 </tbody>
               </table>
-            </>
+            </React.Fragment>
           ))
         : ''}
       <OfficersPercentPaymentFooter />
