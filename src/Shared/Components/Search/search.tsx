@@ -116,6 +116,9 @@ class Search extends Component<SearchProps, SearchState> {
         case 'phoneNumber':
           initialState.phoneNumber = ''
           break
+        case 'consumerFinanceLimitStatus':
+          initialState.consumerFinanceLimitStatus = ''
+          break
         default:
           break
       }
@@ -868,6 +871,25 @@ class Search extends Component<SearchProps, SearchState> {
                       }
                       defaultValue={formikProps.values.warningType}
                     />
+                  )
+                }
+                if (searchKey === 'consumerFinanceLimitStatus') {
+                  return this.statusDropdown(
+                    formikProps,
+                    index,
+                    [
+                      { value: '', text: local.all },
+                      {
+                        value: 'approved',
+                        text: local.approved,
+                      },
+                      {
+                        value: 'pending',
+                        text: local.pending,
+                      },
+                    ],
+                    'consumerFinanceLimitStatus',
+                    local.consumerFinanceLimitStatus
                   )
                 }
               })}

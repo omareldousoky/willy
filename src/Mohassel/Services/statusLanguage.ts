@@ -26,3 +26,16 @@ export const englishToArabic = (status: string) => {
       return {}
   }
 }
+
+export const englishToArabicCFLimitStatus = (status: string) => {
+  switch (status) {
+    case 'approved':
+      return { text: 'الحد الائتماني موافق عليه', color: '#009bed' }
+    case 'pending-update':
+      return { text: 'تعديل الحد الائتماني قيد التحقيق', color: '#edb600' }
+    case 'pending-initialization':
+      return { text: 'الحد الائتماني المبدئي قيد التحقيق', color: '#edb600' }
+    default:
+      return { text: 'الحد الائتماني المبدئي قيد التحقيق', color: '#edb600' }
+  }
+}

@@ -1158,5 +1158,8 @@
   "cfMobileNumber": "محمول الحد الائتماني",
   "addEditOrRemoveGuarantor": "إضافة / تعديل ضمان",
   "searchPlaceholder": " البحث بإسم الفرع او برقم البطاقة أو الكود او رقم التليفون",
-  "returnItem": "استرجاع المنتج"
+  "returnItem": "استرجاع المنتج",
+  "approveCFCustomerLimit": "تأكيد الحد الائتماني للعميل",
+  "consumerFinanceLimitStatus": "حالة الحد الائتماني للعميل",
+  "consumerFinanceMaxLimit": "الحد الائتماني الاقصى للعميل"
 }
