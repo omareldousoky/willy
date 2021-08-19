@@ -18,6 +18,7 @@ export interface LoansIssuedByBranchRow {
   totalAllSum?: number
 }
 export interface LoansIssuedByBranchDF {
+  responseType: 'group' | 'individual' | 'sme' | 'totals'
   rows: LoansIssuedByBranchRow[]
 }
 export interface LoansIssuedByBranchResponse {

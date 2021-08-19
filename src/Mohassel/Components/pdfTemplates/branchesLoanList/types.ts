@@ -5,7 +5,7 @@ import {
 } from '../../../Models/FinancialReports'
 
 export interface BranchesLoanListProps {
-  data: LoansIssuedByBranchResponse
+  data: LoansIssuedByBranchResponse & { loanType: 'sme' | 'micro' | 'all' }
   fromDate: number
   toDate: number
 }
