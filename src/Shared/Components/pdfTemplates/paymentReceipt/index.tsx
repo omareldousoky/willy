@@ -3,9 +3,12 @@ import './paymentReceipt.scss'
 import Tafgeet from 'tafgeetjs'
 import * as local from '../../../Assets/ar.json'
 import { numbersToArabic, extractGMTDate } from '../../../Services/utils'
+import { PaymentReceiptProps } from './types'
 
-const PaymentReceipt = (props) => {
-  const { isCF, isSME } = props
+const PaymentReceipt = (props: PaymentReceiptProps) => {
+  const { type } = props
+  const isCF = type === 'cf'
+
   function getPurpose(installmentSerial: number) {
     switch (installmentSerial) {
       case 0:
@@ -17,6 +20,11 @@ const PaymentReceipt = (props) => {
       default:
         return ''
     }
+  }
+
+  const licenses = {
+    sme: 'ترخيص ممارسة نشاط تمويل المشروعات المتوسطة والصغيرة رقم ١ لسنه ٢٠٢١',
+    cf: 'حالا للتمويل الاستهلاكي ش. م. م. ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١',
   }
 
   return (
@@ -38,10 +46,8 @@ const PaymentReceipt = (props) => {
                       <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
                     </th>
                     <th colSpan={6}>
-                      {isCF
-                        ? 'حالا للتمويل الاستهلاكي ش. م. م. ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
-                        : isSME
-                        ? 'ترخيص ممارسة نشاط تمويل المشروعات المتوسطة والصغيرة رقم ١ لسنه ٢٠٢١'
+                      {type && licenses[type]
+                        ? licenses[type]
                         : 'ترخيص ممارسة نشاط التمويل متناهي الصغر (2) لسنة 2015'}
                     </th>
                   </tr>
@@ -118,7 +124,7 @@ const PaymentReceipt = (props) => {
                   ) : (
                     <span className="info">
                       {'سداد قسط رقم : ' +
-                        numbersToArabic(props.data.applicationKey) +
+                        numbersToArabic(props.data?.applicationKey) +
                         '/' +
                         numbersToArabic(receiptData.installmentSerial)}
                     </span>

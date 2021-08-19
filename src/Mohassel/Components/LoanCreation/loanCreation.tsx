@@ -430,10 +430,10 @@ class LoanCreation extends Component<
         </Container>
         {this.state.print && (
           <PaymentReceipt
-            isSME={this.state.application?.product?.type === 'sme'}
             receiptData={this.state.receiptData}
             fromLoanIssuance
             companyReceipt={this.state.customerData.customerType === 'company'}
+            type={this.state.application?.product?.type}
           />
         )}
       </>
