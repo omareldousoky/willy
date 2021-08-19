@@ -280,6 +280,7 @@ export const CustomerStatusDetails = (props) => {
                       {loan.beneficiaryType === 'individual' && (
                         <div className="d-flex flex-wrap">
                           {loan.guarantors.length > 0 &&
+                            Object.keys(loan.guarantors[0]).length > 0 &&
                             loan.guarantors.map((guarantor, guarantorIndex) => {
                               // TODO: change check on adding `type` key
                               const isCompanyGuarantor = !!guarantor?.commercialRegisterNumber
@@ -404,6 +405,7 @@ export const CustomerStatusDetails = (props) => {
                       {loan.beneficiaryType === 'individual' && (
                         <div className="d-flex flex-wrap">
                           {loan.entitled.length > 0 &&
+                            Object.keys(loan.entitled[0]).length > 0 &&
                             loan.entitled.map((entitled, entitledIndex) => {
                               return (
                                 <table
