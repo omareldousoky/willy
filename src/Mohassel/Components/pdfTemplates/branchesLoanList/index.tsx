@@ -10,31 +10,36 @@ export const BranchesLoanList = ({
   fromDate,
   toDate,
 }: BranchesLoanListProps) => {
+  const { loanType } = data
+  const isAll = loanType === 'all'
+  const isMicro = loanType === 'micro' || isAll
+  const isSme = !isMicro || isAll
+
+  const group = isMicro
+    ? data.result.find((section) => section.responseType === 'group')
+    : undefined
+  const individual = isMicro
+    ? data.result.find((section) => section.responseType === 'individual')
+    : undefined
+  const sme = isSme
+    ? data.result.find((section) => section.responseType === 'sme')
+    : undefined
+  const totals = data.result.find(
+    (section) => section.responseType === 'totals'
+  )
   return (
     <div className="branches-loan-list" lang="ar">
       <Orientation size="portrait" />
       <Header title="القروض والحالات" fromDate={fromDate} toDate={toDate} />
       <table className="body">
-        {data.result[0] && (
-          <LoanTypeSection data={data.result[0]} loanTypeName="مجموعة" />
+        {group && <LoanTypeSection data={group} loanTypeName="مجموعة" />}
+        {individual && (
+          <LoanTypeSection data={individual} loanTypeName="فردي" />
         )}
-        {data.result[1] && (
-          <LoanTypeSection data={data.result[1]} loanTypeName="فردي" />
-        )}
-        {data.result[3]
-          ? data.result[2] && (
-              <LoanTypeSection data={data.result[2]} loanTypeName="sme" />
-            )
-          : data.result[2] && (
-              <LoanTypeSection
-                data={data.result[2]}
-                loanTypeName="ﺷرﻛﺔ ﺗﺳﺎھﯾل ﻟﻠﺗﻣوﯾل ﻣﺗﻧﺎھﻰ اﻟﺻﻐر"
-                withHeader={false}
-              />
-            )}
-        {data.result[3] && (
+        {sme && <LoanTypeSection data={sme} loanTypeName="sme" />}
+        {totals && (
           <LoanTypeSection
-            data={data.result[3]}
+            data={totals}
             loanTypeName="ﺷرﻛﺔ ﺗﺳﺎھﯾل ﻟﻠﺗﻣوﯾل ﻣﺗﻧﺎھﻰ اﻟﺻﻐر"
             withHeader={false}
           />
