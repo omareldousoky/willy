@@ -46,7 +46,7 @@ const PaymentReceipt = (props: PaymentReceiptProps) => {
                       <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
                     </th>
                     <th colSpan={6}>
-                      {type && licenses[type]
+                      {licenses[type]
                         ? licenses[type]
                         : 'ترخيص ممارسة نشاط التمويل متناهي الصغر (2) لسنة 2015'}
                     </th>
