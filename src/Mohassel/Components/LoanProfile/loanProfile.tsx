@@ -1600,6 +1600,7 @@ class LoanProfile extends Component<Props, State> {
             companyReceipt={
               this.state.application.customer.customerType === 'company'
             }
+            isSME={this.state.application?.product?.type === 'sme'}
           />
         )}
         {this.state.print === 'payEarly' && (

@@ -5,7 +5,7 @@ import * as local from '../../../Assets/ar.json'
 import { numbersToArabic, extractGMTDate } from '../../../Services/utils'
 
 const PaymentReceipt = (props) => {
-  const { isCF } = props
+  const { isCF, isSME } = props
   function getPurpose(installmentSerial: number) {
     switch (installmentSerial) {
       case 0:
@@ -40,6 +40,8 @@ const PaymentReceipt = (props) => {
                     <th colSpan={6}>
                       {isCF
                         ? 'حالا للتمويل الاستهلاكي ش. م. م. ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
+                        : isSME
+                        ? 'ترخيص ممارسة نشاط تمويل المشروعات المتوسطة والصغيرة رقم ١ لسنه ٢٠٢١'
                         : 'ترخيص ممارسة نشاط التمويل متناهي الصغر (2) لسنة 2015'}
                     </th>
                   </tr>
