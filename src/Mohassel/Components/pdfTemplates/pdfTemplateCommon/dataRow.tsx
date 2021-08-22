@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  formatMoney,
   extractGMTDate,
   numbersToArabic,
   timeToArabicDate,
@@ -38,6 +39,7 @@ const DataRow = ({
 }: DataRowProps) => {
   const isDate = type === 'date'
   const isString = type === 'string'
+  const isMoney = type === 'money'
   return (
     <>
       {isString && (
@@ -59,7 +61,8 @@ const DataRow = ({
       )}
       {!isDate && !isString && (
         <td className={className || ''} {...meta}>
-          {numbersToArabic(value) || placeHolders[placeholderType || type]}
+          {numbersToArabic(isMoney && value ? formatMoney(value) : value) ||
+            placeHolders[placeholderType || type]}
         </td>
       )}
     </>

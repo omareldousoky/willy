@@ -4,42 +4,9 @@ import {
   timeToArabicDate,
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
-
-interface Props {
-  result: {
-    branches: {
-      df: {
-        truthDate: string
-        branchName: string
-        serialNo: number
-        customerKey: string
-        customerName: string
-        loanSerial: number
-        principal: number
-        status: string
-        principalAmount: number
-        transactionInterest: number
-        transactionAmount: number
-        canceled: number
-      }[]
-      total: number[]
-      canceled: number[]
-      net: number[]
-      branchName: string
-    }[]
-    trx: number
-    day: string
-    total: number[]
-    canceled: number[]
-    net: number[]
-  }[]
-  total: number[]
-  canceled: number[]
-  net: number[]
-  trx: number
-  startDate: any
-  endDate: any
-}
+import { LoanApplicationFeesProps } from './types'
+import Orientation from '../../../../Shared/Components/Common/orientation'
+import { stringPlaceholder } from '../pdfTemplateCommon/reportLocal'
 
 const statusLocalization = (status: string) => {
   switch (status) {
@@ -55,34 +22,28 @@ const statusLocalization = (status: string) => {
       return status
   }
 }
-const LoanApplicationFees = (props: Props) => {
+export const LoanApplicationFees = (props: LoanApplicationFeesProps) => {
   return (
     <div className="loan-application-fees" lang="ar">
+      <Orientation size="portrait" />
       <table
+        className="w-100 text-center"
         style={{
-          fontSize: '12px',
           margin: '10px 0px',
-          textAlign: 'center',
-          width: '100%',
         }}
       >
-        <tr style={{ height: '10px' }} />
-        <tr
-          style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <th colSpan={6}>
-            <div className="logo-print-tb" />
-          </th>
-          <th colSpan={6}>
-            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-          </th>
-        </tr>
-        <tr style={{ height: '10px' }} />
+        <tbody>
+          <tr style={{ height: '10px' }} />
+          <tr className="w-100 d-flex flex-row justify-content-between">
+            <th colSpan={6}>
+              <div className="logo-print-tb" />
+            </th>
+            <th colSpan={6}>
+              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+            </th>
+          </tr>
+          <tr style={{ height: '10px' }} />
+        </tbody>
       </table>
       <table className="report-container">
         <thead className="report-header">
@@ -107,17 +68,17 @@ const LoanApplicationFees = (props: Props) => {
         </thead>
       </table>
       <table>
-        {props.result.map((res) => {
+        {props.result.map((res, index) => {
           return (
-            <>
-              {res.branches.map((branch) => {
+            <React.Fragment key={index}>
+              {res.branches.map((branch, branchIndex) => {
                 return (
-                  <>
+                  <React.Fragment key={branchIndex}>
                     <thead>
                       <tr>
                         <th>رقم مسلسل</th>
                         <th>كود العميل</th>
-                        <th>أسم العميل</th>
+                        <th>اسم العميل</th>
                         <th>مسلسل القرض</th>
                         <th>قيمة</th>
                         <th>تاريخ القرض</th>
@@ -126,6 +87,7 @@ const LoanApplicationFees = (props: Props) => {
                         <th colSpan={2}>قيمة تكلفه التمويل</th>
                         <th colSpan={2}>إجمالي</th>
                         <th>حالة الحركة</th>
+                        <th>نوع القرض</th>
                       </tr>
                       <tr>
                         <th colSpan={100} className="horizontal-line" />
@@ -140,40 +102,37 @@ const LoanApplicationFees = (props: Props) => {
                       </tr>
                       <tr>
                         <th className="gray frame" colSpan={2}>
-                          إسم الفرع
+                          اسم الفرع
                         </th>
                         <th className="gray frame" colSpan={2}>
                           {branch.branchName}
                         </th>
                       </tr>
                     </thead>
-                    {branch.df.map((row) => {
+                    {branch.df.map((row, dfIndex) => {
                       return (
-                        <>
-                          <tbody>
-                            <tr>
-                              <td>{row.serialNo}</td>
-                              <td>{row.customerKey}</td>
-                              <td>{row.customerName}</td>
-                              <td>{row.loanSerial}</td>
-                              <td>{row.principal}</td>
-                              <td>{row.truthDate}</td>
-                              <td>{statusLocalization(row.status)}</td>
-                              <td>{row.principalAmount}</td>
-                              <td colSpan={2}>{row.transactionInterest}</td>
-                              <td colSpan={2}>{row.transactionAmount}</td>
-                              <td>
-                                {row.canceled === 1 ? 'الحركة ملغاه' : ''}
-                              </td>
-                            </tr>
-                            <tr>
-                              <th colSpan={100} className="horizontal-line" />
-                            </tr>
-                          </tbody>
-                        </>
+                        <tbody key={dfIndex}>
+                          <tr>
+                            <td>{row.serialNo}</td>
+                            <td>{row.customerKey}</td>
+                            <td>{row.customerName}</td>
+                            <td>{row.loanSerial}</td>
+                            <td>{row.principal}</td>
+                            <td className="text-nowrap">{row.truthDate}</td>
+                            <td>{statusLocalization(row.status)}</td>
+                            <td>{row.principalAmount}</td>
+                            <td colSpan={2}>{row.transactionInterest}</td>
+                            <td colSpan={2}>{row.transactionAmount}</td>
+                            <td>{row.canceled === 1 ? 'الحركة ملغاه' : ''}</td>
+                            <td>{row?.loanType || stringPlaceholder}</td>
+                          </tr>
+                          <tr>
+                            <th colSpan={100} className="horizontal-line" />
+                          </tr>
+                        </tbody>
                       )
                     })}
-                    <tbody style={{ marginTop: '1rem' }}>
+                    <tbody key={branchIndex} style={{ marginTop: '1rem' }}>
                       <tr>
                         <td className="frame" colSpan={2}>
                           إجمالي الفرع
@@ -211,10 +170,12 @@ const LoanApplicationFees = (props: Props) => {
                         <th colSpan={100} className="horizontal-line" />
                       </tr>
                     </tbody>
-                  </>
+                  </React.Fragment>
                 )
               })}
-              <tr style={{ height: '1em' }} />
+              <tbody>
+                <tr style={{ height: '1em' }} />
+              </tbody>
 
               <tbody className="tbodyborder">
                 <tr>
@@ -249,11 +210,13 @@ const LoanApplicationFees = (props: Props) => {
                   <td className="frame">{res.net[2]}</td>
                 </tr>
               </tbody>
-            </>
+            </React.Fragment>
           )
         })}
 
-        <tr style={{ height: '1em' }} />
+        <tbody>
+          <tr style={{ height: '1em' }} />
+        </tbody>
 
         <tbody className="tbodyborder">
           <tr>
@@ -292,5 +255,3 @@ const LoanApplicationFees = (props: Props) => {
     </div>
   )
 }
-
-export default LoanApplicationFees

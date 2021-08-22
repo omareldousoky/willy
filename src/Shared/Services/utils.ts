@@ -780,6 +780,12 @@ export const DownloadAsCsv = async (name: string, data: string) => {
 export const errorResponseHandler = (error: string) =>
   Swal.fire('Error !', getErrorMessage(error), 'error')
 
+export const formatMoney = (money: string | number) => {
+  const moneyNumber = Number(money)
+  if (Number.isNaN(moneyNumber)) return money
+  return moneyNumber.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
 // Extract GMT date from a timestamp
 export const extractGMTDate = (date: number) => {
   const dateInstance = new Date(date)
