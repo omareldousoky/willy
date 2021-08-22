@@ -1,10 +1,10 @@
 import React from 'react'
 import './issuedLoanList.scss'
-import { englishToArabic } from '../../../Services/statusLanguage'
 import {
   timeToArabicDate,
   getTimestamp,
   timeToArabicDateNow,
+  statusLocale,
 } from '../../../../Shared/Services/utils'
 
 const IssuedLoanList = (props) => {
@@ -113,7 +113,7 @@ const IssuedLoanList = (props) => {
                           false
                         )}
                       </td>
-                      <td>{englishToArabic(transaction.status).text}</td>
+                      <td>{statusLocale[transaction.status].text}</td>
                       <td>{transaction.principalAmount}</td>
                       <td colSpan={2}>{transaction.transactionInterest}</td>
                       <td colSpan={2}>{transaction.transactionAmount}</td>

@@ -15,7 +15,6 @@ import {
   getBranch,
 } from '../../../../Shared/Services/APIs/Branch/getBranch'
 import Payment from '../../Payment'
-import { englishToArabic } from '../../../../Mohassel/Services/statusLanguage'
 import local from '../../../../Shared/Assets/ar.json'
 import { Loader } from '../../../../Shared/Components/Loader'
 import {
@@ -41,6 +40,7 @@ import {
   timeToDateyyymmdd,
   iscoreDate,
   getErrorMessage,
+  statusLocale,
 } from '../../../../Shared/Services/utils'
 import { payment } from '../../../../Shared/redux/payment/actions'
 import { cancelApplication } from '../../../../Shared/Services/APIs/loanApplication/stateHandler'
@@ -1045,7 +1045,7 @@ class LoanProfile extends Component<Props, State> {
                     marginRight: 10,
                     borderRadius: 30,
                     border: `1px solid ${
-                      englishToArabic(this.state.application.status).color
+                      statusLocale[this.state.application.status].color
                     }`,
                   }}
                 >
@@ -1053,11 +1053,11 @@ class LoanProfile extends Component<Props, State> {
                     style={{
                       margin: 0,
                       color: `${
-                        englishToArabic(this.state.application.status).color
+                        statusLocale[this.state.application.status].color
                       }`,
                     }}
                   >
-                    {englishToArabic(this.state.application.status).text}
+                    {statusLocale[this.state.application.status].text}
                   </p>
                 </span>
                 {this.state.application.writeOff && (

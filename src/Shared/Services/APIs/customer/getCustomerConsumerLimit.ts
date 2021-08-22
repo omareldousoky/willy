@@ -12,8 +12,8 @@ export const getCustomerLimitFromMonthlyIncome = async (income: number) => {
   }
 }
 
-export const approveCustomerCFLimit = async (_id: string) => {
-  const url = API_BASE_URL + `/customer/approve-cf-limit/${_id}`
+export const approveCustomerCFLimit = async (customerId: string) => {
+  const url = API_BASE_URL + `/customer/approve-cf-limit/${customerId}`
   try {
     const res = await axios.post(url)
     return { status: 'success', body: res.data }

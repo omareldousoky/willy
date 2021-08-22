@@ -4,8 +4,8 @@ import {
   timeToArabicDate,
   getTimestamp,
   timeToArabicDateNow,
+  statusLocale,
 } from '../../../../Shared/Services/utils'
-import { englishToArabic } from '../../../Services/statusLanguage'
 
 const RescheduledLoanList = (props) => {
   const tempData = props.data.data
@@ -109,7 +109,7 @@ const RescheduledLoanList = (props) => {
                           false
                         )}
                       </td>
-                      <td>{englishToArabic(transaction.status).text}</td>
+                      <td>{statusLocale[transaction.status].text}</td>
                       <td>{transaction.principalAmount}</td>
                       <td colSpan={2}>{transaction.transactionInterest}</td>
                       <td colSpan={2}>{transaction.transactionAmount}</td>

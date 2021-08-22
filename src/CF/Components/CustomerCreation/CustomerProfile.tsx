@@ -3,7 +3,10 @@ import { useHistory, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Container from 'react-bootstrap/Container'
 import { Customer } from '../../../Shared/Services/interfaces'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import {
+  cfLimitStatusLocale,
+  getErrorMessage,
+} from '../../../Shared/Services/utils'
 import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
 import ability from '../../../Shared/config/ability'
@@ -24,7 +27,6 @@ import { AcknowledgmentWasSignedInFront } from '../PdfTemplates/AcknowledgmentWa
 import { PromissoryNote } from '../PdfTemplates/PromissoryNote'
 import { AuthorizationToFillInfo } from '../PdfTemplates/AuthorizationToFillInfo'
 import CFLimitModal from './CFLimitModal'
-import { englishToArabicCFLimitStatus } from '../../../Mohassel/Services/statusLanguage'
 
 export interface Score {
   id?: string // commercialRegisterNumber
@@ -512,26 +514,31 @@ export const CustomerProfile = () => {
                   marginRight: 10,
                   borderRadius: 30,
                   border: `1px solid ${
-                    englishToArabicCFLimitStatus(
-                      customerDetails?.consumerFinanceLimitStatus ?? ''
-                    ).color
+                    cfLimitStatusLocale[
+                      customerDetails?.consumerFinanceLimitStatus || 'default'
+                    ].color
                   }`,
                 }}
               >
+                {console.log(
+                  cfLimitStatusLocale[
+                    customerDetails?.consumerFinanceLimitStatus || 'default'
+                  ]
+                )}
                 <p
                   style={{
                     margin: 0,
                     color: `${
-                      englishToArabicCFLimitStatus(
-                        customerDetails?.consumerFinanceLimitStatus ?? ''
-                      ).color
+                      cfLimitStatusLocale[
+                        customerDetails?.consumerFinanceLimitStatus || 'default'
+                      ].color
                     }`,
                   }}
                 >
                   {
-                    englishToArabicCFLimitStatus(
-                      customerDetails?.consumerFinanceLimitStatus ?? ''
-                    ).text
+                    cfLimitStatusLocale[
+                      customerDetails?.consumerFinanceLimitStatus || 'default'
+                    ].text
                   }
                 </p>
               </span>
