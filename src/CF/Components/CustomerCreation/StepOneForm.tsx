@@ -308,7 +308,7 @@ export const StepOneForm = (props: any) => {
               isInvalid={errors.monthlyIncome && touched.monthlyIncome}
               disabled={
                 props.edit &&
-                !ability.can('approveCFLimit', 'customer') &&
+                !ability.can('editCFLimit', 'customer') &&
                 consumerFinanceLimitStatus === 'approved'
               }
             />
@@ -338,7 +338,7 @@ export const StepOneForm = (props: any) => {
               disabled={
                 values.customerConsumerFinanceMaxLimit === 0 ||
                 (props.edit &&
-                  !ability.can('approveCFLimit', 'customer') &&
+                  !ability.can('editCFLimit', 'customer') &&
                   consumerFinanceLimitStatus === 'approved')
               }
               isInvalid={
