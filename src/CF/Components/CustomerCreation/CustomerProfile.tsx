@@ -520,11 +520,6 @@ export const CustomerProfile = () => {
                   }`,
                 }}
               >
-                {console.log(
-                  cfLimitStatusLocale[
-                    customerDetails?.consumerFinanceLimitStatus || 'default'
-                  ]
-                )}
                 <p
                   style={{
                     margin: 0,
