@@ -18,7 +18,7 @@ import {
   getFullCustomerKey,
   removeEmptyArg,
   loanChipStatusClass,
-} from '../../../../Shared/Utils/utils'
+} from '../../../../Shared/Services/utils'
 import { manageLoansArray } from './manageLoansInitials'
 import HeaderWithCards from '../../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { ActionsIconGroup } from '../../../../Shared/Components'
@@ -33,21 +33,11 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
 
   const dispatch = useDispatch()
 
-  const dispatchActions = {
+  const { search, setIssuedLoansSearchFilters } = {
     search: (data) => dispatch(searchAction(data)),
-    setIssuedLoanSearchFilters: (data?: Record<string, any>) =>
+    setIssuedLoansSearchFilters: (data?: Record<string, any>) =>
       dispatch(issuedLoansSearchFiltersAction(data)),
   }
-
-  const selectedProps = useSelector((state: any) => ({
-    loans: state.search.applications,
-    error: state.search.error,
-    totalCount: state.search.totalCount,
-    loading: state.loading,
-    issuedLoansSearchFilters: state.issuedLoansSearchFilters,
-  }))
-
-  const { search, setIssuedLoanSearchFilters } = dispatchActions
 
   const {
     loans,
@@ -55,13 +45,19 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
     totalCount,
     loading,
     issuedLoansSearchFilters,
-  } = selectedProps
+  } = useSelector((state: any) => ({
+    loans: state.search.applications,
+    error: state.search.error,
+    totalCount: state.search.totalCount,
+    loading: state.loading,
+    issuedLoansSearchFilters: state.issuedLoansSearchFilters,
+  }))
 
   useEffect(() => {
     const currentType = issuedLoansSearchFilters.type
     const productType = 'consumerFinance'
 
-    if (!currentType) setIssuedLoanSearchFilters({ type: productType })
+    if (!currentType) setIssuedLoansSearchFilters({ type: productType })
 
     let query = {
       ...issuedLoansSearchFilters,

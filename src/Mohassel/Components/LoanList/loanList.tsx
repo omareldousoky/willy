@@ -38,21 +38,11 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
 
   const dispatch = useDispatch()
 
-  const dispatchActions = {
+  const { search, setIssuedLoansSearchFilters } = {
     search: (data) => dispatch(searchAction(data)),
-    setIssuedLoanSearchFilters: (data?: Record<string, any>) =>
+    setIssuedLoansSearchFilters: (data?: Record<string, any>) =>
       dispatch(issuedLoansSearchFiltersAction(data)),
   }
-
-  const selectedProps = useSelector((state: any) => ({
-    loans: state.search.applications,
-    error: state.search.error,
-    totalCount: state.search.totalCount,
-    loading: state.loading,
-    issuedLoansSearchFilters: state.issuedLoansSearchFilters,
-  }))
-
-  const { search, setIssuedLoanSearchFilters } = dispatchActions
 
   const {
     loans,
@@ -60,28 +50,34 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
     totalCount,
     loading,
     issuedLoansSearchFilters,
-  } = selectedProps
+  } = useSelector((state: any) => ({
+    loans: state.search.applications,
+    error: state.search.error,
+    totalCount: state.search.totalCount,
+    loading: state.loading,
+    issuedLoansSearchFilters: state.issuedLoansSearchFilters,
+  }))
+
+  const currentType = issuedLoansSearchFilters.type
+  const productType = location.state?.sme
+    ? 'sme'
+    : currentType && currentType !== 'sme'
+    ? currentType
+    : 'micro'
 
   useEffect(() => {
-    const currentType = issuedLoansSearchFilters.type
     let searchFiltersQuery = {}
-
-    const productType = location.state?.sme
-      ? 'sme'
-      : currentType && currentType !== 'sme'
-      ? currentType
-      : 'micro'
 
     if (currentType === productType) {
       searchFiltersQuery = issuedLoansSearchFilters
     } else {
-      setIssuedLoanSearchFilters()
-      setIssuedLoanSearchFilters({ type: productType })
+      setIssuedLoansSearchFilters()
+      setIssuedLoansSearchFilters({ type: productType })
     }
 
     let query = {
       ...searchFiltersQuery,
-      keyword: undefined, // to prevent sending key to BE
+      keyword: undefined, // prevent sending key to BE
       size,
       from,
       url: 'loan',
@@ -320,19 +316,21 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
             </div>
           </div>
           <hr className="dashed-line" />
-          <Search
-            searchKeys={searchKeys}
-            dropDownKeys={dropDownKeys}
-            searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-            setFrom={(fromValue) => setFrom(fromValue)}
-            datePlaceholder={local.issuanceDate}
-            url="loan"
-            from={from}
-            size={size}
-            submitClassName="mt-0"
-            hqBranchIdRequest={props.branchId}
-            sme={location.state?.sme}
-          />
+          {productType === currentType && (
+            <Search
+              searchKeys={searchKeys}
+              dropDownKeys={dropDownKeys}
+              searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+              setFrom={(fromValue) => setFrom(fromValue)}
+              datePlaceholder={local.issuanceDate}
+              url="loan"
+              from={from}
+              size={size}
+              submitClassName="mt-0"
+              hqBranchIdRequest={props.branchId}
+              sme={location.state?.sme}
+            />
+          )}
           <DynamicTable
             pagination
             from={from}
