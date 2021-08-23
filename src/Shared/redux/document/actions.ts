@@ -35,12 +35,14 @@ const handleDocuments = (docs: any[], id, type) => {
       documents.push({
         docName: type,
         imagesFiles: docs,
+        type,
       })
   } else {
     docs?.map((doc) => {
       documents.push({
         docName: doc.name,
         imagesFiles: doc.docs,
+        type,
       })
     })
   }

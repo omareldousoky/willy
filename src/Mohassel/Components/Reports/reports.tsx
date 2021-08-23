@@ -904,6 +904,7 @@ class Reports extends Component<{}, State> {
         : values.branches.some((branch) => branch._id === '')
         ? []
         : values.branches.map((branch) => branch._id),
+      loanType: 'micro',
     }
     const res = await func(obj)
     if (res.status === 'success') {
