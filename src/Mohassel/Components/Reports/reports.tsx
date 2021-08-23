@@ -408,7 +408,7 @@ class Reports extends Component<{}, State> {
       fromDate: values.fromDate,
       toDate: values.toDate,
     })
-    const obj = {
+    const request = {
       startdate: values.fromDate,
       enddate: values.toDate,
       branches: values.branches.some((branch) => branch._id === '')
@@ -416,7 +416,7 @@ class Reports extends Component<{}, State> {
         : values.branches.map((branch) => branch._id),
       loanType: values.loanType,
     }
-    const res = await getBranchLoanList(obj)
+    const res = await getBranchLoanList(request)
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
@@ -424,7 +424,7 @@ class Reports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: res.body,
+            data: { ...res.body, loanType: request.loanType },
             showModal: false,
             print: 'branchLoanList',
             loading: false,
@@ -904,6 +904,7 @@ class Reports extends Component<{}, State> {
         : values.branches.some((branch) => branch._id === '')
         ? []
         : values.branches.map((branch) => branch._id),
+      loanType: 'micro',
     }
     const res = await func(obj)
     if (res.status === 'success') {

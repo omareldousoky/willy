@@ -8,9 +8,10 @@ import store from '../../../../Shared/redux/store'
 import { loanStatusLocal } from '../pdfTemplateCommon/reportLocal'
 
 const ReviewedApplicationsPDF = (props) => {
+  const { isSme, data, branchDetails } = props
   function getTotal() {
     let sum = 0
-    props.data.forEach(
+    data.forEach(
       // eslint-disable-next-line no-return-assign
       (application) =>
         (sum += application.principal ? application.principal : 0)
@@ -56,8 +57,7 @@ const ReviewedApplicationsPDF = (props) => {
               شركة تساهيل للتمويل متناهي الصغر
             </td>
             <td style={{ width: '30%' }} />
-            {/* <td className="title">الجيزه - امبابه ثان</td> */}
-            <td className="title">{props.branchDetails.name}</td>
+            <td className="title">{branchDetails.name}</td>
           </tr>
           <tr>
             <td>{timeToArabicDateNow(true)}</td>
@@ -79,36 +79,49 @@ const ReviewedApplicationsPDF = (props) => {
         <tbody>
           <tr>
             <th>مسلسل</th>
-            <th>نوع العميل</th>
+            <th>نوع {isSme ? 'الشركة' : 'العميل'}</th>
             <th>الكود</th>
-            <th>اسم العميل</th>
-            <th>السن</th>
+            <th>اسم {isSme ? 'الشركة' : 'العميل'}</th>
+            {!isSme && <th>السن</th>}
             <th>النشاط</th>
-            <th>التخصص</th>
-            <th>قطاع العمل</th>
-            <th>اسم الاخصائى</th>
-            <th>الرقم القومى</th>
+            {!isSme ? (
+              <>
+                <th>التخصص</th>
+                <th>قطاع العمل</th>
+                <th>اسم الاخصائى</th>
+                <th>الرقم القومى</th>
+              </>
+            ) : (
+              <th>اسم الاخصائى</th>
+            )}
             <th>المبلغ الحالى</th>
-            <th>المده</th>
+            <th>المدة</th>
             <th>حالة طلب القرض</th>
-            {/* <th>المبلغ بالحروف</th> */}
           </tr>
-          {props.data.map((application) => (
+          {data.map((application) => (
             <tr key={application.id}>
               <td>{application.serialNumber}</td>
               <td>{beneficiaryType(application.beneficiaryType)}</td>
               <td>{application.customerKey}</td>
               <td>{application.customerName}</td>
-              <td>{application.customerAge}</td>
-              <td>{application.businessActivity}</td>
-              <td>{application.businessSpeciality}</td>
+              {!isSme && (
+                <>
+                  <td>{application.customerAge}</td>
+                  <td>{application.businessActivity}</td>
+                  <td>{application.businessSpeciality}</td>
+                </>
+              )}
               <td>{application.businessSector}</td>
-              <td>{application.representativeName}</td>
-              <td>{application.nationalId}</td>
+              {!isSme && (
+                <>
+                  <td>{application.representativeName}</td>
+                  <td>{application.nationalId}</td>
+                </>
+              )}
+              {isSme && <td>{application.representativeName}</td>}
               <td>{application.principal}</td>
               <td>{application.noOfInstallments}</td>
               <td>{loanStatusLocal[application.loanStatus]}</td>
-              {/* <td>فقط عشرة آلاف جنيه لاغير</td> */}
             </tr>
           ))}
         </tbody>
@@ -117,18 +130,16 @@ const ReviewedApplicationsPDF = (props) => {
         <tbody>
           <tr>
             <td className="titleborder">اجمالى عام</td>
-            {/* <td className="titleborder">١</td> */}
             <td className="titleborder">{getTotal()}</td>
-            {/* <td className="titleborder">فقط عشرة آلاف جنيه لاغير</td> */}
           </tr>
         </tbody>
       </table>
       <table>
         <tbody>
           <tr>
-            <td>المراجعه:</td>
+            <td>المراجعة:</td>
             <td>مدير الفرع:</td>
-            <td>مدير المنطقه:</td>
+            <td>مدير المنطقة:</td>
           </tr>
         </tbody>
       </table>
