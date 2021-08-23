@@ -1,7 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { pathTo } from '../../Services/utils'
-import { LtsIcon } from '../LtsIcon'
 
 const Breadcrumbs = ({ route }) => {
   return (
