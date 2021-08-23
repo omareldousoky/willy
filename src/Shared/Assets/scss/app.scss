@@ -104,7 +104,13 @@ input[type='radio'] {
 
 .breadcrumbs .item {
   display: inline-block;
-  margin: 5px 20px;
+  margin: 5px 10px;
+  &:not(:last-of-type)::after {
+    font-family: 'lts-icons' !important;
+    content: '\e902';
+    color: #afafaf;
+    padding-right: 15px;
+  }
 }
 
 /*Loader Component*/
