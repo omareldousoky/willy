@@ -17,20 +17,24 @@ import {
   getErrorMessage,
   getFullCustomerKey,
   removeEmptyArg,
+  loanChipStatusClass,
 } from '../../../Shared/Services/utils'
 import { manageLoansArray, manageSMELoansArray } from './manageLoansInitials'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { ActionsIconGroup } from '../../../Shared/Components'
-import { LoanListLocationState, LoanListProps } from './types'
+import {
+  LoanListLocationState,
+  LoanListHistoryState,
+  LoanListProps,
+} from './types'
 import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
-import { chipStatusClass } from './utils'
 
 const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
   const [from, setFrom] = useState(0)
   const [size, setSize] = useState(10)
 
   const location = useLocation<LoanListLocationState>()
-  const history = useHistory<{ id: string }>()
+  const history = useHistory<LoanListHistoryState>()
 
   const dispatch = useDispatch()
 
@@ -58,9 +62,8 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
     issuedLoansSearchFilters,
   } = selectedProps
 
-  const currentType = issuedLoansSearchFilters.type
-
   useEffect(() => {
+    const currentType = issuedLoansSearchFilters.type
     let searchFiltersQuery = {}
 
     const productType = location.state?.sme
@@ -69,11 +72,6 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
       ? currentType
       : 'micro'
 
-    // if (
-    //   currentType &&
-    //   ((location.state?.sme && currentType === 'sme') ||
-    //     (!location.state?.sme && currentType !== 'sme'))
-    // )
     if (currentType === productType) {
       searchFiltersQuery = issuedLoansSearchFilters
     } else {
@@ -237,7 +235,7 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
       key: 'status',
       sortable: true,
       render: (data) => {
-        const status = chipStatusClass[data.application.status || 'default']
+        const status = loanChipStatusClass[data.application.status || 'default']
         const isCancelled = status === 'canceled'
         return (
           <div className={`status-chip ${status}`}>

@@ -914,3 +914,11 @@ export const getIndexOfGuarantorInAr = (index: number) => {
       return ''
   }
 }
+
+export const loanChipStatusClass: Record<string, string> = {
+  paid: 'paid',
+  issued: 'unpaid',
+  pending: 'pending',
+  canceled: 'canceled',
+  default: '',
+}
