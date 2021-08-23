@@ -914,19 +914,4 @@ const Search: FunctionComponent<SearchProps> = ({
   )
 }
 
-// const mapStateToProps = (state) => {
-//   return {
-//     issuedLoansSearchFilters: state.issuedLoansSearchFilters,
-//   }
-// }
-// const addSearchToProps = (dispatch) => {
-//   return {
-//     search: (data) => dispatch(search(data)),
-//     searchFilters: (data) => dispatch(searchFilters(data)),
-//     setLoading: (data) => dispatch(loading(data)),
-//     setIssuedLoansSearchFilters: (data) =>
-//       dispatch(issuedLoansSearchFilters(data)),
-//   }
-// }
-
 export default Search
