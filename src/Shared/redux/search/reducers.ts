@@ -1,3 +1,5 @@
+import { issuedLoansSearchFilters } from "./actions"
+
 export const searchReducer = (state = {}, action) => {
   switch (action.type) {
     case 'SEARCH':
@@ -23,7 +25,7 @@ export const searchFiltersReducer = (state = {}, action) => {
 export const issuedLoansSearchFiltersReducer = (state = {}, action) => {
   switch (action.type) {
     case 'SET_ISSUED_LOANS_SEARCH_FILTERS':
-      return { ...state, ...action.payload }
+      return { ...action.payload }
     case 'RESET_ISSUED_LOANS_SEARCH_FILTERS':
       return {}
     default:

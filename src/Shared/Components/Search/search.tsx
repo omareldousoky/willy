@@ -186,6 +186,9 @@ const Search: FunctionComponent<SearchProps> = ({
         case 'phoneNumber':
           initialState.phoneNumber = ''
           break
+        case 'consumerFinanceLimitStatus':
+          initialState.consumerFinanceLimitStatus = ''
+          break
         default:
           break
       }
@@ -248,10 +251,9 @@ const Search: FunctionComponent<SearchProps> = ({
     if (fundSource) obj.fundSource = fundSource
     if (isLoanUrl) {
       // reset first, then set & keep type
-      setIssuedLoansSearchFilters()
       setIssuedLoansSearchFilters({
         ...obj,
-        type: issuedLoansSearchFilters.type,
+        type: obj.type || issuedLoansSearchFilters.type,
       })
     }
     if (
@@ -887,6 +889,25 @@ const Search: FunctionComponent<SearchProps> = ({
                     }
                     defaultValue={formikProps.values.warningType}
                   />
+                )
+              }
+              if (searchKey === 'consumerFinanceLimitStatus') {
+                return statusDropdown(
+                  formikProps,
+                  index,
+                  [
+                    { value: '', text: local.all },
+                    {
+                      value: 'approved',
+                      text: local.approved,
+                    },
+                    {
+                      value: 'pending',
+                      text: local.pending,
+                    },
+                  ],
+                  'consumerFinanceLimitStatus',
+                  local.consumerFinanceLimitStatus
                 )
               }
             })}

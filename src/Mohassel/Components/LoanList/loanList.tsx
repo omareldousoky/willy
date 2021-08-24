@@ -71,7 +71,6 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
     if (currentType === productType) {
       searchFiltersQuery = issuedLoansSearchFilters
     } else {
-      setIssuedLoansSearchFilters()
       setIssuedLoansSearchFilters({ type: productType })
     }
 
@@ -330,7 +329,8 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
               hqBranchIdRequest={props.branchId}
               sme={location.state?.sme}
             />
-          )}
+          )
+          }
           <DynamicTable
             pagination
             from={from}
