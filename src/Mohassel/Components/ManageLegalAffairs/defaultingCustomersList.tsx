@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button'
 import FormCheck from 'react-bootstrap/FormCheck'
 import Modal from 'react-bootstrap/Modal'
 import Table from 'react-bootstrap/Table'
-
+import Form from 'react-bootstrap/Form'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'
@@ -42,6 +42,7 @@ import DefaultingCustomersPdfTemplate, {
 } from '../pdfTemplates/defaultingCustomers/DefaultingCustomers'
 import { LtsIcon } from '../../../Shared/Components'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
+import { ProductType } from '../LegalWarnings/types'
 
 interface Review {
   at: number
@@ -122,6 +123,7 @@ interface State {
   loading: boolean
   rowToView: DefaultedCustomer
   showReportsModal: boolean
+  productType: ProductType
 }
 const rowToViewInit = {
   _id: '',
@@ -177,6 +179,7 @@ class DefaultingCustomersList extends Component<Props, State> {
       loading: false,
       rowToView: rowToViewInit,
       showReportsModal: false,
+      productType: 'micro',
     }
     this.mappers = [
       {
@@ -329,7 +332,7 @@ class DefaultingCustomersList extends Component<Props, State> {
       from: 0,
       size: 1000,
       [key]: query,
-      customerType: 'individual',
+      customerType: this.state.productType === 'sme' ? 'company' : 'individual',
     })
     if (results.status === 'success') {
       if (results.body.data.length > 0) {
@@ -441,7 +444,7 @@ class DefaultingCustomersList extends Component<Props, State> {
       from: 0,
       size: 1000,
       customerKey: customer.key,
-      type: 'micro',
+      type: this.state.productType,
     })
     if (results.status === 'success') {
       this.setState({
@@ -848,14 +851,39 @@ class DefaultingCustomersList extends Component<Props, State> {
             <Modal.Body>
               <Loader type="fullsection" open={this.state.modalLoader} />
               {Object.keys(this.state.selectedCustomer).length === 0 ? (
-                <CustomerSearch
-                  source="loanApplication"
-                  style={{ width: '100%' }}
-                  handleSearch={(key, query) => this.handleSearch(key, query)}
-                  selectedCustomer={this.state.selectedCustomer}
-                  searchResults={this.state.customerSearchResults}
-                  selectCustomer={(customer) => this.findLoans(customer)}
-                />
+                <>
+                  <div className="d-flex w-100">
+                    <Form.Label>{local.productName}</Form.Label>
+                    <Form.Control
+                      as="select"
+                      type="select"
+                      value={this.state.productType}
+                      onChange={(event) =>
+                        this.setState({
+                          productType: event.target.value as ProductType,
+                        })
+                      }
+                    >
+                      <option value="micro">micro</option>
+                      <option value="nano">nano</option>
+                      <option value="sme">sme</option>
+                    </Form.Control>
+                  </div>
+
+                  {this.state.productType && (
+                    <CustomerSearch
+                      source="loanApplication"
+                      style={{ width: '100%' }}
+                      handleSearch={(key, query) =>
+                        this.handleSearch(key, query)
+                      }
+                      selectedCustomer={this.state.selectedCustomer}
+                      searchResults={this.state.customerSearchResults}
+                      selectCustomer={(customer) => this.findLoans(customer)}
+                      sme={this.state.productType === 'sme'}
+                    />
+                  )}
+                </>
               ) : (
                 <DynamicTable
                   totalCount={0}
