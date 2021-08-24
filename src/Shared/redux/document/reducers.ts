@@ -40,12 +40,21 @@ export const DocumentsReducer = produce(
     switch (action.type) {
       case GET_DOCUMENTS: {
         if (!action.payload?.length) {
-          draft.map((doc) => {
+          draft.forEach((doc) => {
             doc.imagesFiles = []
           })
         }
 
-        action.payload.map((actionDocument) => {
+        // Get type from the first item in the payload as all items the same type
+        const payloadDocType = action.payload[0]?.type
+        // Clear all documents with the same type
+        draft.forEach((doc) => {
+          if (doc.type === payloadDocType) {
+            doc.imagesFiles = []
+          }
+        })
+
+        action.payload.forEach((actionDocument) => {
           const stateSlice = draft.find(
             (doc) => doc?.docName === actionDocument?.docName
           )

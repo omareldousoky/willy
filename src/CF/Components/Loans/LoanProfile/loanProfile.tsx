@@ -1261,7 +1261,7 @@ class LoanProfile extends Component<Props, State> {
 
         {this.state.print === 'payment' && (
           <PaymentReceipt
-            isCF
+            type="cf"
             receiptData={this.state.receiptData}
             data={this.state.application}
             companyReceipt={

@@ -269,6 +269,7 @@ class NavBar extends Component<Props, State> {
                   onClick={() =>
                     this.setState((prevState) => ({
                       openBranchList: !prevState.openBranchList,
+                      searchKeyWord: '',
                     }))
                   }
                 >

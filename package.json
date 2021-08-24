@@ -21,14 +21,14 @@
     "lint-documents:fix": "eslint --cache src/Documents --ext .ts,.tsx --no-error-on-unmatched-pattern --fix",
     "lint-shared": "eslint --cache src/Shared --ext .ts,.tsx --no-error-on-unmatched-pattern",
     "lint-shared:fix": "eslint --cache src/Shared --ext .ts,.tsx --no-error-on-unmatched-pattern --fix",
-		"lint-cf": "eslint --cache src/CF --ext .ts,.tsx --no-error-on-unmatched-pattern",
+    "lint-cf": "eslint --cache src/CF --ext .ts,.tsx --no-error-on-unmatched-pattern",
     "lint-cf:fix": "eslint --cache src/CF --ext .ts,.tsx --no-error-on-unmatched-pattern --fix",
-		"cf-dev": "sh ./dev-env.sh cf dev",
-		"cf-test": "sh ./dev-env.sh cf test",
-		"lts-dev": "sh ./dev-env.sh lts dev",
-		"lts-test": "sh ./dev-env.sh lts test",
-		"lts-docs-dev": "sh ./dev-env.sh lts-docs dev",
-		"lts-docs-test": "sh ./dev-env.sh lts-docs test"
+    "cf-dev": "sh ./dev-env.sh cf dev",
+    "cf-test": "sh ./dev-env.sh cf test",
+    "lts-dev": "sh ./dev-env.sh lts dev",
+    "lts-test": "sh ./dev-env.sh lts test",
+    "lts-docs-dev": "sh ./dev-env.sh lts-docs dev",
+    "lts-docs-test": "sh ./dev-env.sh lts-docs test"
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.1",
