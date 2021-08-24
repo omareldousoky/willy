@@ -3,25 +3,6 @@ import * as local from '../../../Shared/Assets/ar.json'
 import ability from '../../config/ability'
 import { Card } from '../ManageAccounts/manageAccountsInitials'
 
-export interface Specialty {
-  businessSpecialtyName: { ar: string }
-  id: string
-  active: boolean
-}
-
-export interface Activities {
-  i18n: { ar: string }
-  id: string
-  specialties: Array<Specialty>
-  active: boolean
-}
-
-export interface BusinessSector {
-  i18n: { ar: string }
-  id: string
-  activities: Array<Activities>
-}
-
 export const manageLoanDetailsArray = (): Card[] => {
   const mangeLoanDetailsArr: Card[] = []
   if (ability.can('loanUsage', 'config')) {
