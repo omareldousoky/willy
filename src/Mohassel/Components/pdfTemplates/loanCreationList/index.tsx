@@ -6,8 +6,9 @@ import {
   getTimestamp,
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 
-const LoanCreationList = (props) => {
+export const LoanCreationList = (props) => {
   const tempData = props.data.data
   const reportDate =
     props.data.from === props.data.to
@@ -19,31 +20,25 @@ const LoanCreationList = (props) => {
 
   return (
     <div className="loan-creation-list" lang="ar">
+      <Orientation size="portrait" />
       <table
+        className="w-100 text-center"
         style={{
-          fontSize: '12px',
           margin: '10px 0px',
-          textAlign: 'center',
-          width: '100%',
         }}
       >
-        <tr style={{ height: '10px' }} />
-        <tr
-          style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <th colSpan={6}>
-            <div className="logo-print-tb" />
-          </th>
-          <th colSpan={6}>
-            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-          </th>
-        </tr>
-        <tr style={{ height: '10px' }} />
+        <tbody>
+          <tr style={{ height: '10px' }} />
+          <tr className="w-100 d-flex flex-row justify-content-between">
+            <th colSpan={6}>
+              <div className="logo-print-tb" />
+            </th>
+            <th colSpan={6}>
+              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+            </th>
+          </tr>
+          <tr style={{ height: '10px' }} />
+        </tbody>
       </table>
       <table className="report-container">
         <thead className="report-header">
@@ -74,6 +69,7 @@ const LoanCreationList = (props) => {
             <th colSpan={2}>قيمة تكلفه التمويل</th>
             <th colSpan={2}>إجمالي</th>
             <th>حالة الحركة</th>
+            <th>نوع القرض</th>
           </tr>
           <tr>
             <th colSpan={100} className="horizontal-line" />
@@ -109,7 +105,7 @@ const LoanCreationList = (props) => {
                       <td>{transaction.customerName}</td>
                       <td>{transaction.loanSerial}</td>
                       <td>{transaction.principalAmount}</td>
-                      <td colSpan={2}>
+                      <td colSpan={2} className="text-nowrap">
                         {timeToArabicDate(
                           getTimestamp(transaction.truthDate),
                           false
@@ -122,6 +118,7 @@ const LoanCreationList = (props) => {
                       <td>
                         {transaction.canceled === 1 ? 'الحركة ملغاه' : ''}
                       </td>
+                      <td>{transaction?.loanType || ''}</td>
                     </tr>
                   ))}
                   <tr>
@@ -136,7 +133,7 @@ const LoanCreationList = (props) => {
                     <td className="frame" colSpan={2}>
                       {branch.branchName}
                     </td>
-                    <td className="frame" colSpan={1}>
+                    <td className="frame text-nowrap" colSpan={1}>
                       {timeToArabicDate(new Date(day.day).valueOf(), false)}
                     </td>
                     <td className="frame">{branch.df.length}</td>
@@ -177,7 +174,7 @@ const LoanCreationList = (props) => {
                 <td className="gray frame" colSpan={2}>
                   إجمالي تاريخ الحركه
                 </td>
-                <td className="gray frame">
+                <td className="gray frame text-nowrap">
                   {timeToArabicDate(new Date(day.day).valueOf(), false)}
                 </td>
                 <td className="frame" colSpan={2}>
@@ -252,4 +249,3 @@ const LoanCreationList = (props) => {
     </div>
   )
 }
-export default LoanCreationList

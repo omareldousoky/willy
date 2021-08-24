@@ -583,6 +583,20 @@ export const guarantorOrderLocal = {
   default: 'الضامن',
 }
 
+export const promissoryNoteGuarantorOrderLocal = {
+  0: 'ضامن متضامن أول',
+  1: 'ضامن متضامن ثان',
+  2: 'ضامن متضامن ثالث',
+  3: 'ضامن متضامن رابع',
+  4: 'ضامن متضامن خامس',
+  5: 'ضامن متضامن سادس',
+  6: 'ضامن متضامن سابع',
+  7: 'ضامن متضامن ثامن',
+  8: 'ضامن متضامن تاسع',
+  9: 'ضامن متضامن عاشر',
+  default: 'ضامن متضامن',
+}
+
 export const orderLocal = {
   0: 'الاول',
   1: 'الثاني',
@@ -765,6 +779,12 @@ export const DownloadAsCsv = async (name: string, data: string) => {
 
 export const errorResponseHandler = (error: string) =>
   Swal.fire('Error !', getErrorMessage(error), 'error')
+
+export const formatMoney = (money: string | number) => {
+  const moneyNumber = Number(money)
+  if (Number.isNaN(moneyNumber)) return money
+  return moneyNumber.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
 
 // Extract GMT date from a timestamp
 export const extractGMTDate = (date: number) => {

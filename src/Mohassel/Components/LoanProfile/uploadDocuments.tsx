@@ -33,6 +33,11 @@ interface State {
   selectAll: boolean
 }
 class UploadDocuments extends Component<Props, State> {
+  docType =
+    this.props.application.status === 'issued'
+      ? 'issuedLoan'
+      : 'loanApplication'
+
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -47,10 +52,7 @@ class UploadDocuments extends Component<Props, State> {
     this.getDocumentTypes()
     await this.props.getDocuments({
       applicationId: this.props.application._id,
-      docType:
-        this.props.application.status === 'issued'
-          ? 'issuedLoan'
-          : 'loanApplication',
+      docType: this.docType,
     })
     this.setState({ loading: false })
   }
@@ -167,6 +169,7 @@ class UploadDocuments extends Component<Props, State> {
                   this.props.application.status === 'canceled' ||
                   !this.checkPermission()) as boolean
               }
+              docType={this.docType}
             />
           )
         })}

@@ -91,23 +91,6 @@ label {
   margin: 30px;
 }
 
-.dropdown-container {
-  display: flex;
-  border: 1px #e5e5e5 solid;
-  border-radius: 5px;
-  padding-left: 10px;
-  & .dropdown-label {
-    margin: 0px;
-    background: #e5e5e5;
-    padding: 10px 15px;
-  }
-  & .dropdown-select {
-    height: auto;
-    border: 0px;
-    cursor: pointer;
-  }
-}
-
 .tab {
   font-weight: bold;
   font-size: 15px;

@@ -55,8 +55,9 @@ interface InitialFormikState {
   loanApplicationKey?: string
   defaultingCustomerStatus?: string
   managers?: Array<CurrentHierarchiesSingleResponse>
-  creditInquiryStatus?: string
+  loanType?: 'sme' | 'micro' | 'all'
   year?: number
+  creditInquiryStatus?: string
 }
 
 interface Props {
@@ -126,7 +127,6 @@ const ReportsModal = (props: Props) => {
       loanOfficerIds: getIds(values.representatives),
       geoAreas: getIds(values.geoAreas),
       key: getCustomerKey(values.customerKeyword),
-      managers: values.managers,
     })
   }
   function getInitialValues() {
@@ -177,6 +177,9 @@ const ReportsModal = (props: Props) => {
           break
         case 'managers':
           initValues.managers = []
+          break
+        case 'loanType':
+          initValues.loanType = 'all'
           break
         case 'month':
           initValues.date = ''
@@ -716,6 +719,40 @@ const ReportsModal = (props: Props) => {
                         </Col>
                       )
                     }
+                    if (input === 'loanType') {
+                      return (
+                        <Col key={input} sm={12}>
+                          <div className="dropdown-container">
+                            <p className="dropdown-label">{local.loanType}</p>
+                            <Form.Control
+                              as="select"
+                              className="dropdown-select"
+                              data-qc="loanType"
+                              name="loanType"
+                              value={formikProps.values.loanType}
+                              onChange={formikProps.handleChange}
+                            >
+                              {[
+                                { value: 'all', text: local.all },
+                                { value: 'sme', text: 'sme' },
+                                { value: 'micro', text: 'micro' },
+                              ].map(({ value, text }) => (
+                                <option
+                                  key={value}
+                                  value={value}
+                                  data-qc={value}
+                                >
+                                  {text}
+                                </option>
+                              ))}
+                            </Form.Control>
+                          </div>
+                          <span className="text-danger">
+                            {formikProps.errors.loanType}
+                          </span>
+                        </Col>
+                      )
+                    }
                     if (input === 'month') {
                       return (
                         <Field
@@ -820,7 +857,11 @@ const ReportsModal = (props: Props) => {
                   ].includes(props.pdf.key) &&
                   props.getExcel && (
                     <Button
-                      disabled={!!formikProps.errors.quarterYear}
+                      disabled={
+                        !!formikProps.errors.quarterYear ||
+                        (formikProps.values.loanType &&
+                          formikProps.values.loanType !== 'micro')
+                      }
                       variant="primary"
                       onClick={async () => {
                         // Manual revalidate formik: https://github.com/formium/formik/issues/2734

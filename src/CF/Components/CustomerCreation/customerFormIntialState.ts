@@ -116,7 +116,7 @@ export const customerCreationValidationStepOne = (globalCFMin, globalCFMax) =>
       })
       .required(local.required),
     monthlyIncome: Yup.number()
-      .min(1, local.mustBeGreaterThanZero)
+      .min(3000, minValue(3000))
       .required(local.required),
     initialConsumerFinanceLimit: Yup.number()
       .min(globalCFMin, minValue(globalCFMin))
