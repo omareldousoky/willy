@@ -12,8 +12,8 @@ import { leadsRoutes } from '../Components/Leads/routes'
 const appRoutes = [
   {
     path: '/',
-    label: local.consumerFinance,
-    render: () => <Landing appName={local.consumerFinance} />,
+    label: local.halan,
+    render: () => <Landing appName={local.halan} />,
     routes: [
       manageAccountsRoute,
       customerCreationRoutes,
