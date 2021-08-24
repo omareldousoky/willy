@@ -317,6 +317,7 @@ class CustomerCreation extends Component<Props, State> {
             hasLoan: res.body.hasLoan,
             isGuarantor: res.body.isGuarantor,
             oldRepresentative: res.body.representative,
+            branchId: res.body.branchId,
           } as any)
       )
     } else {
