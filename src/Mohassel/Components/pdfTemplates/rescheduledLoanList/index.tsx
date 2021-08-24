@@ -1,13 +1,14 @@
 import React from 'react'
-import './issuedLoanList.scss'
-import { englishToArabic } from '../../../Services/statusLanguage'
+import './rescheduledLoanList.scss'
 import {
   timeToArabicDate,
   getTimestamp,
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
+import { englishToArabic } from '../../../Services/statusLanguage'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 
-const IssuedLoanList = (props) => {
+export const RescheduledLoanList = (props) => {
   const tempData = props.data.data
   const reportDate =
     props.data.from === props.data.to
@@ -17,41 +18,19 @@ const IssuedLoanList = (props) => {
           false
         )}`
   return (
-    <div className="issued-loan-list" lang="ar">
-      <table
-        style={{
-          fontSize: '12px',
-          margin: '10px 0px',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
-        <tr style={{ height: '10px' }} />
-        <tr
-          style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <th
-            colSpan={6}
-            style={{ backgroundColor: 'white', listStyleType: 'none' }}
-          >
-            <div className="logo-print-tb" />
-          </th>
-          <th colSpan={6} style={{ backgroundColor: 'white' }}>
-            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-          </th>
-        </tr>
-        <tr style={{ height: '10px' }} />
-      </table>
+    <div className="rescheduled-loan-list" lang="ar">
+      <Orientation size="portrait" />
+      <div className="d-flex justify-content-between m-2">
+        <span className="logo-print" role="img" />
+        <p className="m-0 ml-3 text-right text-sm">
+          ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنة 2015
+        </p>
+      </div>
       <table className="report-container">
         <thead className="report-header">
           <tr className="headtitle">
             <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
-            <th colSpan={6}>قائمة حركات إصدار القروض المنفذه</th>
+            <th colSpan={6}>قائمة حركات جدولة القروض المنفذه</th>
           </tr>
           <tr className="headtitle">
             <th colSpan={4}>المركز الرئيسي</th>
@@ -66,16 +45,17 @@ const IssuedLoanList = (props) => {
           </tr>
           <tr>
             <th>رقم مسلسل</th>
-            <th colSpan={2}>كود العميل</th>
+            <th>كود العميل</th>
             <th>أسم العميل</th>
             <th>مسلسل القرض</th>
-            <th colSpan={2}>قيمة</th>
+            <th>قيمة</th>
             <th colSpan={2}>تاريخ القرض</th>
             <th>الحالة الان</th>
             <th>أصل</th>
             <th colSpan={2}>قيمة تكلفه التمويل</th>
             <th colSpan={2}>إجمالي</th>
             <th>حالة الحركة</th>
+            <th>نوع القرض</th>
           </tr>
           <tr>
             <th colSpan={100} className="horizontal-line" />
@@ -92,7 +72,6 @@ const IssuedLoanList = (props) => {
                 </th>
               </tr>
             </tbody>
-
             {day.branches.map((branch, i) => (
               <React.Fragment key={i}>
                 <tbody>
@@ -103,10 +82,10 @@ const IssuedLoanList = (props) => {
                   {branch.df.map((transaction, z) => (
                     <tr key={z}>
                       <td>{transaction.serialNo}</td>
-                      <td colSpan={2}>{transaction.customerKey}</td>
+                      <td>{transaction.customerKey}</td>
                       <td>{transaction.customerName}</td>
                       <td>{transaction.loanSerial}</td>
-                      <td colSpan={2}>{transaction.principalAmount}</td>
+                      <td>{transaction.principal}</td>
                       <td colSpan={2}>
                         {timeToArabicDate(
                           getTimestamp(transaction.truthDate),
@@ -120,6 +99,7 @@ const IssuedLoanList = (props) => {
                       <td>
                         {transaction.canceled === 1 ? 'الحركة ملغاه' : ''}
                       </td>
+                      <td>{transaction?.loanType || ''}</td>
                     </tr>
                   ))}
                   <tr>
@@ -134,7 +114,7 @@ const IssuedLoanList = (props) => {
                       {timeToArabicDate(new Date(day.day).valueOf(), false)}
                     </td>
                     <td>{branch.df.length}</td>
-                    <td colSpan={2} style={{ border: '0px' }} />
+                    <td colSpan={2} className="border-0" />
                     <td>إجمالي المبلغ</td>
                     <td>{branch.total[0]}</td>
                     <td>{branch.total[1]}</td>
@@ -142,14 +122,14 @@ const IssuedLoanList = (props) => {
                   </tr>
 
                   <tr>
-                    <td colSpan={8} style={{ border: '0px' }} />
+                    <td colSpan={8} className="border-0" />
                     <td>القيمة الملغاه</td>
                     <td>{branch.canceled[0]}</td>
                     <td>{branch.canceled[1]}</td>
                     <td>{branch.canceled[2]}</td>
                   </tr>
                   <tr>
-                    <td colSpan={8} style={{ border: '0px' }} />
+                    <td colSpan={8} className="border-0" />
                     <td>صافي المبلغ</td>
                     <td>{branch.net[0]}</td>
                     <td>{branch.net[1]}</td>
@@ -172,7 +152,7 @@ const IssuedLoanList = (props) => {
                 <th>{timeToArabicDate(new Date(day.day).valueOf(), false)}</th>
                 <td colSpan={2}>إجمالي عدد الحركات</td>
                 <td>{day.trx}</td>
-                <td colSpan={2} style={{ border: '0px' }} />
+                <td colSpan={2} className="border-0" />
                 <td>إجمالي المبلغ</td>
                 <td>{day.total[0]}</td>
                 <td>{day.total[1]}</td>
@@ -180,14 +160,14 @@ const IssuedLoanList = (props) => {
               </tr>
 
               <tr>
-                <td colSpan={8} style={{ border: '0px' }} />
+                <td colSpan={8} className="border-0" />
                 <td>القيمة الملغاه</td>
                 <td>{day.canceled[0]}</td>
                 <td>{day.canceled[1]}</td>
                 <td>{day.canceled[2]}</td>
               </tr>
               <tr>
-                <td colSpan={8} style={{ border: '0px' }} />
+                <td colSpan={8} className="border-0" />
                 <td>صافي المبلغ</td>
                 <td>{day.net[0]}</td>
                 <td>{day.net[1]}</td>
@@ -207,7 +187,7 @@ const IssuedLoanList = (props) => {
             <th>جنيه مصري</th>
             <td colSpan={2}>إجمالي عدد الحركات</td>
             <td>{tempData.trx}</td>
-            <td colSpan={2} style={{ border: '0px' }} />
+            <td colSpan={2} className="border-0" />
             <td>إجمالي المبلغ</td>
             <td>{tempData.total[0]}</td>
             <td>{tempData.total[1]}</td>
@@ -215,14 +195,14 @@ const IssuedLoanList = (props) => {
           </tr>
 
           <tr>
-            <td colSpan={8} style={{ border: '0px' }} />
+            <td colSpan={8} className="border-0" />
             <td>القيمة الملغاه</td>
             <td>{tempData.canceled[0]}</td>
             <td>{tempData.canceled[1]}</td>
             <td>{tempData.canceled[2]}</td>
           </tr>
           <tr>
-            <td colSpan={8} style={{ border: '0px' }} />
+            <td colSpan={8} className="border-0" />
             <td>صافي المبلغ</td>
             <td>{tempData.net[0]}</td>
             <td>{tempData.net[1]}</td>
@@ -234,5 +214,3 @@ const IssuedLoanList = (props) => {
     </div>
   )
 }
-
-export default IssuedLoanList
