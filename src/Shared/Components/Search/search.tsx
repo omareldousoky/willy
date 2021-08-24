@@ -122,9 +122,7 @@ class Search extends Component<SearchProps, SearchState> {
           break
         case 'beneficiaryType':
           initialState.type =
-            this.props.url === 'product'
-              ? this.props.beneficiaryType
-              : 'individual'
+            this.props.url === 'product' ? this.props.beneficiaryType : ''
           break
         default:
           break
