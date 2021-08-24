@@ -186,9 +186,6 @@ const Search: FunctionComponent<SearchProps> = ({
         case 'phoneNumber':
           initialState.phoneNumber = ''
           break
-        case 'consumerFinanceLimitStatus':
-          initialState.consumerFinanceLimitStatus = ''
-          break
         default:
           break
       }
@@ -889,25 +886,6 @@ const Search: FunctionComponent<SearchProps> = ({
                     }
                     defaultValue={formikProps.values.warningType}
                   />
-                )
-              }
-              if (searchKey === 'consumerFinanceLimitStatus') {
-                return statusDropdown(
-                  formikProps,
-                  index,
-                  [
-                    { value: '', text: local.all },
-                    {
-                      value: 'approved',
-                      text: local.approved,
-                    },
-                    {
-                      value: 'pending',
-                      text: local.pending,
-                    },
-                  ],
-                  'consumerFinanceLimitStatus',
-                  local.consumerFinanceLimitStatus
                 )
               }
             })}
