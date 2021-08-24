@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { OfficersProductivityResponse } from '../../../../Models/OfficersProductivityReport'
-import Orientation from '../../../Common/orientation'
+import Orientation from '../../../../../Shared/Components/Common/orientation'
 import { Header } from '../../pdfTemplateCommon/header'
 import { formatPercent } from '../officersPercentPayment'
 import '../officersPercentPayment.scss'

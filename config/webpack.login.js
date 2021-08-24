@@ -104,7 +104,7 @@ module.exports = (env) => {
 			}),
 			new webpack.DefinePlugin({
 				'process.env': {
-					REACT_APP_BASE_URL: JSON.stringify(config.API_BASE_URL),
+					API_BASE_URL: JSON.stringify(config.API_BASE_URL),
 					REACT_APP_LOGIN_URL: JSON.stringify(config.REACT_APP_LOGIN_URL),
 					REACT_APP_URL: JSON.stringify(config.REACT_APP_URL),
 					REACT_APP_DOMAIN: JSON.stringify(config.REACT_APP_DOMAIN),

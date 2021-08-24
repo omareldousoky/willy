@@ -1,13 +1,13 @@
 import { AxiosResponse } from 'axios'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 import {
   FalteringPaymentsResponse,
   LaundryReportRequest,
 } from '../../../Models/LaundryReports'
 import { ApiResponse } from '../../../Models/common'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 
-const { REACT_APP_BASE_URL } = process.env
-const fetchFalteringPaymentsUrl = `${REACT_APP_BASE_URL}/report/faltering-payments`
+const fetchFalteringPaymentsUrl = `${API_BASE_URL}/report/faltering-payments`
 
 export const fetchFalteringPaymentsReport = async (
   request: LaundryReportRequest

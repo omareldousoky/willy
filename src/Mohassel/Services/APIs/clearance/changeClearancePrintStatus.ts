@@ -1,4 +1,5 @@
-import axios from '../axios-instance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
+import axios from '../../../../Shared/Services/axiosInstance'
 
 export interface ChangeClearancePrintStatusRequest {
   ids: Array<string>
@@ -7,8 +8,7 @@ export interface ChangeClearancePrintStatusRequest {
 export const changeClearancePrintStatus = async (
   data: ChangeClearancePrintStatusRequest
 ) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + `/application/change-clearance-print`
+  const url = API_BASE_URL + `/application/change-clearance-print`
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }

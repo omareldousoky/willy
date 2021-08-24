@@ -8,15 +8,17 @@ import Button from 'react-bootstrap/Button'
 import Can from '../../../config/Can'
 import ability from '../../../config/ability'
 import * as local from '../../../../Shared/Assets/ar.json'
-import { downloadFile } from '../../../../Shared/Services/utils'
+import {
+  downloadFile,
+  getIscoreReportStatus,
+  timeToArabicDate,
+} from '../../../../Shared/Services/utils'
 
-import HeaderWithCards from '../../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { Loader } from '../../../../Shared/Components/Loader'
 import ReportsModal from '../reportsModal'
 import { RisksReport } from './RisksReport'
 import { DebtsAgingReport } from './DebtsAgingReport'
-import { Tab } from '../../HeaderWithCards/cardNavbar'
-import { ReportsList } from '../../../../Shared/Components/ReportsList'
 import MonthlyReport from '../../pdfTemplates/monthlyReport/monthlyReport'
 import QuarterlyReport from '../../pdfTemplates/quarterlyReport/quarterlyReport'
 
@@ -36,6 +38,12 @@ import {
 } from '../../../Services/APIs/Reports/tasaheelRisksReports'
 
 import { Report, ReportDetails } from './types'
+import { Tab } from '../../../../Shared/Components/HeaderWithCards/cardNavbar'
+import { LtsIcon } from '../../../../Shared/Components'
+import {
+  MonthReport,
+  QuarterReport,
+} from '../../../../Shared/Services/interfaces'
 
 export const TasaheelReports = () => {
   const reportsRequests = {
@@ -111,7 +119,9 @@ export const TasaheelReports = () => {
   const [print, setPrint] = useState<boolean>(false)
 
   const [reports, setReports] = useState<Report[]>([])
-  const [reportDetails, setReportDetails] = useState<ReportDetails>()
+  const [reportDetails, setReportDetails] = useState<
+    ReportDetails | MonthReport | QuarterReport
+  >()
 
   const activeTabIndex = useCallback(() => {
     const calculatedActiveTabIndex = tabs.findIndex(
@@ -179,10 +189,7 @@ export const TasaheelReports = () => {
         tabs[activeTabIndex()].stringKey === 'monthlyReport' ||
         tabs[activeTabIndex()].stringKey === 'quarterlyReport'
       ) {
-        downloadFile(res.body.fileKey)
-        setReportDetails(res.body.response)
-        setPrint(true)
-        window.print()
+        downloadFile(res.body.url)
       } else {
         setReportDetails(res.body)
         setPrint(true)
@@ -262,10 +269,113 @@ export const TasaheelReports = () => {
                 </Can>
               </div>
             )}
-            <ReportsList
-              list={reports}
-              onClickDownload={(itemId) => downloadGeneratedReport(itemId)}
-            />
+            {reports?.length > 0 ? (
+              reports.map((report, index) => (
+                <Card key={index} className="mx-0">
+                  <Card.Body>
+                    <div className="d-flex justify-content-between font-weight-bold">
+                      <div className="d-flex">
+                        <span className="mr-5 text-secondary">
+                          #{index + 1}
+                        </span>
+                        <span className="mr-5 d-flex flex-start flex-column">
+                          <span>{local.loanAppCreationDate}</span>
+                          {timeToArabicDate(report.created?.at, true)}
+                        </span>
+                        <span
+                          className={`mr-5  text-${
+                            report.status === 'created'
+                              ? 'success'
+                              : report.status === 'queued'
+                              ? 'warning'
+                              : 'danger'
+                          } `}
+                        >
+                          {getIscoreReportStatus(report.status)}
+                        </span>
+
+                        {report.status === 'created' && (
+                          <span className="mr-5 d-flex flex-start flex-column">
+                            <span>{local.creationDate}</span>
+                            {timeToArabicDate(
+                              report.generatedAt || report.fileGeneratedAt,
+                              true
+                            )}
+                          </span>
+                        )}
+                      </div>
+                      {report.status === 'created' && (
+                        <>
+                          {report.response &&
+                          (tabs[activeTabIndex()].stringKey.includes(
+                            'monthlyReport'
+                          ) ||
+                            tabs[activeTabIndex()].stringKey.includes(
+                              'quarterlyReport'
+                            )) ? (
+                            <div className="d-flex ">
+                              <Button
+                                type="button"
+                                variant="default"
+                                onClick={async () => {
+                                  setIsLoading(true)
+
+                                  await setReportDetails(report.response)
+                                  setIsLoading(false)
+
+                                  setPrint(true)
+                                  window.print()
+                                }}
+                                title="download"
+                              >
+                                <LtsIcon
+                                  name="printer"
+                                  size="30px"
+                                  color="#7dc356"
+                                />
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="default"
+                                onClick={() =>
+                                  downloadGeneratedReport(report.key)
+                                }
+                                title="download-excel"
+                              >
+                                <LtsIcon
+                                  name="download-big-file"
+                                  size="30px"
+                                  color="#7dc356"
+                                />
+                              </Button>
+                            </div>
+                          ) : (
+                            <Button
+                              type="button"
+                              variant="default"
+                              onClick={() =>
+                                downloadGeneratedReport(report._id)
+                              }
+                              title="download"
+                            >
+                              <LtsIcon
+                                name="download"
+                                size="40px"
+                                color="#7dc356"
+                              />
+                            </Button>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </Card.Body>
+                </Card>
+              ))
+            ) : (
+              <div className="d-flex align-items-center justify-content-center">
+                {local.noResults}
+              </div>
+            )}
           </Card.Body>
         </Card>
       </div>

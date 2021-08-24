@@ -14,19 +14,19 @@ import {
   ADD_TO_SELECTION_ARRAY,
   REMOVE_FROM_SELECTION_ARRAY,
 } from './types'
-import { uploadDocument as customerUploadDocument } from '../../../Mohassel/Services/APIs/Customer-Creation/uploadDocument'
-import { uploadDocument as applicationUploadDocument } from '../../../Mohassel/Services/APIs/loanApplication/uploadDocument'
-import { deleteDocument as customerDeleteDocument } from '../../../Mohassel/Services/APIs/Customer-Creation/deleteDocument'
-import { deleteDocument as applicationDeleteDocument } from '../../../Mohassel/Services/APIs/loanApplication/deleteDocument'
-import {
-  getCustomerDocuments,
-  getNanoLimitDocument,
-} from '../../../Mohassel/Services/APIs/Customer-Creation/getDocuments'
-import { getApplicationDocuments } from '../../../Mohassel/Services/APIs/loanApplication/getDocuments'
+import { uploadDocument as customerUploadDocument } from '../../Services/APIs/customer/uploadDocument'
+import { uploadDocument as applicationUploadDocument } from '../../Services/APIs/loanApplication/uploadDocument'
+import { deleteDocument as customerDeleteDocument } from '../../Services/APIs/customer/deleteDocument'
+import { deleteDocument as applicationDeleteDocument } from '../../Services/APIs/loanApplication/deleteDocument'
+import { getApplicationDocuments } from '../../Services/APIs/loanApplication/getDocuments'
 import { uploadDeathCertificate } from '../../../Mohassel/Services/APIs/DeathCerificate/uploadDeathCertificate'
 import { getDeathCertificate } from '../../../Mohassel/Services/APIs/DeathCerificate/getDeathCertificate'
 import { deleteDeathCertificate } from '../../../Mohassel/Services/APIs/DeathCerificate/deleteDeathCertificate'
 import { Document } from '../../Services/interfaces'
+import {
+  getCustomerDocuments,
+  getNanoLimitDocument,
+} from '../../Services/APIs/customer/getDocuments'
 
 const handleDocuments = (docs: any[], id, type) => {
   const documents: DocumentsState = []
@@ -35,12 +35,14 @@ const handleDocuments = (docs: any[], id, type) => {
       documents.push({
         docName: type,
         imagesFiles: docs,
+        type,
       })
   } else {
     docs?.map((doc) => {
       documents.push({
         docName: doc.name,
         imagesFiles: doc.docs,
+        type,
       })
     })
   }

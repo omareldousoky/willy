@@ -11,14 +11,15 @@ import * as local from '../../Assets/ar.json'
 import { Loader } from '../Loader'
 import { clearAllCookies, getCookie } from '../../Services/getCookie'
 import { parseJwt, timeToDateyyymmdd } from '../../Services/utils'
-import { contextBranch } from '../../../Mohassel/Services/APIs/Login/contextBranch'
+import { contextBranch } from '../../Services/APIs/Auth/contextBranch'
 import './styles.scss'
 import { setToken } from '../../token'
 import { Auth } from '../../redux/auth/types'
-import { logout } from '../../../Mohassel/Services/APIs/Auth/logout'
+import { logout } from '../../Services/APIs/Auth/logout'
 import ChangePasswordModal from '../changePasswordModal/changePasswordModal'
 import { LtsNav } from './LtsNav'
 import { CfNav } from './CfNav'
+import { LtsIcon } from '../LtsIcon'
 
 interface Props extends RouteComponentProps {
   auth: Auth
@@ -141,8 +142,8 @@ class NavBar extends Component<Props, State> {
       <div className="navbar-branch-list">
         <InputGroup style={{ marginLeft: 20 }}>
           <InputGroup.Append>
-            <InputGroup.Text className="bg-white rounded-0 p-3">
-              <span className="fa fa-search fa-rotate-90" />
+            <InputGroup.Text className="bg-white rounded-0 px-3 py-2">
+              <LtsIcon name="search" />
             </InputGroup.Text>
           </InputGroup.Append>
           <Form.Control
@@ -167,18 +168,17 @@ class NavBar extends Component<Props, State> {
                     className="item"
                     onClick={() => this.goToBranch(branch, true)}
                   >
-                    <div style={{ display: 'flex' }}>
+                    <div className="d-flex">
                       <div className="pin-icon">
-                        <span className="fa fa-map-marker-alt fa-lg" />
+                        <LtsIcon name="branch-location" />
                       </div>
                       <div className="branch-name">
                         <span className="text-muted">{local.goToBranch}</span>
                         <h6>{branch.name}</h6>
                       </div>
                     </div>
-                    <span className="fa fa-arrow-left" />
                   </div>
-                  <hr style={{ margin: 0 }} />
+                  <hr className="m-0" />
                 </div>
               )
             })}
@@ -219,10 +219,7 @@ class NavBar extends Component<Props, State> {
   renderNoResults() {
     return (
       <div className="no-branches-container">
-        <img
-          alt="no-branches-found"
-          src={require('../../Assets/noBranchesFound.svg')}
-        />
+        <LtsIcon name="no-branches-found" size="100px" color="#6c757d" />
         <h4>{local.noResults}</h4>
         <h6 className="text-muted">{local.looksLikeYouCantFindResults}</h6>
       </div>
@@ -236,21 +233,24 @@ class NavBar extends Component<Props, State> {
         <Navbar expand="lg" style={{ background: '#f5f5f5', padding: 0 }}>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="logo-navbar">
-              {this.props.isLTS && (
-                <>
-                  <Navbar.Brand className="ml-4">
-                    <img
-                      alt="navbar-logo"
-                      src={require('../../Assets/Logo.svg')}
-                    />
-                  </Navbar.Brand>
-                  <Navbar.Text className="mx-5">
-                    <h5 className="text-primary font-weight-bold">
-                      {local.lowRateLoan}
-                    </h5>
-                  </Navbar.Text>
-                </>
-              )}
+              <Navbar.Brand className="ml-4">
+                <img
+                  alt="navbar-logo"
+                  src={
+                    this.props.isLTS
+                      ? require('../../Assets/Logo.svg')
+                      : require('../../Assets/HalanLogo.svg')
+                  }
+                />
+              </Navbar.Brand>
+
+              <Navbar.Text className="mx-5">
+                <h5 className="text-primary font-weight-bold">
+                  {this.props.isLTS
+                    ? local.lowRateLoan
+                    : local.commerceTrackingSystem}
+                </h5>
+              </Navbar.Text>
               <div style={{ flex: 2, display: 'flex', width: '100%' }}>
                 <div className="info-navbar">
                   <span>{local.currentPeriodStartsIn}</span>
@@ -269,12 +269,13 @@ class NavBar extends Component<Props, State> {
                   onClick={() =>
                     this.setState((prevState) => ({
                       openBranchList: !prevState.openBranchList,
+                      searchKeyWord: '',
                     }))
                   }
                 >
-                  <div className="selected-branch">
+                  <div className="selected-branch pr-4">
                     <div className="pin-icon">
-                      <span className="fa fa-map-marker-alt fa-lg" />
+                      <LtsIcon name="branch-location" />
                     </div>
                     <span className="text-white font-weight-bold">
                       {this.state.selectedBranch._id === ''
@@ -282,11 +283,12 @@ class NavBar extends Component<Props, State> {
                         : this.state.selectedBranch.name}
                     </span>
                   </div>
-                  <img
-                    className="mx-2"
-                    style={{ width: '40px' }}
-                    alt="drop-down-arrow"
-                    src={require('../../Assets/dropDownArrow.svg')}
+                  <LtsIcon
+                    name={`arrow-${
+                      this.state.openBranchList ? 'left' : 'right'
+                    }`}
+                    color="#626262"
+                    style={{ transform: `rotate(90deg)` }}
                   />
                 </div>
                 {this.state.openBranchList ? this.renderBranchList() : null}

@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
 import {
   ReviewedDefaultingCustomersReq,
   DefaultedCustomer,
@@ -11,9 +11,10 @@ import {
 } from '../../../Components/ManageLegalAffairs/types'
 import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
 import { ApiResponse } from '../../../Models/common'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 
 export const searchDefaultingCustomers = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + '/search/defaulting-customer'
+  const url = API_BASE_URL + '/search/defaulting-customer'
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -23,7 +24,7 @@ export const searchDefaultingCustomers = async (data: object) => {
 }
 
 export const searchLegalAffairsCustomers = async (data: object) => {
-  const url = process.env.REACT_APP_BASE_URL + '/search/legal-affairs'
+  const url = API_BASE_URL + '/search/legal-affairs'
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -35,7 +36,7 @@ export const searchLegalAffairsCustomers = async (data: object) => {
 export const updateLegalAffairsCustomers = async (
   data: LegalActionsForm & DefaultedCustomer
 ) => {
-  const url = process.env.REACT_APP_BASE_URL + '/legal/update-customer'
+  const url = API_BASE_URL + '/legal/update-customer'
   try {
     const res = await axios.put(url, data)
     return { status: 'success', body: res.data }
@@ -48,7 +49,7 @@ export const addCustomerToDefaultingList = async (data: {
   customerId: string
   loanId: string
 }) => {
-  const url = process.env.REACT_APP_BASE_URL + '/legal/add-customer'
+  const url = API_BASE_URL + '/legal/add-customer'
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -61,7 +62,7 @@ export const reviewCustomerDefaultedLoan = async (data: {
   notes: string
   type: string
 }) => {
-  const url = process.env.REACT_APP_BASE_URL + '/legal/review-customer'
+  const url = API_BASE_URL + '/legal/review-customer'
   try {
     const res = await axios.put(url, data)
     return { status: 'success', body: res.data }
@@ -70,7 +71,7 @@ export const reviewCustomerDefaultedLoan = async (data: {
   }
 }
 export const deleteCustomerDefaultedLoan = async (data: { ids: string[] }) => {
-  const url = process.env.REACT_APP_BASE_URL + '/legal/delete-customer'
+  const url = API_BASE_URL + '/legal/delete-customer'
   try {
     const res = await axios.post(url, data)
     return { status: 'success', body: res.data }
@@ -82,8 +83,7 @@ export const deleteCustomerDefaultedLoan = async (data: { ids: string[] }) => {
 export const fetchReviewedDefaultingCustomers = async (
   reqBody: ReviewedDefaultingCustomersReq
 ) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + '/report/reviewed-defaulting-customers'
+  const url = API_BASE_URL + '/report/reviewed-defaulting-customers'
 
   try {
     const res = await axios.post(url, reqBody)
@@ -94,7 +94,7 @@ export const fetchReviewedDefaultingCustomers = async (
 }
 
 export const settleLegalCustomer = async (reqBody: FormData, id: string) => {
-  const url = process.env.REACT_APP_BASE_URL + `/legal/update-settlement/${id}`
+  const url = API_BASE_URL + `/legal/update-settlement/${id}`
 
   try {
     const res = await axios.put(url, reqBody)
@@ -105,8 +105,7 @@ export const settleLegalCustomer = async (reqBody: FormData, id: string) => {
 }
 
 export const getSettlementFees = async (customerId: string) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + `/legal/settlement-info/${customerId}`
+  const url = API_BASE_URL + `/legal/settlement-info/${customerId}`
 
   try {
     const res = await axios.get(url)
@@ -117,7 +116,7 @@ export const getSettlementFees = async (customerId: string) => {
 }
 
 export const reviewLegalCustomer = async (reqBody: ReviewReqBody) => {
-  const url = process.env.REACT_APP_BASE_URL + `/legal/review-settlement`
+  const url = API_BASE_URL + `/legal/review-settlement`
 
   try {
     const res = await axios.put(url, reqBody)
@@ -128,9 +127,7 @@ export const reviewLegalCustomer = async (reqBody: ReviewReqBody) => {
 }
 
 export const uploadDefaultingCustomer = async (reqBody: FormData) => {
-  const url =
-    process.env.REACT_APP_BASE_URL +
-    '/legal/upload-defaulting-customers-document'
+  const url = API_BASE_URL + '/legal/upload-defaulting-customers-document'
 
   try {
     const res = await axios.post(url, reqBody)
@@ -144,8 +141,7 @@ export const deleteSettlementDocument = async (
   customerId: string,
   type: string
 ) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + '/legal/delete-settlement-document'
+  const url = API_BASE_URL + '/legal/delete-settlement-document'
 
   try {
     const res = await axios.delete(url, {
@@ -163,7 +159,7 @@ export const deleteSettlementDocument = async (
 export const getLegalHistory = async (
   legalId: string
 ): Promise<ApiResponse<LegalHistoryResponse>> => {
-  const url = process.env.REACT_APP_BASE_URL + `/legal/history/${legalId}`
+  const url = API_BASE_URL + `/legal/history/${legalId}`
   try {
     const res: AxiosResponse<LegalHistoryResponse> = await axios.get(url)
     return { status: 'success', body: res.data }

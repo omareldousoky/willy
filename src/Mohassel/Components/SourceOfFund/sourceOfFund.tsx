@@ -17,10 +17,10 @@ import {
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import { loading } from '../../../Shared/redux/loading/actions'
-import { changeSourceFund } from '../../Services/APIs/loanApplication/changeSourceFund'
-import { cibExtractions } from '../../Services/APIs/loanApplication/cibExtractions'
+import { changeSourceFund } from '../../../Shared/Services/APIs/loanApplication/changeSourceFund'
+import { cibExtractions } from '../../../Shared/Services/APIs/loanApplication/cibExtractions'
 import { downloadTxtFile } from '../CIB/textFiles'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageLoansArray } from '../LoanList/manageLoansInitials'
 import { ActionsIconGroup } from '../../../Shared/Components'
 

@@ -4,10 +4,10 @@ import {
   PaidArrearsRequest,
   PaidArrearsResponse,
 } from '../../interfaces'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 
-const { REACT_APP_BASE_URL } = process.env
-const fetchPaidArrears = `${REACT_APP_BASE_URL}/report/paid-arrears`
+const fetchPaidArrears = `${API_BASE_URL}/report/paid-arrears`
 
 export const fetchPaidArrearsReport = async (
   request: PaidArrearsRequest

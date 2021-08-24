@@ -4,20 +4,20 @@ import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
 import ReportsModal from './reportsModal'
 import * as local from '../../../Shared/Assets/ar.json'
-import CustomerStatusDetails from '../pdfTemplates/customerStatusDetails/customerStatusDetails'
+import { CustomerStatusDetails } from '../pdfTemplates/customerStatusDetails'
 import { getCustomerDetails } from '../../Services/APIs/Reports/customerDetails'
 import { getLoanDetails } from '../../Services/APIs/Reports/loanDetails'
-import LoanApplicationDetails from '../pdfTemplates/loanApplicationDetails/loanApplicationDetails'
-import BranchesLoanList from '../pdfTemplates/branchesLoanList/branchesLoanList'
+import { LoanApplicationDetails } from '../pdfTemplates/loanApplicationDetails'
+import { BranchesLoanList } from '../pdfTemplates/branchesLoanList'
 import {
   getBranchLoanList,
   postBranchLoanListExcel,
   getBranchLoanListExcel,
 } from '../../Services/APIs/Reports/branchLoanList'
-import CollectionStatement from '../pdfTemplates/CollectionStatement/CollectionStatement'
-import LoanPenaltiesList from '../pdfTemplates/loanPenaltiesList/loanPenaltiesList'
-import CrossedOutLoansList from '../pdfTemplates/crossedOutLoansList/crossedOutLoansList'
-import DoubtfulPayments from '../pdfTemplates/doubtfulPayments/doubtfulPayments'
+import { CollectionStatement } from '../pdfTemplates/CollectionStatement'
+import { LoanPenaltiesList } from '../pdfTemplates/loanPenaltiesList'
+import { CrossedOutLoansList } from '../pdfTemplates/crossedOutLoansList'
+import { DoubtfulPayments } from '../pdfTemplates/doubtfulPayments'
 import {
   collectionReport,
   penalties,
@@ -34,8 +34,8 @@ import {
   postInstallmentsExcel,
   getInstallmentsExcel,
 } from '../../Services/APIs/Reports/installments'
-import PaymentsDone from '../pdfTemplates/paymentsDone/paymentsDone'
-import IssuedLoanList from '../pdfTemplates/issuedLoanList/issuedLoanList'
+import { PaymentsDone } from '../pdfTemplates/paymentsDone'
+import { IssuedLoanList } from '../pdfTemplates/issuedLoanList'
 import {
   getIssuedLoanList,
   postIssuedLoansExcel,
@@ -51,27 +51,27 @@ import {
   postRescheduledLoanExcel,
   getRescheduledLoanExcel,
 } from '../../Services/APIs/Reports/rescheduledLoansList'
-import LoanCreationList from '../pdfTemplates/loanCreationList/loanCreationList'
-import RescheduledLoanList from '../pdfTemplates/rescheduledLoanList/rescheduledLoanList'
+import { LoanCreationList } from '../pdfTemplates/loanCreationList'
+import { RescheduledLoanList } from '../pdfTemplates/rescheduledLoanList'
 import {
   getRandomPayments,
   postRandomPaymentsExcel,
   getRandomPaymentsExcel,
 } from '../../Services/APIs/Reports/randomPayment'
-import RandomPayment from '../pdfTemplates/randomPayment/randomPayment'
+import { RandomPayment } from '../pdfTemplates/randomPayment'
 import {
   getLoanApplicationFees,
   postLoanApplicationFeesExcel,
   getLoanApplicationFeesExcel,
 } from '../../Services/APIs/Reports/loanApplicationFees'
-import LoanApplicationFees from '../pdfTemplates/loanApplicationFees/loanApplicationFees'
+import { LoanApplicationFees } from '../pdfTemplates/loanApplicationFees'
 import {
   doubtfulLoans,
   postDoubtfulLoansExcel,
   getDoubtfulLoansExcel,
 } from '../../Services/APIs/Reports/doubtfulLoans'
 import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport'
-import ManualPayments from '../pdfTemplates/manualPayments/manualPayments'
+import { ManualPayments } from '../pdfTemplates/manualPayments'
 import {
   getManualPayments,
   postManualPaymentsExcel,
@@ -79,8 +79,11 @@ import {
 } from '../../Services/APIs/Reports/manualPayments'
 import { downloadFile } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
-import CustomerTransactionReport from '../pdfTemplates/customerTransactionReport/customerTransactionReport'
+import { CustomerTransactionReport } from '../pdfTemplates/customerTransactionReport'
 import { getCustomerTransactions } from '../../Services/APIs/Reports/customerTransactions'
+import { fetchRaseedyTransactions } from '../../Services/APIs/Reports/raseedyTransactions'
+import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
+import RaseedyTransactionsReport from '../pdfTemplates/RaseedyTransactions'
 import { PDFList } from '../../../Shared/Components/PdfList'
 
 export interface PDF {
@@ -98,8 +101,8 @@ interface State {
   data: any
   loading: boolean
   customerKey: string
-  fromDate: string
-  toDate: string
+  fromDate: number
+  toDate: number
 }
 
 class Reports extends Component<{}, State> {
@@ -124,73 +127,73 @@ class Reports extends Component<{}, State> {
         {
           key: 'branchLoanList',
           local: 'ملخص الحالات والقروض',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'branchIssuedLoans',
         },
         {
           key: 'CollectionStatement',
           local: 'كشف التحصيل',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'collectionReport',
         },
         {
           key: 'Penalties',
           local: 'الغرامات',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'penalties',
         },
         {
           key: 'CrossedOutLoans',
           local: 'قائمة حركات إعدام ديون القروض المنفذة',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'writeOffs',
         },
         {
           key: 'DoubtfulLoans',
           local: 'قائمة حركة القروض المشكوك في سدادها',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'loanDoubts',
         },
         {
           key: 'issuedLoanList',
-          local: 'القروض المصدره',
-          inputs: ['dateFromTo', 'branches'],
+          local: 'القروض المصدرة',
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'loansIssued',
         },
         {
           key: 'createdLoanList',
           local: 'انشاء القروض',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'loansCreated',
         },
         {
           key: 'rescheduledLoanList',
           local: 'قائمة حركات جدولة القروض المنفذه',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'loanRescheduling',
         },
         {
           key: 'paymentsDoneList',
           local: 'حركات الاقساط',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'installments',
         },
         {
           key: 'randomPayments',
           local: 'الحركات المالية',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'randomPayments',
         },
         {
           key: 'loanApplicationFees',
           local: 'حركات رسوم طلب القرض',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'loanFees',
         },
         {
           key: 'manualPayments',
           local: 'مراجعه حركات السداد اليدوي',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'manualPayments',
         },
         {
@@ -199,13 +202,19 @@ class Reports extends Component<{}, State> {
           inputs: ['applicationKey'],
           permission: 'loanTransactionReport',
         },
+        {
+          key: 'raseedyTransactions',
+          local: 'مدفوعات رصيدي',
+          inputs: ['dateFromTo'],
+          permission: 'raseedyTransactions',
+        },
       ],
       selectedPdf: { permission: '' },
       data: {},
       loading: false,
       customerKey: '',
-      fromDate: '',
-      toDate: '',
+      fromDate: 0,
+      toDate: 0,
     }
   }
 
@@ -249,6 +258,8 @@ class Reports extends Component<{}, State> {
         return this.getManualPayments(values)
       case 'customerTransactionReport':
         return this.getCustomerTransactions(values)
+      case 'raseedyTransactions':
+        return this.getRaseedyTransactions(values)
       default:
         return null
     }
@@ -397,14 +408,15 @@ class Reports extends Component<{}, State> {
       fromDate: values.fromDate,
       toDate: values.toDate,
     })
-    const obj = {
+    const request = {
       startdate: values.fromDate,
       enddate: values.toDate,
       branches: values.branches.some((branch) => branch._id === '')
         ? []
         : values.branches.map((branch) => branch._id),
+      loanType: values.loanType,
     }
-    const res = await getBranchLoanList(obj)
+    const res = await getBranchLoanList(request)
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
@@ -412,7 +424,7 @@ class Reports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: res.body,
+            data: { ...res.body, loanType: request.loanType },
             showModal: false,
             print: 'branchLoanList',
             loading: false,
@@ -432,8 +444,8 @@ class Reports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branches: branches.includes('') ? [''] : branches,
-      all: branches.includes('') || branches === [] ? '1' : '0',
+      branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
     }
     const res = await installments(obj)
     if (res.status === 'success') {
@@ -468,8 +480,8 @@ class Reports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branches: branches.includes('') ? [''] : branches,
-      all: branches.includes('') ? '1' : '0',
+      branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
     }
     const res = await getRandomPayments(obj)
     if (res.status === 'success') {
@@ -500,6 +512,7 @@ class Reports extends Component<{}, State> {
       startdate: values.fromDate,
       enddate: values.toDate,
       branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
     }
     const res = await getIssuedLoanList(obj)
     if (res.status === 'success') {
@@ -530,6 +543,7 @@ class Reports extends Component<{}, State> {
       startdate: values.fromDate,
       enddate: values.toDate,
       branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
     }
     const res = await getCreatedLoanList(obj)
     if (res.status === 'success') {
@@ -560,6 +574,7 @@ class Reports extends Component<{}, State> {
       startdate: values.fromDate,
       enddate: values.toDate,
       branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
     }
     const res = await getRescheduledLoanList(obj)
     if (res.status === 'success') {
@@ -596,6 +611,7 @@ class Reports extends Component<{}, State> {
       branches: values.branches
         .filter((branch) => branch._id !== '')
         .map((branch) => branch._id),
+      loanType: values.loanType,
     }
     const res = await getLoanApplicationFees(obj)
     if (res.status === 'success') {
@@ -624,10 +640,10 @@ class Reports extends Component<{}, State> {
     const res = await collectionReport({
       startDate: values.fromDate,
       endDate: values.toDate,
-      all: values.branches.some((branch) => branch._id === '') ? '1' : '0',
-      branchList: values.branches.some((branch) => branch._id === '')
+      branches: values.branches.some((branch) => branch._id === '')
         ? []
         : values.branches.map((branch) => branch._id),
+      loanType: values.loanType,
     })
     if (res.status === 'success') {
       if (!res.body) {
@@ -656,13 +672,13 @@ class Reports extends Component<{}, State> {
   }
 
   async getLoanPenaltiesReport(values) {
-    const branches = values.branches.map((branch) => branch._id)
     this.setState({ loading: true, showModal: false })
+    const branches = values.branches.map((branch) => branch._id)
     const res = await penalties({
       startDate: values.fromDate,
       endDate: values.toDate,
-      all: branches.includes('') || branches === [] ? '1' : '0',
-      branchList: branches.includes('') ? [''] : branches,
+      branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
     })
     if (res.status === 'success') {
       if (!res.body) {
@@ -671,8 +687,10 @@ class Reports extends Component<{}, State> {
       } else {
         const data = {
           days: res.body.days,
-          totalNumberOfTransactions: res.body.numTrx,
-          totalTransactionAmount: res.body.transactionAmount,
+          totalNumberOfTransactions: Number(res.body.numTrx),
+          totalTransactionAmount: Number(res.body.transactionAmount),
+          totalCancelledAmount: Number(res.body.rbAmount),
+          totalPaidAmount: Number(res.body.netAmount),
           startDate: values.fromDate,
           endDate: values.toDate,
         }
@@ -694,14 +712,13 @@ class Reports extends Component<{}, State> {
 
   async getDoubtfulLoansReport(values) {
     this.setState({ loading: true, showModal: false })
-    const branches = values.branches.map((branch) => branch._id)
     const res = await doubtfulLoans({
       startDate: values.fromDate,
       endDate: values.toDate,
-      all: branches.includes('') || branches === [] ? '1' : '0',
-      branchList: values.branches
+      branches: values.branches
         .filter((branch) => branch._id !== '')
         .map((branch) => branch._id),
+      loanType: values.loanType,
     })
     if (res.status === 'success') {
       if (!res.body) {
@@ -730,14 +747,13 @@ class Reports extends Component<{}, State> {
 
   async getWriteOffsReport(values) {
     this.setState({ loading: true, showModal: false })
-    const branches = values.branches.map((branch) => branch._id)
     const res = await writeOffs({
       startDate: values.fromDate,
       endDate: values.toDate,
-      all: branches.includes('') || branches === [] ? '1' : '0',
-      branchList: values.branches
+      branches: values.branches
         .filter((branch) => branch._id !== '')
         .map((branch) => branch._id),
+      loanType: values.loanType,
     })
     if (res.status === 'success') {
       if (!res.body) {
@@ -792,8 +808,8 @@ class Reports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branchList: branches.includes('') ? [''] : branches,
-      all: branches.includes('') || branches === [] ? '1' : '0',
+      branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
     }
     const res = await getManualPayments(obj)
     if (res.status === 'success') {
@@ -845,6 +861,34 @@ class Reports extends Component<{}, State> {
     }
   }
 
+  async getRaseedyTransactions(values) {
+    this.setState({ loading: true, showModal: false })
+
+    const res = await fetchRaseedyTransactions({
+      startDate: values.fromDate,
+      endDate: values.toDate,
+    })
+
+    if (res.status === 'success') {
+      if (!res.body || !Object.keys(res.body).length) {
+        this.setState({ loading: false })
+        Swal.fire('error', local.noResults)
+      } else {
+        this.setState(
+          {
+            data: res.body,
+            showModal: false,
+            print: 'raseedyTransactions',
+            loading: false,
+          },
+          () => window.print()
+        )
+      }
+    } else {
+      this.setState({ loading: false })
+    }
+  }
+
   async getExcelFile(func, pollFunc, values) {
     this.setState({
       loading: true,
@@ -855,9 +899,12 @@ class Reports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branches: values.branches.some((branch) => branch._id === '')
+      branches: !values.branches
+        ? undefined
+        : values.branches.some((branch) => branch._id === '')
         ? []
         : values.branches.map((branch) => branch._id),
+      loanType: 'micro',
     }
     const res = await func(obj)
     if (res.status === 'success') {
@@ -996,6 +1043,12 @@ class Reports extends Component<{}, State> {
         )}
         {this.state.print === 'customerTransactionReport' && (
           <CustomerTransactionReport result={this.state.data} />
+        )}
+
+        {this.state.print === 'raseedyTransactions' && (
+          <PdfPortal
+            component={<RaseedyTransactionsReport data={this.state.data} />}
+          />
         )}
       </>
     )

@@ -28,23 +28,23 @@ import {
 import {
   BranchDetailsResponse,
   getBranch,
-} from '../../Services/APIs/Branch/getBranch'
+} from '../../../Shared/Services/APIs/Branch/getBranch'
 import { getCookie } from '../../../Shared/Services/getCookie'
-import {
-  getIscoreCached,
-  getSMECachedIscore,
-} from '../../Services/APIs/iScore/iScore'
-import { Score } from '../CustomerCreation/customerProfile'
+import { Score } from '../CustomerCreation/CustomerProfile'
 import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApplications'
 import {
   manageApplicationsArray,
   manageSMEApplicationsArray,
 } from './manageApplicationInitials'
-import HeaderWithCards from '../HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { LoanApplicationReportRequest } from '../../Services/interfaces'
 import { ActionsIconGroup } from '../../../Shared/Components'
 import ability from '../../config/ability'
 import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
+import {
+  getSMECachedIscore,
+  getIscoreCached,
+} from '../../../Shared/Services/APIs/iScore'
 
 interface Product {
   productName: string
@@ -60,11 +60,6 @@ interface Application {
   entryDate: number
   principal: number
   status: string
-}
-interface LoanItem {
-  id: string
-  branchId: string
-  application: Application
 }
 interface State {
   print: boolean
@@ -406,18 +401,21 @@ class TrackLoanApplications extends Component<Props, State> {
       this.getBranchData(details.branch)
     }
     const filters = this.props.searchFilters
+    const isSme = this.props.searchFilters.type === 'sme'
+
     const obj: LoanApplicationReportRequest = {
       startDate: filters.fromDate,
       endDate: filters.toDate,
       loanStatus: filters.status ? [filters.status] : [],
       branch: hasBranch ? details.branch : filters.branchId || '',
+      loanType: isSme ? 'sme' : 'micro',
     }
     this.setState({ loading: true })
     const res = await getReviewedApplications(obj)
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('', local.noResults, 'error')
+        Swal.fire('Error', local.noResults, 'error')
       } else {
         this.setState(
           { reviewedResults: res.body.result, loading: false },
@@ -661,6 +659,7 @@ class TrackLoanApplications extends Component<Props, State> {
         </div>
         {this.state.print && (
           <ReviewedApplicationsPDF
+            isSme={this.props.searchFilters.type === 'sme'}
             data={this.state.reviewedResults}
             branchDetails={this.state.branchDetails}
           />

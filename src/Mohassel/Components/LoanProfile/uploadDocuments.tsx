@@ -5,8 +5,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
 import DocumentUploader from '../../../Shared/Components/documentUploader/documentUploader'
-import { getDocumentsTypes } from '../../Services/APIs/encodingFiles/getDocumentsTypes'
-import { getApplicationDocuments } from '../../Services/APIs/loanApplication/getDocuments'
+import { getApplicationDocuments } from '../../../Shared/Services/APIs/loanApplication/getDocuments'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import ability from '../../config/ability'
@@ -17,6 +16,7 @@ import {
 } from '../../../Shared/redux/document/actions'
 import { Image } from '../../../Shared/redux/document/types'
 import { downloadAsZip, getErrorMessage } from '../../../Shared/Services/utils'
+import { getDocumentsTypes } from '../../../Shared/Services/APIs/encodingFiles/documentType'
 
 interface Props {
   application: any
@@ -33,6 +33,11 @@ interface State {
   selectAll: boolean
 }
 class UploadDocuments extends Component<Props, State> {
+  docType =
+    this.props.application.status === 'issued'
+      ? 'issuedLoan'
+      : 'loanApplication'
+
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -47,10 +52,7 @@ class UploadDocuments extends Component<Props, State> {
     this.getDocumentTypes()
     await this.props.getDocuments({
       applicationId: this.props.application._id,
-      docType:
-        this.props.application.status === 'issued'
-          ? 'issuedLoan'
-          : 'loanApplication',
+      docType: this.docType,
     })
     this.setState({ loading: false })
   }
@@ -167,6 +169,7 @@ class UploadDocuments extends Component<Props, State> {
                   this.props.application.status === 'canceled' ||
                   !this.checkPermission()) as boolean
               }
+              docType={this.docType}
             />
           )
         })}

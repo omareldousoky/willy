@@ -1,11 +1,11 @@
 import { UnpaidInstallmentsByOfficerRequest } from '../../interfaces'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 
 export const unpaidInstallmentsByOfficer = async (
   request: UnpaidInstallmentsByOfficerRequest
 ) => {
-  const url =
-    process.env.REACT_APP_BASE_URL + `/report/unpaid-installments-by-officer`
+  const url = API_BASE_URL + `/report/unpaid-installments-by-officer`
   try {
     const res = await axios.post(url, request)
     return { status: 'success', body: res.data }

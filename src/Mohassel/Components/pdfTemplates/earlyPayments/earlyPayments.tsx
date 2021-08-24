@@ -3,7 +3,7 @@ import {
   EarlyPaymentsResponse,
   EarlyPaymentsSingleResponse,
 } from '../../../Models/LaundryReports'
-import Orientation from '../../Common/orientation'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 import { Header } from '../pdfTemplateCommon/header'
 import '../customersArrears/customersArrears.scss'
 import DataRow from '../pdfTemplateCommon/dataRow'

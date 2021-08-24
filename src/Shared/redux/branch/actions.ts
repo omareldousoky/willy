@@ -2,10 +2,10 @@ import { EDIT_BRANCH, GET_BRANCH, CREATE_BRANCH } from './types'
 
 // not completed yet
 
-import { createBranch } from '../../../Mohassel/Services/APIs/Branch/createBranch'
-import { editBranch } from '../../../Mohassel/Services/APIs/Branch/editBranch'
+import { createBranch } from '../../Services/APIs/Branch/createBranch'
+import { editBranch } from '../../Services/APIs/Branch/editBranch'
 import { Branch } from '../../Services/interfaces'
-import { getBranch } from '../../../Mohassel/Services/APIs/Branch/getBranch'
+import { getBranch } from '../../Services/APIs/Branch/getBranch'
 
 export function createNewBranch(newBranch: Branch) {
   return async (dispatch) => {

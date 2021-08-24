@@ -15,6 +15,7 @@ export interface SearchInitialFormikState {
   lastDates?: 'day' | 'week' | 'month' | ''
   type?: string
   warningType?: LegalWarningType | ''
+  phoneNumber?: string
   beneficiaryType?: 'individual' | 'group'
 }
 
@@ -42,6 +43,7 @@ export interface SearchProps {
   setLoading: (data) => void
   submitClassName?: string
   sme?: boolean
+  cf?: boolean
 }
 
 export interface SearchState {

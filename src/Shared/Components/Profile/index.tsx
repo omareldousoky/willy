@@ -5,14 +5,15 @@ import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 
 import { Loader } from '../Loader'
-import BackButton from '../../../Mohassel/Components/BackButton/back-button'
-import { CardNavBar } from '../../../Mohassel/Components/HeaderWithCards/cardNavbar'
+import BackButton from '../BackButton/back-button'
+import { CardNavBar } from '../HeaderWithCards/cardNavbar'
 import DocumentsUpload from '../../../Mohassel/Components/CustomerCreation/documentsUpload'
 import DeathCertificate from '../../../Mohassel/Components/CustomerCreation/deathCertificate'
 import { CustomerCategorization } from '../../../Mohassel/Components/CustomerCreation/customerCategorization'
 import { ProfileActions } from '../ProfileActions'
 import { CustomerReportsTab } from '../../../Mohassel/Components/CustomerCreation/customerReportsTab'
-import { ProfileProps } from './types'
+import { CFGuarantorTableViewProp, ProfileProps } from './types'
+import { GuarantorTableView } from '../../../CF/Components/CustomerCreation/GuarantorDetails'
 
 export const Profile = ({
   source,
@@ -132,6 +133,19 @@ export const Profile = ({
                     edit
                     view={false}
                     customerId={fieldData}
+                  />
+                )
+              )
+            })}
+          {activeTab === 'cfGuarantors' &&
+            tabsData[activeTab].map((field, index) => {
+              const fieldData = field.fieldData as CFGuarantorTableViewProp
+              return (
+                Object.keys(fieldData).length > 0 && (
+                  <GuarantorTableView
+                    key={index}
+                    customerId={fieldData.customerId}
+                    guarantors={fieldData.customerGuarantors}
                   />
                 )
               )
