@@ -19,18 +19,6 @@ import Can from '../../Mohassel/config/Can'
 import { FieldProps } from '../Components/Profile/types'
 import { Score } from '../../Mohassel/Components/CustomerCreation/CustomerProfile'
 
-const {
-  companyName,
-  companyCode,
-  taxCardNumber,
-  commercialRegisterNumber,
-  creationDate,
-  customerCode,
-  groupLeaderName,
-  oneBranch,
-  loanOfficer,
-} = local
-
 interface IscoreInfo {
   score?: Score
   getIscore?(customer: Customer): void
@@ -115,17 +103,17 @@ export const getCompanyInfo = ({
 }: CompanyInfo) => {
   return [
     {
-      fieldTitle: companyName,
+      fieldTitle: local.companyName,
       fieldData: company.businessName || '',
       showFieldCondition: true,
     },
     {
-      fieldTitle: companyCode,
+      fieldTitle: local.companyCode,
       fieldData: company.key || '',
       showFieldCondition: true,
     },
     {
-      fieldTitle: oneBranch,
+      fieldTitle: local.oneBranch,
       fieldData: company.branchName || '',
       showFieldCondition: true,
     },
@@ -140,17 +128,17 @@ export const getCompanyInfo = ({
       showFieldCondition: !!score,
     },
     {
-      fieldTitle: taxCardNumber,
+      fieldTitle: local.taxCardNumber,
       fieldData: company.taxCardNumber || '',
       showFieldCondition: true,
     },
     {
-      fieldTitle: commercialRegisterNumber,
+      fieldTitle: local.commercialRegisterNumber,
       fieldData: company.commercialRegisterNumber || '',
       showFieldCondition: true,
     },
     {
-      fieldTitle: creationDate,
+      fieldTitle: local.creationDate,
       fieldData:
         (company.created?.at && getDateAndTime(company.created?.at)) || '',
       showFieldCondition: true,
@@ -161,7 +149,7 @@ export const getCompanyInfo = ({
       showFieldCondition: true,
     },
     {
-      fieldTitle: loanOfficer,
+      fieldTitle: local.loanOfficer,
       fieldData: company.representativeName || '',
       showFieldCondition: true,
     },
@@ -201,17 +189,17 @@ export const getCustomerInfo = ({
   } = customerDetails
   const info: FieldProps[] = [
     {
-      fieldTitle: isLeader ? groupLeaderName : local.name,
+      fieldTitle: isLeader ? local.groupLeaderName : local.name,
       fieldData: customerName || '',
       showFieldCondition: true,
     },
     {
-      fieldTitle: customerCode,
+      fieldTitle: local.customerCode,
       fieldData: key || '',
       showFieldCondition: true,
     },
     {
-      fieldTitle: oneBranch,
+      fieldTitle: local.oneBranch,
       fieldData: branchName || '',
       showFieldCondition: true,
     },
@@ -237,7 +225,7 @@ export const getCustomerInfo = ({
       showFieldCondition: true,
     },
     {
-      fieldTitle: creationDate,
+      fieldTitle: local.creationDate,
       fieldData: created?.at ? timeToDateyyymmdd(created.at) : '',
       showFieldCondition: true,
     },
@@ -304,7 +292,7 @@ export const getCustomerInfo = ({
       showFieldCondition: true,
     },
     {
-      fieldTitle: loanOfficer,
+      fieldTitle: local.loanOfficer,
       fieldData: representativeName || '',
       showFieldCondition: true,
     },

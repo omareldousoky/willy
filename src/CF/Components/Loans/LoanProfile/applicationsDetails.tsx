@@ -11,9 +11,9 @@ import {
   getErrorMessage,
   interestPeriod,
   periodType,
-  timeToArabicDate,
   getRenderDate,
   statusLocale,
+  extractGMTDate,
 } from '../../../../Shared/Services/utils'
 
 interface Props {
@@ -151,7 +151,7 @@ export const LoanDetailsTableView = ({
         {application.issueDate > 0 && (
           <tr>
             <td>{local.loanIssuanceDate}</td>
-            <td>{timeToArabicDate(application.issueDate, false)}</td>
+            <td>{extractGMTDate(application.issueDate)}</td>
           </tr>
         )}
       </tbody>
