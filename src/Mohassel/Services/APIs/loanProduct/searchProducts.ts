@@ -1,9 +1,8 @@
 import { SearchRequest } from '../../../Models/common'
-import axios from '../axios-instance'
+import axios from '../../../../Shared/Services/axiosInstance'
+import { API_BASE_URL } from '../../../../Shared/envConfig'
 
-const { REACT_APP_BASE_URL } = process.env
-
-const searchProductsUrl = `${REACT_APP_BASE_URL}/search/product`
+const searchProductsUrl = `${API_BASE_URL}/search/product`
 export const searchProducts = async (request: SearchRequest) => {
   try {
     const res = await axios.post(searchProductsUrl, request)

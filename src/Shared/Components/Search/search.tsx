@@ -116,9 +116,9 @@ class Search extends Component<SearchProps, SearchState> {
         case 'phoneNumber':
           initialState.phoneNumber = ''
           break
-        case 'type':
+        case 'productType':
           initialState.type =
-            this.props.url === 'product' ? this.props.type : 'micro'
+            this.props.url === 'product' ? this.props.type : ''
           break
         case 'beneficiaryType':
           initialState.type =
@@ -238,7 +238,7 @@ class Search extends Component<SearchProps, SearchState> {
     if (url === 'supervisionsGroups') {
       obj.status = this.props.chosenStatus
     }
-    if (!['application', 'loan'].includes(url)) {
+    if (!['application', 'loan', 'product'].includes(url)) {
       delete obj.type
     } else {
       obj.type = this.props.sme
@@ -904,7 +904,43 @@ class Search extends Component<SearchProps, SearchState> {
                           {[
                             { value: '', text: local.all },
                             { value: 'individual', text: local.individual },
-                            { value: 'week', text: local.group },
+                            { value: 'group', text: local.group },
+                          ].map(({ value, text }) => (
+                            <option key={value} value={value} data-qc={value}>
+                              {text}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </div>
+                    </Col>
+                  )
+                }
+                if (searchKey === 'productType') {
+                  return (
+                    <Col
+                      key={index}
+                      sm={6}
+                      style={{ marginTop: index < 2 ? 0 : 20 }}
+                    >
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.loanType}</p>
+                        <Form.Control
+                          as="select"
+                          className="dropdown-select"
+                          data-qc="loanType"
+                          value={formikProps.values.type}
+                          onChange={(e) => {
+                            formikProps.setFieldValue(
+                              'type',
+                              e.currentTarget.value
+                            )
+                          }}
+                        >
+                          {[
+                            { value: '', text: local.all },
+                            { value: 'micro', text: local.micro },
+                            { value: 'nano', text: local.nano },
+                            { value: 'sme', text: local.sme },
                           ].map(({ value, text }) => (
                             <option key={value} value={value} data-qc={value}>
                               {text}
