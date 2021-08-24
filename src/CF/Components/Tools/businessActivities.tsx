@@ -9,18 +9,18 @@ import Select from 'react-select'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
-import { manageLoanDetailsArray } from './manageLoanDetailsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import {
   CRUDList,
   CrudOption,
 } from '../../../Shared/Components/CRUDList/crudList'
-import ability from '../../config/ability'
+import ability from '../../../Shared/config/ability'
 import {
   createBusinessActivity,
   editBusinessActivity,
   getBusinessSectors,
 } from '../../../Shared/Services/APIs/config'
+import { manageToolsArray } from './manageToolsInitials'
 import { BusinessSector } from '../../../Shared/Models/common'
 
 interface State {
@@ -124,7 +124,7 @@ class BusinessActivities extends Component<{}, State> {
   }
 
   render() {
-    const array = manageLoanDetailsArray()
+    const array = manageToolsArray()
     return (
       <>
         <Loader type="fullscreen" open={this.state.loading} />

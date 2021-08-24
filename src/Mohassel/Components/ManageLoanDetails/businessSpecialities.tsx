@@ -9,11 +9,7 @@ import Select from 'react-select'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
-import {
-  Activities,
-  BusinessSector,
-  manageLoanDetailsArray,
-} from './manageLoanDetailsInitials'
+import { manageLoanDetailsArray } from './manageLoanDetailsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import {
   CRUDList,
@@ -25,6 +21,7 @@ import {
   editBusinessSpeciality,
   getBusinessSectors,
 } from '../../../Shared/Services/APIs/config'
+import { Activities, BusinessSector } from '../../../Shared/Models/common'
 
 interface State {
   businessSectors: Array<BusinessSector>
@@ -158,7 +155,7 @@ class BusinessSpecialities extends Component<{}, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('businessSpecialities')}
+            .indexOf('business-specialities')}
         />
         <div className="d-flex flex-column align-items-center">
           <Form.Group

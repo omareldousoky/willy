@@ -14,8 +14,8 @@ import {
   getErrorMessage,
   interestPeriod,
   periodType,
-  timeToArabicDate,
   getRenderDate,
+  extractGMTDate,
 } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 
@@ -179,7 +179,7 @@ export const LoanDetailsTableView = ({
         </tr>
         <tr>
           <td>{local.visitationDate}</td>
-          <td>{timeToArabicDate(application.visitationDate, false)}</td>
+          <td>{extractGMTDate(application.visitationDate)}</td>
         </tr>
         {application.branchManagerName.length > 0 && (
           <tr>
@@ -190,59 +190,59 @@ export const LoanDetailsTableView = ({
         {application.managerVisitDate > 0 && (
           <tr>
             <td>{local.branchManagerVisitation}</td>
-            <td>{timeToArabicDate(application.managerVisitDate, false)}</td>
+            <td>{extractGMTDate(application.managerVisitDate)}</td>
           </tr>
         )}
         <tr>
           <td>{local.entryDate}</td>
-          <td>{timeToArabicDate(application.entryDate, false)}</td>
+          <td>{extractGMTDate(application.entryDate)}</td>
         </tr>
         {application.reviewedDate > 0 && (
           <tr>
             <td>{local.reviewDate}</td>
-            <td>{timeToArabicDate(application.reviewedDate, false)}</td>
+            <td>{extractGMTDate(application.reviewedDate)}</td>
           </tr>
         )}
         {application.secondReviewDate > 0 && (
           <tr>
             <td>{local.secondReviewDate}</td>
-            <td>{timeToArabicDate(application.secondReviewDate, false)}</td>
+            <td>{extractGMTDate(application.secondReviewDate)}</td>
           </tr>
         )}
         {application.thirdReviewDate > 0 && (
           <tr>
             <td>{local.thirdReviewDate}</td>
-            <td>{timeToArabicDate(application.thirdReviewDate, false)}</td>
+            <td>{extractGMTDate(application.thirdReviewDate)}</td>
           </tr>
         )}
         {application.undoReviewDate > 0 && (
           <tr>
             <td>{local.unreviewDate}</td>
-            <td>{timeToArabicDate(application.undoReviewDate, false)}</td>
+            <td>{extractGMTDate(application.undoReviewDate)}</td>
           </tr>
         )}
         {application.rejectionDate > 0 && (
           <tr>
             <td>{local.decisionDate}</td>
-            <td>{timeToArabicDate(application.rejectionDate, false)}</td>
+            <td>{extractGMTDate(application.rejectionDate)}</td>
           </tr>
         )}
         {application.approvalDate > 0 && (
           <tr>
             <td>{local.loanApprovalDate}</td>
-            <td>{timeToArabicDate(application.approvalDate, false)}</td>
+            <td>{extractGMTDate(application.approvalDate)}</td>
           </tr>
         )}
         {application.creationDate > 0 && (
           <tr>
             <td>{local.loanCreationDate}</td>
-            <td>{timeToArabicDate(application.creationDate, false)}</td>
+            <td>{extractGMTDate(application.creationDate)}</td>
           </tr>
         )}
         {application.issueDate > 0 && (
           <tr>
             <td>{local.loanIssuanceDate}</td>
-            <td>{timeToArabicDate(application.issueDate, false)}</td>
+            <td>{extractGMTDate(application.issueDate)}</td>
           </tr>
         )}
       </tbody>
