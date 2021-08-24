@@ -53,8 +53,8 @@ const OfficerBranchPercentPayment = (props: OfficerPercentPaymentProps) => {
         </thead>
         <tbody>
           {data.branches &&
-            data.branches.map((branch) => (
-              <tr key={branch.branch}>
+            data.branches.map((branch, index) => (
+              <tr key={index}>
                 <td colSpan={3} className="text-right">
                   {branch.branch}
                 </td>

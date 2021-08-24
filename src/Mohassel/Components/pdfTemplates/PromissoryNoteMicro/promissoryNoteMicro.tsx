@@ -1,8 +1,8 @@
 import React from 'react'
 import Tafgeet from 'tafgeetjs'
 import {
-  guarantorOrderLocal,
   numbersToArabic,
+  promissoryNoteGuarantorOrderLocal,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
 import { ApplicationResponse } from '../../../Models/Application'
@@ -104,7 +104,13 @@ const template = (
           {application.guarantors.map((guarantor, i) => (
             <div className="mt-5">
               <p>
-                <u>{guarantorOrderLocal[i && i > 10 ? 'default' : i]}</u>
+                <u>
+                  {
+                    promissoryNoteGuarantorOrderLocal[
+                      i && i > 10 ? 'default' : i
+                    ]
+                  }
+                </u>
               </p>
               <p>الاسم : {guarantor.customerName}</p>
               <p>بطاقة الرقم القومى : {guarantor.nationalId}</p>

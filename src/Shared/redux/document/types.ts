@@ -18,6 +18,7 @@ export interface DocumentState {
 export interface DocumentsType {
   imagesFiles: Document[]
   docName: string
+  type?: string
 }
 export type DocumentsState = Array<DocumentsType>
 export interface Image {
