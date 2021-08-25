@@ -54,10 +54,11 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
   }))
 
   useEffect(() => {
-    const currentType = issuedLoansSearchFilters.type
-    const productType = 'consumerFinance'
+    const previousLoanType = issuedLoansSearchFilters.type
+    const currentLoanType = 'consumerFinance'
 
-    if (!currentType) setIssuedLoansSearchFilters({ type: productType })
+    if (!previousLoanType)
+      setIssuedLoansSearchFilters({ type: currentLoanType })
 
     let query = {
       ...issuedLoansSearchFilters,
@@ -66,7 +67,7 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
       from,
       url: 'loan',
       sort: 'issueDate',
-      type: productType,
+      type: currentLoanType,
     }
     query = removeEmptyArg(query)
     search(query)

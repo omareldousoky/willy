@@ -58,20 +58,20 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
     issuedLoansSearchFilters: state.issuedLoansSearchFilters,
   }))
 
-  const currentType = issuedLoansSearchFilters.type
-  const productType = location.state?.sme
+  const previousLoanType = issuedLoansSearchFilters.type
+  const currentLoanType = location.state?.sme
     ? 'sme'
-    : currentType && currentType !== 'sme'
-    ? currentType
+    : previousLoanType && previousLoanType !== 'sme'
+    ? previousLoanType
     : 'micro'
 
   useEffect(() => {
     let searchFiltersQuery = {}
 
-    if (currentType === productType) {
+    if (previousLoanType === currentLoanType) {
       searchFiltersQuery = issuedLoansSearchFilters
     } else {
-      setIssuedLoansSearchFilters({ type: productType })
+      setIssuedLoansSearchFilters({ type: currentLoanType })
     }
 
     let query = {
@@ -81,7 +81,7 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
       from,
       url: 'loan',
       sort: 'issueDate',
-      type: productType,
+      type: currentLoanType,
     }
 
     query = removeEmptyArg(query)
@@ -315,7 +315,7 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
             </div>
           </div>
           <hr className="dashed-line" />
-          {productType === currentType && (
+          {currentLoanType === previousLoanType && (
             <Search
               searchKeys={searchKeys}
               dropDownKeys={dropDownKeys}
