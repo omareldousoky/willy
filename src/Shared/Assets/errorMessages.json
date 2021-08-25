@@ -558,5 +558,13 @@
   "nano_loan_doc_read_failed": {
     "en": "please make sure nano loan limit document is correct or change it",
     "ar": "برجاء التاكد من صحة ملف الحد الائتماني المرفوع أو تغيريه"
+  },
+  "wrong_cf_status": {
+    "en": "consumer finance status has to be pending",
+    "ar": "حالة الحد الائتماني للعميل خاطئة"
+  },
+  "duplicate_phone_number": {
+    "en": "duplicated phone number",
+    "ar": "رقم الهاتف موجود بالفعل"
   }
 }
