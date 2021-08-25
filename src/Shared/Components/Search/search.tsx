@@ -283,9 +283,8 @@ const Search: FunctionComponent<SearchProps> = ({
     }
     if (!['application', 'loan', 'product'].includes(url)) {
       delete obj.type
-    } else {
+    } else if (url !== 'product')
       obj.type = sme ? 'sme' : obj.type || (cf ? 'consumerFinance' : 'micro')
-    }
 
     if (obj.lastDates) {
       const fromDate = dayjs().subtract(1, obj.lastDates)
