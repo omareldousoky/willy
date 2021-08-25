@@ -100,7 +100,7 @@ export const searchFilters = (obj?: Record<string, any>) => {
   }
 }
 
-export const issuedLoansSearchFilters = (obj?: Record<string, any>) => {
+export const issuedLoansSearchFilters = (obj: Record<string, any>) => {
   return (dispatch) => {
     dispatch({ type: 'SET_ISSUED_LOANS_SEARCH_FILTERS', payload: obj })
   }

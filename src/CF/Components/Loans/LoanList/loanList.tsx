@@ -35,7 +35,7 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
 
   const { search, setIssuedLoansSearchFilters } = {
     search: (data) => dispatch(searchAction(data)),
-    setIssuedLoansSearchFilters: (data?: Record<string, any>) =>
+    setIssuedLoansSearchFilters: (data: Record<string, any>) =>
       dispatch(issuedLoansSearchFiltersAction(data)),
   }
 

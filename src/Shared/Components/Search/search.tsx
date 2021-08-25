@@ -68,7 +68,7 @@ const Search: FunctionComponent<SearchProps> = ({
     setLoading,
   } = {
     search: (data) => dispatch(searchAction(data)),
-    setIssuedLoansSearchFilters: (data?: Record<string, any>) =>
+    setIssuedLoansSearchFilters: (data: Record<string, any>) =>
       dispatch(setIssuedLoansSearchFiltersAction(data)),
     setSearchFilters: (data?: Record<string, any>) =>
       dispatch(setSearchFiltersAction(data)),
