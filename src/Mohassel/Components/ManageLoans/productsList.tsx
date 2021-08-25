@@ -35,7 +35,6 @@ interface Props extends RouteComponentProps {
 interface State {
   loading: boolean
   manageLoansTabs: Tab[]
-  totalCount: number
   size: number
   from: number
 }
@@ -56,7 +55,6 @@ class LoanProducts extends Component<Props, State> {
       manageLoansTabs: [],
       size: 10,
       from: 0,
-      totalCount: 0,
     }
     this.mappers = [
       {
@@ -88,7 +86,10 @@ class LoanProducts extends Component<Props, State> {
         title: local.actions,
         key: 'actions',
         render: (data) => (
-          <ActionsIconGroup currentId={data.id} actions={this.productActions} />
+          <ActionsIconGroup
+            currentId={data._id}
+            actions={this.productActions}
+          />
         ),
       },
     ]
@@ -188,7 +189,7 @@ class LoanProducts extends Component<Props, State> {
                   {local.loanProducts}
                 </Card.Title>
                 <span className="text-muted ml-2">
-                  {local.noOfLoanProducts + ` (${this.state.totalCount})`}
+                  {local.noOfLoanProducts + ` (${this.props.totalCount})`}
                 </span>
               </div>
               <div>
@@ -225,6 +226,11 @@ class LoanProducts extends Component<Props, State> {
                 data={this.props.data}
                 size={this.state.size}
                 from={this.state.from}
+                changeNumber={(key: string, number: number) => {
+                  this.setState({ [key]: number } as any, () =>
+                    this.getProducts()
+                  )
+                }}
               />
             )}
           </Card.Body>
