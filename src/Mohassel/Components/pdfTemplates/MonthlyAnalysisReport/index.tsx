@@ -5,7 +5,6 @@ import { MonthlyAnalysisReportProps } from './types'
 import { Header } from '../pdfTemplateCommon/header'
 
 const MonthlyAnalysisReport = ({
-  date,
   monthlyAnalysis1,
   monthlyAnalysis2,
   monthlyAnalysis2Members,
