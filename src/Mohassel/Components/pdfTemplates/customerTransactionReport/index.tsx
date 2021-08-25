@@ -13,7 +13,7 @@ interface CustomerTransactionsProps {
   result: CustomerApplicationTransactionsResponse
 }
 
-const CustomerTransactionReport = (props: CustomerTransactionsProps) => {
+export const CustomerTransactionReport = (props: CustomerTransactionsProps) => {
   const renderHeader = (result) => {
     return (
       <div style={{ display: 'flex' }}>
@@ -148,5 +148,3 @@ const CustomerTransactionReport = (props: CustomerTransactionsProps) => {
   }
   return renderData(props)
 }
-
-export default CustomerTransactionReport
