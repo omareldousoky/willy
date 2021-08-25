@@ -212,12 +212,7 @@ class CustomersList extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={[
-                'keyword',
-                'dateFromTo',
-                'governorate',
-                'phoneNumber',
-              ]}
+              searchKeys={['keyword', 'dateFromTo', 'governorate']}
               dropDownKeys={[
                 'name',
                 'nationalId',
