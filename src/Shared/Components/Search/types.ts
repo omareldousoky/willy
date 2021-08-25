@@ -16,6 +16,7 @@ export interface SearchInitialFormikState {
   type?: string
   warningType?: LegalWarningType | ''
   phoneNumber?: string
+  consumerFinanceLimitStatus?: string
 }
 
 export interface SearchProps {

@@ -11,3 +11,13 @@ export const getCustomerLimitFromMonthlyIncome = async (income: number) => {
     return { status: 'error', error: error.response.data }
   }
 }
+
+export const approveCustomerCFLimit = async (customerId: string) => {
+  const url = API_BASE_URL + `/customer/approve-cf-limit/${customerId}`
+  try {
+    const res = await axios.post(url)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
+}
