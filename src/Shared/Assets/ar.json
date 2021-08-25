@@ -1160,5 +1160,13 @@
   "addEditOrRemoveGuarantor": "إضافة / تعديل ضمان",
   "entitledToSign": "من له حق التوقيع",
   "searchPlaceholder": " البحث بإسم الفرع او برقم البطاقة أو الكود او رقم التليفون",
-  "returnItem": "استرجاع المنتج"
+  "returnItem": "استرجاع المنتج",
+  "DBRPercentLowStart": "DBR low start",
+  "DBRPercentMidStart": "DBR mid start",
+  "DBRPercentHighStart": "DBR high start",
+  "DBRPercentLow": "نسبة DBR low",
+  "DBRPercentMid": "نسبة DBR mid",
+  "DBRPercentHigh": "نسبة DBR high",
+  "globalCFMin": "CF min",
+  "globalCFMax": "CF max"
 }
