@@ -9,37 +9,46 @@ import Select from 'react-select'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
-import { manageLoanDetailsArray } from './manageLoanDetailsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import {
   CRUDList,
   CrudOption,
 } from '../../../Shared/Components/CRUDList/crudList'
-import ability from '../../config/ability'
+import ability from '../../../Shared/config/ability'
 import {
-  createBusinessActivity,
-  editBusinessActivity,
+  createBusinessSpeciality,
+  editBusinessSpeciality,
   getBusinessSectors,
 } from '../../../Shared/Services/APIs/config'
-import { BusinessSector } from '../../../Shared/Models/common'
+import { manageToolsArray } from './manageToolsInitials'
+import { Activities, BusinessSector } from '../../../Shared/Models/common'
 
 interface State {
-  sector: BusinessSector
   businessSectors: Array<BusinessSector>
-  businessActivities: Array<CrudOption>
+  sector: BusinessSector
+  businessActivities: Array<Activities>
+  activity: Activities
+  businessSpecialities: Array<CrudOption>
   loading: boolean
 }
-class BusinessActivities extends Component<{}, State> {
+class BusinessSpecialities extends Component<{}, State> {
   constructor(props) {
     super(props)
     this.state = {
+      businessSectors: [],
       sector: {
         i18n: { ar: '' },
         id: '',
         activities: [],
       },
-      businessSectors: [],
       businessActivities: [],
+      activity: {
+        i18n: { ar: '' },
+        id: '',
+        specialties: [],
+        active: false,
+      },
+      businessSpecialities: [],
       loading: false,
     }
   }
@@ -64,24 +73,32 @@ class BusinessActivities extends Component<{}, State> {
   }
 
   prepareActivites(id) {
-    const sector = this.state.businessSectors.filter(
-      (sctr) => sctr.id === id
-    )[0]
-    const activities = sector.activities.map((activity) => {
-      return {
-        name: activity.i18n.ar,
-        id: activity.id ? activity.id.toString() : '0',
-        activated: !!activity.active,
-        disabledUi: true,
-      }
-    })
-    this.setState({ businessActivities: activities.reverse() })
+    const [sector] = this.state.businessSectors.filter((sctr) => sctr.id === id)
+    this.setState({ businessActivities: sector.activities })
   }
 
-  async editBusinessActivity(id, active) {
+  prepareSpecialties(id) {
+    const activity = this.state.businessActivities.filter(
+      (act) => act.id === id
+    )[0]
+    const specialties = activity.specialties
+      ? activity.specialties.map((specialty) => {
+          return {
+            name: specialty.businessSpecialtyName.ar,
+            id: specialty.id ? specialty.id.toString() : '0',
+            activated: !!specialty.active,
+            disabledUi: true,
+          }
+        })
+      : []
+    this.setState({ businessSpecialities: specialties })
+  }
+
+  async editBusinessSpeciality(id, active) {
     this.setState({ loading: true })
-    const res = await editBusinessActivity({
-      BusinessActivityId: Number(id),
+    const res = await editBusinessSpeciality({
+      businessSpecialtyId: Number(id),
+      BusinessActivityId: this.state.activity.id,
       BusinessSectorId: this.state.sector.id,
       active,
     })
@@ -93,6 +110,7 @@ class BusinessActivities extends Component<{}, State> {
         async () => {
           await this.getBusinessSectors()
           await this.prepareActivites(this.state.sector.id)
+          await this.prepareSpecialties(this.state.activity.id)
         }
       )
     } else
@@ -101,11 +119,12 @@ class BusinessActivities extends Component<{}, State> {
       )
   }
 
-  async newBusinessActivity(name) {
+  async newBusinessSpeciality(name) {
     this.setState({ loading: true })
-    const res = await createBusinessActivity({
-      BusinessActivityName: name,
-      BusinessSectorId: this.state.sector.id,
+    const res = await createBusinessSpeciality({
+      businessSpecialtyName: name,
+      businessSectorId: this.state.sector.id,
+      businessActivityId: this.state.activity.id,
     })
     if (res.status === 'success') {
       this.setState(
@@ -115,6 +134,7 @@ class BusinessActivities extends Component<{}, State> {
         async () => {
           await this.getBusinessSectors()
           await this.prepareActivites(this.state.sector.id)
+          await this.prepareSpecialties(this.state.activity.id)
         }
       )
     } else
@@ -124,18 +144,18 @@ class BusinessActivities extends Component<{}, State> {
   }
 
   render() {
-    const array = manageLoanDetailsArray()
+    const array = manageToolsArray()
     return (
       <>
         <Loader type="fullscreen" open={this.state.loading} />
         <HeaderWithCards
-          header={local.businessActivities}
+          header={local.businessSpecialities}
           array={array}
           active={array
             .map((item) => {
               return item.icon
             })
-            .indexOf('business-activities')}
+            .indexOf('business-specialities')}
         />
         <div className="d-flex flex-column align-items-center">
           <Form.Group
@@ -164,20 +184,48 @@ class BusinessActivities extends Component<{}, State> {
               />
             </Col>
           </Form.Group>
+          {this.state.sector.id.length > 0 && (
+            <Form.Group
+              as={Row}
+              controlId="businessActivity"
+              style={{ width: '60%', marginTop: '1rem' }}
+            >
+              <Form.Label style={{ textAlign: 'right' }} column sm={4}>
+                {local.businessActivity}
+              </Form.Label>
+              <Col sm={6}>
+                <Select
+                  name="businessActivity"
+                  data-qc="businessActivity"
+                  value={this.state.activity}
+                  enableReinitialize={false}
+                  onChange={(event: any) => {
+                    this.setState({ activity: event }, () =>
+                      this.prepareSpecialties(event.id)
+                    )
+                  }}
+                  type="text"
+                  getOptionLabel={(option) => option.i18n.ar}
+                  getOptionValue={(option) => option.id}
+                  options={this.state.businessActivities}
+                />
+              </Col>
+            </Form.Group>
+          )}
         </div>
-        {this.state.sector.id.length > 0 && (
+        {this.state.activity.id.toString().length > 0 && (
           <CRUDList
-            source="businessActivities"
-            options={this.state.businessActivities}
+            source="businessSpecialities"
+            options={this.state.businessSpecialities}
             newOption={(name) => {
-              this.newBusinessActivity(name)
+              this.newBusinessSpeciality(name)
             }}
             updateOption={(id, name, active) => {
-              this.editBusinessActivity(id, active)
+              this.editBusinessSpeciality(id, active)
             }}
             disableNameEdit
-            canCreate={ability.can('createBusinessActivity', 'config')}
-            canEdit={ability.can('updateBusinessActivity', 'config')}
+            canCreate={ability.can('createBusinessSpecialty', 'config')}
+            canEdit={ability.can('updateBusinessSpecialty', 'config')}
           />
         )}
       </>
@@ -185,4 +233,4 @@ class BusinessActivities extends Component<{}, State> {
   }
 }
 
-export default BusinessActivities
+export default BusinessSpecialities

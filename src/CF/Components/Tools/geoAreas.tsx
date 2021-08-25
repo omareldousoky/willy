@@ -148,7 +148,7 @@ class GeoAreas extends Component<{}, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('branchAreas')}
+            .indexOf('branch-areas')}
         />
         <Card className="main-card">
           <div
