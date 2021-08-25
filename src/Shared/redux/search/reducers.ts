@@ -24,8 +24,6 @@ export const issuedLoansSearchFiltersReducer = (state = {}, action) => {
   switch (action.type) {
     case 'SET_ISSUED_LOANS_SEARCH_FILTERS':
       return { ...action.payload }
-    case 'RESET_ISSUED_LOANS_SEARCH_FILTERS':
-      return {}
     default:
       return state
   }
