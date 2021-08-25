@@ -201,6 +201,7 @@ export const BranchesDropDown = (props: BranchDropDownProps) => {
         loadOptions={getBranches}
         cacheOptions
         defaultOptions
+        isLoading={props.value && !options.length}
       />
     </div>
   )
