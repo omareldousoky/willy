@@ -914,3 +914,16 @@ export const getIndexOfGuarantorInAr = (index: number) => {
       return ''
   }
 }
+
+export const loanChipStatusClass: Record<string, string> = {
+  paid: 'paid',
+  issued: 'unpaid',
+  pending: 'pending',
+  canceled: 'canceled',
+  default: '',
+}
+
+// https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_tolocalestring_date_all
+// en-CA: yyyy-mm-dd
+export const getFormattedLocalDate = (timestamp: number, locale = 'en-CA') =>
+  new Date(timestamp).toLocaleDateString(locale)

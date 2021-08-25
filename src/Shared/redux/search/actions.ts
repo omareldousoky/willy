@@ -95,18 +95,16 @@ export const search = (request) => {
   }
 }
 
-export const searchFilters = (obj) => {
+export const searchFilters = (obj?: Record<string, any>) => {
   return (dispatch) => {
-    if (Object.keys(obj).length === 0)
+    if (!obj || Object.keys(obj).length === 0)
       dispatch({ type: 'RESET_SEARCH_FILTERS', payload: obj })
     else dispatch({ type: 'SET_SEARCH_FILTERS', payload: obj })
   }
 }
 
-export const issuedLoansSearchFilters = (obj) => {
+export const issuedLoansSearchFilters = (obj: Record<string, any>) => {
   return (dispatch) => {
-    if (Object.keys(obj).length === 0)
-      dispatch({ type: 'RESET_ISSUED_LOANS_SEARCH_FILTERS', payload: obj })
-    else dispatch({ type: 'SET_ISSUED_LOANS_SEARCH_FILTERS', payload: obj })
+    dispatch({ type: 'SET_ISSUED_LOANS_SEARCH_FILTERS', payload: obj })
   }
 }
