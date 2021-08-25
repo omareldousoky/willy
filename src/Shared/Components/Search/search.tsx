@@ -19,9 +19,9 @@ import {
 import { BranchesDropDown } from '../dropDowns/allDropDowns'
 import {
   getFullCustomerKey,
+  getFormattedLocalDate,
   parseJwt,
   removeEmptyArg,
-  timeToDateyyymmdd,
 } from '../../Services/utils'
 import { getCookie } from '../../Services/getCookie'
 import { loading as loadingAction } from '../../redux/loading/actions'
@@ -53,6 +53,7 @@ const Search: FunctionComponent<SearchProps> = ({
   submitClassName,
 }) => {
   const isLoanUrl = url === 'loan'
+  const isIssuedLoansSearch = url === 'loan' && !fundSource
   const isApplicationUrl = url === 'application'
   const isCibUrl = url === 'cib'
 
@@ -80,7 +81,11 @@ const Search: FunctionComponent<SearchProps> = ({
   const getDropDownValue = () => {
     if (url === 'actionLogs') return 'authorName'
     // get key used for keyword
-    if (issuedLoansSearchFilters && issuedLoansSearchFilters.keyword) {
+    if (
+      isIssuedLoansSearch &&
+      issuedLoansSearchFilters &&
+      issuedLoansSearchFilters.keyword
+    ) {
       return (
         Object.keys(issuedLoansSearchFilters).find((key) =>
           dropDownKeys?.includes(key)
@@ -132,15 +137,15 @@ const Search: FunctionComponent<SearchProps> = ({
     searchKeys.forEach((searchkey) => {
       switch (searchkey) {
         case 'dateFromTo':
-          initialState.fromDate = isLoanUrl
-            ? timeToDateyyymmdd(issuedLoansSearchFilters.fromDate)
+          initialState.fromDate = isIssuedLoansSearch
+            ? getFormattedLocalDate(issuedLoansSearchFilters.fromDate)
             : ''
-          initialState.toDate = isLoanUrl
-            ? timeToDateyyymmdd(issuedLoansSearchFilters.toDate)
+          initialState.toDate = isIssuedLoansSearch
+            ? getFormattedLocalDate(issuedLoansSearchFilters.toDate)
             : ''
           break
         case 'keyword':
-          initialState.keyword = isLoanUrl
+          initialState.keyword = isIssuedLoansSearch
             ? issuedLoansSearchFilters[dropDownValue]
             : ''
           break
@@ -148,27 +153,31 @@ const Search: FunctionComponent<SearchProps> = ({
           initialState.governorate = ''
           break
         case 'status':
-          initialState.status = isLoanUrl ? issuedLoansSearchFilters.status : ''
+          initialState.status = isIssuedLoansSearch
+            ? issuedLoansSearchFilters.status
+            : ''
           break
         case 'branch':
-          initialState.branchId = isLoanUrl
+          initialState.branchId = isIssuedLoansSearch
             ? issuedLoansSearchFilters.branchId
             : ''
           break
         case 'status-application':
-          initialState.status = isLoanUrl ? issuedLoansSearchFilters.status : ''
+          initialState.status = isIssuedLoansSearch
+            ? issuedLoansSearchFilters.status
+            : ''
           break
         case 'review-application':
           initialState.status =
             url === 'application' ? issuedLoansSearchFilters.status : ''
           break
         case 'doubtful':
-          initialState.isDoubtful = isLoanUrl
+          initialState.isDoubtful = isIssuedLoansSearch
             ? issuedLoansSearchFilters.isDoubtful
             : false
           break
         case 'writtenOff':
-          initialState.isWrittenOff = isLoanUrl
+          initialState.isWrittenOff = isIssuedLoansSearch
             ? issuedLoansSearchFilters.isWrittenOff
             : false
           break
@@ -176,7 +185,7 @@ const Search: FunctionComponent<SearchProps> = ({
           initialState.printed = false
           break
         case 'loanType':
-          initialState.type = isLoanUrl
+          initialState.type = isIssuedLoansSearch
             ? issuedLoansSearchFilters.type
             : 'micro'
           break
@@ -220,10 +229,11 @@ const Search: FunctionComponent<SearchProps> = ({
       from,
       [dropDownValue]: values.keyword,
     }
+
     if (Object.getOwnPropertyDescriptor(obj, 'fromDate'))
       obj.fromDate = new Date(obj.fromDate).setHours(0, 0, 0, 0).valueOf()
     if (Object.getOwnPropertyDescriptor(obj, 'toDate'))
-      obj.toDate = new Date(obj.toDate).setHours(23, 59, 59, 59).valueOf()
+      obj.toDate = new Date(obj.toDate).setHours(23, 59, 59, 999).valueOf()
     if (roleId) obj.roleId = roleId
     obj.from = 0
     if (obj.key) obj.key = Number.isNaN(Number(obj.key)) ? 10 : Number(obj.key)
@@ -246,8 +256,7 @@ const Search: FunctionComponent<SearchProps> = ({
     }
     if (status) obj.status = status
     if (fundSource) obj.fundSource = fundSource
-    if (isLoanUrl) {
-      // reset first, then set & keep type
+    if (isIssuedLoansSearch) {
       setIssuedLoansSearchFilters({
         ...obj,
         type: obj.type || issuedLoansSearchFilters.type,
@@ -296,7 +305,7 @@ const Search: FunctionComponent<SearchProps> = ({
 
     delete obj.keyword
     if (setFrom) setFrom(0)
-    if (!isLoanUrl) setSearchFilters(obj)
+    if (!isIssuedLoansSearch) setSearchFilters(obj)
     const searchQuery = {
       ...obj,
       from: 0,
