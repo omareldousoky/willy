@@ -15,6 +15,7 @@ import {
   getRenderDate,
   extractGMTDate,
 } from '../../../../Shared/Services/utils'
+import { getLoanUsage } from '../../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
 
 interface Props {
   application: any
@@ -156,6 +157,147 @@ export const LoanDetailsTableView = ({
         )}
       </tbody>
     </Table>
+  )
+}
+// this is used in rescheduling
+export const LoanDetailsBoxView = ({ application }: Props) => {
+  const [loanUse, changeUse] = useState('')
+
+  async function getLoanUsages() {
+    const res = await getLoanUsage()
+    if (res.status === 'success') {
+      const uses = res.body.usages
+      const value = uses.find((use) => use.id === application.usage).name
+      changeUse(value)
+    } else {
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      return ''
+    }
+  }
+  useEffect(() => {
+    getLoanUsages()
+  }, [])
+  return (
+    <Form>
+      <Form.Row>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>
+            {local.productName}
+          </Form.Label>
+          <Form.Label>{application.product.productName}</Form.Label>
+        </Form.Group>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>{local.currency}</Form.Label>
+          <Form.Label>{currency(application.product.currency)} </Form.Label>
+        </Form.Group>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>
+            {local.calculationFormulaId}
+          </Form.Label>
+          <Form.Label>{application.product.calculationFormula.name}</Form.Label>
+        </Form.Group>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>{local.interest}</Form.Label>
+          <Form.Label>
+            {application.product.interest +
+              ' ' +
+              interestPeriod(application.product.interestPeriod)}
+          </Form.Label>
+        </Form.Group>
+      </Form.Row>
+      <Form.Row>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>
+            {local.inAdvanceFees}
+          </Form.Label>
+          <Form.Label>{application.product.inAdvanceFees} </Form.Label>
+        </Form.Group>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>
+            {local.periodLengthEvery}
+          </Form.Label>
+          <Form.Label>
+            {application.product.periodLength +
+              ' ' +
+              periodType(application.product.periodType)}
+          </Form.Label>
+        </Form.Group>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>
+            {local.gracePeriod}
+          </Form.Label>
+          <Form.Label>{application.product.gracePeriod} </Form.Label>
+        </Form.Group>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>
+            {local.pushPayment}
+          </Form.Label>
+          <Form.Label>{application.product.pushPayment} </Form.Label>
+        </Form.Group>
+      </Form.Row>
+      <Form.Row>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>
+            {local.noOfInstallments}
+          </Form.Label>
+          <Form.Label>{application.product.noOfInstallments} </Form.Label>
+        </Form.Group>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>
+            {local.principal}
+          </Form.Label>
+          <Form.Label>{application.principal} </Form.Label>
+        </Form.Group>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>
+            {local.applicationFee}
+          </Form.Label>
+          <Form.Label>{application.product.applicationFee} </Form.Label>
+        </Form.Group>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>
+            {local.adminFees}
+          </Form.Label>
+          <Form.Label>{application.product.adminFees} </Form.Label>
+        </Form.Group>
+      </Form.Row>
+      <Form.Row>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>
+            {local.entryDate}
+          </Form.Label>
+          <Form.Label>{getRenderDate(application.entryDate)} </Form.Label>
+        </Form.Group>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>{local.usage}</Form.Label>
+          <Form.Label>{loanUse} </Form.Label>
+        </Form.Group>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>
+            {local.representative}
+          </Form.Label>
+          <Form.Label>
+            {application.product.beneficiaryType === 'group'
+              ? application.group.individualsInGroup.find(
+                  (member) => member.type === 'leader'
+                ).customer.representativeName
+              : application.customer.representativeName}
+          </Form.Label>
+        </Form.Group>
+        <Form.Group as={Col} md="3" className="d-flex flex-column">
+          <Form.Label style={{ color: '#6e6e6e' }}>
+            {application.product.type === 'sme'
+              ? local.researcher
+              : local.enquiror}
+          </Form.Label>
+          <Form.Label>
+            {application.product.type === 'sme'
+              ? application.researcherName
+              : application.enquirerName}
+          </Form.Label>
+        </Form.Group>
+      </Form.Row>
+    </Form>
   )
 }
 // this is used in the customer Card/status

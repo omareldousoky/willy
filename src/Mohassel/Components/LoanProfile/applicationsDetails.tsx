@@ -7,7 +7,6 @@ import local from '../../../Shared/Assets/ar.json'
 import { englishToArabic } from '../../Services/statusLanguage'
 import { GuarantorTableView } from './guarantorDetails'
 import { getLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
-import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
 import {
   beneficiaryType,
   currency,
@@ -18,6 +17,7 @@ import {
   extractGMTDate,
 } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
+import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
 
 interface Props {
   application: any
