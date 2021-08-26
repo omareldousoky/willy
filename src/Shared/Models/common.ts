@@ -17,3 +17,22 @@ export interface Trace {
   created: Signature
   updated: Signature
 }
+
+export interface Specialty {
+  businessSpecialtyName: { ar: string }
+  id: string
+  active: boolean
+}
+
+export interface Activities {
+  i18n: { ar: string }
+  id: string
+  specialties: Array<Specialty>
+  active: boolean
+}
+
+export interface BusinessSector {
+  i18n: { ar: string }
+  id: string
+  activities: Array<Activities>
+}

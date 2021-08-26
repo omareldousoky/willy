@@ -73,8 +73,8 @@ import { legalWarningRoute } from '../Components/LegalWarnings/routes'
 const appRoutes = [
   {
     path: '/',
-    label: local.mohassel,
-    render: () => <Landing appName={local.mohassel} />,
+    label: local.tasaheel,
+    render: () => <Landing appName={local.tasaheel} />,
     routes: [
       {
         path: '/customers',

@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
 import Swal from 'sweetalert2'
+import dayjs from 'dayjs'
 import local from '../../../../Shared/Assets/ar.json'
 import { LtsIcon } from '../../../../Shared/Components'
 import { Loader } from '../../../../Shared/Components/Loader'
@@ -79,11 +80,15 @@ const CreditInquiryRequests = () => {
     setLoading(true)
     setSelectedReport(null)
 
+    const { fromDate, toDate, branches, creditInquiryStatus } = values
+    const startDate = dayjs(fromDate).startOf('day').valueOf()
+    const endDate = dayjs(toDate).endOf('day').valueOf()
+
     const excelRequestModel = {
-      startDate: new Date(values.fromDate).valueOf(),
-      endDate: new Date(values.toDate).valueOf(),
-      branch: values.branches?._id,
-      status: values.creditInquiryStatus,
+      startDate,
+      endDate,
+      branch: branches?._id,
+      status: creditInquiryStatus,
     }
 
     const res = await selectedReport?.handleExcel.post(excelRequestModel)

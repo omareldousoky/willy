@@ -6,23 +6,6 @@ import { Loader } from '../../../Shared/Components/Loader'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { getGovernorates } from '../../../Shared/Services/APIs/config'
 
-interface Village {
-  villageName: { ar: string }
-  villageLegacyCode: number
-}
-
-interface District {
-  districtName: { ar: string }
-  districtLegacyCode: number
-  villages: Array<Village>
-}
-
-interface Governorate {
-  governorateName: { ar: string }
-  governorateLegacyCode: number
-  districts: Array<District>
-}
-
 interface State {
   governoratesOptions: any[]
   governorate: { label: string; value: number }

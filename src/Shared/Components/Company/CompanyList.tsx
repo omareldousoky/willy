@@ -4,7 +4,7 @@ import { useDispatch, connect } from 'react-redux'
 import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
-import * as local from '../../Assets/ar.json'
+import local from '../../Assets/ar.json'
 import ability from '../../../Mohassel/config/ability'
 import { search, searchFilters } from '../../redux/search/actions'
 import {
@@ -34,20 +34,6 @@ const List = ({
 }: CompanyListProps) => {
   const [from, setFrom] = useState<number>(0)
   const [size, setSize] = useState<number>(10)
-  const {
-    actions,
-    companies,
-    companyCode,
-    companyName,
-    commercialRegisterNumber,
-    creationDate,
-    editCompany,
-    newCompany,
-    noOfCompanies,
-    searchCompanyList,
-    taxCardNumber,
-    viewCompany,
-  } = local
 
   const history = useHistory()
   const dispatch = useDispatch()
@@ -89,7 +75,7 @@ const List = ({
   }, [])
   const companyActions: ActionWithIcon[] = [
     {
-      actionTitle: editCompany,
+      actionTitle: local.editCompany,
       actionIcon: 'edit',
 
       actionPermission:
@@ -98,7 +84,7 @@ const List = ({
       actionOnClick: (id) => history.push('/company/edit-company', { id }),
     },
     {
-      actionTitle: viewCompany,
+      actionTitle: local.viewCompany,
       actionIcon: 'view',
 
       actionPermission: ability.can('getCustomer', 'customer'),
@@ -107,34 +93,34 @@ const List = ({
   ]
   const tableMapper: TableMapperItem[] = [
     {
-      title: companyCode,
+      title: local.companyCode,
       key: 'customerCode',
       render: (row) => row.key,
     },
     {
-      title: companyName,
+      title: local.companyName,
       sortable: true,
       key: 'name',
       render: (row) => row.businessName,
     },
     {
-      title: taxCardNumber,
+      title: local.taxCardNumber,
       key: 'taxCardNumber',
       render: (row) => row.taxCardNumber,
     },
     {
-      title: commercialRegisterNumber,
+      title: local.commercialRegisterNumber,
       key: 'commercialRegisterNumber',
       render: (row) => row.commercialRegisterNumber,
     },
     {
-      title: creationDate,
+      title: local.creationDate,
       sortable: true,
       key: 'createdAt',
       render: (row) => (row.created?.at ? getDateAndTime(row.created?.at) : ''),
     },
     {
-      title: actions,
+      title: local.actions,
       key: 'actions',
       // eslint-disable-next-line react/display-name
       render: (row) => (
@@ -146,7 +132,7 @@ const List = ({
   return (
     <>
       <HeaderWithCards
-        header={companies}
+        header={local.companies}
         array={manageCompaniesArray()}
         active={0}
       />
@@ -156,10 +142,10 @@ const List = ({
           <div className="custom-card-header">
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                {companies}
+                {local.companies}
               </Card.Title>
               <span className="text-muted">
-                {noOfCompanies + ` (${totalCount || 0})`}
+                {local.noOfCompanies + ` (${totalCount || 0})`}
               </span>
             </div>
             <div>
@@ -170,7 +156,7 @@ const List = ({
                   }}
                   className="big-button"
                 >
-                  {newCompany}
+                  {local.newCompany}
                 </Button>
               </Can>
             </div>
@@ -186,7 +172,7 @@ const List = ({
               'code',
               'customerShortenedCode',
             ]}
-            searchPlaceholder={searchCompanyList}
+            searchPlaceholder={local.searchCompanyList}
             url="customer"
             from={from}
             size={size}

@@ -1,0 +1,11 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Start pre_build...
+  build:
+    commands:
+      - npm i
+      - npm run type-check
+      - npm run build

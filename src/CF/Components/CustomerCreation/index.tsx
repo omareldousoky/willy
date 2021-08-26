@@ -139,6 +139,8 @@ interface State {
   isGuarantor: boolean
   oldRepresentative: string
   branchId: string
+  globalCFMax?: number
+  globalCFMin?: number
 }
 
 class CustomerCreation extends Component<Props, State> {
@@ -174,6 +176,8 @@ class CustomerCreation extends Component<Props, State> {
       selectedCustomer: {},
       oldRepresentative: '',
       branchId: '',
+      globalCFMax: 100000,
+      globalCFMin: 3000,
     }
   }
 
@@ -187,8 +191,10 @@ class CustomerCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const limitRes = await getCustomerLimitFromMonthlyIncome(income)
     if (limitRes.status === 'success') {
-      this.setState({ loading: false })
-      return limitRes.body.maximumCFLimit
+      const { maximumCFLimit, globalCFMin, globalCFMax } = limitRes.body
+      this.setState({ loading: false, globalCFMin, globalCFMax })
+
+      return maximumCFLimit
     }
     this.setState({ loading: false })
     Swal.fire('Error !', getErrorMessage(limitRes.error.error), 'error')
@@ -479,7 +485,10 @@ class CustomerCreation extends Component<Props, State> {
         enableReinitialize
         initialValues={this.state.step1}
         onSubmit={this.submit}
-        validationSchema={customerCreationValidationStepOne}
+        validationSchema={customerCreationValidationStepOne(
+          this.state.globalCFMin,
+          this.state.globalCFMax
+        )}
         validateOnBlur
         validateOnChange
       >
@@ -494,6 +503,9 @@ class CustomerCreation extends Component<Props, State> {
               edit={this.props.edit}
               hasLoan={this.state.hasLoan}
               isGuarantor={this.state.isGuarantor}
+              consumerFinanceLimitStatus={
+                this.state.selectedCustomer.consumerFinanceLimitStatus
+              }
             />
           )
         }}
