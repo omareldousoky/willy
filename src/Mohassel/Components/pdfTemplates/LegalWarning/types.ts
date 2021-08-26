@@ -1,7 +1,7 @@
 import {
   LegalWarningResponse,
   LegalWarningType,
-} from '../../../Models/LegalAffairs'
+} from '../../../../Shared/Models/LegalAffairs'
 
 export interface LegalWarningTemplate {
   showDateAndTime: boolean

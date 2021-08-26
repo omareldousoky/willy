@@ -36,3 +36,18 @@ export interface BusinessSector {
   id: string
   activities: Array<Activities>
 }
+export interface SearchRequest {
+  from: number
+  size: number
+  order?: 'asc' | 'desc'
+  fromDate?: number
+  toDate?: number
+  name?: string
+  nationalId?: string
+  key?: number
+  url?: string // for FE ONLY
+}
+
+export interface PaginatedResponse {
+  totalCount: number
+}

@@ -61,6 +61,11 @@ export const CfNavbar = () => {
             {local.halan}
           </Nav.Link>
         )}
+        {ability.can('getDefaultingCustomer', 'legal') && (
+          <Nav.Link onClick={() => history.push('/legal-affairs/late-list')}>
+            {local.legalAffairs}
+          </Nav.Link>
+        )}
       </Nav>
     </Navbar.Collapse>
   )

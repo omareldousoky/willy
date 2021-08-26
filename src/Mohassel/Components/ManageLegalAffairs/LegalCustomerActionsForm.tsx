@@ -20,7 +20,7 @@ import {
   isSettlementReviewed,
 } from './utils'
 import { Loader } from '../../../Shared/Components/Loader'
-import { CourtSession } from '../../Models/LegalAffairs'
+import { CourtSession } from '../../../Shared/Models/LegalAffairs'
 
 const LegalActionsForm: FunctionComponent = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)

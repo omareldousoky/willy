@@ -15,7 +15,7 @@ import {
   LegalWarningResponse,
   LegalWarningsSearchRequest,
   LegalWarningType,
-} from '../../Models/LegalAffairs'
+} from '../../../Shared/Models/LegalAffairs'
 import { timeToArabicDate } from '../../../Shared/Services/utils'
 import ability from '../../config/ability'
 import { search as searchAction } from '../../../Shared/redux/search/actions'

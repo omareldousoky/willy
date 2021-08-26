@@ -4,7 +4,7 @@ import {
   LegalWarningResponse,
   LegalWarningsSearchRequest,
   LegalWarningsSearchResponse,
-} from '../../../Models/LegalAffairs'
+} from '../../../../Shared/Models/LegalAffairs'
 import axios from '../../../../Shared/Services/axiosInstance'
 import { API_BASE_URL } from '../../../../Shared/envConfig'
 

@@ -1,4 +1,4 @@
-import { LegalWarningType } from '../../../Mohassel/Models/LegalAffairs'
+import { LegalWarningType } from '../../Models/LegalAffairs'
 
 export type OptionType = { value: string; label: string }
 

@@ -9,7 +9,7 @@ import {
   LegalActionsForm,
   ReviewReqBody,
 } from '../../../Components/ManageLegalAffairs/types'
-import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
+import { LegalHistoryResponse } from '../../../../Shared/Models/LegalAffairs'
 import { ApiResponse } from '../../../Models/common'
 import { API_BASE_URL } from '../../../../Shared/envConfig'
 

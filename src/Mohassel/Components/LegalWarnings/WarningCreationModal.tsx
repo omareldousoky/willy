@@ -12,7 +12,7 @@ import { Customer } from '../../Models/Customer'
 import {
   LegalWarningRequest,
   LegalWarningType,
-} from '../../Models/LegalAffairs'
+} from '../../../Shared/Models/LegalAffairs'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan'
 import { Application } from '../LoanApplication/loanApplicationStates'

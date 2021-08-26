@@ -64,7 +64,7 @@ import {
 import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
 import LegalJudgePdf from '../../pdfTemplates/LegalJudge'
 import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
-import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
+import { LegalHistoryResponse } from '../../../../Shared/Models/LegalAffairs'
 import { ActionsGroup } from '../../../../Shared/Components/ActionsGroup'
 import { TableMapperItem } from '../../../../Shared/Components/DynamicTable/types'
 import useDidUpdateEffect from '../../../../Shared/hooks/useDidUpdateEffect'
