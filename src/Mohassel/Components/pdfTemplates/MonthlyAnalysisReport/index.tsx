@@ -679,19 +679,18 @@ const MonthlyAnalysisReport = ({
           <tr>
             <td>قطاع العمل</td>
             <td>لا ينطبق</td>
-            <td>{renderValue(monthlyAnalysis2.sectorNotApplicable)}1</td>
+            <td>{renderValue(monthlyAnalysis2.sectorNotApplicable)}</td>
             <td>
-              %{renderValue(monthlyAnalysis2.sectorNotApplicablePecentage)}2
+              %{renderValue(monthlyAnalysis2.sectorNotApplicablePecentage)}
             </td>
             <td>
-              {renderValue(monthlyAnalysis2.sectorNotApplicablePrincipal)}3
+              {renderValue(monthlyAnalysis2.sectorNotApplicablePrincipal)}
             </td>
             <td>
               %
               {renderValue(
                 monthlyAnalysis2.sectorNotApplicablePrincipalPecentage
               )}
-              4
             </td>
             <td>
               {renderValue(
