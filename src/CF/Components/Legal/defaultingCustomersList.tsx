@@ -329,7 +329,7 @@ class DefaultingCustomersList extends Component<Props, State> {
       from: 0,
       size: 1000,
       [key]: query,
-      customerType: 'individual',
+      customerType: 'consumerFinance',
     })
     if (results.status === 'success') {
       if (results.body.data.length > 0) {
