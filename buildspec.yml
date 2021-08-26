@@ -1,0 +1,48 @@
+# AWS CodeBuild buildspec
+# By Ramzy
+
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - curl -sS -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
+      - curl -sS -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/kubectl
+      - chmod +x ./kubectl ./aws-iam-authenticator
+      - export PATH=$PWD/:$PATH
+      - cat /etc/issue
+      - yum update  -y
+      - yum -y install  jq
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      - CODEBUILD_RESOLVED_SOURCE_VERSION="${CODEBUILD_RESOLVED_SOURCE_VERSION:-$IMAGE_TAG}"
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-8)
+      - IMAGE_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG"
+      - export KUBECONFIG=$HOME/.kube/config
+
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_URI -f Docker/$DOCKERFILE_NAME.Dockerfile  --build-arg API_BASE_URL=$API_BASE_URL  --build-arg REACT_APP_URL=$REACT_APP_URL  --build-arg REACT_APP_LOGIN_URL=$REACT_APP_LOGIN_URL  --build-arg REACT_APP_DOMAIN=$REACT_APP_DOMAIN  --build-arg REACT_APP_SUBDOMAIN=$REACT_APP_SUBDOMAIN --build-arg REACT_APP_DOCUMENTS_URL=$REACT_APP_DOCUMENTS_URL .
+  post_build:
+    commands:
+      - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
+      - echo Build stage successfully completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $IMAGE_URI
+      - CREDENTIALS=$(aws sts assume-role --role-arn $EKS_KUBECTL_ROLE_ARN --role-session-name codebuild-kubectl --duration-seconds 900)
+      - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
+      - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
+      - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
+      - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
+      - aws eks update-kubeconfig --region $EKS_REGION --name $EKS_CLUSTER_NAME
+      - if [ $SERVICE_NAME = "login-cf" ] ; then echo "login-cf" ; else kubectl -n $NAMESPACE set image deployment/fe-$SERVICE_NAME  fe-$SERVICE_NAME=$IMAGE_URI ; fi
+      - if [ $SERVICE_NAME = "login-cf" ] ; then export SERVICE_NAME=login &&  kubectl -n $NAMESPACE-cf set image deployment/fe-$SERVICE_NAME  fe-$SERVICE_NAME=$IMAGE_URI ; else "dd" ; fi
+      - if [[ $SERVICE_NAME = "login" || $SERVICE_NAME = "login-cf"  ]] ; then echo "login"; else kubectl -n $NAMESPACE-cf set image deployment/fe-$SERVICE_NAME  fe-$SERVICE_NAME=$IMAGE_URI ; fi
+      - printf '[{"name":"%s","imageUri":"%s"}]' "$SERVICE_NAME" "$IMAGE_URI" > "$SERVICE_NAME"-images.json
+artifacts:
+  files:
+    - $SERVICE_NAME-images.json
