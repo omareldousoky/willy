@@ -14,7 +14,7 @@ import { searchCustomer } from '../../../../Shared/Services/APIs/customer/search
 import CustomerSearch, {
   Results,
 } from '../../../../Mohassel/Components/CustomerSearch/customerSearchTable'
-import { Application, Customer } from '../../../../Shared/Services/interfaces'
+import { Application } from '../../../../Shared/Services/interfaces'
 import {
   LegalWarningRequest,
   LegalWarningType,
@@ -25,6 +25,7 @@ import {
   createWarning,
   fetchWarning,
 } from '../../../../Shared/Services/APIs/LegalAffairs/warning'
+import { Customer } from '../../../../Mohassel/Models/Customer'
 
 export const WarningCreationModal = ({
   showModal,
