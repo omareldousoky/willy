@@ -1,12 +1,12 @@
-import { ApiResponse } from '../../../Models/common'
 import {
   LegalWarningRequest,
   LegalWarningResponse,
   LegalWarningsSearchRequest,
   LegalWarningsSearchResponse,
-} from '../../../../Shared/Models/LegalAffairs'
-import axios from '../../../../Shared/Services/axiosInstance'
-import { API_BASE_URL } from '../../../../Shared/envConfig'
+} from '../../../Models/LegalAffairs'
+import axios from '../../axiosInstance'
+import { API_BASE_URL } from '../../../envConfig'
+import { ApiResponse } from '../../../Models/common'
 
 const legalService = `${API_BASE_URL}/legal`
 

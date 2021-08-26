@@ -20,7 +20,7 @@ import { WarningTypeDropDown } from '../../../Shared/Components/dropDowns/Warnin
 import {
   fetchWarning,
   createWarning,
-} from '../../Services/APIs/LegalAffairs/warning'
+} from '../../../Shared/Services/APIs/LegalAffairs/warning'
 import { addeddSuccessfully } from '../../../Shared/localUtils'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 

@@ -46,7 +46,7 @@ import {
   getSettlementFees,
   reviewLegalCustomer,
   getLegalHistory,
-} from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
+} from '../../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
 import { FormField } from '../Form/types'
 import { defaultValidationSchema } from '../validations'
 import AppForm from '../Form'

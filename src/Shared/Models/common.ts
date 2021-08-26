@@ -51,3 +51,8 @@ export interface SearchRequest {
 export interface PaginatedResponse {
   totalCount: number
 }
+export interface ApiResponse<T> {
+  status: 'success' | 'error'
+  body?: T
+  error?: unknown
+}

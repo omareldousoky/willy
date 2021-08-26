@@ -1,17 +1,17 @@
 import { AxiosResponse } from 'axios'
-import axios from '../../../../Shared/Services/axiosInstance'
+import axios from '../../axiosInstance'
 import {
   ReviewedDefaultingCustomersReq,
   DefaultedCustomer,
-} from '../../../Components/ManageLegalAffairs/defaultingCustomersList'
+} from '../../../../Mohassel/Components/ManageLegalAffairs/defaultingCustomersList'
 
 import {
   LegalActionsForm,
   ReviewReqBody,
-} from '../../../Components/ManageLegalAffairs/types'
-import { LegalHistoryResponse } from '../../../../Shared/Models/LegalAffairs'
+} from '../../../../Mohassel/Components/ManageLegalAffairs/types'
+import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
+import { API_BASE_URL } from '../../../envConfig'
 import { ApiResponse } from '../../../Models/common'
-import { API_BASE_URL } from '../../../../Shared/envConfig'
 
 export const searchDefaultingCustomers = async (data: object) => {
   const url = API_BASE_URL + '/search/defaulting-customer'

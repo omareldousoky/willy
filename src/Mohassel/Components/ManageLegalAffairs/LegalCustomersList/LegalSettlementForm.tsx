@@ -11,7 +11,7 @@ import { getErrorMessage } from '../../../../Shared/Services/utils'
 import {
   deleteSettlementDocument,
   settleLegalCustomer,
-} from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
+} from '../../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
 
 import { LegalSettlementFormProps, SettlementFormValues } from '../types'
 import settlementForm from '../configs/settlementForm'

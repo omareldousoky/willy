@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios'
-import { ApiResponse } from '../../../Models/common'
 import axios from '../../../../Shared/Services/axiosInstance'
 import { API_BASE_URL } from '../../../../Shared/envConfig'
+import { ApiResponse } from '../../../../Shared/Models/common'
 
 const fetchActiveWalletIndividualUrl = `${API_BASE_URL}/report/individual-active-wallets`
 const fetchActiveWalletGroupUrl = `${API_BASE_URL}/report/group-active-wallets`

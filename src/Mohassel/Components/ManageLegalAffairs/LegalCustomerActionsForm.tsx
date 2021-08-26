@@ -11,7 +11,7 @@ import {
   SettledCustomer,
 } from './types'
 import AppForm from './Form'
-import { updateLegalAffairsCustomers } from '../../Services/APIs/LegalAffairs/defaultingCustomers'
+import { updateLegalAffairsCustomers } from '../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import customerActionsFields from './configs/CustomerActionsForm'
 import {
