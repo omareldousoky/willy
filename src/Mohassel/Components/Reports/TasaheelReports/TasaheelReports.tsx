@@ -243,9 +243,10 @@ export const TasaheelReports = () => {
           header=""
           array={tabs}
           active={activeTabIndex()}
-          selectTab={(activeTabStringKey: string) =>
+          selectTab={(activeTabStringKey: string) => {
+            setPrint(false)
             setActiveTabKey(activeTabStringKey)
-          }
+          }}
         />
         {modalIsOpen && (
           <ReportsModal
