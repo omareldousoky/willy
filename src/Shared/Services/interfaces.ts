@@ -97,6 +97,7 @@ export interface Customer {
   monthlyIncome?: number
   initialConsumerFinanceLimit?: number
   customerGuarantors?: CustomerGuarantor[]
+  consumerFinanceLimitStatus?: string
 }
 export interface Installment {
   id: number

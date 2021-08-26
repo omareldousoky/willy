@@ -22,7 +22,7 @@ import { cibExtractions } from '../../../Shared/Services/APIs/loanApplication/ci
 import { downloadTxtFile } from '../CIB/textFiles'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageLoansArray } from '../LoanList/manageLoansInitials'
-import { ActionsIconGroup } from '../../../Shared/Components'
+import { ActionsIconGroup, LtsIcon } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -332,9 +332,10 @@ class SourceOfFund extends Component<Props, State> {
                   style={{ marginLeft: 20 }}
                 >
                   {local.downloadOldFiles}
-                  <span
-                    className="fa fa-download-alt"
-                    style={{ verticalAlign: 'middle', marginRight: 10 }}
+                  <LtsIcon
+                    name="download-big-file"
+                    color="#fff"
+                    className="pl-2 align-bottom"
                   />
                 </Button>
                 <Button
@@ -345,9 +346,12 @@ class SourceOfFund extends Component<Props, State> {
                   className="big-button"
                 >
                   {local.changeFund}
-                  <span
-                    className="fa fa-exchange-alt"
-                    style={{ verticalAlign: 'middle', marginRight: 10 }}
+                  <LtsIcon
+                    name="exchange"
+                    color={`#${
+                      this.state.selectedCustomers.length ? 'fff' : '343a40'
+                    }`}
+                    className="pl-2 align-bottom"
                   />
                 </Button>
               </div>

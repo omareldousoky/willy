@@ -1,6 +1,7 @@
 import * as Yup from 'yup'
 import { BasicValues } from './branchCreationInterfaces'
 import * as local from '../../../Shared/Assets/ar.json'
+import { maxValue } from '../../../Shared/localUtils'
 
 export const step1: BasicValues = {
   branchAddressLatLong: { lat: 0, lng: 0 },
@@ -29,7 +30,7 @@ export const branchCreationValidationStepOne = Yup.object().shape({
       .trim()
       .matches(
         /[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z]/,
-        local.branchNameInavlid
+        local.branchNameInvalid
       )
       .max(150, local.maxLength150)
       .required(local.required),
@@ -38,7 +39,7 @@ export const branchCreationValidationStepOne = Yup.object().shape({
     .trim()
     .matches(
       /[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z]/,
-      local.governorateNameInavlid
+      local.governorateNameInvalid
     )
     .max(150, local.maxLength150)
     .required(local.required),
@@ -55,5 +56,8 @@ export const branchCreationValidationStepOne = Yup.object().shape({
     .matches(/^[0-9]*$/, local.onlyNumbers)
     .max(5, local.maxLength5),
   licenseDate: Yup.string().trim().required(local.required),
-  licenseNumber: Yup.string().trim().required(local.required),
+  licenseNumber: Yup.string()
+    .trim()
+    .required(local.required)
+    .max(50, maxValue(50)),
 })
