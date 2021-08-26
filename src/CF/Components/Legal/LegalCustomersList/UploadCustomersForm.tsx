@@ -81,7 +81,7 @@ const UploadLegalCustomers = ({
     <>
       <div className="text-center">
         <a
-          href={require('../../../Assets/sheets/defaulted-customers-template.xlsx')}
+          href={require('../../../../Mohassel/Assets/sheets/defaulted-customers-template.xlsx')}
           download={local.defaultedCustomersTemplate}
           role="button"
         >
