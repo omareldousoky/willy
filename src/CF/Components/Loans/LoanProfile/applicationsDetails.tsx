@@ -15,6 +15,7 @@ import {
   getRenderDate,
   extractGMTDate,
 } from '../../../../Shared/Services/utils'
+import { getLoanUsage } from '../../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
 
 interface Props {
   application: any
