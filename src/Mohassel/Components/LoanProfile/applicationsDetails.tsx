@@ -4,7 +4,6 @@ import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Swal from 'sweetalert2'
 import local from '../../../Shared/Assets/ar.json'
-import { englishToArabic } from '../../Services/statusLanguage'
 import { GuarantorTableView } from './guarantorDetails'
 import { getLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import {
@@ -14,6 +13,7 @@ import {
   interestPeriod,
   periodType,
   getRenderDate,
+  statusLocale,
   extractGMTDate,
 } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
@@ -462,7 +462,7 @@ export const CustomerLoanDetailsBoxView = ({
             <Form.Label style={{ color: '#6e6e6e' }}>
               {local.loanStatus}
             </Form.Label>
-            <Form.Label>{englishToArabic(application.status).text}</Form.Label>
+            <Form.Label>{statusLocale[application.status].text}</Form.Label>
           </Form.Group>
           <Form.Group as={Col} md="3" className="d-flex flex-column">
             <Form.Label style={{ color: '#6e6e6e' }}>
