@@ -9,8 +9,8 @@ import {
   UploadLegalCustomerResponse,
   UploadLegalCustomersProps,
 } from '../types'
-import AppForm from '../Form'
-import { FileField } from '../Form/types'
+import AppForm from '../../../../Shared/Components/Form'
+import { FileField } from '../../../../Shared/Components/Form/types'
 import { LtsIcon } from '../../../../Shared/Components'
 import { uploadDefaultingCustomer } from '../../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
 

@@ -47,9 +47,7 @@ import {
   reviewLegalCustomer,
   getLegalHistory,
 } from '../../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
-import { FormField } from '../Form/types'
 import { defaultValidationSchema } from '../validations'
-import AppForm from '../Form'
 import UploadLegalCustomers from './UploadCustomersForm'
 import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
 import { Branch } from '../../../../Shared/Services/interfaces'
@@ -68,6 +66,8 @@ import { LegalHistoryResponse } from '../../../../Shared/Models/LegalAffairs'
 import { ActionsGroup } from '../../../../Shared/Components/ActionsGroup'
 import { TableMapperItem } from '../../../../Shared/Components/DynamicTable/types'
 import useDidUpdateEffect from '../../../../Shared/hooks/useDidUpdateEffect'
+import { FormField } from '../../../../Shared/Components/Form/types'
+import AppForm from '../../../../Shared/Components/Form'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)

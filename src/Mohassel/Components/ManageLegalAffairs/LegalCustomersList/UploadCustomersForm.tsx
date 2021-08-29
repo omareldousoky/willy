@@ -10,9 +10,9 @@ import {
   UploadLegalCustomerResponse,
   UploadLegalCustomersProps,
 } from '../types'
-import AppForm from '../Form'
-import { FileField } from '../Form/types'
 import { LtsIcon } from '../../../../Shared/Components'
+import AppForm from '../../../../Shared/Components/Form'
+import { FileField } from '../../../../Shared/Components/Form/types'
 
 const UploadLegalCustomers = ({
   onSubmit,

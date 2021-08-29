@@ -6,7 +6,6 @@ import Form from 'react-bootstrap/Form'
 import Swal from 'sweetalert2'
 
 import local from '../../../../Shared/Assets/ar.json'
-import AppForm from '../Form'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
 import {
   deleteSettlementDocument,
@@ -17,7 +16,8 @@ import { LegalSettlementFormProps, SettlementFormValues } from '../types'
 import settlementForm from '../configs/settlementForm'
 import { mapFieldsToReadOnly, isSettlementReviewed } from '../utils'
 import { Loader } from '../../../../Shared/Components/Loader'
-import { mapFormFieldsToFormData } from '../Form/utils'
+import AppForm from '../../../../Shared/Components/Form'
+import { mapFormFieldsToFormData } from '../../../../Shared/Components/Form/utils'
 
 const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
   settlementInfo,

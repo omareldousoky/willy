@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2'
 
 import local from '../../../Shared/Assets/ar.json'
-import { FormField } from './Form/types'
+import { FormField } from '../../../Shared/Components/Form/types'
 import {
   ManagerReviewEnum,
   SettledCustomer,

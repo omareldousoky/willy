@@ -10,7 +10,7 @@ import {
   LegalActionsForm as LegalActionsFormType,
   SettledCustomer,
 } from './types'
-import AppForm from './Form'
+import AppForm from '../../../Shared/Components/Form'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import customerActionsFields from './configs/CustomerActionsForm'
 import {

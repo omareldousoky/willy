@@ -6,14 +6,14 @@ import Form from 'react-bootstrap/Form'
 import Swal from 'sweetalert2'
 
 import local from '../../../../Shared/Assets/ar.json'
-import AppForm from '../Form'
+import AppForm from '../../../../Shared/Components/Form'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
 
 import { LegalSettlementFormProps, SettlementFormValues } from '../types'
 import settlementForm from '../configs/settlementForm'
 import { mapFieldsToReadOnly, isSettlementReviewed } from '../utils'
 import { Loader } from '../../../../Shared/Components/Loader'
-import { mapFormFieldsToFormData } from '../Form/utils'
+import { mapFormFieldsToFormData } from '../../../../Shared/Components/Form/utils'
 import {
   deleteSettlementDocument,
   settleLegalCustomer,
