@@ -283,7 +283,7 @@ export const CustomerStatusDetails = (props) => {
                             Object.keys(loan.guarantors[0]).length > 0 &&
                             loan.guarantors.map((guarantor, guarantorIndex) => {
                               // TODO: change check on adding `type` key
-                              const isCompanyGuarantor = !!guarantor?.commercialRegisterNumber
+                              const isCompanyGuarantor = !guarantor?.gender
                               return (
                                 <table
                                   key={guarantorIndex}
