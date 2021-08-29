@@ -61,6 +61,11 @@ export const CfNavbar = () => {
             {local.halan}
           </Nav.Link>
         )}
+        {ability.can('getClearance', 'application') && (
+          <Nav.Link onClick={() => history.push('/clearances')}>
+            {local.clearances}
+          </Nav.Link>
+        )}
       </Nav>
     </Navbar.Collapse>
   )

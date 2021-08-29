@@ -476,6 +476,15 @@ export const CustomerProfile = () => {
           }),
       },
       {
+        icon: 'applications',
+        title: local.createClearance,
+        permission: ability.can('newClearance', 'application'),
+        onActionClick: () =>
+          history.push('/customers/create-clearance', {
+            customerId: location.state.id,
+          }),
+      },
+      {
         icon: 'deactivate-user',
         title: customerDetails?.blocked?.isBlocked
           ? local.unblockCustomer

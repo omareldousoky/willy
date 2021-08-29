@@ -30,7 +30,7 @@ import {
 } from '../../Services/APIs/Payment'
 import * as local from '../../../Shared/Assets/ar.json'
 import './styles.scss'
-import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties'
+import { calculatePenalties } from '../../../Shared/Services/APIs/clearance/calculatePenalties'
 import { payPenalties } from '../../Services/APIs/Payment/payPenalties'
 import { cancelPenalties } from '../../Services/APIs/Payment/cancelPenalties'
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction'
