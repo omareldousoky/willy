@@ -8,7 +8,7 @@ export interface CalendarEvent {
   customerId: string
   customerKey: number
   loanKey: number
-  customerType: 'individual' | 'group' | 'company' | 'consumerFinance'
+  customerType: 'individual' | 'group' | 'company'
   customerName: string
   caseNumber: string
   settlementType: string

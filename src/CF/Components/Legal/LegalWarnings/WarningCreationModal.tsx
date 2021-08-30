@@ -95,7 +95,7 @@ export const WarningCreationModal = ({
       from: 0,
       size: 1000,
       [key]: query,
-      customerType: 'consumerFinance',
+      customerType: 'individual',
     })
     if (results.status === 'success') {
       setIsLoading(false)
