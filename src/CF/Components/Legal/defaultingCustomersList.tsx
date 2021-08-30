@@ -441,7 +441,7 @@ class DefaultingCustomersList extends Component<Props, State> {
       from: 0,
       size: 1000,
       customerKey: customer.key,
-      type: 'micro',
+      type: 'consumerFinance',
     })
     if (results.status === 'success') {
       this.setState({
