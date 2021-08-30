@@ -306,6 +306,14 @@ class Payment extends Component<Props, State> {
   }
 
   renderPaymentMethods() {
+    const firstDueInstallment = getFirstDueInstallment(this.props.application)
+    const isNormalPayment = this.props.paymentType === 'normal'
+    const payAmountValue =
+      isNormalPayment && firstDueInstallment
+        ? firstDueInstallment.installmentResponse -
+          firstDueInstallment?.totalPaid
+        : this.state.payAmount
+
     switch (this.props.paymentState) {
       case 0:
         return (
@@ -348,13 +356,12 @@ class Payment extends Component<Props, State> {
                 enableReinitialize
                 initialValues={{
                   ...this.state,
-                  dueDate:
-                    this.props.paymentType === 'normal'
-                      ? timeToDateyyymmdd(
-                          getFirstDueInstallment(this.props.application)
-                            ?.dateOfPayment || -1
-                        )
-                      : this.state.dueDate,
+                  payAmount: payAmountValue,
+                  dueDate: isNormalPayment
+                    ? timeToDateyyymmdd(
+                        firstDueInstallment?.dateOfPayment || -1
+                      )
+                    : this.state.dueDate,
                   max:
                     this.props.application.status === 'canceled'
                       ? this.props.application.principal
@@ -369,7 +376,7 @@ class Payment extends Component<Props, State> {
               >
                 {(formikProps) => (
                   <ManualPayment
-                    payAmount={this.state.payAmount}
+                    payAmount={payAmountValue}
                     truthDate={this.state.truthDate}
                     paymentType={this.props.paymentType}
                     receiptNumber={this.state.receiptNumber}
