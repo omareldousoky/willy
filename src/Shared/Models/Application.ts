@@ -1,4 +1,4 @@
-import { Signature } from '../../Shared/Models/common'
+import { Signature } from './common'
 import { Customer } from './Customer'
 
 interface CalculationFormulaResponse {
@@ -92,14 +92,14 @@ interface ViceCustomer {
 
 export interface SingleInstallmentRow {
   id: number
-  installmentResponse?: number
+  installmentResponse: number
   principalInstallment?: number
   feesInstallment?: number
   dateOfPayment: number
   status?: string
   principalPaid?: number
   feesPaid?: number
-  totalPaid?: number
+  totalPaid: number
   paidAt: number
   pendingFees?: number
   pendingPrincipal?: number

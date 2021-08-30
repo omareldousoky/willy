@@ -1,7 +1,7 @@
 import {
   ApplicationResponse,
   InstallmentsResponse,
-} from '../../../Models/Application'
+} from '../../../../Shared/Models/Application'
 import { EarlyPaymentPdfData } from '../../LoanProfile/types'
 
 export interface EarlyPaymentPDFProps {
