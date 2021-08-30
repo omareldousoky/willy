@@ -593,7 +593,6 @@ const appRoutes = [
       {
         path: '/loans',
         label: local.issuedLoans,
-        disableLink: true,
         render: (props) => <LoanList {...props} />,
         routes: [
           {
