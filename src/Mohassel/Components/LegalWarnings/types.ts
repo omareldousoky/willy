@@ -9,4 +9,4 @@ export interface WarningCreationModalProps {
   setShowModal: (newState: boolean) => void
   getLegalWarnings: (resetFrom?: boolean) => void
 }
-export type ProductType = 'micro' | 'nano' | 'sme'
+export type ProductType = 'micro' | 'nano' | 'sme' | 'smeIndividual'

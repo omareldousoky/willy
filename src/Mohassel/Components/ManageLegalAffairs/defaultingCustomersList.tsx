@@ -444,7 +444,10 @@ class DefaultingCustomersList extends Component<Props, State> {
       from: 0,
       size: 1000,
       customerKey: customer.key,
-      type: this.state.productType,
+      type:
+        this.state.productType === 'smeIndividual'
+          ? 'sme'
+          : this.state.productType,
     })
     if (results.status === 'success') {
       this.setState({
@@ -864,9 +867,14 @@ class DefaultingCustomersList extends Component<Props, State> {
                         })
                       }
                     >
-                      <option value="micro">micro</option>
-                      <option value="nano">nano</option>
-                      <option value="sme">sme</option>
+                      <option value="micro">
+                        قرض فردي - جماعي - ضمان | لقروض ميكرو
+                      </option>
+                      <option value="nano"> قرض و ضمان لقروض نانو</option>
+                      <option value="sme">شركات او ضمان من نوع شركات</option>
+                      <option value="smeIndividual">
+                        من لهم حق التوقيع او ضمان فردي للشركات
+                      </option>
                     </Form.Control>
                   </div>
 

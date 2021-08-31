@@ -118,7 +118,7 @@ export const WarningCreationModal = ({
       from: 0,
       size: 1000,
       customerKey: selectedCustomer.key,
-      type: productType,
+      type: productType === 'smeIndividual' ? 'sme' : productType,
     })
     if (results.status === 'success') {
       setIsLoading(false)
@@ -218,9 +218,14 @@ export const WarningCreationModal = ({
                 setProductType(event.target.value as ProductType)
               }
             >
-              <option value="micro">micro</option>
-              <option value="nano">nano</option>
-              <option value="sme">sme</option>
+              <option value="micro">
+                قرض فردي - جماعي - ضمان | لقروض ميكرو
+              </option>
+              <option value="nano"> قرض و ضمان لقروض نانو</option>
+              <option value="sme">شركات او ضمان من نوع شركات</option>
+              <option value="smeIndividual">
+                من لهم حق التوقيع او ضمان فردي للشركات
+              </option>
             </Form.Control>
             <CustomerSearch
               source="loanApplication"
