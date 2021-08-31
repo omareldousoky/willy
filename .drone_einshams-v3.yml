@@ -173,6 +173,4 @@ steps:
       - push
 
 depends_on:
-  - unit-test
-  - PushToEcr
   - kubernetes
