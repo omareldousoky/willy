@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
-import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
-import { addLoanUsage } from '../../Services/APIs/LoanUsage/addLoanUsage'
-import { updateLoanUsage } from '../../Services/APIs/LoanUsage/updateLoanUsage'
 import * as local from '../../../Shared/Assets/ar.json'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageLoanDetailsArray } from '../ManageLoanDetails/manageLoanDetailsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { CRUDList } from '../../../Shared/Components/CRUDList/crudList'
+import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
+import { updateLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/updateLoanUsage'
+import { addLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/addLoanUsage'
 
 interface LoanUse {
   name: string

@@ -82,8 +82,6 @@ import {
   SolidarityGuarantee,
 } from '../pdfTemplates/smeLoanContract'
 import { Score } from '../CustomerCreation/CustomerProfile'
-import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
-
 import { getEarlyPaymentPdfData } from './utils'
 import {
   CalculateEarlyPaymentResponse,
@@ -99,6 +97,7 @@ import {
 } from '../../../Shared/Services/APIs/iScore'
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { getWriteOffReasons } from '../../../Shared/Services/APIs/config'
+import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
 
 export interface IndividualWithInstallments {
   installmentTable: {
