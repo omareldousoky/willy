@@ -460,7 +460,7 @@ class TrackLoanApplications extends Component<Props, State> {
         actionOnClick: () =>
           this.props.history.push('/track-loan-applications/loan-profile', {
             id: data.application._id,
-            sme: this.props.location.state.sme,
+            sme: this.props.location.state?.sme,
           }),
       },
       {
