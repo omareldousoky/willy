@@ -1840,7 +1840,7 @@ class LoanApplicationCreation extends Component<Props, State> {
               {this.props.location.state.sme && (
                 <Can I="getSMEApplication" a="application">
                   <div className="d-flex flex-column m-5">
-                    <LtsIcon name="company" size="100px" color="#7dc356" />
+                    <LtsIcon name="buildings" size="100px" color="#7dc356" />
 
                     <Button
                       className="my-4"
