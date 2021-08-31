@@ -141,6 +141,7 @@ interface LoanProfileRouteState {
   action?: string
   type?: string
   status?: string
+  sme?: boolean
 }
 
 interface Props extends RouteComponentProps<{}, {}, LoanProfileRouteState> {
@@ -542,6 +543,7 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () =>
           this.props.history.push('/track-loan-applications/remove-member', {
             id: this.props.location.state.id,
+            sme: this.props.location.state?.sme,
           }),
       },
       {
@@ -569,7 +571,11 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () =>
           this.props.history.push(
             '/track-loan-applications/edit-loan-application',
-            { id: this.props.location.state.id, action: 'edit' }
+            {
+              id: this.props.location.state.id,
+              action: 'edit',
+              sme: this.props.location.state?.sme,
+            }
           ),
       },
       {
@@ -581,7 +587,11 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () =>
           this.props.history.push(
             '/track-loan-applications/loan-status-change',
-            { id: this.props.location.state.id, action: 'review' }
+            {
+              id: this.props.location.state.id,
+              action: 'review',
+              sme: this.props.location.state?.sme,
+            }
           ),
       },
       {
@@ -593,7 +603,11 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () =>
           this.props.history.push(
             '/track-loan-applications/loan-status-change',
-            { id: this.props.location.state.id, action: 'unreview' }
+            {
+              id: this.props.location.state.id,
+              action: 'unreview',
+              sme: this.props.location.state?.sme,
+            }
           ),
       },
       {
@@ -605,7 +619,11 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () =>
           this.props.history.push(
             '/track-loan-applications/loan-status-change',
-            { id: this.props.location.state.id, action: 'reject' }
+            {
+              id: this.props.location.state.id,
+              action: 'reject',
+              sme: this.props.location.state?.sme,
+            }
           ),
       },
       {
@@ -618,6 +636,7 @@ class LoanProfile extends Component<Props, State> {
           this.props.history.push('/track-loan-applications/create-loan', {
             id: this.props.location.state.id,
             type: 'issue',
+            sme: this.props.location.state?.sme,
           }),
       },
       {
@@ -630,6 +649,7 @@ class LoanProfile extends Component<Props, State> {
           this.props.history.push('/track-loan-applications/create-loan', {
             id: this.props.location.state.id,
             type: 'create',
+            sme: this.props.location.state?.sme,
           }),
       },
       {
@@ -653,6 +673,7 @@ class LoanProfile extends Component<Props, State> {
           this.props.history.push('/track-loan-applications/loan-roll-back', {
             id: this.props.location.state.id,
             status: this.state.application.status,
+            sme: this.props.location.state?.sme,
           }),
       },
       {
