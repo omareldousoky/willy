@@ -168,7 +168,7 @@ class ManualPayment extends Component<Props, State> {
               {this.props.formikProps.errors.receiptNumber}
             </Form.Control.Feedback>
           </Form.Group>
-          {isNormalPayment && !this.props.bankPayment && (
+          {isNormalPayment && (
             <Form.Group as={Col} md={6} controlId="installmentNumber">
               <Form.Label
                 column

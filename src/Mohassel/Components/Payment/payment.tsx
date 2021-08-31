@@ -814,6 +814,11 @@ class Payment extends Component<Props, State> {
                 enableReinitialize
                 initialValues={{
                   ...this.state,
+                  dueDate: isNormalPayment
+                    ? timeToDateyyymmdd(
+                        firstDueInstallment?.dateOfPayment || -1
+                      )
+                    : this.state.dueDate,
                   max:
                     this.props.application.status === 'canceled'
                       ? this.props.application.principal

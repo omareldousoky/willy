@@ -222,7 +222,7 @@ class ManualPayment extends Component<Props, State> {
               {this.props.formikProps.errors.receiptNumber}
             </Form.Control.Feedback>
           </Form.Group>
-          {isNormalPayment && !this.props.bankPayment && (
+          {isNormalPayment && (
             <Form.Group as={Col} md={6} controlId="installmentNumber">
               <Form.Label
                 column
@@ -232,6 +232,7 @@ class ManualPayment extends Component<Props, State> {
                 as="select"
                 name="installmentNumber"
                 data-qc="installmentNumber"
+                disabled={!!this.props.bankPayment}
                 defaultValue={
                   isNormalPayment
                     ? firstDueInstallment?.id ||
@@ -239,6 +240,7 @@ class ManualPayment extends Component<Props, State> {
                     : this.props.formikProps.values.installmentNumber
                 }
                 onChange={(event) => {
+                  if (this.props.bankPayment) return
                   const installment = this.props.application?.installmentsObject?.installments?.find(
                     (inst) => inst.id === Number(event.currentTarget.value)
                   )
