@@ -430,8 +430,8 @@
   "chooseRepresentative": "اختر المندوب",
   "chooseBranch": "اختر الفرع",
   "issued": "مصدر",
-  "branchNameInavlid": "إسم الفرع يجب أن يحتوي  على حروف ",
-  "governorateNameInavlid": "المحافظة لا يمكن أن تحتوي على أرقام",
+  "branchNameInvalid": "إسم الفرع يجب أن يحتوي  على حروف ",
+  "governorateNameInvalid": "المحافظة لا يمكن أن تحتوي على أرقام",
   "containLetterError": "يجب أن يحتوي على أحرف",
   "rolesIsRequired": "يجب إختيار دور للمستخدم ",
   "branchIsRequired": "يجب إختيار فرع للمستخدم",
@@ -1119,6 +1119,7 @@
   "lastDay": "الأمس",
   "lastWeek": "الاسبوع الماضى",
   "lastMonth": "الشهر الماضي",
+  "loanType": "نوع القرض",
   "contractType": "نوع العقد",
   "standard": "اساسي",
   "masterGas": "خاص بقرض ماستر جاس",
@@ -1157,6 +1158,11 @@
   "individualAndGroup": "(فردي - جماعي)",
   "cfMobileNumber": "محمول الحد الائتماني",
   "addEditOrRemoveGuarantor": "إضافة / تعديل ضمان",
+  "entitledToSign": "من له حق التوقيع",
   "searchPlaceholder": " البحث بإسم الفرع او برقم البطاقة أو الكود او رقم التليفون",
-  "returnItem": "استرجاع المنتج"
+  "returnItem": "استرجاع المنتج",
+  "approveCFCustomerLimit": "تأكيد الحد الائتماني للعميل",
+  "consumerFinanceLimitStatus": "حالة الحد الائتماني للعميل",
+  "consumerFinanceMaxLimit": "الحد الائتماني الاقصى للعميل",
+  "monthlyAnalysisReport": "التحليل الشهري"
 }

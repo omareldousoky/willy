@@ -7,8 +7,9 @@ import {
 } from '../../../../Shared/Services/utils'
 import * as local from '../../../../Shared/Assets/ar.json'
 import { loanStatusLocal } from '../pdfTemplateCommon/reportLocal'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 
-const DoubtfulPayments = (props) => {
+export const DoubtfulPayments = (props) => {
   const tempData = props.data.data
   const reportDate =
     props.data.req.startDate === props.data.req.endDate
@@ -19,31 +20,25 @@ const DoubtfulPayments = (props) => {
         )} الي ${timeToArabicDate(props.data.req.endDate, false)}`
   return (
     <div className="doubtful-payments" lang="ar">
+      <Orientation size="portrait" />
       <table
+        className="w-100 text-center"
         style={{
-          fontSize: '12px',
           margin: '10px 0px',
-          textAlign: 'center',
-          width: '100%',
         }}
       >
-        <tr style={{ height: '10px' }} />
-        <tr
-          style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <th colSpan={6}>
-            <div className="logo-print-tb" />
-          </th>
-          <th colSpan={6}>
-            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-          </th>
-        </tr>
-        <tr style={{ height: '10px' }} />
+        <tbody>
+          <tr style={{ height: '10px' }} />
+          <tr className="w-100 d-flex flex-row justify-content-between">
+            <th colSpan={6}>
+              <div className="logo-print-tb" />
+            </th>
+            <th colSpan={6}>
+              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+            </th>
+          </tr>
+          <tr style={{ height: '10px' }} />
+        </tbody>
       </table>
       <table className="report-container">
         <thead className="report-header">
@@ -74,6 +69,7 @@ const DoubtfulPayments = (props) => {
             <th colSpan={1}>قيمة تكلفه التمويل</th>
             <th>إجمالي</th>
             <th colSpan={2}>حالة الحركة</th>
+            <th>نوع القرض</th>
           </tr>
           <tr>
             <th colSpan={100} className="horizontal-line" />
@@ -110,23 +106,24 @@ const DoubtfulPayments = (props) => {
                       <td colSpan={1}>{transaction.customerName}</td>
                       <td>{transaction.loanSerial}</td>
                       <td colSpan={1}>{transaction.loanPrincipal}</td>
-                      <td colSpan={3}>
+                      <td colSpan={3} className="text-nowrap">
                         {timeToArabicDate(
                           getTimestamp(transaction.issueDate),
                           false
                         )}
                       </td>
                       <td colSpan={1}>
-                        {loanStatusLocal[transaction.stateFlags || 'default']}{' '}
+                        {loanStatusLocal[transaction.stateFlags || 'default']}
                       </td>
                       <td>{transaction.transactionPrincipal}</td>
                       <td colSpan={1}>{transaction.transactionInterest}</td>
                       <td>{transaction.transactionAmount}</td>
                       <td colSpan={2}>
-                        {transaction.canceled === 1
+                        {transaction.canceled === '1'
                           ? local.cancelledTransaction
                           : null}
                       </td>
+                      <td>{transaction?.loanType || ''}</td>
                     </tr>
                   ))}
                   <tr>
@@ -139,7 +136,7 @@ const DoubtfulPayments = (props) => {
                     <td className="frame" colSpan={2}>
                       {branch.branchName}
                     </td>
-                    <td className="frame" colSpan={1}>
+                    <td className="frame text-nowrap" colSpan={1}>
                       {timeToArabicDate(getTimestamp(branch.truthDate), false)}
                     </td>
                     <td className="frame">{branch.numTrx}</td>
@@ -171,9 +168,9 @@ const DoubtfulPayments = (props) => {
                 </tbody>
               </React.Fragment>
             ))}
-            <tr style={{ height: '1em' }} />
 
             <tbody className="tbodyborder">
+              <tr style={{ height: '1em' }} />
               <tr>
                 <td className="gray frame" colSpan={2}>
                   إجمالي تاريخ الحركه
@@ -250,5 +247,3 @@ const DoubtfulPayments = (props) => {
     </div>
   )
 }
-
-export default DoubtfulPayments

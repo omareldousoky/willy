@@ -61,11 +61,6 @@ interface Application {
   principal: number
   status: string
 }
-interface LoanItem {
-  id: string
-  branchId: string
-  application: Application
-}
 interface State {
   print: boolean
   size: number
@@ -406,18 +401,21 @@ class TrackLoanApplications extends Component<Props, State> {
       this.getBranchData(details.branch)
     }
     const filters = this.props.searchFilters
+    const isSme = this.props.searchFilters.type === 'sme'
+
     const obj: LoanApplicationReportRequest = {
       startDate: filters.fromDate,
       endDate: filters.toDate,
       loanStatus: filters.status ? [filters.status] : [],
       branch: hasBranch ? details.branch : filters.branchId || '',
+      loanType: isSme ? 'sme' : 'micro',
     }
     this.setState({ loading: true })
     const res = await getReviewedApplications(obj)
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('', local.noResults, 'error')
+        Swal.fire('Error', local.noResults, 'error')
       } else {
         this.setState(
           { reviewedResults: res.body.result, loading: false },
@@ -661,6 +659,7 @@ class TrackLoanApplications extends Component<Props, State> {
         </div>
         {this.state.print && (
           <ReviewedApplicationsPDF
+            isSme={this.props.searchFilters.type === 'sme'}
             data={this.state.reviewedResults}
             branchDetails={this.state.branchDetails}
           />

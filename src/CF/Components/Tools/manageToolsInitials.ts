@@ -20,5 +20,21 @@ export const manageToolsArray = (): Card[] => {
       path: '/tools/geo-areas',
     })
   }
+  if (ability.can('viewBusinessSectorConfig', 'config')) {
+    manageLoanArr.push(
+      {
+        icon: 'business-activities',
+        header: local.businessActivities,
+        desc: local.businessActivities,
+        path: '/tools/business-activities',
+      },
+      {
+        icon: 'business-specialities',
+        header: local.businessSpecialities,
+        desc: local.businessSpecialities,
+        path: '/tools/business-specialities',
+      }
+    )
+  }
   return manageLoanArr
 }

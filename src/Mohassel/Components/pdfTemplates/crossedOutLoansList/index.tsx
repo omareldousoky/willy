@@ -2,8 +2,9 @@ import React from 'react'
 import './crossedOutLoansList.scss'
 import * as local from '../../../../Shared/Assets/ar.json'
 import { timeToArabicDate } from '../../../../Shared/Services/utils'
+import Orientation from '../../../../Shared/Components/Common/orientation'
 
-const CrossedOutLoansList = (props) => {
+export const CrossedOutLoansList = (props) => {
   const { data } = props.data
   const { days } = data
   const totalNumberOfTransactions = Number(data.numTrx)
@@ -42,17 +43,22 @@ const CrossedOutLoansList = (props) => {
     return (
       <>
         {day.branches.map((branch, idx) => (
-          <BranchComponent key={idx} branch={branch} />
+          <BranchComponent
+            key={idx + branch.branchName.trim() + branch.netAmount}
+            branch={branch}
+          />
         ))}
 
-        <tr style={{ height: '1em' }} />
         <tbody className="tbodyborder">
+          <tr style={{ height: '1em' }} />
           <tr>
             <td />
             <td className="gray frame" colSpan={2}>
               إجمالي تاريخ الحركه
             </td>
-            <td className="gray frame">{day.truthDate.substring(0, 10)}</td>
+            <td className="gray frame text-nowrap">
+              {day.truthDate.substring(0, 10)}
+            </td>
             <td />
             <td className="frame">إجمالي عدد الحركات</td>
             <td className="frame">{day.numTrx}</td>
@@ -77,9 +83,8 @@ const CrossedOutLoansList = (props) => {
             <td className="frame">{day.netInt}</td>
             <td className="frame">{day.netAmount}</td>
           </tr>
+          <tr style={{ height: '1em' }} />
         </tbody>
-
-        <tr style={{ height: '1em' }} />
       </>
     )
   }
@@ -94,20 +99,23 @@ const CrossedOutLoansList = (props) => {
         </tr>
 
         {branch.rows.map((row, idx) => (
-          <tr key={row.loanId}>
+          <tr key={idx + row.loanId}>
             <td>{idx + 1}</td>
             <td>{row.customerKey}</td>
             <td>{row.customerName}</td>
             <td>{row.loanSerial}</td>
             <td colSpan={1}>{row.loanPrincipal}</td>
-            <td colSpan={3}>{row.issueDate}</td>
+            <td colSpan={3} className="text-nowrap">
+              {row.issueDate}
+            </td>
             <td>{getStatus(row.loanStatus)}</td>
             <td>{row.transactionPrincipal}</td>
             <td>{row.transactionInterest}</td>
             <td colSpan={1}>{row.transactionAmount}</td>
             <td colSpan={2}>
-              {row.canceled === 1 ? local.cancelledTransaction : null}
+              {row.canceled === '1' ? local.cancelledTransaction : null}
             </td>
+            <td>{row?.loanType || ''}</td>
           </tr>
         ))}
 
@@ -123,7 +131,7 @@ const CrossedOutLoansList = (props) => {
           <td className="frame" colSpan={2}>
             {branch.branchName}
           </td>
-          <td className="frame" colSpan={1}>
+          <td className="frame text-nowrap" colSpan={1}>
             {branch.truthDate.substring(0, 10)}
           </td>
           <td className="frame">{branch.numTrx}</td>
@@ -156,73 +164,65 @@ const CrossedOutLoansList = (props) => {
   }
 
   return (
-    <div
-      className="crossed-out-loans-list"
-      style={{ direction: 'rtl' }}
-      lang="ar"
-    >
-      <table
-        style={{
-          fontSize: '12px',
-          margin: '10px 0px',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
-        <tr style={{ height: '10px' }} />
-        <tr
+    <>
+      <Orientation size="portrait" />
+      <div className="crossed-out-loans-list" lang="ar">
+        <table
+          className="w-100 text-center"
           style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
+            margin: '10px 0px',
           }}
         >
-          <th colSpan={6}>
-            <div className="logo-print-tb" />
-          </th>
-          <th colSpan={6}>
-            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-          </th>
-        </tr>
-        <tr style={{ height: '10px' }} />
-      </table>
-      <table className="report-container">
-        <thead className="report-header">
-          <tr className="headtitle">
-            <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
-            <th colSpan={6}>قائمة حركات إعدام ديون القروض المنفذة</th>
-          </tr>
-          <tr className="headtitle">
-            <th colSpan={4}>المركز الرئيسي</th>
-            <th colSpan={6}>
-              تاريخ الحركه من {startDate} الي {endDate}
-            </th>
-          </tr>
-          <tr className="headtitle">
-            <th colSpan={4}>{new Date().toDateString()}</th>
-            <th colSpan={6}>جنيه مصري</th>
-          </tr>
-          <tr>
-            <th colSpan={100} className="horizontal-line" />
-          </tr>
-          <tr>
-            <th>كود الحركة</th>
-            <th>كود العميل</th>
-            <th>أسم العميل</th>
-            <th>مسلسل القرض</th>
-            <th colSpan={1}>قيمة</th>
-            <th colSpan={3}>تاريخ القرض</th>
-            <th>الحالةالان</th>
-            <th>أصل</th>
-            <th>قيمة تكلفه التمويل</th>
-            <th colSpan={1}>إجمالي</th>
-            <th colSpan={2}>حالةالحركة</th>
-          </tr>
-          <tr>
-            <th colSpan={100} className="horizontal-line" />
-          </tr>
-          {/* <tr>
+          <tbody>
+            <tr style={{ height: '10px' }} />
+            <tr className="w-100 d-flex flex-row justify-content-between">
+              <th colSpan={6}>
+                <div className="logo-print-tb" />
+              </th>
+              <th colSpan={6}>
+                ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+              </th>
+            </tr>
+            <tr style={{ height: '10px' }} />
+          </tbody>
+        </table>
+        <table className="report-container">
+          <thead className="report-header">
+            <tr className="headtitle">
+              <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
+              <th colSpan={6}>قائمة حركات إعدام ديون القروض المنفذة</th>
+            </tr>
+            <tr className="headtitle">
+              <th colSpan={4}>المركز الرئيسي</th>
+              <th colSpan={6}>
+                تاريخ الحركه من {startDate} الي {endDate}
+              </th>
+            </tr>
+            <tr className="headtitle">
+              <th colSpan={4}>{new Date().toDateString()}</th>
+              <th colSpan={6}>جنيه مصري</th>
+            </tr>
+            <tr>
+              <th colSpan={100} className="horizontal-line" />
+            </tr>
+            <tr>
+              <th>كود الحركة</th>
+              <th>كود العميل</th>
+              <th>أسم العميل</th>
+              <th>مسلسل القرض</th>
+              <th colSpan={1}>قيمة</th>
+              <th colSpan={3}>تاريخ القرض</th>
+              <th>الحالةالان</th>
+              <th>أصل</th>
+              <th>قيمة تكلفه التمويل</th>
+              <th colSpan={1}>إجمالي</th>
+              <th colSpan={2}>حالةالحركة</th>
+              <th>نوع القرض</th>
+            </tr>
+            <tr>
+              <th colSpan={100} className="horizontal-line" />
+            </tr>
+            {/* <tr>
             <th className="gray frame" colSpan={2}>
               تاريخ الحركه
             </th>
@@ -230,49 +230,48 @@ const CrossedOutLoansList = (props) => {
               2020/06/09
             </th>
           </tr> */}
-        </thead>
+          </thead>
 
-        {days.map((day, idx) => (
-          <DayComponent key={idx} day={day} />
-        ))}
+          {days.map((day, idx) => (
+            <DayComponent key={idx} day={day} />
+          ))}
 
-        <tr style={{ height: '1em' }} />
+          <tbody className="tbodyborder">
+            <tr style={{ height: '1em' }} />
 
-        <tbody className="tbodyborder">
-          <tr>
-            <td />
-            <td className="gray frame" colSpan={2}>
-              إجمالي بالعمله
-            </td>
-            <td className="gray frame">جنيه مصري</td>
-            <td />
-            <td className="frame">إجمالي عدد الحركات</td>
-            <td className="frame">{totalNumberOfTransactions}</td>
-            <td />
-            <td className="frame">إجمالي المبلغ</td>
-            <td className="frame">{totalTransactionPrincipal}</td>
-            <td className="frame">{totalTransactionInterest}</td>
-            <td className="frame">{totalTransactionAmount}</td>
-          </tr>
+            <tr>
+              <td />
+              <td className="gray frame" colSpan={2}>
+                إجمالي بالعمله
+              </td>
+              <td className="gray frame">جنيه مصري</td>
+              <td />
+              <td className="frame">إجمالي عدد الحركات</td>
+              <td className="frame">{totalNumberOfTransactions}</td>
+              <td />
+              <td className="frame">إجمالي المبلغ</td>
+              <td className="frame">{totalTransactionPrincipal}</td>
+              <td className="frame">{totalTransactionInterest}</td>
+              <td className="frame">{totalTransactionAmount}</td>
+            </tr>
 
-          <tr>
-            <td colSpan={8} />
-            <td className="frame">القيمة الملغاه</td>
-            <td className="frame">{data.rbPrincipal}</td>
-            <td className="frame">{data.rbInt}</td>
-            <td className="frame">{data.rbAmount}</td>
-          </tr>
-          <tr>
-            <td colSpan={8} />
-            <td className="frame">صافي المبلغ</td>
-            <td className="frame">{data.netPrincipal}</td>
-            <td className="frame">{data.netInt}</td>
-            <td className="frame">{data.netAmount}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+            <tr>
+              <td colSpan={8} />
+              <td className="frame">القيمة الملغاه</td>
+              <td className="frame">{data.rbPrincipal}</td>
+              <td className="frame">{data.rbInt}</td>
+              <td className="frame">{data.rbAmount}</td>
+            </tr>
+            <tr>
+              <td colSpan={8} />
+              <td className="frame">صافي المبلغ</td>
+              <td className="frame">{data.netPrincipal}</td>
+              <td className="frame">{data.netInt}</td>
+              <td className="frame">{data.netAmount}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </>
   )
 }
-
-export default CrossedOutLoansList

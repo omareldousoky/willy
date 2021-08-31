@@ -1,46 +1,46 @@
 @media screen,
 print {
-    .branches-loan-list {
-        font-size: 12px;
-        font-weight: bold;
-        page-break-after: always;
-        direction: rtl;
+  .branches-loan-list {
+    font-size: 12px;
+    font-weight: bold;
+    page-break-after: always;
+		font-family: Arial, Helvetica, sans-serif;
 
-        & table.body th {
-            background-color: lightgrey;
-            -webkit-print-color-adjust: exact;
-        }
-    
-        & table.body td, table.body th {
-            border: 1px solid black;
-        }
-    
-        & .headtitle {
-            font-size: 14px;
-        }
-    
-        & table {
-            width: 100%;
-            text-align: center;
-        }
-    
-        & .frame {
-            border: 1px solid black;
-        }
-    
-        & .border {
-            border-bottom: 1px solid black;
-        }
-    
-        & thead.report-header {
-            display: table-header-group;
-        }
+    & table.body th {
+      background-color: lightgrey;
+      -webkit-print-color-adjust: exact;
     }
+
+    & table.body td,
+    table.body th {
+      border: 1px solid black;
+    }
+
+    & .headtitle {
+      font-size: 14px;
+    }
+
+    & table {
+      width: 100%;
+      text-align: center;
+    }
+
+    & .frame {
+      border: 1px solid black;
+    }
+
+    & .border {
+      border-bottom: 1px solid black;
+    }
+
+    & thead.report-header {
+      display: table-header-group;
+    }
+  }
 }
 
 @media screen {
-    .branches-loan-list {
-        max-width: 800px;
-        display: none;
-    }
+  .branches-loan-list {
+    display: none;
+  }
 }

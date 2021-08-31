@@ -3,6 +3,7 @@ type: kubernetes
 name: notify-pipeline-start
 
 
+
 steps:
 - name: notify-start
   image: plugins/slack
@@ -44,6 +45,7 @@ steps:
   commands:
   - apk add git
   - npm i
+  - npm run type-check
   - npm run build
 
 

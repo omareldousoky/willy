@@ -1,5 +1,6 @@
 import * as Yup from 'yup'
 import * as local from '../../../Shared/Assets/ar.json'
+import { maxValue, minValue } from '../../../Shared/localUtils'
 import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
 
 export const step1: any = {
@@ -76,74 +77,78 @@ export const step3 = {
 const endOfDay: Date = new Date()
 endOfDay.setHours(23, 59, 59, 59)
 
-export const customerCreationValidationStepOne = Yup.object().shape({
-  customerName: Yup.string()
-    .trim()
-    .max(100, local.maxLength100)
-    .required(local.required)
-    .matches(
-      /^(?!.*?\s{2})([\u0621-\u064A\s]+){1,100}$/,
-      local.onlyArabicLetters
-    ),
-  nationalId: Yup.number()
-    .when('nationalIdChecker', {
-      is: true,
-      then: Yup.number().test(
-        'error',
-        local.duplicateNationalIdMessage,
-        () => false
+export const customerCreationValidationStepOne = (globalCFMin, globalCFMax) =>
+  Yup.object().shape({
+    customerName: Yup.string()
+      .trim()
+      .max(100, local.maxLength100)
+      .required(local.required)
+      .matches(
+        /^(?!.*?\s{2})([\u0621-\u064A\s]+){1,100}$/,
+        local.onlyArabicLetters
       ),
-      otherwise: Yup.number()
-        .required()
-        .min(10000000000000, local.nationalIdLengthShouldBe14)
-        .max(99999999999999, local.nationalIdLengthShouldBe14)
-        .required(local.required),
-    })
-    .when('birthDate', {
-      is: '1800-01-01',
-      then: Yup.number().test('error', local.wrongNationalId, () => false),
-      otherwise: Yup.number()
-        .required()
-        .min(10000000000000, local.nationalIdLengthShouldBe14)
-        .max(99999999999999, local.nationalIdLengthShouldBe14)
-        .required(local.required),
-    }),
-  nationalIdIssueDate: Yup.string()
-    .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
-    })
-    .required(local.required),
-  monthlyIncome: Yup.number()
-    .min(1, local.mustBeGreaterThanZero)
-    .required(local.required),
-  initialConsumerFinanceLimit: Yup.number()
-    .min(1, local.mustBeGreaterThanZero)
-    .test(
-      'initialConsumerFinanceLimit',
-      local.customerMaxPrincipalError,
-      function (this: any, value: any) {
-        const { customerConsumerFinanceMaxLimit } = this.parent
-        return value <= customerConsumerFinanceMaxLimit
-      }
-    )
-    .required(local.required),
-  customerHomeAddress: Yup.string()
-    .trim()
-    .max(500, "Can't be more than 500 characters")
-    .required(local.required),
-  homePostalCode: Yup.string().min(5, local.minLength5),
-  homePhoneNumber: Yup.string().min(10, local.minLength10),
-  mobilePhoneNumber: Yup.string()
-    .min(11, local.minLength11)
-    .required(local.required),
-  faxNumber: Yup.string().max(11, local.maxLength10).min(10, local.minLength10),
-  emailAddress: Yup.string().matches(
-    // eslint-disable-next-line no-useless-escape
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    local.invalidEmail
-  ),
-  customerWebsite: Yup.string().url(local.invalidWebsite),
-})
+    nationalId: Yup.number()
+      .when('nationalIdChecker', {
+        is: true,
+        then: Yup.number().test(
+          'error',
+          local.duplicateNationalIdMessage,
+          () => false
+        ),
+        otherwise: Yup.number()
+          .required()
+          .min(10000000000000, local.nationalIdLengthShouldBe14)
+          .max(99999999999999, local.nationalIdLengthShouldBe14)
+          .required(local.required),
+      })
+      .when('birthDate', {
+        is: '1800-01-01',
+        then: Yup.number().test('error', local.wrongNationalId, () => false),
+        otherwise: Yup.number()
+          .required()
+          .min(10000000000000, local.nationalIdLengthShouldBe14)
+          .max(99999999999999, local.nationalIdLengthShouldBe14)
+          .required(local.required),
+      }),
+    nationalIdIssueDate: Yup.string()
+      .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
+        return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+      })
+      .required(local.required),
+    monthlyIncome: Yup.number()
+      .min(3000, minValue(3000))
+      .required(local.required),
+    initialConsumerFinanceLimit: Yup.number()
+      .min(globalCFMin, minValue(globalCFMin))
+      .max(globalCFMax, maxValue(globalCFMax))
+      .test(
+        'initialConsumerFinanceLimit',
+        local.customerMaxPrincipalError,
+        function (this: any, value: any) {
+          const { customerConsumerFinanceMaxLimit } = this.parent
+          return value <= customerConsumerFinanceMaxLimit
+        }
+      )
+      .required(local.required),
+    customerHomeAddress: Yup.string()
+      .trim()
+      .max(500, "Can't be more than 500 characters")
+      .required(local.required),
+    homePostalCode: Yup.string().min(5, local.minLength5),
+    homePhoneNumber: Yup.string().min(10, local.minLength10),
+    mobilePhoneNumber: Yup.string()
+      .min(11, local.minLength11)
+      .required(local.required),
+    faxNumber: Yup.string()
+      .max(11, local.maxLength10)
+      .min(10, local.minLength10),
+    emailAddress: Yup.string().matches(
+      // eslint-disable-next-line no-useless-escape
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      local.invalidEmail
+    ),
+    customerWebsite: Yup.string().url(local.invalidWebsite),
+  })
 
 export const customerCreationValidationStepTwo = Yup.object().shape({
   businessName: Yup.string()

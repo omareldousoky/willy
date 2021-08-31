@@ -4,7 +4,6 @@ import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Swal from 'sweetalert2'
 import local from '../../../../Shared/Assets/ar.json'
-import { englishToArabic } from '../../../../Mohassel/Services/statusLanguage'
 import { getLoanOfficer } from '../../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import {
   beneficiaryType,
@@ -12,8 +11,9 @@ import {
   getErrorMessage,
   interestPeriod,
   periodType,
-  timeToArabicDate,
   getRenderDate,
+  statusLocale,
+  extractGMTDate,
 } from '../../../../Shared/Services/utils'
 
 interface Props {
@@ -151,7 +151,7 @@ export const LoanDetailsTableView = ({
         {application.issueDate > 0 && (
           <tr>
             <td>{local.loanIssuanceDate}</td>
-            <td>{timeToArabicDate(application.issueDate, false)}</td>
+            <td>{extractGMTDate(application.issueDate)}</td>
           </tr>
         )}
       </tbody>
@@ -211,7 +211,7 @@ export const CustomerLoanDetailsBoxView = ({ application }: Props) => {
             <Form.Label style={{ color: '#6e6e6e' }}>
               {local.loanStatus}
             </Form.Label>
-            <Form.Label>{englishToArabic(application.status).text}</Form.Label>
+            <Form.Label>{statusLocale[application.status].text}</Form.Label>
           </Form.Group>
           <Form.Group as={Col} md="3" className="d-flex flex-column">
             <Form.Label style={{ color: '#6e6e6e' }}>

@@ -91,23 +91,6 @@ label {
   margin: 30px;
 }
 
-.dropdown-container {
-  display: flex;
-  border: 1px #e5e5e5 solid;
-  border-radius: 5px;
-  padding-left: 10px;
-  & .dropdown-label {
-    margin: 0px;
-    background: #e5e5e5;
-    padding: 10px 15px;
-  }
-  & .dropdown-select {
-    height: auto;
-    border: 0px;
-    cursor: pointer;
-  }
-}
-
 .tab {
   font-weight: bold;
   font-size: 15px;
@@ -173,75 +156,6 @@ label {
   margin-right: 5px;
 }
 
-.status-chip {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  border-radius: 30px;
-  color: #fff;
-  font-size: 12px;
-  min-width: 100px;
-  font-weight: bold;
-  height: 30px;
-  &.outline {
-    background-color: #fff;
-  }
-  &.under-review {
-    border: 1px solid #ed7600;
-    color: #ed7600;
-  }
-  &.created {
-    border: 1px solid #2a3390;
-    color: #2a3390;
-  }
-  &.reviewed {
-    border: 1px solid #edb600;
-    color: #edb600;
-  }
-  &.second-review {
-    border: 1px solid #edb679;
-    color: #edb679;
-  }
-  &.third-review {
-    border: 1px solid #f4c109;
-    color: #f4c109;
-  }
-  &.approved {
-    border: 1px solid #009bed;
-    color: #009bed;
-  }
-  &.rejected {
-    border: 1px solid #d51b1b;
-    color: #d51b1b;
-  }
-  &.late {
-    background-color: #d51b1b;
-  }
-  &.paid {
-    background-color: #7dc356;
-  }
-  &.unpaid {
-    background-color: #009bed;
-  }
-  &.rescheduled {
-    background-color: #2a3390;
-  }
-  &.partially-paid {
-    background-color: #edb600;
-  }
-  &.cancelled {
-    background-color: gray;
-  }
-  &.pending {
-    background-color: #edb600;
-    color: #fff;
-  }
-  &.canceled {
-    background-color: #d51b1b;
-    color: #fff;
-  }
-}
 
 @media print {
   * {

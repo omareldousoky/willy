@@ -39,6 +39,7 @@ interface Props {
   document: any
   documents: any[]
   selectionArray: Image[]
+  docType?: string
 }
 
 interface State {
@@ -217,6 +218,7 @@ class DocumentUploader extends Component<Props, State> {
               this.props.addNewToDocuments({
                 docName: name,
                 imagesFiles: [newDocument],
+                type: this.props.docType,
               })
             }
           }
