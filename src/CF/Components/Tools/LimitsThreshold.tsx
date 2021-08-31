@@ -157,63 +157,69 @@ class LimitsThreshold extends Component<RouteComponentProps, State> {
           >
             {(formikProps) => (
               <Form onSubmit={formikProps.handleSubmit} className="data-form">
-                <Form.Group controlId="maxTenorInMonths">
-                  <Form.Label
-                    className="data-label"
-                    style={{ textAlign: 'right' }}
-                    column
-                    sm={3}
-                  >{`${local.months}*`}</Form.Label>
+                <Row>
                   <Col sm={6}>
-                    <Form.Control
-                      type="number"
-                      name="maxTenorInMonths"
-                      data-qc="maxTenorInMonths"
-                      value={formikProps.values.maxTenorInMonths}
-                      onBlur={formikProps.handleBlur}
-                      onChange={formikProps.handleChange}
-                      isInvalid={
-                        Boolean(formikProps.errors.maxTenorInMonths) &&
-                        Boolean(formikProps.touched.maxTenorInMonths)
-                      }
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {formikProps.errors.maxTenorInMonths}
-                    </Form.Control.Feedback>
+                    <Form.Group controlId="maxTenorInMonths">
+                      <Form.Label
+                        className="data-label"
+                        style={{ textAlign: 'right' }}
+                        column
+                        sm={4}
+                      >{`${local.months}*`}</Form.Label>
+                      <Col sm={9}>
+                        <Form.Control
+                          type="number"
+                          name="maxTenorInMonths"
+                          data-qc="maxTenorInMonths"
+                          value={formikProps.values.maxTenorInMonths}
+                          onBlur={formikProps.handleBlur}
+                          onChange={formikProps.handleChange}
+                          isInvalid={
+                            Boolean(formikProps.errors.maxTenorInMonths) &&
+                            Boolean(formikProps.touched.maxTenorInMonths)
+                          }
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.maxTenorInMonths}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
                   </Col>
-                </Form.Group>
-                <Form.Group controlId="annualInterestRate">
-                  <Form.Label
-                    className="data-label"
-                    style={{ textAlign: 'right' }}
-                    column
-                    sm={3}
-                  >{`${local.interest}*`}</Form.Label>
                   <Col sm={6}>
-                    <Form.Control
-                      type="number"
-                      name="annualInterestRate"
-                      data-qc="annualInterestRate"
-                      value={formikProps.values.annualInterestRate}
-                      onBlur={formikProps.handleBlur}
-                      onChange={formikProps.handleChange}
-                      isInvalid={
-                        Boolean(formikProps.errors.annualInterestRate) &&
-                        Boolean(formikProps.touched.annualInterestRate)
-                      }
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {formikProps.errors.annualInterestRate}
-                    </Form.Control.Feedback>
+                    <Form.Group controlId="annualInterestRate">
+                      <Form.Label
+                        className="data-label"
+                        style={{ textAlign: 'right' }}
+                        column
+                        sm={4}
+                      >{`${local.interest}*`}</Form.Label>
+                      <Col sm={9}>
+                        <Form.Control
+                          type="number"
+                          name="annualInterestRate"
+                          data-qc="annualInterestRate"
+                          value={formikProps.values.annualInterestRate}
+                          onBlur={formikProps.handleBlur}
+                          onChange={formikProps.handleChange}
+                          isInvalid={
+                            Boolean(formikProps.errors.annualInterestRate) &&
+                            Boolean(formikProps.touched.annualInterestRate)
+                          }
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.annualInterestRate}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
                   </Col>
-                </Form.Group>
+                </Row>
                 <Row>
                   <Col sm={6}>
                     <Form.Group controlId="globalCFMin">
                       <Form.Label
                         className="data-label"
                         column
-                        sm={3}
+                        sm={4}
                       >{`${local.globalCFMin}*`}</Form.Label>
                       <Col sm={9}>
                         <Form.Control
@@ -239,7 +245,7 @@ class LimitsThreshold extends Component<RouteComponentProps, State> {
                       <Form.Label
                         className="data-label"
                         column
-                        sm={3}
+                        sm={4}
                       >{`${local.globalCFMax}*`}</Form.Label>
                       <Col sm={9}>
                         <Form.Control
@@ -267,7 +273,7 @@ class LimitsThreshold extends Component<RouteComponentProps, State> {
                       <Form.Label
                         className="data-label"
                         column
-                        sm={3}
+                        sm={4}
                       >{`${local.DBRPercentLowStart}*`}</Form.Label>
                       <Col sm={9}>
                         <Form.Control
@@ -293,7 +299,7 @@ class LimitsThreshold extends Component<RouteComponentProps, State> {
                       <Form.Label
                         className="data-label"
                         column
-                        sm={3}
+                        sm={4}
                       >{`${local.DBRPercentLow}*`}</Form.Label>
                       <Col sm={9}>
                         <Form.Control
@@ -322,7 +328,7 @@ class LimitsThreshold extends Component<RouteComponentProps, State> {
                         className="data-label"
                         style={{ textAlign: 'right' }}
                         column
-                        sm={3}
+                        sm={4}
                       >{`${local.DBRPercentMidStart}*`}</Form.Label>
                       <Col sm={9}>
                         <Form.Control
@@ -348,7 +354,7 @@ class LimitsThreshold extends Component<RouteComponentProps, State> {
                       <Form.Label
                         className="data-label"
                         column
-                        sm={3}
+                        sm={4}
                       >{`${local.DBRPercentMid}*`}</Form.Label>
                       <Col sm={9}>
                         <Form.Control
@@ -377,7 +383,7 @@ class LimitsThreshold extends Component<RouteComponentProps, State> {
                         className="data-label"
                         style={{ textAlign: 'right' }}
                         column
-                        sm={3}
+                        sm={4}
                       >{`${local.DBRPercentHighStart}*`}</Form.Label>
                       <Col sm={9}>
                         <Form.Control
@@ -403,7 +409,7 @@ class LimitsThreshold extends Component<RouteComponentProps, State> {
                       <Form.Label
                         className="data-label"
                         column
-                        sm={3}
+                        sm={4}
                       >{`${local.DBRPercentHigh}*`}</Form.Label>
                       <Col sm={9}>
                         <Form.Control
