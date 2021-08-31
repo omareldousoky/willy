@@ -1164,6 +1164,7 @@
   "approveCFCustomerLimit": "تأكيد الحد الائتماني للعميل",
   "consumerFinanceLimitStatus": "حالة الحد الائتماني للعميل",
   "consumerFinanceMaxLimit": "الحد الائتماني الاقصى للعميل",
+  "monthlyAnalysisReport": "التحليل الشهري",
   "DBRPercentLowStart": "DBR low start",
   "DBRPercentMidStart": "DBR mid start",
   "DBRPercentHighStart": "DBR high start",
