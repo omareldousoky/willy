@@ -9,14 +9,19 @@ import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 
 import { searchUserByAction } from '../../../Mohassel/Services/APIs/UserByAction/searchUserByAction'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import {
+  getErrorMessage,
+  getFormattedLocalDate,
+  timeToDateyyymmdd,
+} from '../../../Shared/Services/utils'
 import { payment } from '../../../Shared/redux/payment/actions'
 import { Employee } from '.'
 import * as local from '../../../Shared/Assets/ar.json'
 import './styles.scss'
 import Can from '../../../Shared/config/Can'
 import { theme } from '../../../Shared/theme'
-import { Installment } from '../../../Shared/Services/interfaces'
+import { ApplicationResponse } from '../../../Shared/Models/Application'
+import { getFirstDueInstallment } from '../../../Shared/Utils/payment'
 
 interface State {
   employees: Array<Employee>
@@ -28,25 +33,8 @@ interface Member {
     _id: string
   }
 }
-interface Application {
-  installmentsObject: InstallmentsObject
-  product: {
-    beneficiaryType: string
-    type: string
-  }
-  group: {
-    individualsInGroup: Array<Member>
-  }
-}
-interface InstallmentsObject {
-  totalInstallments: TotalInstallments
-  installments: Array<Installment>
-}
-interface TotalInstallments {
-  installmentSum: number
-}
 interface Props {
-  application: Application
+  application: ApplicationResponse
   changePaymentState: (data) => void
   handleSubmit: (data) => void
   payAmount: number
@@ -89,6 +77,9 @@ class ManualPayment extends Component<Props, State> {
   }
 
   render() {
+    const firstDueInstallment = getFirstDueInstallment(this.props.application)
+    const isNormalPayment = this.props.paymentType === 'normal'
+
     return (
       <Form onSubmit={this.props.formikProps.handleSubmit}>
         <Form.Group as={Row}>
@@ -101,7 +92,7 @@ class ManualPayment extends Component<Props, State> {
               type="date"
               name="truthDate"
               data-qc="truthDate"
-              min="2021-02-01"
+              min={getFormattedLocalDate(this.props.application.issueDate || 0)}
               value={this.props.formikProps.values.truthDate}
               onBlur={this.props.formikProps.handleBlur}
               onChange={this.props.formikProps.handleChange}
@@ -177,7 +168,7 @@ class ManualPayment extends Component<Props, State> {
               {this.props.formikProps.errors.receiptNumber}
             </Form.Control.Feedback>
           </Form.Group>
-          {this.props.paymentType === 'normal' && !this.props.bankPayment && (
+          {isNormalPayment && !this.props.bankPayment && (
             <Form.Group as={Col} md={6} controlId="installmentNumber">
               <Form.Label
                 column
@@ -187,9 +178,14 @@ class ManualPayment extends Component<Props, State> {
                 as="select"
                 name="installmentNumber"
                 data-qc="installmentNumber"
-                value={this.props.formikProps.values.installmentNumber}
+                defaultValue={
+                  isNormalPayment
+                    ? firstDueInstallment?.id ||
+                      this.props.formikProps.values.installmentNumber
+                    : this.props.formikProps.values.installmentNumber
+                }
                 onChange={(event) => {
-                  const installment = this.props.application.installmentsObject.installments.find(
+                  const installment = this.props.application?.installmentsObject?.installments?.find(
                     (inst) => inst.id === Number(event.currentTarget.value)
                   )
                   this.props.formikProps.setFieldValue(
@@ -208,10 +204,14 @@ class ManualPayment extends Component<Props, State> {
                       ? installment.installmentResponse - installment?.totalPaid
                       : 0
                   )
+                  this.props.formikProps.setFieldValue(
+                    'dueDate',
+                    timeToDateyyymmdd(installment?.dateOfPayment || -1)
+                  )
                 }}
               >
                 <option value={-1} />
-                {this.props.application.installmentsObject.installments.map(
+                {this.props.application?.installmentsObject?.installments?.map(
                   (installment) => {
                     if (
                       installment.status !== 'paid' &&

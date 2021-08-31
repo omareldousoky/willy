@@ -9,15 +9,20 @@ import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import {
+  getErrorMessage,
+  getFormattedLocalDate,
+  timeToDateyyymmdd,
+} from '../../../Shared/Services/utils'
 import { payment } from '../../../Shared/redux/payment/actions'
 import { Employee } from './payment'
 import * as local from '../../../Shared/Assets/ar.json'
 import './styles.scss'
 import { PendingActions } from '../../../Shared/Services/interfaces'
-import { Installment } from './payInstallment'
 import Can from '../../config/Can'
 import { theme } from '../../../Shared/theme'
+import { ApplicationResponse } from '../../../Shared/Models/Application'
+import { getFirstDueInstallment } from '../../../Shared/Utils/payment'
 
 interface SelectObject {
   label: string
@@ -26,44 +31,8 @@ interface SelectObject {
 interface State {
   employees: Array<Employee>
 }
-interface FormValues {
-  truthDate: string
-  payAmount: number
-  randomPaymentType: string
-  max: number
-  dueDate: string
-  receiptNumber: string
-  payerType: string
-  payerNationalId: string
-  payerName: string
-  payerId: string
-  paymentType: string
-}
-interface Member {
-  customer: {
-    customerName: string
-    _id: string
-  }
-}
-interface Application {
-  installmentsObject: InstallmentsObject
-  product: {
-    beneficiaryType: string
-    type: string
-  }
-  group: {
-    individualsInGroup: Array<Member>
-  }
-}
-interface InstallmentsObject {
-  totalInstallments: TotalInstallments
-  installments: Array<Installment>
-}
-interface TotalInstallments {
-  installmentSum: number
-}
 interface Props {
-  application: Application
+  application: ApplicationResponse
   changePaymentState: (data) => void
   handleSubmit: (data) => void
   payAmount: number
@@ -95,7 +64,7 @@ class ManualPayment extends Component<Props, State> {
     const smeRandomPaymentTypes = randomPaymentTypes.filter(
       (option) => !['toktokStamp', 'tricycleStamp'].includes(option.value)
     )
-    return this.props.application.product.type === 'sme'
+    return this.props.application?.product?.type === 'sme'
       ? smeRandomPaymentTypes
       : randomPaymentTypes
   }
@@ -123,6 +92,9 @@ class ManualPayment extends Component<Props, State> {
   }
 
   render() {
+    const firstDueInstallment = getFirstDueInstallment(this.props.application)
+    const isNormalPayment = this.props.paymentType === 'normal'
+
     return (
       <Form onSubmit={this.props.formikProps.handleSubmit}>
         {this.props.paymentType === 'random' ? (
@@ -174,7 +146,7 @@ class ManualPayment extends Component<Props, State> {
               type="date"
               name="truthDate"
               data-qc="truthDate"
-              min="2021-02-01"
+              min={getFormattedLocalDate(this.props.application.issueDate || 0)}
               value={this.props.formikProps.values.truthDate}
               onBlur={this.props.formikProps.handleBlur}
               onChange={this.props.formikProps.handleChange}
@@ -250,7 +222,7 @@ class ManualPayment extends Component<Props, State> {
               {this.props.formikProps.errors.receiptNumber}
             </Form.Control.Feedback>
           </Form.Group>
-          {this.props.paymentType === 'normal' && !this.props.bankPayment && (
+          {isNormalPayment && !this.props.bankPayment && (
             <Form.Group as={Col} md={6} controlId="installmentNumber">
               <Form.Label
                 column
@@ -260,9 +232,14 @@ class ManualPayment extends Component<Props, State> {
                 as="select"
                 name="installmentNumber"
                 data-qc="installmentNumber"
-                value={this.props.formikProps.values.installmentNumber}
+                defaultValue={
+                  isNormalPayment
+                    ? firstDueInstallment?.id ||
+                      this.props.formikProps.values.installmentNumber
+                    : this.props.formikProps.values.installmentNumber
+                }
                 onChange={(event) => {
-                  const installment = this.props.application.installmentsObject.installments.find(
+                  const installment = this.props.application?.installmentsObject?.installments?.find(
                     (inst) => inst.id === Number(event.currentTarget.value)
                   )
                   this.props.formikProps.setFieldValue(
@@ -272,19 +249,23 @@ class ManualPayment extends Component<Props, State> {
                   this.props.formikProps.setFieldValue(
                     'requiredAmount',
                     installment
-                      ? installment.installmentResponse - installment?.totalPaid
+                      ? installment.installmentResponse - installment.totalPaid
                       : 0
                   )
                   this.props.formikProps.setFieldValue(
                     'payAmount',
                     installment
-                      ? installment.installmentResponse - installment?.totalPaid
+                      ? installment.installmentResponse - installment.totalPaid
                       : 0
+                  )
+                  this.props.formikProps.setFieldValue(
+                    'dueDate',
+                    timeToDateyyymmdd(installment?.dateOfPayment || -1)
                   )
                 }}
               >
                 <option value={-1} />
-                {this.props.application.installmentsObject.installments.map(
+                {this.props.application?.installmentsObject?.installments?.map(
                   (installment) => {
                     if (
                       installment.status !== 'paid' &&
@@ -393,7 +374,7 @@ class ManualPayment extends Component<Props, State> {
             </Form.Group>
           )}
           {this.props.formikProps.values.payerType === 'beneficiary' &&
-            this.props.application.product.beneficiaryType === 'group' && (
+            this.props.application?.product?.beneficiaryType === 'group' && (
               <Form.Group as={Col} md={6} controlId="customer">
                 <Form.Label
                   style={{ paddingRight: 0 }}
@@ -412,7 +393,7 @@ class ManualPayment extends Component<Props, State> {
                   }
                 >
                   <option value="" />
-                  {this.props.application.group.individualsInGroup.map(
+                  {this.props.application?.group?.individualsInGroup?.map(
                     (member, index) => {
                       return (
                         <option key={index} value={member.customer._id}>

@@ -3,7 +3,7 @@ import { getStatus } from '../../../Shared/Services/utils'
 import {
   ApplicationResponse,
   SingleInstallmentRow,
-} from '../../Models/Application'
+} from '../../../Shared/Models/Application'
 import local from '../../../Shared/Assets/ar.json'
 import { RemainingLoanResponse } from '../../Models/Payment'
 import { EarlyPaymentPdfData } from './types'
