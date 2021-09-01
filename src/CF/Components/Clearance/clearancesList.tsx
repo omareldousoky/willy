@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-import Can from '../../config/Can'
+import Can from '../../../Shared/config/Can'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -19,8 +19,8 @@ import {
 import { getCookie } from '../../../Shared/Services/getCookie'
 import ClearancePaper from './clearancePaper'
 import {
-  changeClearancePrintStatus,
   ChangeClearancePrintStatusRequest,
+  changeClearancePrintStatus,
 } from '../../../Shared/Services/APIs/clearance/changeClearancePrintStatus'
 import { loading } from '../../../Shared/redux/loading/actions'
 import { LtsIcon } from '../../../Shared/Components'
@@ -55,10 +55,16 @@ class ClearancesList extends Component<Props, State> {
 
   constructor(props) {
     super(props)
+
+    let branchId = getCookie('ltsbranch')
+      ? JSON.parse(getCookie('ltsbranch'))._id
+      : ''
+    branchId = branchId === 'hq' ? '' : branchId
+
     this.state = {
       size: 10,
       from: 0,
-      branchId: JSON.parse(getCookie('ltsbranch'))._id,
+      branchId,
       searchKey: ['keyword', 'dateFromTo', 'clearance-status', 'printed'],
       print: false,
       selectedClearances: [],

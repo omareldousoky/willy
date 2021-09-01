@@ -15,7 +15,7 @@ import {
   CardNavBar,
   Tab,
 } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
-import Can from '../../config/Can'
+import Can from '../../../Shared/config/Can'
 import { theme } from '../../../Shared/theme'
 import { Clearance } from '../../../Shared/Services/interfaces'
 import CustomerBasicsCard from './basicInfoCustomer'
