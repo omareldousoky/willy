@@ -9,4 +9,5 @@ export interface LoanListLocationState {
 
 export interface LoanListHistoryState {
   id: string
+  sme: boolean
 }

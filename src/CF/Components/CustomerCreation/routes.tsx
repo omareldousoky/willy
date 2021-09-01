@@ -3,6 +3,7 @@ import Can from '../../../Shared/config/Can'
 import CustomerCreation from '.'
 import { CustomerProfile } from './CustomerProfile'
 import CustomersList from './CustomersList'
+import ClearanceCreation from '../Clearance/clearanceCreation'
 import local from '../../../Shared/Assets/ar.json'
 
 export const customerCreationRoutes = {
@@ -32,6 +33,15 @@ export const customerCreationRoutes = {
       path: '/view-customer',
       label: local.viewCustomer,
       render: (props) => <CustomerProfile {...props} />,
+    },
+    {
+      path: '/create-clearance',
+      label: local.createClearance,
+      render: (props) => (
+        <Can I="newClearance" a="application">
+          <ClearanceCreation {...props} />
+        </Can>
+      ),
     },
   ],
 }

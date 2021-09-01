@@ -49,7 +49,7 @@ import UploadDocuments from './uploadDocuments'
 import { writeOffLoan } from '../../../../Mohassel/Services/APIs/Loan/writeOffLoan'
 import { doubtLoan } from '../../../../Mohassel/Services/APIs/Loan/doubtLoan'
 import PaymentReceipt from '../../../../Shared/Components/pdfTemplates/paymentReceipt'
-import { calculatePenalties } from '../../../../Mohassel/Services/APIs/Payment/calculatePenalties'
+import { calculatePenalties } from '../../../../Shared/Services/APIs/clearance/calculatePenalties'
 import { numTo2Decimal } from '../../../../Mohassel/Components/CIB/textFiles'
 import { FollowUpStatementView } from './followupStatementView'
 import { remainingLoan } from '../../../../Mohassel/Services/APIs/Loan/remainingLoan'
@@ -78,6 +78,7 @@ import {
 import { getRollableActionsById } from '../../../../Shared/Services/APIs/loanApplication/rollBack'
 import { returnItem } from '../../../Services/APIs/loan'
 import { doneSuccessfully } from '../../../../Shared/localUtils'
+import Rescheduling from '../../Rescheduling/rescheduling'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -314,6 +315,17 @@ class LoanProfile extends Component<Props, State> {
       permissionKey: 'user',
     }
 
+    const reschedulingTab = {
+      header: local.rescheduling,
+      stringKey: 'loanRescheduling',
+      permission: [
+        'pushInstallment',
+        'traditionRescheduling',
+        'freeRescheduling',
+      ],
+      permissionKey: 'application',
+    }
+
     if (application.body.status === 'paid') tabsToRender.push(customerCardTab)
     if (
       application.body.status === 'issued' ||
@@ -321,6 +333,7 @@ class LoanProfile extends Component<Props, State> {
     ) {
       tabsToRender.push(customerCardTab)
       tabsToRender.push(paymentTab)
+      tabsToRender.push(reschedulingTab)
     }
     tabsToRender.push(logsTab)
 
@@ -1020,6 +1033,10 @@ class LoanProfile extends Component<Props, State> {
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="penalties"
           />
+        )
+      case 'loanRescheduling':
+        return (
+          <Rescheduling application={this.state.application} test={false} />
         )
       default:
         return null
