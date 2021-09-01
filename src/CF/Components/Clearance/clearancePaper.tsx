@@ -50,7 +50,7 @@ export default class ClearancePaper extends Component<Props, {}> {
             <div className="rightText">
               الكود المدرج لشركة حالا فى شركة أى سكور
             </div>
-            <br />\
+            <br />
             <br />
             <div className="rightText">تحيه طيبه وبعد ،،،،،</div>
             <div className="rightText">
