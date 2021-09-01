@@ -566,5 +566,9 @@
   "duplicate_phone_number": {
     "en": "duplicated phone number",
     "ar": "رقم الهاتف موجود بالفعل"
+  },
+  "add_manager_hierarchy": {
+    "en": "Please add manager hierarchy to the branch",
+    "ar":  "برجاء إضافة المديرين للفرع"
   }
 }
