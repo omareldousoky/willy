@@ -457,9 +457,10 @@ class DefaultingCustomersList extends Component<Props, State> {
             loan.application.status &&
             ['pending', 'issued'].includes(loan.application.status)
         ),
+        productType: 'micro',
       })
     } else {
-      this.setState({ modalLoader: false })
+      this.setState({ modalLoader: false, productType: 'micro' })
       Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
     }
   }
@@ -479,6 +480,7 @@ class DefaultingCustomersList extends Component<Props, State> {
             selectedCustomer: {},
             customerSearchResults: { results: [], empty: false },
             loanSearchResults: [],
+            productType: 'micro',
           },
           () => {
             this.wait(2000)
