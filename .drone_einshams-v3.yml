@@ -87,7 +87,7 @@ steps:
       from_secret: kubernetes_cert
     namespace: ${DRONE_BRANCH}
     deployment: fe-mohassel
-    repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/${DRONE_REPO_NAME}/mohassel
+    repo: 624792314775.dkr.ecr.eu-central-1.amazonaws.com/${DRONE_REPO_NAME}/mohassel
     container: fe-mohassel
     tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
 
