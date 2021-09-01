@@ -240,7 +240,6 @@ class ManualPayment extends Component<Props, State> {
                     : this.props.formikProps.values.installmentNumber
                 }
                 onChange={(event) => {
-                  if (this.props.bankPayment) return
                   const installment = this.props.application?.installmentsObject?.installments?.find(
                     (inst) => inst.id === Number(event.currentTarget.value)
                   )
