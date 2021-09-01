@@ -2,6 +2,7 @@ import * as Yup from 'yup'
 import * as local from '../../../Shared/Assets/ar.json'
 import { maxValue, minValue } from '../../../Shared/localUtils'
 import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
+import { GlobalCFLimits } from '../../Models/globalLimits'
 
 export const step1: any = {
   customerName: '',
@@ -77,7 +78,7 @@ export const step3 = {
 const endOfDay: Date = new Date()
 endOfDay.setHours(23, 59, 59, 59)
 
-export const customerCreationValidationStepOne = (globalCFMin, globalCFMax) =>
+export const customerCreationValidationStepOne = (limits: GlobalCFLimits) =>
   Yup.object().shape({
     customerName: Yup.string()
       .trim()
@@ -116,11 +117,11 @@ export const customerCreationValidationStepOne = (globalCFMin, globalCFMax) =>
       })
       .required(local.required),
     monthlyIncome: Yup.number()
-      .min(3000, minValue(3000))
+      .min(limits.DBRPercentLowStart, minValue(limits.DBRPercentLowStart))
       .required(local.required),
     initialConsumerFinanceLimit: Yup.number()
-      .min(globalCFMin, minValue(globalCFMin))
-      .max(globalCFMax, maxValue(globalCFMax))
+      .min(limits.globalCFMin, minValue(limits.globalCFMin))
+      .max(limits.globalCFMax, maxValue(limits.globalCFMax))
       .test(
         'initialConsumerFinanceLimit',
         local.customerMaxPrincipalError,

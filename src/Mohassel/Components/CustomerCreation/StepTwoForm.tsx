@@ -11,11 +11,9 @@ import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../config/Can'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { IscoreAuthority } from '../../../Shared/Services/interfaces'
 import {
   getBusinessSectors,
   getGovernorates,
-  getIscoreIssuingAuthorities,
 } from '../../../Shared/Services/APIs/config'
 import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
 
@@ -59,7 +57,6 @@ export const StepTwoForm = (props: any) => {
     touched,
     setFieldValue,
     previousStep,
-    isCompany,
   } = props
   const [mapState, openCloseMap] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -91,16 +88,11 @@ export const StepTwoForm = (props: any) => {
       ],
     },
   ])
-  const [authorities, setAuthorities] = useState<Array<IscoreAuthority>>([])
   async function getConfig() {
     setLoading(true)
-    const resGov = isCompany
-      ? await getIscoreIssuingAuthorities()
-      : await getGovernorates()
+    const resGov = await getGovernorates()
     if (resGov.status === 'success') {
-      isCompany
-        ? setAuthorities(resGov.body.data)
-        : setGovernorates(resGov.body.governorates)
+      setGovernorates(resGov.body.governorates)
     } else Swal.fire('Error !', getErrorMessage(resGov.error.error), 'error')
 
     const resBS = await getBusinessSectors()
@@ -137,9 +129,9 @@ export const StepTwoForm = (props: any) => {
       <Row>
         <Col sm={12}>
           <Form.Group controlId="businessName">
-            <Form.Label className="customer-form-label">{`${
-              isCompany ? local.companyName : local.businessName
-            }*`}</Form.Label>
+            <Form.Label className="customer-form-label">
+              {local.businessName}
+            </Form.Label>
             <Form.Control
               type="text"
               name="businessName"
@@ -158,9 +150,9 @@ export const StepTwoForm = (props: any) => {
       <Row>
         <Col sm={12}>
           <Form.Group controlId="businessAddress">
-            <Form.Label className="customer-form-label">{`${
-              isCompany ? local.companyAddress : local.businessAddress
-            }*`}</Form.Label>
+            <Form.Label className="customer-form-label">
+              {local.businessAddress}
+            </Form.Label>
             <Form.Control
               type="text"
               name="businessAddress"
@@ -176,32 +168,39 @@ export const StepTwoForm = (props: any) => {
           </Form.Group>
         </Col>
       </Row>
-      {isCompany && (
+
+      <>
         <Row>
-          <Col sm={6}>
-            <Form.Group controlId="businessCharacteristic">
-              <Form.Label className="customer-form-label">{`${local.businessCharacteristic}*`}</Form.Label>
+          <Col sm={12}>
+            <Form.Group controlId="customerWorkAddressLocation">
+              <Form.Label className="customer-form-label">
+                {local.customerWorkAddressLocationTitle}
+              </Form.Label>
               <Form.Control
                 type="text"
-                name="businessCharacteristic"
-                data-qc="businessCharacteristic"
-                value={values.businessCharacteristic}
-                onChange={handleChange}
-                isInvalid={
-                  errors.businessCharacteristic &&
-                  touched.businessCharacteristic
+                name="customerWorkAddressLocation"
+                data-qc="customerWorkAddressLocation"
+                style={{
+                  cursor: 'pointer',
+                  color: '#7dc356',
+                  textDecoration: 'underline',
+                }}
+                value={
+                  values.businessAddressLatLongNumber?.lat !== 0 &&
+                  values.businessAddressLatLongNumber?.lng !== 0
+                    ? local.addressChosen
+                    : local.chooseCustomerAddress
                 }
-                onBlur={handleBlur}
+                onClick={() => openCloseMap(true)}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.businessCharacteristic}
-              </Form.Control.Feedback>
             </Form.Group>
           </Col>
+        </Row>
+        <Row>
           <Col sm={6}>
             <Form.Group controlId="governorate">
               <Form.Label className="customer-form-label">
-                {local.iscoreIssuingAuthorities}
+                {local.governorate}
               </Form.Label>
               <Form.Control
                 as="select"
@@ -214,274 +213,185 @@ export const StepTwoForm = (props: any) => {
                 isInvalid={errors.governorate && touched.governorate}
               >
                 <option value="" disabled />
-                {authorities.map((authority, index) => {
+                {governorates.map((governorate, index) => {
                   return (
-                    <option key={index} value={authority.code}>
-                      {authority.nameArabic}
+                    <option key={index} value={governorate.governorateName.ar}>
+                      {governorate.governorateName.ar}
                     </option>
                   )
                 })}
               </Form.Control>
             </Form.Group>
           </Col>
-        </Row>
-      )}
-      {!isCompany && (
-        <>
-          <Row>
-            <Col sm={12}>
-              <Form.Group controlId="customerWorkAddressLocation">
-                <Form.Label className="customer-form-label">
-                  {local.customerWorkAddressLocationTitle}
-                </Form.Label>
-                <Form.Control
-                  type="text"
-                  name="customerWorkAddressLocation"
-                  data-qc="customerWorkAddressLocation"
-                  style={{
-                    cursor: 'pointer',
-                    color: '#7dc356',
-                    textDecoration: 'underline',
-                  }}
-                  value={
-                    values.businessAddressLatLongNumber?.lat !== 0 &&
-                    values.businessAddressLatLongNumber?.lng !== 0
-                      ? local.addressChosen
-                      : local.chooseCustomerAddress
-                  }
-                  onClick={() => openCloseMap(true)}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={6}>
-              <Form.Group controlId="governorate">
-                <Form.Label className="customer-form-label">
-                  {local.governorate}
-                </Form.Label>
-                <Form.Control
-                  as="select"
-                  type="select"
-                  name="governorate"
-                  data-qc="governorate"
-                  value={values.governorate}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  isInvalid={errors.governorate && touched.governorate}
-                >
-                  <option value="" disabled />
-                  {governorates.map((governorate, index) => {
+          <Col sm={6}>
+            <Form.Group controlId="district">
+              <Form.Label className="customer-form-label">
+                {local.district}
+              </Form.Label>
+              <Form.Control
+                as="select"
+                type="select"
+                name="district"
+                data-qc="district"
+                value={values.district}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                isInvalid={errors.district && touched.district}
+                disabled={!values.governorate}
+              >
+                <option value="" />
+                {governorates
+                  .find((gov) => gov.governorateName.ar === values.governorate)
+                  ?.districts.map((district, index) => {
                     return (
-                      <option
-                        key={index}
-                        value={governorate.governorateName.ar}
-                      >
-                        {governorate.governorateName.ar}
+                      <option key={index} value={district.districtName.ar}>
+                        {district.districtName.ar}
                       </option>
                     )
                   })}
-                </Form.Control>
-              </Form.Group>
-            </Col>
-            <Col sm={6}>
-              <Form.Group controlId="district">
-                <Form.Label className="customer-form-label">
-                  {local.district}
-                </Form.Label>
-                <Form.Control
-                  as="select"
-                  type="select"
-                  name="district"
-                  data-qc="district"
-                  value={values.district}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  isInvalid={errors.district && touched.district}
-                  disabled={!values.governorate}
-                >
-                  <option value="" />
-                  {governorates
-                    .find(
-                      (gov) => gov.governorateName.ar === values.governorate
-                    )
-                    ?.districts.map((district, index) => {
-                      return (
-                        <option key={index} value={district.districtName.ar}>
-                          {district.districtName.ar}
-                        </option>
-                      )
-                    })}
-                </Form.Control>
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={6}>
-              <Form.Group controlId="village">
-                <Form.Label className="customer-form-label">
-                  {local.village}
-                </Form.Label>
-                <Form.Control
-                  as="select"
-                  type="select"
-                  name="village"
-                  data-qc="village"
-                  value={values.village}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  isInvalid={errors.village && touched.village}
-                  disabled={!values.district}
-                >
-                  <option value="" />
-                  {governorates
-                    .find(
-                      (gov) => gov.governorateName.ar === values.governorate
-                    )
-                    ?.districts.find(
-                      (district) => district.districtName.ar === values.district
-                    )
-                    ?.villages?.map((village, index) => {
-                      return (
-                        <option key={index} value={village.villageName.ar}>
-                          {village.villageName.ar}
-                        </option>
-                      )
-                    })}
-                </Form.Control>
-              </Form.Group>
-            </Col>
-            <Col sm={6}>
-              <Form.Group controlId="ruralUrban">
-                <Form.Label className="customer-form-label">
-                  {local.ruralUrban}
-                </Form.Label>
-                <div>
-                  <Form.Check
-                    className="d-inline-block pr-3"
-                    type="radio"
-                    data-qc="rural"
-                    checked={values.ruralUrban === 'rural'}
-                    value="rural"
-                    label={local.rural}
-                    name="ruralUrban"
-                    id="rural"
-                    onClick={(e) =>
-                      setFieldValue('ruralUrban', e.currentTarget.value)
-                    }
-                  />
-                  <Form.Check
-                    className="d-inline-block"
-                    type="radio"
-                    data-qc="urban"
-                    checked={values.ruralUrban === 'urban'}
-                    value="urban"
-                    label={local.urban}
-                    name="ruralUrban"
-                    id="urban"
-                    onClick={(e) =>
-                      setFieldValue('ruralUrban', e.currentTarget.value)
-                    }
-                  />
-                </div>
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={6}>
-              <Form.Group controlId="businessPhoneNumber">
-                <Form.Label className="customer-form-label">
-                  {local.businessPhoneNumber}
-                </Form.Label>
-                <Form.Control
-                  type="text"
-                  name="businessPhoneNumber"
-                  data-qc="businessPhoneNumber"
-                  value={values.businessPhoneNumber}
-                  onBlur={handleBlur}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    const re = /^\d*$/
-                    if (
-                      event.currentTarget.value === '' ||
-                      re.test(event.currentTarget.value)
-                    ) {
-                      setFieldValue(
-                        'businessPhoneNumber',
-                        event.currentTarget.value
-                      )
-                    }
-                  }}
-                  maxLength={11}
-                  isInvalid={
-                    errors.businessPhoneNumber && touched.businessPhoneNumber
-                  }
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.businessPhoneNumber}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Col>
-            <Col sm={6}>
-              <Form.Group controlId="businessPostalCode">
-                <Form.Label className="customer-form-label">
-                  {local.businessPostalCode}
-                </Form.Label>
-                <Form.Control
-                  type="text"
-                  name="businessPostalCode"
-                  data-qc="businessPostalCode"
-                  value={values.businessPostalCode}
-                  onBlur={handleBlur}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    const re = /^\d*$/
-                    if (
-                      event.currentTarget.value === '' ||
-                      re.test(event.currentTarget.value)
-                    ) {
-                      setFieldValue(
-                        'businessPostalCode',
-                        event.currentTarget.value
-                      )
-                    }
-                  }}
-                  maxLength={5}
-                  isInvalid={
-                    errors.businessPostalCode && touched.businessPostalCode
-                  }
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.businessPostalCode}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Col>
-          </Row>
-        </>
-      )}
-      {isCompany && (
+              </Form.Control>
+            </Form.Group>
+          </Col>
+        </Row>
         <Row>
-          <Col sm={12}>
-            <Form.Group controlId="businessActivityDetails">
-              <Form.Label className="customer-form-label">{`${local.businessActivityDetails}*`}</Form.Label>
+          <Col sm={6}>
+            <Form.Group controlId="village">
+              <Form.Label className="customer-form-label">
+                {local.village}
+              </Form.Label>
               <Form.Control
-                as="textarea"
-                name="businessActivityDetails"
-                data-qc="businessActivityDetails"
-                value={values.businessActivityDetails}
+                as="select"
+                type="select"
+                name="village"
+                data-qc="village"
+                value={values.village}
                 onBlur={handleBlur}
                 onChange={handleChange}
-                maxLength={500}
+                isInvalid={errors.village && touched.village}
+                disabled={!values.district}
+              >
+                <option value="" />
+                {governorates
+                  .find((gov) => gov.governorateName.ar === values.governorate)
+                  ?.districts.find(
+                    (district) => district.districtName.ar === values.district
+                  )
+                  ?.villages?.map((village, index) => {
+                    return (
+                      <option key={index} value={village.villageName.ar}>
+                        {village.villageName.ar}
+                      </option>
+                    )
+                  })}
+              </Form.Control>
+            </Form.Group>
+          </Col>
+          <Col sm={6}>
+            <Form.Group controlId="ruralUrban">
+              <Form.Label className="customer-form-label">
+                {local.ruralUrban}
+              </Form.Label>
+              <div>
+                <Form.Check
+                  className="d-inline-block pr-3"
+                  type="radio"
+                  data-qc="rural"
+                  checked={values.ruralUrban === 'rural'}
+                  value="rural"
+                  label={local.rural}
+                  name="ruralUrban"
+                  id="rural"
+                  onClick={(e) =>
+                    setFieldValue('ruralUrban', e.currentTarget.value)
+                  }
+                />
+                <Form.Check
+                  className="d-inline-block"
+                  type="radio"
+                  data-qc="urban"
+                  checked={values.ruralUrban === 'urban'}
+                  value="urban"
+                  label={local.urban}
+                  name="ruralUrban"
+                  id="urban"
+                  onClick={(e) =>
+                    setFieldValue('ruralUrban', e.currentTarget.value)
+                  }
+                />
+              </div>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={6}>
+            <Form.Group controlId="businessPhoneNumber">
+              <Form.Label className="customer-form-label">
+                {local.businessPhoneNumber}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="businessPhoneNumber"
+                data-qc="businessPhoneNumber"
+                value={values.businessPhoneNumber}
+                onBlur={handleBlur}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  const re = /^\d*$/
+                  if (
+                    event.currentTarget.value === '' ||
+                    re.test(event.currentTarget.value)
+                  ) {
+                    setFieldValue(
+                      'businessPhoneNumber',
+                      event.currentTarget.value
+                    )
+                  }
+                }}
+                maxLength={11}
                 isInvalid={
-                  errors.businessActivityDetails &&
-                  touched.businessActivityDetails
+                  errors.businessPhoneNumber && touched.businessPhoneNumber
                 }
               />
               <Form.Control.Feedback type="invalid">
-                {errors.businessActivityDetails}
+                {errors.businessPhoneNumber}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col sm={6}>
+            <Form.Group controlId="businessPostalCode">
+              <Form.Label className="customer-form-label">
+                {local.businessPostalCode}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="businessPostalCode"
+                data-qc="businessPostalCode"
+                value={values.businessPostalCode}
+                onBlur={handleBlur}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  const re = /^\d*$/
+                  if (
+                    event.currentTarget.value === '' ||
+                    re.test(event.currentTarget.value)
+                  ) {
+                    setFieldValue(
+                      'businessPostalCode',
+                      event.currentTarget.value
+                    )
+                  }
+                }}
+                maxLength={5}
+                isInvalid={
+                  errors.businessPostalCode && touched.businessPostalCode
+                }
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.businessPostalCode}
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
-      )}
+      </>
+
       <Row>
         <Col sm={12}>
           <Form.Group controlId="businessSector">
@@ -517,109 +427,107 @@ export const StepTwoForm = (props: any) => {
           </Form.Group>
         </Col>
       </Row>
-      {!isCompany && (
-        <Row>
-          <Col sm={6}>
-            <Form.Group controlId="businessActivity">
-              <Form.Label className="customer-form-label">{`${local.businessActivity}*`}</Form.Label>
-              <Can I="updateCustomerHasLoan" a="customer" passThrough>
-                {(allowed) => (
-                  <Form.Control
-                    as="select"
-                    type="select"
-                    name="businessActivity"
-                    data-qc="businessActivity"
-                    value={values.businessActivity}
-                    // disabled={!values.businessSector}
-                    onBlur={handleBlur}
-                    onChange={(e) => {
-                      setFieldValue('businessActivity', e.currentTarget.value)
-                      setFieldValue('businessSpeciality', '')
-                    }}
-                    isInvalid={
-                      errors.businessActivity && touched.businessActivity
-                    }
-                    disabled={
-                      !values.businessSector ||
-                      (!allowed && props.edit && props.hasLoan)
-                    }
-                  >
-                    <option value="" />
-                    {businessSectors
-                      .find(
-                        (businessSector) =>
-                          businessSector.i18n.ar === values.businessSector
+      <Row>
+        <Col sm={6}>
+          <Form.Group controlId="businessActivity">
+            <Form.Label className="customer-form-label">{`${local.businessActivity}*`}</Form.Label>
+            <Can I="updateCustomerHasLoan" a="customer" passThrough>
+              {(allowed) => (
+                <Form.Control
+                  as="select"
+                  type="select"
+                  name="businessActivity"
+                  data-qc="businessActivity"
+                  value={values.businessActivity}
+                  // disabled={!values.businessSector}
+                  onBlur={handleBlur}
+                  onChange={(e) => {
+                    setFieldValue('businessActivity', e.currentTarget.value)
+                    setFieldValue('businessSpeciality', '')
+                  }}
+                  isInvalid={
+                    errors.businessActivity && touched.businessActivity
+                  }
+                  disabled={
+                    !values.businessSector ||
+                    (!allowed && props.edit && props.hasLoan)
+                  }
+                >
+                  <option value="" />
+                  {businessSectors
+                    .find(
+                      (businessSector) =>
+                        businessSector.i18n.ar === values.businessSector
+                    )
+                    ?.activities.filter((activity) => activity.active)
+                    .map((activity, index) => {
+                      return (
+                        <option key={index} value={activity.i18n.ar}>
+                          {activity.i18n.ar}
+                        </option>
                       )
-                      ?.activities.filter((activity) => activity.active)
-                      .map((activity, index) => {
-                        return (
-                          <option key={index} value={activity.i18n.ar}>
-                            {activity.i18n.ar}
-                          </option>
-                        )
-                      })}
-                  </Form.Control>
-                )}
-              </Can>
-            </Form.Group>
-          </Col>
-          <Col sm={6}>
-            <Form.Group controlId="businessSpeciality">
-              <Form.Label className="customer-form-label">
-                {local.businessSpeciality}
-              </Form.Label>
-              <Can I="updateCustomerHasLoan" a="customer" passThrough>
-                {(allowed) => (
-                  <Form.Control
-                    as="select"
-                    type="select"
-                    name="businessSpeciality"
-                    data-qc="businessSpeciality"
-                    value={values.businessSpeciality}
-                    // disabled={!values.businessActivity}
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    isInvalid={
-                      errors.businessSpeciality && touched.businessSpeciality
-                    }
-                    disabled={
-                      !values.businessActivity ||
-                      (!allowed && props.edit && props.hasLoan)
-                    }
-                  >
-                    <option value="" />
-                    {businessSectors
-                      .find(
-                        (businessSector) =>
-                          businessSector.i18n.ar === values.businessSector
+                    })}
+                </Form.Control>
+              )}
+            </Can>
+          </Form.Group>
+        </Col>
+        <Col sm={6}>
+          <Form.Group controlId="businessSpeciality">
+            <Form.Label className="customer-form-label">
+              {local.businessSpeciality}
+            </Form.Label>
+            <Can I="updateCustomerHasLoan" a="customer" passThrough>
+              {(allowed) => (
+                <Form.Control
+                  as="select"
+                  type="select"
+                  name="businessSpeciality"
+                  data-qc="businessSpeciality"
+                  value={values.businessSpeciality}
+                  // disabled={!values.businessActivity}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  isInvalid={
+                    errors.businessSpeciality && touched.businessSpeciality
+                  }
+                  disabled={
+                    !values.businessActivity ||
+                    (!allowed && props.edit && props.hasLoan)
+                  }
+                >
+                  <option value="" />
+                  {businessSectors
+                    .find(
+                      (businessSector) =>
+                        businessSector.i18n.ar === values.businessSector
+                    )
+                    ?.activities.find(
+                      (activity) => activity.i18n.ar === values.businessActivity
+                    )
+                    ?.specialties?.filter((speciality) => speciality.active)
+                    .map((speciality, index) => {
+                      return (
+                        <option
+                          key={index}
+                          value={speciality.businessSpecialtyName.ar}
+                        >
+                          {speciality.businessSpecialtyName.ar}
+                        </option>
                       )
-                      ?.activities.find(
-                        (activity) =>
-                          activity.i18n.ar === values.businessActivity
-                      )
-                      ?.specialties?.filter((speciality) => speciality.active)
-                      .map((speciality, index) => {
-                        return (
-                          <option
-                            key={index}
-                            value={speciality.businessSpecialtyName.ar}
-                          >
-                            {speciality.businessSpecialtyName.ar}
-                          </option>
-                        )
-                      })}
-                  </Form.Control>
-                )}
-              </Can>
-            </Form.Group>
-          </Col>
-        </Row>
-      )}
+                    })}
+                </Form.Control>
+              )}
+            </Can>
+          </Form.Group>
+        </Col>
+      </Row>
+
       <Row>
         <Col sm={6}>
           <Form.Group controlId="businessLicenseNumber">
             <Form.Label className="customer-form-label">
-              {local.businessLicenseNumber + (isCompany ? '*' : '')}
+              {local.businessLicenseNumber}
             </Form.Label>
             <Form.Control
               type="text"
@@ -652,7 +560,7 @@ export const StepTwoForm = (props: any) => {
         <Col sm={6}>
           <Form.Group controlId="commercialRegisterNumber">
             <Form.Label className="customer-form-label">
-              {local.commercialRegisterNumber + (isCompany ? '*' : '')}
+              {local.commercialRegisterNumber}
             </Form.Label>
             <Form.Control
               type="text"
@@ -684,53 +592,12 @@ export const StepTwoForm = (props: any) => {
           </Form.Group>
         </Col>
       </Row>
-      {isCompany && (
-        <Row>
-          <Col sm={6}>
-            <Form.Group controlId="legalStructure">
-              <Form.Label className="customer-form-label">{`${local.legalStructure} *`}</Form.Label>
-              <Form.Control
-                type="text"
-                name="legalStructure"
-                data-qc="legalStructure"
-                value={values.legalStructure}
-                onBlur={handleBlur}
-                maxLength={100}
-                onChange={handleChange}
-                isInvalid={errors.legalStructure && touched.legalStructure}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.legalStructure}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
-          <Col sm={6}>
-            <Form.Group controlId="commercialRegisterExpiryDate">
-              <Form.Label className="customer-form-label">{`${local.commercialRegisterExpiryDate} *`}</Form.Label>
-              <Form.Control
-                type="date"
-                name="commercialRegisterExpiryDate"
-                data-qc="commercialRegisterExpiryDate"
-                value={values.commercialRegisterExpiryDate}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                isInvalid={
-                  errors.commercialRegisterExpiryDate &&
-                  touched.commercialRegisterExpiryDate
-                }
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.commercialRegisterExpiryDate}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
-        </Row>
-      )}
+
       <Row>
-        <Col sm={isCompany ? 12 : 6}>
+        <Col sm={6}>
           <Form.Group controlId="businessLicenseIssueDate">
             <Form.Label className="customer-form-label">
-              {local.businessLicenseIssueDate + (isCompany ? '*' : '')}
+              {local.businessLicenseIssueDate}
             </Form.Label>
             <Form.Control
               type="date"
@@ -749,73 +616,69 @@ export const StepTwoForm = (props: any) => {
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
-        {!isCompany && (
-          <Col sm={6}>
-            <Form.Group controlId="businessLicenseIssuePlace">
-              <Form.Label className="customer-form-label">
-                {local.businessLicenseIssuePlace}
-              </Form.Label>
-              <Form.Control
-                type="text"
-                name="businessLicenseIssuePlace"
-                data-qc="businessLicenseIssuePlace"
-                value={values.businessLicenseIssuePlace}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                maxLength={100}
-                isInvalid={
-                  errors.businessLicenseIssuePlace &&
-                  touched.businessLicenseIssuePlace
-                }
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.businessLicenseIssuePlace}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
-        )}
+        <Col sm={6}>
+          <Form.Group controlId="businessLicenseIssuePlace">
+            <Form.Label className="customer-form-label">
+              {local.businessLicenseIssuePlace}
+            </Form.Label>
+            <Form.Control
+              type="text"
+              name="businessLicenseIssuePlace"
+              data-qc="businessLicenseIssuePlace"
+              value={values.businessLicenseIssuePlace}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              maxLength={100}
+              isInvalid={
+                errors.businessLicenseIssuePlace &&
+                touched.businessLicenseIssuePlace
+              }
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.businessLicenseIssuePlace}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
       </Row>
       <Row>
-        {!isCompany && (
-          <Col sm={6}>
-            <Form.Group controlId="industryRegisterNumber">
-              <Form.Label className="customer-form-label">
-                {local.industryRegisterNumber + (isCompany ? '*' : '')}
-              </Form.Label>
-              <Form.Control
-                type="text"
-                name="industryRegisterNumber"
-                data-qc="industryRegisterNumber"
-                value={values.industryRegisterNumber}
-                onBlur={handleBlur}
-                maxLength={100}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  const re = /^\d*$/
-                  if (
-                    event.currentTarget.value === '' ||
-                    re.test(event.currentTarget.value)
-                  ) {
-                    setFieldValue(
-                      'industryRegisterNumber',
-                      event.currentTarget.value
-                    )
-                  }
-                }}
-                isInvalid={
-                  errors.industryRegisterNumber &&
-                  touched.industryRegisterNumber
+        <Col sm={6}>
+          <Form.Group controlId="industryRegisterNumber">
+            <Form.Label className="customer-form-label">
+              {local.industryRegisterNumber}
+            </Form.Label>
+            <Form.Control
+              type="text"
+              name="industryRegisterNumber"
+              data-qc="industryRegisterNumber"
+              value={values.industryRegisterNumber}
+              onBlur={handleBlur}
+              maxLength={100}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                const re = /^\d*$/
+                if (
+                  event.currentTarget.value === '' ||
+                  re.test(event.currentTarget.value)
+                ) {
+                  setFieldValue(
+                    'industryRegisterNumber',
+                    event.currentTarget.value
+                  )
                 }
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.industryRegisterNumber}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
-        )}
-        <Col sm={isCompany ? 12 : 6}>
+              }}
+              isInvalid={
+                errors.industryRegisterNumber && touched.industryRegisterNumber
+              }
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.industryRegisterNumber}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+
+        <Col sm={6}>
           <Form.Group controlId="taxCardNumber">
             <Form.Label className="customer-form-label">
-              {local.taxCardNumber + (isCompany ? '*' : '')}
+              {local.taxCardNumber}
             </Form.Label>
             <Form.Control
               type="text"

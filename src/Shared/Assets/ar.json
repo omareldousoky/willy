@@ -1163,5 +1163,16 @@
   "returnItem": "استرجاع المنتج",
   "approveCFCustomerLimit": "تأكيد الحد الائتماني",
   "consumerFinanceLimitStatus": "حالة الحد الائتماني للعميل",
-  "consumerFinanceMaxLimit": "الحد الائتماني الاقصى للعميل"
+  "consumerFinanceMaxLimit": "الحد الائتماني الاقصى للعميل",
+  "monthlyAnalysisReport": "التحليل الشهري",
+  "DBRPercentLowStart": "الحد الادني لصافي الراتب لل DBR",
+  "DBRPercentMidStart": "الحد الاوسط لصافي الراتب لل DBR",
+  "DBRPercentHighStart": "الحد الاقصي لصافي الراتب لل DBR",
+  "DBRPercentLow": "نسبة DBR للحد الادني",
+  "DBRPercentMid": "نسبة DBR للحد الاوسط",
+  "DBRPercentHigh": "نسبة DBR للحد الاقصي",
+  "globalCFMin": "الحد الادني للحد المبدئي للعميل",
+  "globalCFMax": "الحد الاقصي للحد المبدئي للعميل",
+  "maxInstallmentsLimit": "الحد الاقصي لعدد الاقساط (DBR)",
+  "maxInterestLimit": "الحد الاقصي لنسبه التمويل السنوي (DBR)"
 }
