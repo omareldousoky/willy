@@ -14,6 +14,7 @@ import { getErrorMessage } from '../../../Shared/Services/utils'
 import { getCFLimits, setCFLimits } from '../../Services/APIs/config'
 import { GlobalCFLimits } from '../../Models/globalLimits'
 import { limitThresholdValidationSchema } from './limitThresholdValidation'
+import { minValue } from '../../../Shared/localUtils'
 
 const LimitsThreshold: FunctionComponent = () => {
   const [loading, setLoading] = useState(false)
@@ -101,8 +102,8 @@ const LimitsThreshold: FunctionComponent = () => {
                     <Form.Label
                       className="data-label"
                       column
-                      sm={4}
-                    >{`${local.months}*`}</Form.Label>
+                      sm={5}
+                    >{`${local.maxInstallmentsLimit}*`}</Form.Label>
                     <Col sm={9}>
                       <Form.Control
                         type="number"
@@ -127,8 +128,8 @@ const LimitsThreshold: FunctionComponent = () => {
                     <Form.Label
                       className="data-label"
                       column
-                      sm={4}
-                    >{`${local.interest}*`}</Form.Label>
+                      sm={5}
+                    >{`${local.maxInterestLimit}*`}</Form.Label>
                     <Col sm={9}>
                       <Form.Control
                         type="number"
@@ -155,7 +156,7 @@ const LimitsThreshold: FunctionComponent = () => {
                     <Form.Label
                       className="data-label"
                       column
-                      sm={4}
+                      sm={5}
                     >{`${local.globalCFMin}*`}</Form.Label>
                     <Col sm={9}>
                       <Form.Control
@@ -181,7 +182,7 @@ const LimitsThreshold: FunctionComponent = () => {
                     <Form.Label
                       className="data-label"
                       column
-                      sm={4}
+                      sm={5}
                     >{`${local.globalCFMax}*`}</Form.Label>
                     <Col sm={9}>
                       <Form.Control
@@ -197,7 +198,9 @@ const LimitsThreshold: FunctionComponent = () => {
                         }
                       />
                       <Form.Control.Feedback type="invalid">
-                        {formikProps.errors.globalCFMax}
+                        {formikProps.errors.globalCFMax === 'globalCFMaxError'
+                          ? minValue(formikProps.values.globalCFMin)
+                          : formikProps.errors.globalCFMax}
                       </Form.Control.Feedback>
                     </Col>
                   </Form.Group>
@@ -209,7 +212,7 @@ const LimitsThreshold: FunctionComponent = () => {
                     <Form.Label
                       className="data-label"
                       column
-                      sm={4}
+                      sm={5}
                     >{`${local.DBRPercentLowStart}*`}</Form.Label>
                     <Col sm={9}>
                       <Form.Control
@@ -235,7 +238,7 @@ const LimitsThreshold: FunctionComponent = () => {
                     <Form.Label
                       className="data-label"
                       column
-                      sm={4}
+                      sm={5}
                     >{`${local.DBRPercentLow}*`}</Form.Label>
                     <Col sm={9}>
                       <Form.Control
@@ -263,7 +266,7 @@ const LimitsThreshold: FunctionComponent = () => {
                     <Form.Label
                       className="data-label"
                       column
-                      sm={4}
+                      sm={5}
                     >{`${local.DBRPercentMidStart}*`}</Form.Label>
                     <Col sm={9}>
                       <Form.Control
@@ -279,7 +282,10 @@ const LimitsThreshold: FunctionComponent = () => {
                         }
                       />
                       <Form.Control.Feedback type="invalid">
-                        {formikProps.errors.DBRPercentMidStart}
+                        {formikProps.errors.DBRPercentMidStart ===
+                        'midStartLimitError'
+                          ? minValue(formikProps.values.DBRPercentLowStart)
+                          : formikProps.errors.DBRPercentMidStart}
                       </Form.Control.Feedback>
                     </Col>
                   </Form.Group>
@@ -289,7 +295,7 @@ const LimitsThreshold: FunctionComponent = () => {
                     <Form.Label
                       className="data-label"
                       column
-                      sm={4}
+                      sm={5}
                     >{`${local.DBRPercentMid}*`}</Form.Label>
                     <Col sm={9}>
                       <Form.Control
@@ -317,7 +323,7 @@ const LimitsThreshold: FunctionComponent = () => {
                     <Form.Label
                       className="data-label"
                       column
-                      sm={4}
+                      sm={5}
                     >{`${local.DBRPercentHighStart}*`}</Form.Label>
                     <Col sm={9}>
                       <Form.Control
@@ -333,7 +339,10 @@ const LimitsThreshold: FunctionComponent = () => {
                         }
                       />
                       <Form.Control.Feedback type="invalid">
-                        {formikProps.errors.DBRPercentHighStart}
+                        {formikProps.errors.DBRPercentHighStart ===
+                        'highStartLimitError'
+                          ? minValue(formikProps.values.DBRPercentMidStart)
+                          : formikProps.errors.DBRPercentHighStart}
                       </Form.Control.Feedback>
                     </Col>
                   </Form.Group>
@@ -343,7 +352,7 @@ const LimitsThreshold: FunctionComponent = () => {
                     <Form.Label
                       className="data-label"
                       column
-                      sm={4}
+                      sm={5}
                     >{`${local.DBRPercentHigh}*`}</Form.Label>
                     <Col sm={9}>
                       <Form.Control

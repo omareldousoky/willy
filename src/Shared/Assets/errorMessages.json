@@ -566,5 +566,9 @@
   "duplicate_phone_number": {
     "en": "duplicated phone number",
     "ar": "رقم الهاتف موجود بالفعل"
+  },
+  "low_monthly_income": {
+    "en": "monthly income is lesser than allowed minimum",
+    "ar": "الدخل الشهري أقل من الحد الأدنى"
   }
 }
