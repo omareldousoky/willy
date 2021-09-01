@@ -129,6 +129,7 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
         actionOnClick: () =>
           history.push('/loans/loan-profile', {
             id: data.application._id,
+            sme: currentLoanType === 'sme',
           }),
       },
     ]
@@ -160,6 +161,7 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
           onClick={() =>
             history.push('/loans/loan-profile', {
               id: data.application._id,
+              sme: currentLoanType === 'sme',
             })
           }
         >
@@ -192,6 +194,7 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
           onClick={() =>
             history.push('/loans/loan-profile', {
               id: data.application._id,
+              sme: currentLoanType === 'sme',
             })
           }
         >

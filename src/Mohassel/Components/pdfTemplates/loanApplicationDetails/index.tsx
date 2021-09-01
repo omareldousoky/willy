@@ -153,9 +153,7 @@ export const LoanApplicationDetails = (props) => {
                     <>
                       <tr>
                         <th>البطاقة الضريبية</th>
-                        <td>
-                          {numbersToArabic(props.data.businessLicenseNumber)}
-                        </td>
+                        <td>{numbersToArabic(props.data.taxCardNumber)}</td>
                         <th>السجل التجاري</th>
                         <td>
                           {numbersToArabic(props.data.commercialRegisterNumber)}

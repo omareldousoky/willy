@@ -567,6 +567,10 @@
     "en": "duplicated phone number",
     "ar": "رقم الهاتف موجود بالفعل"
   },
+  "add_manager_hierarchy": {
+    "en": "Please add manager hierarchy to the branch",
+    "ar": "برجاء إضافة المديرين للفرع"
+  },
   "low_monthly_income": {
     "en": "monthly income is lesser than allowed minimum",
     "ar": "الدخل الشهري أقل من الحد الأدنى"
