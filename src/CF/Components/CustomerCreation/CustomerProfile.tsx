@@ -512,10 +512,10 @@ export const CustomerProfile = () => {
         <div>
           <div className="d-flex flex-row justify-content-between m-2">
             <div
-              className="d-flex justify-content-start"
+              className="d-flex justify-content-start align-items-center"
               style={{ width: '45%' }}
             >
-              <h3> {local.viewCustomer}</h3>
+              <h4> {local.viewCustomer}</h4>
               <span
                 style={{
                   display: 'flex',
@@ -537,6 +537,7 @@ export const CustomerProfile = () => {
                         customerDetails?.consumerFinanceLimitStatus || 'default'
                       ].color
                     }`,
+                    fontSize: '.8rem',
                   }}
                 >
                   {

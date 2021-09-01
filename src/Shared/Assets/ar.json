@@ -1161,7 +1161,7 @@
   "entitledToSign": "من له حق التوقيع",
   "searchPlaceholder": " البحث بإسم الفرع او برقم البطاقة أو الكود او رقم التليفون",
   "returnItem": "استرجاع المنتج",
-  "approveCFCustomerLimit": "تأكيد الحد الائتماني للعميل",
+  "approveCFCustomerLimit": "تأكيد الحد الائتماني",
   "consumerFinanceLimitStatus": "حالة الحد الائتماني للعميل",
   "consumerFinanceMaxLimit": "الحد الائتماني الاقصى للعميل"
 }
