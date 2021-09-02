@@ -1164,5 +1164,6 @@
   "approveCFCustomerLimit": "تأكيد الحد الائتماني للعميل",
   "consumerFinanceLimitStatus": "حالة الحد الائتماني للعميل",
   "consumerFinanceMaxLimit": "الحد الائتماني الاقصى للعميل",
-  "monthlyAnalysisReport": "التحليل الشهري"
+  "monthlyAnalysisReport": "التحليل الشهري",
+  "notApplicable": "لا ينطبق"
 }

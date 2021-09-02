@@ -241,7 +241,7 @@ export const LegalWarnings = () => {
     {
       title: local.nationalId,
       key: 'nationalId',
-      render: (warning) => warning.nationalId,
+      render: (warning) => warning.nationalId || local.notApplicable,
     },
     {
       title: local.loanCode,
