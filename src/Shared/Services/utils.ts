@@ -955,3 +955,12 @@ export const cfLimitStatusLocale = {
   },
   default: { text: 'الحد الائتماني المبدئي قيد التحقيق', color: '#edb600' },
 }
+
+export const groupByKeyName = (list, key) =>
+  list.reduce(
+    (hash, obj) => ({
+      ...hash,
+      [obj[key]]: (hash[obj[key]] || []).concat(obj),
+    }),
+    {}
+  )
