@@ -41,6 +41,7 @@ import {
   iscoreDate,
   getErrorMessage,
   statusLocale,
+  getFormattedLocalDate,
 } from '../../../../Shared/Services/utils'
 import { payment } from '../../../../Shared/redux/payment/actions'
 import { cancelApplication } from '../../../../Shared/Services/APIs/loanApplication/stateHandler'
@@ -1129,7 +1130,7 @@ class LoanProfile extends Component<Props, State> {
                   <span className="text-muted">{local.truthDate}</span>
                   <span>
                     {this.state.pendingActions.transactions
-                      ? timeToDateyyymmdd(
+                      ? getFormattedLocalDate(
                           this.state.pendingActions?.transactions[0].truthDate
                         )
                       : ''}
@@ -1139,7 +1140,7 @@ class LoanProfile extends Component<Props, State> {
                   <span className="text-muted">{local.dueDate}</span>
                   <span>
                     {this.state.pendingActions.transactions
-                      ? timeToDateyyymmdd(
+                      ? getFormattedLocalDate(
                           this.state.pendingActions.transactions[0].actualDate
                         )
                       : ''}
