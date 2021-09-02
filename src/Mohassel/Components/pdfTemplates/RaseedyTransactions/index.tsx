@@ -72,7 +72,7 @@ const RaseedyTransactionsReport = ({
     <>
       <Header title="" showCurrentUser={false} showCurrentTime={false} />
 
-      <Table striped bordered className="horizontal-table">
+      <Table striped bordered>
         <thead>
           <tr>
             {tableColumns.map((item, index) => (
