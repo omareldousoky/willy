@@ -40,7 +40,7 @@ import {
   iscoreDate,
   getErrorMessage,
   statusLocale,
-  getFormattedLocalDate,
+  timeToDateyyymmdd,
 } from '../../../../Shared/Services/utils'
 import { payment } from '../../../../Shared/redux/payment/actions'
 import { cancelApplication } from '../../../../Shared/Services/APIs/loanApplication/stateHandler'
@@ -842,8 +842,8 @@ class LoanProfile extends Component<Props, State> {
     }</th><th>${local.dueDate}</th><th>${local.amount}</th>
                             </thead>
                             <tbody><tr><td>${receiptNumber}</td>
-                            <td>${getFormattedLocalDate(truthDate)}</td>
-                            <td>${getFormattedLocalDate(actualDate)}</td>
+                            <td>${timeToDateyyymmdd(truthDate)}</td>
+                            <td>${timeToDateyyymmdd(actualDate)}</td>
                             <td>${transactionAmount}</td></tr></tbody>`
     Swal.fire({
       width: 700,
@@ -1129,7 +1129,7 @@ class LoanProfile extends Component<Props, State> {
                   <span className="text-muted">{local.truthDate}</span>
                   <span>
                     {this.state.pendingActions.transactions
-                      ? getFormattedLocalDate(
+                      ? timeToDateyyymmdd(
                           this.state.pendingActions?.transactions[0].truthDate
                         )
                       : ''}
@@ -1139,7 +1139,7 @@ class LoanProfile extends Component<Props, State> {
                   <span className="text-muted">{local.dueDate}</span>
                   <span>
                     {this.state.pendingActions.transactions
-                      ? getFormattedLocalDate(
+                      ? timeToDateyyymmdd(
                           this.state.pendingActions.transactions[0].actualDate
                         )
                       : ''}
