@@ -27,7 +27,7 @@ export const Calendar = ({
               const today = isToday(weekDaysDates[weekIndex])
               return (
                 <th key={weekIndex} className="text-center">
-                  <span className={`${today && ' text-primary'}`}>{day}</span>
+                  <span className={today ? 'text-primary' : ''}>{day}</span>
                   <span
                     className={`d-block my-2 font-weight-bolder ${
                       today && 'active-day'
