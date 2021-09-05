@@ -10,6 +10,7 @@ import { toolsRoutes } from '../Components/Tools/routes'
 import { leadsRoutes } from '../Components/Leads/routes'
 import { clearanceRoutes } from '../Components/Clearance/routes'
 import { legalRoutes } from '../Components/Legal/routes'
+import { actionLogsRoutes } from '../Components/ActionLogs/routes'
 
 const appRoutes = [
   {
@@ -24,6 +25,7 @@ const appRoutes = [
       leadsRoutes,
       clearanceRoutes,
       legalRoutes,
+      actionLogsRoutes,
     ],
   },
 ]
