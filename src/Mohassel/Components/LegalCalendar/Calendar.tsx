@@ -30,7 +30,7 @@ export const Calendar = ({
                   <span className={today ? 'text-primary' : ''}>{day}</span>
                   <span
                     className={`d-block my-2 font-weight-bolder ${
-                      today && 'active-day'
+                      today ? 'active-day' : ''
                     }`}
                   >
                     {weekDaysDates[weekIndex].getDate()}
@@ -50,7 +50,7 @@ export const Calendar = ({
                   return (
                     <td
                       className={`text-light font-weight-bold event-cell ${
-                        currentEvent && 'event-cell--active'
+                        currentEvent ? 'event-cell--active' : ''
                       }`}
                       key={dayIndex}
                     >
