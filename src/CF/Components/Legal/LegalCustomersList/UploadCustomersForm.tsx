@@ -4,15 +4,15 @@ import * as Yup from 'yup'
 
 import Swal from 'sweetalert2'
 import local from '../../../../Shared/Assets/ar.json'
-import { uploadDefaultingCustomer } from '../../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
 import {
   UploadLegalCustomerResponse,
   UploadLegalCustomersProps,
 } from '../types'
-import { LtsIcon } from '../../../../Shared/Components'
 import AppForm from '../../../../Shared/Components/Form'
 import { FileField } from '../../../../Shared/Components/Form/types'
+import { LtsIcon } from '../../../../Shared/Components'
+import { uploadDefaultingCustomer } from '../../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
 
 const UploadLegalCustomers = ({
   onSubmit,
@@ -81,7 +81,7 @@ const UploadLegalCustomers = ({
     <>
       <div className="text-center">
         <a
-          href={require('../../../Assets/sheets/defaulted-customers-template.xlsx')}
+          href={require('../../../../Mohassel/Assets/sheets/defaulted-customers-template.xlsx')}
           download={local.defaultedCustomersTemplate}
           role="button"
         >

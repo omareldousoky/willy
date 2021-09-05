@@ -2,27 +2,30 @@ import React, { useState } from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import Modal from 'react-bootstrap/esm/Modal'
 import Swal from 'sweetalert2'
-import local from '../../../Shared/Assets/ar.json'
-import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
-import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-import CustomerSearch, { Results } from '../CustomerSearch/customerSearchTable'
+import local from '../../../../Shared/Assets/ar.json'
+import { TableMapperItem } from '../../../../Shared/Components/DynamicTable/types'
+import DynamicTable from '../../../../Shared/Components/DynamicTable/dynamicTable'
 import { WarningCreationModalProps, WarningCreationStepEnum } from './types'
-import { Loader } from '../../../Shared/Components/Loader'
-import { Customer } from '../../../Shared/Models/Customer'
+import { Loader } from '../../../../Shared/Components/Loader'
+
+import { WarningTypeDropDown } from '../../../../Shared/Components/dropDowns/WarningTypeDropDown'
+import { addeddSuccessfully } from '../../../../Shared/localUtils'
+import { searchCustomer } from '../../../../Shared/Services/APIs/customer/searchCustomer'
+import CustomerSearch, {
+  Results,
+} from '../../../../Mohassel/Components/CustomerSearch/customerSearchTable'
+import { Application } from '../../../../Shared/Services/interfaces'
 import {
   LegalWarningRequest,
   LegalWarningType,
-} from '../../../Shared/Models/LegalAffairs'
-import { getErrorMessage } from '../../../Shared/Services/utils'
-import { searchLoan } from '../../Services/APIs/Loan/searchLoan'
-import { Application } from '../LoanApplication/loanApplicationStates'
-import { WarningTypeDropDown } from '../../../Shared/Components/dropDowns/WarningTypeDropDown'
+} from '../../../../Shared/Models/LegalAffairs'
+import { getErrorMessage } from '../../../../Shared/Services/utils'
+import { searchLoan } from '../../../../Mohassel/Services/APIs/Loan/searchLoan'
 import {
-  fetchWarning,
   createWarning,
-} from '../../../Shared/Services/APIs/LegalAffairs/warning'
-import { addeddSuccessfully } from '../../../Shared/localUtils'
-import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
+  fetchWarning,
+} from '../../../../Shared/Services/APIs/LegalAffairs/warning'
+import { Customer } from '../../../../Shared/Models/Customer'
 
 export const WarningCreationModal = ({
   showModal,
@@ -112,7 +115,7 @@ export const WarningCreationModal = ({
       from: 0,
       size: 1000,
       customerKey: selectedCustomer.key,
-      type: 'micro',
+      type: 'consumerFinance',
     })
     if (results.status === 'success') {
       setIsLoading(false)

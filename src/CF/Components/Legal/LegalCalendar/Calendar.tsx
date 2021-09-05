@@ -8,7 +8,7 @@ import Popover from 'react-bootstrap/Popover'
 
 import isToday from 'date-fns/isToday'
 
-import local from '../../../Shared/Assets/ar.json'
+import local from '../../../../Shared/Assets/ar.json'
 import { CalendarProps } from './types'
 import { EventDetails } from './EventDetails'
 

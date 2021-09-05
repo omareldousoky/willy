@@ -12,7 +12,7 @@ import Table from 'react-bootstrap/Table'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'
-import Can from '../../config/Can'
+import Can from '../../../Shared/config/Can'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { loading } from '../../../Shared/redux/loading/actions'
@@ -24,24 +24,24 @@ import {
   getErrorMessage,
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
-import CustomerSearch from '../CustomerSearch/customerSearchTable'
-import { Customer } from '../../../Shared/Services/interfaces'
-import { searchLoan } from '../../Services/APIs/Loan/searchLoan'
-import { Application } from '../LoanApplication/loanApplicationStates'
+import { Application, Customer } from '../../../Shared/Services/interfaces'
+
+import ability from '../../../Shared/config/ability'
+import { LtsIcon } from '../../../Shared/Components'
+import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
+import CustomerSearch from '../../../Mohassel/Components/CustomerSearch/customerSearchTable'
+import { searchLoan } from '../../../Mohassel/Services/APIs/Loan/searchLoan'
+import ReportsModal from '../../../Mohassel/Components/Reports/reportsModal'
 import {
   addCustomerToDefaultingList,
   deleteCustomerDefaultedLoan,
   fetchReviewedDefaultingCustomers,
   reviewCustomerDefaultedLoan,
 } from '../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
-import ability from '../../config/ability'
-import ReportsModal from '../Reports/reportsModal'
-import { PDF } from '../Reports/reports'
+import { PDF } from '../../../Shared/Components/PdfList/types'
 import DefaultingCustomersPdfTemplate, {
   ReportDefaultedCustomer,
-} from '../pdfTemplates/defaultingCustomers/DefaultingCustomers'
-import { LtsIcon } from '../../../Shared/Components'
-import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
+} from '../../../Mohassel/Components/pdfTemplates/defaultingCustomers/DefaultingCustomers'
 
 interface Review {
   at: number
@@ -441,7 +441,7 @@ class DefaultingCustomersList extends Component<Props, State> {
       from: 0,
       size: 1000,
       customerKey: customer.key,
-      type: 'micro',
+      type: 'consumerFinance',
     })
     if (results.status === 'success') {
       this.setState({

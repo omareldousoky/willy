@@ -11,13 +11,11 @@ import startOfDay from 'date-fns/startOfDay'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
-import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
+import HeaderWithCards from '../../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { Calendar } from './Calendar'
 import { Navigation } from './Navigation'
 
-import local from '../../../Shared/Assets/ar.json'
-import { manageLegalAffairsArray } from '../ManageLegalAffairs/manageLegalAffairsInitials'
-import { getCalendarEvents } from '../../../Shared/Services/APIs/LegalAffairs/calendar'
+import local from '../../../../Shared/Assets/ar.json'
 import {
   DAYS_OF_WEEK,
   formatWrapper,
@@ -27,6 +25,8 @@ import {
 } from './utils'
 
 import { CalendarEvent, FormattedEvents } from './types'
+import { getCalendarEvents } from '../../../../Shared/Services/APIs/LegalAffairs/calendar'
+import { manageLegalAffairsArray } from '../manageLegalAffairsInitials'
 
 export const LegalCalendar = () => {
   const [currentDate, setCurrentDate] = useState<Date>(

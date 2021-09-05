@@ -24,8 +24,8 @@ import {
   getErrorMessage,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
-import ability from '../../../config/ability'
-import Can from '../../../config/Can'
+import ability from '../../../../Shared/config/ability'
+import Can from '../../../../Shared/config/Can'
 import DynamicTable from '../../../../Shared/Components/DynamicTable/dynamicTable'
 import local from '../../../../Shared/Assets/ar.json'
 import Search from '../../../../Shared/Components/Search/search'
@@ -42,14 +42,11 @@ import {
 } from '../types'
 import { DefaultedCustomer, ManagerReviews } from '../defaultingCustomersList'
 import LegalSettlementForm from './LegalSettlementForm'
-import {
-  getSettlementFees,
-  reviewLegalCustomer,
-  getLegalHistory,
-} from '../../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
+import { FormField } from '../../../../Shared/Components/Form/types'
 import { defaultValidationSchema } from '../validations'
+import AppForm from '../../../../Shared/Components/Form'
 import UploadLegalCustomers from './UploadCustomersForm'
-import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
+import LegalSettlementPdfTemp from '../../../../Mohassel/Components/pdfTemplates/LegalSettlement'
 import { Branch } from '../../../../Shared/Services/interfaces'
 import { getBranch } from '../../../../Shared/Services/APIs/Branch/getBranch'
 import managerTypes from '../configs/managerTypes'
@@ -60,14 +57,17 @@ import {
   renderCourtField,
 } from '../utils'
 import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
-import LegalJudgePdf from '../../pdfTemplates/LegalJudge'
-import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
-import { LegalHistoryResponse } from '../../../../Shared/Models/LegalAffairs'
+import LegalJudgePdf from '../../../../Mohassel/Components/pdfTemplates/LegalJudge'
 import { ActionsGroup } from '../../../../Shared/Components/ActionsGroup'
 import { TableMapperItem } from '../../../../Shared/Components/DynamicTable/types'
 import useDidUpdateEffect from '../../../../Shared/hooks/useDidUpdateEffect'
-import { FormField } from '../../../../Shared/Components/Form/types'
-import AppForm from '../../../../Shared/Components/Form'
+import { LegalHistoryResponse } from '../../../../Shared/Models/LegalAffairs'
+import { getConvictedReport } from '../../../../Mohassel/Services/APIs/Reports/legal'
+import {
+  getLegalHistory,
+  getSettlementFees,
+  reviewLegalCustomer,
+} from '../../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)

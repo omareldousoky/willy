@@ -1,5 +1,4 @@
-import { Signature, Trace } from '../../Shared/Models/common'
-import { PaginatedResponse, SearchRequest } from './common'
+import { Signature, Trace, PaginatedResponse, SearchRequest } from './common'
 
 export interface CourtSession {
   confinementNumber?: string

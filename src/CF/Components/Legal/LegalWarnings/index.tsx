@@ -4,30 +4,30 @@ import Button from 'react-bootstrap/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import Card from 'react-bootstrap/Card'
 import { useHistory } from 'react-router-dom'
-import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
-import { manageLegalAffairsArray } from '../ManageLegalAffairs/manageLegalAffairsInitials'
-import local from '../../../Shared/Assets/ar.json'
+import HeaderWithCards from '../../../../Shared/Components/HeaderWithCards/headerWithCards'
+import { manageLegalAffairsArray } from '../manageLegalAffairsInitials'
+import local from '../../../../Shared/Assets/ar.json'
 import {
   ChangeNumberType,
   TableMapperItem,
-} from '../../../Shared/Components/DynamicTable/types'
+} from '../../../../Shared/Components/DynamicTable/types'
 import {
   LegalWarningResponse,
   LegalWarningsSearchRequest,
   LegalWarningType,
-} from '../../../Shared/Models/LegalAffairs'
-import { timeToArabicDate } from '../../../Shared/Services/utils'
-import ability from '../../config/ability'
-import { search as searchAction } from '../../../Shared/redux/search/actions'
-import { Loader } from '../../../Shared/Components/Loader'
-import SearchForm from '../../../Shared/Components/Search/search'
-import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-import { LegalWarning } from '../pdfTemplates/LegalWarning'
-import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
-import { setPrintWarningFlag } from '../../../Shared/Services/APIs/LegalAffairs/warning'
+} from '../../../../Shared/Models/LegalAffairs'
+import { timeToArabicDate } from '../../../../Shared/Services/utils'
+import ability from '../../../../Shared/config/ability'
+import { search as searchAction } from '../../../../Shared/redux/search/actions'
+import { Loader } from '../../../../Shared/Components/Loader'
+import SearchForm from '../../../../Shared/Components/Search/search'
+import DynamicTable from '../../../../Shared/Components/DynamicTable/dynamicTable'
+import { PdfPortal } from '../../../../Shared/Components/Common/PdfPortal'
 import { WarningCreationModal } from './WarningCreationModal'
-import { loading as loadingAction } from '../../../Shared/redux/loading/actions'
-import { LtsIcon } from '../../../Shared/Components'
+import { loading as loadingAction } from '../../../../Shared/redux/loading/actions'
+import { LtsIcon } from '../../../../Shared/Components'
+import { LegalWarning } from '../../../../Mohassel/Components/pdfTemplates/LegalWarning'
+import { setPrintWarningFlag } from '../../../../Shared/Services/APIs/LegalAffairs/warning'
 
 export const LegalWarnings = () => {
   const [from, setFrom] = useState(0)

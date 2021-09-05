@@ -4,11 +4,11 @@ import Swal from 'sweetalert2'
 import * as Yup from 'yup'
 
 import local from '../../../Shared/Assets/ar.json'
-import AppForm from '../../../Shared/Components/Form'
-import { FormField } from '../../../Shared/Components/Form/types'
 import { getGovernorates } from '../../../Shared/Services/APIs/config'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { District, Governorate } from '../CustomerCreation/StepTwoForm'
+import AppForm from '../../../Shared/Components/Form'
+import { FormField } from '../../../Shared/Components/Form/types'
 import { JudgeCustomersFormValues } from './types'
 import { defaultValidationSchema } from './validations'
 

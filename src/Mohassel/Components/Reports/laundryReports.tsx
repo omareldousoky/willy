@@ -15,8 +15,8 @@ import Can from '../../config/Can'
 import { FalteringPayments as FalteringPaymentsPdf } from '../pdfTemplates/falteringPayments/falteringPayments'
 import { fetchEarlyPaymentsReport } from '../../Services/APIs/Reports/earlyPayments'
 import { EarlyPayments as EarlyPaymentsPdf } from '../pdfTemplates/earlyPayments/earlyPayments'
-import { ApiResponse } from '../../Models/common'
 import { LtsIcon } from '../../../Shared/Components'
+import { ApiResponse } from '../../../Shared/Models/common'
 
 enum ReportEnum {
   FalteringPayments = 'falteringPayments',

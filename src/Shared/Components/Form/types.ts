@@ -1,7 +1,7 @@
 import * as Yup from 'yup'
 import { FormikHelpers, FormikProps } from 'formik'
 import { FormEvent } from 'react'
-import { DocumentType } from '../../../../Shared/Services/interfaces'
+import { DocumentType } from '../../Services/interfaces'
 
 export interface FieldDefaultProps {
   name: string

@@ -1,6 +1,5 @@
-import { ApiResponse } from '../../../../Mohassel/Models/common'
 import { API_BASE_URL } from '../../../envConfig'
-import { Trace } from '../../../Models/common'
+import { ApiResponse, Trace } from '../../../Models/common'
 import axios from '../../axiosInstance'
 
 export interface BranchDetails {
