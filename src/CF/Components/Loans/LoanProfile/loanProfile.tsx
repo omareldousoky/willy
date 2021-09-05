@@ -843,8 +843,8 @@ class LoanProfile extends Component<Props, State> {
     }</th><th>${local.dueDate}</th><th>${local.amount}</th>
                             </thead>
                             <tbody><tr><td>${receiptNumber}</td>
-                            <td>${timeToDateyyymmdd(truthDate)}</td>
-                            <td>${timeToDateyyymmdd(actualDate)}</td>
+                            <td>${getFormattedLocalDate(truthDate)}</td>
+                            <td>${getFormattedLocalDate(actualDate)}</td>
                             <td>${transactionAmount}</td></tr></tbody>`
     Swal.fire({
       width: 700,
