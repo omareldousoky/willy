@@ -4,6 +4,7 @@ import Swal from 'sweetalert2'
 import { Formik } from 'formik'
 import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
+import dayjs from 'dayjs'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import { manualPaymentValidation } from './paymentValidation'
@@ -28,6 +29,7 @@ import './styles.scss'
 import PaymentIcons from './paymentIcons'
 import ManualPayment from './manualPayment'
 import { LtsIcon } from '../../../Shared/Components'
+import { getFirstDueInstallment } from '../../../Shared/Utils/payment'
 
 interface Props {
   installments: Array<Installment>
@@ -186,6 +188,11 @@ class Payment extends Component<Props, State> {
 
   handleSubmit = async (values) => {
     this.setState({ loadingFullScreen: true })
+    const truthDateTimestamp =
+      dayjs(values.truthDate) < this.props.application.issueDate
+        ? dayjs().valueOf()
+        : dayjs(values.truthDate).valueOf()
+
     if (this.props.paymentState === 1) {
       if (this.props.paymentType === 'normal') {
         if (Number(values.installmentNumber) === -1) {
@@ -237,7 +244,7 @@ class Payment extends Component<Props, State> {
       const obj = {
         id: this.props.applicationId,
         receiptNumber: values.receiptNumber,
-        truthDate: new Date(values.truthDate).valueOf(),
+        truthDate: truthDateTimestamp,
         payAmount: values.payAmount,
         payerType: values.payerType,
         payerId: values.payerId,
@@ -299,6 +306,14 @@ class Payment extends Component<Props, State> {
   }
 
   renderPaymentMethods() {
+    const firstDueInstallment = getFirstDueInstallment(this.props.application)
+    const isNormalPayment = this.props.paymentType === 'normal'
+    const payAmountValue =
+      isNormalPayment && firstDueInstallment
+        ? firstDueInstallment.installmentResponse -
+          firstDueInstallment?.totalPaid
+        : this.state.payAmount
+
     switch (this.props.paymentState) {
       case 0:
         return (
@@ -341,6 +356,12 @@ class Payment extends Component<Props, State> {
                 enableReinitialize
                 initialValues={{
                   ...this.state,
+                  payAmount: payAmountValue,
+                  dueDate: isNormalPayment
+                    ? timeToDateyyymmdd(
+                        firstDueInstallment?.dateOfPayment || -1
+                      )
+                    : this.state.dueDate,
                   max:
                     this.props.application.status === 'canceled'
                       ? this.props.application.principal
@@ -355,7 +376,7 @@ class Payment extends Component<Props, State> {
               >
                 {(formikProps) => (
                   <ManualPayment
-                    payAmount={this.state.payAmount}
+                    payAmount={payAmountValue}
                     truthDate={this.state.truthDate}
                     paymentType={this.props.paymentType}
                     receiptNumber={this.state.receiptNumber}

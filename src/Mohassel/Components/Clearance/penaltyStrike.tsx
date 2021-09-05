@@ -3,7 +3,7 @@ import Swal from 'sweetalert2'
 import * as local from '../../../Shared/Assets/ar.json'
 import { LtsIcon } from '../../../Shared/Components'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties'
+import { calculatePenalties } from '../../../Shared/Services/APIs/clearance/calculatePenalties'
 
 const PenaltyStrike = (props: { loanId: string }) => {
   const [penalty, setPenalty] = useState(0)

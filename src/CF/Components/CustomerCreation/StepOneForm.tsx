@@ -42,6 +42,7 @@ export const StepOneForm = (props: any) => {
     touched,
     setFieldValue,
     consumerFinanceLimitStatus,
+    limits,
   } = props
 
   const [mapState, setMapState] = useState(false)
@@ -302,7 +303,8 @@ export const StepOneForm = (props: any) => {
                   'monthlyIncome',
                   Number(event.currentTarget.value)
                 )
-                getCustomerLimitFromIncome(event.currentTarget.value)
+                if (event.currentTarget.value >= limits.DBRPercentLowStart)
+                  getCustomerLimitFromIncome(event.currentTarget.value)
               }}
               onBlur={handleBlur}
               isInvalid={errors.monthlyIncome && touched.monthlyIncome}

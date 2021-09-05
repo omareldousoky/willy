@@ -1,6 +1,7 @@
-import { API_BASE_URL } from '../../../../Shared/envConfig'
-import axios from '../../../../Shared/Services/axiosInstance'
+import axios from '../../axiosInstance'
+import { API_BASE_URL } from '../../../envConfig'
 
+// TODO: move to model.ts
 export interface ChangeClearancePrintStatusRequest {
   ids: Array<string>
 }

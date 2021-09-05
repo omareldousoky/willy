@@ -13,7 +13,7 @@ import {
   ProductType,
 } from './types'
 import { Loader } from '../../../Shared/Components/Loader'
-import { Customer } from '../../Models/Customer'
+import { Customer } from '../../../Shared/Models/Customer'
 import {
   LegalWarningRequest,
   LegalWarningType,

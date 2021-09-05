@@ -6,6 +6,7 @@ import DocumentTypeCreation from '../documentTypeCreation/documentTypeCreation'
 import GeoAreas from './geoAreas'
 import BusinessActivities from './businessActivities'
 import BusinessSpecialities from './businessSpecialities'
+import LimitsThreshold from './LimitsThreshold'
 
 export const toolsRoutes = {
   path: '/tools',
@@ -69,6 +70,15 @@ export const toolsRoutes = {
       render: () => (
         <Can I="viewBusinessSectorConfig" a="config">
           <BusinessSpecialities />
+        </Can>
+      ),
+    },
+    {
+      path: '/limits-config',
+      label: local.principalRange,
+      render: (props) => (
+        <Can I="createMaxPrincipal" a="config">
+          <LimitsThreshold {...props} />
         </Can>
       ),
     },
