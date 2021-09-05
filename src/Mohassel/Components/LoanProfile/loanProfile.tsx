@@ -40,7 +40,6 @@ import Can from '../../config/Can'
 import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment'
 import { Customer, PendingActions } from '../../../Shared/Services/interfaces'
 import {
-  timeToDateyyymmdd,
   iscoreDate,
   getErrorMessage,
   statusLocale,

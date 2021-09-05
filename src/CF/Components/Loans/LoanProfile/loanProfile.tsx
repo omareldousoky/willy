@@ -37,7 +37,6 @@ import {
   PendingActions,
 } from '../../../../Shared/Services/interfaces'
 import {
-  timeToDateyyymmdd,
   iscoreDate,
   getErrorMessage,
   statusLocale,
