@@ -890,21 +890,22 @@ class Reports extends Component<{}, State> {
   }
 
   async getExcelFile(func, pollFunc, values) {
+    const { branches, fromDate, toDate, loanType } = values
     this.setState({
       loading: true,
       showModal: false,
-      fromDate: values.fromDate,
-      toDate: values.toDate,
+      fromDate,
+      toDate,
     })
     const obj = {
-      startdate: values.fromDate,
-      enddate: values.toDate,
-      branches: !values.branches
+      startdate: fromDate,
+      enddate: toDate,
+      branches: !branches
         ? undefined
-        : values.branches.some((branch) => branch._id === '')
+        : branches.some((branch) => branch._id === '')
         ? []
-        : values.branches.map((branch) => branch._id),
-      loanType: 'micro',
+        : branches.map((branch) => branch._id),
+      loanType,
     }
     const res = await func(obj)
     if (res.status === 'success') {

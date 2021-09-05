@@ -17,7 +17,6 @@ import {
   getBranch,
 } from '../../../Shared/Services/APIs/Branch/getBranch'
 import Payment from '../Payment/payment'
-import { englishToArabic } from '../../Services/statusLanguage'
 import local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import {
@@ -44,6 +43,8 @@ import {
   timeToDateyyymmdd,
   iscoreDate,
   getErrorMessage,
+  statusLocale,
+  getFormattedLocalDate,
 } from '../../../Shared/Services/utils'
 import { payment } from '../../../Shared/redux/payment/actions'
 import { cancelApplication } from '../../../Shared/Services/APIs/loanApplication/stateHandler'
@@ -54,7 +55,7 @@ import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan'
 import { doubtLoan } from '../../Services/APIs/Loan/doubtLoan'
 import PaymentReceipt from '../../../Shared/Components/pdfTemplates/paymentReceipt'
 import RandomPaymentReceipt from '../pdfTemplates/randomPaymentReceipt/randomPaymentReceipt'
-import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties'
+import { calculatePenalties } from '../../../Shared/Services/APIs/clearance/calculatePenalties'
 import ManualRandomPaymentsActions from './manualRandomPaymentsActions'
 import { getManualOtherPayments } from '../../Services/APIs/Payment/getManualOtherPayments'
 import { rejectManualOtherPayment } from '../../Services/APIs/Payment/rejectManualOtherPayment'
@@ -82,8 +83,6 @@ import {
   SolidarityGuarantee,
 } from '../pdfTemplates/smeLoanContract'
 import { Score } from '../CustomerCreation/CustomerProfile'
-import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
-
 import { getEarlyPaymentPdfData } from './utils'
 import {
   CalculateEarlyPaymentResponse,
@@ -99,6 +98,7 @@ import {
 } from '../../../Shared/Services/APIs/iScore'
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { getWriteOffReasons } from '../../../Shared/Services/APIs/config'
+import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -141,6 +141,7 @@ interface LoanProfileRouteState {
   action?: string
   type?: string
   status?: string
+  sme?: boolean
 }
 
 interface Props extends RouteComponentProps<{}, {}, LoanProfileRouteState> {
@@ -542,6 +543,7 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () =>
           this.props.history.push('/track-loan-applications/remove-member', {
             id: this.props.location.state.id,
+            sme: this.props.location.state?.sme,
           }),
       },
       {
@@ -569,7 +571,11 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () =>
           this.props.history.push(
             '/track-loan-applications/edit-loan-application',
-            { id: this.props.location.state.id, action: 'edit' }
+            {
+              id: this.props.location.state.id,
+              action: 'edit',
+              sme: this.props.location.state?.sme,
+            }
           ),
       },
       {
@@ -581,7 +587,11 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () =>
           this.props.history.push(
             '/track-loan-applications/loan-status-change',
-            { id: this.props.location.state.id, action: 'review' }
+            {
+              id: this.props.location.state.id,
+              action: 'review',
+              sme: this.props.location.state?.sme,
+            }
           ),
       },
       {
@@ -593,7 +603,11 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () =>
           this.props.history.push(
             '/track-loan-applications/loan-status-change',
-            { id: this.props.location.state.id, action: 'unreview' }
+            {
+              id: this.props.location.state.id,
+              action: 'unreview',
+              sme: this.props.location.state?.sme,
+            }
           ),
       },
       {
@@ -605,7 +619,11 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () =>
           this.props.history.push(
             '/track-loan-applications/loan-status-change',
-            { id: this.props.location.state.id, action: 'reject' }
+            {
+              id: this.props.location.state.id,
+              action: 'reject',
+              sme: this.props.location.state?.sme,
+            }
           ),
       },
       {
@@ -618,6 +636,7 @@ class LoanProfile extends Component<Props, State> {
           this.props.history.push('/track-loan-applications/create-loan', {
             id: this.props.location.state.id,
             type: 'issue',
+            sme: this.props.location.state?.sme,
           }),
       },
       {
@@ -630,6 +649,7 @@ class LoanProfile extends Component<Props, State> {
           this.props.history.push('/track-loan-applications/create-loan', {
             id: this.props.location.state.id,
             type: 'create',
+            sme: this.props.location.state?.sme,
           }),
       },
       {
@@ -653,6 +673,7 @@ class LoanProfile extends Component<Props, State> {
           this.props.history.push('/track-loan-applications/loan-roll-back', {
             id: this.props.location.state.id,
             status: this.state.application.status,
+            sme: this.props.location.state?.sme,
           }),
       },
       {
@@ -1272,7 +1293,7 @@ class LoanProfile extends Component<Props, State> {
                     marginRight: 10,
                     borderRadius: 30,
                     border: `1px solid ${
-                      englishToArabic(this.state.application.status).color
+                      statusLocale[this.state.application.status].color
                     }`,
                   }}
                 >
@@ -1280,11 +1301,11 @@ class LoanProfile extends Component<Props, State> {
                     style={{
                       margin: 0,
                       color: `${
-                        englishToArabic(this.state.application.status).color
+                        statusLocale[this.state.application.status].color
                       }`,
                     }}
                   >
-                    {englishToArabic(this.state.application.status).text}
+                    {statusLocale[this.state.application.status].text}
                   </p>
                 </span>
                 {this.state.application.writeOff && (
@@ -1339,7 +1360,7 @@ class LoanProfile extends Component<Props, State> {
                   <span className="text-muted">{local.truthDate}</span>
                   <span>
                     {this.state.pendingActions.transactions
-                      ? timeToDateyyymmdd(
+                      ? getFormattedLocalDate(
                           this.state.pendingActions?.transactions[0].truthDate
                         )
                       : ''}
@@ -1349,7 +1370,7 @@ class LoanProfile extends Component<Props, State> {
                   <span className="text-muted">{local.dueDate}</span>
                   <span>
                     {this.state.pendingActions.transactions
-                      ? timeToDateyyymmdd(
+                      ? getFormattedLocalDate(
                           this.state.pendingActions.transactions[0].actualDate
                         )
                       : ''}

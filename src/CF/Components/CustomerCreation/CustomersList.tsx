@@ -216,7 +216,7 @@ class CustomersList extends Component<Props, State> {
                 'keyword',
                 'dateFromTo',
                 'governorate',
-                'phoneNumber',
+                'consumerFinanceLimitStatus',
               ]}
               dropDownKeys={[
                 'name',

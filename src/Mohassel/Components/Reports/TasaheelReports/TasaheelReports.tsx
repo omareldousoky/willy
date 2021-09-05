@@ -35,6 +35,7 @@ import {
   getLoanAgeReport,
   getMonthlyReport,
   getQuarterlyReport,
+  generateMonthlyAnalysisReport,
 } from '../../../Services/APIs/Reports/tasaheelRisksReports'
 
 import { Report, ReportDetails } from './types'
@@ -44,6 +45,8 @@ import {
   MonthReport,
   QuarterReport,
 } from '../../../../Shared/Services/interfaces'
+import MonthlyAnalysisReport from '../../pdfTemplates/MonthlyAnalysisReport'
+import { PdfPortal } from '../../../../Shared/Components/Common/PdfPortal'
 
 export const TasaheelReports = () => {
   const reportsRequests = {
@@ -70,6 +73,10 @@ export const TasaheelReports = () => {
       requestReport: generateQuarterlyReport,
       getReportDetails: getQuarterlyReport,
       printComponent: QuarterlyReport,
+    },
+    monthlyAnalysis: {
+      requestReport: generateMonthlyAnalysisReport,
+      printComponent: MonthlyAnalysisReport,
     },
   }
   const [tabs, setTabs] = useState<any[]>([])
@@ -107,6 +114,14 @@ export const TasaheelReports = () => {
         header: local.quarterReport,
         stringKey: 'quarterlyReport',
         permission: 'quarterlyReport',
+        permissionKey: 'report',
+      })
+
+    ability.can('monthlyAnalysisReport', 'report') &&
+      allowedTabs.push({
+        header: local.monthlyAnalysisReport,
+        stringKey: 'monthlyAnalysis',
+        permission: 'monthlyAnalysisReport',
         permissionKey: 'report',
       })
 
@@ -149,16 +164,25 @@ export const TasaheelReports = () => {
   }
   const formatValues = (values) => {
     if (!values) return ''
-    if (tabs[activeTabIndex()].stringKey === 'quarterlyReport') {
+    const currentActiveTabKey = tabs[activeTabIndex()].stringKey
+
+    if (currentActiveTabKey === 'quarterlyReport') {
       return {
         quarter: `${values.year}-${values.quarterNumber}`,
       }
     }
-    return { date: values.date + '-01' }
+    return {
+      date: `${values.date}${
+        currentActiveTabKey === 'monthlyAnalysis' ? '' : '-01'
+      }`,
+    }
   }
 
   useEffect(() => {
-    tabs.length > 0 && activeTabKey && getAllReports()
+    tabs.length > 0 &&
+      activeTabKey &&
+      reportsRequests[activeTabKey].getAll &&
+      getAllReports()
     setReports([])
     setPrint(false)
   }, [tabs, activeTabKey])
@@ -171,9 +195,18 @@ export const TasaheelReports = () => {
     )
 
     if (res.status === 'success') {
-      Swal.fire('success', local.fileQueuedSuccess, 'success')
       setModalIsOpen(false)
       setIsLoading(false)
+
+      if (tabs[activeTabIndex()].stringKey === 'monthlyAnalysis') {
+        setReportDetails(res.body)
+        setPrint(true)
+        window.print()
+
+        return
+      }
+
+      Swal.fire('success', local.fileQueuedSuccess, 'success')
       getAllReports()
     } else {
       setIsLoading(false)
@@ -210,9 +243,10 @@ export const TasaheelReports = () => {
           header=""
           array={tabs}
           active={activeTabIndex()}
-          selectTab={(activeTabStringKey: string) =>
+          selectTab={(activeTabStringKey: string) => {
+            setPrint(false)
             setActiveTabKey(activeTabStringKey)
-          }
+          }}
         />
         {modalIsOpen && (
           <ReportsModal
@@ -257,6 +291,9 @@ export const TasaheelReports = () => {
                           requestReport('')
                           break
                         case 'quarterlyReport':
+                          setModalIsOpen(true)
+                          break
+                        case 'monthlyAnalysis':
                           setModalIsOpen(true)
                           break
                         default:
@@ -371,18 +408,25 @@ export const TasaheelReports = () => {
                   </Card.Body>
                 </Card>
               ))
-            ) : (
+            ) : reportsRequests[activeTabKey]?.getAll ? (
               <div className="d-flex align-items-center justify-content-center">
                 {local.noResults}
               </div>
+            ) : (
+              <></>
             )}
           </Card.Body>
         </Card>
       </div>
       {activeTabKey &&
         print &&
-        reportsRequests[activeTabKey].printComponent &&
-        reportsRequests[activeTabKey].printComponent(reportDetails)}
+        reportsRequests[activeTabKey].printComponent && (
+          <PdfPortal
+            component={reportsRequests[activeTabKey].printComponent(
+              reportDetails
+            )}
+          />
+        )}
     </>
   )
 }

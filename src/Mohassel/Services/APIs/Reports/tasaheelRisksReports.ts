@@ -112,3 +112,13 @@ export const getQuarterlyReport = async (id: string) => {
     return { status: 'error', error: error.response.data }
   }
 }
+
+export const generateMonthlyAnalysisReport = async (date: { date: string }) => {
+  const url = API_BASE_URL + '/report/monthly-analysis'
+  try {
+    const res = await axios.get(url, { params: date })
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
+}

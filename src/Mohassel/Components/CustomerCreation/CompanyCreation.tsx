@@ -13,7 +13,7 @@ import {
   companyCreationValidationStepTwo,
   companyCreationValidationStepTwoEdit,
 } from './companyFormIntialState'
-import { StepTwoForm } from './StepTwoForm'
+import { StepTwoCompanyForm } from './StepTwoCompanyForm'
 import { StepThreeForm } from './StepThreeForm'
 import DocumentsUpload from './documentsUpload'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -135,6 +135,9 @@ class CompanyCreation extends Component<Props, State> {
         // industryRegisterNumber: res.body.industryRegisterNumber,
         taxCardNumber: res.body.taxCardNumber,
         governorate: res.body.governorate,
+        policeStation: res.body.policeStation,
+        currHomeAddressGov: res.body.currHomeAddressGov,
+        currentHomeAddress: res.body.currentHomeAddress,
       }
       const customerExtraDetails = {
         geographicalDistribution: res.body.geographicalDistribution,
@@ -342,12 +345,11 @@ class CompanyCreation extends Component<Props, State> {
             this.formikStep1 = formikProps
           }
           return (
-            <StepTwoForm
+            <StepTwoCompanyForm
               {...formikProps}
               hasLoan={this.state.hasLoan}
               isGuarantor={this.state.isGuarantor}
               edit={this.props.edit}
-              isCompany
             />
           )
         }}

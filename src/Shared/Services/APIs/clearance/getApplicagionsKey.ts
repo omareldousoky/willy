@@ -1,5 +1,5 @@
-import { API_BASE_URL } from '../../../../Shared/envConfig'
-import axios from '../../../../Shared/Services/axiosInstance'
+import { API_BASE_URL } from '../../../envConfig'
+import axios from '../../axiosInstance'
 
 export const getApplicationsKeys = async (data: object) => {
   const url = API_BASE_URL + '/application/applications-keys'

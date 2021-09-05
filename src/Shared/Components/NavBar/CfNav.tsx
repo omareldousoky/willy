@@ -61,6 +61,11 @@ export const CfNavbar = () => {
             {local.halan}
           </Nav.Link>
         )}
+        {ability.can('getClearance', 'application') && (
+          <Nav.Link onClick={() => history.push('/clearances')}>
+            {local.clearances}
+          </Nav.Link>
+        )}
         {ability.can('getDefaultingCustomer', 'legal') && (
           <Nav.Link onClick={() => history.push('/legal-affairs/late-list')}>
             {local.legalAffairs}

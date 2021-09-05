@@ -41,6 +41,8 @@ export const StepOneForm = (props: any) => {
     errors,
     touched,
     setFieldValue,
+    consumerFinanceLimitStatus,
+    limits,
   } = props
 
   const [mapState, setMapState] = useState(false)
@@ -301,10 +303,16 @@ export const StepOneForm = (props: any) => {
                   'monthlyIncome',
                   Number(event.currentTarget.value)
                 )
-                getCustomerLimitFromIncome(event.currentTarget.value)
+                if (event.currentTarget.value >= limits.DBRPercentLowStart)
+                  getCustomerLimitFromIncome(event.currentTarget.value)
               }}
               onBlur={handleBlur}
               isInvalid={errors.monthlyIncome && touched.monthlyIncome}
+              disabled={
+                props.edit &&
+                !ability.can('editCFLimit', 'customer') &&
+                consumerFinanceLimitStatus === 'approved'
+              }
             />
             {values.customerConsumerFinanceMaxLimit > 0 && (
               <div className="valid-feedback d-block">
@@ -329,7 +337,12 @@ export const StepOneForm = (props: any) => {
               value={values.initialConsumerFinanceLimit}
               onChange={handleChange}
               onBlur={handleBlur}
-              disabled={values.customerConsumerFinanceMaxLimit === 0}
+              disabled={
+                values.customerConsumerFinanceMaxLimit === 0 ||
+                (props.edit &&
+                  !ability.can('editCFLimit', 'customer') &&
+                  consumerFinanceLimitStatus === 'approved')
+              }
               isInvalid={
                 errors.initialConsumerFinanceLimit &&
                 touched.initialConsumerFinanceLimit

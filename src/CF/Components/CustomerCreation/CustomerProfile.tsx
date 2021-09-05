@@ -3,7 +3,10 @@ import { useHistory, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Container from 'react-bootstrap/Container'
 import { Customer } from '../../../Shared/Services/interfaces'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import {
+  cfLimitStatusLocale,
+  getErrorMessage,
+} from '../../../Shared/Services/utils'
 import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
 import ability from '../../../Shared/config/ability'
@@ -23,6 +26,7 @@ import { ConsumerFinanceContractData } from '../../Models/contract'
 import { AcknowledgmentWasSignedInFront } from '../PdfTemplates/AcknowledgmentWasSignedInFront'
 import { PromissoryNote } from '../PdfTemplates/PromissoryNote'
 import { AuthorizationToFillInfo } from '../PdfTemplates/AuthorizationToFillInfo'
+import CFLimitModal from './CFLimitModal'
 
 export interface Score {
   id?: string // commercialRegisterNumber
@@ -71,6 +75,7 @@ export const CustomerProfile = () => {
   const [iScoreDetails, setIScoreDetails] = useState<Score>()
   const [activeTab, setActiveTab] = useState('workInfo')
   const [print, setPrint] = useState('')
+  const [showCFLimitModal, setShowCFLimitModal] = useState(false)
   const location = useLocation<LocationState>()
   const history = useHistory()
 
@@ -471,6 +476,15 @@ export const CustomerProfile = () => {
           }),
       },
       {
+        icon: 'applications',
+        title: local.createClearance,
+        permission: ability.can('newClearance', 'application'),
+        onActionClick: () =>
+          history.push('/customers/create-clearance', {
+            customerId: location.state.id,
+          }),
+      },
+      {
         icon: 'deactivate-user',
         title: customerDetails?.blocked?.isBlocked
           ? local.unblockCustomer
@@ -482,14 +496,58 @@ export const CustomerProfile = () => {
             blocked: customerDetails?.blocked,
           }),
       },
+      {
+        icon: 'bulk-loan-applications-review',
+        title: local.approveCFCustomerLimit,
+        permission:
+          customerDetails?.consumerFinanceLimitStatus !== 'approved' &&
+          ability.can('approveCFLimit', 'customer'),
+        onActionClick: () => setShowCFLimitModal(true),
+      },
     ]
   }
   return (
     <>
       <Container className="print-none">
-        <div style={{ margin: 15 }}>
-          <div className="d-flex flex-row justify-content-between">
-            <h3> {local.viewCustomer}</h3>
+        <div>
+          <div className="d-flex flex-row justify-content-between m-2">
+            <div
+              className="d-flex justify-content-start align-items-center"
+              style={{ width: '45%' }}
+            >
+              <h4> {local.viewCustomer}</h4>
+              <span
+                style={{
+                  display: 'flex',
+                  padding: 10,
+                  marginRight: 10,
+                  borderRadius: 30,
+                  border: `1px solid ${
+                    cfLimitStatusLocale[
+                      customerDetails?.consumerFinanceLimitStatus || 'default'
+                    ].color
+                  }`,
+                }}
+              >
+                <p
+                  style={{
+                    margin: 0,
+                    color: `${
+                      cfLimitStatusLocale[
+                        customerDetails?.consumerFinanceLimitStatus || 'default'
+                      ].color
+                    }`,
+                    fontSize: '.8rem',
+                  }}
+                >
+                  {
+                    cfLimitStatusLocale[
+                      customerDetails?.consumerFinanceLimitStatus || 'default'
+                    ].text
+                  }
+                </p>
+              </span>
+            </div>
             <ProfileActions actions={getProfileActions()} />
           </div>
           {mainInfo && <InfoBox info={mainInfo} />}
@@ -502,6 +560,14 @@ export const CustomerProfile = () => {
           setActiveTab={(stringKey) => setActiveTab(stringKey)}
           tabsData={tabsData}
         />
+        {showCFLimitModal && customerDetails && (
+          <CFLimitModal
+            show={showCFLimitModal}
+            hideModal={() => setShowCFLimitModal(false)}
+            customer={customerDetails}
+            onSuccess={() => getCustomerDetails()}
+          />
+        )}
       </Container>
       {print === 'all' && (
         <>

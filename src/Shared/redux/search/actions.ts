@@ -4,7 +4,7 @@ import { searchLoan } from '../../../Mohassel/Services/APIs/Loan/searchLoan'
 import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication'
 import { searchActionLogs } from '../../../Mohassel/Services/APIs/ActionLogs/searchActionLogs'
 import { searchLeads } from '../../Services/APIs/Leads/searchLeads'
-import { searchClearance } from '../../../Mohassel/Services/APIs/clearance/searchClearance'
+import { searchClearance } from '../../Services/APIs/clearance/searchClearance'
 import { searchGroups } from '../../../Mohassel/Services/APIs/ManagerHierarchy/searchGroups'
 import {
   searchTerrorists,
@@ -92,18 +92,16 @@ export const search = (request) => {
   }
 }
 
-export const searchFilters = (obj) => {
+export const searchFilters = (obj?: Record<string, any>) => {
   return (dispatch) => {
-    if (Object.keys(obj).length === 0)
+    if (!obj || Object.keys(obj).length === 0)
       dispatch({ type: 'RESET_SEARCH_FILTERS', payload: obj })
     else dispatch({ type: 'SET_SEARCH_FILTERS', payload: obj })
   }
 }
 
-export const issuedLoansSearchFilters = (obj) => {
+export const issuedLoansSearchFilters = (obj: Record<string, any>) => {
   return (dispatch) => {
-    if (Object.keys(obj).length === 0)
-      dispatch({ type: 'RESET_ISSUED_LOANS_SEARCH_FILTERS', payload: obj })
-    else dispatch({ type: 'SET_ISSUED_LOANS_SEARCH_FILTERS', payload: obj })
+    dispatch({ type: 'SET_ISSUED_LOANS_SEARCH_FILTERS', payload: obj })
   }
 }

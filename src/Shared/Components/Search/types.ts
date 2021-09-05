@@ -16,6 +16,7 @@ export interface SearchInitialFormikState {
   type?: string
   warningType?: LegalWarningType | ''
   phoneNumber?: string
+  consumerFinanceLimitStatus?: string
 }
 
 export interface SearchProps {
@@ -30,21 +31,10 @@ export interface SearchProps {
   fundSource?: string
   searchKeys: Array<string>
   dropDownKeys?: Array<string>
-  issuedLoansSearchFilters: any
   chosenStatus?: string
   resetSelectedItems?: () => void
   setFrom?: (from: number) => void
-  search: (data) => void
-  searchFilters: (data) => void
-  setIssuedLoansSearchFilters: (data) => void
-  setLoading: (data) => void
   submitClassName?: string
   sme?: boolean
   cf?: boolean
-}
-
-export interface SearchState {
-  governorates: Array<any>
-  dropDownValue: string
-  actionsList: Array<string>
 }

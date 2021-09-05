@@ -8,7 +8,7 @@ import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import CustomerSearch, { Results } from '../CustomerSearch/customerSearchTable'
 import { WarningCreationModalProps, WarningCreationStepEnum } from './types'
 import { Loader } from '../../../Shared/Components/Loader'
-import { Customer } from '../../Models/Customer'
+import { Customer } from '../../../Shared/Models/Customer'
 import {
   LegalWarningRequest,
   LegalWarningType,

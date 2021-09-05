@@ -1,4 +1,4 @@
-import { Signature } from '../../Shared/Models/common'
+import { Signature } from './common'
 
 interface Blocked {
   isBlocked?: boolean
