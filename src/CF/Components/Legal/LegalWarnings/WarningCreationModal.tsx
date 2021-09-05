@@ -25,7 +25,7 @@ import {
   createWarning,
   fetchWarning,
 } from '../../../../Shared/Services/APIs/LegalAffairs/warning'
-import { Customer } from '../../../../Mohassel/Models/Customer'
+import { Customer } from '../../../../Shared/Models/Customer'
 
 export const WarningCreationModal = ({
   showModal,
