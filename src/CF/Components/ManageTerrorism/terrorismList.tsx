@@ -13,7 +13,7 @@ import * as Yup from 'yup'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-import Can from '../../config/Can'
+import Can from '../../../Shared/config/Can'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import Search from '../../../Shared/Components/Search/search'
 import { loading } from '../../../Shared/redux/loading/actions'
@@ -22,8 +22,9 @@ import HeaderWithCards, {
 } from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { antiTerrorismArray, fullEnglishDate } from './terrorismInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { uploadTerroristUnDocument } from '../../../Shared/Services/APIs/Terrorism/terrorism'
+import { uploadTerroristDocument } from '../../../Shared/Services/APIs/Terrorism/terrorism'
 import { TerroristResponse } from '../../../Shared/Services/interfaces'
+import { TerroristsCustomers } from './terroristsCustomers'
 
 interface Props {
   data: TerroristResponse[]
@@ -53,7 +54,7 @@ interface Touched {
 const uploadTerroristDocumentValidation = Yup.object().shape({
   terrorismLListFile: Yup.mixed(),
 })
-class TerrorismUnList extends Component<Props, State> {
+class TerrorismList extends Component<Props, State> {
   mappers: {
     title: (() => void) | string
     key: string
@@ -73,47 +74,34 @@ class TerrorismUnList extends Component<Props, State> {
       {
         title: local.name,
         key: 'name',
-        render: (data) => (
-          <p className="small-text">
-            {data.name !== 'na' ? data.name : local.na}
-          </p>
-        ),
+        render: (data) => <p className="small-text">{data.name}</p>,
       },
       {
         title: local.nationality,
         key: 'nationality',
-        render: (data) => (
-          <p className="small-text">
-            {data.nationality !== 'na' ? data.nationality : local.na}
-          </p>
-        ),
+        render: (data) => <p className="small-text">{data.nationality}</p>,
       },
       {
         title: local.nationalId,
         key: 'nationalId',
         render: (data) => (
           <p className="small-text" dir="ltr">
-            {data.nationalId !== 'na' ? data.nationalId : local.na}
+            {data.nationalId}
           </p>
         ),
       },
       {
         title: local.birthDate,
         key: 'birthDate',
-        render: (data) => (
-          <p className="small-text">
-            {data.birthDate !== 'na' ? data.birthDate : local.na}
-          </p>
-        ),
+        render: (data) => <p className="small-text">{data.birthDate}</p>,
       },
       {
         title: local.creationDate,
         key: 'createAt',
-        render: (data) => (
-          <p className="small-text">
-            {data?.created?.at ? fullEnglishDate(data.created.at) : local.na}
-          </p>
-        ),
+        render: (data) =>
+          data?.created?.at ? (
+            <p className="small-text">{fullEnglishDate(data.created.at)}</p>
+          ) : null,
       },
     ]
   }
@@ -122,7 +110,7 @@ class TerrorismUnList extends Component<Props, State> {
     this.props.search({
       size: this.state.size,
       from: this.state.from,
-      url: 'terroristUn',
+      url: 'terrorist',
     })
     this.setState({
       tabsToRender: antiTerrorismArray(),
@@ -139,7 +127,7 @@ class TerrorismUnList extends Component<Props, State> {
       ...this.props.searchFilters,
       size: this.state.size,
       from: this.state.from,
-      url: 'terroristUn',
+      url: 'terrorist',
     })
     if (this.props.error) {
       Swal.fire('', getErrorMessage(this.props.error), 'error')
@@ -151,7 +139,7 @@ class TerrorismUnList extends Component<Props, State> {
     this.setState({ showModal: false })
     const formData = new FormData()
     formData.append('data', values.terrorismLListFile)
-    const res = await uploadTerroristUnDocument(formData)
+    const res = await uploadTerroristDocument(formData)
     if (res.status === 'success') {
       Swal.fire('', local.uploadedSuccessfully, 'success').then(() =>
         window.location.reload()
@@ -172,14 +160,14 @@ class TerrorismUnList extends Component<Props, State> {
             .map((item) => {
               return item.stringKey
             })
-            .indexOf('antiTerrorismUn')}
+            .indexOf('antiTerrorism')}
         />
         <Card className="main-card">
           <Loader type="fullscreen" open={this.props.loading} />
           <div className="custom-card-header">
             <div className="d-flex align-items-center p-0">
               <Card.Title className="ml-2 mb-0">
-                {local.terroristsListUn}
+                {local.terroristsList}
               </Card.Title>
               <span className="text-muted">
                 {local.noOfTerrorists +
@@ -187,6 +175,7 @@ class TerrorismUnList extends Component<Props, State> {
               </span>
             </div>
             <div>
+              <TerroristsCustomers />
               <Can I="createTerrorist" a="customer">
                 <Button
                   className="big-button mx-2"
@@ -204,14 +193,14 @@ class TerrorismUnList extends Component<Props, State> {
             <Search
               searchKeys={['keyword', 'dateFromTo']}
               dropDownKeys={['name']}
-              url="terroristUn"
+              url="terrorist"
               from={this.state.from}
               size={this.state.size}
             />
             <DynamicTable
               from={this.state.from}
               size={this.state.size}
-              url="terroristUn"
+              url="terrorist"
               totalCount={this.props.totalCount}
               pagination
               data={this.props.data}
@@ -248,10 +237,10 @@ class TerrorismUnList extends Component<Props, State> {
                     <Form.Group
                       className="d-flex justify-content-center"
                       as={Row}
-                      controlId="terrorismUnListFile"
+                      controlId="terrorismListFile"
                     >
                       <Form.File
-                        name="terrorismUnListFile"
+                        name="terrorismListFile"
                         type="file"
                         onChange={(e) =>
                           formikProps.setFieldValue(
@@ -307,4 +296,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, addSearchToProps)(TerrorismUnList)
+export default connect(mapStateToProps, addSearchToProps)(TerrorismList)

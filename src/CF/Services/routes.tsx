@@ -9,6 +9,7 @@ import { loansRoute } from '../Components/Loans/routes'
 import { toolsRoutes } from '../Components/Tools/routes'
 import { leadsRoutes } from '../Components/Leads/routes'
 import { clearanceRoutes } from '../Components/Clearance/routes'
+import { terrorismRoutes } from '../Components/ManageTerrorism/routes'
 
 const appRoutes = [
   {
@@ -22,6 +23,7 @@ const appRoutes = [
       toolsRoutes,
       leadsRoutes,
       clearanceRoutes,
+      terrorismRoutes,
     ],
   },
 ]

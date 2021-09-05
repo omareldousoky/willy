@@ -66,6 +66,15 @@ export const CfNavbar = () => {
             {local.clearances}
           </Nav.Link>
         )}
+        {ability.can('getTerrorist', 'customer') && (
+          <Nav.Link
+            onClick={() =>
+              history.push('/manage-anti-terrorism/anti-terrorism')
+            }
+          >
+            {local.antiTerrorism}
+          </Nav.Link>
+        )}
       </Nav>
     </Navbar.Collapse>
   )
