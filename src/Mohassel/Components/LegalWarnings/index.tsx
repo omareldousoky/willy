@@ -222,9 +222,14 @@ export const LegalWarnings = () => {
             className="px-0"
             title={`${local.view} ${local.viewCustomer}`}
             onClick={() =>
-              history.push('/customers/view-customer', {
-                id: warning.customerId,
-              })
+              history.push(
+                warning.customerType === 'company'
+                  ? '/company/view-company'
+                  : '/customers/view-customer',
+                {
+                  id: warning.customerId,
+                }
+              )
             }
           >
             {warning.customerKey}

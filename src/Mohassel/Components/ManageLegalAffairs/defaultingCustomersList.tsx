@@ -219,9 +219,14 @@ class DefaultingCustomersList extends Component<Props, State> {
             <span
               style={{ cursor: 'pointer' }}
               onClick={() =>
-                this.props.history.push('/customers/view-customer', {
-                  id: data.customerId,
-                })
+                this.props.history.push(
+                  data.customerType === 'company'
+                    ? '/company/view-company'
+                    : '/customers/view-customer',
+                  {
+                    id: data.customerId,
+                  }
+                )
               }
             >
               {data.customerKey}
