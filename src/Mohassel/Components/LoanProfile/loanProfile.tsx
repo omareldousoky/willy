@@ -40,11 +40,10 @@ import Can from '../../config/Can'
 import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment'
 import { Customer, PendingActions } from '../../../Shared/Services/interfaces'
 import {
-  timeToDateyyymmdd,
   iscoreDate,
   getErrorMessage,
   statusLocale,
-  getFormattedLocalDate,
+  timeToDateyyymmdd,
 } from '../../../Shared/Services/utils'
 import { payment } from '../../../Shared/redux/payment/actions'
 import { cancelApplication } from '../../../Shared/Services/APIs/loanApplication/stateHandler'
@@ -1360,7 +1359,7 @@ class LoanProfile extends Component<Props, State> {
                   <span className="text-muted">{local.truthDate}</span>
                   <span>
                     {this.state.pendingActions.transactions
-                      ? getFormattedLocalDate(
+                      ? timeToDateyyymmdd(
                           this.state.pendingActions?.transactions[0].truthDate
                         )
                       : ''}
@@ -1370,7 +1369,7 @@ class LoanProfile extends Component<Props, State> {
                   <span className="text-muted">{local.dueDate}</span>
                   <span>
                     {this.state.pendingActions.transactions
-                      ? getFormattedLocalDate(
+                      ? timeToDateyyymmdd(
                           this.state.pendingActions.transactions[0].actualDate
                         )
                       : ''}

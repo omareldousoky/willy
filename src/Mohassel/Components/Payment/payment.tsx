@@ -4,7 +4,6 @@ import Swal from 'sweetalert2'
 import { Formik } from 'formik'
 import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
-import dayjs from 'dayjs'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import {
@@ -291,10 +290,7 @@ class Payment extends Component<Props, State> {
 
   handleSubmit = async (values) => {
     this.setState({ loadingFullScreen: true })
-    const truthDateTimestamp =
-      dayjs(values.truthDate) < this.props.application.issueDate
-        ? dayjs().valueOf()
-        : dayjs(values.truthDate).valueOf()
+    const truthDateTimestamp = new Date(values.truthDate).valueOf()
 
     if (this.props.paymentState === 1) {
       if (this.props.paymentType === 'normal') {
