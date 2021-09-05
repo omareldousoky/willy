@@ -1,8 +1,8 @@
 import { AxiosResponse } from 'axios'
-import { ApiResponse } from '../../../Models/common'
 import { UnpaidInstallmentsPerAreaRequest } from '../../interfaces'
 import axios from '../../../../Shared/Services/axiosInstance'
 import { API_BASE_URL } from '../../../../Shared/envConfig'
+import { ApiResponse } from '../../../../Shared/Models/common'
 
 const fetchUnpaidInstallmentsPerAreaUrl = `${API_BASE_URL}/report/unpaid-installments-per-area`
 

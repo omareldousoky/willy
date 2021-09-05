@@ -3,9 +3,9 @@ import {
   TerroristResponse,
   TerroristUnResponse,
 } from '../../../../Shared/Services/interfaces'
-import { ApiResponse } from '../../../Models/common'
 import axios from '../../../../Shared/Services/axiosInstance'
 import { API_BASE_URL } from '../../../../Shared/envConfig'
+import { ApiResponse } from '../../../../Shared/Models/common'
 
 const fetchSearchLocalTerroristUrl = `${API_BASE_URL}/search/local-terrorist`
 const fetchSearchUniTerroristUrl = `${API_BASE_URL}/search/UN-terrorist`

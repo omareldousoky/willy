@@ -1,5 +1,4 @@
 import { AxiosResponse } from 'axios'
-import { ApiResponse } from '../../../Models/common'
 import {
   CurrentHierarchiesResponse,
   OfficersProductivityRequest,
@@ -7,6 +6,7 @@ import {
 } from '../../../Models/OfficersProductivityReport'
 import axios from '../../../../Shared/Services/axiosInstance'
 import { API_BASE_URL } from '../../../../Shared/envConfig'
+import { ApiResponse } from '../../../../Shared/Models/common'
 
 const fetchOfficersProductivityUrl = `${API_BASE_URL}/report/officer-productivity`
 // for officers productivity input preparation

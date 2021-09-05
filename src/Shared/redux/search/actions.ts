@@ -14,10 +14,10 @@ import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOf
 import {
   searchDefaultingCustomers,
   searchLegalAffairsCustomers,
-} from '../../../Mohassel/Services/APIs/LegalAffairs/defaultingCustomers'
+} from '../../Services/APIs/LegalAffairs/defaultingCustomers'
 import { searchFinancialBlocking } from '../../Services/APIs/loanApplication/financialClosing'
 import { cibReport } from '../../Services/APIs/loanApplication/cibReport'
-import { searchWarnings } from '../../../Mohassel/Services/APIs/LegalAffairs/warning'
+import { searchWarnings } from '../../Services/APIs/LegalAffairs/warning'
 import { searchCustomer } from '../../Services/APIs/customer/searchCustomer'
 
 const searchWrapper = (

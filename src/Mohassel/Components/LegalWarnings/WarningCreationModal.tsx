@@ -12,7 +12,7 @@ import { Customer } from '../../../Shared/Models/Customer'
 import {
   LegalWarningRequest,
   LegalWarningType,
-} from '../../Models/LegalAffairs'
+} from '../../../Shared/Models/LegalAffairs'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan'
 import { Application } from '../LoanApplication/loanApplicationStates'
@@ -20,7 +20,7 @@ import { WarningTypeDropDown } from '../../../Shared/Components/dropDowns/Warnin
 import {
   fetchWarning,
   createWarning,
-} from '../../Services/APIs/LegalAffairs/warning'
+} from '../../../Shared/Services/APIs/LegalAffairs/warning'
 import { addeddSuccessfully } from '../../../Shared/localUtils'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 

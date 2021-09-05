@@ -12,23 +12,20 @@ import { FormControlProps } from 'react-bootstrap/FormControl'
 
 import { Schema } from 'yup'
 
-import { getDateString } from '../../../../Shared/Services/utils'
+import { getDateString } from '../../Services/utils'
 import {
   DocumentField,
   FormField as FormFieldType,
   FormFieldProps,
 } from './types'
-import DocumentPhoto from '../../../../Shared/Components/documentPhoto/documentPhoto'
+import DocumentPhoto from '../documentPhoto/documentPhoto'
 import { AppFormContext } from '.'
 import { getNestedByStringKey } from './utils'
-import DocumentUploader from '../../../../Shared/Components/documentUploader/documentUploader'
-import {
-  getDocuments,
-  invalidDocument,
-} from '../../../../Shared/redux/document/actions'
-import { Document } from '../../../../Shared/Services/interfaces'
-import { DocumentsType } from '../../../../Shared/redux/document/types'
-import useDidUpdateEffect from '../../../../Shared/hooks/useDidUpdateEffect'
+import DocumentUploader from '../documentUploader/documentUploader'
+import { getDocuments, invalidDocument } from '../../redux/document/actions'
+import { Document } from '../../Services/interfaces'
+import { DocumentsType } from '../../redux/document/types'
+import useDidUpdateEffect from '../../hooks/useDidUpdateEffect'
 
 const FormField: FunctionComponent<FormFieldProps> = ({
   field,
