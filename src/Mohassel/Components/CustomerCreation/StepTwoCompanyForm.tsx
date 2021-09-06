@@ -20,6 +20,19 @@ import {
 import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
 import { BusinessSector, District, Governorate } from './StepTwoForm'
 
+const legalStructureRoles = [
+  { name: 'الشريك المعتمد', value: 'authorizedPartner' },
+  { name: 'مدير الشركة', value: 'director' },
+  { name: 'مدير', value: 'manager' },
+  { name: 'شريك', value: 'partner' },
+  { name: 'مالك', value: 'proprietor' },
+  { name: 'المستخدم', value: 'user' },
+  { name: 'ضامن', value: 'guarantor' },
+  { name: 'المدير العام', value: 'managingDirector' },
+  { name: 'رئيس مجلس الإدارة', value: 'chairman' },
+  { name: 'آخر', value: 'other' },
+]
+
 export const StepTwoCompanyForm = (props: any) => {
   const {
     values,
@@ -345,15 +358,27 @@ export const StepTwoCompanyForm = (props: any) => {
           <Form.Group controlId="legalStructure">
             <Form.Label className="customer-form-label">{`${local.legalStructure} *`}</Form.Label>
             <Form.Control
-              type="text"
+              as="select"
+              type="select"
               name="legalStructure"
               data-qc="legalStructure"
               value={values.legalStructure}
               onBlur={handleBlur}
-              maxLength={100}
               onChange={handleChange}
               isInvalid={errors.legalStructure && touched.legalStructure}
-            />
+            >
+              <option value="" disabled />
+
+              {legalStructureRoles.map(({ name, value }) => (
+                <option
+                  key={value}
+                  value={value}
+                  selected={values.legalStructure === value}
+                >
+                  {name}
+                </option>
+              ))}
+            </Form.Control>
             <Form.Control.Feedback type="invalid">
               {errors.legalStructure}
             </Form.Control.Feedback>
