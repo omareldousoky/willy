@@ -50,6 +50,7 @@ class DocumentTypeCreation extends Component<Props, State> {
   }
 
   submit = (values) => {
+    values.name = values.name.trim()
     this.setState({
       documentType: values,
     })
