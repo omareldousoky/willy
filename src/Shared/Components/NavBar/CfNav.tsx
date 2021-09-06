@@ -76,6 +76,11 @@ export const CfNavbar = () => {
             {local.logs}
           </Nav.Link>
         )}
+        {ability.can('getOfficersGroups', 'branch') && (
+          <Nav.Link onClick={() => history.push('/supervisions-levels')}>
+            {local.levelsOfSupervision}
+          </Nav.Link>
+        )}
       </Nav>
     </Navbar.Collapse>
   )
