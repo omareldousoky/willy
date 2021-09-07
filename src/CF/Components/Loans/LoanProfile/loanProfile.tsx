@@ -531,26 +531,26 @@ class LoanProfile extends Component<Props, State> {
             status: this.state.application.status,
           }),
       },
-      // {
-      //   icon: 'close',
-      //   title: local.writeOffLoan,
-      //   permission:
-      //     this.state.application.status === 'issued' &&
-      //     this.state.application.isDoubtful &&
-      //     !this.state.application.writeOff &&
-      //     ability.can('writeOff', 'application'),
-      //   onActionClick: () => this.writeOffApplication(),
-      // },
-      // {
-      //   icon: 'minus',
-      //   title: local.doubtLoan,
-      //   permission:
-      //     this.state.application.status === 'issued' &&
-      //     !this.state.application.isDoubtful &&
-      //     !this.state.application.writeOff &&
-      //     ability.can('setDoubtfulLoan', 'application'),
-      //   onActionClick: () => this.doubtApplication(),
-      // },
+      {
+        icon: 'close',
+        title: local.writeOffLoan,
+        permission:
+          this.state.application.status === 'issued' &&
+          this.state.application.isDoubtful &&
+          !this.state.application.writeOff &&
+          ability.can('writeOff', 'application'),
+        onActionClick: () => this.writeOffApplication(),
+      },
+      {
+        icon: 'minus',
+        title: local.doubtLoan,
+        permission:
+          this.state.application.status === 'issued' &&
+          !this.state.application.isDoubtful &&
+          !this.state.application.writeOff &&
+          ability.can('setDoubtfulLoan', 'application'),
+        onActionClick: () => this.doubtApplication(),
+      },
     ]
   }
 
