@@ -33,7 +33,7 @@ import {
   deleteCustomerDefaultedLoan,
   fetchReviewedDefaultingCustomers,
   reviewCustomerDefaultedLoan,
-} from '../../Services/APIs/LegalAffairs/defaultingCustomers'
+} from '../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
 import ability from '../../config/ability'
 import ReportsModal from '../Reports/reportsModal'
 import { PDF } from '../Reports/reports'

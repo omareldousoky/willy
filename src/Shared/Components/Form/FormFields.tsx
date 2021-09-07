@@ -3,7 +3,7 @@ import React, { FunctionComponent } from 'react'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
-import { arrayToPairs } from '../../../../Shared/Services/utils'
+import { arrayToPairs } from '../../Services/utils'
 import FormField from './FormField'
 import {
   FormField as FormFieldInterface,

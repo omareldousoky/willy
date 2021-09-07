@@ -15,7 +15,7 @@ import {
   LegalWarningResponse,
   LegalWarningsSearchRequest,
   LegalWarningType,
-} from '../../Models/LegalAffairs'
+} from '../../../Shared/Models/LegalAffairs'
 import { timeToArabicDate } from '../../../Shared/Services/utils'
 import ability from '../../config/ability'
 import { search as searchAction } from '../../../Shared/redux/search/actions'
@@ -24,7 +24,7 @@ import SearchForm from '../../../Shared/Components/Search/search'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { LegalWarning } from '../pdfTemplates/LegalWarning'
 import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
-import { setPrintWarningFlag } from '../../Services/APIs/LegalAffairs/warning'
+import { setPrintWarningFlag } from '../../../Shared/Services/APIs/LegalAffairs/warning'
 import { WarningCreationModal } from './WarningCreationModal'
 import { loading as loadingAction } from '../../../Shared/redux/loading/actions'
 import { LtsIcon } from '../../../Shared/Components'
