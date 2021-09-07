@@ -11,7 +11,7 @@ import './index.scss'
 const App = (props) => {
   useEffect(() => {
     props.getAuthData()
-  })
+  }, [props])
   const authData = useSelector((state: any) => {
     return state.auth
   })
