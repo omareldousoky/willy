@@ -60,7 +60,7 @@ class LoanProducts extends Component<Props, State> {
       {
         title: local.productName,
         key: 'name',
-        render: (data) => data.productName,
+        render: (data) => data.name,
       },
       {
         title: local.code,
@@ -80,7 +80,7 @@ class LoanProducts extends Component<Props, State> {
       {
         title: local.branches,
         key: 'branches',
-        render: (data) => (data.branches ? data.branches : 0),
+        render: (data) => (data.branchCount ? data.branchCount : 0),
       },
       {
         title: local.actions,
