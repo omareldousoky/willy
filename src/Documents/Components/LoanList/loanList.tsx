@@ -41,6 +41,8 @@ class LoanList extends Component<Props, State> {
     render: (data: any) => void
   }[]
 
+  locationListenerUnregister: () => void
+
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -136,26 +138,22 @@ class LoanList extends Component<Props, State> {
         render: (data) => this.renderIcons(data),
       },
     ]
+
+    this.locationListenerUnregister = this.props.history.listen(
+      (location: { state: any }) => {
+        const type = location?.state?.sme ? 'sme' : 'micro'
+        this.getLoans(type)
+      }
+    )
   }
 
   componentDidMount() {
-    this.props
-      .search({
-        ...this.props.issuedLoansSearchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'loan',
-        sort: 'issueDate',
-        type: 'micro',
-      })
-      .then(() => {
-        if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
-      })
+    this.getLoans()
   }
 
   componentWillUnmount() {
     this.props.setSearchFilters({})
+    this.locationListenerUnregister()
   }
 
   getStatus(status: string) {
@@ -173,28 +171,32 @@ class LoanList extends Component<Props, State> {
     }
   }
 
-  async getLoans() {
-    let query = {}
+  async getLoans(type?: string) {
+    const currentType = (this.props.location as any)?.state?.sme
+      ? 'sme'
+      : 'micro'
+
+    let query = { type: type || currentType }
     if (this.props.fromBranch) {
       query = {
         ...this.props.searchFilters,
         ...this.props.issuedLoansSearchFilters,
+        ...query,
         size: this.state.size,
         from: this.state.from,
         url: 'loan',
         branchId: this.props.branchId,
         sort: 'issueDate',
-        type: 'micro',
       }
     } else {
       query = {
         ...this.props.searchFilters,
         ...this.props.issuedLoansSearchFilters,
+        ...query,
         size: this.state.size,
         from: this.state.from,
         url: 'loan',
         sort: 'issueDate',
-        type: 'micro',
       }
     }
     this.props.search(query).then(() => {
@@ -220,6 +222,7 @@ class LoanList extends Component<Props, State> {
             onClick={() =>
               this.props.history.push('/edit-loan-profile', {
                 id: data.application._id,
+                sme: !!(this.props.location as any)?.state?.sme,
               })
             }
           />

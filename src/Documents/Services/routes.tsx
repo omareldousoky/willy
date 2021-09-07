@@ -22,6 +22,11 @@ const appRoutes = [
         render: (props) => <CustomersList {...props} />,
       },
       {
+        path: '/company',
+        label: local.companies,
+        render: (props) => <CustomersList {...props} />,
+      },
+      {
         path: '/edit-customer-document',
         label: local.customers,
         render: (props) => <DocumentsUpload {...props} />,

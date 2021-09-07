@@ -36,6 +36,8 @@ class CustomersList extends Component<Props, State> {
     render: (data: any) => void
   }[]
 
+  locationListenerUnregister: () => void
+
   constructor(props) {
     super(props)
     this.state = {
@@ -83,6 +85,7 @@ class CustomersList extends Component<Props, State> {
               onClick={() =>
                 this.props.history.push('/edit-customer-document', {
                   id: data._id,
+                  sme: !!(this.props.location as any)?.state?.sme,
                 })
               }
             />
@@ -90,29 +93,29 @@ class CustomersList extends Component<Props, State> {
         ),
       },
     ]
+
+    this.locationListenerUnregister = this.props.history.listen(
+      (location: { state: any }) => {
+        const type = location?.state?.sme ? 'company' : 'individual'
+        this.getCustomers(type)
+      }
+    )
   }
 
   componentDidMount() {
-    this.props
-      .search({
-        size: this.state.size,
-        from: this.state.from,
-        url: 'customer',
-        branchId: this.props.branchId,
-        customerType: 'individual',
-      })
-      .then(() => {
-        if (this.props.error) {
-          Swal.fire('Error', getErrorMessage(this.props.error), 'error')
-        }
-      })
+    this.getCustomers()
   }
 
   componentWillUnmount() {
     this.props.setSearchFilters({})
+    this.locationListenerUnregister()
   }
 
-  getCustomers() {
+  getCustomers(type?: string) {
+    const currentType = (this.props.location as any)?.state?.sme
+      ? 'company'
+      : 'individual'
+
     this.props
       .search({
         ...this.props.searchFilters,
@@ -120,7 +123,7 @@ class CustomersList extends Component<Props, State> {
         from: this.state.from,
         url: 'customer',
         branchId: this.props.branchId,
-        customerType: 'individual',
+        customerType: type || currentType,
       })
       .then(() => {
         if (this.props.error) {

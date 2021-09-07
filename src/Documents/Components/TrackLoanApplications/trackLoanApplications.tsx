@@ -44,7 +44,12 @@ interface State {
   loading: boolean
   selectedApplicationToPrint: any
 }
-interface Props extends RouteComponentProps {
+interface Props
+  extends RouteComponentProps<
+    {},
+    {},
+    { sme?: boolean; id?: string; action?: string }
+  > {
   data: any
   error: string
   totalCount: number
@@ -146,19 +151,60 @@ class TrackLoanApplications extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.props.setSearchFilters({ type: 'micro' })
+    this.props.setSearchFilters({
+      type:
+        this.props.location.state && this.props.location.state.sme
+          ? 'sme'
+          : 'micro',
+    })
     this.props
       .search({
         size: this.state.size,
         from: this.state.from,
         url: 'application',
         branchId: this.props.branchId,
-        type: 'micro',
+        type:
+          this.props.location.state && this.props.location.state.sme
+            ? 'sme'
+            : 'micro',
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          Swal.fire('', getErrorMessage(this.props.error), 'error')
       })
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (
+      (prevProps.location.state && prevProps.location.state.sme) !==
+      (this.props.location.state && this.props.location.state.sme)
+    ) {
+      this.props.setSearchFilters({
+        type:
+          this.props.location.state && this.props.location.state.sme
+            ? 'sme'
+            : 'micro',
+      })
+      this.props
+        .search({
+          size: this.state.size,
+          from: this.state.from,
+          url: 'application',
+          branchId: this.props.branchId,
+          type:
+            this.props.location.state && this.props.location.state.sme
+              ? 'sme'
+              : 'micro',
+        })
+        .then(() => {
+          if (this.props.error)
+            Swal.fire('', getErrorMessage(this.props.error), 'error')
+        })
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
   }
 
   getApplications() {
@@ -252,6 +298,7 @@ class TrackLoanApplications extends Component<Props, State> {
               onClick={() =>
                 this.props.history.push('/edit-loan-profile', {
                   id: data.application._id,
+                  sme: !!(this.props.location as any)?.state?.sme,
                 })
               }
             />
