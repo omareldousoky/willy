@@ -18,7 +18,8 @@ interface State {
   size: number
   from: number
 }
-interface Props extends RouteComponentProps {
+interface Props
+  extends RouteComponentProps<{}, {}, { sme?: boolean; id: number }> {
   data: any
   totalCount: number
   loading: boolean
@@ -85,7 +86,7 @@ class CustomersList extends Component<Props, State> {
               onClick={() =>
                 this.props.history.push('/edit-customer-document', {
                   id: data._id,
-                  sme: !!(this.props.location as any)?.state?.sme,
+                  sme: !!this.props.location.state?.sme,
                 })
               }
             />
@@ -112,7 +113,7 @@ class CustomersList extends Component<Props, State> {
   }
 
   getCustomers(type?: string) {
-    const currentType = (this.props.location as any)?.state?.sme
+    const currentType = this.props.location.state?.sme
       ? 'company'
       : 'individual'
 

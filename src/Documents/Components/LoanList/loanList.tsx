@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { Location } from 'history'
 import { connect } from 'react-redux'
 import Swal from 'sweetalert2'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
@@ -14,8 +15,12 @@ import {
   beneficiaryType,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
+import {
+  LoanListHistoryState,
+  LoanListLocationState,
+} from '../../../Mohassel/Components/LoanList/types'
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps<{}, {}, LoanListLocationState> {
   data: any
   branchId: string
   fromBranch?: boolean
@@ -139,12 +144,10 @@ class LoanList extends Component<Props, State> {
       },
     ]
 
-    this.locationListenerUnregister = this.props.history.listen(
-      (location: { state: any }) => {
-        const type = location?.state?.sme ? 'sme' : 'micro'
-        this.getLoans(type)
-      }
-    )
+    this.locationListenerUnregister = this.props.history.listen((location) => {
+      const type = location?.state?.sme ? 'sme' : 'micro'
+      this.getLoans(type)
+    })
   }
 
   componentDidMount() {
@@ -172,9 +175,7 @@ class LoanList extends Component<Props, State> {
   }
 
   async getLoans(type?: string) {
-    const currentType = (this.props.location as any)?.state?.sme
-      ? 'sme'
-      : 'micro'
+    const currentType = this.props.location?.state?.sme ? 'sme' : 'micro'
 
     let query = { type: type || currentType }
     if (this.props.fromBranch) {
@@ -222,8 +223,8 @@ class LoanList extends Component<Props, State> {
             onClick={() =>
               this.props.history.push('/edit-loan-profile', {
                 id: data.application._id,
-                sme: !!(this.props.location as any)?.state?.sme,
-              })
+                sme: !!this.props.location?.state?.sme,
+              } as LoanListHistoryState)
             }
           />
         </Can>
