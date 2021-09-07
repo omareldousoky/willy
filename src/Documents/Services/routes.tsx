@@ -13,7 +13,7 @@ import { Landing } from '../../Shared/Components/Landing'
 const appRoutes = [
   {
     path: '/',
-    label: local.mohassel,
+    label: local.tasaheel,
     render: () => <Landing appName="LTS Documents" />,
     routes: [
       {
