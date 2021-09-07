@@ -36,5 +36,13 @@ export const manageToolsArray = (): Card[] => {
       }
     )
   }
+  if (ability.can('createMaxPrincipal', 'config')) {
+    manageLoanArr.push({
+      icon: 'principal-range',
+      header: local.principalRange,
+      desc: local.principalRange,
+      path: '/tools/limits-config',
+    })
+  }
   return manageLoanArr
 }

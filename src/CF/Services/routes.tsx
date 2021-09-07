@@ -8,6 +8,9 @@ import { customerCreationRoutes } from '../Components/CustomerCreation/routes'
 import { loansRoute } from '../Components/Loans/routes'
 import { toolsRoutes } from '../Components/Tools/routes'
 import { leadsRoutes } from '../Components/Leads/routes'
+import { clearanceRoutes } from '../Components/Clearance/routes'
+import { legalRoutes } from '../Components/Legal/routes'
+import { actionLogsRoutes } from '../Components/ActionLogs/routes'
 
 const appRoutes = [
   {
@@ -20,6 +23,9 @@ const appRoutes = [
       loansRoute,
       toolsRoutes,
       leadsRoutes,
+      clearanceRoutes,
+      legalRoutes,
+      actionLogsRoutes,
     ],
   },
 ]

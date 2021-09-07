@@ -4,7 +4,7 @@ import { searchLoan } from '../../../Mohassel/Services/APIs/Loan/searchLoan'
 import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication'
 import { searchActionLogs } from '../../../Mohassel/Services/APIs/ActionLogs/searchActionLogs'
 import { searchLeads } from '../../Services/APIs/Leads/searchLeads'
-import { searchClearance } from '../../../Mohassel/Services/APIs/clearance/searchClearance'
+import { searchClearance } from '../../Services/APIs/clearance/searchClearance'
 import { searchGroups } from '../../../Mohassel/Services/APIs/ManagerHierarchy/searchGroups'
 import {
   searchTerrorists,
@@ -14,10 +14,10 @@ import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOf
 import {
   searchDefaultingCustomers,
   searchLegalAffairsCustomers,
-} from '../../../Mohassel/Services/APIs/LegalAffairs/defaultingCustomers'
+} from '../../Services/APIs/LegalAffairs/defaultingCustomers'
 import { searchFinancialBlocking } from '../../Services/APIs/loanApplication/financialClosing'
 import { cibReport } from '../../Services/APIs/loanApplication/cibReport'
-import { searchWarnings } from '../../../Mohassel/Services/APIs/LegalAffairs/warning'
+import { searchWarnings } from '../../Services/APIs/LegalAffairs/warning'
 import { searchCustomer } from '../../Services/APIs/customer/searchCustomer'
 import { searchProducts } from '../../../Mohassel/Services/APIs/loanProduct/searchProducts'
 

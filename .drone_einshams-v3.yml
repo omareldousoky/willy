@@ -1,0 +1,176 @@
+kind: pipeline
+type: kubernetes
+name: notify-pipeline-start
+
+
+steps:
+- name: notify-start
+  image: plugins/slack
+  settings:
+    channel: drone-notifications
+    webhook:
+        from_secret: slack_webhook_url
+    template: >
+      {{#if build.pull }}
+        *Build started*: {{ repo.owner }}/{{ repo.name }} - <https://github.com/{{ repo.owner }}/{{ repo.name }}/pull/{{ build.pull }}|Pull Request #{{ build.pull }}>
+      {{else}}
+        *Build started: {{ repo.owner }}/{{ repo.name }} - Build #{{ build.number }}* (type: `{{ build.event }}`)
+      {{/if}}
+      Commit: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commit/{{ build.commit }}|{{ truncate build.commit 8 }}>
+      Branch: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commits/{{ build.branch }}|{{ build.branch }}>
+      Author: {{ build.author }}
+      <{{ build.link }}|Visit build page ↗>
+  when:
+    branch:
+    - einshams-v2
+    event:
+      - push
+
+---
+
+
+kind: pipeline
+type: kubernetes
+name: kubernetes
+
+steps:
+- name: deploy-login
+  image: quay.io/honestbee/drone-kubernetes
+  settings:
+    KUBERNETES_SERVER:
+     from_secret: kubernetes_server
+    KUBERNETES_TOKEN:
+      from_secret: kubernetes_token
+    KUBERNETES_CERT:
+      from_secret: kubernetes_cert
+    namespace: ${DRONE_BRANCH}
+    deployment: fe-login
+    repo: 624792314775.dkr.ecr.eu-central-1.amazonaws.com/${DRONE_REPO_NAME}/login
+    container: fe-login
+    tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
+
+  when:
+    branch:
+    - einshams-v2
+    event:
+      - push
+
+- name: deploy-login-cf
+  image: quay.io/honestbee/drone-kubernetes
+  settings:
+    KUBERNETES_SERVER:
+     from_secret: kubernetes_server
+    KUBERNETES_TOKEN:
+      from_secret: kubernetes_token
+    KUBERNETES_CERT:
+      from_secret: kubernetes_cert
+    namespace: ${DRONE_BRANCH}-cf
+    deployment: fe-login
+    repo: 624792314775.dkr.ecr.eu-central-1.amazonaws.com/${DRONE_REPO_NAME}/login-cf
+    container: fe-login
+    tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
+
+  when:
+    branch:
+    - einshams-v2
+    event:
+      - push
+
+- name: deploy-mohassel
+  image: quay.io/honestbee/drone-kubernetes
+  settings:
+    KUBERNETES_SERVER:
+     from_secret: kubernetes_server
+    KUBERNETES_TOKEN:
+      from_secret: kubernetes_token
+    KUBERNETES_CERT:
+      from_secret: kubernetes_cert
+    namespace: ${DRONE_BRANCH}
+    deployment: fe-mohassel
+    repo: 624792314775.dkr.ecr.eu-central-1.amazonaws.com/${DRONE_REPO_NAME}/mohassel
+    container: fe-mohassel
+    tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
+
+  when:
+    branch:
+    - einshams-v2
+    event:
+      - push
+
+- name: deploy-documents
+  image: quay.io/honestbee/drone-kubernetes
+  settings:
+    KUBERNETES_SERVER:
+     from_secret: kubernetes_server
+    KUBERNETES_TOKEN:
+      from_secret: kubernetes_token
+    KUBERNETES_CERT:
+      from_secret: kubernetes_cert
+    namespace: ${DRONE_BRANCH}
+    deployment: fe-documents
+    repo: 624792314775.dkr.ecr.eu-central-1.amazonaws.com/${DRONE_REPO_NAME}/documents
+    container: fe-documents
+    tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
+
+  when:
+    branch:
+    - einshams-v2
+    event:
+      - push
+
+
+
+- name: deploy-cf
+  image: quay.io/honestbee/drone-kubernetes
+  settings:
+    KUBERNETES_SERVER:
+     from_secret: kubernetes_server
+    KUBERNETES_TOKEN:
+      from_secret: kubernetes_token
+    KUBERNETES_CERT:
+      from_secret: kubernetes_cert
+    namespace: ${DRONE_BRANCH}-cf
+    deployment: fe-cf
+    repo: 624792314775.dkr.ecr.eu-central-1.amazonaws.com/${DRONE_REPO_NAME}/cf
+    container: fe-cf
+    tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
+
+  when:
+    branch:
+    - einshams-v2
+    event:
+      - push
+
+
+
+---
+kind: pipeline
+type: kubernetes
+name: Endnotify
+
+steps:
+- name: notify-end
+  image: plugins/slack
+  settings:
+    channel: drone-notifications
+    webhook:
+        from_secret: slack_webhook_url
+    template: >
+      {{#if build.pull }}
+        *{{#success build.status}}✔{{ else }}✘{{/success}} {{ uppercasefirst build.status }}*: {{ repo.owner }}/{{ repo.name }} - <https://github.com/{{ repo.owner }}/{{ repo.name }}/pull/{{ build.pull }}|Pull Request #{{ build.pull }}>
+      {{else}}
+        *{{#success build.status}}✔{{ else }}✘{{/success}} {{ uppercasefirst build.status }}: {{ repo.owner }}/{{ repo.name }} - Build #{{ build.number }}* (type: `{{ build.event }}`)
+      {{/if}}
+      Commit: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commit/{{ build.commit }}|{{ truncate build.commit 8 }}>
+      Branch: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commits/{{ build.branch }}|{{ build.branch }}>
+      Author: {{ build.author }}
+      Duration: {{ since build.created }}
+      <{{ build.link }}|Visit build page ↗>
+  when:
+    branch:
+    - einshams-v2
+    event:
+      - push
+
+depends_on:
+  - kubernetes

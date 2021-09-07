@@ -17,7 +17,7 @@ import { Navigation } from './Navigation'
 
 import local from '../../../Shared/Assets/ar.json'
 import { manageLegalAffairsArray } from '../ManageLegalAffairs/manageLegalAffairsInitials'
-import { getCalendarEvents } from '../../Services/APIs/LegalAffairs/calendar'
+import { getCalendarEvents } from '../../../Shared/Services/APIs/LegalAffairs/calendar'
 import {
   DAYS_OF_WEEK,
   formatWrapper,

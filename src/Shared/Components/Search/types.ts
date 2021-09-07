@@ -1,4 +1,4 @@
-import { LegalWarningType } from '../../../Mohassel/Models/LegalAffairs'
+import { LegalWarningType } from '../../Models/LegalAffairs'
 
 export interface SearchInitialFormikState {
   name?: string
@@ -16,6 +16,7 @@ export interface SearchInitialFormikState {
   type?: string
   warningType?: LegalWarningType | ''
   phoneNumber?: string
+  consumerFinanceLimitStatus?: string
   beneficiaryType?: 'individual' | 'group'
 }
 

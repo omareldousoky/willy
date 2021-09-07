@@ -927,3 +927,31 @@ export const loanChipStatusClass: Record<string, string> = {
 // en-CA: yyyy-mm-dd
 export const getFormattedLocalDate = (timestamp: number, locale = 'en-CA') =>
   new Date(timestamp).toLocaleDateString(locale)
+
+export const statusLocale = {
+  underReview: { text: 'تحت التحرير', color: '#ed7600' },
+  reviewed: { text: 'رُجعت', color: '#edb600' },
+  secondReview: { text: 'رُجعت من مدير الفرع', color: '#edb679' },
+  thirdReview: { text: 'رُجعت من مدير المركز', color: '#f4c109' },
+  rejected: { text: 'مرفوضة', color: '#d51b1b' },
+  canceled: { text: 'ملغى', color: '#d51b1b' },
+  approved: { text: 'موافق عليها', color: '#009bed' },
+  created: { text: 'تم الإنشاء', color: '#2a3390' },
+  issued: { text: 'أصدرت', color: '#7dc356' },
+  paid: { text: 'مدفوع', color: '#7dc356' },
+  pending: { text: 'قيد التحقيق', color: '#edb600' },
+  default: {},
+}
+
+export const cfLimitStatusLocale = {
+  approved: { text: 'الحد الائتماني موافق عليه', color: '#009bed' },
+  'pending-update': {
+    text: 'تعديل الحد الائتماني قيد التحقيق',
+    color: '#edb600',
+  },
+  'pending-initialization': {
+    text: 'الحد الائتماني المبدئي قيد التحقيق',
+    color: '#edb600',
+  },
+  default: { text: 'الحد الائتماني المبدئي قيد التحقيق', color: '#edb600' },
+}

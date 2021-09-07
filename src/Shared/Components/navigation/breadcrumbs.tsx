@@ -1,8 +1,9 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { pathTo } from '../../Services/utils'
 
 const Breadcrumbs = ({ route }) => {
+  const location = useLocation<any>()
   return (
     <nav className="breadcrumbs print-none">
       {pathTo(route).map(
@@ -14,7 +15,11 @@ const Breadcrumbs = ({ route }) => {
                   (crumb.disableLink ? (
                     crumb.label
                   ) : (
-                    <NavLink to={crumb.path}>{crumb.label}</NavLink>
+                    <NavLink
+                      to={{ pathname: crumb.path, state: location.state }}
+                    >
+                      {crumb.label}
+                    </NavLink>
                   ))}
                 {index === breadcrumbs.length - 1 && crumb.label}
               </div>

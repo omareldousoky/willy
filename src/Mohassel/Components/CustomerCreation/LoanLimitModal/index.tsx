@@ -9,12 +9,9 @@ import local from '../../../../Shared/Assets/ar.json'
 
 import { Loader } from '../../../../Shared/Components/Loader'
 import { LtsIcon } from '../../../../Shared/Components'
-import AppForm from '../../ManageLegalAffairs/Form'
-import { FormField } from '../../ManageLegalAffairs/Form/types'
-import { mapFormFieldsToFormData } from '../../ManageLegalAffairs/Form/utils'
 import { maxValue, minValue } from '../../../../Shared/localUtils'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
-import { Customer as CustomerModel } from '../../../Models/Customer'
+import { Customer as CustomerModel } from '../../../../Shared/Models/Customer'
 import { PromissoryNoteMicro } from '../../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
 import { LoanLimitModalProps, LoanLimitForm } from './types'
 import { getCustomerMaxNanoLoan } from '../../../../Shared/Services/APIs/customer/getCustomer'
@@ -24,6 +21,9 @@ import {
   getBranch,
 } from '../../../../Shared/Services/APIs/Branch/getBranch'
 import { PdfPortal } from '../../../../Shared/Components/Common/PdfPortal'
+import AppForm from '../../../../Shared/Components/Form'
+import { FormField } from '../../../../Shared/Components/Form/types'
+import { mapFormFieldsToFormData } from '../../../../Shared/Components/Form/utils'
 
 const LoanLimitModal: FunctionComponent<LoanLimitModalProps> = ({
   show,

@@ -4,15 +4,15 @@ import * as Yup from 'yup'
 
 import Swal from 'sweetalert2'
 import local from '../../../../Shared/Assets/ar.json'
-import { uploadDefaultingCustomer } from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
+import { uploadDefaultingCustomer } from '../../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
 import {
   UploadLegalCustomerResponse,
   UploadLegalCustomersProps,
 } from '../types'
-import AppForm from '../Form'
-import { FileField } from '../Form/types'
 import { LtsIcon } from '../../../../Shared/Components'
+import AppForm from '../../../../Shared/Components/Form'
+import { FileField } from '../../../../Shared/Components/Form/types'
 
 const UploadLegalCustomers = ({
   onSubmit,

@@ -5,8 +5,8 @@ import {
   promissoryNoteGuarantorOrderLocal,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
-import { ApplicationResponse } from '../../../Models/Application'
-import { Customer } from '../../../Models/Customer'
+import { ApplicationResponse } from '../../../../Shared/Models/Application'
+import { Customer } from '../../../../Shared/Models/Customer'
 import { BranchDetails } from '../../../../Shared/Services/APIs/Branch/getBranch'
 import { Header } from '../pdfTemplateCommon/header'
 import './promissoryNoteMicro.scss'
