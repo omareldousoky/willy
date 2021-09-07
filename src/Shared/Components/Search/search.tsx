@@ -970,7 +970,7 @@ const Search: FunctionComponent<SearchProps> = ({
                     style={{ marginTop: index < 2 ? 0 : 20 }}
                   >
                     <div className="dropdown-container">
-                      <p className="dropdown-label">{local.loanType}</p>
+                      <p className="dropdown-label">{local.actionType}</p>
                       <Form.Control
                         as="select"
                         className="dropdown-select"
