@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 
 import Map from '../../../Shared/Components/Map/map'
-import * as local from '../../../Shared/Assets/ar.json'
+import local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../config/Can'
 import { getErrorMessage } from '../../../Shared/Services/utils'
@@ -21,16 +21,14 @@ import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNat
 import { BusinessSector, District, Governorate } from './StepTwoForm'
 
 const legalStructureRoles = [
-  { name: 'الشريك المعتمد', value: 'authorizedPartner' },
-  { name: 'مدير الشركة', value: 'director' },
-  { name: 'مدير', value: 'manager' },
-  { name: 'شريك', value: 'partner' },
-  { name: 'مالك', value: 'proprietor' },
-  { name: 'المستخدم', value: 'user' },
-  { name: 'ضامن', value: 'guarantor' },
-  { name: 'المدير العام', value: 'managingDirector' },
-  { name: 'رئيس مجلس الإدارة', value: 'chairman' },
-  { name: 'آخر', value: 'other' },
+  'openStockCompany',
+  'closedStockCompany',
+  'limitedLiabilityCompany',
+  'limitedPartnershipCompany',
+  'partnershipCompany',
+  'soleProprietorship',
+  'ngo',
+  'other',
 ]
 
 export const StepTwoCompanyForm = (props: any) => {
@@ -362,20 +360,17 @@ export const StepTwoCompanyForm = (props: any) => {
               type="select"
               name="legalStructure"
               data-qc="legalStructure"
-              value={values.legalStructure}
               onBlur={handleBlur}
               onChange={handleChange}
               isInvalid={errors.legalStructure && touched.legalStructure}
             >
-              <option value="" disabled />
-
-              {legalStructureRoles.map(({ name, value }) => (
+              {legalStructureRoles.map((role) => (
                 <option
-                  key={value}
-                  value={value}
-                  selected={values.legalStructure === value}
+                  key={role}
+                  value={role}
+                  selected={values.legalStructure === role || role === 'other'}
                 >
-                  {name}
+                  {local[role]}
                 </option>
               ))}
             </Form.Control>
