@@ -1,4 +1,4 @@
-import { SearchRequest } from '../../../Models/common'
+import { SearchRequest } from '../../../../Shared/Models/common'
 import axios from '../../../../Shared/Services/axiosInstance'
 import { API_BASE_URL } from '../../../../Shared/envConfig'
 

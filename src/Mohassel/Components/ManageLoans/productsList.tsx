@@ -68,7 +68,7 @@ class LoanProducts extends Component<Props, State> {
         render: (data) => data.code,
       },
       {
-        title: local.loanType,
+        title: local.actionType,
         key: 'type',
         render: (data) => local[data.type],
       },
@@ -86,10 +86,7 @@ class LoanProducts extends Component<Props, State> {
         title: local.actions,
         key: 'actions',
         render: (data) => (
-          <ActionsIconGroup
-            currentId={data._id}
-            actions={this.productActions}
-          />
+          <ActionsIconGroup currentId={data.id} actions={this.productActions} />
         ),
       },
     ]
@@ -205,7 +202,6 @@ class LoanProducts extends Component<Props, State> {
                     {local.createLoanProduct}
                   </Button>
                 </Can>
-                {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
             <hr className="dashed-line" />
