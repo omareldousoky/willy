@@ -223,7 +223,8 @@ export const LegalWarnings = () => {
             title={`${local.view} ${local.viewCustomer}`}
             onClick={() =>
               history.push(
-                warning.customerType === 'company'
+                warning.customerType === 'company' ||
+                  warning.customerType === 'companyGuarantor'
                   ? '/company/view-company'
                   : '/customers/view-customer',
                 {

@@ -1175,5 +1175,7 @@
   "globalCFMax": "الحد الاقصي للحد المبدئي للعميل",
   "maxInstallmentsLimit": "الحد الاقصي لعدد الاقساط (DBR)",
   "maxInterestLimit": "الحد الاقصي لنسبه التمويل السنوي (DBR)",
-  "notApplicable": "لا ينطبق"
+  "notApplicable": "لا ينطبق",
+  "individualGuarantor": "ضامن من نوع افراد",
+  "companyGuarantor": "ضامن من نوع شركه"
 }

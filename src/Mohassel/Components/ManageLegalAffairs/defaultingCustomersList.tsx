@@ -220,7 +220,8 @@ class DefaultingCustomersList extends Component<Props, State> {
               style={{ cursor: 'pointer' }}
               onClick={() =>
                 this.props.history.push(
-                  data.customerType === 'company'
+                  data.customerType === 'company' ||
+                    data.customerType === 'companyGuarantor'
                     ? '/company/view-company'
                     : '/customers/view-customer',
                   {
