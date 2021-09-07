@@ -1,25 +1,25 @@
 import React from 'react'
 import local from '../../../Shared/Assets/ar.json'
-import Can from '../../../Shared/config/Can'
+import ability from '../../../Shared/config/ability'
 import { LoanList, LoanProfile, LoanRollBack } from '.'
 
 export const loansRoute = {
   path: '/loans',
   label: local.issuedLoans,
-  render: (props) => (
-    <Can I="getIssuedLoan" a="application">
+  render: (props) =>
+    (ability.can('getIssuedLoan', 'application') ||
+      ability.can('branchIssuedLoan', 'application')) && (
       <LoanList {...props} />
-    </Can>
-  ),
+    ),
   routes: [
     {
       path: '/loan-profile',
       label: local.loanDetails,
-      render: (props) => (
-        <Can I="getIssuedLoan" a="application">
+      render: (props) =>
+        (ability.can('getIssuedLoan', 'application') ||
+          ability.can('branchIssuedLoan', 'application')) && (
           <LoanProfile {...props} />
-        </Can>
-      ),
+        ),
     },
     {
       path: '/loan-roll-back',
