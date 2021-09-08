@@ -60,13 +60,6 @@ interface Props
   branchId?: string
 }
 class TrackLoanApplications extends Component<Props, State> {
-  mappers: {
-    title: string
-    key: string
-    sortable?: boolean
-    render: (data: any) => void
-  }[]
-
   constructor(props) {
     super(props)
     this.state = {
@@ -76,78 +69,6 @@ class TrackLoanApplications extends Component<Props, State> {
       loading: false,
       selectedApplicationToPrint: {},
     }
-    this.mappers = [
-      {
-        title: local.customerType,
-        key: 'customerType',
-        render: (data) =>
-          beneficiaryType(data.application.product.beneficiaryType),
-      },
-      {
-        title: local.applicationCode,
-        key: 'applicationCode',
-        render: (data) => data.application.applicationKey,
-      },
-      {
-        title: local.customerName,
-        key: 'name',
-        sortable: true,
-        render: (data) =>
-          data.application.product.beneficiaryType === 'individual' ? (
-            data.application.customer.customerName
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {data.application.group?.individualsInGroup.map((member) =>
-                member.type === 'leader' ? (
-                  <span key={member.customer._id}>
-                    {member.customer.customerName}
-                  </span>
-                ) : null
-              )}
-            </div>
-          ),
-      },
-      {
-        title: local.nationalId,
-        key: 'nationalId',
-        render: (data) =>
-          data.application.product.beneficiaryType === 'individual' ? (
-            data.application.customer.nationalId
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {data.application.group?.individualsInGroup.map((member) =>
-                member.type === 'leader' ? (
-                  <span key={member.customer._id}>
-                    {member.customer.nationalId}
-                  </span>
-                ) : null
-              )}
-            </div>
-          ),
-      },
-      {
-        title: local.productName,
-        key: 'productName',
-        render: (data) => data.application.product.productName,
-      },
-      {
-        title: local.loanCreationDate,
-        key: 'createdAt',
-        sortable: true,
-        render: (data) => timeToDateyyymmdd(data.application.entryDate),
-      },
-      {
-        title: local.loanStatus,
-        key: 'status',
-        sortable: true,
-        render: (data) => this.getStatus(data.application.status),
-      },
-      {
-        title: '',
-        key: 'action',
-        render: (data) => this.renderIcons(data),
-      },
-    ]
   }
 
   componentDidMount() {
@@ -205,6 +126,99 @@ class TrackLoanApplications extends Component<Props, State> {
 
   componentWillUnmount() {
     this.props.setSearchFilters({})
+  }
+
+  mappers() {
+    const isSme = this.props.location?.state?.sme
+
+    return [
+      {
+        title: local.customerType,
+        key: 'customerType',
+        render: (data) =>
+          beneficiaryType(data.application.product.beneficiaryType),
+      },
+      {
+        title: local.applicationCode,
+        key: 'applicationCode',
+        render: (data) => data.application.applicationKey,
+      },
+      {
+        title: local.customerName,
+        key: 'name',
+        sortable: true,
+        render: (data) =>
+          data.application.product.beneficiaryType === 'individual' ? (
+            data.application.customer.customerName
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {data.application.group?.individualsInGroup.map((member) =>
+                member.type === 'leader' ? (
+                  <span key={member.customer._id}>
+                    {member.customer.customerName}
+                  </span>
+                ) : null
+              )}
+            </div>
+          ),
+      },
+      ...(isSme
+        ? [
+            {
+              title: local.commercialRegisterNumber,
+              key: 'commercialRegisterNumber',
+              render: (data) =>
+                data.application.customer.commercialRegisterNumber,
+            },
+            {
+              title: local.taxCardNumber,
+              key: 'taxCardNumber',
+              render: (data) => data.application.customer.taxCardNumber,
+            },
+          ]
+        : [
+            {
+              title: local.nationalId,
+              key: 'nationalId',
+              render: (data) =>
+                data.application.product.beneficiaryType === 'individual' ? (
+                  data.application.customer.nationalId
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    {data.application.group?.individualsInGroup.map((member) =>
+                      member.type === 'leader' ? (
+                        <span key={member.customer._id}>
+                          {member.customer.nationalId}
+                        </span>
+                      ) : null
+                    )}
+                  </div>
+                ),
+            },
+          ]),
+      {
+        title: local.productName,
+        key: 'productName',
+        render: (data) => data.application.product.productName,
+      },
+      {
+        title: local.loanCreationDate,
+        key: 'createdAt',
+        sortable: true,
+        render: (data) => timeToDateyyymmdd(data.application.entryDate),
+      },
+      {
+        title: local.loanStatus,
+        key: 'status',
+        sortable: true,
+        render: (data) => this.getStatus(data.application.status),
+      },
+      {
+        title: '',
+        key: 'action',
+        render: (data) => this.renderIcons(data),
+      },
+    ]
   }
 
   getApplications() {
@@ -298,7 +312,7 @@ class TrackLoanApplications extends Component<Props, State> {
               onClick={() =>
                 this.props.history.push('/edit-loan-profile', {
                   id: data.application._id,
-                  sme: !!(this.props.location as any)?.state?.sme,
+                  sme: !!this.props.location.state?.sme,
                 })
               }
             />
@@ -342,10 +356,13 @@ class TrackLoanApplications extends Component<Props, State> {
               searchKeys={['keyword', 'dateFromTo', 'status-application']}
               dropDownKeys={[
                 'name',
-                'nationalId',
                 'key',
                 'customerKey',
                 'customerCode',
+                'customerShortenedCode',
+                ...(this.props.location.state?.sme
+                  ? ['taxCardNumber', 'commercialRegisterNumber']
+                  : ['nationalId']),
               ]}
               url="application"
               from={this.state.from}
@@ -359,7 +376,7 @@ class TrackLoanApplications extends Component<Props, State> {
               from={this.state.from}
               size={this.state.size}
               totalCount={this.props.totalCount}
-              mappers={this.mappers}
+              mappers={this.mappers()}
               pagination
               data={this.props.data}
               changeNumber={(key: string, number: number) => {

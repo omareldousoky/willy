@@ -30,13 +30,6 @@ interface Props
   setSearchFilters: (data) => void
 }
 class CustomersList extends Component<Props, State> {
-  mappers: {
-    title: string
-    key: string
-    sortable?: boolean
-    render: (data: any) => void
-  }[]
-
   locationListenerUnregister: () => void
 
   constructor(props) {
@@ -45,7 +38,28 @@ class CustomersList extends Component<Props, State> {
       size: 10,
       from: 0,
     }
-    this.mappers = [
+
+    this.locationListenerUnregister = this.props.history.listen(
+      (location: { state: any }) => {
+        const type = location?.state?.sme ? 'company' : 'individual'
+        this.getCustomers(type)
+      }
+    )
+  }
+
+  componentDidMount() {
+    this.getCustomers()
+  }
+
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+    this.locationListenerUnregister()
+  }
+
+  mappers() {
+    const isSme = this.props.location?.state?.sme
+
+    return [
       {
         title: local.customerCode,
         key: 'customerCode',
@@ -57,17 +71,32 @@ class CustomersList extends Component<Props, State> {
         key: 'name',
         render: (data) => data.customerName,
       },
-      {
-        title: local.nationalId,
-        key: 'nationalId',
-        render: (data) => data.nationalId,
-      },
-      {
-        title: local.governorate,
-        sortable: true,
-        key: 'governorate',
-        render: (data) => data.governorate,
-      },
+      ...(isSme
+        ? [
+            {
+              title: local.commercialRegisterNumber,
+              key: 'commercialRegisterNumber',
+              render: (row) => row.commercialRegisterNumber,
+            },
+            {
+              title: local.taxCardNumber,
+              key: 'taxCardNumber',
+              render: (row) => row.taxCardNumber,
+            },
+          ]
+        : [
+            {
+              title: local.nationalId,
+              key: 'nationalId',
+              render: (data) => data.nationalId,
+            },
+            {
+              title: local.governorate,
+              sortable: true,
+              key: 'governorate',
+              render: (data) => data.governorate,
+            },
+          ]),
       {
         title: local.creationDate,
         sortable: true,
@@ -94,22 +123,19 @@ class CustomersList extends Component<Props, State> {
         ),
       },
     ]
-
-    this.locationListenerUnregister = this.props.history.listen(
-      (location: { state: any }) => {
-        const type = location?.state?.sme ? 'company' : 'individual'
-        this.getCustomers(type)
-      }
-    )
   }
 
-  componentDidMount() {
-    this.getCustomers()
-  }
-
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
-    this.locationListenerUnregister()
+  dropDownKeys() {
+    return this.props.location.state?.sme
+      ? [
+          'name',
+          'taxCardNumber',
+          'commercialRegisterNumber',
+          'key',
+          'code',
+          'customerShortenedCode',
+        ]
+      : ['name', 'nationalId', 'key', 'code', 'customerShortenedCode']
   }
 
   getCustomers(type?: string) {
@@ -152,7 +178,7 @@ class CustomersList extends Component<Props, State> {
           <hr className="dashed-line" />
           <Search
             searchKeys={['keyword', 'dateFromTo', 'governorate']}
-            dropDownKeys={['name', 'nationalId', 'key', 'code']}
+            dropDownKeys={this.dropDownKeys()}
             searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
             url="customer"
             from={this.state.from}
@@ -165,7 +191,7 @@ class CustomersList extends Component<Props, State> {
               from={this.state.from}
               size={this.state.size}
               totalCount={this.props.totalCount}
-              mappers={this.mappers}
+              mappers={this.mappers()}
               pagination
               data={this.props.data}
               url="customer"

@@ -38,13 +38,6 @@ interface State {
 }
 
 class LoanList extends Component<Props, State> {
-  mappers: {
-    title: string
-    key: string
-    sortable?: boolean
-    render: (data: any) => void
-  }[]
-
   locationListenerUnregister: () => void
 
   constructor(props: Props) {
@@ -61,7 +54,26 @@ class LoanList extends Component<Props, State> {
         'writtenOff',
       ],
     }
-    this.mappers = [
+
+    this.locationListenerUnregister = this.props.history.listen((location) => {
+      const type = location?.state?.sme ? 'sme' : 'micro'
+      this.getLoans(type)
+    })
+  }
+
+  componentDidMount() {
+    this.getLoans()
+  }
+
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+    this.locationListenerUnregister()
+  }
+
+  mappers() {
+    const isSme = this.props.location?.state?.sme
+
+    return [
       {
         title: local.customerType,
         key: 'customerType',
@@ -95,27 +107,44 @@ class LoanList extends Component<Props, State> {
           </div>
         ),
       },
-      {
-        title: local.nationalId,
-        key: 'nationalId',
-        render: (data) => (
-          <div>
-            {data.application.product.beneficiaryType === 'individual' ? (
-              data.application.customer.nationalId
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {data.application.group?.individualsInGroup.map((member) =>
-                  member.type === 'leader' ? (
-                    <span key={member.customer._id}>
-                      {member.customer.nationalId}
-                    </span>
-                  ) : null
-                )}
-              </div>
-            )}
-          </div>
-        ),
-      },
+      ...(isSme
+        ? [
+            {
+              title: local.commercialRegisterNumber,
+              key: 'commercialRegisterNumber',
+              render: (data) =>
+                data.application.customer.commercialRegisterNumber,
+            },
+            {
+              title: local.taxCardNumber,
+              key: 'taxCardNumber',
+              render: (data) => data.application.customer.taxCardNumber,
+            },
+          ]
+        : [
+            {
+              title: local.nationalId,
+              key: 'nationalId',
+              render: (data) => (
+                <div>
+                  {data.application.product.beneficiaryType === 'individual' ? (
+                    data.application.customer.nationalId
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      {data.application.group?.individualsInGroup.map(
+                        (member) =>
+                          member.type === 'leader' ? (
+                            <span key={member.customer._id}>
+                              {member.customer.nationalId}
+                            </span>
+                          ) : null
+                      )}
+                    </div>
+                  )}
+                </div>
+              ),
+            },
+          ]),
       {
         title: local.productName,
         key: 'productName',
@@ -142,20 +171,6 @@ class LoanList extends Component<Props, State> {
         render: (data) => this.renderIcons(data),
       },
     ]
-
-    this.locationListenerUnregister = this.props.history.listen((location) => {
-      const type = location?.state?.sme ? 'sme' : 'micro'
-      this.getLoans(type)
-    })
-  }
-
-  componentDidMount() {
-    this.getLoans()
-  }
-
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
-    this.locationListenerUnregister()
   }
 
   getStatus(status: string) {
@@ -253,10 +268,13 @@ class LoanList extends Component<Props, State> {
             searchKeys={this.state.searchKeys}
             dropDownKeys={[
               'name',
-              'nationalId',
               'key',
               'customerKey',
               'customerCode',
+              'customerShortenedCode',
+              ...(this.props.location.state?.sme
+                ? ['taxCardNumber', 'commercialRegisterNumber']
+                : ['nationalId']),
             ]}
             searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
             setFrom={(from) => this.setState({ from })}
@@ -271,7 +289,7 @@ class LoanList extends Component<Props, State> {
             size={this.state.size}
             url="loan"
             totalCount={this.props.totalCount}
-            mappers={this.mappers}
+            mappers={this.mappers()}
             pagination
             data={this.props.data}
             changeNumber={(key: string, number: number) => {
