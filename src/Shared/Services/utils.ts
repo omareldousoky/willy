@@ -956,11 +956,12 @@ export const cfLimitStatusLocale = {
   default: { text: 'الحد الائتماني المبدئي قيد التحقيق', color: '#edb600' },
 }
 
-export const groupByKeyName = (list, key) =>
-  list.reduce(
-    (hash, obj) => ({
-      ...hash,
-      [obj[key]]: (hash[obj[key]] || []).concat(obj),
-    }),
-    {}
-  )
+export const removeDuplicatesByName = (list: { name: string }[]) =>
+  list?.length
+    ? [
+        ...list.filter(
+          (item, index, self) =>
+            index === self.findIndex((t) => t.name === item.name)
+        ),
+      ]
+    : list
