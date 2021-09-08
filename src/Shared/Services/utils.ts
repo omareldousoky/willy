@@ -958,10 +958,8 @@ export const cfLimitStatusLocale = {
 
 export const removeDuplicatesByName = (list: { name: string }[]) =>
   list?.length
-    ? [
-        ...list.filter(
-          (item, index, self) =>
-            index === self.findIndex((t) => t.name === item.name)
-        ),
-      ]
+    ? [...list].filter(
+        (item, index, self) =>
+          index === self.findIndex((t) => t.name === item.name)
+      )
     : list
