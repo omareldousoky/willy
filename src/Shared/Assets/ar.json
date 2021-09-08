@@ -1174,5 +1174,13 @@
   "globalCFMin": "الحد الادني للحد المبدئي للعميل",
   "globalCFMax": "الحد الاقصي للحد المبدئي للعميل",
   "maxInstallmentsLimit": "الحد الاقصي لعدد الاقساط (DBR)",
-  "maxInterestLimit": "الحد الاقصي لنسبه التمويل السنوي (DBR)"
+  "maxInterestLimit": "الحد الاقصي لنسبه التمويل السنوي (DBR)",
+  "other": "آخر",
+  "openStockCompany": "شركة مساهمة مفتوحة",
+  "closedStockCompany": "شركة مساهمة مقفلة",
+  "limitedLiabilityCompany": "شركه ذات مسئوليه محدوده",
+  "limitedPartnershipCompany": "شركة توصية محدوده",
+  "partnershipCompany": "شركة توصية",
+  "soleProprietorship": "ملكية فردية",
+  "ngo": "منظمة غير حكومية"
 }
