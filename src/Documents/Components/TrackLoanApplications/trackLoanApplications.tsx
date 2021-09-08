@@ -128,6 +128,79 @@ class TrackLoanApplications extends Component<Props, State> {
     this.props.setSearchFilters({})
   }
 
+  getApplications() {
+    this.props
+      .search({
+        ...this.props.searchFilters,
+        size: this.state.size,
+        from: this.state.from,
+        url: 'application',
+        branchId: this.props.branchId || this.props.searchFilters.branchId,
+      })
+      .then(() => {
+        if (this.props.error)
+          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+      })
+  }
+
+  getStatus(status: string) {
+    switch (status) {
+      case 'underReview':
+        return (
+          <div className="status-chip outline under-review">
+            {local.underReview}
+          </div>
+        )
+      case 'created':
+        return (
+          <div className="status-chip outline created">{local.created}</div>
+        )
+      case 'reviewed':
+        return (
+          <div className="status-chip outline reviewed">{local.reviewed}</div>
+        )
+      case 'secondReview':
+        return (
+          <div className="status-chip outline second-review">
+            {local.secondReviewed}
+          </div>
+        )
+      case 'thirdReview':
+        return (
+          <div className="status-chip outline third-review">
+            {local.thirdReviewed}
+          </div>
+        )
+      case 'approved':
+        return (
+          <div className="status-chip outline approved">{local.approved}</div>
+        )
+      case 'rejected':
+        return (
+          <div className="status-chip outline rejected">{local.rejected}</div>
+        )
+      case 'canceled':
+        return (
+          <div className="status-chip outline canceled">{local.cancelled}</div>
+        )
+      default:
+        return null
+    }
+  }
+
+  async getApplicationById(id: string) {
+    this.setState({ loading: true })
+    const res = await getApplication(id)
+    if (res.status === 'success') {
+      this.setState(
+        { loading: false, selectedApplicationToPrint: res.body, print: true },
+        () => window.print()
+      )
+    } else {
+      this.setState({ loading: false })
+    }
+  }
+
   mappers() {
     const isSme = this.props.location?.state?.sme
 
@@ -219,79 +292,6 @@ class TrackLoanApplications extends Component<Props, State> {
         render: (data) => this.renderIcons(data),
       },
     ]
-  }
-
-  getApplications() {
-    this.props
-      .search({
-        ...this.props.searchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'application',
-        branchId: this.props.branchId || this.props.searchFilters.branchId,
-      })
-      .then(() => {
-        if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
-      })
-  }
-
-  getStatus(status: string) {
-    switch (status) {
-      case 'underReview':
-        return (
-          <div className="status-chip outline under-review">
-            {local.underReview}
-          </div>
-        )
-      case 'created':
-        return (
-          <div className="status-chip outline created">{local.created}</div>
-        )
-      case 'reviewed':
-        return (
-          <div className="status-chip outline reviewed">{local.reviewed}</div>
-        )
-      case 'secondReview':
-        return (
-          <div className="status-chip outline second-review">
-            {local.secondReviewed}
-          </div>
-        )
-      case 'thirdReview':
-        return (
-          <div className="status-chip outline third-review">
-            {local.thirdReviewed}
-          </div>
-        )
-      case 'approved':
-        return (
-          <div className="status-chip outline approved">{local.approved}</div>
-        )
-      case 'rejected':
-        return (
-          <div className="status-chip outline rejected">{local.rejected}</div>
-        )
-      case 'canceled':
-        return (
-          <div className="status-chip outline canceled">{local.cancelled}</div>
-        )
-      default:
-        return null
-    }
-  }
-
-  async getApplicationById(id: string) {
-    this.setState({ loading: true })
-    const res = await getApplication(id)
-    if (res.status === 'success') {
-      this.setState(
-        { loading: false, selectedApplicationToPrint: res.body, print: true },
-        () => window.print()
-      )
-    } else {
-      this.setState({ loading: false })
-    }
   }
 
   renderIcons(data) {

@@ -70,6 +70,53 @@ class LoanList extends Component<Props, State> {
     this.locationListenerUnregister()
   }
 
+  getStatus(status: string) {
+    switch (status) {
+      case 'paid':
+        return <div className="status-chip paid">{local.paid}</div>
+      case 'issued':
+        return <div className="status-chip unpaid">{local.issued}</div>
+      case 'pending':
+        return <div className="status-chip pending">{local.pending}</div>
+      case 'canceled':
+        return <div className="status-chip canceled">{local.cancelled}</div>
+      default:
+        return null
+    }
+  }
+
+  async getLoans(type?: string) {
+    const currentType = this.props.location?.state?.sme ? 'sme' : 'micro'
+
+    let query = { type: type || currentType }
+    if (this.props.fromBranch) {
+      query = {
+        ...this.props.searchFilters,
+        ...this.props.issuedLoansSearchFilters,
+        ...query,
+        size: this.state.size,
+        from: this.state.from,
+        url: 'loan',
+        branchId: this.props.branchId,
+        sort: 'issueDate',
+      }
+    } else {
+      query = {
+        ...this.props.searchFilters,
+        ...this.props.issuedLoansSearchFilters,
+        ...query,
+        size: this.state.size,
+        from: this.state.from,
+        url: 'loan',
+        sort: 'issueDate',
+      }
+    }
+    this.props.search(query).then(() => {
+      if (this.props.error)
+        Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+    })
+  }
+
   mappers() {
     const isSme = this.props.location?.state?.sme
 
@@ -171,53 +218,6 @@ class LoanList extends Component<Props, State> {
         render: (data) => this.renderIcons(data),
       },
     ]
-  }
-
-  getStatus(status: string) {
-    switch (status) {
-      case 'paid':
-        return <div className="status-chip paid">{local.paid}</div>
-      case 'issued':
-        return <div className="status-chip unpaid">{local.issued}</div>
-      case 'pending':
-        return <div className="status-chip pending">{local.pending}</div>
-      case 'canceled':
-        return <div className="status-chip canceled">{local.cancelled}</div>
-      default:
-        return null
-    }
-  }
-
-  async getLoans(type?: string) {
-    const currentType = this.props.location?.state?.sme ? 'sme' : 'micro'
-
-    let query = { type: type || currentType }
-    if (this.props.fromBranch) {
-      query = {
-        ...this.props.searchFilters,
-        ...this.props.issuedLoansSearchFilters,
-        ...query,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'loan',
-        branchId: this.props.branchId,
-        sort: 'issueDate',
-      }
-    } else {
-      query = {
-        ...this.props.searchFilters,
-        ...this.props.issuedLoansSearchFilters,
-        ...query,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'loan',
-        sort: 'issueDate',
-      }
-    }
-    this.props.search(query).then(() => {
-      if (this.props.error)
-        Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
-    })
   }
 
   renderIcons(data) {

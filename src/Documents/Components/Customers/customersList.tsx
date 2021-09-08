@@ -56,6 +56,40 @@ class CustomersList extends Component<Props, State> {
     this.locationListenerUnregister()
   }
 
+  getCustomers(type?: string) {
+    const currentType = this.props.location.state?.sme
+      ? 'company'
+      : 'individual'
+
+    this.props
+      .search({
+        ...this.props.searchFilters,
+        size: this.state.size,
+        from: this.state.from,
+        url: 'customer',
+        branchId: this.props.branchId,
+        customerType: type || currentType,
+      })
+      .then(() => {
+        if (this.props.error) {
+          Swal.fire('error', getErrorMessage(this.props.error), 'error')
+        }
+      })
+  }
+
+  dropDownKeys() {
+    return this.props.location.state?.sme
+      ? [
+          'name',
+          'taxCardNumber',
+          'commercialRegisterNumber',
+          'key',
+          'code',
+          'customerShortenedCode',
+        ]
+      : ['name', 'nationalId', 'key', 'code', 'customerShortenedCode']
+  }
+
   mappers() {
     const isSme = this.props.location?.state?.sme
 
@@ -123,40 +157,6 @@ class CustomersList extends Component<Props, State> {
         ),
       },
     ]
-  }
-
-  dropDownKeys() {
-    return this.props.location.state?.sme
-      ? [
-          'name',
-          'taxCardNumber',
-          'commercialRegisterNumber',
-          'key',
-          'code',
-          'customerShortenedCode',
-        ]
-      : ['name', 'nationalId', 'key', 'code', 'customerShortenedCode']
-  }
-
-  getCustomers(type?: string) {
-    const currentType = this.props.location.state?.sme
-      ? 'company'
-      : 'individual'
-
-    this.props
-      .search({
-        ...this.props.searchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'customer',
-        branchId: this.props.branchId,
-        customerType: type || currentType,
-      })
-      .then(() => {
-        if (this.props.error) {
-          Swal.fire('error', getErrorMessage(this.props.error), 'error')
-        }
-      })
   }
 
   render() {
