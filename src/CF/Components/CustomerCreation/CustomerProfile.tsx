@@ -6,6 +6,7 @@ import { Customer } from '../../../Shared/Services/interfaces'
 import {
   cfLimitStatusLocale,
   getErrorMessage,
+  iscoreDate,
 } from '../../../Shared/Services/utils'
 import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -16,7 +17,10 @@ import {
   TabDataProps,
 } from '../../../Shared/Components/Profile/types'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
-import { getIscoreCached } from '../../../Shared/Services/APIs/iScore'
+import {
+  getIscoreCached,
+  getIscore,
+} from '../../../Shared/Services/APIs/iScore'
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCustomer'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
@@ -27,16 +31,8 @@ import { AcknowledgmentWasSignedInFront } from '../PdfTemplates/AcknowledgmentWa
 import { PromissoryNote } from '../PdfTemplates/PromissoryNote'
 import { AuthorizationToFillInfo } from '../PdfTemplates/AuthorizationToFillInfo'
 import CFLimitModal from './CFLimitModal'
+import { Score } from '../../../Shared/Models/Customer'
 
-export interface Score {
-  id?: string // commercialRegisterNumber
-  customerName?: string
-  activeLoans?: string
-  iscore: string
-  nationalId: string
-  url?: string
-  bankCodes?: string[]
-}
 interface LocationState {
   id: string
 }
@@ -147,6 +143,31 @@ export const CustomerProfile = () => {
   function getArRuralUrban(ruralUrban: string | undefined) {
     if (ruralUrban === 'rural') return local.rural
     return local.urban
+  }
+  const getCustomerIscore = async (data) => {
+    setLoading(true)
+    const obj = {
+      requestNumber: '148',
+      reportId: '3004',
+      product: '023',
+      loanAccountNumber: `${data.key}`,
+      number: '1703943',
+      date: '02/12/2014',
+      amount: `${1000}`, // TODO
+      lastName: `${data.customerName}`,
+      idSource: '003',
+      idValue: `${data.nationalId}`,
+      gender: data.gender === 'male' ? '001' : '002',
+      dateOfBirth: iscoreDate(data.birthDate),
+    }
+    const iScore = await getIscore(obj)
+    if (iScore.status === 'success') {
+      // getCachediScores()
+      setLoading(false)
+    } else {
+      setLoading(false)
+      Swal.fire('Error !', getErrorMessage(iScore.error.error), 'error')
+    }
   }
   const handleActivationClick = async ({ id, blocked }) => {
     const { value: text } = await Swal.fire({
@@ -448,6 +469,7 @@ export const CustomerProfile = () => {
         fieldData: {
           customerId: customerDetails?._id,
           customerGuarantors: customerDetails?.customerGuarantors || [],
+          getIscore: (data) => getCustomerIscore(data),
         } as CFGuarantorTableViewProp,
         showFieldCondition: true,
       },

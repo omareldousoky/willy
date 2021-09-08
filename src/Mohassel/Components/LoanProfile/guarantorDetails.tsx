@@ -15,7 +15,6 @@ import {
   orderLocal,
 } from '../../../Shared/Services/utils'
 import Can from '../../config/Can'
-import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import { editGuarantors } from '../../../Shared/Services/APIs/loanApplication/editGuarantors'
 import ability from '../../config/ability'
@@ -23,6 +22,7 @@ import { Customer } from '../../../Shared/Services/interfaces'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
+import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 
 type Guarantor = Customer & { position?: string }
 interface Props {
