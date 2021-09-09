@@ -3,7 +3,7 @@ import axios from '../../../../Shared/Services/axiosInstance'
 
 export const addGuarantorsToCustomer = async (data: {
   customerId: string
-  customerGuarantors: Array<string>
+  guarantorIds: Array<string>
 }) => {
   const url = API_BASE_URL + `/customer/add-guarantors`
   try {

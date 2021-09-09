@@ -190,7 +190,7 @@ export const GuarantorTableView = (props: Props) => {
     ] as string[]
     const obj = {
       customerId: props.customerId,
-      customerGuarantors: currentGuarantors,
+      guarantorIds: currentGuarantors,
     }
     if (currentGuarantors.length > 0) {
       const res = await addGuarantorsToCustomer(obj)
