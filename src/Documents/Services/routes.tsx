@@ -9,6 +9,7 @@ import EncodingFiles from '../Components/Tools/encodingFiles'
 import local from '../../Shared/Assets/ar.json'
 import { generateAppRoutes } from '../../Shared/Services/utils'
 import { Landing } from '../../Shared/Components/Landing'
+import { CompanyList } from '../../Shared/Components'
 
 const appRoutes = [
   {
@@ -24,7 +25,7 @@ const appRoutes = [
       {
         path: '/company',
         label: local.companies,
-        render: (props) => <CustomersList {...props} />,
+        render: (props) => <CompanyList {...props} type="DOCUMENTS" />,
       },
       {
         path: '/edit-customer-document',

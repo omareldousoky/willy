@@ -5,7 +5,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import Search from '../../../Shared/Components/Search/search'
-import Can from '../../../Mohassel/config/Can'
+
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -13,6 +13,8 @@ import {
   getErrorMessage,
   timeToDateyyymmdd,
 } from '../../../Shared/Services/utils'
+import { ActionsIconGroup } from '../../../Shared/Components'
+import ability from '../../../Shared/config/ability'
 
 interface State {
   size: number
@@ -138,22 +140,27 @@ class CustomersList extends Component<Props, State> {
         render: (data) => timeToDateyyymmdd(data.created?.at),
       },
       {
-        title: '',
+        title: local.actions,
         key: 'actions',
         render: (data) => (
-          <Can I="updateCustomer" a="customer">
-            <img
-              style={{ cursor: 'pointer', marginLeft: 20 }}
-              alt="edit"
-              src={require('../../../Shared/Assets/upload.svg')}
-              onClick={() =>
-                this.props.history.push('/edit-customer-document', {
-                  id: data._id,
-                  sme: !!this.props.location.state?.sme,
-                })
-              }
-            />
-          </Can>
+          <ActionsIconGroup
+            currentId={data._id}
+            actions={[
+              {
+                actionTitle: local.edit,
+                actionIcon: 'download',
+                actionPermission: ability.can('updateCustomer', 'customer'),
+                actionOnClick: () =>
+                  this.props.history.push('/edit-customer-document', {
+                    id: data._id,
+                    sme: !!this.props.location.state?.sme,
+                  }),
+                style: {
+                  transform: `rotate(180deg)`,
+                },
+              },
+            ]}
+          />
         ),
       },
     ]

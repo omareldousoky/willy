@@ -44,6 +44,10 @@ h6,
   color: #fff;
 }
 
+.main-card {
+  margin: 2rem !important; // class used with <Card /> so we need to override style with !important
+}
+
 .form-check > .form-check-input,
 input[type='checkbox'],
 input[type='radio'] {
@@ -271,12 +275,12 @@ input[type='radio'] {
 }
 
 .profile-action-btn {
-	padding: 0px 8px;
-	margin: 10px 0;
-	border-radius: 0;
-	&:not(:first-of-type) {
-		border-right: 2px solid #2b3390;
-	}
+  padding: 0px 8px;
+  margin: 10px 0;
+  border-radius: 0;
+  &:not(:first-of-type) {
+    border-right: 2px solid #2b3390;
+  }
 }
 
 .dropdown-container {
@@ -366,7 +370,7 @@ input[type='radio'] {
   }
 
   &.paid {
-    background-color: #7DC356;
+    background-color: #7dc356;
   }
 
   &.unpaid {
