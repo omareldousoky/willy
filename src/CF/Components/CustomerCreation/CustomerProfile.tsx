@@ -484,7 +484,9 @@ export const CustomerProfile = () => {
       {
         icon: 'download',
         title: local.downloadPDF,
-        permission: customerDetails?.consumerFinanceLimitStatus === 'approved',
+        permission: !['pending-initialization', 'pending-update'].includes(
+          customerDetails?.consumerFinanceLimitStatus ?? ''
+        ),
         onActionClick: () => {
           setCustomerContractData(customerDetails as Customer)
           setPrint('all')
@@ -531,7 +533,7 @@ export const CustomerProfile = () => {
           ) &&
           ((ability.can('reviewCFLimit', 'customer') &&
             (customerDetails?.initialConsumerFinanceLimit ?? 0) <
-              globalLimits.DBRPercentLowStart) ||
+              globalLimits.CFHQMinimumApprovalLimit) ||
             ability.can('reviewCFLimitHQ', 'customer')),
         onActionClick: () => setModalData('review'),
       },
