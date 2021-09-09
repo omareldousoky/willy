@@ -205,10 +205,51 @@ export const GuarantorTableView = (props: Props) => {
       }
     }
   }
+
+  async function removeGuarantor(guarantor) {
+    Swal.fire({
+      title: local.areYouSure,
+      text: `${guarantor.customerName} ${local.willNotBeAGuarantor}`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: local.removeGuarantor,
+      cancelButtonText: local.cancel,
+    }).then(async (result) => {
+      if (result.value) {
+        const guarIds = props.guarantors.filter(
+          (guar) => guar._id !== guarantor._id
+        )
+        const ids: string[] = guarIds.map((guar) => guar._id || '')
+        changeLoading(true)
+        const guarantorToRemove = await addGuarantorsToCustomer({
+          customerId: props.customerId,
+          guarantorIds: ids,
+        })
+        if (guarantorToRemove.status === 'success') {
+          Swal.fire(local.guarantorRemovedSuccessfully, '', 'success').then(
+            () => {
+              window.location.reload()
+            }
+          )
+        } else {
+          Swal.fire(
+            'Error !',
+            getErrorMessage(guarantorToRemove.error.error),
+            'error'
+          )
+        }
+        changeLoading(false)
+      }
+    })
+  }
+
   function cancelModal() {
     changeModal(false)
     changeLoading(false)
     changeSelected({})
+    changeResults({ results: [], empty: false })
   }
   return (
     <>
@@ -234,6 +275,7 @@ export const GuarantorTableView = (props: Props) => {
                 {props.iScores && props.iScores.length > 0 && <th />}
                 {props.iScores && props.iScores.length > 0 && <th />}
                 {props.iScores && props.iScores.length > 0 && <th />}
+                {props.guarantors.length > 2 && <th />}
               </tr>
             </thead>
             <tbody>
@@ -316,6 +358,15 @@ export const GuarantorTableView = (props: Props) => {
                             </td>
                           </Can>
                         )}
+                      {props.guarantors.length > 2 && (
+                        <td style={{ cursor: 'pointer', padding: 10 }}>
+                          <img
+                            src={require('../../../Shared/Assets/deleteIcon.svg')}
+                            alt={local.delete}
+                            onClick={() => removeGuarantor(guar)}
+                          />
+                        </td>
+                      )}
                     </tr>
                   )
                 })}
