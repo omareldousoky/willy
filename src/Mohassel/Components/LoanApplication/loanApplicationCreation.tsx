@@ -33,7 +33,6 @@ import {
 } from '../../../Shared/Services/APIs/loanApplication/newApplication'
 import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
 import { getCookie } from '../../../Shared/Services/getCookie'
-import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage'
 import {
   getLoanOfficer,
   searchLoanOfficer,
@@ -58,6 +57,7 @@ import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCus
 import { getMaxPrinciples } from '../../../Shared/Services/APIs/config'
 import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
+import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
 
 interface LoanApplicationCreationRouteState {
   id?: string
@@ -1840,7 +1840,7 @@ class LoanApplicationCreation extends Component<Props, State> {
               {this.props.location.state.sme && (
                 <Can I="getSMEApplication" a="application">
                   <div className="d-flex flex-column m-5">
-                    <LtsIcon name="company" size="100px" color="#7dc356" />
+                    <LtsIcon name="buildings" size="100px" color="#7dc356" />
 
                     <Button
                       className="my-4"

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { connect } from 'react-redux'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
@@ -314,10 +313,4 @@ class NavBar extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.auth,
-  }
-}
-
-export default connect(mapStateToProps)(withRouter(NavBar))
+export default withRouter(NavBar)

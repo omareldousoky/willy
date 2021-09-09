@@ -30,6 +30,11 @@ import { editCustomer } from '../../../Shared/Services/APIs/customer/editCustome
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 import { getMaxPrinciples } from '../../../Shared/Services/APIs/config'
 import { getCustomerLimitFromMonthlyIncome } from '../../../Shared/Services/APIs/customer/getCustomerConsumerLimit'
+import { getCFLimits } from '../../Services/APIs/config'
+import {
+  GlobalCFLimits,
+  globalCfLmitsInitialValues,
+} from '../../Models/globalLimits'
 
 interface CustomerInfo {
   birthDate: number
@@ -139,6 +144,7 @@ interface State {
   isGuarantor: boolean
   oldRepresentative: string
   branchId: string
+  globalLimits: GlobalCFLimits
 }
 
 class CustomerCreation extends Component<Props, State> {
@@ -174,21 +180,35 @@ class CustomerCreation extends Component<Props, State> {
       selectedCustomer: {},
       oldRepresentative: '',
       branchId: '',
+      globalLimits: globalCfLmitsInitialValues,
     }
   }
 
   componentDidMount() {
+    this.getGlobalCfLimits()
     if (this.props.edit) {
       this.getCustomerById()
     }
+  }
+
+  async getGlobalCfLimits() {
+    this.setState({ loading: true })
+    const limitsRes = await getCFLimits()
+    if (limitsRes.status === 'success') {
+      this.setState({ loading: false, globalLimits: limitsRes.body })
+    }
+    this.setState({ loading: false })
+    Swal.fire('Error !', getErrorMessage(limitsRes.error.error), 'error')
   }
 
   async getCustomerLimitFromIncome(income) {
     this.setState({ loading: true })
     const limitRes = await getCustomerLimitFromMonthlyIncome(income)
     if (limitRes.status === 'success') {
+      const { maximumCFLimit } = limitRes.body
       this.setState({ loading: false })
-      return limitRes.body.maximumCFLimit
+
+      return maximumCFLimit
     }
     this.setState({ loading: false })
     Swal.fire('Error !', getErrorMessage(limitRes.error.error), 'error')
@@ -479,7 +499,9 @@ class CustomerCreation extends Component<Props, State> {
         enableReinitialize
         initialValues={this.state.step1}
         onSubmit={this.submit}
-        validationSchema={customerCreationValidationStepOne}
+        validationSchema={customerCreationValidationStepOne(
+          this.state.globalLimits
+        )}
         validateOnBlur
         validateOnChange
       >
@@ -494,6 +516,10 @@ class CustomerCreation extends Component<Props, State> {
               edit={this.props.edit}
               hasLoan={this.state.hasLoan}
               isGuarantor={this.state.isGuarantor}
+              limits={this.state.globalLimits}
+              consumerFinanceLimitStatus={
+                this.state.selectedCustomer.consumerFinanceLimitStatus
+              }
             />
           )
         }}

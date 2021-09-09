@@ -153,9 +153,7 @@ export const LoanApplicationDetails = (props) => {
                     <>
                       <tr>
                         <th>البطاقة الضريبية</th>
-                        <td>
-                          {numbersToArabic(props.data.businessLicenseNumber)}
-                        </td>
+                        <td>{numbersToArabic(props.data.taxCardNumber)}</td>
                         <th>السجل التجاري</th>
                         <td>
                           {numbersToArabic(props.data.commercialRegisterNumber)}
@@ -421,7 +419,7 @@ export const LoanApplicationDetails = (props) => {
                   Object.keys(loan.guarantors[0]).length > 0 &&
                   loan.guarantors.map((guarantor, guarantorIndex) => {
                     // TODO: change check on adding `type` key
-                    const isCompanyGuarantor = !!guarantor?.commercialRegisterNumber
+                    const isCompanyGuarantor = !guarantor?.gender
 
                     return (
                       <table
