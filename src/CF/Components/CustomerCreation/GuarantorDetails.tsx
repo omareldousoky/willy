@@ -89,33 +89,6 @@ export const GuarantorTableView = (props: Props) => {
         merged.forEach((customer) => {
           if (guarantor) {
             if (
-              customer.applicationIds &&
-              customer.applicationIds.length > 0 &&
-              !customer.allowGuarantorLoan
-            ) {
-              validationObject[customer._id] = {
-                customerName: customer.customerName,
-                applicationIds: customer.applicationIds,
-              }
-            }
-            if (
-              customer.loanIds &&
-              customer.loanIds.length > 0 &&
-              !customer.allowGuarantorLoan
-            ) {
-              if (Object.keys(validationObject).includes(customer._id)) {
-                validationObject[customer._id] = {
-                  ...validationObject[customer._id],
-                  ...{ loanIds: customer.loanIds },
-                }
-              } else {
-                validationObject[customer._id] = {
-                  customerName: customer.customerName,
-                  loanIds: customer.loanIds,
-                }
-              }
-            }
-            if (
               customer.guarantorIds &&
               customer.guarantorIds.length >= customer.guarantorMaxLoans
             ) {
@@ -151,16 +124,22 @@ export const GuarantorTableView = (props: Props) => {
     if (targetGuarantor.status === 'success') {
       let errorMessage1 = ''
       let errorMessage2 = ''
-      if (targetGuarantor.body.blocked.isBlocked === true) {
+      if (targetGuarantor.body.customer.blocked.isBlocked === true) {
         errorMessage1 = local.theCustomerIsBlocked
       }
-      const check = await checkCustomersLimits([targetGuarantor.body], true)
+      const check = await checkCustomersLimits(
+        [targetGuarantor.body.customer],
+        true
+      )
       if (
         check.flag === true &&
         check.customers &&
-        targetGuarantor.body.blocked.isBlocked !== true
+        targetGuarantor.body.customer.blocked.isBlocked !== true
       ) {
-        const newGuarantor = { ...targetGuarantor.body, id: guarantor._id }
+        const newGuarantor = {
+          ...targetGuarantor.body.customer,
+          id: guarantor._id,
+        }
         changeSelected(newGuarantor)
       } else if (check.flag === false && check.validationObject) {
         errorMessage2 = local.customerInvolvedInAnotherLoan

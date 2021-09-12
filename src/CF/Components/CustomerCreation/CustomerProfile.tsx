@@ -68,10 +68,11 @@ export const CustomerProfile = () => {
     customerCFContract,
     setCustomerCFContract,
   ] = useState<ConsumerFinanceContractData>()
-  const [iScoreDetails, setIScoreDetails] = useState<Score>()
+  const [iScoreDetails, setIScoreDetails] = useState<Score[]>()
   const [activeTab, setActiveTab] = useState('workInfo')
   const [print, setPrint] = useState('')
   const [showCFLimitModal, setShowCFLimitModal] = useState(false)
+  const [customerGuarantors, setCustomerGuarantors] = useState<Customer[]>([])
   const location = useLocation<LocationState>()
   const history = useHistory()
 
@@ -84,11 +85,13 @@ export const CustomerProfile = () => {
     }
   }, [print])
 
-  async function getCachediScores(id) {
+  async function getCachediScores(array: string[]) {
     setLoading(true)
-    const iScores = await getIscoreCached({ nationalIds: [id] })
+    const iScores = await getIscoreCached({
+      nationalIds: array,
+    })
     if (iScores.status === 'success') {
-      setIScoreDetails(iScores.body.data[0])
+      setIScoreDetails(iScores.body.data)
       setLoading(false)
     } else {
       setLoading(false)
@@ -120,7 +123,7 @@ export const CustomerProfile = () => {
       customerHomeAddress: customer.currentHomeAddress || '',
       mobilePhoneNumber: customer.mobilePhoneNumber || '',
       initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
-      customerGuarantors: customer.customerGuarantors || [],
+      customerGuarantors: customerGuarantors || [],
     })
   }
 
@@ -128,10 +131,13 @@ export const CustomerProfile = () => {
     setLoading(true)
     const res = await getCustomerByID(location.state.id)
     if (res.status === 'success') {
-      await setCustomerDetails(res.body)
-      if (ability.can('viewIscore', 'customer'))
-        await getCachediScores(res.body.nationalId)
-      await getGeoArea(res.body.geoAreaId, res.body.branchId)
+      await setCustomerDetails(res.body.customer)
+      await setCustomerGuarantors(res.body.guarantors)
+      if (ability.can('viewIscore', 'customer')) {
+        const guarIds = res.body.guarantors.map((guar) => guar.nationalId)
+        await getCachediScores([res.body.customer.nationalId, ...guarIds])
+      }
+      await getGeoArea(res.body.customer.geoAreaId, res.body.customer.branchId)
     } else {
       setLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
@@ -162,7 +168,8 @@ export const CustomerProfile = () => {
     }
     const iScore = await getIscore(obj)
     if (iScore.status === 'success') {
-      // getCachediScores()
+      const guarIds = customerGuarantors.map((guar) => guar.nationalId)
+      getCachediScores([data.nationalId, ...guarIds])
       setLoading(false)
     } else {
       setLoading(false)
@@ -232,7 +239,9 @@ export const CustomerProfile = () => {
   const mainInfo = customerDetails && [
     getCustomerInfo({
       customerDetails,
-      score: iScoreDetails,
+      score: iScoreDetails?.filter(
+        (score) => score.nationalId === customerDetails.nationalId
+      )[0],
       isLeader: false,
       isCF: true,
     }),
@@ -468,8 +477,9 @@ export const CustomerProfile = () => {
         fieldTitle: 'cfGuarantors',
         fieldData: {
           customerId: customerDetails?._id,
-          customerGuarantors: customerDetails?.customerGuarantors || [],
+          customerGuarantors,
           getIscore: (data) => getCustomerIscore(data),
+          iscores: iScoreDetails,
         } as CFGuarantorTableViewProp,
         showFieldCondition: true,
       },
@@ -605,13 +615,12 @@ export const CustomerProfile = () => {
               customerDetails?.initialConsumerFinanceLimit || 0
             }
           />
-          {customerDetails?.customerGuarantors &&
-            customerDetails?.customerGuarantors?.length > 0 &&
-            customerDetails?.customerGuarantors.map((guarantor) => (
+          {customerGuarantors?.length > 0 &&
+            customerGuarantors.map((guarantor) => (
               <BondContract
                 customerCreationDate={customerDetails?.created?.at || 0}
-                customerName={guarantor?.name || ''}
-                customerHomeAddress={guarantor?.address || ''}
+                customerName={guarantor?.customerName || ''}
+                customerHomeAddress={guarantor?.customerHomeAddress || ''}
                 nationalId={guarantor?.nationalId || ''}
                 initialConsumerFinanceLimit={
                   customerDetails?.initialConsumerFinanceLimit || 0
@@ -626,19 +635,19 @@ export const CustomerProfile = () => {
             initialConsumerFinanceLimit={
               customerDetails?.initialConsumerFinanceLimit || 0
             }
-            customerGuarantors={customerDetails?.customerGuarantors}
+            customerGuarantors={customerGuarantors}
           />
           <AuthorizationToFillInfo
             customerCreationDate={customerDetails?.created?.at || 0}
             customerName={customerDetails?.customerName || ''}
             customerHomeAddress={customerDetails?.customerHomeAddress || ''}
-            customerGuarantors={customerDetails?.customerGuarantors}
+            customerGuarantors={customerGuarantors}
           />
           <AcknowledgmentWasSignedInFront
             customerCreationDate={customerDetails?.created?.at || 0}
             customerName={customerDetails?.customerName || ''}
             nationalId={customerDetails?.nationalId || ''}
-            customerGuarantors={customerDetails?.customerGuarantors}
+            customerGuarantors={customerGuarantors}
           />
         </>
       )}
