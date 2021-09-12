@@ -1,5 +1,9 @@
 export interface Product {
   id: string
   name: string
-  branches?: number
+  branchCount: number
+  beneficiaryType: string
+  code: number
+  type: string
+  contractType: string
 }
