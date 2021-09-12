@@ -7,13 +7,13 @@ import Form from 'react-bootstrap/Form'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-import Can from '../../config/Can'
+import Can from '../../../Shared/config/Can'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
-import { manageLoansArray } from './manageLoansInitials'
+import { manageLoansArray } from './ManageLoansInitials'
 import { getErrorMessage, interestType } from '../../../Shared/Services/utils'
 import { getFormulas } from '../../../Shared/Services/APIs/LoanFormula/getFormulas'
-import { Formula } from '../LoanApplication/loanApplicationCreation'
 import { LtsIcon } from '../../../Shared/Components'
+import { CalculationFormula } from '../../../Shared/Services/interfaces'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -27,7 +27,7 @@ interface Props extends RouteComponentProps {
 }
 interface State {
   loading: boolean
-  formulas: Array<Formula>
+  formulas: Array<CalculationFormula>
   filterFormulas: string
   manageLoansTabs: any[]
 }
@@ -110,7 +110,7 @@ class FormulaList extends Component<Props, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('calculation-forumlas')}
+            .indexOf('calculation-formulas')}
         />
         <Card className="main-card">
           <Loader type="fullsection" open={this.state.loading} />

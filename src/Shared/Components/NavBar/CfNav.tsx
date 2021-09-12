@@ -23,6 +23,17 @@ export const CfNavbar = () => {
             {local.customers}
           </Nav.Link>
         )}
+        {ability.can('getLoanProduct', 'product') ? (
+          <Nav.Link onClick={() => history.push('/manage-loans/loan-products')}>
+            {local.loans}
+          </Nav.Link>
+        ) : ability.can('getCalculationFormula', 'product') ? (
+          <Nav.Link
+            onClick={() => history.push('/manage-loans/calculation-formulas')}
+          >
+            {local.loans}
+          </Nav.Link>
+        ) : null}
         {ability.can('getRoles', 'user') ? (
           <Nav.Link onClick={() => history.push('/manage-accounts/roles')}>
             {local.manageAccounts}
