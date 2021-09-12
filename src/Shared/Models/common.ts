@@ -6,6 +6,7 @@ export interface Action {
 
 export interface ActionWithIcon extends Action {
   actionIcon: string
+  style?: React.CSSProperties
 }
 export interface Signature {
   by?: string
