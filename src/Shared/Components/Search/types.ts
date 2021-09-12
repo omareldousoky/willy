@@ -17,6 +17,7 @@ export interface SearchInitialFormikState {
   warningType?: LegalWarningType | ''
   phoneNumber?: string
   consumerFinanceLimitStatus?: string
+  beneficiaryType?: 'individual' | 'group'
 }
 
 export interface SearchProps {
@@ -32,6 +33,8 @@ export interface SearchProps {
   searchKeys: Array<string>
   dropDownKeys?: Array<string>
   chosenStatus?: string
+  type?: 'sme' | 'micro' | 'nano' // type of product
+  beneficiaryType?: 'individual' | 'group'
   resetSelectedItems?: () => void
   setFrom?: (from: number) => void
   submitClassName?: string

@@ -61,7 +61,7 @@ export const step1Company = {
   commercialRegisterNumber: '',
   // industryRegisterNumber: '',
   taxCardNumber: '',
-  legalStructure: '',
+  legalStructure: 'other',
   commercialRegisterExpiryDate: '',
   customerType: 'company',
   governorate: '',

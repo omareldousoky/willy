@@ -955,3 +955,11 @@ export const cfLimitStatusLocale = {
   },
   default: { text: 'الحد الائتماني المبدئي قيد التحقيق', color: '#edb600' },
 }
+
+export const removeDuplicatesByName = (list: { name: string }[]) =>
+  list?.length
+    ? [...list].filter(
+        (item, index, self) =>
+          index === self.findIndex((t) => t.name === item.name)
+      )
+    : list
