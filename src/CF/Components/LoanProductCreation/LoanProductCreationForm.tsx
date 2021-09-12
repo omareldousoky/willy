@@ -42,67 +42,6 @@ export const LoanProductCreationForm = (props: any) => {
           </Form.Group>
         </Col>
         <Col>
-          <Form.Group controlId="beneficiaryType">
-            <Form.Label className="data-label">{local.customerType}</Form.Label>
-            <Form.Control
-              as="select"
-              name="beneficiaryType"
-              data-qc="beneficiaryType"
-              value={values.beneficiaryType}
-              onBlur={handleBlur}
-              onChange={(e: any) => {
-                const val = e.currentTarget.value
-                if (val === 'group') {
-                  setFieldValue('type', 'micro')
-                  setFieldValue('contractType', 'standard')
-                }
-                setFieldValue('beneficiaryType', val)
-              }}
-              isInvalid={errors.beneficiaryType && touched.beneficiaryType}
-            >
-              <option value="" />
-              <option value="individual">{local.individual}</option>
-              <option value="group">{local.group}</option>
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              {errors.beneficiaryType}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group controlId="type">
-            <Form.Label className="data-label">{local.contractType}</Form.Label>
-            <Form.Control
-              as="select"
-              name="contractType"
-              data-qc="contractType"
-              value={values.contractType}
-              onBlur={handleBlur}
-              onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-                const val = e.currentTarget.value
-                if (val === 'masterGas') {
-                  setFieldValue('type', 'micro')
-                }
-                handleChange(e)
-              }}
-              isInvalid={errors.contractType && touched.contractType}
-            >
-              <option value="standard">{local.standard}</option>
-              {values.type === 'micro' &&
-                values.beneficiaryType === 'individual' && (
-                  <option value="masterGas">{local.masterGas}</option>
-                )}
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              {errors.contractType}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
           <Form.Group controlId="calculationFormulaId">
             <Form.Label className="data-label">
               {local.calculationFormulaId}
@@ -130,43 +69,6 @@ export const LoanProductCreationForm = (props: any) => {
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
-        {values.beneficiaryType === 'individual' && (
-          <Col>
-            <Form.Group controlId="type">
-              <Form.Label className="data-label">{local.actionType}</Form.Label>
-              <Form.Control
-                as="select"
-                name="type"
-                data-qc="type"
-                value={values.type}
-                onBlur={handleBlur}
-                onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-                  const val = e.currentTarget.value
-                  if (val === 'nano') {
-                    setFieldValue('allowInterestAdjustment', false)
-                    setFieldValue('allowStampsAdjustment', false)
-                    setFieldValue('allowRepresentativeFeesAdjustment', false)
-                    setFieldValue('allowAdminFeesAdjustment', false)
-                    setFieldValue('allowApplicationFeeAdjustment', false)
-                  }
-                  handleChange(e)
-                }}
-                isInvalid={errors.type && touched.type}
-              >
-                <option value="micro">Micro</option>
-                {values.contractType !== 'masterGas' && (
-                  <>
-                    <option value="sme">SME</option>
-                    <option value="nano">Nano</option>
-                  </>
-                )}
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {errors.type}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
-        )}
       </Row>
       <Row>
         <Col>
