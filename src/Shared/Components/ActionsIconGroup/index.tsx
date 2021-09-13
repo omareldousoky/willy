@@ -23,10 +23,12 @@ export const ActionsIconGroup = ({
                   size="sm"
                   variant="outline-primary"
                   onClick={() => action.actionOnClick(currentId)}
+                  className="d-flex"
                 >
                   <LtsIcon
                     name={action.actionIcon}
                     tooltipText={action.actionTitle}
+                    style={action.style}
                   />
                 </Button>
               </Col>

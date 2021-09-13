@@ -953,6 +953,14 @@ export const cfLimitStatusLocale = {
     text: 'الحد الائتماني المبدئي قيد التحقيق',
     color: '#edb600',
   },
+  'update-reviewed': {
+    text: 'تم مراجعه الحد الائتماني',
+    color: '#edb600',
+  },
+  'initialization-reviewed': {
+    text: 'تم مراجعه الحد الائتماني المبدئي',
+    color: '#edb600',
+  },
   default: { text: 'الحد الائتماني المبدئي قيد التحقيق', color: '#edb600' },
 }
 

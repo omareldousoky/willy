@@ -10,6 +10,7 @@ import { Loader } from '../../../Shared/Components/Loader'
 import {
   approveCustomerCFLimit,
   getCustomerLimitFromMonthlyIncome,
+  reviewCustomerCFLimit,
 } from '../../../Shared/Services/APIs/customer/getCustomerConsumerLimit'
 import { Customer } from '../../../Shared/Services/interfaces'
 import { getErrorMessage } from '../../../Shared/Services/utils'
@@ -19,6 +20,7 @@ interface CFLimitModalProps {
   hideModal: () => void
   customer: Customer
   onSuccess: () => void
+  action: string
 }
 
 const CFLimitModal: FunctionComponent<CFLimitModalProps> = ({
@@ -26,6 +28,7 @@ const CFLimitModal: FunctionComponent<CFLimitModalProps> = ({
   hideModal,
   customer,
   onSuccess,
+  action,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [
@@ -51,7 +54,10 @@ const CFLimitModal: FunctionComponent<CFLimitModalProps> = ({
   const handleSubmit = async () => {
     if (customer._id) {
       setIsLoading(true)
-      const result = await approveCustomerCFLimit(customer._id)
+      const result =
+        action === 'approve'
+          ? await approveCustomerCFLimit(customer._id)
+          : await reviewCustomerCFLimit(customer._id)
       setIsLoading(false)
       if (result.status === 'success') {
         hideModal()
@@ -69,7 +75,9 @@ const CFLimitModal: FunctionComponent<CFLimitModalProps> = ({
         <Loader type="fullsection" open={isLoading} />
         <Modal.Header closeButton>
           <Modal.Title className="text-mixed-lang">
-            {local.approveCFCustomerLimit}
+            {action === 'approve'
+              ? local.approveCFCustomerLimit
+              : local.reviewCFCustomerLimit}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
