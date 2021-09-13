@@ -67,16 +67,6 @@ class LoanProducts extends Component<Props, State> {
         render: (data) => data.code,
       },
       {
-        title: local.actionType,
-        key: 'type',
-        render: (data) => local[data.type],
-      },
-      {
-        title: local.customerType,
-        key: 'customerType',
-        render: (data) => local[data.beneficiaryType],
-      },
-      {
         title: local.branches,
         key: 'branches',
         render: (data) => (data.branchCount ? data.branchCount : 0),
@@ -111,14 +101,8 @@ class LoanProducts extends Component<Props, State> {
             id,
           }),
       },
-      {
-        actionTitle: local.productApplicationsReport,
-        actionIcon: 'download-big-file',
-        actionPermission: ability.can('getApplicationsOfProduct', 'report'),
-        actionOnClick: (id) => this.getProductApplicationsReport(id as string),
-      },
     ]
-    this.searchKeys = ['keyword', 'beneficiaryType', 'productType']
+    this.searchKeys = ['keyword']
     this.dropDownKeys = ['name', 'code']
   }
 
