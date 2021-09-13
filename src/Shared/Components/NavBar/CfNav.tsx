@@ -67,6 +67,15 @@ export const CfNavbar = () => {
             {local.clearances}
           </Nav.Link>
         )}
+        {ability.can('getTerrorist', 'customer') && (
+          <Nav.Link
+            onClick={() =>
+              history.push('/manage-anti-terrorism/anti-terrorism')
+            }
+          >
+            {local.antiTerrorism}
+          </Nav.Link>
+        )}
         {ability.can('getDefaultingCustomer', 'legal') && (
           <Nav.Link onClick={() => history.push('/legal-affairs/late-list')}>
             {local.legalAffairs}
