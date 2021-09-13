@@ -23,7 +23,9 @@ import {
   fetchWarning,
 } from '../../../../Shared/Services/APIs/LegalAffairs/warning'
 import { Customer } from '../../../../Shared/Models/Customer'
-import CustomerSearch, { Results } from '../../../../Shared/Components/CustomerSearch'
+import CustomerSearch, {
+  Results,
+} from '../../../../Shared/Components/CustomerSearch'
 
 export const WarningCreationModal = ({
   showModal,
