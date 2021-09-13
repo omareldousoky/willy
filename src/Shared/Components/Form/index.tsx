@@ -7,7 +7,7 @@ import './style.scss'
 
 import FormFields, { FormFieldPairs } from './FormFields'
 import { AppFormProps, FormField } from './types'
-import local from '../../../../Shared/Assets/ar.json'
+import local from '../../Assets/ar.json'
 import { createFormFieldsInitValue, createValidationSchema } from './utils'
 
 interface FormContext {

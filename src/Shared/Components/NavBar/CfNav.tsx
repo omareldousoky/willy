@@ -42,7 +42,8 @@ export const CfNavbar = () => {
             {local.manageAccounts}
           </Nav.Link>
         ) : null}
-        {ability.can('getIssuedLoan', 'application') && (
+        {(ability.can('getIssuedLoan', 'application') ||
+          ability.can('branchIssuedLoan', 'application')) && (
           <Nav.Link onClick={() => history.push('/loans')}>
             {local.issuedLoans}
           </Nav.Link>
@@ -73,6 +74,16 @@ export const CfNavbar = () => {
             }
           >
             {local.antiTerrorism}
+          </Nav.Link>
+        )}
+        {ability.can('getDefaultingCustomer', 'legal') && (
+          <Nav.Link onClick={() => history.push('/legal-affairs/late-list')}>
+            {local.legalAffairs}
+          </Nav.Link>
+        )}
+        {ability.can('viewActionLogs', 'user') && (
+          <Nav.Link onClick={() => history.push('/logs')}>
+            {local.logs}
           </Nav.Link>
         )}
       </Nav>

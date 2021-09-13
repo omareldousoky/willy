@@ -15,4 +15,5 @@ export interface CompanyListProps {
   history: any
   loading: boolean
   totalCount: number
+  type: 'LTS' | 'DOCUMENTS'
 }

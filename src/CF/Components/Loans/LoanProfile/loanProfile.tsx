@@ -37,11 +37,10 @@ import {
   PendingActions,
 } from '../../../../Shared/Services/interfaces'
 import {
-  timeToDateyyymmdd,
   iscoreDate,
   getErrorMessage,
   statusLocale,
-  getFormattedLocalDate,
+  timeToDateyyymmdd,
 } from '../../../../Shared/Services/utils'
 import { payment } from '../../../../Shared/redux/payment/actions'
 import { cancelApplication } from '../../../../Shared/Services/APIs/loanApplication/stateHandler'
@@ -532,26 +531,26 @@ class LoanProfile extends Component<Props, State> {
             status: this.state.application.status,
           }),
       },
-      // {
-      //   icon: 'close',
-      //   title: local.writeOffLoan,
-      //   permission:
-      //     this.state.application.status === 'issued' &&
-      //     this.state.application.isDoubtful &&
-      //     !this.state.application.writeOff &&
-      //     ability.can('writeOff', 'application'),
-      //   onActionClick: () => this.writeOffApplication(),
-      // },
-      // {
-      //   icon: 'minus',
-      //   title: local.doubtLoan,
-      //   permission:
-      //     this.state.application.status === 'issued' &&
-      //     !this.state.application.isDoubtful &&
-      //     !this.state.application.writeOff &&
-      //     ability.can('setDoubtfulLoan', 'application'),
-      //   onActionClick: () => this.doubtApplication(),
-      // },
+      {
+        icon: 'close',
+        title: local.writeOffLoan,
+        permission:
+          this.state.application.status === 'issued' &&
+          this.state.application.isDoubtful &&
+          !this.state.application.writeOff &&
+          ability.can('writeOff', 'application'),
+        onActionClick: () => this.writeOffApplication(),
+      },
+      {
+        icon: 'minus',
+        title: local.doubtLoan,
+        permission:
+          this.state.application.status === 'issued' &&
+          !this.state.application.isDoubtful &&
+          !this.state.application.writeOff &&
+          ability.can('setDoubtfulLoan', 'application'),
+        onActionClick: () => this.doubtApplication(),
+      },
     ]
   }
 
@@ -699,12 +698,13 @@ class LoanProfile extends Component<Props, State> {
       confirmButtonText: local.returnItem,
       cancelButtonText: local.cancel,
     }).then(async (result) => {
+      const appId = this.props.location.state.id
       if (result.value) {
         this.setState({ loading: true })
-        const res = await returnItem(this.props.location.state.id)
+        const res = await returnItem(appId)
         if (res.status === 'success') {
           this.successHandler(doneSuccessfully('returnItem'), () =>
-            window.location.reload()
+            this.getAppByID(appId)
           )
         } else {
           this.failureHandler(res)
@@ -755,14 +755,15 @@ class LoanProfile extends Component<Props, State> {
         confirmButtonText: local.writeOffLoan,
         cancelButtonText: local.cancel,
       }).then(async (result) => {
+        const appId = this.props.location.state.id
         if (result.value) {
           this.setState({ loading: true })
-          const res = await writeOffLoan(this.props.location.state.id, {
+          const res = await writeOffLoan(appId, {
             writeOffReason: text,
           })
           if (res.status === 'success') {
             this.successHandler(local.loanWriteOffSuccess, () =>
-              window.location.reload()
+              this.getAppByID(appId)
             )
           } else {
             this.failureHandler(res)
@@ -783,12 +784,13 @@ class LoanProfile extends Component<Props, State> {
       confirmButtonText: local.cancelApplication,
       cancelButtonText: local.cancel,
     }).then(async (result) => {
+      const appId = this.props.location.state.id
       if (result.value) {
         this.setState({ loading: true })
-        const res = await cancelApplication(this.props.location.state.id)
+        const res = await cancelApplication(appId)
         if (res.status === 'success') {
           this.successHandler(local.applicationCancelSuccess, () =>
-            window.location.reload()
+            this.getAppByID(appId)
           )
         } else {
           this.failureHandler(res)
@@ -922,14 +924,15 @@ class LoanProfile extends Component<Props, State> {
         confirmButtonText: local.doubtLoan,
         cancelButtonText: local.cancel,
       }).then(async (result) => {
+        const appId = this.props.location.state.id
         if (result.value) {
           this.setState({ loading: true })
-          const res = await doubtLoan(this.props.location.state.id, {
+          const res = await doubtLoan(appId, {
             doubtReason: text,
           })
           if (res.status === 'success') {
             this.successHandler(local.loanDoubtSuccess, () =>
-              window.location.reload()
+              this.getAppByID(appId)
             )
           } else {
             this.failureHandler(res)
@@ -1130,7 +1133,7 @@ class LoanProfile extends Component<Props, State> {
                   <span className="text-muted">{local.truthDate}</span>
                   <span>
                     {this.state.pendingActions.transactions
-                      ? getFormattedLocalDate(
+                      ? timeToDateyyymmdd(
                           this.state.pendingActions?.transactions[0].truthDate
                         )
                       : ''}
@@ -1140,7 +1143,7 @@ class LoanProfile extends Component<Props, State> {
                   <span className="text-muted">{local.dueDate}</span>
                   <span>
                     {this.state.pendingActions.transactions
-                      ? getFormattedLocalDate(
+                      ? timeToDateyyymmdd(
                           this.state.pendingActions.transactions[0].actualDate
                         )
                       : ''}

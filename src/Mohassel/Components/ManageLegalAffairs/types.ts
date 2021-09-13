@@ -1,6 +1,9 @@
 import { Managers } from '../managerHierarchy/types'
 import { DefaultedCustomer, ManagerReviews } from './defaultingCustomersList'
-import { CourtSession, LegalHistoryResponse } from '../../Models/LegalAffairs'
+import {
+  CourtSession,
+  LegalHistoryResponse,
+} from '../../../Shared/Models/LegalAffairs'
 
 export interface LegalActionsForm {
   statusNumber: string

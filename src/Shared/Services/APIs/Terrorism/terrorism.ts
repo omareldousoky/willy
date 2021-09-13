@@ -1,8 +1,8 @@
 import { AxiosResponse } from 'axios'
 import { TerroristResponse, TerroristUnResponse } from '../../interfaces'
-import { ApiResponse } from '../../../../Mohassel/Models/common'
 import axios from '../../axiosInstance'
 import { API_BASE_URL } from '../../../envConfig'
+import { ApiResponse } from '../../../Models/common'
 
 const fetchSearchLocalTerroristUrl = `${API_BASE_URL}/search/local-terrorist`
 const fetchSearchUniTerroristUrl = `${API_BASE_URL}/search/UN-terrorist`

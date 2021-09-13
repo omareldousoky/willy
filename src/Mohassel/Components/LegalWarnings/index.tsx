@@ -15,7 +15,7 @@ import {
   LegalWarningResponse,
   LegalWarningsSearchRequest,
   LegalWarningType,
-} from '../../Models/LegalAffairs'
+} from '../../../Shared/Models/LegalAffairs'
 import { timeToArabicDate } from '../../../Shared/Services/utils'
 import ability from '../../config/ability'
 import { search as searchAction } from '../../../Shared/redux/search/actions'
@@ -24,7 +24,7 @@ import SearchForm from '../../../Shared/Components/Search/search'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { LegalWarning } from '../pdfTemplates/LegalWarning'
 import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
-import { setPrintWarningFlag } from '../../Services/APIs/LegalAffairs/warning'
+import { setPrintWarningFlag } from '../../../Shared/Services/APIs/LegalAffairs/warning'
 import { WarningCreationModal } from './WarningCreationModal'
 import { loading as loadingAction } from '../../../Shared/redux/loading/actions'
 import { LtsIcon } from '../../../Shared/Components'
@@ -222,9 +222,15 @@ export const LegalWarnings = () => {
             className="px-0"
             title={`${local.view} ${local.viewCustomer}`}
             onClick={() =>
-              history.push('/customers/view-customer', {
-                id: warning.customerId,
-              })
+              history.push(
+                warning.customerType === 'company' ||
+                  warning.customerType === 'companyGuarantor'
+                  ? '/company/view-company'
+                  : '/customers/view-customer',
+                {
+                  id: warning.customerId,
+                }
+              )
             }
           >
             {warning.customerKey}
@@ -241,7 +247,7 @@ export const LegalWarnings = () => {
     {
       title: local.nationalId,
       key: 'nationalId',
-      render: (warning) => warning.nationalId,
+      render: (warning) => warning.nationalId || local.notApplicable,
     },
     {
       title: local.loanCode,

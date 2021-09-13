@@ -4,8 +4,8 @@ import {
   FalteringPaymentsResponse,
   LaundryReportRequest,
 } from '../../../Models/LaundryReports'
-import { ApiResponse } from '../../../Models/common'
 import { API_BASE_URL } from '../../../../Shared/envConfig'
+import { ApiResponse } from '../../../../Shared/Models/common'
 
 const fetchFalteringPaymentsUrl = `${API_BASE_URL}/report/faltering-payments`
 

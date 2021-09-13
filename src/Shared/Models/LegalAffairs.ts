@@ -1,5 +1,4 @@
-import { Signature, Trace } from '../../Shared/Models/common'
-import { PaginatedResponse, SearchRequest } from './common'
+import { Signature, Trace, PaginatedResponse, SearchRequest } from './common'
 
 export interface CourtSession {
   confinementNumber?: string
@@ -51,6 +50,7 @@ export interface LegalWarningResponse extends Trace {
   customerName?: string
   nationalId?: string
   customerKey?: number
+  customerType?: string
   customerBranchId?: string
   warningType: LegalWarningType
   printed?: boolean

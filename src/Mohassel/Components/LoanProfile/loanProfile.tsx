@@ -40,11 +40,10 @@ import Can from '../../config/Can'
 import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment'
 import { Customer, PendingActions } from '../../../Shared/Services/interfaces'
 import {
-  timeToDateyyymmdd,
   iscoreDate,
   getErrorMessage,
   statusLocale,
-  getFormattedLocalDate,
+  timeToDateyyymmdd,
 } from '../../../Shared/Services/utils'
 import { payment } from '../../../Shared/redux/payment/actions'
 import { cancelApplication } from '../../../Shared/Services/APIs/loanApplication/stateHandler'
@@ -880,15 +879,16 @@ class LoanProfile extends Component<Props, State> {
         confirmButtonText: local.writeOffLoan,
         cancelButtonText: local.cancel,
       }).then(async (result) => {
+        const appId = this.props.location.state.id
         if (result.value) {
           this.setState({ loading: true })
-          const res = await writeOffLoan(this.props.location.state.id, {
+          const res = await writeOffLoan(appId, {
             writeOffReason: text,
           })
           if (res.status === 'success') {
             this.setState({ loading: false })
             Swal.fire('', local.loanWriteOffSuccess, 'success').then(() =>
-              window.location.reload()
+              this.getAppByID(appId)
             )
           } else {
             this.setState({ loading: false }, () =>
@@ -911,13 +911,14 @@ class LoanProfile extends Component<Props, State> {
       confirmButtonText: local.cancelApplication,
       cancelButtonText: local.cancel,
     }).then(async (result) => {
+      const appId = this.props.location.state.id
       if (result.value) {
         this.setState({ loading: true })
-        const res = await cancelApplication(this.props.location.state.id)
+        const res = await cancelApplication(appId)
         if (res.status === 'success') {
           this.setState({ loading: false })
           Swal.fire('', local.applicationCancelSuccess, 'success').then(() =>
-            window.location.reload()
+            this.getAppByID(appId)
           )
         } else {
           this.setState({ loading: false }, () =>
@@ -1090,15 +1091,16 @@ class LoanProfile extends Component<Props, State> {
         confirmButtonText: local.doubtLoan,
         cancelButtonText: local.cancel,
       }).then(async (result) => {
+        const appId = this.props.location.state.id
         if (result.value) {
           this.setState({ loading: true })
-          const res = await doubtLoan(this.props.location.state.id, {
+          const res = await doubtLoan(appId, {
             doubtReason: text,
           })
           if (res.status === 'success') {
             this.setState({ loading: false })
             Swal.fire('', local.loanDoubtSuccess, 'success').then(() =>
-              window.location.reload()
+              this.getAppByID(appId)
             )
           } else {
             this.setState({ loading: false }, () =>
@@ -1360,7 +1362,7 @@ class LoanProfile extends Component<Props, State> {
                   <span className="text-muted">{local.truthDate}</span>
                   <span>
                     {this.state.pendingActions.transactions
-                      ? getFormattedLocalDate(
+                      ? timeToDateyyymmdd(
                           this.state.pendingActions?.transactions[0].truthDate
                         )
                       : ''}
@@ -1370,7 +1372,7 @@ class LoanProfile extends Component<Props, State> {
                   <span className="text-muted">{local.dueDate}</span>
                   <span>
                     {this.state.pendingActions.transactions
-                      ? getFormattedLocalDate(
+                      ? timeToDateyyymmdd(
                           this.state.pendingActions.transactions[0].actualDate
                         )
                       : ''}

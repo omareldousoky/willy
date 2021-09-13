@@ -14,11 +14,12 @@ import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOf
 import {
   searchDefaultingCustomers,
   searchLegalAffairsCustomers,
-} from '../../../Mohassel/Services/APIs/LegalAffairs/defaultingCustomers'
+} from '../../Services/APIs/LegalAffairs/defaultingCustomers'
 import { searchFinancialBlocking } from '../../Services/APIs/loanApplication/financialClosing'
 import { cibReport } from '../../Services/APIs/loanApplication/cibReport'
-import { searchWarnings } from '../../../Mohassel/Services/APIs/LegalAffairs/warning'
+import { searchWarnings } from '../../Services/APIs/LegalAffairs/warning'
 import { searchCustomer } from '../../Services/APIs/customer/searchCustomer'
+import { searchProducts } from '../../../Mohassel/Services/APIs/loanProduct/searchProducts'
 
 const searchWrapper = (
   request: any,
@@ -83,6 +84,8 @@ export const search = (request) => {
       return searchWrapper(request, cibReport, 'cib')
     case 'legal-warning':
       return searchWrapper(request, searchWarnings)
+    case 'product':
+      return searchWrapper(request, searchProducts)
     case 'clearData':
       return (dispatch) => {
         dispatch({ type: 'CLEAR_DATA', payload: {} })

@@ -9,9 +9,10 @@ export interface GlobalCFLimits {
   DBRPercentHigh: number
   globalCFMin: number
   globalCFMax: number
+  CFHQMinimumApprovalLimit: number
 }
 
-export const globalCfLmitsInitialValues = {
+export const globalCfLimitsInitialValues = {
   maxTenorInMonths: 0,
   annualInterestRate: 0,
   DBRPercentLowStart: 0,
@@ -22,4 +23,5 @@ export const globalCfLmitsInitialValues = {
   DBRPercentHigh: 0,
   globalCFMin: 0,
   globalCFMax: 0,
+  CFHQMinimumApprovalLimit: 0,
 }

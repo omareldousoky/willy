@@ -46,10 +46,8 @@ import {
   getSettlementFees,
   reviewLegalCustomer,
   getLegalHistory,
-} from '../../../Services/APIs/LegalAffairs/defaultingCustomers'
-import { FormField } from '../Form/types'
+} from '../../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
 import { defaultValidationSchema } from '../validations'
-import AppForm from '../Form'
 import UploadLegalCustomers from './UploadCustomersForm'
 import LegalSettlementPdfTemp from '../../pdfTemplates/LegalSettlement'
 import { Branch } from '../../../../Shared/Services/interfaces'
@@ -64,10 +62,12 @@ import {
 import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
 import LegalJudgePdf from '../../pdfTemplates/LegalJudge'
 import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
-import { LegalHistoryResponse } from '../../../Models/LegalAffairs'
+import { LegalHistoryResponse } from '../../../../Shared/Models/LegalAffairs'
 import { ActionsGroup } from '../../../../Shared/Components/ActionsGroup'
 import { TableMapperItem } from '../../../../Shared/Components/DynamicTable/types'
 import useDidUpdateEffect from '../../../../Shared/hooks/useDidUpdateEffect'
+import { FormField } from '../../../../Shared/Components/Form/types'
+import AppForm from '../../../../Shared/Components/Form'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -468,9 +468,15 @@ const LegalCustomersList: FunctionComponent = () => {
             title={local.customerId}
             className="p-0"
             onClick={() =>
-              history.push('/customers/view-customer', {
-                id: customer.customerId,
-              })
+              history.push(
+                customer.customerType === 'company' ||
+                  customer.customerType === 'companyGuarantor'
+                  ? '/company/view-company'
+                  : '/customers/view-customer',
+                {
+                  id: customer.customerId,
+                }
+              )
             }
           >
             {customer.customerKey}
