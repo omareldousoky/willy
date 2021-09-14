@@ -3,8 +3,6 @@ import Swal from 'sweetalert2'
 
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
-
-import { PDF } from './reports'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { LaundryReportRequest } from '../../Models/LaundryReports'
@@ -17,6 +15,7 @@ import { fetchEarlyPaymentsReport } from '../../Services/APIs/Reports/earlyPayme
 import { EarlyPayments as EarlyPaymentsPdf } from '../pdfTemplates/earlyPayments/earlyPayments'
 import { LtsIcon } from '../../../Shared/Components'
 import { ApiResponse } from '../../../Shared/Models/common'
+import { PDF } from '../../../Shared/Components/PdfList/types'
 
 enum ReportEnum {
   FalteringPayments = 'falteringPayments',

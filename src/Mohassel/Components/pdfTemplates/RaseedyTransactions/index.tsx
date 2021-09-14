@@ -2,11 +2,11 @@ import React from 'react'
 import Table from 'react-bootstrap/Table'
 
 import local from '../../../../Shared/Assets/ar.json'
+import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 import {
   numbersToArabic,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
-import { Header } from '../pdfTemplateCommon/header'
 
 interface RaseedyTransactionsModel {
   customerCode: string

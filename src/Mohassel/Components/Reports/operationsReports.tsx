@@ -48,13 +48,7 @@ import {
 } from '../../Services/APIs/Reports/activeWallet'
 import ActiveWalletGroupPdf from '../pdfTemplates/activeWalletGroup/activeWalletGroup'
 import { PDFList } from '../../../Shared/Components/PdfList'
-
-export interface PDF {
-  key?: string
-  local?: string
-  inputs?: Array<string>
-  permission: string
-}
+import { PDF } from '../../../Shared/Components/PdfList/types'
 
 interface OperationsReportsState {
   showModal?: boolean

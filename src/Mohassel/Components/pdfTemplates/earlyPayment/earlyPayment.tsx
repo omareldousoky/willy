@@ -5,9 +5,9 @@ import {
   numbersToArabic,
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
-import DataRow from '../pdfTemplateCommon/dataRow'
 import { EarlyPaymentPDFProps } from './types'
 import { EarlyPaymentInstallment } from './EarlyPaymentInstallment'
+import DataRow from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/dataRow'
 
 const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
   application,

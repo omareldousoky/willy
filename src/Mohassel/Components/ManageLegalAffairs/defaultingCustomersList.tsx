@@ -36,13 +36,13 @@ import {
 } from '../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
 import ability from '../../config/ability'
 import ReportsModal from '../Reports/reportsModal'
-import { PDF } from '../Reports/reports'
 import DefaultingCustomersPdfTemplate, {
   ReportDefaultedCustomer,
 } from '../pdfTemplates/defaultingCustomers/DefaultingCustomers'
 import { LtsIcon } from '../../../Shared/Components'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 import { ProductType } from '../LegalWarnings/types'
+import { PDF } from '../../../Shared/Components/PdfList/types'
 
 interface Review {
   at: number

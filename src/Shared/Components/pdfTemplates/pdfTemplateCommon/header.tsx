@@ -1,10 +1,10 @@
 import React from 'react'
-import store from '../../../../Shared/redux/store'
+import store from '../../../redux/store'
 import {
   getCurrentTime,
   timeToArabicDate,
   timeToArabicDateNow,
-} from '../../../../Shared/Services/utils'
+} from '../../../Services/utils'
 
 interface HeaderProps {
   title?: string
@@ -15,6 +15,7 @@ interface HeaderProps {
   toDate?: string | number
   branchName?: string
   sme?: boolean
+  cf?: boolean
 }
 
 export const Header = ({
@@ -26,20 +27,27 @@ export const Header = ({
   toDate,
   branchName,
   sme,
+  cf,
 }: HeaderProps) => {
   return (
     <>
       <div className="d-flex justify-content-between m-2">
         <span className="logo-print" role="img" />
         <p className="m-0 ml-3 text-right text-sm">
-          {sme
+          {cf
+            ? 'ترخيص رقم 23 بتاريخ 31/05/2021'
+            : sme
             ? 'ترخيص ممارسة نشاط تمويل المشروعات المتوسطة والصغيرة رقم ١ لسنه ٢٠٢١'
             : 'ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
         </p>
       </div>
       <div className="d-flex mb-3">
         <p className="ml-3 pt-1 text-left">
-          <span>شركة تساهيل للتمويل متناهي الصغر</span>
+          <span>
+            {cf
+              ? 'حالا للتمويل الاستهلاكي ش. م. م.'
+              : 'شركة تساهيل للتمويل متناهي الصغر'}
+          </span>
           {branchName && (
             <>
               <br />

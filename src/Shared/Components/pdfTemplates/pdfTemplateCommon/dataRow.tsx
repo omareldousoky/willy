@@ -4,7 +4,7 @@ import {
   extractGMTDate,
   numbersToArabic,
   timeToArabicDate,
-} from '../../../../Shared/Services/utils'
+} from '../../../Services/utils'
 import {
   stringPlaceholder,
   moneyPlaceholder,

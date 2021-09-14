@@ -17,7 +17,6 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
 import { reportsModalValidation } from './reportsModalValidation'
-import { PDF } from './reports'
 import {
   AsyncBranchGeoAreasDropDown,
   AsyncLoanOfficersDropDown,
@@ -26,9 +25,11 @@ import {
 } from '../../../Shared/Components/dropDowns/allDropDowns'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Branch } from '../../../Shared/Services/interfaces'
-import DateField from '../../../Shared/Components/Common/FormikFields/dateField'
+import {
+  DateField,
+  DateFromToField,
+} from '../../../Shared/Components/Common/FormikFields/dateField'
 import { required } from '../../../Shared/validations'
-import { DateFromToField } from './Fields/dateFromTo'
 import TextField from '../../../Shared/Components/Common/FormikFields/textField'
 
 import {
@@ -36,6 +37,7 @@ import {
   getFullCustomerKey,
 } from '../../../Shared/Services/utils'
 import { CurrentHierarchiesSingleResponse } from '../../Models/OfficersProductivityReport'
+import { PDF } from '../../../Shared/Components/PdfList/types'
 
 interface InitialFormikState {
   fromDate?: string

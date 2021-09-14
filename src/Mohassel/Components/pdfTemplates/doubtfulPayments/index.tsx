@@ -6,8 +6,8 @@ import {
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
 import * as local from '../../../../Shared/Assets/ar.json'
-import { loanStatusLocal } from '../pdfTemplateCommon/reportLocal'
 import Orientation from '../../../../Shared/Components/Common/orientation'
+import { loanStatusLocal } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/reportLocal'
 
 export const DoubtfulPayments = (props) => {
   const tempData = props.data.data

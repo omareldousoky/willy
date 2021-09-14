@@ -1,7 +1,7 @@
 import React from 'react'
+import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 import { timeToArabicDate } from '../../../../Shared/Services/utils'
 
-import { Header } from '../pdfTemplateCommon/header'
 import { AuthorizationToFillInfoProps } from './types'
 
 export const AuthorizationToFillInfo = ({

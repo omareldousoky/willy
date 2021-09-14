@@ -2,7 +2,7 @@ import React from 'react'
 import './CollectionStatement.scss'
 import Table from 'react-bootstrap/Table'
 import Orientation from '../../../../Shared/Components/Common/orientation'
-import { Header } from '../pdfTemplateCommon/header'
+import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 
 export const CollectionStatement = ({ data }) => {
   const { branches } = data.data

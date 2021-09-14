@@ -89,13 +89,7 @@ import {
 import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
 import RaseedyTransactionsReport from '../pdfTemplates/RaseedyTransactions'
 import { PDFList } from '../../../Shared/Components/PdfList'
-
-export interface PDF {
-  key?: string
-  local?: string
-  inputs?: Array<string>
-  permission: string
-}
+import { PDF } from '../../../Shared/Components/PdfList/types'
 
 interface State {
   showModal?: boolean

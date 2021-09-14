@@ -1,4 +1,4 @@
-import * as local from '../../../../Shared/Assets/ar.json'
+import * as local from '../../../Assets/ar.json'
 
 export const moneyPlaceholder = '٠.٠٠'
 export const numPlaceholder = '٠'
