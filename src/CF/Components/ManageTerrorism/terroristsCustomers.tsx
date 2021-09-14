@@ -6,7 +6,7 @@ import Swal from 'sweetalert2'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import { downloadFile, getErrorMessage } from '../../../Shared/Services/utils'
-import Can from '../../config/Can'
+import Can from '../../../Shared/config/Can'
 import { downloadSuspectsReport } from '../../../Shared/Services/APIs/Terrorism/terrorism'
 
 export const TerroristsCustomers = () => {
