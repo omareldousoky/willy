@@ -19,13 +19,17 @@ import {
 } from '../../../Shared/Services/utils'
 
 import { ActionsIconGroup } from '../../../Shared/Components'
-
 import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
+import ability from '../../../Shared/config/ability'
+import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
+import TotalWrittenChecksPDF from '../PDF/totalWrittenChecks/totalWrittenChecks'
 
 interface State {
+  print: boolean
   size: number
   from: number
   loading: boolean
+  selectedApplicationToPrint: any
 }
 interface Props
   extends RouteComponentProps<
@@ -49,9 +53,11 @@ class TrackLoanApplications extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
+      print: false,
       size: 10,
       from: 0,
       loading: false,
+      selectedApplicationToPrint: {},
     }
 
     this.mappers = [
@@ -262,12 +268,25 @@ class TrackLoanApplications extends Component<Props, State> {
     }
   }
 
+  async getApplicationById(id: string) {
+    this.setState({ loading: true })
+    const res = await getApplication(id)
+    if (res.status === 'success') {
+      this.setState(
+        { loading: false, selectedApplicationToPrint: res.body, print: true },
+        () => window.print()
+      )
+    } else {
+      this.setState({ loading: false })
+    }
+  }
+
   renderActions(data) {
     return [
       {
-        actionTitle: local.edit,
+        actionTitle: local.uploadDocuments,
         actionIcon: 'download',
-        actionPermission: true,
+        actionPermission: ability.can('addingDocuments', 'application'),
         actionOnClick: () =>
           this.props.history.push('/edit-loan-profile', {
             id: data.application._id,
@@ -276,6 +295,12 @@ class TrackLoanApplications extends Component<Props, State> {
         style: {
           transform: `rotate(180deg)`,
         },
+      },
+      {
+        actionTitle: local.downloadDocuments,
+        actionIcon: 'download',
+        actionPermission: data.application.status === 'created',
+        actionOnClick: () => this.getApplicationById(data.application._id),
       },
     ]
   }
@@ -311,52 +336,58 @@ class TrackLoanApplications extends Component<Props, State> {
       dropDownKeys.push('nationalId')
       searchKeys.push('loanType')
     }
+
     return (
-      <Card className="main-card">
-        <Loader
-          type="fullsection"
-          open={this.props.loading || this.state.loading}
-        />
-        <Card.Body style={{ padding: 0 }}>
-          <div className="custom-card-header">
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                {local.loanApplications}
-              </Card.Title>
-              <span className="text-muted">
-                {local.noOfApplications +
-                  ` (${this.props.totalCount ? this.props.totalCount : 0})`}
-              </span>
+      <>
+        <Card className="main-card print-none">
+          <Loader
+            type="fullsection"
+            open={this.props.loading || this.state.loading}
+          />
+          <Card.Body style={{ padding: 0 }}>
+            <div className="custom-card-header">
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
+                  {local.loanApplications}
+                </Card.Title>
+                <span className="text-muted">
+                  {local.noOfApplications +
+                    ` (${this.props.totalCount ? this.props.totalCount : 0})`}
+                </span>
+              </div>
             </div>
-          </div>
-          <hr className="dashed-line" />
-          <Search
-            searchKeys={searchKeys}
-            dropDownKeys={dropDownKeys}
-            url="application"
-            from={this.state.from}
-            size={this.state.size}
-            setFrom={(from) => this.setState({ from })}
-            searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-            hqBranchIdRequest={this.props.branchId}
-            sme={this.props.location.state && this.props.location.state.sme}
-          />
-          <DynamicTable
-            url="application"
-            from={this.state.from}
-            size={this.state.size}
-            totalCount={this.props.totalCount}
-            mappers={filteredMappers}
-            pagination
-            data={this.props.data}
-            changeNumber={(key: string, number: number) => {
-              this.setState({ [key]: number } as any, () =>
-                this.getApplications()
-              )
-            }}
-          />
-        </Card.Body>
-      </Card>
+            <hr className="dashed-line" />
+            <Search
+              searchKeys={searchKeys}
+              dropDownKeys={dropDownKeys}
+              url="application"
+              from={this.state.from}
+              size={this.state.size}
+              setFrom={(from) => this.setState({ from })}
+              searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+              hqBranchIdRequest={this.props.branchId}
+              sme={this.props.location.state && this.props.location.state.sme}
+            />
+            <DynamicTable
+              url="application"
+              from={this.state.from}
+              size={this.state.size}
+              totalCount={this.props.totalCount}
+              mappers={filteredMappers}
+              pagination
+              data={this.props.data}
+              changeNumber={(key: string, number: number) => {
+                this.setState({ [key]: number } as any, () =>
+                  this.getApplications()
+                )
+              }}
+            />
+          </Card.Body>
+        </Card>
+        {this.state.print && (
+          <TotalWrittenChecksPDF data={this.state.selectedApplicationToPrint} />
+        )}
+      </>
     )
   }
 }

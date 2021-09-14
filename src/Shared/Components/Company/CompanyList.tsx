@@ -98,7 +98,7 @@ const List = ({
         ]
       : [
           {
-            actionTitle: local.edit,
+            actionTitle: local.uploadDocuments,
             actionIcon: 'download',
             actionPermission: ability.can('updateCustomer', 'customer'),
             actionOnClick: (id) =>
