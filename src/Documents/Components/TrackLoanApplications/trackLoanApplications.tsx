@@ -1,42 +1,29 @@
 import React, { Component } from 'react'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
+
+import Card from 'react-bootstrap/Card'
+
 import { Loader } from '../../../Shared/Components/Loader'
+
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import Search from '../../../Shared/Components/Search/search'
-import TotalWrittenChecksPDF from '../PDF/totalWrittenChecks/totalWrittenChecks'
-import Can from '../../../Mohassel/config/Can'
-import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
+import * as local from '../../../Shared/Assets/ar.json'
 import {
   timeToDateyyymmdd,
   beneficiaryType,
   getErrorMessage,
+  getFullCustomerKey,
 } from '../../../Shared/Services/utils'
-import * as local from '../../../Shared/Assets/ar.json'
 
-interface Product {
-  productName: string
-  loanNature: string
-  beneficiaryType: string
-}
-interface Customer {
-  customerName: string
-}
-interface Application {
-  product: Product
-  customer: Customer
-  entryDate: number
-  principal: number
-  status: string
-}
-interface LoanItem {
-  id: string
-  branchId: string
-  application: Application
-}
+import { ActionsIconGroup } from '../../../Shared/Components'
+import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
+import ability from '../../../Shared/config/ability'
+import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
+import TotalWrittenChecksPDF from '../PDF/totalWrittenChecks/totalWrittenChecks'
+
 interface State {
   print: boolean
   size: number
@@ -44,7 +31,12 @@ interface State {
   loading: boolean
   selectedApplicationToPrint: any
 }
-interface Props extends RouteComponentProps {
+interface Props
+  extends RouteComponentProps<
+    {},
+    {},
+    { sme?: boolean; id?: string; action?: string }
+  > {
   data: any
   error: string
   totalCount: number
@@ -53,14 +45,10 @@ interface Props extends RouteComponentProps {
   search: (data) => Promise<void>
   setSearchFilters: (data) => void
   branchId?: string
+  sme?: boolean
 }
 class TrackLoanApplications extends Component<Props, State> {
-  mappers: {
-    title: string
-    key: string
-    sortable?: boolean
-    render: (data: any) => void
-  }[]
+  mappers: TableMapperItem[]
 
   constructor(props) {
     super(props)
@@ -71,12 +59,17 @@ class TrackLoanApplications extends Component<Props, State> {
       loading: false,
       selectedApplicationToPrint: {},
     }
+
     this.mappers = [
       {
         title: local.customerType,
         key: 'customerType',
         render: (data) =>
-          beneficiaryType(data.application.product.beneficiaryType),
+          beneficiaryType(
+            data.application.customer.customerType === 'company'
+              ? 'company'
+              : data.application.product.beneficiaryType
+          ),
       },
       {
         title: local.applicationCode,
@@ -88,11 +81,15 @@ class TrackLoanApplications extends Component<Props, State> {
         key: 'name',
         sortable: true,
         render: (data) =>
-          data.application.product.beneficiaryType === 'individual' ? (
+          data.application.product.beneficiaryType === 'individual' &&
+          ['micro', 'nano'].includes(data.application.product.type) ? (
             data.application.customer.customerName
+          ) : data.application.product.beneficiaryType === 'individual' &&
+            data.application.product.type === 'sme' ? (
+            data.application.customer.businessName
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {data.application.group?.individualsInGroup.map((member) =>
+              {data.application.group?.individualsInGroup?.map((member) =>
                 member.type === 'leader' ? (
                   <span key={member.customer._id}>
                     {member.customer.customerName}
@@ -140,40 +137,90 @@ class TrackLoanApplications extends Component<Props, State> {
       {
         title: '',
         key: 'action',
-        render: (data) => this.renderIcons(data),
+        render: (data) => (
+          <ActionsIconGroup
+            currentId={data._id}
+            actions={this.renderActions(data)}
+          />
+        ),
       },
     ]
   }
 
   componentDidMount() {
-    this.props.setSearchFilters({ type: 'micro' })
+    this.props.setSearchFilters({
+      type:
+        this.props.location.state && this.props.location.state.sme
+          ? 'sme'
+          : 'micro',
+    })
     this.props
       .search({
         size: this.state.size,
         from: this.state.from,
         url: 'application',
         branchId: this.props.branchId,
-        type: 'micro',
+        type:
+          this.props.location.state && this.props.location.state.sme
+            ? 'sme'
+            : 'micro',
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          Swal.fire('', getErrorMessage(this.props.error), 'error')
       })
   }
 
+  componentDidUpdate(prevProps: Props) {
+    if (
+      (prevProps.location.state && prevProps.location.state.sme) !==
+      (this.props.location.state && this.props.location.state.sme)
+    ) {
+      this.props.setSearchFilters({
+        type:
+          this.props.location.state && this.props.location.state.sme
+            ? 'sme'
+            : 'micro',
+      })
+      this.props
+        .search({
+          size: this.state.size,
+          from: this.state.from,
+          url: 'application',
+          branchId: this.props.branchId,
+          type:
+            this.props.location.state && this.props.location.state.sme
+              ? 'sme'
+              : 'micro',
+        })
+        .then(() => {
+          if (this.props.error)
+            Swal.fire('', getErrorMessage(this.props.error), 'error')
+        })
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
+
   getApplications() {
-    this.props
-      .search({
-        ...this.props.searchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'application',
-        branchId: this.props.branchId || this.props.searchFilters.branchId,
-      })
-      .then(() => {
-        if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
-      })
+    // eslint-disable-next-line no-shadow
+    const { searchFilters, search, error, branchId } = this.props
+    const { customerShortenedCode, customerKey } = searchFilters
+    const { size, from } = this.state
+    search({
+      ...searchFilters,
+      customerKey: customerShortenedCode
+        ? getFullCustomerKey(customerShortenedCode)
+        : customerKey || undefined,
+      size,
+      from,
+      url: 'application',
+      branchId: branchId || searchFilters.branchId,
+    }).then(() => {
+      if (error) Swal.fire('', getErrorMessage(error), 'error')
+    })
   }
 
   getStatus(status: string) {
@@ -234,46 +281,65 @@ class TrackLoanApplications extends Component<Props, State> {
     }
   }
 
-  renderIcons(data) {
-    if (
-      !(
-        data.application.status === 'paid' ||
-        data.application.status === 'canceled' ||
-        data.application.status === 'rejected'
-      )
-    ) {
-      return (
-        <>
-          <Can I="addingDocuments" a="application">
-            <img
-              style={{ cursor: 'pointer', marginLeft: 20 }}
-              alt="edit"
-              src={require('../../../Shared/Assets/upload.svg')}
-              onClick={() =>
-                this.props.history.push('/edit-loan-profile', {
-                  id: data.application._id,
-                })
-              }
-            />
-          </Can>
-          {data.application.status === 'created' && (
-            <img
-              style={{ cursor: 'pointer', marginLeft: 20 }}
-              alt="edit"
-              src={require('../../../Shared/Assets/downloadIcon.svg')}
-              onClick={() => this.getApplicationById(data.application._id)}
-            />
-          )}
-        </>
-      )
-    }
-    return null
+  renderActions(data) {
+    return [
+      {
+        actionTitle: local.uploadDocuments,
+        actionIcon: 'download',
+        actionPermission: ability.can('addingDocuments', 'application'),
+        actionOnClick: () =>
+          this.props.history.push('/edit-loan-profile', {
+            id: data.application._id,
+            sme: this.props.location.state?.sme,
+          }),
+        style: {
+          transform: `rotate(180deg)`,
+        },
+      },
+      {
+        actionTitle: local.downloadDocuments,
+        actionIcon: 'download',
+        actionPermission: data.application.status === 'created',
+        actionOnClick: () => this.getApplicationById(data.application._id),
+      },
+    ]
   }
 
   render() {
+    const smePermission =
+      (this.props.location.state && this.props.location.state.sme) || false
+    const searchKeys = ['keyword', 'dateFromTo', 'branch', 'status-application']
+    const filteredMappers = smePermission
+      ? this.mappers.filter((mapper) => mapper.key !== 'nationalId')
+      : this.mappers
+    const dropDownKeys = [
+      'name',
+      'key',
+      'customerKey',
+      'customerCode',
+      'customerShortenedCode',
+    ]
+
+    if (smePermission) {
+      filteredMappers.splice(3, 0, {
+        title: local.commercialRegisterNumber,
+        key: 'commercialRegisterNumber',
+        render: (data) => data.application.customer.commercialRegisterNumber,
+      })
+      filteredMappers.splice(4, 0, {
+        title: local.taxCardNumber,
+        key: 'taxCardNumber',
+        render: (data) => data.application.customer.taxCardNumber,
+      })
+      dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
+    } else {
+      dropDownKeys.push('nationalId')
+      searchKeys.push('loanType')
+    }
+
     return (
       <>
-        <Card className="print-none" style={{ margin: '20px 50px' }}>
+        <Card className="main-card print-none">
           <Loader
             type="fullsection"
             open={this.props.loading || this.state.loading}
@@ -292,27 +358,22 @@ class TrackLoanApplications extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['keyword', 'dateFromTo', 'status-application']}
-              dropDownKeys={[
-                'name',
-                'nationalId',
-                'key',
-                'customerKey',
-                'customerCode',
-              ]}
+              searchKeys={searchKeys}
+              dropDownKeys={dropDownKeys}
               url="application"
               from={this.state.from}
               size={this.state.size}
               setFrom={(from) => this.setState({ from })}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               hqBranchIdRequest={this.props.branchId}
+              sme={this.props.location.state && this.props.location.state.sme}
             />
             <DynamicTable
               url="application"
               from={this.state.from}
               size={this.state.size}
               totalCount={this.props.totalCount}
-              mappers={this.mappers}
+              mappers={filteredMappers}
               pagination
               data={this.props.data}
               changeNumber={(key: string, number: number) => {

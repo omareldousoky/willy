@@ -5,7 +5,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import Search from '../../../Shared/Components/Search/search'
-import Can from '../../../Mohassel/config/Can'
+
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -13,12 +13,15 @@ import {
   getErrorMessage,
   timeToDateyyymmdd,
 } from '../../../Shared/Services/utils'
+import { ActionsIconGroup } from '../../../Shared/Components'
+import ability from '../../../Shared/config/ability'
 
 interface State {
   size: number
   from: number
 }
-interface Props extends RouteComponentProps {
+interface Props
+  extends RouteComponentProps<{}, {}, { sme?: boolean; id: number }> {
   data: any
   totalCount: number
   loading: boolean
@@ -29,12 +32,7 @@ interface Props extends RouteComponentProps {
   setSearchFilters: (data) => void
 }
 class CustomersList extends Component<Props, State> {
-  mappers: {
-    title: string
-    key: string
-    sortable?: boolean
-    render: (data: any) => void
-  }[]
+  locationListenerUnregister: () => void
 
   constructor(props) {
     super(props)
@@ -42,7 +40,62 @@ class CustomersList extends Component<Props, State> {
       size: 10,
       from: 0,
     }
-    this.mappers = [
+
+    this.locationListenerUnregister = this.props.history.listen(
+      (location: { state: any }) => {
+        const type = location?.state?.sme ? 'company' : 'individual'
+        this.getCustomers(type)
+      }
+    )
+  }
+
+  componentDidMount() {
+    this.getCustomers()
+  }
+
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+    this.locationListenerUnregister()
+  }
+
+  getCustomers(type?: string) {
+    const currentType = this.props.location.state?.sme
+      ? 'company'
+      : 'individual'
+
+    this.props
+      .search({
+        ...this.props.searchFilters,
+        size: this.state.size,
+        from: this.state.from,
+        url: 'customer',
+        branchId: this.props.branchId,
+        customerType: type || currentType,
+      })
+      .then(() => {
+        if (this.props.error) {
+          Swal.fire('error', getErrorMessage(this.props.error), 'error')
+        }
+      })
+  }
+
+  dropDownKeys() {
+    return this.props.location.state?.sme
+      ? [
+          'name',
+          'taxCardNumber',
+          'commercialRegisterNumber',
+          'key',
+          'code',
+          'customerShortenedCode',
+        ]
+      : ['name', 'nationalId', 'key', 'code', 'customerShortenedCode']
+  }
+
+  mappers() {
+    const isSme = this.props.location?.state?.sme
+
+    return [
       {
         title: local.customerCode,
         key: 'customerCode',
@@ -54,17 +107,32 @@ class CustomersList extends Component<Props, State> {
         key: 'name',
         render: (data) => data.customerName,
       },
-      {
-        title: local.nationalId,
-        key: 'nationalId',
-        render: (data) => data.nationalId,
-      },
-      {
-        title: local.governorate,
-        sortable: true,
-        key: 'governorate',
-        render: (data) => data.governorate,
-      },
+      ...(isSme
+        ? [
+            {
+              title: local.commercialRegisterNumber,
+              key: 'commercialRegisterNumber',
+              render: (row) => row.commercialRegisterNumber,
+            },
+            {
+              title: local.taxCardNumber,
+              key: 'taxCardNumber',
+              render: (row) => row.taxCardNumber,
+            },
+          ]
+        : [
+            {
+              title: local.nationalId,
+              key: 'nationalId',
+              render: (data) => data.nationalId,
+            },
+            {
+              title: local.governorate,
+              sortable: true,
+              key: 'governorate',
+              render: (data) => data.governorate,
+            },
+          ]),
       {
         title: local.creationDate,
         sortable: true,
@@ -72,61 +140,30 @@ class CustomersList extends Component<Props, State> {
         render: (data) => timeToDateyyymmdd(data.created?.at),
       },
       {
-        title: '',
+        title: local.actions,
         key: 'actions',
         render: (data) => (
-          <Can I="updateCustomer" a="customer">
-            <img
-              style={{ cursor: 'pointer', marginLeft: 20 }}
-              alt="edit"
-              src={require('../../../Shared/Assets/upload.svg')}
-              onClick={() =>
-                this.props.history.push('/edit-customer-document', {
-                  id: data._id,
-                })
-              }
-            />
-          </Can>
+          <ActionsIconGroup
+            currentId={data._id}
+            actions={[
+              {
+                actionTitle: local.uploadDocuments,
+                actionIcon: 'download',
+                actionPermission: ability.can('updateCustomer', 'customer'),
+                actionOnClick: () =>
+                  this.props.history.push('/edit-customer-document', {
+                    id: data._id,
+                    sme: !!this.props.location.state?.sme,
+                  }),
+                style: {
+                  transform: `rotate(180deg)`,
+                },
+              },
+            ]}
+          />
         ),
       },
     ]
-  }
-
-  componentDidMount() {
-    this.props
-      .search({
-        size: this.state.size,
-        from: this.state.from,
-        url: 'customer',
-        branchId: this.props.branchId,
-        customerType: 'individual',
-      })
-      .then(() => {
-        if (this.props.error) {
-          Swal.fire('Error', getErrorMessage(this.props.error), 'error')
-        }
-      })
-  }
-
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
-  }
-
-  getCustomers() {
-    this.props
-      .search({
-        ...this.props.searchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'customer',
-        branchId: this.props.branchId,
-        customerType: 'individual',
-      })
-      .then(() => {
-        if (this.props.error) {
-          Swal.fire('error', getErrorMessage(this.props.error), 'error')
-        }
-      })
   }
 
   render() {
@@ -148,7 +185,7 @@ class CustomersList extends Component<Props, State> {
           <hr className="dashed-line" />
           <Search
             searchKeys={['keyword', 'dateFromTo', 'governorate']}
-            dropDownKeys={['name', 'nationalId', 'key', 'code']}
+            dropDownKeys={this.dropDownKeys()}
             searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
             url="customer"
             from={this.state.from}
@@ -161,7 +198,7 @@ class CustomersList extends Component<Props, State> {
               from={this.state.from}
               size={this.state.size}
               totalCount={this.props.totalCount}
-              mappers={this.mappers}
+              mappers={this.mappers()}
               pagination
               data={this.props.data}
               url="customer"
