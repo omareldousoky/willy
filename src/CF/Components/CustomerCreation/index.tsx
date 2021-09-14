@@ -200,7 +200,7 @@ class CustomerCreation extends Component<Props, State> {
     if (this.props.edit) {
       this.getCustomerById()
     } else if (this.props.isFromLead) {
-      this.convertLeadToCustomer()
+      // this.convertLeadToCustomer()
     }
   }
 
@@ -340,11 +340,13 @@ class CustomerCreation extends Component<Props, State> {
             branchId: res.body.branchId,
           } as any)
       )
+      console.log(customerInfo)
     } else {
       this.setState({ loading: false }, () =>
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
       )
     }
+    x
   }
 
   async getGlobalPrinciple() {
@@ -435,6 +437,20 @@ class CustomerCreation extends Component<Props, State> {
         gender,
         nationalIdIssueDate: timeToDateyyymmdd(res.body.nationalIdIssueDate),
         mobilePhoneNumber: res.body.phoneNumber,
+        customerConsumerFinanceMaxLimit: 0,
+        customerAddressLatLong: '',
+        customerAddressLatLongNumber: {
+          lat: 0,
+          lng: 0,
+        },
+        customerHomeAddress: '',
+        currentHomeAddress: '',
+        homePostalCode: '',
+        homePhoneNumber: '',
+        faxNumber: '',
+        emailAddress: '',
+        customerWebsite: '',
+        customerType: 'individual',
       }
       const customerBusiness = {
         businessAddressLatLong: res.body.businessAddressLatLong,
@@ -446,12 +462,42 @@ class CustomerCreation extends Component<Props, State> {
             ? Number(res.body.businessAddressLatLong.split(',')[1])
             : 0,
         },
+        businessName: '',
+        businessSector: res.body.businessSector,
         businessAddress: res.body.businessAddressDescription || '',
         governorate: res.body.businessGovernate || '',
         district: res.body.businessCity || '',
         village: res.body.businessArea || '',
-
-        businessSector: res.body.businessSector,
+        ruralUrban: '',
+        businessPostalCode: '',
+        businessPhoneNumber: '',
+        businessActivity: '',
+        businessSpeciality: '',
+        businessLicenseNumber: '',
+        businessLicenseIssuePlace: '',
+        businessLicenseIssueDate: '',
+        commercialRegisterNumber: '',
+        industryRegisterNumber: '',
+        taxCardNumber: '',
+      }
+      const customerExtraDetails = {
+        representative: res.body.loanOfficerId,
+        representativeName: res.body.loanOfficerName,
+        geographicalDistribution: '',
+        geoAreaId: '',
+        newRepresentative: '',
+        applicationDate: timeToDateyyymmdd(-1),
+        permanentEmployeeCount: '',
+        partTimeEmployeeCount: '',
+        comments: '',
+        guarantorMaxLoans: 1,
+        maxLoansAllowed: 1,
+        maxPrincipal: 0,
+        principals: {
+          maxIndividualPrincipal: 0,
+          maxGroupIndividualPrincipal: 0,
+          maxGroupPrincipal: 0,
+        },
       }
 
       this.formikStep1 = {
@@ -466,7 +512,7 @@ class CustomerCreation extends Component<Props, State> {
       }
       this.formikStep3 = {
         errors: {},
-        values: { ...this.state.step3 },
+        values: { ...this.state.step3, ...customerExtraDetails },
         isValid: true,
       }
       this.setState(
@@ -476,7 +522,7 @@ class CustomerCreation extends Component<Props, State> {
             selectedCustomer: res.body,
             step1: { ...prevState.step1, ...customerInfo },
             step2: { ...prevState.step2, ...customerBusiness },
-            step3: { ...prevState.step3 },
+            step3: { ...prevState.step3, ...customerExtraDetails },
             hasLoan: res.body.hasLoan,
             isGuarantor: res.body.isGuarantor,
             oldRepresentative: res.body.representative,
