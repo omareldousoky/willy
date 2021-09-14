@@ -31,7 +31,6 @@ import { LtsIcon } from '../../../Shared/Components'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 import CustomerSearch from '../../../Mohassel/Components/CustomerSearch/customerSearchTable'
 import { searchLoan } from '../../../Mohassel/Services/APIs/Loan/searchLoan'
-import ReportsModal from '../../../Mohassel/Components/Reports/reportsModal'
 import {
   addCustomerToDefaultingList,
   deleteCustomerDefaultedLoan,
@@ -42,6 +41,7 @@ import { PDF } from '../../../Shared/Components/PdfList/types'
 import DefaultingCustomersPdfTemplate, {
   ReportDefaultedCustomer,
 } from '../../../Mohassel/Components/pdfTemplates/defaultingCustomers/DefaultingCustomers'
+import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
 
 interface Review {
   at: number

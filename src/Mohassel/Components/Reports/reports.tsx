@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
-import ReportsModal from './reportsModal'
 import * as local from '../../../Shared/Assets/ar.json'
 import { CustomerStatusDetails } from '../pdfTemplates/customerStatusDetails'
 import { getCustomerDetails } from '../../Services/APIs/Reports/customerDetails'
@@ -71,12 +70,11 @@ import {
   getDoubtfulLoansExcel,
 } from '../../Services/APIs/Reports/doubtfulLoans'
 import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport'
-import { ManualPayments } from '../pdfTemplates/manualPayments'
 import {
   getManualPayments,
   postManualPaymentsExcel,
   getManualPaymentsExcel,
-} from '../../Services/APIs/Reports/manualPayments'
+} from '../../../Shared/Services/APIs/Reports/manualPayments'
 import { downloadFile } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import { CustomerTransactionReport } from '../pdfTemplates/customerTransactionReport'
@@ -90,6 +88,8 @@ import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
 import RaseedyTransactionsReport from '../pdfTemplates/RaseedyTransactions'
 import { PDFList } from '../../../Shared/Components/PdfList'
 import { PDF } from '../../../Shared/Components/PdfList/types'
+import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
+import { ManualPayments } from '../../../Shared/Components/pdfTemplates/manualPayments'
 
 interface State {
   showModal?: boolean

@@ -41,4 +41,5 @@ export interface ManualPaymentsProps {
   }
   fromDate: number
   toDate: number
+  isCF?: boolean
 }

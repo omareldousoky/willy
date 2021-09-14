@@ -1,10 +1,7 @@
 import React from 'react'
 import './manualPayments.scss'
-import {
-  timeToArabicDate,
-  timeToArabicDateNow,
-} from '../../../../Shared/Services/utils'
-import Orientation from '../../../../Shared/Components/Common/orientation'
+import { timeToArabicDate, timeToArabicDateNow } from '../../../Services/utils'
+import Orientation from '../../Common/orientation'
 import { ManualPaymentsProps } from './types'
 
 const statusLocalization = (status: string) => {
@@ -28,6 +25,7 @@ export const ManualPayments = ({
   fromDate,
   toDate,
   result,
+  isCF,
 }: ManualPaymentsProps) => (
   <>
     <Orientation size="portrait" />
@@ -42,10 +40,12 @@ export const ManualPayments = ({
           <tr style={{ height: '10px' }} />
           <tr className="w-100 d-flex flex-row justify-content-between">
             <th colSpan={6}>
-              <div className="logo-print-tb" />
+              <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
             </th>
             <th colSpan={6}>
-              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+              {isCF
+                ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
+                : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
             </th>
           </tr>
           <tr style={{ height: '10px' }} />
@@ -54,7 +54,11 @@ export const ManualPayments = ({
       <table className="report-container">
         <thead className="report-header">
           <tr className="headtitle">
-            <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
+            <th colSpan={4}>
+              {isCF
+                ? 'حالا للتمويل الاستهلاكي ش. م. م.'
+                : 'شركة تساهيل للتمويل متناهي الصغر'}
+            </th>
             <th colSpan={6}>مراجعه حركات السداد اليدوي</th>
           </tr>
         </thead>

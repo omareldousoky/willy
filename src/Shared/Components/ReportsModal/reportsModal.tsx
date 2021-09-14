@@ -36,8 +36,8 @@ import {
   generateArrayOfYears,
   getFullCustomerKey,
 } from '../../../Shared/Services/utils'
-import { CurrentHierarchiesSingleResponse } from '../../Models/OfficersProductivityReport'
 import { PDF } from '../../../Shared/Components/PdfList/types'
+import { CurrentHierarchiesSingleResponse } from '../../Models/OfficerProductivity/OfficerProductivityReport'
 
 interface InitialFormikState {
   fromDate?: string

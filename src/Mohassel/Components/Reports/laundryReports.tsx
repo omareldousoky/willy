@@ -8,7 +8,6 @@ import { getErrorMessage } from '../../../Shared/Services/utils'
 import { LaundryReportRequest } from '../../Models/LaundryReports'
 import { fetchFalteringPaymentsReport } from '../../Services/APIs/Reports/falteringPayments'
 import { Loader } from '../../../Shared/Components/Loader'
-import ReportsModal from './reportsModal'
 import Can from '../../config/Can'
 import { FalteringPayments as FalteringPaymentsPdf } from '../pdfTemplates/falteringPayments/falteringPayments'
 import { fetchEarlyPaymentsReport } from '../../Services/APIs/Reports/earlyPayments'
@@ -16,6 +15,7 @@ import { EarlyPayments as EarlyPaymentsPdf } from '../pdfTemplates/earlyPayments
 import { LtsIcon } from '../../../Shared/Components'
 import { ApiResponse } from '../../../Shared/Models/common'
 import { PDF } from '../../../Shared/Components/PdfList/types'
+import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
 
 enum ReportEnum {
   FalteringPayments = 'falteringPayments',

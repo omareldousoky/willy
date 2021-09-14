@@ -1,5 +1,5 @@
 import { array, object, ObjectSchema, Shape, string } from 'yup'
-import * as local from '../../../Shared/Assets/ar.json'
+import * as local from '../../Assets/ar.json'
 
 const minYear = new Date(2021, 0, 1)
 export const reportsModalValidation: ObjectSchema<

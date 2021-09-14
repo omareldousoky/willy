@@ -86,6 +86,11 @@ export const CfNavbar = () => {
             {local.logs}
           </Nav.Link>
         )}
+        {ability.can('viewReports', 'report') && (
+          <Nav.Link onClick={() => history.push('/reports')}>
+            {local.reports}
+          </Nav.Link>
+        )}
       </Nav>
     </Navbar.Collapse>
   )
