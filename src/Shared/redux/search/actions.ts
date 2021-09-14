@@ -9,7 +9,7 @@ import { searchGroups } from '../../../Mohassel/Services/APIs/ManagerHierarchy/s
 import {
   searchTerrorists,
   searchUnTerrorists,
-} from '../../../Mohassel/Services/APIs/Terrorism/terrorism'
+} from '../../Services/APIs/Terrorism/terrorism'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import {
   searchDefaultingCustomers,

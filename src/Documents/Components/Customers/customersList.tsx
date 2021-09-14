@@ -147,7 +147,7 @@ class CustomersList extends Component<Props, State> {
             currentId={data._id}
             actions={[
               {
-                actionTitle: local.edit,
+                actionTitle: local.uploadDocuments,
                 actionIcon: 'download',
                 actionPermission: ability.can('updateCustomer', 'customer'),
                 actionOnClick: () =>
