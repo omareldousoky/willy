@@ -2,7 +2,10 @@ import React from 'react'
 import Table from 'react-bootstrap/Table'
 
 import local from '../../../../Shared/Assets/ar.json'
-import { numbersToArabic } from '../../../../Shared/Services/utils'
+import {
+  numbersToArabic,
+  timeToArabicDate,
+} from '../../../../Shared/Services/utils'
 import { Header } from '../pdfTemplateCommon/header'
 
 interface RaseedyTransactionsModel {
@@ -42,13 +45,34 @@ const RaseedyTransactionsReport = ({
       label: local.transactionAmount,
       type: 'number',
     },
+    {
+      key: 'branchName',
+      label: local.branchName,
+    },
+    {
+      key: 'branchCode',
+      label: local.branchCode,
+    },
+    {
+      key: 'officerName',
+      label: 'اسم الاخصائي',
+    },
+    {
+      key: 'customerPhone',
+      label: 'رقم تليفون القائم بالسداد',
+    },
+    {
+      key: 'transactionDate',
+      label: 'تاريخ سداد القسط (الحركة)',
+      type: 'date',
+    },
   ]
 
   return (
     <>
       <Header title="" showCurrentUser={false} showCurrentTime={false} />
 
-      <Table striped bordered className="horizontal-table">
+      <Table striped bordered>
         <thead>
           <tr>
             {tableColumns.map((item, index) => (
@@ -65,6 +89,8 @@ const RaseedyTransactionsReport = ({
                 <td key={j}>
                   {item.type === 'number'
                     ? numbersToArabic(transaction[item.key])
+                    : item.type === 'date'
+                    ? timeToArabicDate(Number(transaction[item.key]), true)
                     : transaction[item.key]}
                 </td>
               ))}

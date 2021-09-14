@@ -12,24 +12,18 @@ import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWi
 import { manageToolsArray } from './manageToolsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { getCFLimits, setCFLimits } from '../../Services/APIs/config'
-import { GlobalCFLimits } from '../../Models/globalLimits'
+import {
+  GlobalCFLimits,
+  globalCfLimitsInitialValues,
+} from '../../Models/globalLimits'
 import { limitThresholdValidationSchema } from './limitThresholdValidation'
 import { minValue } from '../../../Shared/localUtils'
 
 const LimitsThreshold: FunctionComponent = () => {
   const [loading, setLoading] = useState(false)
-  const [globalLimits, setLimits] = useState<GlobalCFLimits>({
-    maxTenorInMonths: 0,
-    annualInterestRate: 0,
-    DBRPercentLowStart: 0,
-    DBRPercentMidStart: 0,
-    DBRPercentHighStart: 0,
-    DBRPercentLow: 0,
-    DBRPercentMid: 0,
-    DBRPercentHigh: 0,
-    globalCFMin: 0,
-    globalCFMax: 0,
-  })
+  const [globalLimits, setLimits] = useState<GlobalCFLimits>(
+    globalCfLimitsInitialValues
+  )
   async function fetchCFLimits() {
     setLoading(true)
     const limits = await getCFLimits()
@@ -201,6 +195,36 @@ const LimitsThreshold: FunctionComponent = () => {
                         {formikProps.errors.globalCFMax === 'globalCFMaxError'
                           ? minValue(formikProps.values.globalCFMin)
                           : formikProps.errors.globalCFMax}
+                      </Form.Control.Feedback>
+                    </Col>
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm={6}>
+                  <Form.Group controlId="CFHQMinimumApprovalLimit">
+                    <Form.Label
+                      className="data-label"
+                      column
+                      sm={10}
+                    >{`${local.CFHQMinimumApprovalLimit}*`}</Form.Label>
+                    <Col sm={9}>
+                      <Form.Control
+                        type="number"
+                        name="CFHQMinimumApprovalLimit"
+                        data-qc="CFHQMinimumApprovalLimit"
+                        value={formikProps.values.CFHQMinimumApprovalLimit}
+                        onBlur={formikProps.handleBlur}
+                        onChange={formikProps.handleChange}
+                        isInvalid={
+                          Boolean(
+                            formikProps.errors.CFHQMinimumApprovalLimit
+                          ) &&
+                          Boolean(formikProps.touched.CFHQMinimumApprovalLimit)
+                        }
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {formikProps.errors.CFHQMinimumApprovalLimit}
                       </Form.Control.Feedback>
                     </Col>
                   </Form.Group>
