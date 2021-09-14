@@ -4,8 +4,8 @@ import Container from 'react-bootstrap/Container'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
-import { LoanProductValidation } from './loanProductStates'
-import { LoanProductCreationForm } from './loanProductCreationForm'
+import { LoanProductValidation } from './LoanProductStates'
+import { LoanProductCreationForm } from './LoanProductCreationForm'
 import {
   createProduct,
   editProduct,
@@ -36,7 +36,7 @@ class LoanProductCreation extends Component<Props, State> {
         beneficiaryType: 'individual',
         contractType: 'standard',
         calculationFormulaId: '',
-        type: 'micro',
+        type: 'consumerFinance',
         loanNature: 'cash',
         currency: 'egp',
         periodLength: 1,

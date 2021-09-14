@@ -8,9 +8,8 @@ import Table from 'react-bootstrap/Table'
 import {
   FormulaTestClass,
   loanFormulaTestValidation,
-} from './loanCreationInitialStates'
-import { LoanFormulaTestForm } from './loanFormulaTestForm'
-import TestCalculateFormulaPDF from '../pdfTemplates/testCalculateFormula/testCalculateFormula'
+} from './LoanFormulaCreationInitialStates'
+import { LoanFormulaTestForm } from './LoanFormulaTestForm'
 import { getFormulas } from '../../../Shared/Services/APIs/LoanFormula/getFormulas'
 import { testFormula } from '../../../Shared/Services/APIs/LoanFormula/testFormula'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -23,6 +22,7 @@ import {
 import { getCookie } from '../../../Shared/Services/getCookie'
 import BackButton from '../../../Shared/Components/BackButton/back-button'
 import store from '../../../Shared/redux/store'
+import TestCalculateFormulaPDF from '../PdfTemplates/TestCalculateFormula/TestCalculateFormula'
 
 interface Props {
   title: string
