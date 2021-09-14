@@ -97,6 +97,19 @@ export const CfNavbar = () => {
             {local.logs}
           </Nav.Link>
         )}
+        {ability.can('financialBlocking', 'application') ? (
+          <Nav.Link
+            onClick={() => history.push('/financial-closing/lts-blocking')}
+          >
+            {local.manageFinancialTransaction}
+          </Nav.Link>
+        ) : ability.can('financialClosing', 'application') ? (
+          <Nav.Link
+            onClick={() => history.push('/financial-closing/lts-closing')}
+          >
+            {local.manageFinancialTransaction}
+          </Nav.Link>
+        ) : null}
       </Nav>
     </Navbar.Collapse>
   )
