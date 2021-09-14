@@ -12,6 +12,7 @@ import { clearanceRoutes } from '../Components/Clearance/routes'
 import { legalRoutes } from '../Components/Legal/routes'
 import { actionLogsRoutes } from '../Components/ActionLogs/routes'
 import { terrorismRoutes } from '../Components/ManageTerrorism/routes'
+import { financialClosingRoutes } from '../Components/FinancialClosing/routes'
 
 const appRoutes = [
   {
@@ -28,6 +29,7 @@ const appRoutes = [
       legalRoutes,
       actionLogsRoutes,
       terrorismRoutes,
+      financialClosingRoutes,
     ],
   },
 ]
