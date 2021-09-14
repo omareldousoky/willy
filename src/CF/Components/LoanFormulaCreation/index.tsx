@@ -8,8 +8,8 @@ import {
   Formula,
   loanFormula,
   loanFormulaCreationValidation,
-} from './loanCreationInitialStates'
-import { LoanFormulaCreationForm } from './loanFormulaCreationForm'
+} from './LoanFormulaCreationInitialStates'
+import { LoanFormulaCreationForm } from './LoanFormulaCreationForm'
 import { createFormula } from '../../../Shared/Services/APIs/LoanFormula/createFromula'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'

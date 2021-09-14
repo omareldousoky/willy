@@ -7,17 +7,16 @@ import { connect } from 'react-redux'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'
-import Can from '../../config/Can'
+import Can from '../../../Shared/config/Can'
 import HeaderWithCards, {
   Tab,
 } from '../../../Shared/Components/HeaderWithCards/headerWithCards'
-import { manageLoansArray } from './manageLoansInitials'
+import { manageLoansArray } from './ManageLoansInitials'
 import { downloadFile, getErrorMessage } from '../../../Shared/Services/utils'
-import ability from '../../config/ability'
+import ability from '../../../Shared/config/ability'
 import { ActionsIconGroup } from '../../../Shared/Components'
-import { Product } from '../../Models/common'
 import { getProductApplications } from '../../../Shared/Services/APIs/loanProduct/productCreation'
-import { ActionWithIcon } from '../../../Shared/Models/common'
+import { ActionWithIcon, Product } from '../../../Shared/Models/common'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 
@@ -68,16 +67,6 @@ class LoanProducts extends Component<Props, State> {
         render: (data) => data.code,
       },
       {
-        title: local.actionType,
-        key: 'type',
-        render: (data) => local[data.type],
-      },
-      {
-        title: local.customerType,
-        key: 'customerType',
-        render: (data) => local[data.beneficiaryType],
-      },
-      {
         title: local.branches,
         key: 'branches',
         render: (data) => (data.branchCount ? data.branchCount : 0),
@@ -112,14 +101,8 @@ class LoanProducts extends Component<Props, State> {
             id,
           }),
       },
-      {
-        actionTitle: local.productApplicationsReport,
-        actionIcon: 'download-big-file',
-        actionPermission: ability.can('getApplicationsOfProduct', 'report'),
-        actionOnClick: (id) => this.getProductApplicationsReport(id as string),
-      },
     ]
-    this.searchKeys = ['keyword', 'beneficiaryType', 'productType']
+    this.searchKeys = ['keyword']
     this.dropDownKeys = ['name', 'code']
   }
 
