@@ -122,7 +122,7 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
   const renderActions = (data) => {
     return [
       {
-        actionTitle: local.edit,
+        actionTitle: local.uploadDocuments,
         actionIcon: 'download',
         actionPermission: true,
         actionOnClick: () =>
