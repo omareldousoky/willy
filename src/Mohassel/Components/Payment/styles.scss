@@ -1,122 +1,62 @@
 .payment-menu {
-    flex-direction: row;
-    & .payment-info {
-				margin: auto;
-        padding: 2rem;
-        & h6:nth-child(odd){
-            color: #2a3390;
-            font-weight: 500;
-            margin-bottom: 5px;
-        }
-        & h6:nth-child(even){
-            color: #7dc356;
-            margin-bottom: 15px;
-        }
-        & img {
-            margin-bottom: 20px;
-        }
+  flex-direction: row;
+
+  & .payment-info {
+    margin: auto;
+    padding: 2rem;
+
+    & h6:nth-child(odd) {
+      color: #2a3390;
+      font-weight: 500;
+      margin-bottom: 5px;
     }
-    & .payment-icons-container {
-        display: flex;
-        margin: auto;
-        width: 100%;
-        justify-content: space-evenly;
-        & .payment-icon {
-            display: flex;
-            flex-direction: column;
-            & img {
-                margin-bottom: 20px;
-            }
-        }
+
+    & h6:nth-child(even) {
+      color: #7dc356;
+      margin-bottom: 15px;
     }
-    & .payments-buttons-container {
-        display: flex;
-        justify-content: space-between;
-        padding: 0px 15px;
+
+    & img {
+      margin-bottom: 20px;
     }
-    
+  }
+
+  & .payment-icons-container {
+    display: flex;
+    margin: auto;
+    width: 100%;
+    justify-content: space-evenly;
+
+    & .payment-icon {
+      display: flex;
+      flex-direction: column;
+
+      & img {
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  & .payments-buttons-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 15px;
+  }
+
 }
-.verticalLine{
-    border-left: 1px dashed #e5e5e5;
+
+.verticalLine {
+  border-left: 1px dashed #e5e5e5;
 }
 
 .payment-buttons-container {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 50px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 50px;
 }
 
-.status-chip {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    border-radius: 30px; 
-    color: #fff;
-    font-size: 12px;
-    font-weight: bold;
-    min-width: 130px;
-    height: 30px;
-    &.outline {
-        background-color: #fff;
-    }
-    &.under-review {
-        border: 1px solid #ed7600;
-        color: #ed7600;
-    }
-    &.created {
-        border: 1px solid #2a3390;
-        color: #2a3390;
-    }
-    &.reviewed {
-        border: 1px solid #edb600;
-        color: #edb600;
-    }
-    &.second-review {
-        border: 1px solid #edb679;
-        color: #edb679;
-      }
-      &.third-review {
-        border: 1px solid #f4c109;
-        color: #f4c109;
-      }
-    &.approved {
-        border: 1px solid #009bed;
-        color: #009bed;
-    }
-    &.rejected {
-        border: 1px solid #d51b1b;
-        color: #d51b1b;
-    }
-    &.late {
-        background-color: #d51b1b;
-    }
-    &.paid {
-        background-color: #7DC356;
-    }
-    &.unpaid {
-        background-color: #009bed;
-    }
-    &.rescheduled {
-        background-color: #2a3390;
-    }
-    &.partially-paid {
-        background-color: #edb600;
-    }
-    &.cancelled {
-        background-color: gray;
-    }
-    &.pending {
-        background-color: #edb600;
-        color: #fff;
-    }
-    &.canceled {
-        background-color: #d51b1b;
-        color: #fff;
-    }
-}
 .receipt-modal {
-    .modal-content {
-        width: 520px;
-    }
+  .modal-content {
+    width: 520px;
+  }
 }

@@ -583,6 +583,20 @@ export const guarantorOrderLocal = {
   default: 'الضامن',
 }
 
+export const promissoryNoteGuarantorOrderLocal = {
+  0: 'ضامن متضامن أول',
+  1: 'ضامن متضامن ثان',
+  2: 'ضامن متضامن ثالث',
+  3: 'ضامن متضامن رابع',
+  4: 'ضامن متضامن خامس',
+  5: 'ضامن متضامن سادس',
+  6: 'ضامن متضامن سابع',
+  7: 'ضامن متضامن ثامن',
+  8: 'ضامن متضامن تاسع',
+  9: 'ضامن متضامن عاشر',
+  default: 'ضامن متضامن',
+}
+
 export const orderLocal = {
   0: 'الاول',
   1: 'الثاني',
@@ -766,6 +780,12 @@ export const DownloadAsCsv = async (name: string, data: string) => {
 export const errorResponseHandler = (error: string) =>
   Swal.fire('Error !', getErrorMessage(error), 'error')
 
+export const formatMoney = (money: string | number) => {
+  const moneyNumber = Number(money)
+  if (Number.isNaN(moneyNumber)) return money
+  return moneyNumber.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
 // Extract GMT date from a timestamp
 export const extractGMTDate = (date: number) => {
   const dateInstance = new Date(date)
@@ -894,3 +914,60 @@ export const getIndexOfGuarantorInAr = (index: number) => {
       return ''
   }
 }
+
+export const loanChipStatusClass: Record<string, string> = {
+  paid: 'paid',
+  issued: 'unpaid',
+  pending: 'pending',
+  canceled: 'canceled',
+  default: '',
+}
+
+// https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_tolocalestring_date_all
+// en-CA: yyyy-mm-dd
+export const getFormattedLocalDate = (timestamp: number, locale = 'en-CA') =>
+  new Date(timestamp).toLocaleDateString(locale)
+
+export const statusLocale = {
+  underReview: { text: 'تحت التحرير', color: '#ed7600' },
+  reviewed: { text: 'رُجعت', color: '#edb600' },
+  secondReview: { text: 'رُجعت من مدير الفرع', color: '#edb679' },
+  thirdReview: { text: 'رُجعت من مدير المركز', color: '#f4c109' },
+  rejected: { text: 'مرفوضة', color: '#d51b1b' },
+  canceled: { text: 'ملغى', color: '#d51b1b' },
+  approved: { text: 'موافق عليها', color: '#009bed' },
+  created: { text: 'تم الإنشاء', color: '#2a3390' },
+  issued: { text: 'أصدرت', color: '#7dc356' },
+  paid: { text: 'مدفوع', color: '#7dc356' },
+  pending: { text: 'قيد التحقيق', color: '#edb600' },
+  default: {},
+}
+
+export const cfLimitStatusLocale = {
+  approved: { text: 'الحد الائتماني موافق عليه', color: '#009bed' },
+  'pending-update': {
+    text: 'تعديل الحد الائتماني قيد التحقيق',
+    color: '#edb600',
+  },
+  'pending-initialization': {
+    text: 'الحد الائتماني المبدئي قيد التحقيق',
+    color: '#edb600',
+  },
+  'update-reviewed': {
+    text: 'تم مراجعه الحد الائتماني',
+    color: '#edb600',
+  },
+  'initialization-reviewed': {
+    text: 'تم مراجعه الحد الائتماني المبدئي',
+    color: '#edb600',
+  },
+  default: { text: 'الحد الائتماني المبدئي قيد التحقيق', color: '#edb600' },
+}
+
+export const removeDuplicatesByName = (list: { name: string }[]) =>
+  list?.length
+    ? [...list].filter(
+        (item, index, self) =>
+          index === self.findIndex((t) => t.name === item.name)
+      )
+    : list

@@ -7,7 +7,7 @@ import Container from 'react-bootstrap/Container'
 
 import { InfoBox, Profile, ProfileActions } from '..'
 
-import * as local from '../../Assets/ar.json'
+import local from '../../Assets/ar.json'
 import ability from '../../../Mohassel/config/ability'
 import { getErrorMessage } from '../../Services/utils'
 
@@ -31,7 +31,6 @@ export const CompanyProfile = () => {
   const location = useLocation<{ id: string }>()
   const history = useHistory()
 
-  const { viewCompany, documents } = local
   const getiScores = async (companyObj) => {
     setIsLoading(true)
     const iScores = await getSMECachedIscore({
@@ -74,7 +73,7 @@ export const CompanyProfile = () => {
   const mainInfo = company && [getCompanyInfo({ company, score })]
   const tabs: Array<Tab> = [
     {
-      header: documents,
+      header: local.documents,
       stringKey: 'documents',
     },
   ]
@@ -177,7 +176,7 @@ export const CompanyProfile = () => {
     <Container className="print-none">
       <div style={{ margin: 15 }}>
         <div className="d-flex flex-row justify-content-between">
-          <h3>{viewCompany}</h3>
+          <h3>{local.viewCompany}</h3>
           <ProfileActions actions={getProfileActions()} />
         </div>
         {mainInfo && <InfoBox info={mainInfo} />}

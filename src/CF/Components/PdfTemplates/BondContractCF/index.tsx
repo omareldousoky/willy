@@ -6,6 +6,7 @@ import {
   timeToArabicDate,
   dayToArabic,
 } from '../../../../Shared/Services/utils'
+import { Header } from '../pdfTemplatesCommon/header'
 import { BondContractProps } from '../../../Models/contract'
 
 export const BondContract: React.FC<BondContractProps> = (props) => {
@@ -13,52 +14,7 @@ export const BondContract: React.FC<BondContractProps> = (props) => {
     <>
       <div className="loan-contract" dir="rtl" lang="ar">
         <table className="report-container">
-          <thead className="report-header">
-            <tr>
-              <th className="report-header-cell">
-                <div className="header-info">
-                  <table className="textcenter bottomborder">
-                    <thead>
-                      <tr>
-                        <table
-                          style={{
-                            fontSize: '12px',
-                            margin: '10px 0px',
-                            textAlign: 'center',
-                            width: '100%',
-                          }}
-                        >
-                          <thead>
-                            <tr style={{ height: '10px' }} />
-                            <tr
-                              style={{
-                                width: '100%',
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                              }}
-                            >
-                              <th colSpan={4}>
-                                <div className="cf-logo-print-tb" />
-                              </th>
-                              <th colSpan={4}>
-                                ترخيص رقم 23 بتاريخ 31/05/2021
-                              </th>
-                              <th colSpan={4}>
-                                حالا للتمويل الاستهلاكي ش. م. م.
-                              </th>
-                            </tr>
-                            <tr style={{ height: '10px' }} />
-                          </thead>
-                        </table>
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
-              </th>
-            </tr>
-          </thead>
-
+          <Header />
           <tbody className="report-content">
             <tr>
               <td

@@ -11,7 +11,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const {
   CleanWebpackPlugin
 } = require('clean-webpack-plugin');
-const TerserPlugin = require("terser-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin")
 
 const CF_APP_DIR = resolve(__dirname, '../src/CF/')
 const SHARED_DIR = resolve(__dirname, '../src/Shared/')
@@ -32,11 +32,10 @@ module.exports = (env) => {
     module: {
       rules: [{
           test: /\.tsx?$/,
-          loader: 'ts-loader',
+          loader: 'esbuild-loader',
           options: {
-            // disable type checker - we will use it in fork plugin
-            transpileOnly: true,
-            configFile: resolve(__dirname, '../tsconfig.json'),
+            loader: 'tsx',
+            target: 'es2015'
           },
           exclude: /node_modules/,
         },
@@ -117,9 +116,9 @@ module.exports = (env) => {
           REACT_APP_SUBDOMAIN: JSON.stringify(config.REACT_APP_SUBDOMAIN),
         },
       }),
-      new ForkTsCheckerWebpackPlugin({
-        eslint: true
-      }),
+      !isProd ? new ForkTsCheckerWebpackPlugin({
+        eslint: true,
+      }) : false,
       // to clean build dir
       isProd ? new CleanWebpackPlugin() : false,
       isProd ? new OptimizeCssAssetsPlugin({

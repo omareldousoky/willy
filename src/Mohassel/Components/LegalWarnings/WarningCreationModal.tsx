@@ -1,18 +1,23 @@
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import Modal from 'react-bootstrap/esm/Modal'
+import Form from 'react-bootstrap/Form'
 import Swal from 'sweetalert2'
 import local from '../../../Shared/Assets/ar.json'
 import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import CustomerSearch, { Results } from '../CustomerSearch/customerSearchTable'
-import { WarningCreationModalProps, WarningCreationStepEnum } from './types'
+import {
+  WarningCreationModalProps,
+  WarningCreationStepEnum,
+  ProductType,
+} from './types'
 import { Loader } from '../../../Shared/Components/Loader'
-import { Customer } from '../../Models/Customer'
+import { Customer } from '../../../Shared/Models/Customer'
 import {
   LegalWarningRequest,
   LegalWarningType,
-} from '../../Models/LegalAffairs'
+} from '../../../Shared/Models/LegalAffairs'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan'
 import { Application } from '../LoanApplication/loanApplicationStates'
@@ -20,7 +25,7 @@ import { WarningTypeDropDown } from '../../../Shared/Components/dropDowns/Warnin
 import {
   fetchWarning,
   createWarning,
-} from '../../Services/APIs/LegalAffairs/warning'
+} from '../../../Shared/Services/APIs/LegalAffairs/warning'
 import { addeddSuccessfully } from '../../../Shared/localUtils'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 
@@ -36,6 +41,7 @@ export const WarningCreationModal = ({
   const [customer, setCustomer] = useState<Customer>()
   const [loan, setLoan] = useState<any>()
   const [warningType, setWarningType] = useState<LegalWarningType>()
+  const [productType, setProductType] = useState<ProductType>('micro')
 
   const [customerSearchResults, setCustomerSearchResults] = useState<Results>({
     results: [],
@@ -92,7 +98,7 @@ export const WarningCreationModal = ({
       from: 0,
       size: 1000,
       [key]: query,
-      customerType: 'individual',
+      customerType: productType === 'sme' ? 'company' : 'individual',
     })
     if (results.status === 'success') {
       setIsLoading(false)
@@ -112,7 +118,7 @@ export const WarningCreationModal = ({
       from: 0,
       size: 1000,
       customerKey: selectedCustomer.key,
-      type: 'micro',
+      type: productType === 'smeIndividual' ? 'sme' : productType,
     })
     if (results.status === 'success') {
       setIsLoading(false)
@@ -202,18 +208,39 @@ export const WarningCreationModal = ({
       <Modal.Body>
         <Loader type="fullsection" open={isLoading} />
         {step === WarningCreationStepEnum.SelectCustomer && (
-          <CustomerSearch
-            source="loanApplication"
-            className="w-100"
-            handleSearch={(key, query) => handleCustomerSearch(key, query)}
-            selectedCustomer={customer}
-            searchResults={customerSearchResults}
-            selectCustomer={(cust) => {
-              setCustomer(cust)
-              setStep(WarningCreationStepEnum.SelectLoan)
-              findCustomerLoans(cust)
-            }}
-          />
+          <>
+            <Form.Label>{local.productName}</Form.Label>
+            <Form.Control
+              as="select"
+              type="select"
+              value={productType}
+              onChange={(event) =>
+                setProductType(event.target.value as ProductType)
+              }
+            >
+              <option value="micro">
+                قرض فردي - جماعي - ضمان | لقروض ميكرو
+              </option>
+              <option value="nano"> قرض و ضمان لقروض نانو</option>
+              <option value="sme">شركات او ضمان من نوع شركات</option>
+              <option value="smeIndividual">
+                من لهم حق التوقيع او ضمان فردي للشركات
+              </option>
+            </Form.Control>
+            <CustomerSearch
+              source="loanApplication"
+              className="w-100"
+              handleSearch={(key, query) => handleCustomerSearch(key, query)}
+              selectedCustomer={customer}
+              searchResults={customerSearchResults}
+              selectCustomer={(cust) => {
+                setCustomer(cust)
+                setStep(WarningCreationStepEnum.SelectLoan)
+                findCustomerLoans(cust)
+              }}
+              sme={productType === 'sme'}
+            />
+          </>
         )}
         {step === WarningCreationStepEnum.SelectLoan && loanSearchResults && (
           <DynamicTable

@@ -15,7 +15,6 @@ import {
   getBranch,
 } from '../../../../Shared/Services/APIs/Branch/getBranch'
 import Payment from '../../Payment'
-import { englishToArabic } from '../../../../Mohassel/Services/statusLanguage'
 import local from '../../../../Shared/Assets/ar.json'
 import { Loader } from '../../../../Shared/Components/Loader'
 import {
@@ -38,9 +37,10 @@ import {
   PendingActions,
 } from '../../../../Shared/Services/interfaces'
 import {
-  timeToDateyyymmdd,
   iscoreDate,
   getErrorMessage,
+  statusLocale,
+  timeToDateyyymmdd,
 } from '../../../../Shared/Services/utils'
 import { payment } from '../../../../Shared/redux/payment/actions'
 import { cancelApplication } from '../../../../Shared/Services/APIs/loanApplication/stateHandler'
@@ -49,7 +49,7 @@ import UploadDocuments from './uploadDocuments'
 import { writeOffLoan } from '../../../../Mohassel/Services/APIs/Loan/writeOffLoan'
 import { doubtLoan } from '../../../../Mohassel/Services/APIs/Loan/doubtLoan'
 import PaymentReceipt from '../../../../Shared/Components/pdfTemplates/paymentReceipt'
-import { calculatePenalties } from '../../../../Mohassel/Services/APIs/Payment/calculatePenalties'
+import { calculatePenalties } from '../../../../Shared/Services/APIs/clearance/calculatePenalties'
 import { numTo2Decimal } from '../../../../Mohassel/Components/CIB/textFiles'
 import { FollowUpStatementView } from './followupStatementView'
 import { remainingLoan } from '../../../../Mohassel/Services/APIs/Loan/remainingLoan'
@@ -78,6 +78,7 @@ import {
 import { getRollableActionsById } from '../../../../Shared/Services/APIs/loanApplication/rollBack'
 import { returnItem } from '../../../Services/APIs/loan'
 import { doneSuccessfully } from '../../../../Shared/localUtils'
+import Rescheduling from '../../Rescheduling/rescheduling'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -314,6 +315,17 @@ class LoanProfile extends Component<Props, State> {
       permissionKey: 'user',
     }
 
+    const reschedulingTab = {
+      header: local.rescheduling,
+      stringKey: 'loanRescheduling',
+      permission: [
+        'pushInstallment',
+        'traditionRescheduling',
+        'freeRescheduling',
+      ],
+      permissionKey: 'application',
+    }
+
     if (application.body.status === 'paid') tabsToRender.push(customerCardTab)
     if (
       application.body.status === 'issued' ||
@@ -321,6 +333,7 @@ class LoanProfile extends Component<Props, State> {
     ) {
       tabsToRender.push(customerCardTab)
       tabsToRender.push(paymentTab)
+      tabsToRender.push(reschedulingTab)
     }
     tabsToRender.push(logsTab)
 
@@ -518,26 +531,26 @@ class LoanProfile extends Component<Props, State> {
             status: this.state.application.status,
           }),
       },
-      // {
-      //   icon: 'close',
-      //   title: local.writeOffLoan,
-      //   permission:
-      //     this.state.application.status === 'issued' &&
-      //     this.state.application.isDoubtful &&
-      //     !this.state.application.writeOff &&
-      //     ability.can('writeOff', 'application'),
-      //   onActionClick: () => this.writeOffApplication(),
-      // },
-      // {
-      //   icon: 'minus',
-      //   title: local.doubtLoan,
-      //   permission:
-      //     this.state.application.status === 'issued' &&
-      //     !this.state.application.isDoubtful &&
-      //     !this.state.application.writeOff &&
-      //     ability.can('setDoubtfulLoan', 'application'),
-      //   onActionClick: () => this.doubtApplication(),
-      // },
+      {
+        icon: 'close',
+        title: local.writeOffLoan,
+        permission:
+          this.state.application.status === 'issued' &&
+          this.state.application.isDoubtful &&
+          !this.state.application.writeOff &&
+          ability.can('writeOff', 'application'),
+        onActionClick: () => this.writeOffApplication(),
+      },
+      {
+        icon: 'minus',
+        title: local.doubtLoan,
+        permission:
+          this.state.application.status === 'issued' &&
+          !this.state.application.isDoubtful &&
+          !this.state.application.writeOff &&
+          ability.can('setDoubtfulLoan', 'application'),
+        onActionClick: () => this.doubtApplication(),
+      },
     ]
   }
 
@@ -685,12 +698,13 @@ class LoanProfile extends Component<Props, State> {
       confirmButtonText: local.returnItem,
       cancelButtonText: local.cancel,
     }).then(async (result) => {
+      const appId = this.props.location.state.id
       if (result.value) {
         this.setState({ loading: true })
-        const res = await returnItem(this.props.location.state.id)
+        const res = await returnItem(appId)
         if (res.status === 'success') {
           this.successHandler(doneSuccessfully('returnItem'), () =>
-            window.location.reload()
+            this.getAppByID(appId)
           )
         } else {
           this.failureHandler(res)
@@ -741,14 +755,15 @@ class LoanProfile extends Component<Props, State> {
         confirmButtonText: local.writeOffLoan,
         cancelButtonText: local.cancel,
       }).then(async (result) => {
+        const appId = this.props.location.state.id
         if (result.value) {
           this.setState({ loading: true })
-          const res = await writeOffLoan(this.props.location.state.id, {
+          const res = await writeOffLoan(appId, {
             writeOffReason: text,
           })
           if (res.status === 'success') {
             this.successHandler(local.loanWriteOffSuccess, () =>
-              window.location.reload()
+              this.getAppByID(appId)
             )
           } else {
             this.failureHandler(res)
@@ -769,12 +784,13 @@ class LoanProfile extends Component<Props, State> {
       confirmButtonText: local.cancelApplication,
       cancelButtonText: local.cancel,
     }).then(async (result) => {
+      const appId = this.props.location.state.id
       if (result.value) {
         this.setState({ loading: true })
-        const res = await cancelApplication(this.props.location.state.id)
+        const res = await cancelApplication(appId)
         if (res.status === 'success') {
           this.successHandler(local.applicationCancelSuccess, () =>
-            window.location.reload()
+            this.getAppByID(appId)
           )
         } else {
           this.failureHandler(res)
@@ -908,14 +924,15 @@ class LoanProfile extends Component<Props, State> {
         confirmButtonText: local.doubtLoan,
         cancelButtonText: local.cancel,
       }).then(async (result) => {
+        const appId = this.props.location.state.id
         if (result.value) {
           this.setState({ loading: true })
-          const res = await doubtLoan(this.props.location.state.id, {
+          const res = await doubtLoan(appId, {
             doubtReason: text,
           })
           if (res.status === 'success') {
             this.successHandler(local.loanDoubtSuccess, () =>
-              window.location.reload()
+              this.getAppByID(appId)
             )
           } else {
             this.failureHandler(res)
@@ -1021,6 +1038,10 @@ class LoanProfile extends Component<Props, State> {
             paymentType="penalties"
           />
         )
+      case 'loanRescheduling':
+        return (
+          <Rescheduling application={this.state.application} test={false} />
+        )
       default:
         return null
     }
@@ -1045,7 +1066,7 @@ class LoanProfile extends Component<Props, State> {
                     marginRight: 10,
                     borderRadius: 30,
                     border: `1px solid ${
-                      englishToArabic(this.state.application.status).color
+                      statusLocale[this.state.application.status].color
                     }`,
                   }}
                 >
@@ -1053,11 +1074,11 @@ class LoanProfile extends Component<Props, State> {
                     style={{
                       margin: 0,
                       color: `${
-                        englishToArabic(this.state.application.status).color
+                        statusLocale[this.state.application.status].color
                       }`,
                     }}
                   >
-                    {englishToArabic(this.state.application.status).text}
+                    {statusLocale[this.state.application.status].text}
                   </p>
                 </span>
                 {this.state.application.writeOff && (
@@ -1261,7 +1282,7 @@ class LoanProfile extends Component<Props, State> {
 
         {this.state.print === 'payment' && (
           <PaymentReceipt
-            isCF
+            type="cf"
             receiptData={this.state.receiptData}
             data={this.state.application}
             companyReceipt={

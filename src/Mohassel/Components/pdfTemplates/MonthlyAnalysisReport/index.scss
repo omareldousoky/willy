@@ -1,0 +1,90 @@
+@media screen, print {
+  tbody {
+    line-height: 1.3em;
+  }
+
+  div.gray th {
+    background-color: lightgrey;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .headtitle {
+    font-size: 12px;
+    font-weight: bolder;
+  }
+
+  table {
+    width: 100%;
+    page-break-inside: avoid;
+    margin-top: 1em;
+  }
+
+  table.equations {
+    width: 70%;
+    text-align: center;
+  }
+
+  table.equations th {
+    text-align: right;
+  }
+
+  .frame {
+    border: 0.5px solid black;
+  }
+
+  .gray {
+    background-color: lightgrey;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .border {
+    border-bottom: 1px solid black;
+  }
+
+  .borderright {
+    border-right: 1px solid black;
+  }
+
+  .bordertop {
+    border-top: 1px solid black;
+  }
+
+  .frac {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    letter-spacing: 0.001em;
+    text-align: center;
+  }
+
+  .frac > span {
+    display: block;
+    padding: 0.1em;
+  }
+
+  .frac span.bottom {
+    border-top: thin solid black;
+  }
+
+  .frac span.symbol {
+    display: none;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .table5 {
+    text-align: center;
+    border-collapse: collapse;
+  }
+}
+
+@media print {
+  footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+}

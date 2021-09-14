@@ -3,7 +3,10 @@ import { useHistory, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Container from 'react-bootstrap/Container'
 import { Customer } from '../../../Shared/Services/interfaces'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import {
+  cfLimitStatusLocale,
+  getErrorMessage,
+} from '../../../Shared/Services/utils'
 import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
 import ability from '../../../Shared/config/ability'
@@ -23,6 +26,12 @@ import { ConsumerFinanceContractData } from '../../Models/contract'
 import { AcknowledgmentWasSignedInFront } from '../PdfTemplates/AcknowledgmentWasSignedInFront'
 import { PromissoryNote } from '../PdfTemplates/PromissoryNote'
 import { AuthorizationToFillInfo } from '../PdfTemplates/AuthorizationToFillInfo'
+import CFLimitModal from './CFLimitModal'
+import { getCFLimits } from '../../Services/APIs/config'
+import {
+  GlobalCFLimits,
+  globalCfLimitsInitialValues,
+} from '../../Models/globalLimits'
 
 export interface Score {
   id?: string // commercialRegisterNumber
@@ -71,6 +80,12 @@ export const CustomerProfile = () => {
   const [iScoreDetails, setIScoreDetails] = useState<Score>()
   const [activeTab, setActiveTab] = useState('workInfo')
   const [print, setPrint] = useState('')
+  const [showCFLimitModal, setShowCFLimitModal] = useState(false)
+  const [cfModalAction, setCFModalAction] = useState('')
+  const [globalLimits, setGlobalLimits] = useState<GlobalCFLimits>(
+    globalCfLimitsInitialValues
+  )
+
   const location = useLocation<LocationState>()
   const history = useHistory()
 
@@ -122,7 +137,16 @@ export const CustomerProfile = () => {
       customerGuarantors: customer.customerGuarantors || [],
     })
   }
-
+  async function getGlobalCfLimits() {
+    setLoading(true)
+    const limitsRes = await getCFLimits()
+    if (limitsRes.status === 'success') {
+      setLoading(false)
+      setGlobalLimits(limitsRes.body)
+    }
+    setLoading(false)
+    Swal.fire('Error !', getErrorMessage(limitsRes.error.error), 'error')
+  }
   async function getCustomerDetails() {
     setLoading(true)
     const res = await getCustomerByID(location.state.id)
@@ -138,6 +162,7 @@ export const CustomerProfile = () => {
   }
   useEffect(() => {
     getCustomerDetails()
+    getGlobalCfLimits()
   }, [])
   function getArRuralUrban(ruralUrban: string | undefined) {
     if (ruralUrban === 'rural') return local.rural
@@ -203,6 +228,12 @@ export const CustomerProfile = () => {
       })
     }
   }
+
+  function setModalData(type) {
+    setCFModalAction(type)
+    setShowCFLimitModal(true)
+  }
+
   const mainInfo = customerDetails && [
     getCustomerInfo({
       customerDetails,
@@ -453,7 +484,9 @@ export const CustomerProfile = () => {
       {
         icon: 'download',
         title: local.downloadPDF,
-        permission: true,
+        permission: !['pending-initialization', 'pending-update'].includes(
+          customerDetails?.consumerFinanceLimitStatus ?? ''
+        ),
         onActionClick: () => {
           setCustomerContractData(customerDetails as Customer)
           setPrint('all')
@@ -471,6 +504,15 @@ export const CustomerProfile = () => {
           }),
       },
       {
+        icon: 'applications',
+        title: local.createClearance,
+        permission: ability.can('newClearance', 'application'),
+        onActionClick: () =>
+          history.push('/customers/create-clearance', {
+            customerId: location.state.id,
+          }),
+      },
+      {
         icon: 'deactivate-user',
         title: customerDetails?.blocked?.isBlocked
           ? local.unblockCustomer
@@ -482,14 +524,72 @@ export const CustomerProfile = () => {
             blocked: customerDetails?.blocked,
           }),
       },
+      {
+        icon: 'bulk-loan-applications-review',
+        title: local.reviewCFCustomerLimit,
+        permission:
+          ['pending-initialization', 'pending-update'].includes(
+            customerDetails?.consumerFinanceLimitStatus ?? ''
+          ) &&
+          ((ability.can('reviewCFLimit', 'customer') &&
+            (customerDetails?.initialConsumerFinanceLimit ?? 0) <
+              globalLimits.CFHQMinimumApprovalLimit) ||
+            ability.can('reviewCFLimitHQ', 'customer')),
+        onActionClick: () => setModalData('review'),
+      },
+      {
+        icon: 'bulk-loan-applications-review',
+        title: local.approveCFCustomerLimit,
+        permission:
+          ['initialization-reviewed', 'update-reviewed'].includes(
+            customerDetails?.consumerFinanceLimitStatus ?? ''
+          ) && ability.can('approveCFLimit', 'customer'),
+        onActionClick: () => setModalData('approve'),
+      },
     ]
   }
   return (
     <>
       <Container className="print-none">
-        <div style={{ margin: 15 }}>
-          <div className="d-flex flex-row justify-content-between">
-            <h3> {local.viewCustomer}</h3>
+        <div>
+          <div className="d-flex flex-row justify-content-between m-2">
+            <div
+              className="d-flex justify-content-start align-items-center"
+              style={{ width: '45%' }}
+            >
+              <h4> {local.viewCustomer}</h4>
+              <span
+                style={{
+                  display: 'flex',
+                  padding: 10,
+                  marginRight: 10,
+                  borderRadius: 30,
+                  border: `1px solid ${
+                    cfLimitStatusLocale[
+                      customerDetails?.consumerFinanceLimitStatus || 'default'
+                    ].color
+                  }`,
+                }}
+              >
+                <p
+                  style={{
+                    margin: 0,
+                    color: `${
+                      cfLimitStatusLocale[
+                        customerDetails?.consumerFinanceLimitStatus || 'default'
+                      ].color
+                    }`,
+                    fontSize: '.8rem',
+                  }}
+                >
+                  {
+                    cfLimitStatusLocale[
+                      customerDetails?.consumerFinanceLimitStatus || 'default'
+                    ].text
+                  }
+                </p>
+              </span>
+            </div>
             <ProfileActions actions={getProfileActions()} />
           </div>
           {mainInfo && <InfoBox info={mainInfo} />}
@@ -502,6 +602,18 @@ export const CustomerProfile = () => {
           setActiveTab={(stringKey) => setActiveTab(stringKey)}
           tabsData={tabsData}
         />
+        {showCFLimitModal && customerDetails && (
+          <CFLimitModal
+            show={showCFLimitModal}
+            hideModal={() => {
+              setShowCFLimitModal(false)
+              setCFModalAction('')
+            }}
+            customer={customerDetails}
+            onSuccess={() => getCustomerDetails()}
+            action={cfModalAction}
+          />
+        )}
       </Container>
       {print === 'all' && (
         <>

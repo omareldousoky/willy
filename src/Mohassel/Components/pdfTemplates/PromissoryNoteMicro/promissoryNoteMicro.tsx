@@ -1,12 +1,12 @@
 import React from 'react'
 import Tafgeet from 'tafgeetjs'
 import {
-  guarantorOrderLocal,
   numbersToArabic,
+  promissoryNoteGuarantorOrderLocal,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
-import { ApplicationResponse } from '../../../Models/Application'
-import { Customer } from '../../../Models/Customer'
+import { ApplicationResponse } from '../../../../Shared/Models/Application'
+import { Customer } from '../../../../Shared/Models/Customer'
 import { BranchDetails } from '../../../../Shared/Services/APIs/Branch/getBranch'
 import { Header } from '../pdfTemplateCommon/header'
 import './promissoryNoteMicro.scss'
@@ -104,7 +104,13 @@ const template = (
           {application.guarantors.map((guarantor, i) => (
             <div className="mt-5">
               <p>
-                <u>{guarantorOrderLocal[i && i > 10 ? 'default' : i]}</u>
+                <u>
+                  {
+                    promissoryNoteGuarantorOrderLocal[
+                      i && i > 10 ? 'default' : i
+                    ]
+                  }
+                </u>
               </p>
               <p>الاسم : {guarantor.customerName}</p>
               <p>بطاقة الرقم القومى : {guarantor.nationalId}</p>

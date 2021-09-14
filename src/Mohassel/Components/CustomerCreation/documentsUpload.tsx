@@ -141,6 +141,7 @@ class DocumentsUpload extends Component<Props, State> {
               keyName="customerId"
               keyId={this.props.customerId}
               view={this.props.view}
+              docType="customer"
             />
           )
         })}

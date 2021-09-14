@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useDispatch, connect } from 'react-redux'
 import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
-import * as local from '../../Assets/ar.json'
+import local from '../../Assets/ar.json'
 import ability from '../../../Mohassel/config/ability'
 import { search, searchFilters } from '../../redux/search/actions'
 import {
@@ -31,26 +31,14 @@ const List = ({
   error,
   loading,
   totalCount,
+  type = 'LTS',
 }: CompanyListProps) => {
   const [from, setFrom] = useState<number>(0)
   const [size, setSize] = useState<number>(10)
-  const {
-    actions,
-    companies,
-    companyCode,
-    companyName,
-    commercialRegisterNumber,
-    creationDate,
-    editCompany,
-    newCompany,
-    noOfCompanies,
-    searchCompanyList,
-    taxCardNumber,
-    viewCompany,
-  } = local
 
   const history = useHistory()
   const dispatch = useDispatch()
+  const location = useLocation<{ sme: boolean; id: number }>()
 
   const getCompanies = async () => {
     const { customerShortenedCode, key } = currentSearchFilters
@@ -88,53 +76,72 @@ const List = ({
     if (error) Swal.fire('error', getErrorMessage(error), 'error')
   }, [])
   const companyActions: ActionWithIcon[] = [
-    {
-      actionTitle: editCompany,
-      actionIcon: 'edit',
+    ...(type === 'LTS'
+      ? [
+          {
+            actionTitle: local.editCompany,
+            actionIcon: 'edit',
+            actionPermission:
+              ability.can('updateCustomer', 'customer') ||
+              ability.can('updateNationalId', 'customer'),
+            actionOnClick: (id) =>
+              history.push('/company/edit-company', { id }),
+          },
+          {
+            actionTitle: local.viewCompany,
+            actionIcon: 'view',
 
-      actionPermission:
-        ability.can('updateCustomer', 'customer') ||
-        ability.can('updateNationalId', 'customer'),
-      actionOnClick: (id) => history.push('/company/edit-company', { id }),
-    },
-    {
-      actionTitle: viewCompany,
-      actionIcon: 'view',
-
-      actionPermission: ability.can('getCustomer', 'customer'),
-      actionOnClick: (id) => history.push('/company/view-company', { id }),
-    },
+            actionPermission: ability.can('getCustomer', 'customer'),
+            actionOnClick: (id) =>
+              history.push('/company/view-company', { id }),
+          },
+        ]
+      : [
+          {
+            actionTitle: local.edit,
+            actionIcon: 'download',
+            actionPermission: ability.can('updateCustomer', 'customer'),
+            actionOnClick: (id) =>
+              history.push('/edit-customer-document', {
+                id,
+                sme: !!location.state?.sme,
+              }),
+            style: {
+              transform: `rotate(180deg)`,
+            },
+          },
+        ]),
   ]
   const tableMapper: TableMapperItem[] = [
     {
-      title: companyCode,
+      title: local.companyCode,
       key: 'customerCode',
       render: (row) => row.key,
     },
     {
-      title: companyName,
+      title: local.companyName,
       sortable: true,
       key: 'name',
       render: (row) => row.businessName,
     },
     {
-      title: taxCardNumber,
+      title: local.taxCardNumber,
       key: 'taxCardNumber',
       render: (row) => row.taxCardNumber,
     },
     {
-      title: commercialRegisterNumber,
+      title: local.commercialRegisterNumber,
       key: 'commercialRegisterNumber',
       render: (row) => row.commercialRegisterNumber,
     },
     {
-      title: creationDate,
+      title: local.creationDate,
       sortable: true,
       key: 'createdAt',
       render: (row) => (row.created?.at ? getDateAndTime(row.created?.at) : ''),
     },
     {
-      title: actions,
+      title: local.actions,
       key: 'actions',
       // eslint-disable-next-line react/display-name
       render: (row) => (
@@ -145,34 +152,38 @@ const List = ({
 
   return (
     <>
-      <HeaderWithCards
-        header={companies}
-        array={manageCompaniesArray()}
-        active={0}
-      />
+      {type === 'LTS' && (
+        <HeaderWithCards
+          header={local.companies}
+          array={manageCompaniesArray()}
+          active={0}
+        />
+      )}
       <Card className="main-card">
         <Loader type="fullsection" open={loading} />
         <Card.Body style={{ padding: 0 }}>
           <div className="custom-card-header">
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                {companies}
+                {local.companies}
               </Card.Title>
               <span className="text-muted">
-                {noOfCompanies + ` (${totalCount || 0})`}
+                {local.noOfCompanies + ` (${totalCount || 0})`}
               </span>
             </div>
             <div>
-              <Can I="createCustomer" a="customer">
-                <Button
-                  onClick={() => {
-                    history.push('/company/new-company')
-                  }}
-                  className="big-button"
-                >
-                  {newCompany}
-                </Button>
-              </Can>
+              {type === 'LTS' && (
+                <Can I="createCustomer" a="customer">
+                  <Button
+                    onClick={() => {
+                      history.push('/company/new-company')
+                    }}
+                    className="big-button"
+                  >
+                    {local.newCompany}
+                  </Button>
+                </Can>
+              )}
             </div>
           </div>
           <hr className="dashed-line" />
@@ -186,7 +197,7 @@ const List = ({
               'code',
               'customerShortenedCode',
             ]}
-            searchPlaceholder={searchCompanyList}
+            searchPlaceholder={local.searchCompanyList}
             url="customer"
             from={from}
             size={size}

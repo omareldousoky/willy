@@ -10,8 +10,7 @@ import {
   LegalActionsForm as LegalActionsFormType,
   SettledCustomer,
 } from './types'
-import AppForm from './Form'
-import { updateLegalAffairsCustomers } from '../../Services/APIs/LegalAffairs/defaultingCustomers'
+import { updateLegalAffairsCustomers } from '../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import customerActionsFields from './configs/CustomerActionsForm'
 import {
@@ -20,7 +19,8 @@ import {
   isSettlementReviewed,
 } from './utils'
 import { Loader } from '../../../Shared/Components/Loader'
-import { CourtSession } from '../../Models/LegalAffairs'
+import { CourtSession } from '../../../Shared/Models/LegalAffairs'
+import AppForm from '../../../Shared/Components/Form'
 
 const LegalActionsForm: FunctionComponent = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)

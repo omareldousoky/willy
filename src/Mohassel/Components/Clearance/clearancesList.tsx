@@ -21,7 +21,7 @@ import ClearancePaper from './clearancePaper'
 import {
   changeClearancePrintStatus,
   ChangeClearancePrintStatusRequest,
-} from '../../Services/APIs/clearance/changeClearancePrintStatus'
+} from '../../../Shared/Services/APIs/clearance/changeClearancePrintStatus'
 import { loading } from '../../../Shared/redux/loading/actions'
 import { LtsIcon } from '../../../Shared/Components'
 

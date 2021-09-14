@@ -4,6 +4,9 @@ import local from '../../../Shared/Assets/ar.json'
 import EncodingFiles from './encodingFiles'
 import DocumentTypeCreation from '../documentTypeCreation/documentTypeCreation'
 import GeoAreas from './geoAreas'
+import BusinessActivities from './businessActivities'
+import BusinessSpecialities from './businessSpecialities'
+import LimitsThreshold from './LimitsThreshold'
 
 export const toolsRoutes = {
   path: '/tools',
@@ -49,6 +52,33 @@ export const toolsRoutes = {
       render: () => (
         <Can I="geoArea" a="config">
           <GeoAreas />
+        </Can>
+      ),
+    },
+    {
+      path: '/business-activities',
+      label: local.businessActivities,
+      render: () => (
+        <Can I="viewBusinessSectorConfig" a="config">
+          <BusinessActivities />
+        </Can>
+      ),
+    },
+    {
+      path: '/business-specialities',
+      label: local.businessSpecialities,
+      render: () => (
+        <Can I="viewBusinessSectorConfig" a="config">
+          <BusinessSpecialities />
+        </Can>
+      ),
+    },
+    {
+      path: '/limits-config',
+      label: local.principalRange,
+      render: (props) => (
+        <Can I="createMaxPrincipal" a="config">
+          <LimitsThreshold {...props} />
         </Can>
       ),
     },

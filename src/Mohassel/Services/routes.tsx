@@ -73,8 +73,8 @@ import { legalWarningRoute } from '../Components/LegalWarnings/routes'
 const appRoutes = [
   {
     path: '/',
-    label: local.mohassel,
-    render: () => <Landing appName={local.mohassel} />,
+    label: local.tasaheel,
+    render: () => <Landing appName={local.tasaheel} />,
     routes: [
       {
         path: '/customers',
@@ -233,7 +233,6 @@ const appRoutes = [
       {
         path: '/track-loan-applications',
         label: local.loanApplications,
-        disableLink: true,
         render: () => (
           <Can I="getLoanApplication" a="application">
             <TrackLoanApplications />
@@ -593,7 +592,6 @@ const appRoutes = [
       {
         path: '/loans',
         label: local.issuedLoans,
-        disableLink: true,
         render: (props) => <LoanList {...props} />,
         routes: [
           {
