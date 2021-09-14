@@ -19,7 +19,7 @@ export const KnowYourCustomer = ({
     <>
       <div className="contract-container p-0" dir="rtl" lang="ar">
         <Header
-          title="أعرف عميلك"
+          title="اعرف عميلك"
           showCurrentUser={false}
           showCurrentTime={false}
           sme
