@@ -1,8 +1,8 @@
 import React from 'react'
 import './randomPayment.scss'
 import { RandomPaymentProps } from './types'
-import Orientation from '../../../../Shared/Components/Common/orientation'
-import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
+import Orientation from '../../Common/orientation'
+import { Header } from '../pdfTemplateCommon/header'
 
 const actionsLocalization = (action: string) => {
   switch (action) {
@@ -32,6 +32,7 @@ export const RandomPayment = ({
   branches,
   startDate,
   endDate,
+  isCF,
 }: RandomPaymentProps) => {
   return (
     <div lang="ar" className="random-payment-print">
@@ -40,6 +41,7 @@ export const RandomPayment = ({
         fromDate={startDate}
         toDate={endDate}
         title="الحركات المالية (حركات السداد المنفذة)"
+        cf={isCF}
       />
       {branches?.map((branch, index) => {
         return (

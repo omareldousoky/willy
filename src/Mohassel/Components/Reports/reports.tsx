@@ -17,12 +17,7 @@ import { CollectionStatement } from '../../../Shared/Components/pdfTemplates/Col
 import { LoanPenaltiesList } from '../../../Shared/Components/pdfTemplates/loanPenaltiesList'
 import { CrossedOutLoansList } from '../../../Shared/Components/pdfTemplates/crossedOutLoansList'
 import { DoubtfulPayments } from '../../../Shared/Components/pdfTemplates/doubtfulPayments'
-import {
-  installments,
-  postInstallmentsExcel,
-  getInstallmentsExcel,
-} from '../../Services/APIs/Reports/installments'
-import { PaymentsDone } from '../pdfTemplates/paymentsDone'
+import { PaymentsDone } from '../../../Shared/Components/pdfTemplates/paymentsDone'
 import { IssuedLoanList } from '../../../Shared/Components/pdfTemplates/issuedLoanList'
 import {
   getCreatedLoanList,
@@ -36,12 +31,7 @@ import {
 } from '../../Services/APIs/Reports/rescheduledLoansList'
 import { LoanCreationList } from '../pdfTemplates/loanCreationList'
 import { RescheduledLoanList } from '../pdfTemplates/rescheduledLoanList'
-import {
-  getRandomPayments,
-  postRandomPaymentsExcel,
-  getRandomPaymentsExcel,
-} from '../../Services/APIs/Reports/randomPayment'
-import { RandomPayment } from '../pdfTemplates/randomPayment'
+import { RandomPayment } from '../../../Shared/Components/pdfTemplates/randomPayment'
 import {
   getLoanApplicationFees,
   postLoanApplicationFeesExcel,
@@ -51,15 +41,9 @@ import { LoanApplicationFees } from '../pdfTemplates/loanApplicationFees'
 import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport'
 import { downloadFile } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
-import { CustomerTransactionReport } from '../pdfTemplates/customerTransactionReport'
-import { getCustomerTransactions } from '../../Services/APIs/Reports/customerTransactions'
-import {
-  fetchRaseedyTransactions,
-  getRaseedyTransactionsExcel,
-  postRaseedyTransactionsExcel,
-} from '../../Services/APIs/Reports/raseedyTransactions'
+import { CustomerTransactionReport } from '../../../Shared/Components/pdfTemplates/customerTransactionReport'
 import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
-import RaseedyTransactionsReport from '../pdfTemplates/RaseedyTransactions'
+import RaseedyTransactionsReport from '../../../Shared/Components/pdfTemplates/RaseedyTransactions'
 import { PDFList } from '../../../Shared/Components/PdfList'
 import { PDF } from '../../../Shared/Components/PdfList/types'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
@@ -83,6 +67,16 @@ import {
   getIssuedLoanList,
   getIssuedLoansExcel,
   postIssuedLoansExcel,
+  getInstallmentsExcel,
+  installments,
+  postInstallmentsExcel,
+  getRandomPayments,
+  getRandomPaymentsExcel,
+  postRandomPaymentsExcel,
+  getCustomerTransactions,
+  fetchRaseedyTransactions,
+  getRaseedyTransactionsExcel,
+  postRaseedyTransactionsExcel,
 } from '../../../Shared/Services/APIs/Reports'
 
 interface State {

@@ -59,6 +59,7 @@ interface InitialFormikState {
 interface Props {
   pdf: PDF
   show: boolean
+  isCF?: boolean
   hideModal: () => void
   submit: (values) => void
   getExcel?: (values) => void
@@ -715,7 +716,7 @@ const ReportsModal = (props: Props) => {
                         </Col>
                       )
                     }
-                    if (input === 'loanType') {
+                    if (!props.isCF && input === 'loanType') {
                       return (
                         <Col key={input} sm={12}>
                           <div className="dropdown-container">

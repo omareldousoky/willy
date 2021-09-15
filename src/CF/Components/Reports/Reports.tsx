@@ -11,7 +11,13 @@ import { CollectionStatement } from '../../../Shared/Components/pdfTemplates/Col
 import { ManualPayments } from '../../../Shared/Components/pdfTemplates/manualPayments'
 import { LoanPenaltiesList } from '../../../Shared/Components/pdfTemplates/loanPenaltiesList'
 import { CrossedOutLoansList } from '../../../Shared/Components/pdfTemplates/crossedOutLoansList'
-// import { DoubtfulPayments } from '../pdfTemplates/doubtfulPayments'
+import { DoubtfulPayments } from '../../../Shared/Components/pdfTemplates/doubtfulPayments'
+import { IssuedLoanList } from '../../../Shared/Components/pdfTemplates/issuedLoanList'
+import { PaymentsDone } from '../../../Shared/Components/pdfTemplates/paymentsDone'
+import { RandomPayment } from '../../../Shared/Components/pdfTemplates/randomPayment'
+import { CustomerTransactionReport } from '../../../Shared/Components/pdfTemplates/customerTransactionReport'
+import RaseedyTransactionsReport from '../../../Shared/Components/pdfTemplates/RaseedyTransactions'
+
 import {
   collectionReport,
   penalties,
@@ -31,51 +37,33 @@ import {
   getIssuedLoanList,
   getIssuedLoansExcel,
   postIssuedLoansExcel,
+  getInstallmentsExcel,
+  installments,
+  postInstallmentsExcel,
+  getRandomPaymentsExcel,
+  postRandomPaymentsExcel,
+  getRandomPayments,
+  getCustomerTransactions,
+  getRaseedyTransactionsExcel,
+  postRaseedyTransactionsExcel,
+  fetchRaseedyTransactions,
 } from '../../../Shared/Services/APIs/Reports'
-// import {
-//   installments,
-//   postInstallmentsExcel,
-//   getInstallmentsExcel,
-// } from '../../Services/APIs/Reports/installments'
-// import { PaymentsDone } from '../pdfTemplates/paymentsDone'
-// import { IssuedLoanList } from '../pdfTemplates/issuedLoanList'
 // import {
 //   getRescheduledLoanList,
 //   postRescheduledLoanExcel,
 //   getRescheduledLoanExcel,
 // } from '../../Services/APIs/Reports/rescheduledLoansList'
-// import { LoanCreationList } from '../pdfTemplates/loanCreationList'
-// import { RescheduledLoanList } from '../pdfTemplates/rescheduledLoanList'
-// import {
-//   getRandomPayments,
-//   postRandomPaymentsExcel,
-//   getRandomPaymentsExcel,
-// } from '../../Services/APIs/Reports/randomPayment'
-// import { RandomPayment } from '../pdfTemplates/randomPayment'
-// import {
-//   getLoanApplicationFees,
-//   postLoanApplicationFeesExcel,
-//   getLoanApplicationFeesExcel,
-// } from '../../Services/APIs/Reports/loanApplicationFees'
-// import { LoanApplicationFees } from '../pdfTemplates/loanApplicationFees'
+// import { RescheduledLoanList } from '../pdfTemplates/rescheduledLoanList',
 
 // import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport'
 import { downloadFile } from '../../../Shared/Services/utils'
 // import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 // import { CustomerTransactionReport } from '../pdfTemplates/customerTransactionReport'
 // import { getCustomerTransactions } from '../../Services/APIs/Reports/customerTransactions'
-// import {
-//   fetchRaseedyTransactions,
-//   getRaseedyTransactionsExcel,
-//   postRaseedyTransactionsExcel,
-// } from '../../Services/APIs/Reports/raseedyTransactions'
-// import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
-// import RaseedyTransactionsReport from '../pdfTemplates/RaseedyTransactions'
+import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
 import { PDFList } from '../../../Shared/Components/PdfList'
 import { PDF } from '../../../Shared/Components/PdfList/types'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
-import { DoubtfulPayments } from '../../../Shared/Components/pdfTemplates/doubtfulPayments'
-import { IssuedLoanList } from '../../../Shared/Components/pdfTemplates/issuedLoanList'
 
 interface State {
   showModal?: boolean
@@ -144,36 +132,36 @@ class Reports extends Component<{}, State> {
         //   inputs: ['dateFromTo', 'branches', 'loanType'],
         //   permission: 'loanRescheduling',
         // },
-        // {
-        //   key: 'paymentsDoneList',
-        //   local: 'حركات الاقساط',
-        //   inputs: ['dateFromTo', 'branches', 'loanType'],
-        //   permission: 'installments',
-        // },
-        // {
-        //   key: 'randomPayments',
-        //   local: 'الحركات المالية',
-        //   inputs: ['dateFromTo', 'branches', 'loanType'],
-        //   permission: 'randomPayments',
-        // },
+        {
+          key: 'paymentsDoneList',
+          local: 'حركات الاقساط',
+          inputs: ['dateFromTo', 'branches', 'loanType'],
+          permission: 'installments',
+        },
+        {
+          key: 'randomPayments',
+          local: 'الحركات المالية',
+          inputs: ['dateFromTo', 'branches', 'loanType'],
+          permission: 'randomPayments',
+        },
         {
           key: 'manualPayments',
           local: 'مراجعه حركات السداد اليدوي',
           inputs: ['dateFromTo', 'branches'],
           permission: 'manualPayments',
         },
-        // {
-        //   key: 'customerTransactionReport',
-        //   local: 'الحركة تبعا للعميل',
-        //   inputs: ['applicationKey'],
-        //   permission: 'loanTransactionReport',
-        // },
-        // {
-        //   key: 'raseedyTransactions',
-        //   local: 'مدفوعات رصيدي',
-        //   inputs: ['dateFromTo', 'branches'],
-        //   permission: 'raseedyTransactions',
-        // },
+        {
+          key: 'customerTransactionReport',
+          local: 'الحركة تبعا للعميل',
+          inputs: ['applicationKey'],
+          permission: 'loanTransactionReport',
+        },
+        {
+          key: 'raseedyTransactions',
+          local: 'مدفوعات رصيدي',
+          inputs: ['dateFromTo', 'branches'],
+          permission: 'raseedyTransactions',
+        },
       ],
       selectedPdf: { permission: '' },
       data: {},
@@ -210,16 +198,16 @@ class Reports extends Component<{}, State> {
         return this.getIssuedLoanList(values)
       // case 'rescheduledLoanList':
       //   return this.getRescheduledLoanList(values)
-      // case 'paymentsDoneList':
-      //   return this.getInstallments(values)
-      // case 'randomPayments':
-      //   return this.getRandomPayments(values)
+      case 'paymentsDoneList':
+        return this.getInstallments(values)
+      case 'randomPayments':
+        return this.getRandomPayments(values)
       case 'manualPayments':
         return this.getManualPayments(values)
-      // case 'customerTransactionReport':
-      //   return this.getCustomerTransactions(values)
-      // case 'raseedyTransactions':
-      //   return this.getRaseedyTransactions(values)
+      case 'customerTransactionReport':
+        return this.getCustomerTransactions(values)
+      case 'raseedyTransactions':
+        return this.getRaseedyTransactions(values)
       default:
         return null
     }
@@ -261,18 +249,18 @@ class Reports extends Component<{}, State> {
       //     getRescheduledLoanExcel,
       //     values
       //   )
-      // case 'paymentsDoneList':
-      //   return this.getExcelFile(
-      //     postInstallmentsExcel,
-      //     getInstallmentsExcel,
-      //     values
-      //   )
-      // case 'randomPayments':
-      //   return this.getExcelFile(
-      //     postRandomPaymentsExcel,
-      //     getRandomPaymentsExcel,
-      //     values
-      //   )
+      case 'paymentsDoneList':
+        return this.getExcelFile(
+          postInstallmentsExcel,
+          getInstallmentsExcel,
+          values
+        )
+      case 'randomPayments':
+        return this.getExcelFile(
+          postRandomPaymentsExcel,
+          getRandomPaymentsExcel,
+          values
+        )
       // case 'cibPaymentReport': return this.getCibPaymentReport(values); TODO keep commented
       case 'manualPayments':
         return this.getExcelFile(
@@ -280,12 +268,12 @@ class Reports extends Component<{}, State> {
           getManualPaymentsExcel,
           values
         )
-      // case 'raseedyTransactions':
-      //   return this.getExcelFile(
-      //     postRaseedyTransactionsExcel,
-      //     getRaseedyTransactionsExcel,
-      //     values
-      //   )
+      case 'raseedyTransactions':
+        return this.getExcelFile(
+          postRaseedyTransactionsExcel,
+          getRaseedyTransactionsExcel,
+          values
+        )
       default:
         return null
     }
@@ -349,72 +337,72 @@ class Reports extends Component<{}, State> {
   //   }
   // }
 
-  // async getInstallments(values) {
-  //   this.setState({ loading: true, showModal: false })
-  //   const branches = values.branches.map((branch) => branch._id)
-  //   const obj = {
-  //     startdate: values.fromDate,
-  //     enddate: values.toDate,
-  //     branches: branches.includes('') ? [] : branches,
-  //     loanType: values.loanType,
-  //   }
-  //   const res = await installments(obj)
-  //   if (res.status === 'success') {
-  //     if (!res.body) {
-  //       this.setState({ loading: false })
-  //       Swal.fire('error', local.noResults)
-  //     } else {
-  //       this.setState(
-  //         {
-  //           data: { data: res.body, from: values.fromDate, to: values.toDate },
-  //           showModal: false,
-  //           print: 'paymentsDoneList',
-  //           loading: false,
-  //         },
-  //         () => window.print()
-  //       )
-  //     }
-  //   } else {
-  //     this.setState({ loading: false })
-  //     console.log(res)
-  //   }
-  // }
+  async getInstallments(values) {
+    this.setState({ loading: true, showModal: false })
+    const branches = values.branches.map((branch) => branch._id)
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
+    }
+    const res = await installments(obj)
+    if (res.status === 'success') {
+      if (!res.body) {
+        this.setState({ loading: false })
+        Swal.fire('error', local.noResults)
+      } else {
+        this.setState(
+          {
+            data: { data: res.body, from: values.fromDate, to: values.toDate },
+            showModal: false,
+            print: 'paymentsDoneList',
+            loading: false,
+          },
+          () => window.print()
+        )
+      }
+    } else {
+      this.setState({ loading: false })
+      console.log(res)
+    }
+  }
 
-  // async getRandomPayments(values) {
-  //   this.setState({
-  //     loading: true,
-  //     showModal: false,
-  //     fromDate: values.fromDate,
-  //     toDate: values.toDate,
-  //   })
-  //   const branches = values.branches.map((branch) => branch._id)
-  //   const obj = {
-  //     startdate: values.fromDate,
-  //     enddate: values.toDate,
-  //     branches: branches.includes('') ? [] : branches,
-  //     loanType: values.loanType,
-  //   }
-  //   const res = await getRandomPayments(obj)
-  //   if (res.status === 'success') {
-  //     if (!res.body) {
-  //       this.setState({ loading: false })
-  //       Swal.fire('error', local.noResults)
-  //     } else {
-  //       this.setState(
-  //         {
-  //           data: res.body,
-  //           showModal: false,
-  //           print: 'randomPayments',
-  //           loading: false,
-  //         },
-  //         () => window.print()
-  //       )
-  //     }
-  //   } else {
-  //     this.setState({ loading: false })
-  //     console.log(res)
-  //   }
-  // }
+  async getRandomPayments(values) {
+    this.setState({
+      loading: true,
+      showModal: false,
+      fromDate: values.fromDate,
+      toDate: values.toDate,
+    })
+    const branches = values.branches.map((branch) => branch._id)
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
+    }
+    const res = await getRandomPayments(obj)
+    if (res.status === 'success') {
+      if (!res.body) {
+        this.setState({ loading: false })
+        Swal.fire('error', local.noResults)
+      } else {
+        this.setState(
+          {
+            data: res.body,
+            showModal: false,
+            print: 'randomPayments',
+            loading: false,
+          },
+          () => window.print()
+        )
+      }
+    } else {
+      this.setState({ loading: false })
+      console.log(res)
+    }
+  }
 
   async getIssuedLoanList(values) {
     this.setState({ loading: true, showModal: false })
@@ -678,60 +666,60 @@ class Reports extends Component<{}, State> {
     }
   }
 
-  // async getCustomerTransactions(values) {
-  //   this.setState({ loading: true, showModal: false })
-  //   const res = await getCustomerTransactions({
-  //     loanApplicationKey: values.loanApplicationKey,
-  //   })
-  //   if (res.status === 'success') {
-  //     if (!res.body || !Object.keys(res.body).length) {
-  //       this.setState({ loading: false })
-  //       Swal.fire('error', local.noResults)
-  //     } else {
-  //       this.setState(
-  //         {
-  //           data: res.body,
-  //           showModal: false,
-  //           print: 'customerTransactionReport',
-  //           loading: false,
-  //         },
-  //         () => window.print()
-  //       )
-  //     }
-  //   } else {
-  //     this.setState({ loading: false })
-  //     console.log(res)
-  //   }
-  // }
+  async getCustomerTransactions(values) {
+    this.setState({ loading: true, showModal: false })
+    const res = await getCustomerTransactions({
+      loanApplicationKey: values.loanApplicationKey,
+    })
+    if (res.status === 'success') {
+      if (!res.body || !Object.keys(res.body).length) {
+        this.setState({ loading: false })
+        Swal.fire('error', local.noResults)
+      } else {
+        this.setState(
+          {
+            data: res.body,
+            showModal: false,
+            print: 'customerTransactionReport',
+            loading: false,
+          },
+          () => window.print()
+        )
+      }
+    } else {
+      this.setState({ loading: false })
+      console.log(res)
+    }
+  }
 
-  // async getRaseedyTransactions(values) {
-  //   this.setState({ loading: true, showModal: false })
-  //   const branches = values.branches.map((branch) => branch._id)
-  //   const res = await fetchRaseedyTransactions({
-  //     startDate: values.fromDate,
-  //     endDate: values.toDate,
-  //     branches: branches.includes('') ? [] : branches,
-  //   })
+  async getRaseedyTransactions(values) {
+    this.setState({ loading: true, showModal: false })
+    const branches = values.branches.map((branch) => branch._id)
+    const res = await fetchRaseedyTransactions({
+      startDate: values.fromDate,
+      endDate: values.toDate,
+      branches: branches.includes('') ? [] : branches,
+    })
 
-  //   if (res.status === 'success') {
-  //     if (!res.body || !Object.keys(res.body).length) {
-  //       this.setState({ loading: false })
-  //       Swal.fire('error', local.noResults)
-  //     } else {
-  //       this.setState(
-  //         {
-  //           data: res.body,
-  //           showModal: false,
-  //           print: 'raseedyTransactions',
-  //           loading: false,
-  //         },
-  //         () => window.print()
-  //       )
-  //     }
-  //   } else {
-  //     this.setState({ loading: false })
-  //   }
-  // }
+    if (res.status === 'success') {
+      if (!res.body || !Object.keys(res.body).length) {
+        this.setState({ loading: false })
+        Swal.fire('error', local.noResults)
+      } else {
+        this.setState(
+          {
+            data: res.body,
+            showModal: false,
+            print: 'raseedyTransactions',
+            loading: false,
+          },
+          () => window.print()
+        )
+      }
+    } else {
+      this.setState({ loading: false })
+    }
+  }
 
   async getExcelFile(func, pollFunc, values) {
     const { branches, fromDate, toDate, loanType } = values
@@ -819,6 +807,7 @@ class Reports extends Component<{}, State> {
             hideModal={() => this.setState({ showModal: false })}
             submit={(values) => this.handleSubmit(values)}
             getExcel={(values) => this.getExcel(values)}
+            isCF
           />
         )}
         {/* {this.state.print === 'customerDetails' && (
@@ -838,10 +827,10 @@ class Reports extends Component<{}, State> {
         {this.state.print === 'rescheduledLoanList' && (
           <RescheduledLoanList data={this.state.data} />
         )}
+      */}
         {this.state.print === 'paymentsDoneList' && (
-          <PaymentsDone data={this.state.data} />
+          <PaymentsDone data={this.state.data} isCF />
         )}
-        */}
         {this.state.print === 'CollectionStatement' && (
           <CollectionStatement data={this.state.data} isCF />
         )}
@@ -856,14 +845,15 @@ class Reports extends Component<{}, State> {
         {this.state.print === 'DoubtfulLoans' && (
           <DoubtfulPayments data={this.state.data} isCF />
         )}
-        {/*
+
         {this.state.print === 'randomPayments' && (
           <RandomPayment
             branches={this.state.data.branches}
             startDate={this.state.fromDate}
             endDate={this.state.toDate}
+            isCF
           />
-        )} */}
+        )}
         {this.state.print === 'manualPayments' && (
           <ManualPayments
             result={this.state.data.result}
@@ -872,16 +862,17 @@ class Reports extends Component<{}, State> {
             isCF
           />
         )}
-        {/* 
         {this.state.print === 'customerTransactionReport' && (
-          <CustomerTransactionReport result={this.state.data} />
+          <CustomerTransactionReport result={this.state.data} isCF />
         )}
 
         {this.state.print === 'raseedyTransactions' && (
           <PdfPortal
-            component={<RaseedyTransactionsReport data={this.state.data} />}
+            component={
+              <RaseedyTransactionsReport data={this.state.data} isCF />
+            }
           />
-        )} */}
+        )}
       </>
     )
   }
