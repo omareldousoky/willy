@@ -1,11 +1,11 @@
 import { AxiosResponse } from 'axios'
-import {
-  ApiResponse,
-  CustomerApplicationTransactionsRequest,
-  CustomerApplicationTransactionsResponse,
-} from '../../../../Mohassel/Services/interfaces'
 import axios from '../../axiosInstance'
 import { API_BASE_URL } from '../../../envConfig'
+import {
+  CustomerApplicationTransactionsRequest,
+  CustomerApplicationTransactionsResponse,
+} from '../../interfaces'
+import { ApiResponse } from '../../../Models/common'
 
 const getCustomerTransactionsURL = `${API_BASE_URL}/report/loan-transactions`
 

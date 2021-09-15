@@ -5,7 +5,7 @@ import {
   timeToArabicDate,
   timeToArabicDateNow,
 } from '../../../Services/utils'
-import { CustomerApplicationTransactionsResponse } from '../../../../Mohassel/Services/interfaces'
+import { CustomerApplicationTransactionsResponse } from '../../../Services/interfaces'
 import Orientation from '../../Common/orientation'
 import './customerTransactionReport.scss'
 
