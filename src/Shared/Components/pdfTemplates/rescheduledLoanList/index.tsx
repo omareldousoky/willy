@@ -1,13 +1,15 @@
 import React from 'react'
-import './issuedLoanList.scss'
+import './rescheduledLoanList.scss'
 import {
   timeToArabicDate,
   getTimestamp,
   timeToArabicDateNow,
   statusLocale,
-} from '../../../../Shared/Services/utils'
+} from '../../../Services/utils'
+import Orientation from '../../Common/orientation'
 
-export const IssuedLoanList = (props) => {
+export const RescheduledLoanList = (props) => {
+  const { isCF } = props
   const tempData = props.data.data
   const reportDate =
     props.data.from === props.data.to
@@ -17,39 +19,25 @@ export const IssuedLoanList = (props) => {
           false
         )}`
   return (
-    <div className="issued-loan-list" lang="ar">
-      <table
-        className="w-100 text-center"
-        style={{
-          margin: '10px 0px',
-        }}
-      >
-        <tbody>
-          <tr style={{ height: '10px' }} />
-          <tr className="w-100 d-flex flex-row justify-content-between">
-            <th
-              colSpan={6}
-              style={{ backgroundColor: 'white', listStyleType: 'none' }}
-              className="border-0"
-            >
-              <div className="logo-print-tb" />
-            </th>
-            <th
-              colSpan={6}
-              style={{ backgroundColor: 'white' }}
-              className="border-0"
-            >
-              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-            </th>
-          </tr>
-          <tr style={{ height: '10px' }} />
-        </tbody>
-      </table>
+    <div className="rescheduled-loan-list" lang="ar">
+      <Orientation size="portrait" />
+      <div className="d-flex justify-content-between m-2">
+        <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
+        <p className="m-0 ml-3 text-right text-sm">
+          {isCF
+            ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
+            : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
+        </p>
+      </div>
       <table className="report-container">
         <thead className="report-header">
           <tr className="headtitle">
-            <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
-            <th colSpan={6}>قائمة حركات إصدار القروض المنفذه</th>
+            <th colSpan={4}>
+              {isCF
+                ? 'حالا للتمويل الاستهلاكي ش. م. م.'
+                : 'شركة تساهيل للتمويل متناهي الصغر'}
+            </th>
+            <th colSpan={6}>قائمة حركات جدولة القروض المنفذه</th>
           </tr>
           <tr className="headtitle">
             <th colSpan={4}>المركز الرئيسي</th>
@@ -64,10 +52,10 @@ export const IssuedLoanList = (props) => {
           </tr>
           <tr>
             <th>رقم مسلسل</th>
-            <th colSpan={2}>كود العميل</th>
+            <th>كود العميل</th>
             <th>أسم العميل</th>
             <th>مسلسل القرض</th>
-            <th colSpan={2}>قيمة</th>
+            <th>قيمة</th>
             <th colSpan={2}>تاريخ القرض</th>
             <th>الحالة الان</th>
             <th>أصل</th>
@@ -86,12 +74,11 @@ export const IssuedLoanList = (props) => {
             <tbody>
               <tr>
                 <th colSpan={2}>تاريخ الحركه</th>
-                <th colSpan={2} className="text-nowrap">
+                <th colSpan={2}>
                   {timeToArabicDate(new Date(day.day).valueOf(), false)}
                 </th>
               </tr>
             </tbody>
-
             {day.branches.map((branch, i) => (
               <React.Fragment key={i}>
                 <tbody>
@@ -102,11 +89,11 @@ export const IssuedLoanList = (props) => {
                   {branch.df.map((transaction, z) => (
                     <tr key={z}>
                       <td>{transaction.serialNo}</td>
-                      <td colSpan={2}>{transaction.customerKey}</td>
+                      <td>{transaction.customerKey}</td>
                       <td>{transaction.customerName}</td>
                       <td>{transaction.loanSerial}</td>
-                      <td colSpan={2}>{transaction.principalAmount}</td>
-                      <td colSpan={2} className="text-nowrap">
+                      <td>{transaction.principal}</td>
+                      <td colSpan={2}>
                         {timeToArabicDate(
                           getTimestamp(transaction.truthDate),
                           false
@@ -130,7 +117,7 @@ export const IssuedLoanList = (props) => {
                   <tr>
                     <td colSpan={2}>إجمالي فرع</td>
                     <td colSpan={2}>{branch.branchName}</td>
-                    <td colSpan={1} className="text-nowrap">
+                    <td colSpan={1}>
                       {timeToArabicDate(new Date(day.day).valueOf(), false)}
                     </td>
                     <td>{branch.df.length}</td>

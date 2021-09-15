@@ -1,11 +1,11 @@
 import { AxiosResponse } from 'axios'
+import axios from '../../axiosInstance'
+import { API_BASE_URL } from '../../../envConfig'
 import {
-  ApiResponse,
   CustomerApplicationTransactionsRequest,
   CustomerApplicationTransactionsResponse,
 } from '../../interfaces'
-import axios from '../../../../Shared/Services/axiosInstance'
-import { API_BASE_URL } from '../../../../Shared/envConfig'
+import { ApiResponse } from '../../../Models/common'
 
 const getCustomerTransactionsURL = `${API_BASE_URL}/report/loan-transactions`
 

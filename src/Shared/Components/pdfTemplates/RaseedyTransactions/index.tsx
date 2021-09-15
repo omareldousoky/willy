@@ -1,12 +1,9 @@
 import React from 'react'
 import Table from 'react-bootstrap/Table'
 
-import local from '../../../../Shared/Assets/ar.json'
-import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
-import {
-  numbersToArabic,
-  timeToArabicDate,
-} from '../../../../Shared/Services/utils'
+import local from '../../../Assets/ar.json'
+import { Header } from '../pdfTemplateCommon/header'
+import { numbersToArabic, timeToArabicDate } from '../../../Services/utils'
 
 interface RaseedyTransactionsModel {
   customerCode: string
@@ -19,8 +16,10 @@ interface RaseedyTransactionsModel {
 
 const RaseedyTransactionsReport = ({
   data,
+  isCF,
 }: {
   data: { result: RaseedyTransactionsModel[]; transactionAmountSum: number }
+  isCF?: boolean
 }) => {
   const tableColumns = [
     {
@@ -70,7 +69,12 @@ const RaseedyTransactionsReport = ({
 
   return (
     <>
-      <Header title="" showCurrentUser={false} showCurrentTime={false} />
+      <Header
+        title=""
+        showCurrentUser={false}
+        showCurrentTime={false}
+        cf={isCF}
+      />
 
       <Table striped bordered>
         <thead>

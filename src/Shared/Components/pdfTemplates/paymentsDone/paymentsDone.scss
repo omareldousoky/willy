@@ -1,17 +1,18 @@
 @media screen, print {
-  & .manual-payments {
+  .payments-done {
     font-size: 10px;
     font-weight: bold;
-    padding: 10px 5px;
     text-align: center;
+    padding: 10px 5px;
     page-break-after: always;
+    direction: rtl;
 
     & tbody {
       page-break-inside: avoid;
     }
 
     & .tbodyborder {
-      box-shadow: 0 0 0 1px black !important;
+      box-shadow: 0 0 0 1px black;
     }
 
     & .headtitle {
@@ -36,15 +37,14 @@
       -webkit-print-color-adjust: exact;
     }
 
-    & .border {
-      border: solid black !important;
-      border-width: 0 0 1px 0 !important;
+    & .horizontal-line {
+      border-bottom: 1px solid black;
     }
   }
 }
 
 @media screen {
-  .manual-payments {
+  .payments-done {
     max-width: 624px;
     font-size: 8px;
     display: none;

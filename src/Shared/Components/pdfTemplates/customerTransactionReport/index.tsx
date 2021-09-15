@@ -4,13 +4,14 @@ import {
   numbersToArabic,
   timeToArabicDate,
   timeToArabicDateNow,
-} from '../../../../Shared/Services/utils'
+} from '../../../Services/utils'
 import { CustomerApplicationTransactionsResponse } from '../../../Services/interfaces'
-import Orientation from '../../../../Shared/Components/Common/orientation'
+import Orientation from '../../Common/orientation'
 import './customerTransactionReport.scss'
 
 interface CustomerTransactionsProps {
   result: CustomerApplicationTransactionsResponse
+  isCF?: boolean
 }
 
 export const CustomerTransactionReport = (props: CustomerTransactionsProps) => {
@@ -34,7 +35,9 @@ export const CustomerTransactionReport = (props: CustomerTransactionsProps) => {
               marginBottom: 5,
             }}
           >
-            شركة تساهيل للتمويل متناهى الصغر
+            {props.isCF
+              ? 'حالا للتمويل الاستهلاكي ش. م. م.'
+              : 'شركة تساهيل للتمويل متناهي الصغر'}
           </div>
           <p style={{ margin: 0 }}>{timeToArabicDateNow(true)}</p>
         </div>
