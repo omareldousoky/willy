@@ -19,9 +19,12 @@ import {
 import { payment } from '../../../Shared/redux/payment/actions'
 import PayInstallment from './payInstallment'
 import {
+  editManualOtherPayment,
   manualPayment,
+  otherPayment,
   payFutureInstallment,
   payInstallment,
+  randomManualPayment,
 } from '../../../Shared/Services/APIs/payment'
 import * as local from '../../../Shared/Assets/ar.json'
 import './styles.scss'
@@ -41,7 +44,7 @@ interface Props {
   setReceiptData: (data) => void
   print: (data) => void
   refreshPayment: () => void
-  // manualPaymentEditId: string
+  manualPaymentEditId: string
   paymentType: string
 }
 export interface Employee {
@@ -58,6 +61,7 @@ interface State {
   loading: boolean
   loadingFullScreen: boolean
   remainingPrincipal: number
+  earlyPaymentFees: number
   requiredAmount: number
   installmentNumber: number
   // penalty: number
@@ -130,6 +134,7 @@ class Payment extends Component<Props, State> {
       loading: false,
       loadingFullScreen: false,
       remainingPrincipal: 0,
+      earlyPaymentFees: 0,
       requiredAmount: 0,
       installmentNumber: -1,
       payerType: '',
@@ -235,6 +240,31 @@ class Payment extends Component<Props, State> {
             )
           }
         }
+      } else if (this.props.paymentType === 'random') {
+        const data = {
+          payAmount: values.payAmount,
+          truthDate: truthDateTimestamp,
+          type: values.randomPaymentType,
+          payerType: values.payerType,
+          payerId: values.payerId,
+          payerName: values.payerName,
+          payerNationalId: values.payerNationalId?.toString(),
+        }
+        const res = await otherPayment({ id: this.props.applicationId, data })
+        if (res.status === 'success') {
+          const resBody = res.body
+          resBody[0].type = 'randomPayment'
+          resBody[0].randomPaymentType = values.randomPaymentType
+          this.props.setReceiptData(resBody)
+          this.props.print({ print: 'randomPayment' })
+          this.setState({ loadingFullScreen: false }, () =>
+            this.props.refreshPayment()
+          )
+        } else {
+          this.setState({ loadingFullScreen: false }, () =>
+            Swal.fire('', getErrorMessage(res.error.error), 'error')
+          )
+        }
       }
     } else if (this.props.paymentType === 'normal') {
       const obj = {
@@ -262,6 +292,51 @@ class Payment extends Component<Props, State> {
         this.setState({ loadingFullScreen: false }, () =>
           Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
         )
+      }
+    } else {
+      const obj = {
+        id: this.props.applicationId,
+        receiptNumber: values.receiptNumber,
+        truthDate: truthDateTimestamp,
+        payAmount: values.payAmount,
+        payerType: values.payerType,
+        payerId: values.payerId,
+        payerName: values.payerName,
+        payerNationalId: values.payerNationalId
+          ? values.payerNationalId.toString()
+          : '',
+        type:
+          this.props.paymentType === 'random'
+            ? values.randomPaymentType
+            : 'penalty',
+        actionId: this.props.manualPaymentEditId
+          ? this.props.manualPaymentEditId
+          : '',
+      }
+      if (this.props.manualPaymentEditId === '') {
+        const res = await randomManualPayment(obj)
+        if (res.status === 'success') {
+          this.setState({ loadingFullScreen: false })
+          Swal.fire('', local.manualPaymentSuccess, 'success').then(() =>
+            this.props.refreshPayment()
+          )
+        } else {
+          this.setState({ loadingFullScreen: false }, () =>
+            Swal.fire('', getErrorMessage(res.error.error), 'error')
+          )
+        }
+      } else {
+        const res = await editManualOtherPayment(obj)
+        if (res.status === 'success') {
+          this.setState({ loadingFullScreen: false })
+          Swal.fire('', local.editManualPaymentSuccess, 'success').then(() =>
+            this.props.refreshPayment()
+          )
+        } else {
+          this.setState({ loadingFullScreen: false }, () =>
+            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          )
+        }
       }
     }
 

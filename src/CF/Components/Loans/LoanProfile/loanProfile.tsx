@@ -79,6 +79,7 @@ import { getRollableActionsById } from '../../../../Shared/Services/APIs/loanApp
 import { returnItem } from '../../../Services/APIs/loan'
 import { doneSuccessfully } from '../../../../Shared/localUtils'
 import Rescheduling from '../../Rescheduling/rescheduling'
+import RandomPaymentReceipt from '../../PdfTemplates/randomPaymentReceipt/randomPaymentReceipt'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -102,12 +103,12 @@ interface State {
   loading: boolean
   print: string
   pendingActions: PendingActions
-  // manualPaymentEditId: string
+  manualPaymentEditId: string
   branchDetails: BranchDetails
   receiptData: any
   iscores: any
   penalty: number
-  // randomPendingActions: Array<any>
+  randomPendingActions: Array<any>
   geoAreas: Array<any>
   // remainingTotal: number
   remainingLoan?: RemainingLoanResponse
@@ -136,11 +137,11 @@ class LoanProfile extends Component<Props, State> {
       loading: false,
       print: '',
       pendingActions: {},
-      // manualPaymentEditId: '',
+      manualPaymentEditId: '',
       receiptData: {},
       iscores: [],
       penalty: 0,
-      // randomPendingActions: [],
+      randomPendingActions: [],
       geoAreas: [],
       // remainingTotal: 0,
       individualsWithInstallments: {
@@ -308,6 +309,13 @@ class LoanProfile extends Component<Props, State> {
       permissionKey: 'application',
     }
 
+    const financialTransactionsTab = {
+      header: local.financialTransactions,
+      stringKey: 'financialTransactions',
+      permission: 'payInstallment',
+      permissionKey: 'application',
+    }
+
     const logsTab = {
       header: local.logs,
       stringKey: 'loanLogs',
@@ -334,6 +342,14 @@ class LoanProfile extends Component<Props, State> {
       tabsToRender.push(customerCardTab)
       tabsToRender.push(paymentTab)
       tabsToRender.push(reschedulingTab)
+    }
+    if (
+      application.body.status === 'issued' ||
+      application.body.status === 'paid' ||
+      application.body.status === 'pending' ||
+      application.body.status === 'canceled'
+    ) {
+      tabsToRender.push(financialTransactionsTab)
     }
     tabsToRender.push(logsTab)
 
@@ -967,7 +983,7 @@ class LoanProfile extends Component<Props, State> {
             currency={this.state.application.product.currency}
             applicationId={this.state.application._id}
             pendingActions={this.state.pendingActions}
-            // manualPaymentEditId={this.state.manualPaymentEditId}
+            manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="normal"
           />
@@ -1014,7 +1030,7 @@ class LoanProfile extends Component<Props, State> {
             currency={this.state.application.product.currency}
             applicationId={this.state.application._id}
             pendingActions={this.state.pendingActions}
-            // manualPaymentEditId={this.state.manualPaymentEditId}
+            manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="random"
           />
@@ -1033,7 +1049,7 @@ class LoanProfile extends Component<Props, State> {
             currency={this.state.application.product.currency}
             applicationId={this.state.application._id}
             pendingActions={this.state.pendingActions}
-            // manualPaymentEditId={this.state.manualPaymentEditId}
+            manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="penalties"
           />
@@ -1288,6 +1304,13 @@ class LoanProfile extends Component<Props, State> {
             companyReceipt={
               this.state.application.customer.customerType === 'company'
             }
+          />
+        )}
+
+        {this.state.print === 'randomPayment' && (
+          <RandomPaymentReceipt
+            receiptData={this.state.receiptData}
+            data={this.state.application}
           />
         )}
       </Container>
