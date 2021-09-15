@@ -108,7 +108,6 @@ interface State {
   receiptData: any
   iscores: any
   penalty: number
-  randomPendingActions: Array<any>
   geoAreas: Array<any>
   // remainingTotal: number
   remainingLoan?: RemainingLoanResponse
@@ -141,7 +140,6 @@ class LoanProfile extends Component<Props, State> {
       receiptData: {},
       iscores: [],
       penalty: 0,
-      randomPendingActions: [],
       geoAreas: [],
       // remainingTotal: 0,
       individualsWithInstallments: {
