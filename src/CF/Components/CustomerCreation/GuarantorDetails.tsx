@@ -233,13 +233,14 @@ export const GuarantorTableView = (props: Props) => {
   return (
     <>
       <div className="d-flex flex-column align-items-start justify-content-center">
-        {ability.can('addCustomerGuarantors', 'customer') && (
-          <div className="mt-5 mb-5">
-            <Button variant="primary" onClick={() => changeModal(true)}>
-              {local.addEditOrRemoveGuarantor}
-            </Button>
-          </div>
-        )}
+        {ability.can('addCustomerGuarantors', 'customer') &&
+          props.guarantors.length < 2 && (
+            <div className="mt-5 mb-5">
+              <Button variant="primary" onClick={() => changeModal(true)}>
+                {local.addEditOrRemoveGuarantor}
+              </Button>
+            </div>
+          )}
         {props.guarantors.length > 0 ? (
           <Table style={{ textAlign: 'right' }}>
             <thead>
@@ -337,15 +338,13 @@ export const GuarantorTableView = (props: Props) => {
                             </td>
                           </Can>
                         )}
-                      {props.guarantors.length > 2 && (
-                        <td style={{ cursor: 'pointer', padding: 10 }}>
-                          <img
-                            src={require('../../../Shared/Assets/deleteIcon.svg')}
-                            alt={local.delete}
-                            onClick={() => removeGuarantor(guar)}
-                          />
-                        </td>
-                      )}
+                      <td style={{ cursor: 'pointer', padding: 10 }}>
+                        <img
+                          src={require('../../../Shared/Assets/deleteIcon.svg')}
+                          alt={local.delete}
+                          onClick={() => removeGuarantor(guar)}
+                        />
+                      </td>
                     </tr>
                   )
                 })}
