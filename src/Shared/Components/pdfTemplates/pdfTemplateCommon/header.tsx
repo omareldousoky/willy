@@ -32,7 +32,7 @@ export const Header = ({
   return (
     <>
       <div className="d-flex justify-content-between m-2">
-        <span className="logo-print" role="img" />
+        <span className={`${cf ? 'cf-' : ''}logo-print`} role="img" />
         <p className="m-0 ml-3 text-right text-sm">
           {cf
             ? 'ترخيص رقم 23 بتاريخ 31/05/2021'
