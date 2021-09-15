@@ -18,7 +18,7 @@ import { PaymentsDone } from '../../../Shared/Components/pdfTemplates/paymentsDo
 import { RandomPayment } from '../../../Shared/Components/pdfTemplates/randomPayment'
 import { CustomerTransactionReport } from '../../../Shared/Components/pdfTemplates/customerTransactionReport'
 import RaseedyTransactionsReport from '../../../Shared/Components/pdfTemplates/RaseedyTransactions'
-
+import { RescheduledLoanList } from '../../../Shared/Components/pdfTemplates/rescheduledLoanList'
 import {
   collectionReport,
   penalties,
@@ -798,6 +798,9 @@ class Reports extends Component<{}, State> {
         */}
         {this.state.print === 'issuedLoanList' && (
           <IssuedLoanList data={this.state.data} isCF />
+        )}
+        {this.state.print === 'rescheduledLoanList' && (
+          <RescheduledLoanList data={this.state.data} isCF />
         )}
         {this.state.print === 'paymentsDoneList' && (
           <PaymentsDone data={this.state.data} isCF />
