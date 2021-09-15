@@ -7,7 +7,6 @@ import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'
 import BackButton from '../../../Shared/Components/BackButton/back-button'
 import {
-  beneficiaryType,
   loanNature,
   currency,
   periodType,
@@ -67,17 +66,6 @@ class ViewProduct extends Component<
                   <tr>
                     <td>{local.productName}</td>
                     <td>{this.state.product.productName}</td>
-                  </tr>
-                  <tr>
-                    <td>{local.customerType}</td>
-                    <td>
-                      {beneficiaryType(this.state.product.beneficiaryType)} -
-                      {this.state.product.type || ''}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{local.contractType}</td>
-                    <td>{local[this.state.product.contractType]}</td>
                   </tr>
                   <tr>
                     <td>{local.calculationFormulaId}</td>

@@ -59,3 +59,12 @@ export interface ApiResponse<T> {
   body?: T
   error?: unknown
 }
+export interface Product {
+  id: string
+  name: string
+  branchCount: number
+  beneficiaryType: string
+  code: number
+  type: string
+  contractType: string
+}
