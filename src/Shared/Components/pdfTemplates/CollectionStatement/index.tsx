@@ -1,10 +1,17 @@
 import React from 'react'
 import './CollectionStatement.scss'
 import Table from 'react-bootstrap/Table'
-import Orientation from '../../../../Shared/Components/Common/orientation'
-import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
+import Orientation from '../../Common/orientation'
+import { Header } from '../pdfTemplateCommon/header'
 
-export const CollectionStatement = ({ data }) => {
+interface CollectionStatementProps {
+  data: any
+  isCF?: boolean
+}
+export const CollectionStatement: React.FC<CollectionStatementProps> = ({
+  data,
+  isCF,
+}) => {
   const { branches } = data.data
   const { total } = data.data
   const { startDate, endDate } = data
@@ -69,6 +76,7 @@ export const CollectionStatement = ({ data }) => {
           title="حركات السداد باليوم"
           fromDate={startDate}
           toDate={endDate}
+          cf={isCF}
         />
         <Table className="w-100" striped bordered hover>
           <tbody>

@@ -7,21 +7,31 @@ import * as local from '../../../Shared/Assets/ar.json'
 // import { getCustomerDetails } from '../../Services/APIs/Reports/customerDetails'
 // import { getLoanDetails } from '../../Services/APIs/Reports/loanDetails'
 // import { LoanApplicationDetails } from '../pdfTemplates/loanApplicationDetails'
-// import { CollectionStatement } from '../pdfTemplates/CollectionStatement'
-// import { LoanPenaltiesList } from '../pdfTemplates/loanPenaltiesList'
-// import { CrossedOutLoansList } from '../pdfTemplates/crossedOutLoansList'
+import { CollectionStatement } from '../../../Shared/Components/pdfTemplates/CollectionStatement'
+import { ManualPayments } from '../../../Shared/Components/pdfTemplates/manualPayments'
+import { LoanPenaltiesList } from '../../../Shared/Components/pdfTemplates/loanPenaltiesList'
+import { CrossedOutLoansList } from '../../../Shared/Components/pdfTemplates/crossedOutLoansList'
 // import { DoubtfulPayments } from '../pdfTemplates/doubtfulPayments'
-// import {
-//   collectionReport,
-//   penalties,
-//   writeOffs,
-//   postCollectionReportExcel,
-//   getCollectionReportExcel,
-//   postPenaltiesExcel,
-//   getPenaltiesExcel,
-//   getWriteOffsExcel,
-//   postWriteOffsExcel,
-// } from '../../Services/APIs/Reports'
+import {
+  collectionReport,
+  penalties,
+  writeOffs,
+  postCollectionReportExcel,
+  getCollectionReportExcel,
+  postPenaltiesExcel,
+  getPenaltiesExcel,
+  getWriteOffsExcel,
+  postWriteOffsExcel,
+  getManualPayments,
+  postManualPaymentsExcel,
+  getManualPaymentsExcel,
+  getDoubtfulLoansExcel,
+  postDoubtfulLoansExcel,
+  doubtfulLoans,
+  getIssuedLoanList,
+  getIssuedLoansExcel,
+  postIssuedLoansExcel,
+} from '../../../Shared/Services/APIs/Reports'
 // import {
 //   installments,
 //   postInstallmentsExcel,
@@ -29,11 +39,6 @@ import * as local from '../../../Shared/Assets/ar.json'
 // } from '../../Services/APIs/Reports/installments'
 // import { PaymentsDone } from '../pdfTemplates/paymentsDone'
 // import { IssuedLoanList } from '../pdfTemplates/issuedLoanList'
-// import {
-//   getIssuedLoanList,
-//   postIssuedLoansExcel,
-//   getIssuedLoansExcel,
-// } from '../../Services/APIs/Reports/issuedLoansList'
 // import {
 //   getRescheduledLoanList,
 //   postRescheduledLoanExcel,
@@ -53,18 +58,8 @@ import * as local from '../../../Shared/Assets/ar.json'
 //   getLoanApplicationFeesExcel,
 // } from '../../Services/APIs/Reports/loanApplicationFees'
 // import { LoanApplicationFees } from '../pdfTemplates/loanApplicationFees'
-// import {
-//   doubtfulLoans,
-//   postDoubtfulLoansExcel,
-//   getDoubtfulLoansExcel,
-// } from '../../Services/APIs/Reports/doubtfulLoans'
+
 // import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport'
-// import { ManualPayments } from '../pdfTemplates/manualPayments'
-import {
-  getManualPayments,
-  postManualPaymentsExcel,
-  getManualPaymentsExcel,
-} from '../../../Shared/Services/APIs/Reports/manualPayments'
 import { downloadFile } from '../../../Shared/Services/utils'
 // import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 // import { CustomerTransactionReport } from '../pdfTemplates/customerTransactionReport'
@@ -79,7 +74,8 @@ import { downloadFile } from '../../../Shared/Services/utils'
 import { PDFList } from '../../../Shared/Components/PdfList'
 import { PDF } from '../../../Shared/Components/PdfList/types'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
-import { ManualPayments } from '../../../Shared/Components/pdfTemplates/manualPayments'
+import { DoubtfulPayments } from '../../../Shared/Components/pdfTemplates/doubtfulPayments'
+import { IssuedLoanList } from '../../../Shared/Components/pdfTemplates/issuedLoanList'
 
 interface State {
   showModal?: boolean
@@ -112,36 +108,36 @@ class Reports extends Component<{}, State> {
         //   inputs: ['customerKey'],
         //   permission: 'loanDetails',
         // },
-        // {
-        //   key: 'CollectionStatement',
-        //   local: 'كشف التحصيل',
-        //   inputs: ['dateFromTo', 'branches', 'loanType'],
-        //   permission: 'collectionReport',
-        // },
-        // {
-        //   key: 'Penalties',
-        //   local: 'الغرامات',
-        //   inputs: ['dateFromTo', 'branches', 'loanType'],
-        //   permission: 'penalties',
-        // },
-        // {
-        //   key: 'CrossedOutLoans',
-        //   local: 'قائمة حركات إعدام ديون القروض المنفذة',
-        //   inputs: ['dateFromTo', 'branches', 'loanType'],
-        //   permission: 'writeOffs',
-        // },
-        // {
-        //   key: 'DoubtfulLoans',
-        //   local: 'قائمة حركة القروض المشكوك في سدادها',
-        //   inputs: ['dateFromTo', 'branches', 'loanType'],
-        //   permission: 'loanDoubts',
-        // },
-        // {
-        //   key: 'issuedLoanList',
-        //   local: 'القروض المصدرة',
-        //   inputs: ['dateFromTo', 'branches', 'loanType'],
-        //   permission: 'loansIssued',
-        // },
+        {
+          key: 'CollectionStatement',
+          local: 'كشف التحصيل',
+          inputs: ['dateFromTo', 'branches', 'loanType'],
+          permission: 'collectionReport',
+        },
+        {
+          key: 'Penalties',
+          local: 'الغرامات',
+          inputs: ['dateFromTo', 'branches', 'loanType'],
+          permission: 'penalties',
+        },
+        {
+          key: 'CrossedOutLoans',
+          local: 'قائمة حركات إعدام ديون القروض المنفذة',
+          inputs: ['dateFromTo', 'branches', 'loanType'],
+          permission: 'writeOffs',
+        },
+        {
+          key: 'DoubtfulLoans',
+          local: 'قائمة حركة القروض المشكوك في سدادها',
+          inputs: ['dateFromTo', 'branches', 'loanType'],
+          permission: 'loanDoubts',
+        },
+        {
+          key: 'issuedLoanList',
+          local: 'القروض المصدرة',
+          inputs: ['dateFromTo', 'branches', 'loanType'],
+          permission: 'loansIssued',
+        },
         // {
         //   key: 'rescheduledLoanList',
         //   local: 'قائمة حركات جدولة القروض المنفذه',
@@ -202,16 +198,16 @@ class Reports extends Component<{}, State> {
       //   return this.getCustomerDetails(values)
       // case 'loanDetails':
       //   return this.getLoanDetails(values)
-      // case 'CollectionStatement':
-      //   return this.getCollectionReport(values)
-      // case 'Penalties':
-      //   return this.getLoanPenaltiesReport(values)
-      // case 'CrossedOutLoans':
-      //   return this.getWriteOffsReport(values)
-      // case 'DoubtfulLoans':
-      //   return this.getDoubtfulLoansReport(values)
-      // case 'issuedLoanList':
-      //   return this.getIssuedLoanList(values)
+      case 'CollectionStatement':
+        return this.getCollectionReport(values)
+      case 'Penalties':
+        return this.getLoanPenaltiesReport(values)
+      case 'CrossedOutLoans':
+        return this.getWriteOffsReport(values)
+      case 'DoubtfulLoans':
+        return this.getDoubtfulLoansReport(values)
+      case 'issuedLoanList':
+        return this.getIssuedLoanList(values)
       // case 'rescheduledLoanList':
       //   return this.getRescheduledLoanList(values)
       // case 'paymentsDoneList':
@@ -237,28 +233,28 @@ class Reports extends Component<{}, State> {
     switch (this.state.selectedPdf.key) {
       // case 'customerDetails': return this.getCustomerDetails(values); TODO keep commented
       // case 'loanDetails': return this.getLoanDetails(values); TODO keep commented
-      // case 'CollectionStatement':
-      //   return this.getExcelFile(
-      //     postCollectionReportExcel,
-      //     getCollectionReportExcel,
-      //     values
-      //   )
-      // case 'Penalties':
-      //   return this.getExcelFile(postPenaltiesExcel, getPenaltiesExcel, values)
-      // case 'CrossedOutLoans':
-      //   return this.getExcelFile(postWriteOffsExcel, getWriteOffsExcel, values)
-      // case 'DoubtfulLoans':
-      //   return this.getExcelFile(
-      //     postDoubtfulLoansExcel,
-      //     getDoubtfulLoansExcel,
-      //     values
-      //   )
-      // case 'issuedLoanList':
-      //   return this.getExcelFile(
-      //     postIssuedLoansExcel,
-      //     getIssuedLoansExcel,
-      //     values
-      //   )
+      case 'CollectionStatement':
+        return this.getExcelFile(
+          postCollectionReportExcel,
+          getCollectionReportExcel,
+          values
+        )
+      case 'Penalties':
+        return this.getExcelFile(postPenaltiesExcel, getPenaltiesExcel, values)
+      case 'CrossedOutLoans':
+        return this.getExcelFile(postWriteOffsExcel, getWriteOffsExcel, values)
+      case 'DoubtfulLoans':
+        return this.getExcelFile(
+          postDoubtfulLoansExcel,
+          getDoubtfulLoansExcel,
+          values
+        )
+      case 'issuedLoanList':
+        return this.getExcelFile(
+          postIssuedLoansExcel,
+          getIssuedLoansExcel,
+          values
+        )
       // case 'rescheduledLoanList':
       //   return this.getExcelFile(
       //     postRescheduledLoanExcel,
@@ -420,36 +416,36 @@ class Reports extends Component<{}, State> {
   //   }
   // }
 
-  // async getIssuedLoanList(values) {
-  //   this.setState({ loading: true, showModal: false })
-  //   const branches = values.branches.map((branch) => branch._id)
-  //   const obj = {
-  //     startdate: values.fromDate,
-  //     enddate: values.toDate,
-  //     branches: branches.includes('') ? [] : branches,
-  //     loanType: values.loanType,
-  //   }
-  //   const res = await getIssuedLoanList(obj)
-  //   if (res.status === 'success') {
-  //     if (!res.body) {
-  //       this.setState({ loading: false })
-  //       Swal.fire('error', local.noResults)
-  //     } else {
-  //       this.setState(
-  //         {
-  //           data: { data: res.body, from: values.fromDate, to: values.toDate },
-  //           showModal: false,
-  //           print: 'issuedLoanList',
-  //           loading: false,
-  //         },
-  //         () => window.print()
-  //       )
-  //     }
-  //   } else {
-  //     this.setState({ loading: false })
-  //     console.log(res)
-  //   }
-  // }
+  async getIssuedLoanList(values) {
+    this.setState({ loading: true, showModal: false })
+    const branches = values.branches.map((branch) => branch._id)
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
+    }
+    const res = await getIssuedLoanList(obj)
+    if (res.status === 'success') {
+      if (!res.body) {
+        this.setState({ loading: false })
+        Swal.fire('error', local.noResults)
+      } else {
+        this.setState(
+          {
+            data: { data: res.body, from: values.fromDate, to: values.toDate },
+            showModal: false,
+            print: 'issuedLoanList',
+            loading: false,
+          },
+          () => window.print()
+        )
+      }
+    } else {
+      this.setState({ loading: false })
+      console.log(res)
+    }
+  }
 
   // async getRescheduledLoanList(values) {
   //   this.setState({ loading: true, showModal: false })
@@ -482,150 +478,150 @@ class Reports extends Component<{}, State> {
   //   }
   // }
 
-  // async getCollectionReport(values) {
-  //   this.setState({ loading: true, showModal: false })
-  //   const res = await collectionReport({
-  //     startDate: values.fromDate,
-  //     endDate: values.toDate,
-  //     branches: values.branches.some((branch) => branch._id === '')
-  //       ? []
-  //       : values.branches.map((branch) => branch._id),
-  //     loanType: values.loanType,
-  //   })
-  //   if (res.status === 'success') {
-  //     if (!res.body) {
-  //       this.setState({ loading: false })
-  //       Swal.fire('error', local.noResults)
-  //     } else {
-  //       const data = {
-  //         startDate: values.fromDate,
-  //         endDate: values.toDate,
-  //         data: res.body,
-  //       }
-  //       this.setState(
-  //         {
-  //           data,
-  //           showModal: false,
-  //           print: 'CollectionStatement',
-  //           loading: false,
-  //         },
-  //         () => window.print()
-  //       )
-  //     }
-  //   } else {
-  //     this.setState({ loading: false })
-  //     console.log(res)
-  //   }
-  // }
+  async getCollectionReport(values) {
+    this.setState({ loading: true, showModal: false })
+    const res = await collectionReport({
+      startDate: values.fromDate,
+      endDate: values.toDate,
+      branches: values.branches.some((branch) => branch._id === '')
+        ? []
+        : values.branches.map((branch) => branch._id),
+      loanType: values.loanType,
+    })
+    if (res.status === 'success') {
+      if (!res.body) {
+        this.setState({ loading: false })
+        Swal.fire('error', local.noResults)
+      } else {
+        const data = {
+          startDate: values.fromDate,
+          endDate: values.toDate,
+          data: res.body,
+        }
+        this.setState(
+          {
+            data,
+            showModal: false,
+            print: 'CollectionStatement',
+            loading: false,
+          },
+          () => window.print()
+        )
+      }
+    } else {
+      this.setState({ loading: false })
+      console.log(res)
+    }
+  }
 
-  // async getLoanPenaltiesReport(values) {
-  //   this.setState({ loading: true, showModal: false })
-  //   const branches = values.branches.map((branch) => branch._id)
-  //   const res = await penalties({
-  //     startDate: values.fromDate,
-  //     endDate: values.toDate,
-  //     branches: branches.includes('') ? [] : branches,
-  //     loanType: values.loanType,
-  //   })
-  //   if (res.status === 'success') {
-  //     if (!res.body) {
-  //       this.setState({ loading: false })
-  //       Swal.fire('error', local.noResults)
-  //     } else {
-  //       const data = {
-  //         days: res.body.days,
-  //         totalNumberOfTransactions: Number(res.body.numTrx),
-  //         totalTransactionAmount: Number(res.body.transactionAmount),
-  //         totalCancelledAmount: Number(res.body.rbAmount),
-  //         totalPaidAmount: Number(res.body.netAmount),
-  //         startDate: values.fromDate,
-  //         endDate: values.toDate,
-  //       }
-  //       this.setState(
-  //         {
-  //           data,
-  //           showModal: false,
-  //           print: 'Penalties',
-  //           loading: false,
-  //         },
-  //         () => window.print()
-  //       )
-  //     }
-  //   } else {
-  //     this.setState({ loading: false })
-  //     console.log(res)
-  //   }
-  // }
+  async getLoanPenaltiesReport(values) {
+    this.setState({ loading: true, showModal: false })
+    const branches = values.branches.map((branch) => branch._id)
+    const res = await penalties({
+      startDate: values.fromDate,
+      endDate: values.toDate,
+      branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
+    })
+    if (res.status === 'success') {
+      if (!res.body) {
+        this.setState({ loading: false })
+        Swal.fire('error', local.noResults)
+      } else {
+        const data = {
+          days: res.body.days,
+          totalNumberOfTransactions: Number(res.body.numTrx),
+          totalTransactionAmount: Number(res.body.transactionAmount),
+          totalCancelledAmount: Number(res.body.rbAmount),
+          totalPaidAmount: Number(res.body.netAmount),
+          startDate: values.fromDate,
+          endDate: values.toDate,
+        }
+        this.setState(
+          {
+            data,
+            showModal: false,
+            print: 'Penalties',
+            loading: false,
+          },
+          () => window.print()
+        )
+      }
+    } else {
+      this.setState({ loading: false })
+      console.log(res)
+    }
+  }
 
-  // async getDoubtfulLoansReport(values) {
-  //   this.setState({ loading: true, showModal: false })
-  //   const res = await doubtfulLoans({
-  //     startDate: values.fromDate,
-  //     endDate: values.toDate,
-  //     branches: values.branches
-  //       .filter((branch) => branch._id !== '')
-  //       .map((branch) => branch._id),
-  //     loanType: values.loanType,
-  //   })
-  //   if (res.status === 'success') {
-  //     if (!res.body) {
-  //       this.setState({ loading: false })
-  //       Swal.fire('error', local.noResults)
-  //     } else {
-  //       const data = {
-  //         req: { startDate: values.fromDate, endDate: values.toDate },
-  //         data: { ...res.body },
-  //       }
-  //       this.setState(
-  //         {
-  //           data,
-  //           showModal: false,
-  //           print: 'DoubtfulLoans',
-  //           loading: false,
-  //         },
-  //         () => window.print()
-  //       )
-  //     }
-  //   } else {
-  //     this.setState({ loading: false })
-  //     console.log(res)
-  //   }
-  // }
+  async getDoubtfulLoansReport(values) {
+    this.setState({ loading: true, showModal: false })
+    const res = await doubtfulLoans({
+      startDate: values.fromDate,
+      endDate: values.toDate,
+      branches: values.branches
+        .filter((branch) => branch._id !== '')
+        .map((branch) => branch._id),
+      loanType: values.loanType,
+    })
+    if (res.status === 'success') {
+      if (!res.body) {
+        this.setState({ loading: false })
+        Swal.fire('error', local.noResults)
+      } else {
+        const data = {
+          req: { startDate: values.fromDate, endDate: values.toDate },
+          data: { ...res.body },
+        }
+        this.setState(
+          {
+            data,
+            showModal: false,
+            print: 'DoubtfulLoans',
+            loading: false,
+          },
+          () => window.print()
+        )
+      }
+    } else {
+      this.setState({ loading: false })
+      console.log(res)
+    }
+  }
 
-  // async getWriteOffsReport(values) {
-  //   this.setState({ loading: true, showModal: false })
-  //   const res = await writeOffs({
-  //     startDate: values.fromDate,
-  //     endDate: values.toDate,
-  //     branches: values.branches
-  //       .filter((branch) => branch._id !== '')
-  //       .map((branch) => branch._id),
-  //     loanType: values.loanType,
-  //   })
-  //   if (res.status === 'success') {
-  //     if (!res.body) {
-  //       this.setState({ loading: false })
-  //       Swal.fire('error', local.noResults)
-  //     } else {
-  //       const data = {
-  //         req: { startDate: values.fromDate, endDate: values.toDate },
-  //         data: { ...res.body },
-  //       }
-  //       this.setState(
-  //         {
-  //           data,
-  //           showModal: false,
-  //           print: 'CrossedOutLoans',
-  //           loading: false,
-  //         },
-  //         () => window.print()
-  //       )
-  //     }
-  //   } else {
-  //     this.setState({ loading: false })
-  //     console.log(res)
-  //   }
-  // }
+  async getWriteOffsReport(values) {
+    this.setState({ loading: true, showModal: false })
+    const res = await writeOffs({
+      startDate: values.fromDate,
+      endDate: values.toDate,
+      branches: values.branches
+        .filter((branch) => branch._id !== '')
+        .map((branch) => branch._id),
+      loanType: values.loanType,
+    })
+    if (res.status === 'success') {
+      if (!res.body) {
+        this.setState({ loading: false })
+        Swal.fire('error', local.noResults)
+      } else {
+        const data = {
+          req: { startDate: values.fromDate, endDate: values.toDate },
+          data: { ...res.body },
+        }
+        this.setState(
+          {
+            data,
+            showModal: false,
+            print: 'CrossedOutLoans',
+            loading: false,
+          },
+          () => window.print()
+        )
+      }
+    } else {
+      this.setState({ loading: false })
+      console.log(res)
+    }
+  }
 
   // async getCibPaymentReport(values) {
   //   this.setState({ loading: true, showModal: false })
@@ -834,27 +830,33 @@ class Reports extends Component<{}, State> {
         {this.state.print === 'loanDetails' && (
           <LoanApplicationDetails data={this.state.data} />
         )}
+        */}
         {this.state.print === 'issuedLoanList' && (
-          <IssuedLoanList data={this.state.data} />
+          <IssuedLoanList data={this.state.data} isCF />
         )}
+        {/*
         {this.state.print === 'rescheduledLoanList' && (
           <RescheduledLoanList data={this.state.data} />
         )}
         {this.state.print === 'paymentsDoneList' && (
           <PaymentsDone data={this.state.data} />
         )}
+        */}
         {this.state.print === 'CollectionStatement' && (
-          <CollectionStatement data={this.state.data} />
+          <CollectionStatement data={this.state.data} isCF />
         )}
         {this.state.print === 'Penalties' && (
-          <LoanPenaltiesList data={this.state.data} />
+          <LoanPenaltiesList data={this.state.data} isCF />
         )}
+
         {this.state.print === 'CrossedOutLoans' && (
-          <CrossedOutLoansList data={this.state.data} />
+          <CrossedOutLoansList data={this.state.data} isCF />
         )}
+
         {this.state.print === 'DoubtfulLoans' && (
-          <DoubtfulPayments data={this.state.data} />
+          <DoubtfulPayments data={this.state.data} isCF />
         )}
+        {/*
         {this.state.print === 'randomPayments' && (
           <RandomPayment
             branches={this.state.data.branches}

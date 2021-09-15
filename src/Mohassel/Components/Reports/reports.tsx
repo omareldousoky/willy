@@ -13,33 +13,17 @@ import {
   postBranchLoanListExcel,
   getBranchLoanListExcel,
 } from '../../Services/APIs/Reports/branchLoanList'
-import { CollectionStatement } from '../pdfTemplates/CollectionStatement'
-import { LoanPenaltiesList } from '../pdfTemplates/loanPenaltiesList'
-import { CrossedOutLoansList } from '../pdfTemplates/crossedOutLoansList'
-import { DoubtfulPayments } from '../pdfTemplates/doubtfulPayments'
-import {
-  collectionReport,
-  penalties,
-  writeOffs,
-  postCollectionReportExcel,
-  getCollectionReportExcel,
-  postPenaltiesExcel,
-  getPenaltiesExcel,
-  getWriteOffsExcel,
-  postWriteOffsExcel,
-} from '../../Services/APIs/Reports'
+import { CollectionStatement } from '../../../Shared/Components/pdfTemplates/CollectionStatement'
+import { LoanPenaltiesList } from '../../../Shared/Components/pdfTemplates/loanPenaltiesList'
+import { CrossedOutLoansList } from '../../../Shared/Components/pdfTemplates/crossedOutLoansList'
+import { DoubtfulPayments } from '../../../Shared/Components/pdfTemplates/doubtfulPayments'
 import {
   installments,
   postInstallmentsExcel,
   getInstallmentsExcel,
 } from '../../Services/APIs/Reports/installments'
 import { PaymentsDone } from '../pdfTemplates/paymentsDone'
-import { IssuedLoanList } from '../pdfTemplates/issuedLoanList'
-import {
-  getIssuedLoanList,
-  postIssuedLoansExcel,
-  getIssuedLoansExcel,
-} from '../../Services/APIs/Reports/issuedLoansList'
+import { IssuedLoanList } from '../../../Shared/Components/pdfTemplates/issuedLoanList'
 import {
   getCreatedLoanList,
   postCreatedLoansExcel,
@@ -64,17 +48,7 @@ import {
   getLoanApplicationFeesExcel,
 } from '../../Services/APIs/Reports/loanApplicationFees'
 import { LoanApplicationFees } from '../pdfTemplates/loanApplicationFees'
-import {
-  doubtfulLoans,
-  postDoubtfulLoansExcel,
-  getDoubtfulLoansExcel,
-} from '../../Services/APIs/Reports/doubtfulLoans'
 import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport'
-import {
-  getManualPayments,
-  postManualPaymentsExcel,
-  getManualPaymentsExcel,
-} from '../../../Shared/Services/APIs/Reports/manualPayments'
 import { downloadFile } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import { CustomerTransactionReport } from '../pdfTemplates/customerTransactionReport'
@@ -90,6 +64,26 @@ import { PDFList } from '../../../Shared/Components/PdfList'
 import { PDF } from '../../../Shared/Components/PdfList/types'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
 import { ManualPayments } from '../../../Shared/Components/pdfTemplates/manualPayments'
+import {
+  getManualPayments,
+  postManualPaymentsExcel,
+  getManualPaymentsExcel,
+  postCollectionReportExcel,
+  getCollectionReportExcel,
+  postPenaltiesExcel,
+  getPenaltiesExcel,
+  collectionReport,
+  penalties,
+  getWriteOffsExcel,
+  postWriteOffsExcel,
+  writeOffs,
+  doubtfulLoans,
+  getDoubtfulLoansExcel,
+  postDoubtfulLoansExcel,
+  getIssuedLoanList,
+  getIssuedLoansExcel,
+  postIssuedLoansExcel,
+} from '../../../Shared/Services/APIs/Reports'
 
 interface State {
   showModal?: boolean

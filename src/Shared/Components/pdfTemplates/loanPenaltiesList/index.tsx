@@ -1,11 +1,11 @@
 import React from 'react'
 import './loanPenaltiesList.scss'
-import * as local from '../../../../Shared/Assets/ar.json'
-import { timeToArabicDate } from '../../../../Shared/Services/utils'
-import Orientation from '../../../../Shared/Components/Common/orientation'
+import * as local from '../../../Assets/ar.json'
+import { timeToArabicDate } from '../../../Services/utils'
+import Orientation from '../../Common/orientation'
 
 export const LoanPenaltiesList = (props) => {
-  const { data } = props
+  const { data, isCF } = props
   const { days } = data
   const startDate = timeToArabicDate(props.data.startDate, false)
   const endDate = timeToArabicDate(props.data.endDate, false)
@@ -155,10 +155,12 @@ export const LoanPenaltiesList = (props) => {
             <tr style={{ height: '10px' }} />
             <tr className="w-100 d-flex flex-row justify-content-between">
               <th colSpan={6}>
-                <div className="logo-print-tb" />
+                <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
               </th>
               <th colSpan={6}>
-                ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+                {isCF
+                  ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
+                  : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
               </th>
             </tr>
             <tr style={{ height: '10px' }} />
@@ -167,7 +169,11 @@ export const LoanPenaltiesList = (props) => {
         <table className="report-container">
           <thead className="report-header">
             <tr className="headtitle">
-              <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
+              <th colSpan={4}>
+                {isCF
+                  ? 'حالا للتمويل الاستهلاكي ش. م. م.'
+                  : 'شركة تساهيل للتمويل متناهي الصغر'}
+              </th>
               <th colSpan={6}>قائمة حركة غرامات القروض المنفذة</th>
             </tr>
             <tr className="headtitle">

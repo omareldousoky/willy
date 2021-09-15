@@ -4,12 +4,13 @@ import {
   timeToArabicDate,
   getTimestamp,
   timeToArabicDateNow,
-} from '../../../../Shared/Services/utils'
-import * as local from '../../../../Shared/Assets/ar.json'
-import Orientation from '../../../../Shared/Components/Common/orientation'
-import { loanStatusLocal } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/reportLocal'
+} from '../../../Services/utils'
+import * as local from '../../../Assets/ar.json'
+import Orientation from '../../Common/orientation'
+import { loanStatusLocal } from '../pdfTemplateCommon/reportLocal'
 
 export const DoubtfulPayments = (props) => {
+  const { isCF } = props
   const tempData = props.data.data
   const reportDate =
     props.data.req.startDate === props.data.req.endDate
@@ -31,10 +32,12 @@ export const DoubtfulPayments = (props) => {
           <tr style={{ height: '10px' }} />
           <tr className="w-100 d-flex flex-row justify-content-between">
             <th colSpan={6}>
-              <div className="logo-print-tb" />
+              <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
             </th>
             <th colSpan={6}>
-              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+              {isCF
+                ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
+                : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
             </th>
           </tr>
           <tr style={{ height: '10px' }} />
@@ -43,7 +46,11 @@ export const DoubtfulPayments = (props) => {
       <table className="report-container">
         <thead className="report-header">
           <tr className="headtitle">
-            <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
+            <th colSpan={4}>
+              {isCF
+                ? 'حالا للتمويل الاستهلاكي ش. م. م.'
+                : 'شركة تساهيل للتمويل متناهي الصغر'}
+            </th>
             <th colSpan={6}>قائمة حركة القروض المشكوك في سدادها</th>
           </tr>
           <tr className="headtitle">

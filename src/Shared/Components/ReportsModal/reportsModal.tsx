@@ -22,22 +22,16 @@ import {
   AsyncLoanOfficersDropDown,
   AsyncManagersDropDown,
   BranchesDropDown,
-} from '../../../Shared/Components/dropDowns/allDropDowns'
-import * as local from '../../../Shared/Assets/ar.json'
-import { Branch } from '../../../Shared/Services/interfaces'
-import {
-  DateField,
-  DateFromToField,
-} from '../../../Shared/Components/Common/FormikFields/dateField'
-import { required } from '../../../Shared/validations'
-import TextField from '../../../Shared/Components/Common/FormikFields/textField'
+} from '../dropDowns/allDropDowns'
+import * as local from '../../Assets/ar.json'
+import { Branch } from '../../Services/interfaces'
+import { required } from '../../validations'
+import TextField from '../Common/FormikFields/textField'
 
-import {
-  generateArrayOfYears,
-  getFullCustomerKey,
-} from '../../../Shared/Services/utils'
-import { PDF } from '../../../Shared/Components/PdfList/types'
+import { generateArrayOfYears, getFullCustomerKey } from '../../Services/utils'
+import { PDF } from '../PdfList/types'
 import { CurrentHierarchiesSingleResponse } from '../../Models/OfficerProductivity/OfficerProductivityReport'
+import { DateField, DateFromToField } from '../Common/FormikFields/dateField'
 
 interface InitialFormikState {
   fromDate?: string

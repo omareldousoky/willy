@@ -5,7 +5,7 @@ import {
   getTimestamp,
   timeToArabicDateNow,
   statusLocale,
-} from '../../../../Shared/Services/utils'
+} from '../../../Services/utils'
 
 export const IssuedLoanList = (props) => {
   const tempData = props.data.data
@@ -32,14 +32,16 @@ export const IssuedLoanList = (props) => {
               style={{ backgroundColor: 'white', listStyleType: 'none' }}
               className="border-0"
             >
-              <div className="logo-print-tb" />
+              <div className={`${props.isCF ? 'cf' : 'lts'}-logo-print-tb`} />
             </th>
             <th
               colSpan={6}
               style={{ backgroundColor: 'white' }}
               className="border-0"
             >
-              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+              {props.isCF
+                ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
+                : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
             </th>
           </tr>
           <tr style={{ height: '10px' }} />
@@ -48,7 +50,11 @@ export const IssuedLoanList = (props) => {
       <table className="report-container">
         <thead className="report-header">
           <tr className="headtitle">
-            <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
+            <th colSpan={4}>
+              {props.isCF
+                ? 'حالا للتمويل الاستهلاكي ش. م. م.'
+                : 'شركة تساهيل للتمويل متناهي الصغر'}
+            </th>
             <th colSpan={6}>قائمة حركات إصدار القروض المنفذه</th>
           </tr>
           <tr className="headtitle">
