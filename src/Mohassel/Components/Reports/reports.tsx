@@ -28,9 +28,9 @@ import {
   getRescheduledLoanList,
   postRescheduledLoanExcel,
   getRescheduledLoanExcel,
-} from '../../Services/APIs/Reports/rescheduledLoansList'
+} from '../../../Shared/Services/APIs/Reports/rescheduledLoansList'
 import { LoanCreationList } from '../pdfTemplates/loanCreationList'
-import { RescheduledLoanList } from '../pdfTemplates/rescheduledLoanList'
+import { RescheduledLoanList } from '../../../Shared/Components/pdfTemplates/rescheduledLoanList'
 import { RandomPayment } from '../../../Shared/Components/pdfTemplates/randomPayment'
 import {
   getLoanApplicationFees,

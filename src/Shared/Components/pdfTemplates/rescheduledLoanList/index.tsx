@@ -5,10 +5,11 @@ import {
   getTimestamp,
   timeToArabicDateNow,
   statusLocale,
-} from '../../../../Shared/Services/utils'
-import Orientation from '../../../../Shared/Components/Common/orientation'
+} from '../../../Services/utils'
+import Orientation from '../../Common/orientation'
 
 export const RescheduledLoanList = (props) => {
+  const { isCF } = props
   const tempData = props.data.data
   const reportDate =
     props.data.from === props.data.to
@@ -21,15 +22,21 @@ export const RescheduledLoanList = (props) => {
     <div className="rescheduled-loan-list" lang="ar">
       <Orientation size="portrait" />
       <div className="d-flex justify-content-between m-2">
-        <span className="logo-print" role="img" />
+        <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
         <p className="m-0 ml-3 text-right text-sm">
-          ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنة 2015
+          {isCF
+            ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
+            : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
         </p>
       </div>
       <table className="report-container">
         <thead className="report-header">
           <tr className="headtitle">
-            <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
+            <th colSpan={4}>
+              {isCF
+                ? 'حالا للتمويل الاستهلاكي ش. م. م.'
+                : 'شركة تساهيل للتمويل متناهي الصغر'}
+            </th>
             <th colSpan={6}>قائمة حركات جدولة القروض المنفذه</th>
           </tr>
           <tr className="headtitle">

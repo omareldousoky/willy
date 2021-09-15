@@ -6,6 +6,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 // import { CustomerStatusDetails } from '../pdfTemplates/customerStatusDetails'
 // import { getCustomerDetails } from '../../Services/APIs/Reports/customerDetails'
 // import { getLoanDetails } from '../../Services/APIs/Reports/loanDetails'
+// import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 // import { LoanApplicationDetails } from '../pdfTemplates/loanApplicationDetails'
 import { CollectionStatement } from '../../../Shared/Components/pdfTemplates/CollectionStatement'
 import { ManualPayments } from '../../../Shared/Components/pdfTemplates/manualPayments'
@@ -47,19 +48,12 @@ import {
   getRaseedyTransactionsExcel,
   postRaseedyTransactionsExcel,
   fetchRaseedyTransactions,
+  getRescheduledLoanExcel,
+  getRescheduledLoanList,
+  postRescheduledLoanExcel,
 } from '../../../Shared/Services/APIs/Reports'
-// import {
-//   getRescheduledLoanList,
-//   postRescheduledLoanExcel,
-//   getRescheduledLoanExcel,
-// } from '../../Services/APIs/Reports/rescheduledLoansList'
-// import { RescheduledLoanList } from '../pdfTemplates/rescheduledLoanList',
 
-// import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport'
 import { downloadFile } from '../../../Shared/Services/utils'
-// import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
-// import { CustomerTransactionReport } from '../pdfTemplates/customerTransactionReport'
-// import { getCustomerTransactions } from '../../Services/APIs/Reports/customerTransactions'
 import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
 import { PDFList } from '../../../Shared/Components/PdfList'
 import { PDF } from '../../../Shared/Components/PdfList/types'
@@ -126,12 +120,12 @@ class Reports extends Component<{}, State> {
           inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'loansIssued',
         },
-        // {
-        //   key: 'rescheduledLoanList',
-        //   local: 'قائمة حركات جدولة القروض المنفذه',
-        //   inputs: ['dateFromTo', 'branches', 'loanType'],
-        //   permission: 'loanRescheduling',
-        // },
+        {
+          key: 'rescheduledLoanList',
+          local: 'قائمة حركات جدولة القروض المنفذه',
+          inputs: ['dateFromTo', 'branches', 'loanType'],
+          permission: 'loanRescheduling',
+        },
         {
           key: 'paymentsDoneList',
           local: 'حركات الاقساط',
@@ -196,8 +190,8 @@ class Reports extends Component<{}, State> {
         return this.getDoubtfulLoansReport(values)
       case 'issuedLoanList':
         return this.getIssuedLoanList(values)
-      // case 'rescheduledLoanList':
-      //   return this.getRescheduledLoanList(values)
+      case 'rescheduledLoanList':
+        return this.getRescheduledLoanList(values)
       case 'paymentsDoneList':
         return this.getInstallments(values)
       case 'randomPayments':
@@ -243,12 +237,12 @@ class Reports extends Component<{}, State> {
           getIssuedLoansExcel,
           values
         )
-      // case 'rescheduledLoanList':
-      //   return this.getExcelFile(
-      //     postRescheduledLoanExcel,
-      //     getRescheduledLoanExcel,
-      //     values
-      //   )
+      case 'rescheduledLoanList':
+        return this.getExcelFile(
+          postRescheduledLoanExcel,
+          getRescheduledLoanExcel,
+          values
+        )
       case 'paymentsDoneList':
         return this.getExcelFile(
           postInstallmentsExcel,
@@ -261,7 +255,6 @@ class Reports extends Component<{}, State> {
           getRandomPaymentsExcel,
           values
         )
-      // case 'cibPaymentReport': return this.getCibPaymentReport(values); TODO keep commented
       case 'manualPayments':
         return this.getExcelFile(
           postManualPaymentsExcel,
@@ -435,36 +428,36 @@ class Reports extends Component<{}, State> {
     }
   }
 
-  // async getRescheduledLoanList(values) {
-  //   this.setState({ loading: true, showModal: false })
-  //   const branches = values.branches.map((branch) => branch._id)
-  //   const obj = {
-  //     startdate: values.fromDate,
-  //     enddate: values.toDate,
-  //     branches: branches.includes('') ? [] : branches,
-  //     loanType: values.loanType,
-  //   }
-  //   const res = await getRescheduledLoanList(obj)
-  //   if (res.status === 'success') {
-  //     if (!res.body) {
-  //       this.setState({ loading: false })
-  //       Swal.fire('error', local.noResults)
-  //     } else {
-  //       this.setState(
-  //         {
-  //           data: { data: res.body, from: values.fromDate, to: values.toDate },
-  //           showModal: false,
-  //           print: 'rescheduledLoanList',
-  //           loading: false,
-  //         },
-  //         () => window.print()
-  //       )
-  //     }
-  //   } else {
-  //     this.setState({ loading: false })
-  //     console.log(res)
-  //   }
-  // }
+  async getRescheduledLoanList(values) {
+    this.setState({ loading: true, showModal: false })
+    const branches = values.branches.map((branch) => branch._id)
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: branches.includes('') ? [] : branches,
+      loanType: values.loanType,
+    }
+    const res = await getRescheduledLoanList(obj)
+    if (res.status === 'success') {
+      if (!res.body) {
+        this.setState({ loading: false })
+        Swal.fire('error', local.noResults)
+      } else {
+        this.setState(
+          {
+            data: { data: res.body, from: values.fromDate, to: values.toDate },
+            showModal: false,
+            print: 'rescheduledLoanList',
+            loading: false,
+          },
+          () => window.print()
+        )
+      }
+    } else {
+      this.setState({ loading: false })
+      console.log(res)
+    }
+  }
 
   async getCollectionReport(values) {
     this.setState({ loading: true, showModal: false })
@@ -610,23 +603,6 @@ class Reports extends Component<{}, State> {
       console.log(res)
     }
   }
-
-  // async getCibPaymentReport(values) {
-  //   this.setState({ loading: true, showModal: false })
-  //   const res = await cibPaymentReport({ endDate: values.toDate })
-  //   if (res.status === 'success') {
-  //     this.setState({ loading: false })
-  //     const link = document.createElement('a')
-  //     link.href = res.body.url
-  //     document.body.appendChild(link)
-  //     link.click()
-  //     document.body.removeChild(link)
-  //     link.remove()
-  //   } else {
-  //     this.setState({ loading: false })
-  //     Swal.fire('', local.noResults, 'error')
-  //   }
-  // }
 
   async getManualPayments(values) {
     this.setState({
@@ -823,11 +799,6 @@ class Reports extends Component<{}, State> {
         {this.state.print === 'issuedLoanList' && (
           <IssuedLoanList data={this.state.data} isCF />
         )}
-        {/*
-        {this.state.print === 'rescheduledLoanList' && (
-          <RescheduledLoanList data={this.state.data} />
-        )}
-      */}
         {this.state.print === 'paymentsDoneList' && (
           <PaymentsDone data={this.state.data} isCF />
         )}
