@@ -21,3 +21,13 @@ export const approveCustomerCFLimit = async (customerId: string) => {
     return { status: 'error', error: error.response.data }
   }
 }
+
+export const reviewCustomerCFLimit = async (customerId: string) => {
+  const url = API_BASE_URL + `/customer/review-cf-limit/${customerId}`
+  try {
+    const res = await axios.post(url)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
+}

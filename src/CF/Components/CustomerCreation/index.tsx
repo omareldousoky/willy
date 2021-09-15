@@ -33,7 +33,7 @@ import { getCustomerLimitFromMonthlyIncome } from '../../../Shared/Services/APIs
 import { getCFLimits } from '../../Services/APIs/config'
 import {
   GlobalCFLimits,
-  globalCfLmitsInitialValues,
+  globalCfLimitsInitialValues,
 } from '../../Models/globalLimits'
 
 interface CustomerInfo {
@@ -180,7 +180,7 @@ class CustomerCreation extends Component<Props, State> {
       selectedCustomer: {},
       oldRepresentative: '',
       branchId: '',
-      globalLimits: globalCfLmitsInitialValues,
+      globalLimits: globalCfLimitsInitialValues,
     }
   }
 

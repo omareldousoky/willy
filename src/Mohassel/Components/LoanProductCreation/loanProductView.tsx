@@ -16,7 +16,7 @@ import {
   inAdvanceType,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
-import { getProduct } from '../../Services/APIs/loanProduct/getProduct'
+import { getProduct } from '../../../Shared/Services/APIs/loanProduct/getProduct'
 
 interface State {
   product: any

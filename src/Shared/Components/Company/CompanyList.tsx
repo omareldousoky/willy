@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useDispatch, connect } from 'react-redux'
 import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
@@ -31,12 +31,14 @@ const List = ({
   error,
   loading,
   totalCount,
+  type = 'LTS',
 }: CompanyListProps) => {
   const [from, setFrom] = useState<number>(0)
   const [size, setSize] = useState<number>(10)
 
   const history = useHistory()
   const dispatch = useDispatch()
+  const location = useLocation<{ sme: boolean; id: number }>()
 
   const getCompanies = async () => {
     const { customerShortenedCode, key } = currentSearchFilters
@@ -74,22 +76,41 @@ const List = ({
     if (error) Swal.fire('error', getErrorMessage(error), 'error')
   }, [])
   const companyActions: ActionWithIcon[] = [
-    {
-      actionTitle: local.editCompany,
-      actionIcon: 'edit',
+    ...(type === 'LTS'
+      ? [
+          {
+            actionTitle: local.editCompany,
+            actionIcon: 'edit',
+            actionPermission:
+              ability.can('updateCustomer', 'customer') ||
+              ability.can('updateNationalId', 'customer'),
+            actionOnClick: (id) =>
+              history.push('/company/edit-company', { id }),
+          },
+          {
+            actionTitle: local.viewCompany,
+            actionIcon: 'view',
 
-      actionPermission:
-        ability.can('updateCustomer', 'customer') ||
-        ability.can('updateNationalId', 'customer'),
-      actionOnClick: (id) => history.push('/company/edit-company', { id }),
-    },
-    {
-      actionTitle: local.viewCompany,
-      actionIcon: 'view',
-
-      actionPermission: ability.can('getCustomer', 'customer'),
-      actionOnClick: (id) => history.push('/company/view-company', { id }),
-    },
+            actionPermission: ability.can('getCustomer', 'customer'),
+            actionOnClick: (id) =>
+              history.push('/company/view-company', { id }),
+          },
+        ]
+      : [
+          {
+            actionTitle: local.uploadDocuments,
+            actionIcon: 'download',
+            actionPermission: ability.can('updateCustomer', 'customer'),
+            actionOnClick: (id) =>
+              history.push('/edit-customer-document', {
+                id,
+                sme: !!location.state?.sme,
+              }),
+            style: {
+              transform: `rotate(180deg)`,
+            },
+          },
+        ]),
   ]
   const tableMapper: TableMapperItem[] = [
     {
@@ -131,11 +152,13 @@ const List = ({
 
   return (
     <>
-      <HeaderWithCards
-        header={local.companies}
-        array={manageCompaniesArray()}
-        active={0}
-      />
+      {type === 'LTS' && (
+        <HeaderWithCards
+          header={local.companies}
+          array={manageCompaniesArray()}
+          active={0}
+        />
+      )}
       <Card className="main-card">
         <Loader type="fullsection" open={loading} />
         <Card.Body style={{ padding: 0 }}>
@@ -149,16 +172,18 @@ const List = ({
               </span>
             </div>
             <div>
-              <Can I="createCustomer" a="customer">
-                <Button
-                  onClick={() => {
-                    history.push('/company/new-company')
-                  }}
-                  className="big-button"
-                >
-                  {local.newCompany}
-                </Button>
-              </Can>
+              {type === 'LTS' && (
+                <Can I="createCustomer" a="customer">
+                  <Button
+                    onClick={() => {
+                      history.push('/company/new-company')
+                    }}
+                    className="big-button"
+                  >
+                    {local.newCompany}
+                  </Button>
+                </Can>
+              )}
             </div>
           </div>
           <hr className="dashed-line" />

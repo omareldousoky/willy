@@ -31,6 +31,11 @@ import { AcknowledgmentWasSignedInFront } from '../PdfTemplates/AcknowledgmentWa
 import { PromissoryNote } from '../PdfTemplates/PromissoryNote'
 import { AuthorizationToFillInfo } from '../PdfTemplates/AuthorizationToFillInfo'
 import CFLimitModal from './CFLimitModal'
+import { getCFLimits } from '../../Services/APIs/config'
+import {
+  GlobalCFLimits,
+  globalCfLimitsInitialValues,
+} from '../../Models/globalLimits'
 import { Score } from '../../../Shared/Models/Customer'
 
 interface LocationState {
@@ -72,7 +77,12 @@ export const CustomerProfile = () => {
   const [activeTab, setActiveTab] = useState('workInfo')
   const [print, setPrint] = useState('')
   const [showCFLimitModal, setShowCFLimitModal] = useState(false)
+  const [cfModalAction, setCFModalAction] = useState('')
+  const [globalLimits, setGlobalLimits] = useState<GlobalCFLimits>(
+    globalCfLimitsInitialValues
+  )
   const [customerGuarantors, setCustomerGuarantors] = useState<Customer[]>([])
+
   const location = useLocation<LocationState>()
   const history = useHistory()
 
@@ -126,7 +136,16 @@ export const CustomerProfile = () => {
       customerGuarantors: customerGuarantors || [],
     })
   }
-
+  async function getGlobalCfLimits() {
+    setLoading(true)
+    const limitsRes = await getCFLimits()
+    if (limitsRes.status === 'success') {
+      setLoading(false)
+      setGlobalLimits(limitsRes.body)
+    }
+    setLoading(false)
+    Swal.fire('Error !', getErrorMessage(limitsRes.error.error), 'error')
+  }
   async function getCustomerDetails() {
     setLoading(true)
     const res = await getCustomerByID(location.state.id)
@@ -145,6 +164,7 @@ export const CustomerProfile = () => {
   }
   useEffect(() => {
     getCustomerDetails()
+    getGlobalCfLimits()
   }, [])
   function getArRuralUrban(ruralUrban: string | undefined) {
     if (ruralUrban === 'rural') return local.rural
@@ -236,6 +256,12 @@ export const CustomerProfile = () => {
       })
     }
   }
+
+  function setModalData(type) {
+    setCFModalAction(type)
+    setShowCFLimitModal(true)
+  }
+
   const mainInfo = customerDetails && [
     getCustomerInfo({
       customerDetails,
@@ -490,7 +516,9 @@ export const CustomerProfile = () => {
       {
         icon: 'download',
         title: local.downloadPDF,
-        permission: true,
+        permission: !['pending-initialization', 'pending-update'].includes(
+          customerDetails?.consumerFinanceLimitStatus ?? ''
+        ),
         onActionClick: () => {
           setCustomerContractData(customerDetails as Customer)
           setPrint('all')
@@ -530,11 +558,25 @@ export const CustomerProfile = () => {
       },
       {
         icon: 'bulk-loan-applications-review',
+        title: local.reviewCFCustomerLimit,
+        permission:
+          ['pending-initialization', 'pending-update'].includes(
+            customerDetails?.consumerFinanceLimitStatus ?? ''
+          ) &&
+          ((ability.can('reviewCFLimit', 'customer') &&
+            (customerDetails?.initialConsumerFinanceLimit ?? 0) <
+              globalLimits.CFHQMinimumApprovalLimit) ||
+            ability.can('reviewCFLimitHQ', 'customer')),
+        onActionClick: () => setModalData('review'),
+      },
+      {
+        icon: 'bulk-loan-applications-review',
         title: local.approveCFCustomerLimit,
         permission:
-          customerDetails?.consumerFinanceLimitStatus !== 'approved' &&
-          ability.can('approveCFLimit', 'customer'),
-        onActionClick: () => setShowCFLimitModal(true),
+          ['initialization-reviewed', 'update-reviewed'].includes(
+            customerDetails?.consumerFinanceLimitStatus ?? ''
+          ) && ability.can('approveCFLimit', 'customer'),
+        onActionClick: () => setModalData('approve'),
       },
     ]
   }
@@ -595,9 +637,13 @@ export const CustomerProfile = () => {
         {showCFLimitModal && customerDetails && (
           <CFLimitModal
             show={showCFLimitModal}
-            hideModal={() => setShowCFLimitModal(false)}
+            hideModal={() => {
+              setShowCFLimitModal(false)
+              setCFModalAction('')
+            }}
             customer={customerDetails}
             onSuccess={() => getCustomerDetails()}
+            action={cfModalAction}
           />
         )}
       </Container>

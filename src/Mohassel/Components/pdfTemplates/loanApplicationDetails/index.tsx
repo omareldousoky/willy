@@ -574,6 +574,22 @@ export const LoanApplicationDetails = (props) => {
                                 : ''}
                             </td>
                           </tr>
+                          <tr>
+                            <th>التليفون</th>
+                            <td>{`${
+                              entitled.homePhoneNumber
+                                ? entitled.homePhoneNumber
+                                : ''
+                            } ${
+                              entitled.mobilePhoneNumber
+                                ? ` - ${entitled.mobilePhoneNumber}`
+                                : ''
+                            }`}</td>
+                          </tr>
+                          <tr>
+                            <th>العنوان</th>
+                            <td>{entitled.customerHomeAddress}</td>
+                          </tr>
                         </tbody>
                       </table>
                     )
@@ -598,7 +614,7 @@ export const LoanApplicationDetails = (props) => {
                         </thead>
                         <tbody>
                           <tr>
-                            <th>الأسم</th>
+                            <th>الاسم</th>
                             <td>{member.customerName}</td>
                           </tr>
                           <tr>
@@ -653,7 +669,7 @@ export const LoanApplicationDetails = (props) => {
                             <td>{numbersToArabic(member.amount)}</td>
                           </tr>
                           <tr>
-                            <th>تاريخ الأصدار</th>
+                            <th>تاريخ الإصدار</th>
                             <td>
                               {member.nationalIdIssueDate
                                 ? timeToArabicDate(

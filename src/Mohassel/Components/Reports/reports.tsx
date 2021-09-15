@@ -81,7 +81,11 @@ import { downloadFile } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import { CustomerTransactionReport } from '../pdfTemplates/customerTransactionReport'
 import { getCustomerTransactions } from '../../Services/APIs/Reports/customerTransactions'
-import { fetchRaseedyTransactions } from '../../Services/APIs/Reports/raseedyTransactions'
+import {
+  fetchRaseedyTransactions,
+  getRaseedyTransactionsExcel,
+  postRaseedyTransactionsExcel,
+} from '../../Services/APIs/Reports/raseedyTransactions'
 import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
 import RaseedyTransactionsReport from '../pdfTemplates/RaseedyTransactions'
 import { PDFList } from '../../../Shared/Components/PdfList'
@@ -205,7 +209,7 @@ class Reports extends Component<{}, State> {
         {
           key: 'raseedyTransactions',
           local: 'مدفوعات رصيدي',
-          inputs: ['dateFromTo'],
+          inputs: ['dateFromTo', 'branches'],
           permission: 'raseedyTransactions',
         },
       ],
@@ -336,6 +340,12 @@ class Reports extends Component<{}, State> {
         return this.getExcelFile(
           postManualPaymentsExcel,
           getManualPaymentsExcel,
+          values
+        )
+      case 'raseedyTransactions':
+        return this.getExcelFile(
+          postRaseedyTransactionsExcel,
+          getRaseedyTransactionsExcel,
           values
         )
       default:
@@ -863,10 +873,11 @@ class Reports extends Component<{}, State> {
 
   async getRaseedyTransactions(values) {
     this.setState({ loading: true, showModal: false })
-
+    const branches = values.branches.map((branch) => branch._id)
     const res = await fetchRaseedyTransactions({
       startDate: values.fromDate,
       endDate: values.toDate,
+      branches: branches.includes('') ? [] : branches,
     })
 
     if (res.status === 'success') {

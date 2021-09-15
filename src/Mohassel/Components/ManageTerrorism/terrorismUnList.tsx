@@ -22,7 +22,7 @@ import HeaderWithCards, {
 } from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { antiTerrorismArray, fullEnglishDate } from './terrorismInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { uploadTerroristUnDocument } from '../../Services/APIs/Terrorism/terrorism'
+import { uploadTerroristUnDocument } from '../../../Shared/Services/APIs/Terrorism/terrorism'
 import { TerroristResponse } from '../../../Shared/Services/interfaces'
 
 interface Props {

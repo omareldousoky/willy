@@ -468,9 +468,15 @@ const LegalCustomersList: FunctionComponent = () => {
             title={local.customerId}
             className="p-0"
             onClick={() =>
-              history.push('/customers/view-customer', {
-                id: customer.customerId,
-              })
+              history.push(
+                customer.customerType === 'company' ||
+                  customer.customerType === 'companyGuarantor'
+                  ? '/company/view-company'
+                  : '/customers/view-customer',
+                {
+                  id: customer.customerId,
+                }
+              )
             }
           >
             {customer.customerKey}

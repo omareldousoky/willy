@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button'
 import FormCheck from 'react-bootstrap/FormCheck'
 import Modal from 'react-bootstrap/Modal'
 import Table from 'react-bootstrap/Table'
-
+import Form from 'react-bootstrap/Form'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'
@@ -41,6 +41,7 @@ import DefaultingCustomersPdfTemplate, {
 } from '../pdfTemplates/defaultingCustomers/DefaultingCustomers'
 import { LtsIcon } from '../../../Shared/Components'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
+import { ProductType } from '../LegalWarnings/types'
 import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 
 interface Review {
@@ -122,6 +123,7 @@ interface State {
   loading: boolean
   rowToView: DefaultedCustomer
   showReportsModal: boolean
+  productType: ProductType
 }
 const rowToViewInit = {
   _id: '',
@@ -177,6 +179,7 @@ class DefaultingCustomersList extends Component<Props, State> {
       loading: false,
       rowToView: rowToViewInit,
       showReportsModal: false,
+      productType: 'micro',
     }
     this.mappers = [
       {
@@ -216,9 +219,15 @@ class DefaultingCustomersList extends Component<Props, State> {
             <span
               style={{ cursor: 'pointer' }}
               onClick={() =>
-                this.props.history.push('/customers/view-customer', {
-                  id: data.customerId,
-                })
+                this.props.history.push(
+                  data.customerType === 'company' ||
+                    data.customerType === 'companyGuarantor'
+                    ? '/company/view-company'
+                    : '/customers/view-customer',
+                  {
+                    id: data.customerId,
+                  }
+                )
               }
             >
               {data.customerKey}
@@ -329,7 +338,7 @@ class DefaultingCustomersList extends Component<Props, State> {
       from: 0,
       size: 1000,
       [key]: query,
-      customerType: 'individual',
+      customerType: this.state.productType === 'sme' ? 'company' : 'individual',
     })
     if (results.status === 'success') {
       if (results.body.data.length > 0) {
@@ -441,7 +450,10 @@ class DefaultingCustomersList extends Component<Props, State> {
       from: 0,
       size: 1000,
       customerKey: customer.key,
-      type: 'micro',
+      type:
+        this.state.productType === 'smeIndividual'
+          ? 'sme'
+          : this.state.productType,
     })
     if (results.status === 'success') {
       this.setState({
@@ -451,9 +463,10 @@ class DefaultingCustomersList extends Component<Props, State> {
             loan.application.status &&
             ['pending', 'issued'].includes(loan.application.status)
         ),
+        productType: 'micro',
       })
     } else {
-      this.setState({ modalLoader: false })
+      this.setState({ modalLoader: false, productType: 'micro' })
       Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
     }
   }
@@ -473,6 +486,7 @@ class DefaultingCustomersList extends Component<Props, State> {
             selectedCustomer: {},
             customerSearchResults: { results: [], empty: false },
             loanSearchResults: [],
+            productType: 'micro',
           },
           () => {
             this.wait(2000)
@@ -848,14 +862,44 @@ class DefaultingCustomersList extends Component<Props, State> {
             <Modal.Body>
               <Loader type="fullsection" open={this.state.modalLoader} />
               {Object.keys(this.state.selectedCustomer).length === 0 ? (
-                <CustomerSearch
-                  source="loanApplication"
-                  style={{ width: '100%' }}
-                  handleSearch={(key, query) => this.handleSearch(key, query)}
-                  selectedCustomer={this.state.selectedCustomer}
-                  searchResults={this.state.customerSearchResults}
-                  selectCustomer={(customer) => this.findLoans(customer)}
-                />
+                <>
+                  <div className="d-flex w-100">
+                    <Form.Label>{local.productName}</Form.Label>
+                    <Form.Control
+                      as="select"
+                      type="select"
+                      value={this.state.productType}
+                      onChange={(event) =>
+                        this.setState({
+                          productType: event.target.value as ProductType,
+                        })
+                      }
+                    >
+                      <option value="micro">
+                        قرض فردي - جماعي - ضمان | لقروض ميكرو
+                      </option>
+                      <option value="nano"> قرض و ضمان لقروض نانو</option>
+                      <option value="sme">شركات او ضمان من نوع شركات</option>
+                      <option value="smeIndividual">
+                        من لهم حق التوقيع او ضمان فردي للشركات
+                      </option>
+                    </Form.Control>
+                  </div>
+
+                  {this.state.productType && (
+                    <CustomerSearch
+                      source="loanApplication"
+                      style={{ width: '100%' }}
+                      handleSearch={(key, query) =>
+                        this.handleSearch(key, query)
+                      }
+                      selectedCustomer={this.state.selectedCustomer}
+                      searchResults={this.state.customerSearchResults}
+                      selectCustomer={(customer) => this.findLoans(customer)}
+                      sme={this.state.productType === 'sme'}
+                    />
+                  )}
+                </>
               ) : (
                 <DynamicTable
                   totalCount={0}
