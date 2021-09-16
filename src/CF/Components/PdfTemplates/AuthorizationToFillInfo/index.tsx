@@ -53,9 +53,9 @@ export const AuthorizationToFillInfo = ({
                 <u>ضامن متضامن :</u>
               </p>
             )}
-            <p>الاسم : {person.name ?? ''}</p>
+            <p>الاسم : {person.customerName ?? ''}</p>
             <p>التوقيع :</p>
-            <p>العنوان : {person.address ?? ''}</p>
+            <p>العنوان : {person.customerHomeAddress ?? ''}</p>
           </div>
         ))}
       </table>

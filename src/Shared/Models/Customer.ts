@@ -79,3 +79,12 @@ export interface Customer {
   policeStation?: string
   nanoLoansLimit?: number
 }
+export interface Score {
+  id?: string // commercialRegisterNumber
+  customerName?: string
+  activeLoans?: string
+  iscore: string
+  nationalId?: string
+  url?: string
+  bankCodes?: string[]
+}

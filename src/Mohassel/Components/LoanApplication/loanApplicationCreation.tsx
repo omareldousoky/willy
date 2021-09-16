@@ -46,7 +46,6 @@ import {
 import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationGuarantorForm'
 import DualBox from '../../../Shared/Components/DualListBox/dualListBox'
 import InfoBox from '../userInfoBox'
-import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
 
 import { theme } from '../../../Shared/theme'
@@ -58,6 +57,7 @@ import { getMaxPrinciples } from '../../../Shared/Services/APIs/config'
 import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
+import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 
 interface LoanApplicationCreationRouteState {
   id?: string

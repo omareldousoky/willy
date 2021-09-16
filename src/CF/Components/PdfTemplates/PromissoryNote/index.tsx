@@ -78,11 +78,11 @@ export const PromissoryNote = ({
               <p>
                 <u>{guarantorOrderLocal[i && i > 10 ? 'default' : i]}</u>
               </p>
-              <p>الاسم : {guarantor.name}</p>
+              <p>الاسم : {guarantor.customerName}</p>
               <p>
                 بطاقة الرقم القومى : {numbersToArabic(guarantor.nationalId)}
               </p>
-              <p>العنوان: {guarantor.address}</p>
+              <p>العنوان: {guarantor.customerHomeAddress}</p>
               <p>التوقيع :</p>
             </div>
           ))}

@@ -66,7 +66,7 @@ export const AcknowledgmentWasSignedInFront = ({
               {customerGuarantors?.map((person, index) => (
                 <tr key={index}>
                   <td>{guarantorOrderLocal[index]}</td>
-                  <td>{person.name ?? ''} </td>
+                  <td>{person.customerName ?? ''} </td>
                   <td>{numbersToArabic(person.nationalId)}</td>
                 </tr>
               ))}
