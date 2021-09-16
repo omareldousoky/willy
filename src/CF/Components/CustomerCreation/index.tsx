@@ -531,7 +531,6 @@ class CustomerCreation extends Component<Props, State> {
             step3: { ...prevState.step3, ...customerExtraDetails },
             hasLoan: res.body.hasLoan,
             isGuarantor: res.body.isGuarantor,
-            oldRepresentative: res.body.representative,
             branchId: res.body?.branchId,
           } as any)
       )
