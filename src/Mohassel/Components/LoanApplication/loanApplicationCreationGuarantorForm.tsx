@@ -7,7 +7,6 @@ import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 
 import * as local from '../../../Shared/Assets/ar.json'
-import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import GroupInfoBox from '../LoanProfile/groupInfoBox'
 import { guarantorOrderLocal, orderLocal } from '../../../Shared/Services/utils'
 import { InfoBox } from '../../../Shared/Components'
@@ -15,6 +14,7 @@ import {
   getCompanyInfo,
   getCustomerInfo,
 } from '../../../Shared/Services/formatCustomersInfo'
+import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 
 export const LoanApplicationCreationGuarantorForm = (props: any) => {
   const { values, handleSubmit, handleBlur, handleChange, errors } = props
