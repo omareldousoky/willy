@@ -346,7 +346,6 @@ class CustomerCreation extends Component<Props, State> {
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
       )
     }
-    x
   }
 
   async getGlobalPrinciple() {
@@ -423,7 +422,6 @@ class CustomerCreation extends Component<Props, State> {
       this.props.location.state.uuid,
       this.props.location.state.phoneNumber
     )
-    console.log(res.body)
     if (res.status === 'success') {
       const birthDate = res.body.customerNationalId
         ? await getBirthdateFromNationalId(res.body.customerNationalId)
