@@ -41,7 +41,7 @@ const RandomPaymentReceipt = ({
 
   return (
     <div className="random-payment-receipt">
-      {receiptData?.map((receiptData, index) => {
+      {receiptData?.map((data, index) => {
         return (
           <div key={index} className="random-payment-receipt" lang="ar">
             <div className="receipt-container">
@@ -55,29 +55,27 @@ const RandomPaymentReceipt = ({
               <div className="receipt-content">
                 <div>
                   <span className="title">{local.date}</span>
-                  <span className="info">
-                    {extractGMTDate(receiptData.date)}
-                  </span>
+                  <span className="info">{extractGMTDate(data.date)}</span>
                 </div>
                 <div>
                   <span className="title">{local.receiptNumber}</span>
                   <span className="info">
-                    {numbersToArabic(receiptData.receiptNumber)}
+                    {numbersToArabic(data.receiptNumber)}
                   </span>
                 </div>
                 <div>
                   <span className="title">{local.customerName}</span>
-                  <span className="info">{receiptData.customerName}</span>
+                  <span className="info">{data.customerName}</span>
                 </div>
                 <div>
                   <span className="title">{local.value}</span>
                   <span className="info">
                     <span style={{ direction: 'ltr' }}>
-                      {numbersToArabic(receiptData.installmentAmount)}
+                      {numbersToArabic(data.installmentAmount)}
                     </span>
-                    {receiptData.installmentAmount
+                    {data.installmentAmount
                       ? ` = (${new Tafgeet(
-                          receiptData.installmentAmount,
+                          data.installmentAmount,
                           'EGP'
                         ).parse()})`
                       : null}
@@ -86,10 +84,10 @@ const RandomPaymentReceipt = ({
                 <div>
                   <span className="title">{local.purpose}</span>
                   <span className="info">
-                    {receiptData.type === 'penalty'
+                    {data.type === 'penalty'
                       ? local.payPenalty
-                      : receiptData.type === 'randomPayment'
-                      ? local[receiptData.randomPaymentType]
+                      : data.type === 'randomPayment'
+                      ? local[data.randomPaymentType]
                       : ''}
                   </span>
                 </div>
