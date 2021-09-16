@@ -35,9 +35,8 @@ import CustomerCardAttachments from '../pdfTemplates/customerCardAttachments/cus
 import FollowUpStatementPDF from '../pdfTemplates/followUpStatment/followUpStatement'
 import LoanContract from '../pdfTemplates/loanContract/loanContract'
 import LoanContractForGroup from '../pdfTemplates/loanContractForGroup/loanContractForGroup'
-import EarlyPaymentReceipt from '../pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt'
 import Can from '../../config/Can'
-import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment'
+import EarlyPaymentPDF from '../../../Shared/Components/pdfTemplates/earlyPayment/earlyPayment'
 import { Customer, PendingActions } from '../../../Shared/Services/interfaces'
 import {
   iscoreDate,
@@ -82,11 +81,10 @@ import {
   SolidarityGuarantee,
 } from '../pdfTemplates/smeLoanContract'
 import { Score } from '../CustomerCreation/CustomerProfile'
-import { getEarlyPaymentPdfData } from './utils'
 import {
   CalculateEarlyPaymentResponse,
   RemainingLoanResponse,
-} from '../../Models/Payment'
+} from '../../../Shared/Models/Payment'
 import NanoLoanContract from '../pdfTemplates/nanoLoanContract/nanoLoanContract'
 import { PromissoryNoteMicro } from '../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
 import {
@@ -98,6 +96,8 @@ import {
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { getWriteOffReasons } from '../../../Shared/Services/APIs/config'
 import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
+import { getEarlyPaymentPdfData } from '../../../Shared/Utils/payment'
+import EarlyPaymentReceipt from '../../../Shared/Components/pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt'
 
 export interface IndividualWithInstallments {
   installmentTable: {

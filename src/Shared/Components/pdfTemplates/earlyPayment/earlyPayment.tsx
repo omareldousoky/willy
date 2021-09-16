@@ -1,18 +1,17 @@
 import React, { FunctionComponent } from 'react'
 import './earlyPayment.scss'
-import * as local from '../../../../Shared/Assets/ar.json'
-import {
-  numbersToArabic,
-  timeToArabicDateNow,
-} from '../../../../Shared/Services/utils'
-import DataRow from '../pdfTemplateCommon/dataRow'
+import * as local from '../../../Assets/ar.json'
+import { numbersToArabic, timeToArabicDateNow } from '../../../Services/utils'
+import DataRow from '../../../../Mohassel/Components/pdfTemplates/pdfTemplateCommon/dataRow'
 import { EarlyPaymentPDFProps } from './types'
 import { EarlyPaymentInstallment } from './EarlyPaymentInstallment'
+import { companies, licenses } from '../../../Utils/pdf'
 
 const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
   application,
   earlyPaymentPdfData,
   branchDetails,
+  type = 'lts',
 }) => {
   const {
     totalDaysLate,
@@ -35,10 +34,10 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
           <tr style={{ height: '10px' }} />
           <tr className="w-100 d-flex flex-row justify-content-between">
             <th colSpan={6} style={{ backgroundColor: 'white' }}>
-              <div className="logo-print-tb" />
+              <div className={`${type}-logo-print-tb`} />
             </th>
             <th style={{ backgroundColor: 'white' }} colSpan={6}>
-              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+              {licenses[type]}
             </th>
           </tr>
           <tr style={{ height: '10px' }} />
@@ -48,7 +47,7 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
         <tbody>
           <tr>
             <th style={{ width: '35%' }} className="title bold border">
-              شركة تساهيل للتمويل متناهي الصغر
+              <th>{companies[type]}</th>
             </th>
             <td />
             <td className="title bold">

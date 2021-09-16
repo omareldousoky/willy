@@ -22,7 +22,7 @@ import {
 import { payment } from '../../../Shared/redux/payment/actions'
 import PayInstallment from './payInstallment'
 import {
-  manualPayment,
+  earlyPayment,
   payFutureInstallment,
   payInstallment,
 } from '../../../Shared/Services/APIs/payment'
@@ -267,26 +267,22 @@ class Payment extends Component<Props, State> {
           }
         }
       }
-    } else if (this.props.paymentType === 'normal') {
+    } else if (this.props.paymentState === 2) {
       const obj = {
         id: this.props.applicationId,
-        receiptNumber: values.receiptNumber,
-        truthDate: truthDateTimestamp,
-        payAmount: values.payAmount,
+        payAmount: values.requiredAmount,
         payerType: values.payerType,
         payerId: values.payerId,
         payerName: values.payerName,
         payerNationalId: values.payerNationalId.toString(),
-        installmentNumber:
-          values.installmentNumber !== -1
-            ? Number(values.installmentNumber)
-            : undefined,
-        futurePayment: values.installmentNumber !== -1 || undefined,
+        truthDate: truthDateTimestamp,
       }
-      const res = await manualPayment(obj)
+      const res = await earlyPayment(obj)
+      this.setState({ payAmount: values.payAmount })
       if (res.status === 'success') {
-        this.setState({ loadingFullScreen: false })
-        Swal.fire('', local.manualPaymentSuccess, 'success').then(() =>
+        this.props.setReceiptData(res.body)
+        this.props.print({ print: 'payEarly' })
+        this.setState({ loadingFullScreen: false }, () =>
           this.props.refreshPayment()
         )
       } else {
@@ -295,7 +291,6 @@ class Payment extends Component<Props, State> {
         )
       }
     }
-
     this.props.changePaymentState(0)
   }
 
