@@ -10,5 +10,5 @@ export interface List {
 }
 export interface ReportsListProps {
   list: List[]
-  onClickDownload(itemId: string): void
+  onClickDownload?: (itemId: string) => void
 }

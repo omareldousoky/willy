@@ -48,7 +48,7 @@ export const ReportsList = ({ list, onClickDownload }: ReportsListProps) => {
                     </span>
                   )}
                 </div>
-                {listItem.status === 'created' && (
+                {onClickDownload && listItem.status === 'created' && (
                   <Button
                     type="button"
                     variant="default"
