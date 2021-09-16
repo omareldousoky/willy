@@ -79,7 +79,7 @@ import { getRollableActionsById } from '../../../../Shared/Services/APIs/loanApp
 import { returnItem } from '../../../Services/APIs/loan'
 import { doneSuccessfully } from '../../../../Shared/localUtils'
 import Rescheduling from '../../Rescheduling/rescheduling'
-import RandomPaymentReceipt from '../../PdfTemplates/randomPaymentReceipt/randomPaymentReceipt'
+import RandomPaymentReceipt from '../../../../Shared/Components/pdfTemplates/randomPaymentReceipt/randomPaymentReceipt'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -1308,7 +1308,7 @@ class LoanProfile extends Component<Props, State> {
         {this.state.print === 'randomPayment' && (
           <RandomPaymentReceipt
             receiptData={this.state.receiptData}
-            data={this.state.application}
+            appType="CF"
           />
         )}
       </Container>

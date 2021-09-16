@@ -1,42 +1,57 @@
 import React from 'react'
 import './randomPaymentReceipt.scss'
 import Tafgeet from 'tafgeetjs'
-import {
-  numbersToArabic,
-  extractGMTDate,
-} from '../../../../Shared/Services/utils'
-import local from '../../../../Shared/Assets/ar.json'
+import { numbersToArabic, extractGMTDate } from '../../../Services/utils'
+import local from '../../../Assets/ar.json'
+import { RandomPaymentReceiptProps } from './types'
+import { Header as CFHeader } from '../../../../CF/Components/PdfTemplates/pdfTemplatesCommon/header'
 
-const randomPaymentReceipt = (props) => {
+const LTSReceiptHeader = () => (
+  <>
+    <table
+      className="w-100 text-center"
+      style={{
+        margin: '10px 0px',
+      }}
+    >
+      <tbody>
+        <tr style={{ height: '10px' }} />
+        <tr className="w-100 d-flex flex-row justify-content-between">
+          <th colSpan={6}>
+            <div className="logo-print-tb" />
+          </th>
+          <th colSpan={6}>
+            ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنة 2015
+          </th>
+        </tr>
+        <tr style={{ height: '10px' }} />
+      </tbody>
+    </table>
+  </>
+)
+
+const RandomPaymentReceipt = ({
+  receiptData,
+  appType = 'LTS',
+}: RandomPaymentReceiptProps) => {
+  const pdfHeaders = {
+    LTS: <LTSReceiptHeader />,
+    CF: <CFHeader />,
+  }
+
   return (
     <div className="random-payment-receipt">
-      {props.receiptData.map((receiptData, index) => {
+      {receiptData?.map((receiptData, index) => {
         return (
           <div key={index} className="random-payment-receipt" lang="ar">
             <div className="receipt-container">
-              <table
-                className="w-100 text-center"
-                style={{
-                  margin: '10px 0px',
-                }}
-              >
-                <tbody>
-                  <tr style={{ height: '10px' }} />
-                  <tr className="w-100 d-flex flex-row justify-content-between">
-                    <th colSpan={6}>
-                      <div className="logo-print-tb" />
-                    </th>
-                    <th colSpan={6}>
-                      ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنة 2015
-                    </th>
-                  </tr>
-                  <tr style={{ height: '10px' }} />
-                </tbody>
-              </table>
+              {pdfHeaders[appType]}
+
               <div className="receipt-header">
                 <h5>{local.tasaheelName}</h5>
                 <h5>{local.paymentReceipt}</h5>
               </div>
+
               <div className="receipt-content">
                 <div>
                   <span className="title">{local.date}</span>
@@ -99,4 +114,4 @@ const randomPaymentReceipt = (props) => {
   )
 }
 
-export default randomPaymentReceipt
+export default RandomPaymentReceipt
