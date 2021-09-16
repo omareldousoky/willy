@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Header } from '../pdfTemplateCommon/header'
+import local from '../../../../Shared/Assets/ar.json'
 
 import {
   guarantorOrderLocal,
@@ -18,23 +19,25 @@ export const KnowYourCustomer = ({
     <>
       <div className="contract-container p-0" dir="rtl" lang="ar">
         <Header
-          title="أعرف عميلك"
+          title="اعرف عميلك"
           showCurrentUser={false}
           showCurrentTime={false}
           sme
         />
         <p className="font-weight-bolder border-bottom w-25">بيانات الشركة:-</p>
         <p>
-          إســـــــــــم الشــــركـــــــــة :-
+          اســـــــــــم الشــــركـــــــــة :-
           {application.customer?.businessName ?? ''}
         </p>
         <p>
-          السمــــــــــه التجاريـــــــــه :-
+          السمــــــــــة التجاريـــــــــة :-
           {application.customer?.businessCharacteristic ?? ''}
         </p>
         <p>
           الشكـــــــــل القانونــــــــــي :-
-          {application.customer?.legalStructure ?? ''}
+          {application.customer?.legalStructure
+            ? local[application.customer.legalStructure]
+            : ''}
         </p>
         <p>
           رقــــــم السجــــــل التجاري :-
@@ -73,7 +76,7 @@ export const KnowYourCustomer = ({
               الشخص {orderLocal[index]}
             </p>
             <p>
-              الأســـــــــــــــــــم :-
+              الاســـــــــــــــــــم :-
               {person.customer.customerName ?? ''}
             </p>
             <p>
@@ -105,7 +108,7 @@ export const KnowYourCustomer = ({
               بيانات {guarantorOrderLocal[index]}
             </p>
             <p>
-              إسم الضامـــــــــــن :-
+              اسم الضامـــــــــــن :-
               {person.customerName ?? ''}
             </p>
             <p>
@@ -147,13 +150,13 @@ export const KnowYourCustomer = ({
           البيانات فور حدوث أي تغيرات بها أو عند طلب الشركة ذلك .
         </p>
         <p>
-          أسم الشركة المدينة :-
+          اسم الشركة المدينة :-
           {application.customer?.businessName ?? ''}
         </p>
         {application.entitledToSign?.map((person, index) => (
           <div key={index}>
             <p>
-              إسم من له حق التوقيع والاقتراض :-
+              اسم من له حق التوقيع والاقتراض :-
               {person.customer.customerName ?? ''}
             </p>
             <p>التوقيع /</p>
@@ -174,7 +177,7 @@ export const KnowYourCustomer = ({
           </span>
         </div>
         <div className="d-flex justify-content-between">
-          <span>أسم مدير الفرع </span>
+          <span>اسم مدير الفرع </span>
           <span>توقيع مدير الفرع</span>
           <span>
             التاريخ &emsp; {timeToArabicDate(application.creationDate, false)}

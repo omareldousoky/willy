@@ -11,7 +11,7 @@ import Can from '../../config/Can'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageLoansArray } from './manageLoansInitials'
 import { getErrorMessage, interestType } from '../../../Shared/Services/utils'
-import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas'
+import { getFormulas } from '../../../Shared/Services/APIs/LoanFormula/getFormulas'
 import { Formula } from '../LoanApplication/loanApplicationCreation'
 import { LtsIcon } from '../../../Shared/Components'
 
@@ -110,7 +110,7 @@ class FormulaList extends Component<Props, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('calculationForumlas')}
+            .indexOf('calculation-forumlas')}
         />
         <Card className="main-card">
           <Loader type="fullsection" open={this.state.loading} />

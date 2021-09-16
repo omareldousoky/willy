@@ -1,11 +1,8 @@
 import React, { useState } from 'react'
 import Swal from 'sweetalert2'
-import * as Yup from 'yup'
-
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Table from 'react-bootstrap/Table'
-import { Formik } from 'formik'
 import * as local from '../../../Shared/Assets/ar.json'
 import {
   downloadFile,
@@ -18,58 +15,232 @@ import {
 import Can from '../../../Shared/config/Can'
 import { Loader } from '../../../Shared/Components/Loader'
 import ability from '../../../Shared/config/ability'
-import { CustomerGuarantor } from '../../../Shared/Services/interfaces'
-import { CustomerGuarantorsForm } from './GuarantorDetailsForm'
+import { Customer } from '../../../Shared/Services/interfaces'
 import { addGuarantorsToCustomer } from '../../Services/APIs/Customer/customerGuarantors'
-import { CFGuarantorTableViewProp } from '../../../Shared/Components/Profile/types'
+import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
+import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
+import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
+import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 
 interface Props {
-  guarantors: Array<CustomerGuarantor>
+  guarantors: Array<Customer>
   iScores?: any
   getIscore?: Function
-  customerId?: string
+  customerId: string
 }
 export const GuarantorTableView = (props: Props) => {
   const [modalView, changeModal] = useState(false)
   const [loading, changeLoading] = useState(false)
+  const [selectedGuarantor, changeSelected] = useState<Customer>({})
+  const [searchResults, changeResults] = useState({ results: [], empty: false })
+
   function getIscore(data) {
     if (props.getIscore) {
       props.getIscore(data)
     }
   }
-  async function submit(values) {
-    values.guarantors.forEach(function (guar) {
-      guar.birthDate = new Date(guar.birthDate).valueOf()
-    })
+
+  async function handleSearch(key, query, companySearch?: boolean) {
     const obj = {
-      customerId: props.customerId,
-      customerGuarantors: values.guarantors,
-    } as CFGuarantorTableViewProp
-    const res = await addGuarantorsToCustomer(obj)
-    if (res.status === 'success') {
+      [key]: query,
+      from: 0,
+      size: 1000,
+      excludedIds: [
+        props.customerId,
+        ...props.guarantors.map((guar) => guar._id),
+      ],
+      customerType: companySearch ? 'company' : 'individual',
+    }
+    changeLoading(true)
+    const results = await searchCustomer(obj)
+    if (results.status === 'success') {
+      if (results.body.data.length > 0) {
+        changeResults({ results: results.body.data, empty: false })
+      } else {
+        changeResults({ results: results.body.data, empty: true })
+      }
       changeLoading(false)
-      Swal.fire('', local.success, 'success').then(() =>
-        window.location.reload()
-      )
     } else {
+      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
       changeLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
   }
+
+  async function checkCustomersLimits(customers, guarantor) {
+    const customerIds: Array<string> = []
+    customers.forEach((customer) => customerIds.push(customer._id))
+    changeLoading(true)
+    const res = await getCustomersBalances({ ids: customerIds })
+    if (res.status === 'success') {
+      changeLoading(false)
+      const merged: Array<any> = []
+      const validationObject: any = {}
+      for (let i = 0; i < customers.length; i += 1) {
+        const obj = {
+          ...customers[i],
+          ...(res.body.data
+            ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id)
+            : { id: customers[i]._id }),
+        }
+        delete obj.id
+        merged.push(obj)
+      }
+      if (res.body.data && res.body.data.length > 0) {
+        merged.forEach((customer) => {
+          if (guarantor) {
+            if (
+              customer.guarantorIds &&
+              customer.guarantorIds.length >= customer.guarantorMaxLoans
+            ) {
+              if (Object.keys(validationObject).includes(customer._id)) {
+                validationObject[customer._id] = {
+                  ...validationObject[customer._id],
+                  ...{ guarantorIds: customer.guarantorIds },
+                }
+              } else {
+                validationObject[customer._id] = {
+                  customerName: customer.customerName,
+                  guarantorIds: customer.guarantorIds,
+                }
+              }
+            }
+          }
+        })
+      }
+      if (Object.keys(validationObject).length > 0) {
+        return { flag: false, validationObject }
+      }
+      return { flag: true, customers: merged }
+    }
+    changeLoading(false)
+    Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    return { flag: false }
+  }
+
+  async function selectGuarantor(guarantor) {
+    changeLoading(true)
+    const targetGuarantor = await getCustomerByID(guarantor._id)
+
+    if (targetGuarantor.status === 'success') {
+      let errorMessage1 = ''
+      let errorMessage2 = ''
+      if (targetGuarantor.body.customer.blocked.isBlocked === true) {
+        errorMessage1 = local.theCustomerIsBlocked
+      }
+      const check = await checkCustomersLimits(
+        [targetGuarantor.body.customer],
+        true
+      )
+      if (
+        check.flag === true &&
+        check.customers &&
+        targetGuarantor.body.customer.blocked.isBlocked !== true
+      ) {
+        const newGuarantor = {
+          ...targetGuarantor.body.customer,
+          id: guarantor._id,
+        }
+        changeSelected(newGuarantor)
+      } else if (check.flag === false && check.validationObject) {
+        errorMessage2 = local.customerInvolvedInAnotherLoan
+      }
+      if (errorMessage1 || errorMessage2)
+        Swal.fire(
+          'error',
+          `<span>${errorMessage1}  ${
+            errorMessage1 ? `<br/>` : ''
+          } ${errorMessage2}</span>`,
+          'error'
+        )
+    } else {
+      Swal.fire(
+        'Error !',
+        getErrorMessage(targetGuarantor.error.error),
+        'error'
+      )
+    }
+    changeLoading(false)
+  }
+
+  async function addGuarantor() {
+    const currentGuarantors = [
+      selectedGuarantor._id,
+      ...props.guarantors.map((guar) => guar._id),
+    ] as string[]
+    const obj = {
+      customerId: props.customerId,
+      guarantorIds: currentGuarantors,
+    }
+    if (currentGuarantors.length > 0) {
+      const res = await addGuarantorsToCustomer(obj)
+      if (res.status === 'success') {
+        changeLoading(false)
+        Swal.fire('', local.success, 'success').then(() =>
+          window.location.reload()
+        )
+      } else {
+        changeLoading(false)
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      }
+    }
+  }
+
+  async function removeGuarantor(guarantor) {
+    Swal.fire({
+      title: local.areYouSure,
+      text: `${guarantor.customerName} ${local.willNotBeAGuarantor}`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: local.removeGuarantor,
+      cancelButtonText: local.cancel,
+    }).then(async (result) => {
+      if (result.value) {
+        const guarIds = props.guarantors.filter(
+          (guar) => guar._id !== guarantor._id
+        )
+        const ids: string[] = guarIds.map((guar) => guar._id || '')
+        changeLoading(true)
+        const guarantorToRemove = await addGuarantorsToCustomer({
+          customerId: props.customerId,
+          guarantorIds: ids,
+        })
+        if (guarantorToRemove.status === 'success') {
+          Swal.fire(local.guarantorRemovedSuccessfully, '', 'success').then(
+            () => {
+              window.location.reload()
+            }
+          )
+        } else {
+          Swal.fire(
+            'Error !',
+            getErrorMessage(guarantorToRemove.error.error),
+            'error'
+          )
+        }
+        changeLoading(false)
+      }
+    })
+  }
+
   function cancelModal() {
     changeModal(false)
     changeLoading(false)
+    changeSelected({})
+    changeResults({ results: [], empty: false })
   }
   return (
     <>
       <div className="d-flex flex-column align-items-start justify-content-center">
-        {ability.can('addCustomerGuarantors', 'customer') && (
-          <div className="mt-5 mb-5">
-            <Button variant="primary" onClick={() => changeModal(true)}>
-              {local.addEditOrRemoveGuarantor}
-            </Button>
-          </div>
-        )}
+        {ability.can('addCustomerGuarantors', 'customer') &&
+          props.guarantors.length < 2 && (
+            <div className="mt-5 mb-5">
+              <Button variant="primary" onClick={() => changeModal(true)}>
+                {local.addEditOrRemoveGuarantor}
+              </Button>
+            </div>
+          )}
         {props.guarantors.length > 0 ? (
           <Table style={{ textAlign: 'right' }}>
             <thead>
@@ -84,6 +255,7 @@ export const GuarantorTableView = (props: Props) => {
                 {props.iScores && props.iScores.length > 0 && <th />}
                 {props.iScores && props.iScores.length > 0 && <th />}
                 {props.iScores && props.iScores.length > 0 && <th />}
+                {props.guarantors.length > 2 && <th />}
               </tr>
             </thead>
             <tbody>
@@ -104,10 +276,10 @@ export const GuarantorTableView = (props: Props) => {
                           ]
                         }
                       </td>
-                      <td>{guar.name}</td>
+                      <td>{guar.customerName}</td>
                       <td>{guar.nationalId}</td>
-                      <td>{timeToArabicDate(guar.birthDate, false)}</td>
-                      <td>{guar.address}</td>
+                      <td>{timeToArabicDate(guar.birthDate ?? 0, false)}</td>
+                      <td>{guar.customerHomeAddress}</td>
                       {props.iScores &&
                         props.iScores.length > 0 &&
                         iScore.nationalId?.length > 0 && (
@@ -166,6 +338,13 @@ export const GuarantorTableView = (props: Props) => {
                             </td>
                           </Can>
                         )}
+                      <td style={{ cursor: 'pointer', padding: 10 }}>
+                        <img
+                          src={require('../../../Shared/Assets/deleteIcon.svg')}
+                          alt={local.delete}
+                          onClick={() => removeGuarantor(guar)}
+                        />
+                      </td>
                     </tr>
                   )
                 })}
@@ -178,42 +357,36 @@ export const GuarantorTableView = (props: Props) => {
       {modalView && (
         <Modal size="lg" show={modalView} onHide={() => changeModal(false)}>
           <Loader type="fullsection" open={loading} />
+          <Modal.Header>
+            <Modal.Title>
+              {local.add}
+              {
+                guarantorOrderLocal[
+                  props.guarantors.length > 10
+                    ? 'default'
+                    : props.guarantors.length
+                ]
+              }
+            </Modal.Title>
+          </Modal.Header>
           <Modal.Body>
-            <Formik
-              initialValues={{ guarantors: props.guarantors }}
-              onSubmit={submit}
-              validationSchema={Yup.object().shape({
-                guarantors: Yup.array().of(
-                  Yup.object().shape({
-                    name: Yup.string().required(local.required),
-                    address: Yup.string().required(local.required),
-                    nationalId: Yup.number()
-                      .required()
-                      .min(10000000000000, local.nationalIdLengthShouldBe14)
-                      .max(99999999999999, local.nationalIdLengthShouldBe14)
-                      .required(local.required)
-                      .when('birthDate', {
-                        is: '1800-01-01',
-                        then: Yup.number().test(
-                          'error',
-                          local.wrongNationalId,
-                          () => false
-                        ),
-                        otherwise: Yup.number()
-                          .required()
-                          .min(10000000000000, local.nationalIdLengthShouldBe14)
-                          .max(99999999999999, local.nationalIdLengthShouldBe14)
-                          .required(local.required),
-                      }),
-                  })
-                ),
-              })}
-              validateOnBlur
-              validateOnChange
-              enableReinitialize
-            >
-              {(formikProps) => <CustomerGuarantorsForm {...formikProps} />}
-            </Formik>
+            <CustomerSearch
+              source="loanApplication"
+              style={{ width: '98%' }}
+              handleSearch={(key, query) => handleSearch(key, query)}
+              searchResults={searchResults}
+              selectCustomer={(guarantor) => {
+                selectGuarantor(guarantor)
+              }}
+              selectedCustomer={selectedGuarantor}
+              header={
+                guarantorOrderLocal[
+                  props.guarantors.length > 10
+                    ? 'default'
+                    : props.guarantors.length
+                ]
+              }
+            />
           </Modal.Body>
           <Modal.Footer>
             <Button
@@ -223,6 +396,13 @@ export const GuarantorTableView = (props: Props) => {
               }}
             >
               {local.cancel}
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => addGuarantor()}
+              disabled={Object.keys(selectedGuarantor).length === 0}
+            >
+              {local.submit}
             </Button>
           </Modal.Footer>
         </Modal>

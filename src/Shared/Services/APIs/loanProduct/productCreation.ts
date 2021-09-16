@@ -1,5 +1,5 @@
-import { API_BASE_URL } from '../../../../Shared/envConfig'
-import axios from '../../../../Shared/Services/axiosInstance'
+import { API_BASE_URL } from '../../../envConfig'
+import axios from '../../axiosInstance'
 
 const createProductUrl = `${API_BASE_URL}/product/loan-product`
 const editProductUrl = `${API_BASE_URL}/product/loan-product`

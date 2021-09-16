@@ -11,8 +11,8 @@ import {
 } from './loanCreationInitialStates'
 import { LoanFormulaTestForm } from './loanFormulaTestForm'
 import TestCalculateFormulaPDF from '../pdfTemplates/testCalculateFormula/testCalculateFormula'
-import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas'
-import { testFormula } from '../../Services/APIs/LoanFormula/testFormula'
+import { getFormulas } from '../../../Shared/Services/APIs/LoanFormula/getFormulas'
+import { testFormula } from '../../../Shared/Services/APIs/LoanFormula/testFormula'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import {

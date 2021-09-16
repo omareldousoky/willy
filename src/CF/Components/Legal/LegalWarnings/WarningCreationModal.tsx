@@ -11,9 +11,6 @@ import { Loader } from '../../../../Shared/Components/Loader'
 import { WarningTypeDropDown } from '../../../../Shared/Components/dropDowns/WarningTypeDropDown'
 import { addeddSuccessfully } from '../../../../Shared/localUtils'
 import { searchCustomer } from '../../../../Shared/Services/APIs/customer/searchCustomer'
-import CustomerSearch, {
-  Results,
-} from '../../../../Mohassel/Components/CustomerSearch/customerSearchTable'
 import { Application } from '../../../../Shared/Services/interfaces'
 import {
   LegalWarningRequest,
@@ -26,6 +23,9 @@ import {
   fetchWarning,
 } from '../../../../Shared/Services/APIs/LegalAffairs/warning'
 import { Customer } from '../../../../Shared/Models/Customer'
+import CustomerSearch, {
+  Results,
+} from '../../../../Shared/Components/CustomerSearch'
 
 export const WarningCreationModal = ({
   showModal,

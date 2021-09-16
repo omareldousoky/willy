@@ -9,7 +9,7 @@ import { searchGroups } from '../../../Mohassel/Services/APIs/ManagerHierarchy/s
 import {
   searchTerrorists,
   searchUnTerrorists,
-} from '../../../Mohassel/Services/APIs/Terrorism/terrorism'
+} from '../../Services/APIs/Terrorism/terrorism'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import {
   searchDefaultingCustomers,
@@ -19,7 +19,7 @@ import { searchFinancialBlocking } from '../../Services/APIs/loanApplication/fin
 import { cibReport } from '../../Services/APIs/loanApplication/cibReport'
 import { searchWarnings } from '../../Services/APIs/LegalAffairs/warning'
 import { searchCustomer } from '../../Services/APIs/customer/searchCustomer'
-import { searchProducts } from '../../../Mohassel/Services/APIs/loanProduct/searchProducts'
+import { searchProducts } from '../../Services/APIs/loanProduct/searchProducts'
 
 const searchWrapper = (
   request: any,
