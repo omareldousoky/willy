@@ -21,7 +21,7 @@ export interface EarlyPaymentPDFProps {
   application: ApplicationResponse
   earlyPaymentPdfData: EarlyPaymentPdfData
   branchDetails: any
-  type?: 'cf' | 'sme'
+  type?: 'cf' | 'sme' | 'lts'
 }
 
 export interface EarlyPaymentInstallmentProps {

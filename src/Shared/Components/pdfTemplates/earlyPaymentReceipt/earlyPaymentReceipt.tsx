@@ -34,7 +34,9 @@ const EarlyPaymentReceipt = (props) => {
             }}
           >
             <th style={{ backgroundColor: 'white' }} colSpan={6}>
-              <div className={`${type}-logo-print-tb`} />
+              <div
+                className={`${type === 'sme' ? 'lts' : type}-logo-print-tb`}
+              />
             </th>
             <th style={{ backgroundColor: 'white' }} colSpan={6}>
               {licenses[type]}

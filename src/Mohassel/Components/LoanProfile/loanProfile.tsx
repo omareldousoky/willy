@@ -1605,6 +1605,7 @@ class LoanProfile extends Component<Props, State> {
         )}
         {this.state.print === 'earlyPayment' && (
           <EarlyPaymentPDF
+            type={this.props.location.state?.sme ? 'sme' : 'lts'}
             application={this.state.application}
             earlyPaymentPdfData={getEarlyPaymentPdfData(
               this.state.application,
@@ -1625,6 +1626,7 @@ class LoanProfile extends Component<Props, State> {
         )}
         {this.state.print === 'payEarly' && (
           <EarlyPaymentReceipt
+            type={this.props.location.state?.sme ? 'sme' : 'lts'}
             receiptData={this.state.receiptData}
             branchDetails={this.state.branchDetails}
             earlyPaymentData={this.state.earlyPaymentData}

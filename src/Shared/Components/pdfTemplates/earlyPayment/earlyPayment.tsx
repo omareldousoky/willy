@@ -34,7 +34,9 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
           <tr style={{ height: '10px' }} />
           <tr className="w-100 d-flex flex-row justify-content-between">
             <th colSpan={6} style={{ backgroundColor: 'white' }}>
-              <div className={`${type}-logo-print-tb`} />
+              <div
+                className={`${type === 'sme' ? 'lts' : type}-logo-print-tb`}
+              />
             </th>
             <th style={{ backgroundColor: 'white' }} colSpan={6}>
               {licenses[type]}
