@@ -200,7 +200,7 @@ class CustomerCreation extends Component<Props, State> {
     if (this.props.edit) {
       this.getCustomerById()
     } else if (this.props.isFromLead) {
-      // this.convertLeadToCustomer()
+      this.convertLeadToCustomer()
     }
   }
 
@@ -423,6 +423,7 @@ class CustomerCreation extends Component<Props, State> {
       this.props.location.state.uuid,
       this.props.location.state.phoneNumber
     )
+    console.log(res.body)
     if (res.status === 'success') {
       const birthDate = res.body.customerNationalId
         ? await getBirthdateFromNationalId(res.body.customerNationalId)
@@ -463,7 +464,7 @@ class CustomerCreation extends Component<Props, State> {
             : 0,
         },
         businessName: '',
-        businessSector: res.body.businessSector,
+        businessSector: res.body.businessSector || '',
         businessAddress: res.body.businessAddressDescription || '',
         governorate: res.body.businessGovernate || '',
         district: res.body.businessCity || '',
@@ -526,7 +527,7 @@ class CustomerCreation extends Component<Props, State> {
             hasLoan: res.body.hasLoan,
             isGuarantor: res.body.isGuarantor,
             oldRepresentative: res.body.representative,
-            branchId: res.body.branchId,
+            branchId: res.body?.branchId,
           } as any)
       )
     } else {
