@@ -233,7 +233,7 @@ const appRoutes = [
             path: '/cbe-codes',
             label: local.cbeCodes,
             render: (props) => (
-              <Can I="createMaxPrincipal" a="config">
+              <Can I="getCBEFiles" a="customer">
                 <CBEFiles {...props} />
               </Can>
             ),

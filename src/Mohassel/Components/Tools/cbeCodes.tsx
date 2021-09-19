@@ -12,9 +12,10 @@ import {
   getCbeCodesFiles,
   postCbeCodesFile,
 } from '../../Services/APIs/CbeCodes/CbeCodes'
+import { List } from '../../../Shared/Components/ReportsList/types'
 
 interface State {
-  data: any
+  data: List[]
   loading: boolean
 }
 class CBEFiles extends Component<{}, State> {
@@ -35,7 +36,7 @@ class CBEFiles extends Component<{}, State> {
     const res = await getCbeCodesFiles()
     if (res.status === 'success') {
       this.setState({
-        data: res.body?.iscoreFiles ?? [],
+        data: res.body?.cbeFiles ?? [],
         loading: false,
       })
     } else {
