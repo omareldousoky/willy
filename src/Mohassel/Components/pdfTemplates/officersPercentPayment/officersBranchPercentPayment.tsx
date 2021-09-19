@@ -1,6 +1,6 @@
 import React from 'react'
+import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 import { OfficerBranchPercentPaymentResponse } from '../../../Services/interfaces'
-import { Header } from '../pdfTemplateCommon/header'
 import { formatPercent } from './officersPercentPayment'
 import './officersPercentPayment.scss'
 import OfficersPercentPaymentFooter from './officersPercentPaymentFooter'

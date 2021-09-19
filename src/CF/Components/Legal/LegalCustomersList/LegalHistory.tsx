@@ -3,7 +3,7 @@ import local from '../../../../Shared/Assets/ar.json'
 import Orientation from '../../../../Shared/Components/Common/orientation'
 import './legalHistory.scss'
 import { LegalHistoryProps } from '../types'
-import DataRow from '../../../../Mohassel/Components/pdfTemplates/pdfTemplateCommon/dataRow'
+import DataRow from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/dataRow'
 
 export const LegalHistory = (props: LegalHistoryProps) => {
   return (

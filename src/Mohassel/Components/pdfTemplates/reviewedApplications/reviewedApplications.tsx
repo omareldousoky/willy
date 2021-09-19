@@ -5,7 +5,7 @@ import {
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
 import store from '../../../../Shared/redux/store'
-import { loanStatusLocal } from '../pdfTemplateCommon/reportLocal'
+import { loanStatusLocal } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/reportLocal'
 
 const ReviewedApplicationsPDF = (props) => {
   const { isSme, data, branchDetails } = props

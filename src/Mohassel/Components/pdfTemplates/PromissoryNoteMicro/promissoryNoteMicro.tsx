@@ -8,8 +8,8 @@ import {
 import { ApplicationResponse } from '../../../../Shared/Models/Application'
 import { Customer } from '../../../../Shared/Models/Customer'
 import { BranchDetails } from '../../../../Shared/Services/APIs/Branch/getBranch'
-import { Header } from '../pdfTemplateCommon/header'
 import './promissoryNoteMicro.scss'
+import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 
 interface PromissoryNoteProps {
   customer: Customer
