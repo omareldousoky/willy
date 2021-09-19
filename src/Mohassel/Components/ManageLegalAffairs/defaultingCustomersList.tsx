@@ -24,7 +24,6 @@ import {
   getErrorMessage,
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
-import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import { Customer } from '../../../Shared/Services/interfaces'
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan'
 import { Application } from '../LoanApplication/loanApplicationStates'
@@ -41,6 +40,7 @@ import DefaultingCustomersPdfTemplate, {
 import { LtsIcon } from '../../../Shared/Components'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 import { ProductType } from '../LegalWarnings/types'
+import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 import { PDF } from '../../../Shared/Components/PdfList/types'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
 

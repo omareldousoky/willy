@@ -7,18 +7,15 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import FormControl from 'react-bootstrap/FormControl'
 import InputGroup from 'react-bootstrap/InputGroup'
 
-import * as local from '../../../Shared/Assets/ar.json'
+import * as local from '../../Assets/ar.json'
 
-import {
-  getFullCustomerKey,
-  getRenderDate,
-} from '../../../Shared/Services/utils'
-import { InfoBox, LtsIcon } from '../../../Shared/Components'
+import { getFullCustomerKey, getRenderDate } from '../../Services/utils'
+import { InfoBox, LtsIcon } from '..'
 import {
   getCompanyInfo,
   getCustomerInfo,
-} from '../../../Shared/Services/formatCustomersInfo'
-import { Customer } from '../../../Shared/Services/interfaces'
+} from '../../Services/formatCustomersInfo'
+import { Customer } from '../../Services/interfaces'
 
 export interface Results {
   results: Array<object>

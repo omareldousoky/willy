@@ -12,13 +12,13 @@ export const manageCustomersArray = (): Tab[] => {
       path: '/customers',
     })
   }
-  // if (ability.can('changeOfficer', 'customer')) {
-  //   manageLoanArr.push({
-  //     icon: 'exchange',
-  //     header: local.moveCustomers,
-  //     desc: local.moveCustomers,
-  //     path: '/customers/move-customers',
-  //   })
-  // }
+  if (ability.can('changeOfficer', 'customer')) {
+    manageLoanArr.push({
+      icon: 'exchange',
+      header: local.moveCustomers,
+      desc: local.moveCustomers,
+      path: '/customers/move-customers',
+    })
+  }
   return manageLoanArr
 }
