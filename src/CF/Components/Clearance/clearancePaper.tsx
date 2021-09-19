@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './clearancePaper.scss'
 import Tafgeet from 'tafgeetjs'
 import { timeToArabicDate } from '../../../Shared/Services/utils'
-import { Header } from '../PdfTemplates/pdfTemplatesCommon/header'
+import { Header } from '../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 
 interface Clearance {
   issuedDate: number
@@ -23,7 +23,12 @@ export default class ClearancePaper extends Component<Props, {}> {
       (clearance: Clearance, index) => (
         <div className="clearance-paper-print" dir="rtl" lang="ar" key={index}>
           <table>
-            <Header />
+            <Header
+              title=""
+              showCurrentUser={false}
+              showCurrentTime={false}
+              cf
+            />
             <div className="rightText">
               {`${clearance.branchName} فى ${timeToArabicDate(
                 new Date().valueOf(),

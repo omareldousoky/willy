@@ -30,7 +30,6 @@ import {
   getBranch,
 } from '../../../Shared/Services/APIs/Branch/getBranch'
 import { getCookie } from '../../../Shared/Services/getCookie'
-import { Score } from '../CustomerCreation/CustomerProfile'
 import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApplications'
 import {
   manageApplicationsArray,
@@ -45,6 +44,7 @@ import {
   getSMECachedIscore,
   getIscoreCached,
 } from '../../../Shared/Services/APIs/iScore'
+import { Score } from '../../../Shared/Models/Customer'
 
 interface Product {
   productName: string

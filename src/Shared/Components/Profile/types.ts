@@ -1,5 +1,6 @@
+import { Score } from '../../Models/Customer'
 import { CustomerScore } from '../../Services/APIs/customer/customerCategorization'
-import { CustomerGuarantor } from '../../Services/interfaces'
+import { Customer } from '../../Services/interfaces'
 
 export interface FieldProps {
   fieldTitle: string
@@ -40,5 +41,7 @@ export interface ProfileProps {
 
 export interface CFGuarantorTableViewProp {
   customerId: string
-  customerGuarantors: Array<CustomerGuarantor>
+  customerGuarantors: Array<Customer>
+  getIscore?: (data) => Promise<void>
+  iscores?: Score[]
 }

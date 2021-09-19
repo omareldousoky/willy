@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import DataRow from '../pdfTemplateCommon/dataRow'
+import DataRow from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/dataRow'
 
 import './branchesLoanList.scss'
 import { LoanTypeRowProps } from './types'

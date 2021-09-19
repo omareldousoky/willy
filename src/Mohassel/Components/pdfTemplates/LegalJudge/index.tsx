@@ -1,13 +1,13 @@
 import React, { ReactNode } from 'react'
 
 import local from '../../../../Shared/Assets/ar.json'
+import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 import { DefaultedCustomer } from '../../ManageLegalAffairs/defaultingCustomersList'
 import {
   LegalActionsForm,
   SettledCustomer,
   SettlementFormValues,
 } from '../../ManageLegalAffairs/types'
-import { Header } from '../pdfTemplateCommon/header'
 
 import './style.scss'
 

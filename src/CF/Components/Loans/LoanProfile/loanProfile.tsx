@@ -61,7 +61,6 @@ import {
   getCustomerInfo,
 } from '../../../../Shared/Services/formatCustomersInfo'
 import { FieldProps } from '../../../../Shared/Components/Profile/types'
-import { Score } from '../../../../Mohassel/Components/CustomerCreation/CustomerProfile'
 
 import { RemainingLoanResponse } from '../../../../Mohassel/Models/Payment'
 import { PromissoryNoteMicro } from '../../../../Mohassel/Components/pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
@@ -79,6 +78,7 @@ import { getRollableActionsById } from '../../../../Shared/Services/APIs/loanApp
 import { returnItem } from '../../../Services/APIs/loan'
 import { doneSuccessfully } from '../../../../Shared/localUtils'
 import Rescheduling from '../../Rescheduling/rescheduling'
+import { Score } from '../../../../Shared/Models/Customer'
 
 export interface IndividualWithInstallments {
   installmentTable: {
