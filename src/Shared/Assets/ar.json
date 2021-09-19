@@ -1182,5 +1182,12 @@
   "limitedPartnershipCompany": "شركة توصية محدوده",
   "partnershipCompany": "شركة توصية",
   "soleProprietorship": "ملكية فردية",
-  "ngo": "منظمة غير حكومية"
+  "ngo": "منظمة غير حكومية",
+  "notApplicable": "لا ينطبق",
+  "individualGuarantor": "ضامن من نوع افراد",
+  "companyGuarantor": "ضامن من نوع شركه",
+  "CFHQMinimumApprovalLimit": "الحد الادنى لمراجعه المقر الرئيسي للحد الائتماني للعميل",
+  "reviewCFCustomerLimit": "مراجعة الحد الائتماني",
+  "uploadDocuments": "رفع المستندات",
+  "downloadDocuments": "تنزيل المستندات"
 }

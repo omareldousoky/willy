@@ -10,7 +10,7 @@ import {
   loanFormulaCreationValidation,
 } from './loanCreationInitialStates'
 import { LoanFormulaCreationForm } from './loanFormulaCreationForm'
-import { createFormula } from '../../Services/APIs/LoanFormula/createFromula'
+import { createFormula } from '../../../Shared/Services/APIs/LoanFormula/createFromula'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import BackButton from '../../../Shared/Components/BackButton/back-button'

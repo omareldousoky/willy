@@ -1,6 +1,6 @@
-import { SearchRequest } from '../../../../Shared/Models/common'
-import axios from '../../../../Shared/Services/axiosInstance'
-import { API_BASE_URL } from '../../../../Shared/envConfig'
+import { SearchRequest } from '../../../Models/common'
+import axios from '../../axiosInstance'
+import { API_BASE_URL } from '../../../envConfig'
 
 const searchProductsUrl = `${API_BASE_URL}/search/product`
 export const searchProducts = async (request: SearchRequest) => {

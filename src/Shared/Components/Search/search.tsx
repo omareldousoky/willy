@@ -922,6 +922,10 @@ const Search: FunctionComponent<SearchProps> = ({
                       value: 'pending',
                       text: local.pending,
                     },
+                    {
+                      value: 'reviewed',
+                      text: local.reviewed,
+                    },
                   ],
                   'consumerFinanceLimitStatus',
                   local.consumerFinanceLimitStatus

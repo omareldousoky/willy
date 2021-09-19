@@ -6,6 +6,7 @@ export interface Action {
 
 export interface ActionWithIcon extends Action {
   actionIcon: string
+  style?: React.CSSProperties
 }
 export interface Signature {
   by?: string
@@ -57,4 +58,13 @@ export interface ApiResponse<T> {
   status: 'success' | 'error'
   body?: T
   error?: unknown
+}
+export interface Product {
+  id: string
+  name: string
+  branchCount: number
+  beneficiaryType: string
+  code: number
+  type: string
+  contractType: string
 }

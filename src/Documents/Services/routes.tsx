@@ -9,17 +9,23 @@ import EncodingFiles from '../Components/Tools/encodingFiles'
 import local from '../../Shared/Assets/ar.json'
 import { generateAppRoutes } from '../../Shared/Services/utils'
 import { Landing } from '../../Shared/Components/Landing'
+import { CompanyList } from '../../Shared/Components'
 
 const appRoutes = [
   {
     path: '/',
-    label: local.mohassel,
+    label: local.tasaheel,
     render: () => <Landing appName="LTS Documents" />,
     routes: [
       {
         path: '/customers',
         label: local.customers,
         render: (props) => <CustomersList {...props} />,
+      },
+      {
+        path: '/company',
+        label: local.companies,
+        render: (props) => <CompanyList {...props} type="DOCUMENTS" />,
       },
       {
         path: '/edit-customer-document',

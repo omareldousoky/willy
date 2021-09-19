@@ -879,15 +879,16 @@ class LoanProfile extends Component<Props, State> {
         confirmButtonText: local.writeOffLoan,
         cancelButtonText: local.cancel,
       }).then(async (result) => {
+        const appId = this.props.location.state.id
         if (result.value) {
           this.setState({ loading: true })
-          const res = await writeOffLoan(this.props.location.state.id, {
+          const res = await writeOffLoan(appId, {
             writeOffReason: text,
           })
           if (res.status === 'success') {
             this.setState({ loading: false })
             Swal.fire('', local.loanWriteOffSuccess, 'success').then(() =>
-              window.location.reload()
+              this.getAppByID(appId)
             )
           } else {
             this.setState({ loading: false }, () =>
@@ -910,13 +911,14 @@ class LoanProfile extends Component<Props, State> {
       confirmButtonText: local.cancelApplication,
       cancelButtonText: local.cancel,
     }).then(async (result) => {
+      const appId = this.props.location.state.id
       if (result.value) {
         this.setState({ loading: true })
-        const res = await cancelApplication(this.props.location.state.id)
+        const res = await cancelApplication(appId)
         if (res.status === 'success') {
           this.setState({ loading: false })
           Swal.fire('', local.applicationCancelSuccess, 'success').then(() =>
-            window.location.reload()
+            this.getAppByID(appId)
           )
         } else {
           this.setState({ loading: false }, () =>
@@ -1089,15 +1091,16 @@ class LoanProfile extends Component<Props, State> {
         confirmButtonText: local.doubtLoan,
         cancelButtonText: local.cancel,
       }).then(async (result) => {
+        const appId = this.props.location.state.id
         if (result.value) {
           this.setState({ loading: true })
-          const res = await doubtLoan(this.props.location.state.id, {
+          const res = await doubtLoan(appId, {
             doubtReason: text,
           })
           if (res.status === 'success') {
             this.setState({ loading: false })
             Swal.fire('', local.loanDoubtSuccess, 'success').then(() =>
-              window.location.reload()
+              this.getAppByID(appId)
             )
           } else {
             this.setState({ loading: false }, () =>

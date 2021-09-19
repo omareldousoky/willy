@@ -16,7 +16,7 @@ import { downloadFile, getErrorMessage } from '../../../Shared/Services/utils'
 import ability from '../../config/ability'
 import { ActionsIconGroup } from '../../../Shared/Components'
 import { Product } from '../../Models/common'
-import { getProductApplications } from '../../Services/APIs/loanProduct/productCreation'
+import { getProductApplications } from '../../../Shared/Services/APIs/loanProduct/productCreation'
 import { ActionWithIcon } from '../../../Shared/Models/common'
 import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
@@ -172,7 +172,7 @@ class LoanProducts extends Component<Props, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('loanProducts')}
+            .indexOf('loan-products')}
         />
         <Card className="main-card">
           <Loader
