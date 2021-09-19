@@ -347,7 +347,6 @@ class CustomerCreation extends Component<Props, State> {
             branchId: res.body.customer.branchId,
           } as any)
       )
-      console.log(customerInfo)
     } else {
       this.setState({ loading: false }, () =>
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
