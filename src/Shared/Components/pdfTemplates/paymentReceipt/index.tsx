@@ -4,7 +4,7 @@ import Tafgeet from 'tafgeetjs'
 import * as local from '../../../Assets/ar.json'
 import { numbersToArabic, extractGMTDate } from '../../../Services/utils'
 import { PaymentReceiptProps } from './types'
-import { companies, licenses } from '../../../Utils/pdf'
+import { companies, licenses } from '../../../Constants/pdf'
 
 const PaymentReceipt = (props: PaymentReceiptProps) => {
   const { type } = props

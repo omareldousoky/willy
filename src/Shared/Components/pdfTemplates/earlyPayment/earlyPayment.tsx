@@ -5,7 +5,7 @@ import { numbersToArabic, timeToArabicDateNow } from '../../../Services/utils'
 import DataRow from '../../../../Mohassel/Components/pdfTemplates/pdfTemplateCommon/dataRow'
 import { EarlyPaymentPDFProps } from './types'
 import { EarlyPaymentInstallment } from './EarlyPaymentInstallment'
-import { companies, licenses } from '../../../Utils/pdf'
+import { companies, licenses } from '../../../Constants/pdf'
 
 const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
   application,
