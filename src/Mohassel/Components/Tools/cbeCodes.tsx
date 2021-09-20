@@ -94,7 +94,7 @@ class CBEFiles extends Component<{}, State> {
                   variant="primary"
                   onClick={() => this.generateReport()}
                 >
-                  {local.requestNewreport}
+                  {local.fileUpload}
                 </Button>
               </Can>
             </div>
