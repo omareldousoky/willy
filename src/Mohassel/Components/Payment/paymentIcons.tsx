@@ -138,8 +138,24 @@ class PaymentIcons extends Component<Props, {}> {
             </>
           ) : null}
           {this.props.paymentType === 'normal' &&
+            (ability.can('payInstallment', 'application') ||
+              ability.can('payByInsurance', 'application')) &&
+            this.props.application.product.type === 'sme' && (
+              <div className="payment-icon m-4">
+                <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
+
+                <Button
+                  className="my-4"
+                  disabled={this.props.application.status === 'pending'}
+                  onClick={() => this.props.changePaymentState(4)}
+                  variant="primary"
+                >
+                  {local.bankPayment}
+                </Button>
+              </div>
+            )}
+          {this.props.paymentType === 'normal' &&
           !this.props.application.writeOff &&
-          this.props.application.product.type !== 'sme' &&
           this.props.application.product.contractType === 'standard' ? (
             <Can I="payEarly" a="application">
               <div className="payment-icon m-4">
@@ -160,23 +176,6 @@ class PaymentIcons extends Component<Props, {}> {
               </div>
             </Can>
           ) : null}
-          {this.props.paymentType === 'normal' &&
-            (ability.can('payInstallment', 'application') ||
-              ability.can('payByInsurance', 'application')) &&
-            this.props.application.product.type === 'sme' && (
-              <div className="payment-icon m-4">
-                <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
-
-                <Button
-                  className="my-4"
-                  disabled={this.props.application.status === 'pending'}
-                  onClick={() => this.props.changePaymentState(4)}
-                  variant="primary"
-                >
-                  {local.bankPayment}
-                </Button>
-              </div>
-            )}
           {this.props.paymentType === 'normal' &&
             (ability.can('payInstallment', 'application') ||
               ability.can('payByInsurance', 'application')) && (

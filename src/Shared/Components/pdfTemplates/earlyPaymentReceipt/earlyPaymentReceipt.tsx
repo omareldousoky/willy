@@ -1,12 +1,11 @@
 import React from 'react'
 import Tafgeet from 'tafgeetjs'
-import {
-  numbersToArabic,
-  timeToArabicDateNow,
-} from '../../../../Shared/Services/utils'
+import { numbersToArabic, timeToArabicDateNow } from '../../../Services/utils'
+import { companies, licenses } from '../../../Constants/pdf'
 import './earlyPaymentReceipt.scss'
 
 const EarlyPaymentReceipt = (props) => {
+  const { type = 'lts' } = props
   function getCode() {
     if (props.data.product.beneficiaryType === 'individual')
       return props.data.customer.key
@@ -15,7 +14,7 @@ const EarlyPaymentReceipt = (props) => {
     ).customer.key
   }
   return (
-    <div className="early-payment-receipt" dir="rtl" lang="ar">
+    <div className="early-payment-receipt" lang="ar">
       <table className="title">
         <table
           style={{
@@ -35,17 +34,19 @@ const EarlyPaymentReceipt = (props) => {
             }}
           >
             <th style={{ backgroundColor: 'white' }} colSpan={6}>
-              <div className="logo-print-tb" />
+              <div
+                className={`${type === 'sme' ? 'lts' : type}-logo-print-tb`}
+              />
             </th>
             <th style={{ backgroundColor: 'white' }} colSpan={6}>
-              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+              {licenses[type]}
             </th>
           </tr>
           <tr style={{ height: '10px' }} />
         </table>
         <tbody>
           <tr>
-            <th>شركة تساهيل للتمويل متناهي الصغر</th>
+            <th>{companies[type]}</th>
           </tr>
           <tr>
             <td>{`${props.branchDetails.name} - ${props.branchDetails.governorate}`}</td>
@@ -69,7 +70,7 @@ const EarlyPaymentReceipt = (props) => {
             </td>
           </tr>
           <tr>
-            <th className="frame">إسم العميل</th>
+            <th className="frame">اسم العميل</th>
             <td className="frame">{props.receiptData[0].customerName}</td>
           </tr>
           <tr>
