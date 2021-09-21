@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
+import Select from 'react-select'
 
 import * as local from '../../../Shared/Assets/ar.json'
 import CustomerSearch from '../CustomerSearch/customerSearchTable'
@@ -15,10 +16,31 @@ import {
   getCompanyInfo,
   getCustomerInfo,
 } from '../../../Shared/Services/formatCustomersInfo'
+import { theme } from '../../../Shared/theme'
+import { OptionType } from '../../../Shared/Components/dropDowns/types'
 
 export const LoanApplicationCreationGuarantorForm = (props: any) => {
-  const { values, handleSubmit, handleBlur, handleChange, errors } = props
+  const {
+    values,
+    handleSubmit,
+    handleBlur,
+    handleChange,
+    errors,
+    setFieldValue,
+  } = props
   const companyCheck = props.customer.customerType === 'company'
+  const entitledToSignOptions = [
+    { label: local.authorizedPartner, value: 'authorizedPartner' },
+    { label: local.director, value: 'director' },
+    { label: local.manager, value: 'manager' },
+    { label: local.partner, value: 'partner' },
+    { label: local.proprietor, value: 'proprietor' },
+    { label: local.managingDirector, value: 'managingDirector' },
+    { label: local.chairman, value: 'chairman' },
+    { label: local.guarantor, value: 'guarantor' },
+    { label: local.user, value: 'user' },
+    { label: local.other, value: 'other' },
+  ]
   return (
     <>
       <Form style={{ width: '90%', padding: 20 }} onSubmit={handleSubmit}>
@@ -130,7 +152,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                           </Button>
                         </div>
                       )}
-                      <div>
+                      <div className="col-8">
                         <CustomerSearch
                           source={text}
                           key={i}
@@ -154,14 +176,24 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                             <Form.Label className="font-weight-bold mr-2 mb-0">
                               {local.position}
                             </Form.Label>
-                            <Form.Control
-                              type="text"
+                            <Select<OptionType>
                               name={`entitledToSign[${i}].position`}
                               data-qc={`entitledToSign[${i}].position`}
-                              value={values.entitledToSign[i]?.position}
-                              defaultValue={customer.entitledToSign.position}
-                              onBlur={handleBlur}
-                              onChange={handleChange}
+                              styles={theme.selectStyleWithBorder}
+                              theme={theme?.selectTheme}
+                              className="full-width"
+                              options={entitledToSignOptions}
+                              value={entitledToSignOptions.find(
+                                (el) =>
+                                  el.value === values.entitledToSign[i].position
+                              )}
+                              onChange={(event) => {
+                                const { value } = event as OptionType
+                                setFieldValue(
+                                  `entitledToSign[${i}].position`,
+                                  value
+                                )
+                              }}
                             />
                           </div>
                         )}
