@@ -1189,5 +1189,6 @@
   "CFHQMinimumApprovalLimit": "الحد الادنى لمراجعه المقر الرئيسي للحد الائتماني للعميل",
   "reviewCFCustomerLimit": "مراجعة الحد الائتماني",
   "uploadDocuments": "رفع المستندات",
-  "downloadDocuments": "تنزيل المستندات"
+  "downloadDocuments": "تنزيل المستندات",
+  "convertToCustomer": "تحويل إلي عميل"
 }
