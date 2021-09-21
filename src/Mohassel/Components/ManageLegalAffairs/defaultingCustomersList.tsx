@@ -257,6 +257,7 @@ class DefaultingCustomersList extends Component<Props, State> {
               onClick={() =>
                 this.props.history.push('/loans/loan-profile', {
                   id: data.loanId,
+                  sme: data.customerType === 'company',
                 })
               }
             >
