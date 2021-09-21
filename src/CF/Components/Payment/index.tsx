@@ -23,7 +23,6 @@ import { payment } from '../../../Shared/redux/payment/actions'
 import PayInstallment from './payInstallment'
 import {
   editManualOtherPayment,
-  manualPayment,
   otherPayment,
   earlyPayment,
   payFutureInstallment,
