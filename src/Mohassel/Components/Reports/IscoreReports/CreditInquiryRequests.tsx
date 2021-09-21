@@ -10,7 +10,6 @@ import { Loader } from '../../../../Shared/Components/Loader'
 
 import Can from '../../../config/Can'
 
-import ReportsModal from '../reportsModal'
 import {
   downloadFile,
   getErrorMessage,
@@ -19,6 +18,7 @@ import {
   getCreditInquiryExcel,
   postCreditInquiryExcel,
 } from '../../../Services/APIs/Reports/creditInquiryRequests'
+import ReportsModal from '../../../../Shared/Components/ReportsModal/reportsModal'
 
 interface Report {
   key: string

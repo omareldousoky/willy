@@ -80,7 +80,6 @@ import {
   SmeLoanContract,
   SolidarityGuarantee,
 } from '../pdfTemplates/smeLoanContract'
-import { Score } from '../CustomerCreation/CustomerProfile'
 import {
   CalculateEarlyPaymentResponse,
   RemainingLoanResponse,
@@ -98,6 +97,7 @@ import { getWriteOffReasons } from '../../../Shared/Services/APIs/config'
 import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
 import { getEarlyPaymentPdfData } from '../../../Shared/Utils/payment'
 import EarlyPaymentReceipt from '../../../Shared/Components/pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt'
+import { Score } from '../../../Shared/Models/Customer'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -548,7 +548,9 @@ class LoanProfile extends Component<Props, State> {
       {
         icon: 'download',
         title: local.downloadPDF,
-        permission: this.state.application.status === 'created',
+        permission:
+          this.state.application.status === 'created' &&
+          ability.can('createLoan', 'application'),
         onActionClick: () => {
           this.setState(
             (prevState) => ({

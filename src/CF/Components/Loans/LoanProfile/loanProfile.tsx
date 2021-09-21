@@ -61,7 +61,6 @@ import {
   getCustomerInfo,
 } from '../../../../Shared/Services/formatCustomersInfo'
 import { FieldProps } from '../../../../Shared/Components/Profile/types'
-import { Score } from '../../../../Mohassel/Components/CustomerCreation/CustomerProfile'
 
 import {
   CalculateEarlyPaymentResponse,
@@ -85,6 +84,7 @@ import Rescheduling from '../../Rescheduling/rescheduling'
 import EarlyPaymentPDF from '../../../../Shared/Components/pdfTemplates/earlyPayment/earlyPayment'
 import EarlyPaymentReceipt from '../../../../Shared/Components/pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt'
 import { getEarlyPaymentPdfData } from '../../../../Shared/Utils/payment'
+import { Score } from '../../../../Shared/Models/Customer'
 
 export interface IndividualWithInstallments {
   installmentTable: {

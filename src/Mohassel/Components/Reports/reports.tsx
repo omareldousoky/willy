@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
-import ReportsModal from './reportsModal'
 import * as local from '../../../Shared/Assets/ar.json'
 import { CustomerStatusDetails } from '../pdfTemplates/customerStatusDetails'
 import { getCustomerDetails } from '../../Services/APIs/Reports/customerDetails'
@@ -14,33 +13,12 @@ import {
   postBranchLoanListExcel,
   getBranchLoanListExcel,
 } from '../../Services/APIs/Reports/branchLoanList'
-import { CollectionStatement } from '../pdfTemplates/CollectionStatement'
-import { LoanPenaltiesList } from '../pdfTemplates/loanPenaltiesList'
-import { CrossedOutLoansList } from '../pdfTemplates/crossedOutLoansList'
-import { DoubtfulPayments } from '../pdfTemplates/doubtfulPayments'
-import {
-  collectionReport,
-  penalties,
-  writeOffs,
-  postCollectionReportExcel,
-  getCollectionReportExcel,
-  postPenaltiesExcel,
-  getPenaltiesExcel,
-  getWriteOffsExcel,
-  postWriteOffsExcel,
-} from '../../Services/APIs/Reports'
-import {
-  installments,
-  postInstallmentsExcel,
-  getInstallmentsExcel,
-} from '../../Services/APIs/Reports/installments'
-import { PaymentsDone } from '../pdfTemplates/paymentsDone'
-import { IssuedLoanList } from '../pdfTemplates/issuedLoanList'
-import {
-  getIssuedLoanList,
-  postIssuedLoansExcel,
-  getIssuedLoansExcel,
-} from '../../Services/APIs/Reports/issuedLoansList'
+import { CollectionStatement } from '../../../Shared/Components/pdfTemplates/CollectionStatement'
+import { LoanPenaltiesList } from '../../../Shared/Components/pdfTemplates/loanPenaltiesList'
+import { CrossedOutLoansList } from '../../../Shared/Components/pdfTemplates/crossedOutLoansList'
+import { DoubtfulPayments } from '../../../Shared/Components/pdfTemplates/doubtfulPayments'
+import { PaymentsDone } from '../../../Shared/Components/pdfTemplates/paymentsDone'
+import { IssuedLoanList } from '../../../Shared/Components/pdfTemplates/issuedLoanList'
 import {
   getCreatedLoanList,
   postCreatedLoansExcel,
@@ -50,52 +28,56 @@ import {
   getRescheduledLoanList,
   postRescheduledLoanExcel,
   getRescheduledLoanExcel,
-} from '../../Services/APIs/Reports/rescheduledLoansList'
+} from '../../../Shared/Services/APIs/Reports/rescheduledLoansList'
 import { LoanCreationList } from '../pdfTemplates/loanCreationList'
-import { RescheduledLoanList } from '../pdfTemplates/rescheduledLoanList'
-import {
-  getRandomPayments,
-  postRandomPaymentsExcel,
-  getRandomPaymentsExcel,
-} from '../../Services/APIs/Reports/randomPayment'
-import { RandomPayment } from '../pdfTemplates/randomPayment'
+import { RescheduledLoanList } from '../../../Shared/Components/pdfTemplates/rescheduledLoanList'
+import { RandomPayment } from '../../../Shared/Components/pdfTemplates/randomPayment'
 import {
   getLoanApplicationFees,
   postLoanApplicationFeesExcel,
   getLoanApplicationFeesExcel,
 } from '../../Services/APIs/Reports/loanApplicationFees'
 import { LoanApplicationFees } from '../pdfTemplates/loanApplicationFees'
-import {
-  doubtfulLoans,
-  postDoubtfulLoansExcel,
-  getDoubtfulLoansExcel,
-} from '../../Services/APIs/Reports/doubtfulLoans'
 import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport'
-import { ManualPayments } from '../pdfTemplates/manualPayments'
+import { downloadFile } from '../../../Shared/Services/utils'
+import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
+import { CustomerTransactionReport } from '../../../Shared/Components/pdfTemplates/customerTransactionReport'
+import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
+import RaseedyTransactionsReport from '../../../Shared/Components/pdfTemplates/RaseedyTransactions'
+import { PDFList } from '../../../Shared/Components/PdfList'
+import { PDF } from '../../../Shared/Components/PdfList/types'
+import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
+import { ManualPayments } from '../../../Shared/Components/pdfTemplates/manualPayments'
 import {
   getManualPayments,
   postManualPaymentsExcel,
   getManualPaymentsExcel,
-} from '../../Services/APIs/Reports/manualPayments'
-import { downloadFile } from '../../../Shared/Services/utils'
-import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
-import { CustomerTransactionReport } from '../pdfTemplates/customerTransactionReport'
-import { getCustomerTransactions } from '../../Services/APIs/Reports/customerTransactions'
-import {
+  postCollectionReportExcel,
+  getCollectionReportExcel,
+  postPenaltiesExcel,
+  getPenaltiesExcel,
+  collectionReport,
+  penalties,
+  getWriteOffsExcel,
+  postWriteOffsExcel,
+  writeOffs,
+  doubtfulLoans,
+  getDoubtfulLoansExcel,
+  postDoubtfulLoansExcel,
+  getIssuedLoanList,
+  getIssuedLoansExcel,
+  postIssuedLoansExcel,
+  getInstallmentsExcel,
+  installments,
+  postInstallmentsExcel,
+  getRandomPayments,
+  getRandomPaymentsExcel,
+  postRandomPaymentsExcel,
+  getCustomerTransactions,
   fetchRaseedyTransactions,
   getRaseedyTransactionsExcel,
   postRaseedyTransactionsExcel,
-} from '../../Services/APIs/Reports/raseedyTransactions'
-import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
-import RaseedyTransactionsReport from '../pdfTemplates/RaseedyTransactions'
-import { PDFList } from '../../../Shared/Components/PdfList'
-
-export interface PDF {
-  key?: string
-  local?: string
-  inputs?: Array<string>
-  permission: string
-}
+} from '../../../Shared/Services/APIs/Reports'
 
 interface State {
   showModal?: boolean

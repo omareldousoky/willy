@@ -15,9 +15,9 @@ import {
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
 import Can from '../../config/Can'
-import ReportsModal from './reportsModal'
 import { cibTpayURL } from '../../Services/APIs/Reports/cibURL'
 import { LtsIcon } from '../../../Shared/Components'
+import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
 
 interface TPAYFile {
   created: {
