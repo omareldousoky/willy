@@ -6,7 +6,10 @@ import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
-import { manualPaymentValidation } from './paymentValidation'
+import {
+  earlyPaymentValidation,
+  manualPaymentValidation,
+} from './paymentValidation'
 import {
   getDateString,
   getErrorMessage,
@@ -22,6 +25,7 @@ import {
   editManualOtherPayment,
   manualPayment,
   otherPayment,
+  earlyPayment,
   payFutureInstallment,
   payInstallment,
   randomManualPayment,
@@ -31,6 +35,8 @@ import './styles.scss'
 import PaymentIcons from './paymentIcons'
 import ManualPayment from './manualPayment'
 import { LtsIcon } from '../../../Shared/Components'
+import { EarlyPayment } from './earlyPayment'
+import { calculateEarlyPayment } from '../../../Mohassel/Services/APIs/Payment'
 import { getFirstDueInstallment } from '../../../Shared/Utils/payment'
 
 interface Props {
@@ -44,6 +50,7 @@ interface Props {
   setReceiptData: (data) => void
   print: (data) => void
   refreshPayment: () => void
+  setEarlyPaymentData: (data) => void
   manualPaymentEditId: string
   paymentType: string
 }
@@ -162,6 +169,29 @@ class Payment extends Component<Props, State> {
     this.props.changePaymentState(0)
   }
 
+  async handleClickEarlyPayment() {
+    this.props.changePaymentState(2)
+    this.setState({ loading: true })
+    const res = await calculateEarlyPayment(this.props.applicationId)
+    if (res.status === 'success') {
+      this.props.setEarlyPaymentData({
+        remainingPrincipal: res.body.remainingPrincipal,
+        earlyPaymentFees: res.body.earlyPaymentFees,
+        requiredAmount: res.body.requiredAmount,
+      })
+      this.setState({
+        loading: false,
+        remainingPrincipal: res.body.remainingPrincipal,
+        earlyPaymentFees: res.body.earlyPaymentFees,
+        requiredAmount: res.body.requiredAmount,
+      })
+    } else {
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
+    }
+  }
+
   getStatus(data) {
     const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf()
     switch (data.status) {
@@ -266,26 +296,22 @@ class Payment extends Component<Props, State> {
           )
         }
       }
-    } else if (this.props.paymentType === 'normal') {
+    } else if (this.props.paymentState === 2) {
       const obj = {
         id: this.props.applicationId,
-        receiptNumber: values.receiptNumber,
-        truthDate: truthDateTimestamp,
-        payAmount: values.payAmount,
+        payAmount: values.requiredAmount,
         payerType: values.payerType,
         payerId: values.payerId,
         payerName: values.payerName,
         payerNationalId: values.payerNationalId.toString(),
-        installmentNumber:
-          values.installmentNumber !== -1
-            ? Number(values.installmentNumber)
-            : undefined,
-        futurePayment: values.installmentNumber !== -1 || undefined,
+        truthDate: truthDateTimestamp,
       }
-      const res = await manualPayment(obj)
+      const res = await earlyPayment(obj)
+      this.setState({ payAmount: values.payAmount })
       if (res.status === 'success') {
-        this.setState({ loadingFullScreen: false })
-        Swal.fire('', local.manualPaymentSuccess, 'success').then(() =>
+        this.props.setReceiptData(res.body)
+        this.props.print({ print: 'payEarly' })
+        this.setState({ loadingFullScreen: false }, () =>
           this.props.refreshPayment()
         )
       } else {
@@ -339,7 +365,6 @@ class Payment extends Component<Props, State> {
         }
       }
     }
-
     this.props.changePaymentState(0)
   }
 
@@ -392,6 +417,7 @@ class Payment extends Component<Props, State> {
             paymentType={this.props.paymentType}
             application={this.props.application}
             installments={this.props.installments}
+            handleClickEarlyPayment={() => this.handleClickEarlyPayment()}
           />
         )
       case 1:
@@ -406,6 +432,78 @@ class Payment extends Component<Props, State> {
             paymentType={this.props.paymentType}
           />
         )
+      case 2:
+        return (
+          <Card className="payment-menu">
+            <Loader type="fullsection" open={this.state.loading} />
+            <div className="payment-info" style={{ textAlign: 'center' }}>
+              <LtsIcon name="early-payment" size="90px" color="#7dc255" />
+              <Button
+                variant="default"
+                onClick={() => this.props.changePaymentState(0)}
+              >
+                <span className="font-weight-bolder text-primary">&#8702;</span>
+                <small className="font-weight-bolder text-primary">
+                  &nbsp;{local.earlyPayment}
+                </small>
+              </Button>
+            </div>
+            <div className="verticalLine" />
+            <div style={{ width: '100%', padding: 20 }}>
+              <span
+                style={{
+                  cursor: 'pointer',
+                  float: 'left',
+                  background: '#E5E5E5',
+                  padding: 10,
+                  borderRadius: 15,
+                }}
+                onClick={() =>
+                  this.props.print({
+                    print: 'earlyPayment',
+                    remainingPrincipal: this.state.remainingPrincipal,
+                    earlyPaymentFees: this.state.earlyPaymentFees,
+                    requiredAmount: this.state.requiredAmount,
+                  })
+                }
+              >
+                <span
+                  className="fa fa-download"
+                  style={{ margin: '0px 0px 0px 5px' }}
+                />
+                {local.downloadPDF}
+              </span>
+              <Formik
+                enableReinitialize
+                initialValues={{
+                  ...this.state,
+                  max: this.props.application.installmentsObject
+                    .totalInstallments.installmentSum,
+                }}
+                onSubmit={this.handleSubmit}
+                validationSchema={earlyPaymentValidation}
+                validateOnBlur
+                validateOnChange
+              >
+                {(formikProps) => (
+                  <EarlyPayment
+                    loading={this.state.loading}
+                    application={this.props.application}
+                    formikProps={formikProps}
+                    installments={this.props.installments}
+                    remainingPrincipal={this.state.remainingPrincipal}
+                    earlyPaymentFees={this.state.earlyPaymentFees}
+                    requiredAmount={this.state.requiredAmount}
+                    setPayerType={(payerType: string) =>
+                      this.setState({ payerType })
+                    }
+                  />
+                )}
+              </Formik>
+            </div>
+          </Card>
+        )
+
       case 3:
         return (
           <Card className="payment-menu">

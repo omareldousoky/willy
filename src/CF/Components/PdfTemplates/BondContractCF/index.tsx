@@ -6,15 +6,15 @@ import {
   timeToArabicDate,
   dayToArabic,
 } from '../../../../Shared/Services/utils'
-import { Header } from '../pdfTemplatesCommon/header'
 import { BondContractProps } from '../../../Models/contract'
+import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 
 export const BondContract: React.FC<BondContractProps> = (props) => {
   return (
     <>
       <div className="loan-contract" dir="rtl" lang="ar">
         <table className="report-container">
-          <Header />
+          <Header title="" showCurrentUser={false} showCurrentTime={false} cf />
           <tbody className="report-content">
             <tr>
               <td

@@ -62,7 +62,10 @@ import {
 } from '../../../../Shared/Services/formatCustomersInfo'
 import { FieldProps } from '../../../../Shared/Components/Profile/types'
 
-import { RemainingLoanResponse } from '../../../../Mohassel/Models/Payment'
+import {
+  CalculateEarlyPaymentResponse,
+  RemainingLoanResponse,
+} from '../../../../Shared/Models/Payment'
 import { PromissoryNoteMicro } from '../../../../Mohassel/Components/pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
 import {
   getIscore,
@@ -82,6 +85,9 @@ import { returnItem } from '../../../Services/APIs/loan'
 import { doneSuccessfully } from '../../../../Shared/localUtils'
 import Rescheduling from '../../Rescheduling/rescheduling'
 import RandomPaymentReceipt from '../../../../Shared/Components/pdfTemplates/randomPaymentReceipt/randomPaymentReceipt'
+import EarlyPaymentPDF from '../../../../Shared/Components/pdfTemplates/earlyPayment/earlyPayment'
+import EarlyPaymentReceipt from '../../../../Shared/Components/pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt'
+import { getEarlyPaymentPdfData } from '../../../../Shared/Utils/payment'
 import { Score } from '../../../../Shared/Models/Customer'
 import ManualRandomPaymentsActions from './manualRandomPaymentsActions'
 
@@ -106,6 +112,7 @@ interface State {
   tabsArray: Array<Tab>
   loading: boolean
   print: string
+  earlyPaymentData?: CalculateEarlyPaymentResponse
   pendingActions: PendingActions
   manualPaymentEditId: string
   branchDetails: BranchDetails
@@ -335,7 +342,7 @@ class LoanProfile extends Component<Props, State> {
     const paymentTab = {
       header: local.payments,
       stringKey: 'loanPayments',
-      permission: ['payInstallment', 'payByInsurance'],
+      permission: ['payInstallment', 'payEarly', 'payByInsurance'],
       permissionKey: 'application',
     }
 
@@ -1037,9 +1044,18 @@ class LoanProfile extends Component<Props, State> {
         return (
           <Payment
             print={(data) =>
-              this.setState({ print: data.print }, () => window.print())
+              this.setState(
+                (prevState) => ({
+                  print: data.print,
+                  earlyPaymentData: { ...prevState.earlyPaymentData, ...data },
+                }),
+                () => window.print()
+              )
             }
             setReceiptData={(data) => this.setState({ receiptData: data })}
+            setEarlyPaymentData={(data) =>
+              this.setState({ earlyPaymentData: data })
+            }
             application={this.state.application}
             installments={
               this.state.application.installmentsObject.installments
@@ -1084,9 +1100,18 @@ class LoanProfile extends Component<Props, State> {
         return (
           <Payment
             print={(data) =>
-              this.setState({ print: data.print }, () => window.print())
+              this.setState(
+                (prevState) => ({
+                  print: data.print,
+                  earlyPaymentData: { ...prevState.earlyPaymentData, ...data },
+                }),
+                () => window.print()
+              )
             }
             setReceiptData={(data) => this.setState({ receiptData: data })}
+            setEarlyPaymentData={(data) =>
+              this.setState({ earlyPaymentData: data })
+            }
             application={this.state.application}
             installments={
               this.state.application.installmentsObject.installments
@@ -1103,9 +1128,18 @@ class LoanProfile extends Component<Props, State> {
         return (
           <Payment
             print={(data) =>
-              this.setState({ print: data.print }, () => window.print())
+              this.setState(
+                (prevState) => ({
+                  print: data.print,
+                  earlyPaymentData: { ...prevState.earlyPaymentData, ...data },
+                }),
+                () => window.print()
+              )
             }
             setReceiptData={(data) => this.setState({ receiptData: data })}
+            setEarlyPaymentData={(data) =>
+              this.setState({ earlyPaymentData: data })
+            }
             application={this.state.application}
             installments={
               this.state.application.installmentsObject.installments
@@ -1373,7 +1407,17 @@ class LoanProfile extends Component<Props, State> {
             members={this.state.individualsWithInstallments}
           />
         )}
-
+        {this.state.print === 'earlyPayment' && (
+          <EarlyPaymentPDF
+            type="cf"
+            application={this.state.application}
+            earlyPaymentPdfData={getEarlyPaymentPdfData(
+              this.state.application,
+              this.state.remainingLoan
+            )}
+            branchDetails={this.state.branchDetails}
+          />
+        )}
         {this.state.print === 'payment' && (
           <PaymentReceipt
             type="cf"
@@ -1389,6 +1433,15 @@ class LoanProfile extends Component<Props, State> {
           <RandomPaymentReceipt
             receiptData={this.state.receiptData}
             appType="CF"
+          />
+        )}
+        {this.state.print === 'payEarly' && (
+          <EarlyPaymentReceipt
+            type="cf"
+            receiptData={this.state.receiptData}
+            branchDetails={this.state.branchDetails}
+            earlyPaymentData={this.state.earlyPaymentData}
+            data={this.state.application}
           />
         )}
       </Container>

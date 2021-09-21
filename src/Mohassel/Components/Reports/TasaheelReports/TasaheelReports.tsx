@@ -16,7 +16,6 @@ import {
 
 import HeaderWithCards from '../../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { Loader } from '../../../../Shared/Components/Loader'
-import ReportsModal from '../reportsModal'
 import { RisksReport } from './RisksReport'
 import { DebtsAgingReport } from './DebtsAgingReport'
 import MonthlyReport from '../../pdfTemplates/monthlyReport/monthlyReport'
@@ -47,6 +46,7 @@ import {
 } from '../../../../Shared/Services/interfaces'
 import MonthlyAnalysisReport from '../../pdfTemplates/MonthlyAnalysisReport'
 import { PdfPortal } from '../../../../Shared/Components/Common/PdfPortal'
+import ReportsModal from '../../../../Shared/Components/ReportsModal/reportsModal'
 
 export const TasaheelReports = () => {
   const reportsRequests = {

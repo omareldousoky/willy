@@ -13,6 +13,7 @@ const randomManualPaymentUrl = `${baseUrl}/manual-other-payment/:loanId`
 const getOtherManualPaymentUrl = `${baseUrl}/get-manual-other-payments/:loanId`
 const approveManualOtherPaymentUrl = `${baseUrl}/approve-manual-other-payment`
 const rejectManualOtherPaymentUrl = `${baseUrl}/reject-manual-other-payment`
+const earlyPaymentUrl = `${baseUrl}/early-payment/:loanId`
 
 export const manualPayment = async (obj) => {
   try {
@@ -127,5 +128,17 @@ export const rejectManualOtherPayment = async (id: string) => {
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
+  }
+}
+
+export const earlyPayment = async (obj) => {
+  try {
+    const res = await axios.put(earlyPaymentUrl.replace(':loanId', obj.id), obj)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
   }
 }
