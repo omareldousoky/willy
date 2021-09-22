@@ -174,7 +174,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                         {values.entitledToSign[i]?.entitledToSign?._id && (
                           <div className="d-flex align-items-center">
                             <Form.Label className="font-weight-bold mr-2 mb-0">
-                              {local.position}
+                              {`${local.position} *`}
                             </Form.Label>
                             <Select<OptionType>
                               name={`entitledToSign[${i}].position`}
@@ -191,6 +191,10 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                 const { value } = event as OptionType
                                 setFieldValue(
                                   `entitledToSign[${i}].position`,
+                                  value
+                                )
+                                setFieldValue(
+                                  `entitledToSignIds[${i}].position`,
                                   value
                                 )
                               }}
