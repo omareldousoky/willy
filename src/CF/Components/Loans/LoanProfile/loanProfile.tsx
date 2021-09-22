@@ -1066,6 +1066,7 @@ class LoanProfile extends Component<Props, State> {
             manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="normal"
+            randomPendingActions={this.state.randomPendingActions}
           />
         )
       case 'customerCard':
@@ -1122,6 +1123,7 @@ class LoanProfile extends Component<Props, State> {
             manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="random"
+            randomPendingActions={this.state.randomPendingActions}
           />
         )
       case 'penalties':
@@ -1150,6 +1152,7 @@ class LoanProfile extends Component<Props, State> {
             manualPaymentEditId={this.state.manualPaymentEditId}
             refreshPayment={() => this.getAppByID(this.state.application._id)}
             paymentType="penalties"
+            randomPendingActions={this.state.randomPendingActions}
           />
         )
       case 'loanRescheduling':

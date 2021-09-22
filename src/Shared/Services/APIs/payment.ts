@@ -14,6 +14,7 @@ const getOtherManualPaymentUrl = `${baseUrl}/get-manual-other-payments/:loanId`
 const approveManualOtherPaymentUrl = `${baseUrl}/approve-manual-other-payment`
 const rejectManualOtherPaymentUrl = `${baseUrl}/reject-manual-other-payment`
 const earlyPaymentUrl = `${baseUrl}/early-payment/:loanId`
+const editManualPaymentUrl = `${baseUrl}/edit-manual-payment/:loanId`
 
 export const manualPayment = async (obj) => {
   try {
@@ -140,5 +141,17 @@ export const earlyPayment = async (obj) => {
       status: 'error',
       error: (error as Record<string, any>).response.data,
     }
+  }
+}
+
+export const editManualPayment = async (obj) => {
+  try {
+    const res = await axios.put(
+      editManualPaymentUrl.replace(':loanId', obj.id),
+      obj
+    )
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
   }
 }
