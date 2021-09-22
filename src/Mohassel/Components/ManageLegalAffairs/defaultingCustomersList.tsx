@@ -461,7 +461,7 @@ class DefaultingCustomersList extends Component<Props, State> {
         loanSearchResults: results.body.applications.filter(
           (loan) =>
             loan.application.status &&
-            ['pending', 'issued'].includes(loan.application.status)
+            ['pending', 'issued', 'paid'].includes(loan.application.status)
         ),
         productType: 'micro',
       })
