@@ -17,13 +17,6 @@ export interface Branch {
   _id?: string
 }
 
-export interface CustomerGuarantor {
-  name: string
-  birthDate: number
-  nationalId: string
-  address: string
-}
-
 export interface Customer {
   accountBranch?: string
   accountNumber?: string
@@ -96,7 +89,6 @@ export interface Customer {
   nanoLoansLimit?: number
   monthlyIncome?: number
   initialConsumerFinanceLimit?: number
-  customerGuarantors?: CustomerGuarantor[]
   consumerFinanceLimitStatus?: string
 }
 export interface Installment {
@@ -598,4 +590,32 @@ export interface IscoreAuthority {
   code: string
   nameEnglish: string
   nameArabic: string
+}
+export interface CustomerApplicationTransactionsRequest {
+  loanApplicationKey: string
+}
+
+export interface CustomerApplicationTransactionRow {
+  transactionCode: string
+  installmentSerial: string
+  date: string
+  action: string
+  loanSerial: string
+  transactionAmount: string
+  currency: string
+  branchName: string
+  status: string
+  username: string
+  createdAt: string
+}
+export interface CustomerApplicationTransactionsResponse {
+  result?: CustomerApplicationTransactionRow[]
+  customer?: {
+    name: string
+    key: string
+  }
+  branch?: {
+    name: string
+    code: string
+  }
 }

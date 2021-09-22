@@ -146,6 +146,8 @@ export const Profile = ({
                     key={index}
                     customerId={fieldData.customerId}
                     guarantors={fieldData.customerGuarantors}
+                    getIscore={fieldData.getIscore}
+                    iScores={fieldData.iscores}
                   />
                 )
               )

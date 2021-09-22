@@ -9,14 +9,14 @@ import {
   getOfficersProductivityReportById,
   getOfficersProductivityReports,
 } from '../../Services/APIs/Reports/officersProductivity'
-import ReportsModal from './reportsModal'
 import {
-  CurrentHierarchiesSingleResponse,
   OfficersProductivityRequest,
   OfficersProductivityResponse,
 } from '../../Models/OfficersProductivityReport'
 import OfficersProductivity from '../pdfTemplates/officersPercentPayment/officersProductivity/officersProductivity'
 import { ReportsList } from '../../../Shared/Components/ReportsList'
+import { CurrentHierarchiesSingleResponse } from '../../../Shared/Models/OfficerProductivity/OfficerProductivityReport'
+import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
 
 interface State {
   data: any

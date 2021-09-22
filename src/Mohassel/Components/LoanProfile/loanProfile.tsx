@@ -35,9 +35,8 @@ import CustomerCardAttachments from '../pdfTemplates/customerCardAttachments/cus
 import FollowUpStatementPDF from '../pdfTemplates/followUpStatment/followUpStatement'
 import LoanContract from '../pdfTemplates/loanContract/loanContract'
 import LoanContractForGroup from '../pdfTemplates/loanContractForGroup/loanContractForGroup'
-import EarlyPaymentReceipt from '../pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt'
 import Can from '../../config/Can'
-import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment'
+import EarlyPaymentPDF from '../../../Shared/Components/pdfTemplates/earlyPayment/earlyPayment'
 import { Customer, PendingActions } from '../../../Shared/Services/interfaces'
 import {
   iscoreDate,
@@ -81,12 +80,10 @@ import {
   SmeLoanContract,
   SolidarityGuarantee,
 } from '../pdfTemplates/smeLoanContract'
-import { Score } from '../CustomerCreation/CustomerProfile'
-import { getEarlyPaymentPdfData } from './utils'
 import {
   CalculateEarlyPaymentResponse,
   RemainingLoanResponse,
-} from '../../Models/Payment'
+} from '../../../Shared/Models/Payment'
 import NanoLoanContract from '../pdfTemplates/nanoLoanContract/nanoLoanContract'
 import { PromissoryNoteMicro } from '../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
 import {
@@ -98,6 +95,9 @@ import {
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { getWriteOffReasons } from '../../../Shared/Services/APIs/config'
 import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
+import { getEarlyPaymentPdfData } from '../../../Shared/Utils/payment'
+import EarlyPaymentReceipt from '../../../Shared/Components/pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt'
+import { Score } from '../../../Shared/Models/Customer'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -548,7 +548,9 @@ class LoanProfile extends Component<Props, State> {
       {
         icon: 'download',
         title: local.downloadPDF,
-        permission: this.state.application.status === 'created',
+        permission:
+          this.state.application.status === 'created' &&
+          ability.can('createLoan', 'application'),
         onActionClick: () => {
           this.setState(
             (prevState) => ({
@@ -1608,6 +1610,7 @@ class LoanProfile extends Component<Props, State> {
         )}
         {this.state.print === 'earlyPayment' && (
           <EarlyPaymentPDF
+            type={this.props.location.state?.sme ? 'sme' : 'lts'}
             application={this.state.application}
             earlyPaymentPdfData={getEarlyPaymentPdfData(
               this.state.application,
@@ -1628,6 +1631,7 @@ class LoanProfile extends Component<Props, State> {
         )}
         {this.state.print === 'payEarly' && (
           <EarlyPaymentReceipt
+            type={this.props.location.state?.sme ? 'sme' : 'lts'}
             receiptData={this.state.receiptData}
             branchDetails={this.state.branchDetails}
             earlyPaymentData={this.state.earlyPaymentData}

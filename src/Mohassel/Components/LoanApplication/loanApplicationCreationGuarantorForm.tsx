@@ -8,7 +8,6 @@ import Col from 'react-bootstrap/Col'
 import Select from 'react-select'
 
 import * as local from '../../../Shared/Assets/ar.json'
-import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import GroupInfoBox from '../LoanProfile/groupInfoBox'
 import { guarantorOrderLocal, orderLocal } from '../../../Shared/Services/utils'
 import { InfoBox } from '../../../Shared/Components'
@@ -18,6 +17,7 @@ import {
 } from '../../../Shared/Services/formatCustomersInfo'
 import { theme } from '../../../Shared/theme'
 import { OptionType } from '../../../Shared/Components/dropDowns/types'
+import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 
 export const LoanApplicationCreationGuarantorForm = (props: any) => {
   const {

@@ -6,7 +6,7 @@ import {
 } from '../../../../Shared/Services/utils'
 import { LoanApplicationFeesProps } from './types'
 import Orientation from '../../../../Shared/Components/Common/orientation'
-import { stringPlaceholder } from '../pdfTemplateCommon/reportLocal'
+import { stringPlaceholder } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/reportLocal'
 
 const statusLocalization = (status: string) => {
   switch (status) {

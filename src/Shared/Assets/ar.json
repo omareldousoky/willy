@@ -1211,5 +1211,6 @@
   "smeBankName": "اسم البنك التابعة له الشركة",
   "smeBankBranch": "فرع البنك التابعة له الشركة",
   "smeBankAccountNumber": "رقم الحساب البنكي للشركة",
-  "smeIbanNumber": "رقم IBAN"
+  "smeIbanNumber": "رقم IBAN",
+  "convertToCustomer": "تحويل إلي عميل"
 }
