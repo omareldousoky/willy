@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
-import ReportsModal from './reportsModal'
 import * as local from '../../../Shared/Assets/ar.json'
 import { fetchLoansBriefingReport } from '../../Services/APIs/Reports/loansBriefingReport'
 import { installmentsDuePerOfficerCustomerCard } from '../../Services/APIs/Reports/installmentsDuePerOfficerCustomerCard'
@@ -48,13 +47,8 @@ import {
 } from '../../Services/APIs/Reports/activeWallet'
 import ActiveWalletGroupPdf from '../pdfTemplates/activeWalletGroup/activeWalletGroup'
 import { PDFList } from '../../../Shared/Components/PdfList'
-
-export interface PDF {
-  key?: string
-  local?: string
-  inputs?: Array<string>
-  permission: string
-}
+import { PDF } from '../../../Shared/Components/PdfList/types'
+import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
 
 interface OperationsReportsState {
   showModal?: boolean

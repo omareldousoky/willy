@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 
 import Map from '../../../Shared/Components/Map/map'
-import * as local from '../../../Shared/Assets/ar.json'
+import local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../config/Can'
 import { getErrorMessage } from '../../../Shared/Services/utils'
@@ -19,6 +19,17 @@ import {
 } from '../../../Shared/Services/APIs/config'
 import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
 import { BusinessSector, District, Governorate } from './StepTwoForm'
+
+const legalStructureRoles = [
+  'openStockCompany',
+  'closedStockCompany',
+  'limitedLiabilityCompany',
+  'limitedPartnershipCompany',
+  'partnershipCompany',
+  'soleProprietorship',
+  'ngo',
+  'other',
+]
 
 export const StepTwoCompanyForm = (props: any) => {
   const {
@@ -345,15 +356,24 @@ export const StepTwoCompanyForm = (props: any) => {
           <Form.Group controlId="legalStructure">
             <Form.Label className="customer-form-label">{`${local.legalStructure} *`}</Form.Label>
             <Form.Control
-              type="text"
+              as="select"
+              type="select"
               name="legalStructure"
               data-qc="legalStructure"
-              value={values.legalStructure}
               onBlur={handleBlur}
-              maxLength={100}
               onChange={handleChange}
               isInvalid={errors.legalStructure && touched.legalStructure}
-            />
+            >
+              {legalStructureRoles.map((role) => (
+                <option
+                  key={role}
+                  value={role}
+                  selected={values.legalStructure === role || role === 'other'}
+                >
+                  {local[role]}
+                </option>
+              ))}
+            </Form.Control>
             <Form.Control.Feedback type="invalid">
               {errors.legalStructure}
             </Form.Control.Feedback>

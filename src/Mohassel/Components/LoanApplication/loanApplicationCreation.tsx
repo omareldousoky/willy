@@ -22,8 +22,8 @@ import {
 } from './loanApplicationStates'
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm'
 import { Loader } from '../../../Shared/Components/Loader'
-import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas'
-import { getProduct } from '../../Services/APIs/loanProduct/getProduct'
+import { getFormulas } from '../../../Shared/Services/APIs/LoanFormula/getFormulas'
+import { getProduct } from '../../../Shared/Services/APIs/loanProduct/getProduct'
 import { getProductsByBranch } from '../../../Shared/Services/APIs/Branch/getBranches'
 import { getGenderFromNationalId } from '../../../Shared/Services/nationalIdValidation'
 import {
@@ -46,7 +46,6 @@ import {
 import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationGuarantorForm'
 import DualBox from '../../../Shared/Components/DualListBox/dualListBox'
 import InfoBox from '../userInfoBox'
-import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
 
 import { theme } from '../../../Shared/theme'
@@ -58,6 +57,7 @@ import { getMaxPrinciples } from '../../../Shared/Services/APIs/config'
 import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
+import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 
 interface LoanApplicationCreationRouteState {
   id?: string

@@ -9,9 +9,9 @@ import { LoanProductCreationForm } from './loanProductCreationForm'
 import {
   createProduct,
   editProduct,
-} from '../../Services/APIs/loanProduct/productCreation'
-import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas'
-import { getProduct } from '../../Services/APIs/loanProduct/getProduct'
+} from '../../../Shared/Services/APIs/loanProduct/productCreation'
+import { getFormulas } from '../../../Shared/Services/APIs/LoanFormula/getFormulas'
+import { getProduct } from '../../../Shared/Services/APIs/loanProduct/getProduct'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import BackButton from '../../../Shared/Components/BackButton/back-button'

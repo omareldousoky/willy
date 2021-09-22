@@ -11,7 +11,7 @@ import {
   iscoreBank,
 } from '../../Shared/Services/utils'
 import Can from '../config/Can'
-import { Score } from './CustomerCreation/CustomerProfile'
+import { Score } from '../../Shared/Models/Customer'
 
 interface Props {
   values: any

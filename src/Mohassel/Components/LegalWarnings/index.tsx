@@ -222,9 +222,15 @@ export const LegalWarnings = () => {
             className="px-0"
             title={`${local.view} ${local.viewCustomer}`}
             onClick={() =>
-              history.push('/customers/view-customer', {
-                id: warning.customerId,
-              })
+              history.push(
+                warning.customerType === 'company' ||
+                  warning.customerType === 'companyGuarantor'
+                  ? '/company/view-company'
+                  : '/customers/view-customer',
+                {
+                  id: warning.customerId,
+                }
+              )
             }
           >
             {warning.customerKey}
@@ -241,7 +247,7 @@ export const LegalWarnings = () => {
     {
       title: local.nationalId,
       key: 'nationalId',
-      render: (warning) => warning.nationalId,
+      render: (warning) => warning.nationalId || local.notApplicable,
     },
     {
       title: local.loanCode,

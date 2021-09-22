@@ -7,7 +7,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import { downloadFile, getErrorMessage } from '../../../Shared/Services/utils'
 import Can from '../../config/Can'
-import { downloadSuspectsReport } from '../../Services/APIs/Terrorism/terrorism'
+import { downloadSuspectsReport } from '../../../Shared/Services/APIs/Terrorism/terrorism'
 
 export const TerroristsCustomers = () => {
   const [loading, setLoading] = useState(false)

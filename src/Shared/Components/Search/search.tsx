@@ -47,6 +47,8 @@ const Search: FunctionComponent<SearchProps> = ({
   datePlaceholder,
   hqBranchIdRequest,
   chosenStatus,
+  type,
+  beneficiaryType,
   resetSelectedItems,
   setFrom,
   dropDownKeys,
@@ -55,6 +57,7 @@ const Search: FunctionComponent<SearchProps> = ({
   const isLoanUrl = url === 'loan'
   const isIssuedLoansSearch = url === 'loan' && !fundSource
   const isApplicationUrl = url === 'application'
+  const isProductUrl = url === 'product'
   const isCibUrl = url === 'cib'
 
   const [governorates, setGovernorates] = useState<Governorate[]>([])
@@ -195,6 +198,12 @@ const Search: FunctionComponent<SearchProps> = ({
         case 'phoneNumber':
           initialState.phoneNumber = ''
           break
+        case 'productType':
+          initialState.type = isProductUrl ? type : ''
+          break
+        case 'beneficiaryType':
+          initialState.type = isProductUrl ? beneficiaryType : ''
+          break
         case 'consumerFinanceLimitStatus':
           initialState.consumerFinanceLimitStatus = ''
           break
@@ -275,11 +284,10 @@ const Search: FunctionComponent<SearchProps> = ({
     if (url === 'supervisionsGroups') {
       obj.status = chosenStatus
     }
-    if (!['application', 'loan'].includes(url)) {
+    if (!['application', 'loan', 'product'].includes(url)) {
       delete obj.type
-    } else {
+    } else if (url !== 'product')
       obj.type = sme ? 'sme' : obj.type || (cf ? 'consumerFinance' : 'micro')
-    }
 
     if (obj.lastDates) {
       const fromDate = dayjs().subtract(1, obj.lastDates)
@@ -914,9 +922,84 @@ const Search: FunctionComponent<SearchProps> = ({
                       value: 'pending',
                       text: local.pending,
                     },
+                    {
+                      value: 'reviewed',
+                      text: local.reviewed,
+                    },
                   ],
                   'consumerFinanceLimitStatus',
                   local.consumerFinanceLimitStatus
+                )
+              }
+              if (searchKey === 'beneficiaryType') {
+                return (
+                  <Col
+                    key={index}
+                    sm={6}
+                    style={{ marginTop: index < 2 ? 0 : 20 }}
+                  >
+                    <div className="dropdown-container">
+                      <p className="dropdown-label">{local.customerType}</p>
+                      <Form.Control
+                        as="select"
+                        className="dropdown-select"
+                        data-qc="beneficiaryType"
+                        value={formikProps.values.beneficiaryType}
+                        onChange={(e) => {
+                          formikProps.setFieldValue(
+                            'beneficiaryType',
+                            e.currentTarget.value
+                          )
+                        }}
+                      >
+                        {[
+                          { value: '', text: local.all },
+                          { value: 'individual', text: local.individual },
+                          { value: 'group', text: local.group },
+                        ].map(({ value, text }) => (
+                          <option key={value} value={value} data-qc={value}>
+                            {text}
+                          </option>
+                        ))}
+                      </Form.Control>
+                    </div>
+                  </Col>
+                )
+              }
+              if (searchKey === 'productType') {
+                return (
+                  <Col
+                    key={index}
+                    sm={6}
+                    style={{ marginTop: index < 2 ? 0 : 20 }}
+                  >
+                    <div className="dropdown-container">
+                      <p className="dropdown-label">{local.actionType}</p>
+                      <Form.Control
+                        as="select"
+                        className="dropdown-select"
+                        data-qc="loanType"
+                        value={formikProps.values.type}
+                        onChange={(e) => {
+                          formikProps.setFieldValue(
+                            'type',
+                            e.currentTarget.value
+                          )
+                        }}
+                      >
+                        {[
+                          { value: '', text: local.all },
+                          { value: 'micro', text: local.micro },
+                          { value: 'nano', text: local.nano },
+                          { value: 'sme', text: local.sme },
+                        ].map(({ value, text }) => (
+                          <option key={value} value={value} data-qc={value}>
+                            {text}
+                          </option>
+                        ))}
+                      </Form.Control>
+                    </div>
+                  </Col>
                 )
               }
             })}

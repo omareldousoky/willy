@@ -50,6 +50,7 @@ export interface LegalWarningResponse extends Trace {
   customerName?: string
   nationalId?: string
   customerKey?: number
+  customerType?: string
   customerBranchId?: string
   warningType: LegalWarningType
   printed?: boolean

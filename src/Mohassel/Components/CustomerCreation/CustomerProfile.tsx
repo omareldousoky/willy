@@ -20,16 +20,8 @@ import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCusto
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { getIscoreCached } from '../../../Shared/Services/APIs/iScore'
 import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCustomer'
+import { Score } from '../../../Shared/Models/Customer'
 
-export interface Score {
-  id?: string // commercialRegisterNumber
-  customerName?: string
-  activeLoans?: string
-  iscore: string
-  nationalId?: string
-  url?: string
-  bankCodes?: string[]
-}
 interface LocationState {
   id: string
 }

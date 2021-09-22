@@ -23,6 +23,17 @@ export const CfNavbar = () => {
             {local.customers}
           </Nav.Link>
         )}
+        {ability.can('getLoanProduct', 'product') ? (
+          <Nav.Link onClick={() => history.push('/manage-loans/loan-products')}>
+            {local.loans}
+          </Nav.Link>
+        ) : ability.can('getCalculationFormula', 'product') ? (
+          <Nav.Link
+            onClick={() => history.push('/manage-loans/calculation-formulas')}
+          >
+            {local.loans}
+          </Nav.Link>
+        ) : null}
         {ability.can('getRoles', 'user') ? (
           <Nav.Link onClick={() => history.push('/manage-accounts/roles')}>
             {local.manageAccounts}
@@ -42,7 +53,8 @@ export const CfNavbar = () => {
             {local.manageAccounts}
           </Nav.Link>
         ) : null}
-        {ability.can('getIssuedLoan', 'application') && (
+        {(ability.can('getIssuedLoan', 'application') ||
+          ability.can('branchIssuedLoan', 'application')) && (
           <Nav.Link onClick={() => history.push('/loans')}>
             {local.issuedLoans}
           </Nav.Link>
@@ -66,6 +78,15 @@ export const CfNavbar = () => {
             {local.clearances}
           </Nav.Link>
         )}
+        {ability.can('getTerrorist', 'customer') && (
+          <Nav.Link
+            onClick={() =>
+              history.push('/manage-anti-terrorism/anti-terrorism')
+            }
+          >
+            {local.antiTerrorism}
+          </Nav.Link>
+        )}
         {ability.can('getDefaultingCustomer', 'legal') && (
           <Nav.Link onClick={() => history.push('/legal-affairs/late-list')}>
             {local.legalAffairs}
@@ -79,6 +100,24 @@ export const CfNavbar = () => {
         {ability.can('getOfficersGroups', 'branch') && (
           <Nav.Link onClick={() => history.push('/supervisions-levels')}>
             {local.levelsOfSupervision}
+          </Nav.Link>
+        )}
+        {ability.can('financialBlocking', 'application') ? (
+          <Nav.Link
+            onClick={() => history.push('/financial-closing/lts-blocking')}
+          >
+            {local.manageFinancialTransaction}
+          </Nav.Link>
+        ) : ability.can('financialClosing', 'application') ? (
+          <Nav.Link
+            onClick={() => history.push('/financial-closing/lts-closing')}
+          >
+            {local.manageFinancialTransaction}
+          </Nav.Link>
+        ) : null}
+        {ability.can('viewReports', 'report') && (
+          <Nav.Link onClick={() => history.push('/reports')}>
+            {local.reports}
           </Nav.Link>
         )}
       </Nav>

@@ -1,301 +1,337 @@
-import React, { Component } from 'react'
+import React, { FunctionComponent, useState, useEffect } from 'react'
 import Card from 'react-bootstrap/Card'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useHistory, useLocation } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-import Can from '../../../Mohassel/config/Can'
 import { Loader } from '../../../Shared/Components/Loader'
-import * as local from '../../../Shared/Assets/ar.json'
+import local from '../../../Shared/Assets/ar.json'
 import Search from '../../../Shared/Components/Search/search'
-import { search, searchFilters } from '../../../Shared/redux/search/actions'
+import {
+  issuedLoansSearchFilters as issuedLoansSearchFiltersAction,
+  search as searchAction,
+} from '../../../Shared/redux/search/actions'
 import {
   timeToDateyyymmdd,
   beneficiaryType,
   getErrorMessage,
+  getFullCustomerKey,
+  removeEmptyArg,
+  loanChipStatusClass,
 } from '../../../Shared/Services/utils'
 
-interface Props extends RouteComponentProps {
-  data: any
-  branchId: string
-  fromBranch?: boolean
-  totalCount: number
-  loading: boolean
-  searchFilters: any
-  error: string
-  issuedLoansSearchFilters: any
-  search: (data) => Promise<void>
-  setSearchFilters: (data) => void
-}
-interface State {
-  size: number
-  from: number
-  searchKeys: any
-}
+import { ActionsIconGroup } from '../../../Shared/Components'
+import {
+  LoanListLocationState,
+  LoanListHistoryState,
+  LoanListProps,
+} from './types'
+import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
 
-class LoanList extends Component<Props, State> {
-  mappers: {
-    title: string
-    key: string
-    sortable?: boolean
-    render: (data: any) => void
-  }[]
+const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
+  const [from, setFrom] = useState(0)
+  const [size, setSize] = useState(10)
 
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      size: 10,
-      from: 0,
-      searchKeys: [
-        'keyword',
-        'dateFromTo',
-        'status',
-        'branch',
-        'doubtful',
-        'writtenOff',
-      ],
+  const location = useLocation<LoanListLocationState>()
+  const history = useHistory<LoanListHistoryState>()
+
+  const dispatch = useDispatch()
+
+  const { search, setIssuedLoansSearchFilters } = {
+    search: (data) => dispatch(searchAction(data)),
+    setIssuedLoansSearchFilters: (data: Record<string, any>) =>
+      dispatch(issuedLoansSearchFiltersAction(data)),
+  }
+
+  const {
+    loans,
+    error,
+    totalCount,
+    loading,
+    issuedLoansSearchFilters,
+  } = useSelector((state: any) => ({
+    loans: state.search.applications,
+    error: state.search.error,
+    totalCount: state.search.totalCount,
+    loading: state.loading,
+    issuedLoansSearchFilters: state.issuedLoansSearchFilters,
+  }))
+
+  const previousLoanType = issuedLoansSearchFilters.type
+  const currentLoanType = location.state?.sme
+    ? 'sme'
+    : previousLoanType && previousLoanType !== 'sme'
+    ? previousLoanType
+    : 'micro'
+
+  useEffect(() => {
+    let searchFiltersQuery = {}
+
+    if (previousLoanType === currentLoanType) {
+      searchFiltersQuery = issuedLoansSearchFilters
+    } else {
+      setIssuedLoansSearchFilters({ type: currentLoanType })
     }
-    this.mappers = [
+
+    let query = {
+      ...searchFiltersQuery,
+      keyword: undefined, // prevent sending key to BE
+      size,
+      from,
+      url: 'loan',
+      sort: 'issueDate',
+      type: currentLoanType,
+    }
+
+    query = removeEmptyArg(query)
+    search(query)
+  }, [location.state?.sme])
+
+  useEffect(() => {
+    if (error) Swal.fire('Error !', getErrorMessage(error), 'error')
+  }, [error])
+
+  const getLoans = async () => {
+    const { fromBranch, branchId } = props
+    const { customerShortenedCode, customerKey } = issuedLoansSearchFilters
+    const modifiedSearchFilters = {
+      ...issuedLoansSearchFilters,
+      customerKey: customerShortenedCode
+        ? getFullCustomerKey(customerShortenedCode)
+        : customerKey || undefined,
+    }
+    let query = {
+      ...modifiedSearchFilters,
+      ...issuedLoansSearchFilters,
+      branchId: fromBranch ? branchId : issuedLoansSearchFilters.branchId,
+      size,
+      from,
+      url: 'loan',
+      sort: 'issueDate',
+    }
+
+    query = removeEmptyArg(query)
+    search(query)
+  }
+
+  useEffect(() => {
+    // avoid trigger when from == 0
+    if (from) getLoans()
+  }, [from, size])
+
+  const renderActions = (data) => {
+    return [
       {
-        title: local.customerType,
-        key: 'customerType',
-        render: (data) =>
-          beneficiaryType(data.application.product.beneficiaryType),
-      },
-      {
-        title: local.loanCode,
-        key: 'loanCode',
-        render: (data) => data.application.loanApplicationKey,
-      },
-      {
-        title: local.customerName,
-        key: 'name',
-        sortable: true,
-        render: (data) => (
-          <div>
-            {data.application.product.beneficiaryType === 'individual' ? (
-              data.application.customer.customerName
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {data.application.group?.individualsInGroup.map((member) =>
-                  member.type === 'leader' ? (
-                    <span key={member.customer._id}>
-                      {member.customer.customerName}
-                    </span>
-                  ) : null
-                )}
-              </div>
-            )}
-          </div>
-        ),
-      },
-      {
-        title: local.nationalId,
-        key: 'nationalId',
-        render: (data) => (
-          <div>
-            {data.application.product.beneficiaryType === 'individual' ? (
-              data.application.customer.nationalId
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {data.application.group?.individualsInGroup.map((member) =>
-                  member.type === 'leader' ? (
-                    <span key={member.customer._id}>
-                      {member.customer.nationalId}
-                    </span>
-                  ) : null
-                )}
-              </div>
-            )}
-          </div>
-        ),
-      },
-      {
-        title: local.productName,
-        key: 'productName',
-        render: (data) => data.application.product.productName,
-      },
-      {
-        title: local.loanIssuanceDate,
-        key: 'issueDate',
-        sortable: true,
-        render: (data) =>
-          data.application.issueDate
-            ? timeToDateyyymmdd(data.application.issueDate)
-            : '',
-      },
-      {
-        title: local.status,
-        key: 'status',
-        sortable: true,
-        render: (data) => this.getStatus(data.application.status),
-      },
-      {
-        title: '',
-        key: 'action',
-        render: (data) => this.renderIcons(data),
+        actionTitle: local.uploadDocuments,
+        actionIcon: 'download',
+        actionPermission: true,
+        actionOnClick: () =>
+          history.push('/edit-loan-profile', {
+            id: data.application._id,
+            sme: !!location?.state?.sme,
+          } as LoanListHistoryState),
+        style: {
+          transform: `rotate(180deg)`,
+        },
       },
     ]
   }
 
-  componentDidMount() {
-    this.props
-      .search({
-        ...this.props.issuedLoansSearchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'loan',
-        sort: 'issueDate',
-        type: 'micro',
-      })
-      .then(() => {
-        if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
-      })
-  }
-
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
-  }
-
-  getStatus(status: string) {
-    switch (status) {
-      case 'paid':
-        return <div className="status-chip paid">{local.paid}</div>
-      case 'issued':
-        return <div className="status-chip unpaid">{local.issued}</div>
-      case 'pending':
-        return <div className="status-chip pending">{local.pending}</div>
-      case 'canceled':
-        return <div className="status-chip canceled">{local.cancelled}</div>
-      default:
-        return null
-    }
-  }
-
-  async getLoans() {
-    let query = {}
-    if (this.props.fromBranch) {
-      query = {
-        ...this.props.searchFilters,
-        ...this.props.issuedLoansSearchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'loan',
-        branchId: this.props.branchId,
-        sort: 'issueDate',
-        type: 'micro',
-      }
-    } else {
-      query = {
-        ...this.props.searchFilters,
-        ...this.props.issuedLoansSearchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'loan',
-        sort: 'issueDate',
-        type: 'micro',
-      }
-    }
-    this.props.search(query).then(() => {
-      if (this.props.error)
-        Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
-    })
-  }
-
-  renderIcons(data) {
-    if (
-      !(
-        data.application.status === 'paid' ||
-        data.application.status === 'canceled' ||
-        data.application.status === 'rejected'
-      )
-    ) {
-      return (
-        <Can I="addingDocuments" a="application">
-          <img
-            style={{ cursor: 'pointer', marginLeft: 20 }}
-            alt="edit"
-            src={require('../../../Shared/Assets/upload.svg')}
-            onClick={() =>
-              this.props.history.push('/edit-loan-profile', {
-                id: data.application._id,
-              })
-            }
-          />
-        </Can>
-      )
-    }
-    return null
-  }
-
-  render() {
-    return (
-      <Card style={{ margin: '20px 50px' }}>
-        <Loader type="fullsection" open={this.props.loading} />
-        <Card.Body style={{ padding: 0 }}>
-          <div className="custom-card-header">
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                {local.issuedLoans}
-              </Card.Title>
-              <span className="text-muted">
-                {local.noOfIssuedLoans +
-                  ` (${this.props.totalCount ? this.props.totalCount : 0})`}
-              </span>
+  const tableMappers: TableMapperItem[] = [
+    {
+      title: local.customerType,
+      key: 'customerType',
+      render: (data) =>
+        beneficiaryType(
+          data.application.customer.customerType === 'company'
+            ? 'company'
+            : data.application.product.beneficiaryType
+        ),
+    },
+    {
+      title: local.loanCode,
+      key: 'loanCode',
+      render: (data) => data.application.loanApplicationKey,
+    },
+    {
+      title: local.customerName,
+      key: 'name',
+      sortable: true,
+      render: (data) => (
+        <div>
+          {data.application.product.beneficiaryType === 'individual' &&
+          ['micro', 'nano'].includes(data.application.product.type) ? (
+            data.application.customer.customerName
+          ) : data.application.product.beneficiaryType === 'individual' &&
+            data.application.product.type === 'sme' ? (
+            data.application.customer.businessName
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {data.application.group?.individualsInGroup?.map((member) =>
+                member.type === 'leader' ? (
+                  <span key={member.customer._id}>
+                    {member.customer.customerName}
+                  </span>
+                ) : null
+              )}
             </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: local.nationalId,
+      key: 'nationalId',
+      render: (data) => (
+        <div
+          style={{ cursor: 'pointer' }}
+          onClick={() =>
+            history.push('/loans/loan-profile', {
+              id: data.application._id,
+              sme: currentLoanType === 'sme',
+            })
+          }
+        >
+          {data.application.product.beneficiaryType === 'individual' ? (
+            data.application.customer.nationalId
+          ) : (
+            <div className="d-flex flex-column">
+              {data.application.group?.individualsInGroup.map((member) =>
+                member.type === 'leader' ? (
+                  <span key={member.customer._id}>
+                    {member.customer.nationalId}
+                  </span>
+                ) : null
+              )}
+            </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: local.productName,
+      key: 'productName',
+      render: (data) => data.application.product.productName,
+    },
+    {
+      title: local.loanIssuanceDate,
+      key: 'issueDate',
+      sortable: true,
+      render: (data) =>
+        data.application.issueDate
+          ? timeToDateyyymmdd(data.application.issueDate)
+          : '',
+    },
+    {
+      title: local.status,
+      key: 'status',
+      sortable: true,
+      render: (data) => {
+        const status = loanChipStatusClass[data.application.status || 'default']
+        const isCancelled = status === 'canceled'
+        return (
+          <div className={`status-chip ${status}`}>
+            {isCancelled ? local.cancelled : local[status]}
           </div>
-          <hr className="dashed-line" />
+        )
+      },
+    },
+    {
+      title: '',
+      key: 'action',
+      render: (data) => (
+        <ActionsIconGroup currentId={data._id} actions={renderActions(data)} />
+      ),
+    },
+  ]
+
+  const smePermission = !!location.state?.sme
+
+  const searchKeys = [
+    'keyword',
+    'dateFromTo',
+    'status',
+    'branch',
+    'doubtful',
+    'writtenOff',
+  ]
+
+  const dropDownKeys = [
+    'name',
+    'key',
+    'customerKey',
+    'customerCode',
+    'customerShortenedCode',
+  ]
+
+  const filteredMappers = smePermission
+    ? tableMappers.filter((mapper) => mapper.key !== 'nationalId')
+    : tableMappers
+  if (smePermission) {
+    filteredMappers.splice(3, 0, {
+      title: local.commercialRegisterNumber,
+      key: 'commercialRegisterNumber',
+      render: (data) => data.application.customer.commercialRegisterNumber,
+    })
+    filteredMappers.splice(4, 0, {
+      title: local.taxCardNumber,
+      key: 'taxCardNumber',
+      render: (data) => data.application.customer.taxCardNumber,
+    })
+    dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
+  } else {
+    dropDownKeys.push('nationalId')
+    searchKeys.splice(4, 0, 'loanType')
+  }
+
+  return (
+    <Card className="main-card">
+      <Loader type="fullsection" open={loading} />
+      <Card.Body style={{ padding: 0 }}>
+        <div className="custom-card-header">
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
+              {local.issuedLoans}
+            </Card.Title>
+            <span className="text-muted">
+              {local.noOfIssuedLoans + ` (${totalCount ?? 0})`}
+            </span>
+          </div>
+        </div>
+        <hr className="dashed-line" />
+        {currentLoanType === previousLoanType && (
           <Search
-            searchKeys={this.state.searchKeys}
-            dropDownKeys={[
-              'name',
-              'nationalId',
-              'key',
-              'customerKey',
-              'customerCode',
-            ]}
+            searchKeys={searchKeys}
+            dropDownKeys={dropDownKeys}
             searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-            setFrom={(from) => this.setState({ from })}
+            setFrom={(fromValue) => setFrom(fromValue)}
             datePlaceholder={local.issuanceDate}
             url="loan"
-            from={this.state.from}
-            size={this.state.size}
-            hqBranchIdRequest={this.props.branchId}
+            from={from}
+            size={size}
+            submitClassName="mt-0"
+            hqBranchIdRequest={props.branchId}
+            sme={location.state?.sme}
           />
-          <DynamicTable
-            from={this.state.from}
-            size={this.state.size}
-            url="loan"
-            totalCount={this.props.totalCount}
-            mappers={this.mappers}
-            pagination
-            data={this.props.data}
-            changeNumber={(key: string, number: number) => {
-              this.setState({ [key]: number } as any, () => this.getLoans())
-            }}
-          />
-        </Card.Body>
-      </Card>
-    )
-  }
+        )}
+        <DynamicTable
+          pagination
+          from={from}
+          size={size}
+          url="loan"
+          totalCount={totalCount}
+          mappers={filteredMappers}
+          data={loans}
+          changeNumber={(key: string, number: number) => {
+            if (key === 'from') {
+              if (!number) getLoans()
+              else setFrom(number)
+            } else setSize(number)
+          }}
+        />
+      </Card.Body>
+    </Card>
+  )
 }
 
-const addSearchToProps = (dispatch) => {
-  return {
-    search: (data) => dispatch(search(data)),
-    setSearchFilters: (data) => dispatch(searchFilters(data)),
-  }
-}
-const mapStateToProps = (state) => {
-  return {
-    data: state.search.applications,
-    error: state.search.error,
-    totalCount: state.search.totalCount,
-    loading: state.loading,
-    searchFilters: state.searchFilters,
-    issuedLoansSearchFilters: state.issuedLoansSearchFilters,
-  }
-}
-
-export default connect(mapStateToProps, addSearchToProps)(withRouter(LoanList))
+export default LoanList

@@ -6,6 +6,7 @@ export interface Action {
 
 export interface ActionWithIcon extends Action {
   actionIcon: string
+  style?: React.CSSProperties
 }
 export interface Signature {
   by?: string
@@ -46,6 +47,8 @@ export interface SearchRequest {
   nationalId?: string
   key?: number
   url?: string // for FE ONLY
+  type?: 'sme' | 'micro' | 'nano'
+  beneficiaryType?: string
 }
 
 export interface PaginatedResponse {
@@ -55,4 +58,13 @@ export interface ApiResponse<T> {
   status: 'success' | 'error'
   body?: T
   error?: unknown
+}
+export interface Product {
+  id: string
+  name: string
+  branchCount: number
+  beneficiaryType: string
+  code: number
+  type: string
+  contractType: string
 }

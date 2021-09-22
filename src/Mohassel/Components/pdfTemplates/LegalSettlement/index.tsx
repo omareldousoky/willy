@@ -9,8 +9,8 @@ import {
 } from '../../../../Shared/Services/utils'
 
 import { SettledCustomer } from '../../ManageLegalAffairs/types'
-import { Header } from '../pdfTemplateCommon/header'
 import { Managers } from '../../managerHierarchy/types'
+import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 
 const LegalSettlement = ({
   customer,

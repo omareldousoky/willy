@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getProducts } from '../../Services/APIs/loanProduct/getProduct'
+import { getProducts } from '../../../Shared/Services/APIs/loanProduct/getProduct'
 import {
   assignProductsToBranches,
   unassignProductsToBranches,
@@ -205,7 +205,7 @@ class AssignProductsToBranches extends Component<Props, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('assignProductToBranch')}
+            .indexOf('assign-product-to-branch')}
         />
         <Card className="main-card">
           <Loader open={this.state.loading} type="fullscreen" />
