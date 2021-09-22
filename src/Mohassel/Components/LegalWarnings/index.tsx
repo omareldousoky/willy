@@ -262,7 +262,10 @@ export const LegalWarnings = () => {
             onClick={() =>
               history.push('/loans/loan-profile', {
                 id: warning.loanId,
-                sme: warning.customerType === 'company',
+                sme:
+                  warning.customerType === 'company' ||
+                  warning.customerType === 'companyGuarantor' ||
+                  warning.customerType === 'entitledToSign',
               })
             }
           >
