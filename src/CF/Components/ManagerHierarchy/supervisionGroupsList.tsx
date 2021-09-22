@@ -7,8 +7,10 @@ import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import FormCheck from 'react-bootstrap/FormCheck'
 import Row from 'react-bootstrap/Row'
-
+import Modal from 'react-bootstrap/Modal'
+import Table from 'react-bootstrap/Table'
 import Select from 'react-select'
+
 import { connect } from 'react-redux'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import './managerHierarchy.scss'
@@ -27,6 +29,8 @@ import { approveOfficersGroups } from '../../../Mohassel/Services/APIs/ManagerHi
 import { unApproveOfficersGroups } from '../../../Mohassel/Services/APIs/ManagerHierarchy/unApproveOfficersGroups'
 import { loading } from '../../../Shared/redux/loading/actions'
 import { SupervisionGroupsListProps, SupervisionGroupsListState } from './types'
+import { ActionsIconGroup } from '../../../Shared/Components'
+import { GroupsByBranch } from '../../../Shared/Services/interfaces'
 
 class SupervisionGroupsList extends Component<
   SupervisionGroupsListProps,
@@ -50,6 +54,7 @@ class SupervisionGroupsList extends Component<
       checkAll: false,
       options: [{ label: local.getSupervisionGroups, value: '' }],
       chosenStatus: '',
+      officersModal: false,
     }
     this.mappers = [
       {
@@ -92,17 +97,22 @@ class SupervisionGroupsList extends Component<
         key: 'officers',
         render: (data) =>
           data.officers && (
-            <div className="d-flex flex-row">
-              {data.officers?.map((officer, i) => {
-                return (
-                  officer?.name && (
-                    <div key={i} className="labelBtn">
-                      {officer.name}
-                    </div>
-                  )
-                )
-              })}
-            </div>
+            <ActionsIconGroup
+              currentId={data.id}
+              actions={[
+                {
+                  actionTitle: local.loanOfficerOrCoordinator,
+                  actionIcon: 'customers',
+                  actionPermission: true,
+                  actionOnClick: () => {
+                    this.setState({
+                      officersModal: true,
+                      currentGroup: data as GroupsByBranch,
+                    })
+                  },
+                },
+              ]}
+            />
           ),
       },
     ]
@@ -303,15 +313,15 @@ class SupervisionGroupsList extends Component<
     return (
       <>
         <div className="print-none">
-          <Card className="m-4">
+          <Card className="main-card">
             <Loader type="fullsection" open={this.props.loading} />
             <Card.Body style={{ padding: 0 }}>
-              <div className="d-flex justify-content-between m-3">
+              <div className="custom-card-header">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
                     {local.levelsOfSupervision}
                   </Card.Title>
-                  <span>
+                  <span className="text-muted">
                     {local.noOfSupervisionGroups +
                       ` (${this.props.totalCount ? this.props.totalCount : 0})`}
                   </span>
@@ -320,7 +330,8 @@ class SupervisionGroupsList extends Component<
                   <Button
                     onClick={this.submit}
                     disabled={!this.state.selectedGroups.length}
-                    className="mr-4"
+                    className="big-button"
+                    style={{ marginLeft: 20, height: 70 }}
                   >
                     {this.state.chosenStatus === 'pending'
                       ? local.approveSuperVisionGroups
@@ -394,6 +405,41 @@ class SupervisionGroupsList extends Component<
             </Card.Body>
           </Card>
         </div>
+        <Modal
+          show={this.state.officersModal}
+          onHide={() => this.setState({ officersModal: false })}
+          size="lg"
+        >
+          <Modal.Header>{local.loanOfficerOrCoordinator}</Modal.Header>
+          <Modal.Body>
+            <div>
+              <h4>{local.groupLeaderName}</h4>
+              <p>{this.state.currentGroup?.leader.name}</p>
+            </div>
+            <Table striped bordered>
+              <thead>
+                <th className="border-0">{local.loanOfficerOrCoordinator}</th>
+              </thead>
+              <tbody>
+                {this.state.currentGroup?.officers?.map((officer, index) => (
+                  <tr key={index} className="border-0">
+                    <td className="text-break">{officer.name}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                this.setState({ officersModal: false, currentGroup: undefined })
+              }}
+            >
+              {local.cancel}
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </>
     )
   }
