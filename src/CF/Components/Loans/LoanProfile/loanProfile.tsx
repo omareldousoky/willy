@@ -333,6 +333,13 @@ class LoanProfile extends Component<Props, State> {
       permissionKey: 'application',
     }
 
+    const penaltiesTab = {
+      header: local.penalties,
+      stringKey: 'penalties',
+      permission: ['payInstallment', 'cancelPenalty'],
+      permissionKey: 'application',
+    }
+
     if (application.body.status === 'paid') tabsToRender.push(customerCardTab)
     if (
       application.body.status === 'issued' ||
@@ -342,6 +349,15 @@ class LoanProfile extends Component<Props, State> {
       tabsToRender.push(paymentTab)
       tabsToRender.push(reschedulingTab)
     }
+
+    if (
+      application.body.status === 'issued' ||
+      application.body.status === 'paid' ||
+      application.body.status === 'pending'
+    ) {
+      tabsToRender.push(penaltiesTab)
+    }
+
     tabsToRender.push(logsTab)
 
     if (application.body.status === 'pending') {

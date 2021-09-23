@@ -34,6 +34,7 @@ import { LtsIcon } from '../../../Shared/Components'
 import { EarlyPayment } from './earlyPayment'
 import { calculateEarlyPayment } from '../../../Mohassel/Services/APIs/Payment'
 import { getFirstDueInstallment } from '../../../Shared/Utils/payment'
+import { calculatePenalties } from '../../../Shared/Services/APIs/clearance/calculatePenalties'
 
 interface Props {
   installments: Array<Installment>
@@ -67,8 +68,8 @@ interface State {
   earlyPaymentFees: number
   requiredAmount: number
   installmentNumber: number
-  // penalty: number
-  // penaltyAction: string
+  penalty: number
+  penaltyAction: string
   payerType: string
   payerNationalId: string
   payerName: string
@@ -140,6 +141,8 @@ class Payment extends Component<Props, State> {
       earlyPaymentFees: 0,
       requiredAmount: 0,
       installmentNumber: -1,
+      penalty: -1,
+      penaltyAction: '',
       payerType: '',
       payerNationalId: '',
       payerName: '',
@@ -149,17 +152,21 @@ class Payment extends Component<Props, State> {
     this.mappers = normalTableMappers
   }
 
-  // componentDidMount() {
-  //   if (this.props.manualPaymentEditId) {
-  //     this.setManualPaymentValues()
-  //   }
-  // }
+  componentDidMount() {
+    if (this.props.paymentType === 'penalties' && this.state.penalty === -1) {
+      this.calculatePenalties()
+    }
+  }
 
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.manualPaymentEditId !== this.props.manualPaymentEditId) {
-  //     this.setManualPaymentValues()
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.paymentType !== this.props.paymentType &&
+      this.props.paymentType === 'penalties' &&
+      this.state.penalty === -1
+    ) {
+      this.calculatePenalties()
+    }
+  }
 
   componentWillUnmount() {
     this.props.changePaymentState(0)
@@ -327,6 +334,20 @@ class Payment extends Component<Props, State> {
     })
   }
 
+  async calculatePenalties() {
+    this.setState({ loadingFullScreen: true })
+    const res = await calculatePenalties({
+      id: this.props.applicationId,
+      truthDate: new Date().getTime(),
+    })
+    if (res.body) {
+      this.setState({ penalty: res.body.penalty, loadingFullScreen: false })
+    } else
+      this.setState({ loadingFullScreen: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
+  }
+
   renderPaymentMethods() {
     const firstDueInstallment = getFirstDueInstallment(this.props.application)
     const isNormalPayment = this.props.paymentType === 'normal'
@@ -341,21 +362,26 @@ class Payment extends Component<Props, State> {
         return (
           <PaymentIcons
             paymentType={this.props.paymentType}
+            penalty={this.state.penalty}
             application={this.props.application}
             installments={this.props.installments}
             handleClickEarlyPayment={() => this.handleClickEarlyPayment()}
+            handleChangePenaltyAction={(key: string) =>
+              this.setState({ penaltyAction: key })
+            }
           />
         )
       case 1:
         return (
           <PayInstallment
-            penalty={0}
+            penalty={this.state.penalty}
             installments={this.props.installments}
             application={this.props.application}
             handleSubmit={this.handleSubmit}
             payAmount={this.state.payAmount}
             truthDate={this.state.truthDate}
             paymentType={this.props.paymentType}
+            penaltyAction={this.state.penaltyAction}
           />
         )
       case 2:

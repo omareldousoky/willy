@@ -13,6 +13,7 @@ type ContractType = 'standard'
 
 interface PaymentIconsProps {
   paymentType: string
+  penalty: number
   application: {
     status: string
     writeOff: boolean
@@ -24,6 +25,7 @@ interface PaymentIconsProps {
   installments: Array<Installment>
   changePaymentState: (data) => void
   handleClickEarlyPayment: () => void
+  handleChangePenaltyAction: (key: string) => void
 }
 
 class PaymentIcons extends Component<PaymentIconsProps, {}> {
@@ -60,28 +62,81 @@ class PaymentIcons extends Component<PaymentIconsProps, {}> {
             <h6>{}</h6>
           </div>
         ) : null}
+        {this.props.paymentType === 'penalties' ? (
+          <div className="payment-info">
+            <h6>{local.requiredAmount}</h6>
+            <h6>{this.props.penalty}</h6>
+          </div>
+        ) : null}
         <div className="verticalLine" />
         <div className="payment-icons-container p-4">
           {(ability.can('payInstallment', 'application') ||
-            ability.can('payByInsurance', 'application')) &&
-            this.props.application.product.type !== 'sme' && (
-              <div className="payment-icon m-4">
-                <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
-                <Button
-                  className="my-4"
-                  disabled={
-                    this.props.application.status === 'pending' &&
-                    this.props.paymentType === 'normal'
-                  }
-                  onClick={() => {
+            ability.can('payByInsurance', 'application')) && (
+            <div className="payment-icon m-4">
+              <LtsIcon
+                name={
+                  this.props.paymentType === 'penalties'
+                    ? 'pay-penalty'
+                    : 'pay-installment'
+                }
+                size="90px"
+                color="#7dc255"
+              />
+              <Button
+                className="my-4"
+                disabled={
+                  this.props.application.status === 'pending' &&
+                  this.props.paymentType === 'normal'
+                }
+                onClick={() => {
+                  if (this.props.paymentType === 'penalties') {
+                    this.props.handleChangePenaltyAction('pay')
                     this.props.changePaymentState(1)
-                  }}
-                  variant="primary"
-                >
-                  {local.payInstallment}
-                </Button>
-              </div>
-            )}
+                  } else this.props.changePaymentState(1)
+                }}
+                variant="primary"
+              >
+                {this.props.paymentType === 'penalties'
+                  ? local.payPenalty
+                  : local.payInstallment}
+              </Button>
+            </div>
+          )}
+          {this.props.paymentType === 'penalties' ? (
+            <>
+              <Can I="cancelPenalty" a="application">
+                <div className="payment-icon m-4">
+                  <LtsIcon name="cancel-penalty" color="#7dc255" size="90px" />
+
+                  <Button
+                    className="my-4"
+                    onClick={() => {
+                      this.props.handleChangePenaltyAction('cancel')
+                      this.props.changePaymentState(1)
+                    }}
+                    variant="primary"
+                  >
+                    {local.cancelPenalty}
+                  </Button>
+                </div>
+              </Can>
+              <Can I="payInstallment" a="application">
+                <div className="payment-icon m-4">
+                  <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
+
+                  <Button
+                    className="my-4"
+                    onClick={() => {
+                      this.props.changePaymentState(3)
+                    }}
+                    variant="primary"
+                  >
+                    {local.manualPayment}
+                  </Button>
+                </div>
+              </Can>
+            </>
+          ) : null}
           {this.props.paymentType === 'normal' &&
             !this.props.application.writeOff && (
               <Can I="payEarly" a="application">
