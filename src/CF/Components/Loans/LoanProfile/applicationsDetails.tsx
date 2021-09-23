@@ -13,7 +13,7 @@ import {
   periodType,
   getRenderDate,
   statusLocale,
-  extractGMTDate,
+  getFormattedLocalDate,
 } from '../../../../Shared/Services/utils'
 
 interface Props {
@@ -151,7 +151,7 @@ export const LoanDetailsTableView = ({
         {application.issueDate > 0 && (
           <tr>
             <td>{local.loanIssuanceDate}</td>
-            <td>{extractGMTDate(application.issueDate)}</td>
+            <td>{getFormattedLocalDate(application.issueDate)}</td>
           </tr>
         )}
       </tbody>
