@@ -196,7 +196,7 @@ class LoanProfile extends Component<Props, State> {
     this.setState({
       loading: true,
       activeTab: 'loanDetails',
-      // manualPaymentEditId: '',
+      manualPaymentEditId: '',
     })
     const application = await getApplication(id)
     this.getBranchData(application.body.branchId)
@@ -1339,10 +1339,13 @@ class LoanProfile extends Component<Props, State> {
                 array={this.state.tabsArray}
                 active={this.state.activeTab}
                 selectTab={(index: string) =>
-                  this.setState({ activeTab: index }, () => {
-                    if (index === 'customerCard') this.calculatePenalties()
-                    this.props.changePaymentState(0)
-                  })
+                  this.setState(
+                    { activeTab: index, manualPaymentEditId: '' },
+                    () => {
+                      if (index === 'customerCard') this.calculatePenalties()
+                      this.props.changePaymentState(0)
+                    }
+                  )
                 }
               />
               <div style={{ padding: 20, marginTop: 15 }}>
