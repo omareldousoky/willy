@@ -82,11 +82,17 @@ export const StepTwoCompanyForm = (props: any) => {
       setSystemUsers([
         ...res.body.data,
         {
-          _id: props.representativeDetails.representative,
-          name: props.representativeDetails.representativeName,
+          _id: null,
+          name: local.notApplicable,
         },
       ])
-      return res.body.data
+      return [
+        ...res.body.data,
+        {
+          _id: null,
+          name: local.notApplicable,
+        },
+      ]
     }
     Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     return []
@@ -244,7 +250,9 @@ export const StepTwoCompanyForm = (props: any) => {
       <Row>
         <Col sm={12}>
           <Form.Group controlId="smeSourceId">
-            <Form.Label className="customer-form-label">{`${local.smeSourceId}*`}</Form.Label>
+            <Form.Label className="customer-form-label">
+              {local.smeSourceId}
+            </Form.Label>
             <AsyncSelect
               className={errors.smeSourceId ? 'error' : ''}
               name="smeSourceId"

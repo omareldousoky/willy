@@ -113,7 +113,6 @@ export const companyCreationValidationStepTwo = Yup.object().shape({
   comments: Yup.string().trim().max(500, local.maxLength100),
   paidCapital: Yup.string().trim().required(local.required),
   establishmentDate: Yup.string().trim().required(local.required),
-  smeSourceId: Yup.string().trim().required(local.required),
   smeBankName: Yup.string().trim().required(local.required),
   smeBankBranch: Yup.string().trim().required(local.required),
   smeBankAccountNumber: Yup.string().trim().required(local.required),
