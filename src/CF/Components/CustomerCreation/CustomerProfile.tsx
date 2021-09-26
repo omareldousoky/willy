@@ -130,7 +130,8 @@ export const CustomerProfile = () => {
       customerCreationDate: customer.created?.at || 0,
       customerName: customer.customerName || '',
       nationalId: customer.nationalId || '',
-      customerHomeAddress: customer.currentHomeAddress || '',
+      customerHomeAddress:
+        customer.currentHomeAddress || customer.customerHomeAddress || '',
       mobilePhoneNumber: customer.mobilePhoneNumber || '',
       initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
       customerGuarantors: customerGuarantors || [],
