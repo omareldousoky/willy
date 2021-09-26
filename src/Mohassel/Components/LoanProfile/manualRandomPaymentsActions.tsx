@@ -47,7 +47,7 @@ const ManualRandomPaymentsActions = (props) => {
                 data-qc="editManualPayment"
                 onClick={() => props.editManualPayment(pendingAction._id)}
               >
-                <span className="fa fa-pencil" style={{ marginLeft: 5 }} />
+                <LtsIcon name="edit" style={{ marginLeft: 5 }} />
                 {local.edit}
               </div>
             </Can>

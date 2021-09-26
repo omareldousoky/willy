@@ -1,0 +1,43 @@
+@media screen, print {
+  .random-payment-receipt {
+    font-size: 12px;
+    font-weight: 600;
+    page-break-after: always;
+    color: #000;
+    & .receipt-container {
+      width: 105mm;
+      padding: 20px;
+      border: 1px solid black;
+      & .receipt-header {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      & .receipt-content {
+        text-align: right;
+        & div {
+          display: flex;
+          margin: 10px 0px;
+        }
+        & .title {
+          text-align: right;
+          width: 25%;
+        }
+        & .info {
+          padding-right: 10px;
+          border: 1px black solid;
+          width: 75%;
+        }
+        & .dots {
+          padding-right: 10px;
+          margin-right: 0px;
+        }
+      }
+    }
+  }
+}
+@media screen {
+  .random-payment-receipt {
+    max-width: 105mm;
+    display: none;
+  }
+}
