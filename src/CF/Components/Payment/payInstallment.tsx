@@ -24,6 +24,7 @@ interface FormValues {
   requiredAmount: number
   truthDate: string
   payAmount: number
+  randomPaymentType: string
   max: number
   paymentType: string
   payerType: string
@@ -74,8 +75,10 @@ interface SelectObject {
 interface State {
   payAmount: number
   truthDate: string
+  randomPaymentType: string
   requiredAmount: number
   paymentType: string
+  randomPaymentTypes: Array<SelectObject>
   payerType: string
   payerNationalId: string
   payerName: string
@@ -90,8 +93,14 @@ class PayInstallment extends Component<Props, State> {
     this.state = {
       payAmount: this.props.payAmount,
       truthDate: this.props.truthDate,
+      randomPaymentType: '',
       requiredAmount: 0,
       paymentType: this.props.paymentType,
+      randomPaymentTypes: [
+        { label: local.reissuingFees, value: 'reissuingFees' },
+        { label: local.legalFees, value: 'legalFees' },
+        { label: local.clearanceFees, value: 'clearanceFees' },
+      ],
       payerType: '',
       payerNationalId: '',
       payerName: '',
@@ -265,6 +274,39 @@ class PayInstallment extends Component<Props, State> {
                         </Form.Group>
                       </>
                     ) : null}
+                    {this.props.paymentType === 'random' && (
+                      <Form.Group as={Col} md={6} controlId="randomPaymentType">
+                        <Form.Label
+                          className="pr-0"
+                          column
+                        >{`${local.randomPaymentToBePaid}`}</Form.Label>
+                        <Form.Control
+                          as="select"
+                          name="randomPaymentType"
+                          data-qc="randomPaymentType"
+                          onChange={(event) => {
+                            formikBag.setFieldValue(
+                              'randomPaymentType',
+                              event.currentTarget.value
+                            )
+                          }}
+                        >
+                          <option value={-1} />
+                          {this.state.randomPaymentTypes.map(
+                            (randomPaymentType: SelectObject) => {
+                              return (
+                                <option
+                                  key={randomPaymentType.value}
+                                  value={randomPaymentType.value}
+                                >
+                                  {randomPaymentType.label}
+                                </option>
+                              )
+                            }
+                          )}
+                        </Form.Control>
+                      </Form.Group>
+                    )}
                     <Form.Group as={Col} md={6} controlId="payAmount">
                       <Form.Label
                         className="pr-0"

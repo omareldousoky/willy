@@ -1,68 +1,82 @@
 import React from 'react'
 import './randomPaymentReceipt.scss'
 import Tafgeet from 'tafgeetjs'
-import {
-  numbersToArabic,
-  extractGMTDate,
-} from '../../../../Shared/Services/utils'
-import local from '../../../../Shared/Assets/ar.json'
+import { numbersToArabic, extractGMTDate } from '../../../Services/utils'
+import local from '../../../Assets/ar.json'
+import { RandomPaymentReceiptProps } from './types'
 
-const randomPaymentReceipt = (props) => {
+const ReceiptHeader = (CF?: boolean) => {
+  return (
+    <>
+      <table
+        className="w-100 text-center"
+        style={{
+          margin: '10px 0px',
+        }}
+      >
+        <tbody>
+          <tr style={{ height: '10px' }} />
+          <tr className="w-100 d-flex flex-row justify-content-between">
+            <th colSpan={6}>
+              <div className={`${CF ? 'cf' : 'lts'}-logo-print-tb`} />
+            </th>
+            <th colSpan={6}>
+              {CF
+                ? 'ترخيص رقم 23 بتاريخ 31/05/2021'
+                : 'ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
+            </th>
+          </tr>
+          <tr style={{ height: '10px' }} />
+        </tbody>
+      </table>
+      <div className="receipt-header">
+        <h5>{CF ? local.cfName : local.tasaheelName}</h5>
+        <h5>{local.paymentReceipt}</h5>
+      </div>
+    </>
+  )
+}
+
+const RandomPaymentReceipt = ({
+  receiptData,
+  appType = 'LTS',
+}: RandomPaymentReceiptProps) => {
+  const pdfHeaders = {
+    LTS: ReceiptHeader(),
+    CF: ReceiptHeader(true),
+  }
+
   return (
     <div className="random-payment-receipt">
-      {props.receiptData.map((receiptData, index) => {
+      {receiptData?.map((data, index) => {
         return (
           <div key={index} className="random-payment-receipt" lang="ar">
             <div className="receipt-container">
-              <table
-                className="w-100 text-center"
-                style={{
-                  margin: '10px 0px',
-                }}
-              >
-                <tbody>
-                  <tr style={{ height: '10px' }} />
-                  <tr className="w-100 d-flex flex-row justify-content-between">
-                    <th colSpan={6}>
-                      <div className="logo-print-tb" />
-                    </th>
-                    <th colSpan={6}>
-                      ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنة 2015
-                    </th>
-                  </tr>
-                  <tr style={{ height: '10px' }} />
-                </tbody>
-              </table>
-              <div className="receipt-header">
-                <h5>{local.tasaheelName}</h5>
-                <h5>{local.paymentReceipt}</h5>
-              </div>
+              {pdfHeaders[appType]}
               <div className="receipt-content">
                 <div>
                   <span className="title">{local.date}</span>
-                  <span className="info">
-                    {extractGMTDate(receiptData.date)}
-                  </span>
+                  <span className="info">{extractGMTDate(data.date)}</span>
                 </div>
                 <div>
                   <span className="title">{local.receiptNumber}</span>
                   <span className="info">
-                    {numbersToArabic(receiptData.receiptNumber)}
+                    {numbersToArabic(data.receiptNumber)}
                   </span>
                 </div>
                 <div>
                   <span className="title">{local.customerName}</span>
-                  <span className="info">{receiptData.customerName}</span>
+                  <span className="info">{data.customerName}</span>
                 </div>
                 <div>
                   <span className="title">{local.value}</span>
                   <span className="info">
                     <span style={{ direction: 'ltr' }}>
-                      {numbersToArabic(receiptData.installmentAmount)}
+                      {numbersToArabic(data.installmentAmount)}
                     </span>
-                    {receiptData.installmentAmount
+                    {data.installmentAmount
                       ? ` = (${new Tafgeet(
-                          receiptData.installmentAmount,
+                          data.installmentAmount,
                           'EGP'
                         ).parse()})`
                       : null}
@@ -71,10 +85,10 @@ const randomPaymentReceipt = (props) => {
                 <div>
                   <span className="title">{local.purpose}</span>
                   <span className="info">
-                    {receiptData.type === 'penalty'
+                    {data.type === 'penalty'
                       ? local.payPenalty
-                      : receiptData.type === 'randomPayment'
-                      ? local[receiptData.randomPaymentType]
+                      : data.type === 'randomPayment'
+                      ? local[data.randomPaymentType]
                       : ''}
                   </span>
                 </div>
@@ -99,4 +113,4 @@ const randomPaymentReceipt = (props) => {
   )
 }
 
-export default randomPaymentReceipt
+export default RandomPaymentReceipt

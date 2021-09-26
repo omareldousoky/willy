@@ -23,6 +23,11 @@ import { theme } from '../../../Shared/theme'
 import { ApplicationResponse } from '../../../Shared/Models/Application'
 import { getFirstDueInstallment } from '../../../Shared/Utils/payment'
 
+interface SelectObject {
+  label: string
+  value: string
+}
+
 interface State {
   employees: Array<Employee>
 }
@@ -33,6 +38,7 @@ interface Member {
     _id: string
   }
 }
+
 interface Props {
   application: ApplicationResponse
   changePaymentState: (data) => void
@@ -47,11 +53,19 @@ interface Props {
   bankPayment?: boolean
 }
 class ManualPayment extends Component<Props, State> {
+  randomPaymentTypes: SelectObject[]
+
   constructor(props: Props) {
     super(props)
     this.state = {
       employees: [],
     }
+
+    this.randomPaymentTypes = [
+      { label: local.reissuingFees, value: 'reissuingFees' },
+      { label: local.legalFees, value: 'legalFees' },
+      { label: local.clearanceFees, value: 'clearanceFees' },
+    ]
   }
 
   getUsersByAction = async (input: string, values) => {
@@ -82,6 +96,45 @@ class ManualPayment extends Component<Props, State> {
 
     return (
       <Form onSubmit={this.props.formikProps.handleSubmit}>
+        {this.props.paymentType === 'random' && (
+          <Form.Group as={Row}>
+            <Form.Group as={Col} controlId="randomPaymentType">
+              <Form.Label
+                style={{ paddingRight: 0 }}
+                column
+              >{`${local.randomPaymentToBePaid}`}</Form.Label>
+              <Form.Control
+                as="select"
+                name="randomPaymentType"
+                data-qc="randomPaymentType"
+                value={this.props.formikProps.values.randomPaymentType}
+                onChange={this.props.formikProps.handleChange}
+                onBlur={this.props.formikProps.handleBlur}
+                isInvalid={
+                  Boolean(this.props.formikProps.errors.randomPaymentType) &&
+                  Boolean(this.props.formikProps.touched.randomPaymentType)
+                }
+              >
+                <option value="" />
+                {this.randomPaymentTypes.map(
+                  (randomPaymentType: SelectObject) => {
+                    return (
+                      <option
+                        key={randomPaymentType.value}
+                        value={randomPaymentType.value}
+                      >
+                        {randomPaymentType.label}
+                      </option>
+                    )
+                  }
+                )}
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {this.props.formikProps.errors.randomPaymentType}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Form.Group>
+        )}
         <Form.Group as={Row}>
           <Form.Group as={Col} controlId="truthDate">
             <Form.Label

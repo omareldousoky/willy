@@ -22,9 +22,14 @@ import {
 import { payment } from '../../../Shared/redux/payment/actions'
 import PayInstallment from './payInstallment'
 import {
+  editManualOtherPayment,
+  otherPayment,
   earlyPayment,
   payFutureInstallment,
   payInstallment,
+  randomManualPayment,
+  manualPayment,
+  editManualPayment,
 } from '../../../Shared/Services/APIs/payment'
 import * as local from '../../../Shared/Assets/ar.json'
 import './styles.scss'
@@ -47,8 +52,9 @@ interface Props {
   print: (data) => void
   refreshPayment: () => void
   setEarlyPaymentData: (data) => void
-  // manualPaymentEditId: string
+  manualPaymentEditId: string
   paymentType: string
+  randomPendingActions: Array<any>
 }
 export interface Employee {
   _id: string
@@ -74,6 +80,9 @@ interface State {
   payerName: string
   payerId: string
   employees: Array<Employee>
+  randomPaymentType: string
+  bankOfPayment: string
+  bankOfPaymentBranch: string
 }
 
 class Payment extends Component<Props, State> {
@@ -145,21 +154,24 @@ class Payment extends Component<Props, State> {
       payerName: '',
       payerId: '',
       employees: [],
+      randomPaymentType: '',
+      bankOfPayment: '',
+      bankOfPaymentBranch: '',
     }
     this.mappers = normalTableMappers
   }
 
-  // componentDidMount() {
-  //   if (this.props.manualPaymentEditId) {
-  //     this.setManualPaymentValues()
-  //   }
-  // }
+  componentDidMount() {
+    if (this.props.manualPaymentEditId) {
+      this.setManualPaymentValues()
+    }
+  }
 
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.manualPaymentEditId !== this.props.manualPaymentEditId) {
-  //     this.setManualPaymentValues()
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    if (prevProps.manualPaymentEditId !== this.props.manualPaymentEditId) {
+      this.setManualPaymentValues()
+    }
+  }
 
   componentWillUnmount() {
     this.props.changePaymentState(0)
@@ -266,6 +278,31 @@ class Payment extends Component<Props, State> {
             )
           }
         }
+      } else if (this.props.paymentType === 'random') {
+        const data = {
+          payAmount: values.payAmount,
+          truthDate: truthDateTimestamp,
+          type: values.randomPaymentType,
+          payerType: values.payerType,
+          payerId: values.payerId,
+          payerName: values.payerName,
+          payerNationalId: values.payerNationalId?.toString(),
+        }
+        const res = await otherPayment({ id: this.props.applicationId, data })
+        if (res.status === 'success') {
+          const resBody = res.body
+          resBody[0].type = 'randomPayment'
+          resBody[0].randomPaymentType = values.randomPaymentType
+          this.props.setReceiptData(resBody)
+          this.props.print({ print: 'randomPayment' })
+          this.setState({ loadingFullScreen: false }, () =>
+            this.props.refreshPayment()
+          )
+        } else {
+          this.setState({ loadingFullScreen: false }, () =>
+            Swal.fire('', getErrorMessage(res.error.error), 'error')
+          )
+        }
       }
     } else if (this.props.paymentState === 2) {
       const obj = {
@@ -290,41 +327,161 @@ class Payment extends Component<Props, State> {
           Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
         )
       }
+    } else if (this.props.paymentType === 'normal') {
+      if (this.props.manualPaymentEditId === '') {
+        const obj = {
+          id: this.props.applicationId,
+          receiptNumber: values.receiptNumber,
+          truthDate: truthDateTimestamp,
+          payAmount: values.payAmount,
+          payerType: values.payerType,
+          payerId: values.payerId,
+          payerName: values.payerName,
+          payerNationalId: values.payerNationalId.toString(),
+          installmentNumber:
+            values.installmentNumber !== -1
+              ? Number(values.installmentNumber)
+              : undefined,
+          futurePayment: values.installmentNumber !== -1 || undefined,
+        }
+        const res = await manualPayment(obj)
+        if (res.status === 'success') {
+          this.setState({ loadingFullScreen: false })
+          Swal.fire('', local.manualPaymentSuccess, 'success').then(() =>
+            this.props.refreshPayment()
+          )
+        } else {
+          this.setState({ loadingFullScreen: false }, () =>
+            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          )
+        }
+      } else {
+        const obj = {
+          id: this.props.applicationId,
+          payAmount: values.payAmount,
+          receiptNumber: values.receiptNumber,
+          truthDate: truthDateTimestamp,
+          payerType: values.payerType,
+          payerId: values.payerId,
+          payerName: values.payerName,
+          payerNationalId: values.payerNationalId.toString(),
+          installmentNumber:
+            values.installmentNumber !== -1
+              ? Number(values.installmentNumber)
+              : undefined,
+          futurePayment: values.installmentNumber !== -1 || undefined,
+        }
+        const res = await editManualPayment(obj)
+        if (res.status === 'success') {
+          this.setState({ loadingFullScreen: false })
+          Swal.fire('', local.editManualPaymentSuccess, 'success').then(() =>
+            this.props.refreshPayment()
+          )
+        } else {
+          this.setState({ loadingFullScreen: false }, () =>
+            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          )
+        }
+      }
+    } else {
+      const obj = {
+        id: this.props.applicationId,
+        receiptNumber: values.receiptNumber,
+        truthDate: truthDateTimestamp,
+        payAmount: values.payAmount,
+        payerType: values.payerType,
+        payerId: values.payerId,
+        payerName: values.payerName,
+        payerNationalId: values.payerNationalId
+          ? values.payerNationalId.toString()
+          : '',
+        type:
+          this.props.paymentType === 'random'
+            ? values.randomPaymentType
+            : 'penalty',
+        actionId: this.props.manualPaymentEditId
+          ? this.props.manualPaymentEditId
+          : '',
+      }
+      if (this.props.manualPaymentEditId === '') {
+        const res = await randomManualPayment(obj)
+        if (res.status === 'success') {
+          this.setState({ loadingFullScreen: false })
+          Swal.fire('', local.manualPaymentSuccess, 'success').then(() =>
+            this.props.refreshPayment()
+          )
+        } else {
+          this.setState({ loadingFullScreen: false }, () =>
+            Swal.fire('', getErrorMessage(res.error.error), 'error')
+          )
+        }
+      } else {
+        const res = await editManualOtherPayment(obj)
+        if (res.status === 'success') {
+          this.setState({ loadingFullScreen: false })
+          Swal.fire('', local.editManualPaymentSuccess, 'success').then(() =>
+            this.props.refreshPayment()
+          )
+        } else {
+          this.setState({ loadingFullScreen: false }, () =>
+            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          )
+        }
+      }
     }
     this.props.changePaymentState(0)
   }
 
   setManualPaymentValues() {
-    const payAmount = this.props.pendingActions.transactions?.reduce(
-      (accumulator, pendingAct) => {
-        return accumulator + pendingAct.transactionAmount
-      },
-      0
+    const pendingAction = this.props.randomPendingActions.find(
+      (el) => el._id === this.props.manualPaymentEditId
     )
-    this.setState({
-      payAmount: payAmount || 0,
-      payerType: this.props.pendingActions.payerType
-        ? this.props.pendingActions.payerType
-        : '',
-      payerNationalId: this.props.pendingActions.payerNationalId
-        ? this.props.pendingActions.payerNationalId
-        : '',
-      payerName: this.props.pendingActions.payerName
-        ? this.props.pendingActions.payerName
-        : '',
-      payerId: this.props.pendingActions.payerId
-        ? this.props.pendingActions.payerId
-        : '',
-      receiptNumber: this.props.pendingActions.receiptNumber
-        ? this.props.pendingActions.receiptNumber
-        : '',
-      installmentNumber: this.props.pendingActions.transactions
-        ? this.props.pendingActions.transactions[0].installmentSerial
-        : -1,
-      truthDate: this.props.pendingActions.transactions
-        ? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate)
-        : timeToDateyyymmdd(-1),
-    })
+    if (pendingAction) {
+      this.setState({
+        randomPaymentType: pendingAction.transactions[0].action,
+        payAmount: pendingAction.transactions[0].transactionAmount,
+        payerType: pendingAction.payerType,
+        payerNationalId: pendingAction.payerNationalId,
+        payerName: pendingAction.transactions[0].payerName,
+        payerId: pendingAction.transactions[0].payerId,
+        receiptNumber: pendingAction.receiptNumber,
+        installmentNumber: pendingAction.transactions[0].installmentSerial,
+        truthDate: timeToDateyyymmdd(pendingAction.transactions[0].truthDate),
+      })
+    } else {
+      const payAmount = this.props.pendingActions.transactions?.reduce(
+        (accumulator, pendingAct) => {
+          return accumulator + pendingAct.transactionAmount
+        },
+        0
+      )
+      this.setState({
+        payAmount: payAmount || 0,
+        payerType: this.props.pendingActions.payerType
+          ? this.props.pendingActions.payerType
+          : '',
+        payerNationalId: this.props.pendingActions.payerNationalId
+          ? this.props.pendingActions.payerNationalId
+          : '',
+        payerName: this.props.pendingActions.payerName
+          ? this.props.pendingActions.payerName
+          : '',
+        payerId: this.props.pendingActions.payerId
+          ? this.props.pendingActions.payerId
+          : '',
+        receiptNumber: this.props.pendingActions.receiptNumber
+          ? this.props.pendingActions.receiptNumber
+          : '',
+        installmentNumber: this.props.pendingActions.transactions
+          ? this.props.pendingActions.transactions[0].installmentSerial
+          : -1,
+        truthDate: this.props.pendingActions.transactions
+          ? timeToDateyyymmdd(
+              this.props.pendingActions.transactions[0].truthDate
+            )
+          : timeToDateyyymmdd(-1),
+      })
+    }
   }
 
   renderPaymentMethods() {
