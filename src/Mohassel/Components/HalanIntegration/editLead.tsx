@@ -18,7 +18,7 @@ import {
   leadStepTwo,
   leadValidationStepOne,
   leadValidationStepTwo,
-} from './editLeadValidation'
+} from './leadsValidation'
 import {
   timeToDateyyymmdd,
   getErrorMessage,

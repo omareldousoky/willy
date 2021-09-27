@@ -63,3 +63,22 @@ export const leadValidationStepTwo = Yup.object().shape({
   businessArea: Yup.string().trim().required(local.required),
   businessAddressDescription: Yup.string(),
 })
+
+export const createLeadValidation = Yup.object().shape({
+  businessStreet: Yup.string().trim().required(local.required),
+  businessGovernate: Yup.string().trim().required(local.required),
+  businessArea: Yup.string().trim().required(local.required),
+  businessCity: Yup.string().trim().required(local.required),
+  businessSector: Yup.string().trim().required(local.required),
+  customerName: Yup.string().trim().required(local.required),
+  phoneNumber: Yup.string().trim().required(local.required),
+  customerNationalId: Yup.number().when('nationalIdChecker', {
+    is: true,
+    then: Yup.number().test(
+      'error',
+      local.duplicateNationalIdMessage,
+      () => false
+    ),
+  }),
+  loanAmount: Yup.number().required(local.required),
+})
