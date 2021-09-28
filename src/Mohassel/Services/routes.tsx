@@ -646,7 +646,7 @@ const appRoutes = [
             routes: [
               {
                 path: '/view-lead',
-                label: local.customersDetails,
+                label: local.viewCustomerLead,
                 render: (props) => <LeadProfile {...props} />,
               },
               {

@@ -52,7 +52,7 @@ const LeadProfile = (
   return (
     <>
       <div className="rowContainer print-none" style={{ paddingLeft: 30 }}>
-        <BackButton title={local.viewCustomer} className="print-none" />
+        <BackButton title={local.viewCustomerLead} className="print-none" />
       </div>
       <Card style={{ marginTop: 10 }} className="print-none">
         <CardNavBar

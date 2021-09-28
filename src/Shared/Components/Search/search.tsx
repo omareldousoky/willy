@@ -31,7 +31,7 @@ import ability from '../../config/ability'
 import { WarningTypeDropDown } from '../dropDowns/WarningTypeDropDown'
 import { getGovernorates } from '../../Services/APIs/config'
 import Can from '../../config/Can'
-import { Governorate } from '../../../Mohassel/Models/Governorate'
+import { Governorate } from '../../Models/Governorate'
 
 const Search: FunctionComponent<SearchProps> = ({
   url,
