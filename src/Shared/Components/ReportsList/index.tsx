@@ -44,11 +44,14 @@ export const ReportsList = ({ list, onClickDownload }: ReportsListProps) => {
                   {listItem.status === 'created' && (
                     <span className="mr-5 d-flex flex-start flex-column">
                       <span>{local.creationDate}</span>
-                      {timeToArabicDate(listItem.generatedAt, true)}
+                      {timeToArabicDate(
+                        listItem.fileGeneratedAt || listItem.generatedAt,
+                        true
+                      )}
                     </span>
                   )}
                 </div>
-                {listItem.status === 'created' && (
+                {onClickDownload && listItem.status === 'created' && (
                   <Button
                     type="button"
                     variant="default"
