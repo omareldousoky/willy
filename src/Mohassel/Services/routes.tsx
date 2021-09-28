@@ -637,27 +637,48 @@ const appRoutes = [
       {
         path: '/halan-integration',
         label: local.halan,
-        render: (props) => <Leads {...props} />,
+        render: (props) => (
+          <Can I="getLead" a="halanuser">
+            <Leads {...props} />
+          </Can>
+        ),
         routes: [
           {
             path: '/leads',
             label: local.applicantsLeads,
-            render: (props) => <Leads {...props} />,
+            render: (props) => (
+              <Can I="getLead" a="halanuser">
+                <Leads {...props} />
+              </Can>
+            ),
             routes: [
               {
                 path: '/view-lead',
                 label: local.viewCustomerLead,
-                render: (props) => <LeadProfile {...props} />,
+                render: (props) => (
+                  <Can I="gestLead" a="halanuser">
+                    <LeadProfile {...props} />
+                  </Can>
+                ),
               },
               {
                 path: '/edit-lead',
                 label: local.editLead,
-                render: (props) => <EditLead {...props} />,
+                render: (props) => (
+                  <Can I="getLead" a="halanuser">
+                    <EditLead {...props} />
+                  </Can>
+                ),
               },
               {
                 path: '/create-lead',
                 label: local.createLead,
-                render: (props) => <CreateLead {...props} />,
+                render: (props) => (
+                  <Can I="getLead" a="halanuser">
+                    {' '}
+                    <CreateLead {...props} />
+                  </Can>
+                ),
               },
             ],
           },
