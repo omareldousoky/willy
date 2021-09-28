@@ -14,9 +14,9 @@ import Map from '../../../Shared/Components/Map/map'
 import * as local from '../../../Shared/Assets/ar.json'
 import Can from '../../config/Can'
 import ability from '../../config/ability'
-import { Governorate, District } from './StepTwoForm'
 import { getGovernorates } from '../../../Shared/Services/APIs/config'
 import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
+import { District, Governorate } from '../../../Shared/Models/Governorate'
 
 function calculateAge(dateOfBirth: number) {
   if (dateOfBirth) {
