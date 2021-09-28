@@ -69,6 +69,7 @@ import CompanyCreation from '../Components/CustomerCreation/CompanyCreation'
 import { LegalCalendar } from '../Components/LegalCalendar'
 import { Landing } from '../../Shared/Components/Landing'
 import { legalWarningRoute } from '../Components/LegalWarnings/routes'
+import { CreateLead } from '../Components/HalanIntegration/createLead'
 
 const appRoutes = [
   {
@@ -650,8 +651,13 @@ const appRoutes = [
               },
               {
                 path: '/edit-lead',
-                label: local.editCustomer,
+                label: local.editLead,
                 render: (props) => <EditLead {...props} />,
+              },
+              {
+                path: '/create-lead',
+                label: local.createLead,
+                render: (props) => <CreateLead {...props} />,
               },
             ],
           },
