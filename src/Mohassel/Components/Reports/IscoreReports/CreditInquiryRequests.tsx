@@ -37,7 +37,7 @@ const CreditInquiryRequests = () => {
     {
       key: 'creditInquiryRequests',
       local: `${local.creditInquiryRequestsReport} ${local.individualAndGroup}`,
-      inputs: ['branch', 'dateFromTo', 'creditInquiryStatus'],
+      inputs: ['branches', 'dateFromTo', 'creditInquiryStatus'],
       permission: 'generateIscoreReport',
       handleExcel: {
         post: postCreditInquiryExcel,
@@ -87,7 +87,7 @@ const CreditInquiryRequests = () => {
     const excelRequestModel = {
       startDate,
       endDate,
-      branch: branches?._id,
+      branches: branches.map((branch) => branch._id),
       status: creditInquiryStatus,
     }
 
