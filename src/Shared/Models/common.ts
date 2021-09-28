@@ -68,3 +68,36 @@ export interface Product {
   type: string
   contractType: string
 }
+
+export interface Lead {
+  nationalIdIssueDate?: string
+  customerNationalId: string
+  branchAddress?: string
+  branchId?: string
+  branchLat?: number
+  branchLong?: number
+  branchName?: string
+  businessAddress: string
+  businessAddressDescription?: string
+  businessArea: string
+  businessCity: string
+  businessGovernate: string
+  businessSector: string
+  businessStreet: string
+  createdAt?: number
+  customerName: string
+  deviceId?: string
+  deviceLat?: number
+  deviceLong?: number
+  inReviewStatus?: string
+  lastUpdate?: number
+  loanOwner?: boolean
+  maxAge?: number
+  maxBusinessDate?: number
+  minAge?: number
+  minBusinessDate?: number
+  phoneNumber: string
+  source?: string
+  status?: string
+  uuid?: string
+}

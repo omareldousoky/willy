@@ -9,7 +9,7 @@ import {
 } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import BackButton from '../../../Shared/Components/BackButton/back-button'
 import * as local from '../../../Shared/Assets/ar.json'
-import { Lead } from './leadInterface'
+import { Lead } from '../../../Shared/Models/common'
 
 const tabs: Array<Tab> = [
   {

@@ -9,7 +9,6 @@ import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Swal from 'sweetalert2'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
-import { Lead } from './leadInterface'
 import { Loader } from '../../../Shared/Components/Loader'
 import { editLead } from '../../../Shared/Services/APIs/Leads/editLead'
 import { Governorate } from '../CustomerCreation/StepTwoForm'
@@ -26,6 +25,7 @@ import {
 import local from '../../../Shared/Assets/ar.json'
 import './leads.scss'
 import { getGovernorates } from '../../../Shared/Services/APIs/config'
+import { Lead } from '../../../Shared/Models/common'
 
 export interface LeadStepOne {
   customerName: string
@@ -75,14 +75,14 @@ class EditLead extends Component<
     this.setState({
       stepOne: {
         customerName: lead.customerName,
-        maxAge: lead.maxAge,
-        minAge: lead.minAge,
+        maxAge: lead.maxAge as number,
+        minAge: lead.minAge as number,
         maxMinAge: `${lead.minAge ? lead.minAge : 0}-${lead.maxAge}`,
         phoneNumber: lead.phoneNumber,
         customerNationalId: lead.customerNationalId || '',
         nationalIdIssueDate:
           timeToDateyyymmdd(Number(lead.nationalIdIssueDate)) || '',
-        loanOwner: lead.loanOwner,
+        loanOwner: lead.loanOwner as boolean,
       },
       stepTwo: {
         businessSector: lead.businessSector,
@@ -90,10 +90,10 @@ class EditLead extends Component<
         businessCity: lead.businessCity,
         businessArea: lead.businessArea,
         businessStreet: lead.businessStreet,
-        businessAddressDescription: lead.businessAddressDescription,
+        businessAddressDescription: lead.businessAddressDescription as string,
       },
       loading: true,
-      uuid: lead.uuid,
+      uuid: lead.uuid as string,
     })
     this.getGovernorates()
   }
