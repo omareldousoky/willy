@@ -69,9 +69,19 @@ export interface Product {
   contractType: string
 }
 
-export interface Lead {
-  nationalIdIssueDate?: string
+export interface LeadCore {
+  customerName: string
   customerNationalId: string
+  phoneNumber: string
+  businessArea: string
+  businessCity: string
+  businessGovernate: string
+  businessSector: string
+  businessStreet: string
+  loanAmount?: number
+}
+export interface Lead extends LeadCore {
+  nationalIdIssueDate?: string
   branchAddress?: string
   branchId?: string
   branchLat?: number
@@ -79,13 +89,7 @@ export interface Lead {
   branchName?: string
   businessAddress: string
   businessAddressDescription?: string
-  businessArea: string
-  businessCity: string
-  businessGovernate: string
-  businessSector: string
-  businessStreet: string
   createdAt?: number
-  customerName: string
   deviceId?: string
   deviceLat?: number
   deviceLong?: number
@@ -96,7 +100,6 @@ export interface Lead {
   maxBusinessDate?: number
   minAge?: number
   minBusinessDate?: number
-  phoneNumber: string
   source?: string
   status?: string
   uuid?: string
