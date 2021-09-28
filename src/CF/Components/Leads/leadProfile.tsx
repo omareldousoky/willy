@@ -92,7 +92,11 @@ const LeadProfile = (
                 </tr>
                 <tr>
                   <td>{local.creationDate}</td>
-                  <td>{timeToDateyyymmdd(leadDetails.createdAt)}</td>
+                  <td>
+                    {leadDetails.createdAt
+                      ? timeToDateyyymmdd(leadDetails.createdAt)
+                      : ''}
+                  </td>
                 </tr>
               </tbody>
             </Table>

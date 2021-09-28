@@ -11,7 +11,6 @@ import Swal from 'sweetalert2'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
 import { Loader } from '../../../Shared/Components/Loader'
 import { editLead } from '../../../Shared/Services/APIs/Leads/editLead'
-import { Governorate } from '../CustomerCreation/StepTwoForm'
 import {
   leadStepOne,
   leadStepTwo,
@@ -26,6 +25,7 @@ import local from '../../../Shared/Assets/ar.json'
 import './leads.scss'
 import { getGovernorates } from '../../../Shared/Services/APIs/config'
 import { Lead } from '../../../Shared/Models/common'
+import { Governorate } from '../../../Shared/Models/Governorate'
 
 export interface LeadStepOne {
   customerName: string

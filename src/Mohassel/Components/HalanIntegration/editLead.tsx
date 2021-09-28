@@ -11,7 +11,7 @@ import Swal from 'sweetalert2'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
 import { Loader } from '../../../Shared/Components/Loader'
 import { editLead } from '../../../Shared/Services/APIs/Leads/editLead'
-import { Governorate } from '../CustomerCreation/StepTwoForm'
+import { Governorate } from '../../../Shared/Models/Governorate'
 import {
   leadStepOne,
   leadStepTwo,
