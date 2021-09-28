@@ -521,6 +521,20 @@ class Leads extends Component<Props, State> {
               <div />
             </div>
             <hr className="dashed-line" />
+            <div>
+              <Can I="getLead" a="halanuser">
+                <Button
+                  onClick={() => {
+                    this.props.history.push(
+                      '/halan-integration/leads/create-lead'
+                    )
+                  }}
+                  className="big-button"
+                >
+                  {local.createLead}
+                </Button>
+              </Can>
+            </div>
             <Search
               searchKeys={[
                 'keyword',

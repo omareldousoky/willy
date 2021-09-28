@@ -1,5 +1,6 @@
 import * as Yup from 'yup'
 import local from '../../../Shared/Assets/ar.json'
+import { LeadCore } from '../../../Shared/Models/common'
 import { LeadStepOne, LeadStepTwo } from './editLead'
 
 export const leadStepOne: LeadStepOne = {
@@ -20,6 +21,17 @@ export const leadStepTwo: LeadStepTwo = {
   businessArea: '',
   businessStreet: '',
   businessAddressDescription: '',
+}
+export const LeadCreationInitial: LeadCore = {
+  customerName: '',
+  customerNationalId: '',
+  phoneNumber: '',
+  businessArea: '',
+  businessCity: '',
+  businessGovernate: '',
+  businessSector: '',
+  businessStreet: '',
+  loanAmount: 0,
 }
 
 const endOfDay: Date = new Date()
