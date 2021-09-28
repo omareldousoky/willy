@@ -10,7 +10,11 @@ import { LtsIcon } from '../LtsIcon'
 
 import { ReportsListProps } from './types'
 
-export const ReportsList = ({ list, onClickDownload }: ReportsListProps) => {
+export const ReportsList = ({
+  list,
+  onClickDownload,
+  iscoreType,
+}: ReportsListProps) => {
   return (
     <>
       {list?.length > 0 ? (
@@ -45,6 +49,14 @@ export const ReportsList = ({ list, onClickDownload }: ReportsListProps) => {
                     <span className="mr-5 d-flex flex-start flex-column">
                       <span>{local.creationDate}</span>
                       {timeToArabicDate(listItem.generatedAt, true)}
+                    </span>
+                  )}
+                  {iscoreType && (
+                    <span className="mr-5 d-flex flex-start flex-column">
+                      <span>{local.transactionType}</span>
+                      {listItem.fileName?.includes('-SME-')
+                        ? local.sme
+                        : local.micro}
                     </span>
                   )}
                 </div>
