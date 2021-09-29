@@ -1,9 +1,9 @@
 import React from 'react'
 import Table from 'react-bootstrap/Table'
 
-import local from '../../../Assets/ar.json'
-import { Header } from '../pdfTemplateCommon/header'
-import { numbersToArabic, timeToArabicDate } from '../../../Services/utils'
+import local from '../../../../Assets/ar.json'
+import { Header } from '../../pdfTemplateCommon/header'
+import { numbersToArabic, timeToArabicDate } from '../../../../Services/utils'
 
 interface RaseedyTransactionsModel {
   customerCode: string

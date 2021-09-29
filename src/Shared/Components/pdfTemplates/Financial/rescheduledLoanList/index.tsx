@@ -5,8 +5,8 @@ import {
   getTimestamp,
   timeToArabicDateNow,
   statusLocale,
-} from '../../../Services/utils'
-import Orientation from '../../Common/orientation'
+} from '../../../../Services/utils'
+import Orientation from '../../../Common/orientation'
 
 export const RescheduledLoanList = (props) => {
   const { isCF } = props

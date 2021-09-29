@@ -1,8 +1,8 @@
 import React from 'react'
 import './loanPenaltiesList.scss'
-import * as local from '../../../Assets/ar.json'
-import { timeToArabicDate } from '../../../Services/utils'
-import Orientation from '../../Common/orientation'
+import * as local from '../../../../Assets/ar.json'
+import { timeToArabicDate } from '../../../../Services/utils'
+import Orientation from '../../../Common/orientation'
 
 export const LoanPenaltiesList = (props) => {
   const { data, isCF } = props

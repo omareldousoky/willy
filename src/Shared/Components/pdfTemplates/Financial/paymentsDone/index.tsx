@@ -4,9 +4,9 @@ import {
   timeToArabicDate,
   getInstallmentStatus,
   timeToArabicDateNow,
-} from '../../../Services/utils'
-import * as local from '../../../Assets/ar.json'
-import Orientation from '../../Common/orientation'
+} from '../../../../Services/utils'
+import * as local from '../../../../Assets/ar.json'
+import Orientation from '../../../Common/orientation'
 
 export const PaymentsDone = (props) => {
   const { isCF } = props
