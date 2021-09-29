@@ -1,4 +1,4 @@
-import { Application } from '../../../Services/interfaces'
+import { Application } from '../../../../Services/interfaces'
 
 export interface PaymentReceiptProps {
   receiptData: any

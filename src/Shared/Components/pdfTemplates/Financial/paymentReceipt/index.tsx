@@ -1,10 +1,10 @@
 import React from 'react'
 import './paymentReceipt.scss'
 import Tafgeet from 'tafgeetjs'
-import * as local from '../../../Assets/ar.json'
-import { numbersToArabic, extractGMTDate } from '../../../Services/utils'
+import * as local from '../../../../Assets/ar.json'
+import { numbersToArabic, extractGMTDate } from '../../../../Services/utils'
 import { PaymentReceiptProps } from './types'
-import { companies, licenses } from '../../../Constants/pdf'
+import { companies, licenses } from '../../../../Constants/pdf'
 
 const PaymentReceipt = (props: PaymentReceiptProps) => {
   const { type } = props

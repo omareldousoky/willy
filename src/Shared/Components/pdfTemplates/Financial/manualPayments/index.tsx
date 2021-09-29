@@ -1,7 +1,10 @@
 import React from 'react'
 import './manualPayments.scss'
-import { timeToArabicDate, timeToArabicDateNow } from '../../../Services/utils'
-import Orientation from '../../Common/orientation'
+import {
+  timeToArabicDate,
+  timeToArabicDateNow,
+} from '../../../../Services/utils'
+import Orientation from '../../../Common/orientation'
 import { ManualPaymentsProps } from './types'
 
 const statusLocalization = (status: string) => {
