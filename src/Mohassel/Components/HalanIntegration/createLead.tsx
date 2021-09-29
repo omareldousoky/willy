@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Formik } from 'formik'
 import Swal from 'sweetalert2'
@@ -13,14 +13,15 @@ import { createLead } from '../../../Shared/Services/APIs/Leads/createLead'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { doneSuccessfully } from '../../../Shared/localUtils'
 import { LeadCore } from '../../../Shared/Models/common'
+import { getMaxPrinciples } from '../../../Shared/Services/APIs/config'
 
 export const CreateLead: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const history = useHistory()
-  const submit = async (values) => {
+  let maxLimit = 0
+  const submit = async (values: LeadCore) => {
     setLoading(true)
-    const leadData: LeadCore = { ...values }
-    const res = await createLead(leadData)
+    const res = await createLead(values)
     if (res.status === 'success') {
       Swal.fire('', doneSuccessfully('createLead'), 'success')
       history.goBack()
@@ -29,6 +30,20 @@ export const CreateLead: React.FC = () => {
     }
     setLoading(false)
   }
+
+  const getGlobalPrinciple = async () => {
+    setLoading(true)
+    const res = await getMaxPrinciples()
+    if (res.status === 'success') {
+      maxLimit = res.body.maxIndividualPrincipal
+    } else {
+      Swal.fire('', res.error.error, 'error')
+    }
+    setLoading(false)
+  }
+  useEffect(() => {
+    getGlobalPrinciple()
+  }, [])
   return (
     <div>
       <Loader type="fullscreen" open={loading} />
@@ -40,7 +55,7 @@ export const CreateLead: React.FC = () => {
               initialValues={LeadCreationInitial}
               enableReinitialize
               onSubmit={submit}
-              validationSchema={createLeadValidation}
+              validationSchema={createLeadValidation(maxLimit)}
               validateOnBlur
               validateOnChange
             >

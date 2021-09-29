@@ -1,5 +1,6 @@
 import * as Yup from 'yup'
 import local from '../../../Shared/Assets/ar.json'
+import { maxValue } from '../../../Shared/localUtils'
 import { LeadCore } from '../../../Shared/Models/common'
 import { LeadStepOne, LeadStepTwo } from './editLead'
 
@@ -76,21 +77,20 @@ export const leadValidationStepTwo = Yup.object().shape({
   businessAddressDescription: Yup.string(),
 })
 
-export const createLeadValidation = Yup.object().shape({
-  businessStreet: Yup.string().trim().required(local.required),
-  businessGovernate: Yup.string().trim().required(local.required),
-  businessArea: Yup.string().trim().required(local.required),
-  businessCity: Yup.string().trim().required(local.required),
-  businessSector: Yup.string().trim().required(local.required),
-  customerName: Yup.string().trim().required(local.required),
-  phoneNumber: Yup.string().trim().required(local.required),
-  customerNationalId: Yup.number().when('nationalIdChecker', {
-    is: true,
-    then: Yup.number().test(
-      'error',
-      local.duplicateNationalIdMessage,
-      () => false
-    ),
-  }),
-  loanAmount: Yup.number().required(local.required),
-})
+export const createLeadValidation = (maxLimit: number) =>
+  Yup.object().shape({
+    businessStreet: Yup.string().trim().required(local.required),
+    businessGovernate: Yup.string().trim().required(local.required),
+    businessArea: Yup.string().trim().required(local.required),
+    businessCity: Yup.string().trim().required(local.required),
+    businessSector: Yup.string().trim().required(local.required),
+    customerName: Yup.string().trim().required(local.required),
+    phoneNumber: Yup.string().trim().required(local.required),
+    customerNationalId: Yup.number()
+      .min(10000000000000, local.nationalIdLengthShouldBe14)
+      .max(99999999999999, local.nationalIdLengthShouldBe14)
+      .required(local.required),
+    loanAmount: Yup.number()
+      .max(maxLimit, maxValue(maxLimit))
+      .required(local.required),
+  })

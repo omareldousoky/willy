@@ -264,7 +264,6 @@ export const LeadCreationForm: React.FC<LeadCreationFromProps> = ({
       <Row>
         <Form.Group controlId="businessSector" as={Col}>
           <Form.Label className="data-label">{local.businessSector}</Form.Label>
-
           <Form.Control
             as="select"
             type="select"
@@ -291,15 +290,16 @@ export const LeadCreationForm: React.FC<LeadCreationFromProps> = ({
           </Form.Control.Feedback>
         </Form.Group>
       </Row>
-      <Row className="d-flex justify-content-end">
+      <Row className="d-flex justify-content-between mx-1 my-3">
         <Button
-          className="mr-3"
+          variant="secondary"
+          className="w-25"
           onClick={() => history.goBack()}
           data-qc="previous"
         >
           {local.previous}
         </Button>
-        <Button type="submit" data-qc="submit">
+        <Button className="w-25" type="submit" data-qc="submit">
           {local.submit}
         </Button>
       </Row>
