@@ -1,8 +1,8 @@
 import React from 'react'
 import './CollectionStatement.scss'
 import Table from 'react-bootstrap/Table'
-import Orientation from '../../Common/orientation'
-import { Header } from '../pdfTemplateCommon/header'
+import Orientation from '../../../Common/orientation'
+import { Header } from '../../pdfTemplateCommon/header'
 
 interface CollectionStatementProps {
   data: any

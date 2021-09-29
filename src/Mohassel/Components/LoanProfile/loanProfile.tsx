@@ -36,7 +36,7 @@ import FollowUpStatementPDF from '../pdfTemplates/followUpStatment/followUpState
 import LoanContract from '../pdfTemplates/loanContract/loanContract'
 import LoanContractForGroup from '../pdfTemplates/loanContractForGroup/loanContractForGroup'
 import Can from '../../config/Can'
-import EarlyPaymentPDF from '../../../Shared/Components/pdfTemplates/earlyPayment/earlyPayment'
+import EarlyPaymentPDF from '../../../Shared/Components/pdfTemplates/Financial/earlyPayment/earlyPayment'
 import { Customer, PendingActions } from '../../../Shared/Services/interfaces'
 import {
   iscoreDate,
@@ -51,8 +51,8 @@ import store from '../../../Shared/redux/store'
 import UploadDocuments from './uploadDocuments'
 import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan'
 import { doubtLoan } from '../../Services/APIs/Loan/doubtLoan'
-import PaymentReceipt from '../../../Shared/Components/pdfTemplates/paymentReceipt'
-import RandomPaymentReceipt from '../../../Shared/Components/pdfTemplates/randomPaymentReceipt/randomPaymentReceipt'
+import PaymentReceipt from '../../../Shared/Components/pdfTemplates/Financial/paymentReceipt'
+import RandomPaymentReceipt from '../../../Shared/Components/pdfTemplates/Financial/randomPaymentReceipt/randomPaymentReceipt'
 import { calculatePenalties } from '../../../Shared/Services/APIs/clearance/calculatePenalties'
 import ManualRandomPaymentsActions from './manualRandomPaymentsActions'
 import { getManualOtherPayments } from '../../Services/APIs/Payment/getManualOtherPayments'
@@ -96,7 +96,7 @@ import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getG
 import { getWriteOffReasons } from '../../../Shared/Services/APIs/config'
 import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
 import { getEarlyPaymentPdfData } from '../../../Shared/Utils/payment'
-import EarlyPaymentReceipt from '../../../Shared/Components/pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt'
+import EarlyPaymentReceipt from '../../../Shared/Components/pdfTemplates/Financial/earlyPaymentReceipt/earlyPaymentReceipt'
 import { Score } from '../../../Shared/Models/Customer'
 
 export interface IndividualWithInstallments {

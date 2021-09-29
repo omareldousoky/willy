@@ -1,8 +1,8 @@
 import React from 'react'
 import './crossedOutLoansList.scss'
-import * as local from '../../../Assets/ar.json'
-import { timeToArabicDate } from '../../../Services/utils'
-import Orientation from '../../Common/orientation'
+import * as local from '../../../../Assets/ar.json'
+import { timeToArabicDate } from '../../../../Services/utils'
+import Orientation from '../../../Common/orientation'
 
 export const CrossedOutLoansList = (props) => {
   const { isCF } = props

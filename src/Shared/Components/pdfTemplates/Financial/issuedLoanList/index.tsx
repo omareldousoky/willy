@@ -5,7 +5,7 @@ import {
   getTimestamp,
   timeToArabicDateNow,
   statusLocale,
-} from '../../../Services/utils'
+} from '../../../../Services/utils'
 
 export const IssuedLoanList = (props) => {
   const tempData = props.data.data

@@ -13,12 +13,12 @@ import {
   postBranchLoanListExcel,
   getBranchLoanListExcel,
 } from '../../Services/APIs/Reports/branchLoanList'
-import { CollectionStatement } from '../../../Shared/Components/pdfTemplates/CollectionStatement'
-import { LoanPenaltiesList } from '../../../Shared/Components/pdfTemplates/loanPenaltiesList'
-import { CrossedOutLoansList } from '../../../Shared/Components/pdfTemplates/crossedOutLoansList'
-import { DoubtfulPayments } from '../../../Shared/Components/pdfTemplates/doubtfulPayments'
-import { PaymentsDone } from '../../../Shared/Components/pdfTemplates/paymentsDone'
-import { IssuedLoanList } from '../../../Shared/Components/pdfTemplates/issuedLoanList'
+import { CollectionStatement } from '../../../Shared/Components/pdfTemplates/Financial/CollectionStatement'
+import { LoanPenaltiesList } from '../../../Shared/Components/pdfTemplates/Financial/loanPenaltiesList'
+import { CrossedOutLoansList } from '../../../Shared/Components/pdfTemplates/Financial/crossedOutLoansList'
+import { DoubtfulPayments } from '../../../Shared/Components/pdfTemplates/Financial/doubtfulPayments'
+import { PaymentsDone } from '../../../Shared/Components/pdfTemplates/Financial/paymentsDone'
+import { IssuedLoanList } from '../../../Shared/Components/pdfTemplates/Financial/issuedLoanList'
 import {
   getCreatedLoanList,
   postCreatedLoansExcel,
@@ -30,8 +30,8 @@ import {
   getRescheduledLoanExcel,
 } from '../../../Shared/Services/APIs/Reports/rescheduledLoansList'
 import { LoanCreationList } from '../pdfTemplates/loanCreationList'
-import { RescheduledLoanList } from '../../../Shared/Components/pdfTemplates/rescheduledLoanList'
-import { RandomPayment } from '../../../Shared/Components/pdfTemplates/randomPayment'
+import { RescheduledLoanList } from '../../../Shared/Components/pdfTemplates/Financial/rescheduledLoanList'
+import { RandomPayment } from '../../../Shared/Components/pdfTemplates/Financial/randomPayment'
 import {
   getLoanApplicationFees,
   postLoanApplicationFeesExcel,
@@ -41,13 +41,13 @@ import { LoanApplicationFees } from '../pdfTemplates/loanApplicationFees'
 import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport'
 import { downloadFile } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
-import { CustomerTransactionReport } from '../../../Shared/Components/pdfTemplates/customerTransactionReport'
+import { CustomerTransactionReport } from '../../../Shared/Components/pdfTemplates/Financial/customerTransactionReport'
 import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
-import RaseedyTransactionsReport from '../../../Shared/Components/pdfTemplates/RaseedyTransactions'
+import RaseedyTransactionsReport from '../../../Shared/Components/pdfTemplates/Financial/RaseedyTransactions'
 import { PDFList } from '../../../Shared/Components/PdfList'
 import { PDF } from '../../../Shared/Components/PdfList/types'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
-import { ManualPayments } from '../../../Shared/Components/pdfTemplates/manualPayments'
+import { ManualPayments } from '../../../Shared/Components/pdfTemplates/Financial/manualPayments'
 import {
   getManualPayments,
   postManualPaymentsExcel,

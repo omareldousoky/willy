@@ -1,7 +1,10 @@
 import React from 'react'
 import Tafgeet from 'tafgeetjs'
-import { numbersToArabic, timeToArabicDateNow } from '../../../Services/utils'
-import { companies, licenses } from '../../../Constants/pdf'
+import {
+  numbersToArabic,
+  timeToArabicDateNow,
+} from '../../../../Services/utils'
+import { companies, licenses } from '../../../../Constants/pdf'
 import './earlyPaymentReceipt.scss'
 
 const EarlyPaymentReceipt = (props) => {

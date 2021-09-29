@@ -1,7 +1,7 @@
 import {
   ApplicationResponse,
   InstallmentsResponse,
-} from '../../../Models/Application'
+} from '../../../../Models/Application'
 
 export interface EarlyPaymentPdfData {
   totalDaysLate: number

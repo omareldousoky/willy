@@ -4,10 +4,10 @@ import {
   timeToArabicDate,
   getTimestamp,
   timeToArabicDateNow,
-} from '../../../Services/utils'
-import * as local from '../../../Assets/ar.json'
-import Orientation from '../../Common/orientation'
-import { loanStatusLocal } from '../pdfTemplateCommon/reportLocal'
+} from '../../../../Services/utils'
+import * as local from '../../../../Assets/ar.json'
+import Orientation from '../../../Common/orientation'
+import { loanStatusLocal } from '../../pdfTemplateCommon/reportLocal'
 
 export const DoubtfulPayments = (props) => {
   const { isCF } = props

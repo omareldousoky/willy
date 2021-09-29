@@ -1,11 +1,14 @@
 import React, { FunctionComponent } from 'react'
 import './earlyPayment.scss'
-import * as local from '../../../Assets/ar.json'
-import { numbersToArabic, timeToArabicDateNow } from '../../../Services/utils'
-import DataRow from '../pdfTemplateCommon/dataRow'
+import * as local from '../../../../Assets/ar.json'
+import {
+  numbersToArabic,
+  timeToArabicDateNow,
+} from '../../../../Services/utils'
+import DataRow from '../../pdfTemplateCommon/dataRow'
 import { EarlyPaymentPDFProps } from './types'
 import { EarlyPaymentInstallment } from './EarlyPaymentInstallment'
-import { companies, licenses } from '../../../Constants/pdf'
+import { companies, licenses } from '../../../../Constants/pdf'
 
 const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
   application,

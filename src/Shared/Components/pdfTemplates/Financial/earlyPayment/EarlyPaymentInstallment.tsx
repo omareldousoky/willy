@@ -5,9 +5,9 @@ import {
   timeToArabicDate,
   numbersToArabic,
   getStatus,
-} from '../../../Services/utils'
+} from '../../../../Services/utils'
 import { EarlyPaymentInstallmentProps } from './types'
-import { DAY_IN_MS, getInstallmentKeySum } from '../../../Utils/payment'
+import { DAY_IN_MS, getInstallmentKeySum } from '../../../../Utils/payment'
 
 export const EarlyPaymentInstallment: FunctionComponent<EarlyPaymentInstallmentProps> = ({
   applicationKey,

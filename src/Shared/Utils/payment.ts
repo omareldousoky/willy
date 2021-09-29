@@ -5,7 +5,7 @@ import {
 } from '../Models/Application'
 
 import local from '../Assets/ar.json'
-import { EarlyPaymentPdfData } from '../Components/pdfTemplates/earlyPayment/types'
+import { EarlyPaymentPdfData } from '../Components/pdfTemplates/Financial/earlyPayment/types'
 import { RemainingLoanResponse } from '../Models/Payment'
 import { getStatus } from '../Services/utils'
 

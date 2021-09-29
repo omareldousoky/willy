@@ -1,8 +1,8 @@
 import React from 'react'
 import './randomPaymentReceipt.scss'
 import Tafgeet from 'tafgeetjs'
-import { numbersToArabic, extractGMTDate } from '../../../Services/utils'
-import local from '../../../Assets/ar.json'
+import { numbersToArabic, extractGMTDate } from '../../../../Services/utils'
+import local from '../../../../Assets/ar.json'
 import { RandomPaymentReceiptProps } from './types'
 
 const ReceiptHeader = (CF?: boolean) => {

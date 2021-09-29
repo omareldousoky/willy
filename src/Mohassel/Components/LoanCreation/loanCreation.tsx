@@ -23,7 +23,7 @@ import {
   beneficiaryType,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
-import PaymentReceipt from '../../../Shared/Components/pdfTemplates/paymentReceipt'
+import PaymentReceipt from '../../../Shared/Components/pdfTemplates/Financial/paymentReceipt'
 
 interface CustomerData {
   id: string

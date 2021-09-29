@@ -4,9 +4,9 @@ import {
   numbersToArabic,
   timeToArabicDate,
   timeToArabicDateNow,
-} from '../../../Services/utils'
-import { CustomerApplicationTransactionsResponse } from '../../../Services/interfaces'
-import Orientation from '../../Common/orientation'
+} from '../../../../Services/utils'
+import { CustomerApplicationTransactionsResponse } from '../../../../Services/interfaces'
+import Orientation from '../../../Common/orientation'
 import './customerTransactionReport.scss'
 
 interface CustomerTransactionsProps {
