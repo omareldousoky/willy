@@ -84,6 +84,8 @@ class Leads extends Component<Props, State> {
     render: (data: any) => void
   }[]
 
+  isHq = false
+
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -215,6 +217,9 @@ class Leads extends Component<Props, State> {
         ),
       },
     ]
+    this.isHq =
+      !!getCookie('ltsbranch') &&
+      JSON.parse(getCookie('ltsbranch'))._id === 'hq'
   }
 
   componentDidMount() {
@@ -519,22 +524,22 @@ class Leads extends Component<Props, State> {
                 </span>
               </div>
               <div />
+              {!this.isHq && (
+                <Can I="getLead" a="halanuser">
+                  <Button
+                    onClick={() => {
+                      this.props.history.push(
+                        '/halan-integration/leads/create-lead'
+                      )
+                    }}
+                    className="big-button"
+                  >
+                    {local.createLead}
+                  </Button>
+                </Can>
+              )}
             </div>
             <hr className="dashed-line" />
-            <div>
-              <Can I="getLead" a="halanuser">
-                <Button
-                  onClick={() => {
-                    this.props.history.push(
-                      '/halan-integration/leads/create-lead'
-                    )
-                  }}
-                  className="big-button"
-                >
-                  {local.createLead}
-                </Button>
-              </Can>
-            </div>
             <Search
               searchKeys={[
                 'keyword',
