@@ -91,7 +91,7 @@ interface State {
   toDate: number
 }
 
-class Reports extends Component<{}, State> {
+class FinancialReports extends Component<{}, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -1049,4 +1049,4 @@ class Reports extends Component<{}, State> {
   }
 }
 
-export default Reports
+export default FinancialReports

@@ -6,7 +6,7 @@ import {
   CardNavBar,
   Tab,
 } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
-import Reports from './reports'
+import FinancialReports from './financialReports'
 import IscoreReports from './IscoreReports'
 import OracleIntegration from './oracleIntegration'
 import OperationsReports from './operationsReports'
@@ -80,7 +80,7 @@ class ReportsHome extends Component<{}, State> {
   renderContent() {
     switch (this.state.activeTab) {
       case 'financialReports':
-        return <Reports />
+        return <FinancialReports />
       case 'iScoreReports':
         return <IscoreReports />
       case 'cibTPAYReport':

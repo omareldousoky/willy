@@ -5,7 +5,7 @@ import {
   CardNavBar,
   Tab,
 } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
-import Reports from './Reports'
+import FinancialReports from './financialReports'
 
 interface State {
   activeTab: string
@@ -73,7 +73,7 @@ class ReportsHome extends Component<{}, State> {
   renderContent() {
     switch (this.state.activeTab) {
       case 'financialReports':
-        return <Reports />
+        return <FinancialReports />
       // case 'iScoreReports':
       //   return <IscoreReports />
       // case 'cibTPAYReport':
