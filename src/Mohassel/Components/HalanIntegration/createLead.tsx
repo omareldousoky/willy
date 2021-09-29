@@ -18,7 +18,7 @@ import { getMaxPrinciples } from '../../../Shared/Services/APIs/config'
 export const CreateLead: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const history = useHistory()
-  let maxLimit = 0
+  const [maxLimit, setMaxLimit] = useState(0)
   const submit = async (values: LeadCore) => {
     setLoading(true)
     const res = await createLead(values)
@@ -35,7 +35,7 @@ export const CreateLead: React.FC = () => {
     setLoading(true)
     const res = await getMaxPrinciples()
     if (res.status === 'success') {
-      maxLimit = res.body.maxIndividualPrincipal
+      setMaxLimit(res.body.maxIndividualPrincipal)
     } else {
       Swal.fire('', res.error.error, 'error')
     }
