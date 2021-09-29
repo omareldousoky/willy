@@ -91,6 +91,18 @@ export interface Customer {
   initialConsumerFinanceLimit?: number
   consumerFinanceLimitStatus?: string
 }
+export interface Company extends Customer {
+  legalConstitution: string
+  smeCategory: string
+  cbeCode: string
+  paidCapital: number
+  establishmentDate: number
+  smeSourceId?: string
+  smeBankName: string
+  smeBankBranch: string
+  smeBankAccountNumber: string
+  smeIbanNumber: string
+}
 export interface Installment {
   id: number
   installmentResponse: number

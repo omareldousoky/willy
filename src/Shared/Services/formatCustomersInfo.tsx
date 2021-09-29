@@ -1,9 +1,9 @@
 import React from 'react'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
-import { Customer } from './interfaces'
+import { Company, Customer } from './interfaces'
 
-import * as local from '../Assets/ar.json'
+import local from '../Assets/ar.json'
 import ability from '../../Mohassel/config/ability'
 import {
   arabicGender,
@@ -31,7 +31,7 @@ interface CustomerInfo extends IscoreInfo {
   isCF?: boolean
 }
 interface CompanyInfo extends IscoreInfo {
-  company: Customer
+  company: Company
 }
 const iscoreField = ({
   score,
@@ -151,6 +151,64 @@ export const getCompanyInfo = ({
     {
       fieldTitle: local.loanOfficer,
       fieldData: company.representativeName || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.legalConstitution,
+      fieldData: local[company.legalConstitution] || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.smeCategory,
+      fieldData: local[company.smeCategory] || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.paidCapital,
+      fieldData: company.paidCapital || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.establishmentDate,
+      fieldData:
+        (company.establishmentDate &&
+          getDateAndTime(company.establishmentDate)) ||
+        '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.smeSourceId,
+      fieldData: company.smeSourceId || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.smeBankName,
+      fieldData: company.smeBankName || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.smeBankBranch,
+      fieldData: company.smeBankBranch || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.smeBankAccountNumber,
+      fieldData: company.smeBankAccountNumber || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.smeIbanNumber,
+      fieldData: company.smeIbanNumber || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.cbeCode,
+      fieldData: company.cbeCode || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.permanentEmployeeCount,
+      fieldData: company.permanentEmployeeCount || '',
       showFieldCondition: true,
     },
   ]
