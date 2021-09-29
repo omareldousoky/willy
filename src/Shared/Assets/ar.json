@@ -1212,5 +1212,6 @@
   "smeBankBranch": "فرع البنك التابعة له الشركة",
   "smeBankAccountNumber": "رقم الحساب البنكي للشركة",
   "smeIbanNumber": "رقم IBAN",
-  "convertToCustomer": "تحويل إلي عميل"
+  "convertToCustomer": "تحويل إلي عميل",
+  "cbeCode": "كود البنك المركزي"
 }

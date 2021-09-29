@@ -17,6 +17,7 @@ import ability from '../../config/ability'
 import { theme } from '../../../Shared/theme'
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { searchUsers } from '../../../Shared/Services/APIs/Users/searchUsers'
+import { searchCbeCode } from '../../Services/APIs/CbeCodes/CbeCodes'
 
 interface GeoDivision {
   majorGeoDivisionName: { ar: string }
@@ -31,6 +32,7 @@ export const StepTwoCompanyForm = (props: any) => {
   const [loading, setLoading] = useState(false)
   const [loanOfficers, setLoanOfficers] = useState<Array<any>>([])
   const [systemUsers, setSystemUsers] = useState<Array<any>>([])
+  const [cbeCode, setCbeCode] = useState<Array<any>>([])
 
   const [geoDivisions, setgeoDivisions] = useState<Array<GeoDivision>>([
     {
@@ -79,20 +81,8 @@ export const StepTwoCompanyForm = (props: any) => {
     })
 
     if (res.status === 'success') {
-      setSystemUsers([
-        ...res.body.data,
-        {
-          _id: null,
-          name: local.notApplicable,
-        },
-      ])
-      return [
-        ...res.body.data,
-        {
-          _id: null,
-          name: local.notApplicable,
-        },
-      ]
+      setSystemUsers(res.body.data)
+      return res.body.data
     }
     Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     return []
@@ -110,6 +100,17 @@ export const StepTwoCompanyForm = (props: any) => {
       Swal.fire('Error !', getErrorMessage(resGeo.error.error), 'error')
     }
   }
+  const getCbeCode = async (name) => {
+    const res = await searchCbeCode({
+      from: 0,
+      size: 100,
+      name,
+    })
+
+    res.status === 'success'
+      ? setCbeCode(res.body.data)
+      : Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+  }
   useEffect(() => {
     const token = getCookie('token')
     const details = parseJwt(token)
@@ -118,14 +119,58 @@ export const StepTwoCompanyForm = (props: any) => {
     } else if (props.branchId.length > 0) {
       getConfig(props.branchId)
     }
+    getCbeCode(values.businessName)
   }, [])
   return (
     <Form onSubmit={handleSubmit}>
       <Loader open={loading} type="fullscreen" />
       <Row>
-        <Col sm={12}>
+        <Col sm={6}>
+          <Form.Group controlId="cbeCode">
+            <Form.Label>{`${local.cbeCode} *`}</Form.Label>
+            {cbeCode.length > 1 ? (
+              <Form.Control
+                as="select"
+                type="select"
+                name="cbeCode"
+                value={values.cbeCode}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                isInvalid={errors.cbeCode && touched.cbeCode}
+                disabled={cbeCode.length === 1}
+              >
+                {cbeCode.map((company, index) => {
+                  return (
+                    <option
+                      key={index}
+                      value={company.cbeCode}
+                      selected={values.cbeCode === company.cbeCode}
+                    >
+                      {`${company.name} | ${company.cbeCode}`}
+                    </option>
+                  )
+                })}
+              </Form.Control>
+            ) : (
+              <Form.Control
+                type="number"
+                name="cbeCode"
+                value={values.cbeCode}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                isInvalid={errors.cbeCode && touched.cbeCode}
+                disabled={cbeCode.length === 1}
+              />
+            )}
+
+            <Form.Control.Feedback type="invalid">
+              {errors.cbeCode}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+        <Col sm={6}>
           <Form.Group controlId="geoAreaId">
-            <Form.Label className="customer-form-label">{`${local.geographicalDistribution}*`}</Form.Label>
+            <Form.Label>{`${local.geographicalDistribution}*`}</Form.Label>
             <Form.Control
               as="select"
               type="select"
@@ -154,7 +199,7 @@ export const StepTwoCompanyForm = (props: any) => {
       <Row>
         <Col sm={6}>
           <Form.Group controlId="representative">
-            <Form.Label className="customer-form-label">{`${local.representative}*`}</Form.Label>
+            <Form.Label>{`${local.representative}*`}</Form.Label>
             <Can I="updateNationalId" a="customer" passThrough>
               {() => (
                 <AsyncSelect
@@ -206,7 +251,7 @@ export const StepTwoCompanyForm = (props: any) => {
         </Col>
         <Col sm={6}>
           <Form.Group controlId="applicationDate">
-            <Form.Label className="customer-form-label">{`${local.applicationDate}*`}</Form.Label>
+            <Form.Label>{`${local.applicationDate}*`}</Form.Label>
             <Form.Control
               type="date"
               name="applicationDate"
@@ -250,9 +295,7 @@ export const StepTwoCompanyForm = (props: any) => {
       <Row>
         <Col sm={12}>
           <Form.Group controlId="smeSourceId">
-            <Form.Label className="customer-form-label">
-              {local.smeSourceId}
-            </Form.Label>
+            <Form.Label>{local.smeSourceId}</Form.Label>
             <AsyncSelect
               className={errors.smeSourceId ? 'error' : ''}
               name="smeSourceId"
@@ -299,7 +342,7 @@ export const StepTwoCompanyForm = (props: any) => {
       <Row>
         <Col sm={6}>
           <Form.Group controlId="establishmentDate">
-            <Form.Label className="customer-form-label">{`${local.establishmentDate}*`}</Form.Label>
+            <Form.Label>{`${local.establishmentDate}*`}</Form.Label>
             <Form.Control
               type="date"
               name="establishmentDate"
@@ -315,7 +358,7 @@ export const StepTwoCompanyForm = (props: any) => {
         </Col>
         <Col sm={6}>
           <Form.Group controlId="paidCapital">
-            <Form.Label className="customer-form-label">{`${local.paidCapital} *`}</Form.Label>
+            <Form.Label>{`${local.paidCapital} *`}</Form.Label>
             <Form.Control
               type="number"
               name="paidCapital"
@@ -341,7 +384,7 @@ export const StepTwoCompanyForm = (props: any) => {
                   <>
                     <Col sm={6}>
                       <Form.Group controlId="maxLoansAllowed">
-                        <Form.Label className="customer-form-label">{`${local.maxLoansAllowed}`}</Form.Label>
+                        <Form.Label>{`${local.maxLoansAllowed}`}</Form.Label>
                         <Form.Control
                           type="number"
                           name="maxLoansAllowed"
@@ -363,7 +406,7 @@ export const StepTwoCompanyForm = (props: any) => {
                     </Col>
                     <Col sm={6}>
                       <Form.Group controlId="guarantorMaxLoans">
-                        <Form.Label className="customer-form-label">{`${local.guarantorMaxLoans}`}</Form.Label>
+                        <Form.Label>{`${local.guarantorMaxLoans}`}</Form.Label>
                         <Form.Control
                           type="number"
                           name="guarantorMaxLoans"
@@ -392,7 +435,7 @@ export const StepTwoCompanyForm = (props: any) => {
                   !props.hasLoan) && (
                   <Col sm={6}>
                     <Form.Group controlId="maxPrincipal">
-                      <Form.Label className="customer-form-label">{`${local.maxCustomerPrincipal}`}</Form.Label>
+                      <Form.Label>{`${local.maxCustomerPrincipal}`}</Form.Label>
                       <Form.Control
                         type="number"
                         name="maxPrincipal"
@@ -409,6 +452,39 @@ export const StepTwoCompanyForm = (props: any) => {
                     </Form.Group>
                   </Col>
                 )}
+                <Col sm={6}>
+                  <Form.Group controlId="permanentEmployeeCount">
+                    <Form.Label>{`${local.permanentEmployeeCount} *`}</Form.Label>
+                    <Form.Control
+                      type="number"
+                      name="permanentEmployeeCount"
+                      data-qc="permanentEmployeeCount"
+                      value={values.permanentEmployeeCount}
+                      onBlur={handleBlur}
+                      onChange={(
+                        event: React.ChangeEvent<HTMLInputElement>
+                      ) => {
+                        const re = /^\d*$/
+                        if (
+                          event.currentTarget.value === '' ||
+                          re.test(event.currentTarget.value)
+                        ) {
+                          setFieldValue(
+                            'permanentEmployeeCount',
+                            event.currentTarget.value
+                          )
+                        }
+                      }}
+                      isInvalid={
+                        errors.permanentEmployeeCount &&
+                        touched.permanentEmployeeCount
+                      }
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.permanentEmployeeCount}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
               </Row>
             </>
           )
@@ -417,7 +493,7 @@ export const StepTwoCompanyForm = (props: any) => {
       <Row>
         <Col sm={6}>
           <Form.Group controlId="smeBankName">
-            <Form.Label className="customer-form-label">{`${local.smeBankName} *`}</Form.Label>
+            <Form.Label>{`${local.smeBankName} *`}</Form.Label>
             <Form.Control
               type="text"
               name="smeBankName"
@@ -433,7 +509,7 @@ export const StepTwoCompanyForm = (props: any) => {
         </Col>
         <Col sm={6}>
           <Form.Group controlId="smeBankBranch">
-            <Form.Label className="customer-form-label">{`${local.smeBankBranch} *`}</Form.Label>
+            <Form.Label>{`${local.smeBankBranch} *`}</Form.Label>
             <Form.Control
               type="text"
               name="smeBankBranch"
@@ -449,7 +525,7 @@ export const StepTwoCompanyForm = (props: any) => {
         </Col>
         <Col sm={6}>
           <Form.Group controlId="smeBankAccountNumber">
-            <Form.Label className="customer-form-label">{`${local.smeBankAccountNumber} *`}</Form.Label>
+            <Form.Label>{`${local.smeBankAccountNumber} *`}</Form.Label>
             <Form.Control
               type="text"
               name="smeBankAccountNumber"
@@ -467,7 +543,7 @@ export const StepTwoCompanyForm = (props: any) => {
         </Col>
         <Col sm={6}>
           <Form.Group controlId="smeIbanNumber">
-            <Form.Label className="customer-form-label">{`${local.smeIbanNumber} *`}</Form.Label>
+            <Form.Label>{`${local.smeIbanNumber} *`}</Form.Label>
             <Form.Control
               type="text"
               name="smeIbanNumber"
@@ -485,9 +561,7 @@ export const StepTwoCompanyForm = (props: any) => {
       <Row>
         <Col sm={12}>
           <Form.Group controlId="comments">
-            <Form.Label className="customer-form-label">
-              {local.comments}
-            </Form.Label>
+            <Form.Label>{local.comments}</Form.Label>
             <Can I="updateNationalId" a="customer" passThrough>
               {() => (
                 <Form.Control

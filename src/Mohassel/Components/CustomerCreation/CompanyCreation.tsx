@@ -167,6 +167,7 @@ class CompanyCreation extends Component<Props, State> {
           ? Number(res.body.guarantorMaxLoans)
           : 1,
         maxPrincipal: res.body.maxPrincipal ? Number(res.body.maxPrincipal) : 0,
+        cbeCode: res.body.cbeCode,
         paidCapital: res.body.paidCapital,
         establishmentDate: timeToDateyyymmdd(res.body.establishmentDate),
         smeSourceId: res.body.smeSourceId,

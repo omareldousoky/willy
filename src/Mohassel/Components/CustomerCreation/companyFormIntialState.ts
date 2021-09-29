@@ -117,6 +117,7 @@ export const companyCreationValidationStepTwo = Yup.object().shape({
   smeBankBranch: Yup.string().trim().required(local.required),
   smeBankAccountNumber: Yup.string().trim().required(local.required),
   smeIbanNumber: Yup.string().trim().required(local.required),
+  cbeCode: Yup.string().trim().required(local.required),
 })
 
 export const companyCreationValidationStepTwoEdit = Yup.object().shape({
