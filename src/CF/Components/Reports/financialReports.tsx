@@ -51,7 +51,7 @@ import {
   getRescheduledLoanExcel,
   getRescheduledLoanList,
   postRescheduledLoanExcel,
-} from '../../../Shared/Services/APIs/Reports'
+} from '../../../Shared/Services/APIs/Reports/Financial'
 
 import { downloadFile } from '../../../Shared/Services/utils'
 import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'

@@ -1,8 +1,8 @@
-import { API_BASE_URL } from '../../../envConfig'
-import axios from '../../axiosInstance'
+import { API_BASE_URL } from '../../../../envConfig'
+import axios from '../../../axiosInstance'
 
-export const collectionReport = async (data) => {
-  const url = API_BASE_URL + `/report/collection-report`
+export const doubtfulLoans = async (data) => {
+  const url = API_BASE_URL + `/report/loan-doubts`
   try {
     const res = await axios({
       method: 'POST',
@@ -14,9 +14,8 @@ export const collectionReport = async (data) => {
     return { status: 'error', error: error.response.data }
   }
 }
-
-export const postCollectionReportExcel = async (obj) => {
-  const url = API_BASE_URL + `/report/excel/collection`
+export const postDoubtfulLoansExcel = async (obj) => {
+  const url = API_BASE_URL + `/report/excel/loan-doubts`
   try {
     const res = await axios.post(url, obj)
     return { status: 'success', body: res.data }
@@ -24,8 +23,8 @@ export const postCollectionReportExcel = async (obj) => {
     return { status: 'error', error: error.response.data }
   }
 }
-export const getCollectionReportExcel = async (id) => {
-  const url = API_BASE_URL + `/report/excel/collection/${id}`
+export const getDoubtfulLoansExcel = async (id) => {
+  const url = API_BASE_URL + `/report/excel/loan-doubts/${id}`
   try {
     const res = await axios.get(url)
     return { status: 'success', body: res.data }

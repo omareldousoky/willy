@@ -1,5 +1,5 @@
-import { API_BASE_URL } from '../../../envConfig'
-import axios from '../../axiosInstance'
+import { API_BASE_URL } from '../../../../envConfig'
+import axios from '../../../axiosInstance'
 
 interface RaseedyTransactionsRequestBody {
   startDate: number

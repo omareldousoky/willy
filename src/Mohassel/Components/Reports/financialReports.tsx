@@ -24,11 +24,7 @@ import {
   postCreatedLoansExcel,
   getCreatedLoansExcel,
 } from '../../Services/APIs/Reports/createdLoansList'
-import {
-  getRescheduledLoanList,
-  postRescheduledLoanExcel,
-  getRescheduledLoanExcel,
-} from '../../../Shared/Services/APIs/Reports/rescheduledLoansList'
+
 import { LoanCreationList } from '../pdfTemplates/loanCreationList'
 import { RescheduledLoanList } from '../../../Shared/Components/pdfTemplates/Financial/rescheduledLoanList'
 import { RandomPayment } from '../../../Shared/Components/pdfTemplates/Financial/randomPayment'
@@ -77,7 +73,10 @@ import {
   fetchRaseedyTransactions,
   getRaseedyTransactionsExcel,
   postRaseedyTransactionsExcel,
-} from '../../../Shared/Services/APIs/Reports'
+  getRescheduledLoanList,
+  postRescheduledLoanExcel,
+  getRescheduledLoanExcel,
+} from '../../../Shared/Services/APIs/Reports/Financial'
 
 interface State {
   showModal?: boolean
