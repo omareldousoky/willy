@@ -231,7 +231,7 @@ export interface Application {
   branchManagerName?: string
   created?: Signature
   creationDate: number
-  customer?: Customer
+  customer?: Customer | Company
   earlyPaymentAmount?: number
   enquirerName?: string
   enquirorId?: string
