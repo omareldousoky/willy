@@ -295,7 +295,7 @@ export const StepTwoCompanyForm = (props: any) => {
         }
       </Can>
       <Row>
-        <Col sm={12}>
+        <Col sm={6}>
           <Form.Group controlId="smeSourceId">
             <Form.Label>{local.smeSourceId}</Form.Label>
             <AsyncSelect
@@ -338,6 +338,36 @@ export const StepTwoCompanyForm = (props: any) => {
             >
               {errors.smeSourceId}
             </div>
+          </Form.Group>
+        </Col>
+        <Col sm={6}>
+          <Form.Group controlId="permanentEmployeeCount">
+            <Form.Label>{`${local.permanentEmployeeCount} *`}</Form.Label>
+            <Form.Control
+              type="number"
+              name="permanentEmployeeCount"
+              data-qc="permanentEmployeeCount"
+              value={values.permanentEmployeeCount}
+              onBlur={handleBlur}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                const re = /^\d*$/
+                if (
+                  event.currentTarget.value === '' ||
+                  re.test(event.currentTarget.value)
+                ) {
+                  setFieldValue(
+                    'permanentEmployeeCount',
+                    event.currentTarget.value
+                  )
+                }
+              }}
+              isInvalid={
+                errors.permanentEmployeeCount && touched.permanentEmployeeCount
+              }
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.permanentEmployeeCount}
+            </Form.Control.Feedback>
           </Form.Group>
         </Col>
       </Row>
@@ -431,62 +461,6 @@ export const StepTwoCompanyForm = (props: any) => {
                     </Col>
                   </>
                 )}
-              </Row>
-              <Row>
-                {(ability.can('updateCustomerHasLoan', 'customer') ||
-                  !props.hasLoan) && (
-                  <Col sm={6}>
-                    <Form.Group controlId="maxPrincipal">
-                      <Form.Label>{`${local.maxCustomerPrincipal}`}</Form.Label>
-                      <Form.Control
-                        type="number"
-                        name="maxPrincipal"
-                        data-qc="maxCustomerPrincipal"
-                        value={values.maxPrincipal}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        // disabled={(!allowed && )}
-                        isInvalid={errors.maxPrincipal && touched.maxPrincipal}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.maxPrincipal}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                )}
-                <Col sm={6}>
-                  <Form.Group controlId="permanentEmployeeCount">
-                    <Form.Label>{`${local.permanentEmployeeCount} *`}</Form.Label>
-                    <Form.Control
-                      type="number"
-                      name="permanentEmployeeCount"
-                      data-qc="permanentEmployeeCount"
-                      value={values.permanentEmployeeCount}
-                      onBlur={handleBlur}
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        const re = /^\d*$/
-                        if (
-                          event.currentTarget.value === '' ||
-                          re.test(event.currentTarget.value)
-                        ) {
-                          setFieldValue(
-                            'permanentEmployeeCount',
-                            event.currentTarget.value
-                          )
-                        }
-                      }}
-                      isInvalid={
-                        errors.permanentEmployeeCount &&
-                        touched.permanentEmployeeCount
-                      }
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.permanentEmployeeCount}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </Col>
               </Row>
             </>
           )

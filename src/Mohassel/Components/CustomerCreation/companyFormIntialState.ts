@@ -32,7 +32,6 @@ export const step2Company = {
   comments: '',
   guarantorMaxLoans: 1,
   maxLoansAllowed: 1,
-  maxPrincipal: 0,
   principals: {
     maxIndividualPrincipal: 0,
     maxGroupIndividualPrincipal: 0,
@@ -141,19 +140,5 @@ export const companyCreationValidationStepTwoEdit = Yup.object().shape({
     .required()
     .min(1, local.mustBeOneOrMore)
     .max(100, local.mustBeNotMoreThanHundred)
-    .required(local.required),
-  maxPrincipal: Yup.number()
-    .min(0, local.mustBeGreaterThanZero)
-    // .test(
-    //   'maxPrincipal',
-    //   maxGlobalLimitReachedError,
-    //   function (this: any, value: any) {
-    //     const { principals } = this.parent
-    //     if (value <= principals.maxIndividualPrincipal) {
-    //       return true
-    //     }
-    //     return false
-    //   }
-    // )
     .required(local.required),
 })

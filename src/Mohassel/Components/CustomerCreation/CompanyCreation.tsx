@@ -63,7 +63,6 @@ interface State {
     comments: string
     guarantorMaxLoans: number
     maxLoansAllowed: number
-    maxPrincipal: number
     principals?: {
       maxIndividualPrincipal: number
       maxGroupIndividualPrincipal: number
@@ -166,7 +165,6 @@ class CompanyCreation extends Component<Props, State> {
         guarantorMaxLoans: res.body.guarantorMaxLoans
           ? Number(res.body.guarantorMaxLoans)
           : 1,
-        maxPrincipal: res.body.maxPrincipal ? Number(res.body.maxPrincipal) : 0,
         cbeCode: res.body.cbeCode,
         paidCapital: res.body.paidCapital,
         establishmentDate: timeToDateyyymmdd(res.body.establishmentDate),
