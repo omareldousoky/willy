@@ -83,11 +83,14 @@ const CreditInquiryRequests = () => {
     const { fromDate, toDate, branches, creditInquiryStatus } = values
     const startDate = dayjs(fromDate).startOf('day').valueOf()
     const endDate = dayjs(toDate).endOf('day').valueOf()
-
+    const branchesArray =
+      branches.length === 1 && branches[0]._id === ''
+        ? []
+        : branches.map((branch) => branch._id)
     const excelRequestModel = {
       startDate,
       endDate,
-      branches: branches.map((branch) => branch._id),
+      branches: branchesArray,
       status: creditInquiryStatus,
     }
 
