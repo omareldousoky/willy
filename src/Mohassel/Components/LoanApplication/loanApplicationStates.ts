@@ -425,6 +425,8 @@ export const SMELoanApplicationValidation = Yup.object().shape({
 export const SMELoanApplicationStep2Validation = Yup.object().shape({
   entitledToSignIds: Yup.array()
     .min(1, local.atLeastOneEntiitledToSign)
+    .required(local.required),
+  entitledToSign: Yup.array()
     .test(
       'entitledToSignIds',
       `${local.required} : ${local.position}`,

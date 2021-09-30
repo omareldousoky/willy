@@ -187,14 +187,18 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                 (el) =>
                                   el.value === values.entitledToSign[i].position
                               )}
-                              onChange={(event) => {
+                              defaultValue={{
+                                label: local.other,
+                                value: 'other',
+                              }}
+                              onChange={async (event) => {
                                 const { value } = event as OptionType
-                                setFieldValue(
-                                  `entitledToSign[${i}].position`,
+                                await setFieldValue(
+                                  `entitledToSignIds[${i}].position`,
                                   value
                                 )
                                 setFieldValue(
-                                  `entitledToSignIds[${i}].position`,
+                                  `entitledToSign[${i}].position`,
                                   value
                                 )
                               }}
@@ -206,12 +210,12 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                   )
                 })}
                 <Button onClick={() => props.addEntitledToSignRow()}>+</Button>
-                {errors.entitledToSignIds && (
+                {errors.entitledToSign && (
                   <Form.Control.Feedback
                     type="invalid"
                     style={{ display: 'block' }}
                   >
-                    {errors.entitledToSignIds}
+                    {errors.entitledToSign}
                   </Form.Control.Feedback>
                 )}
               </Col>
