@@ -106,10 +106,12 @@ export const StepTwoCompanyForm = (props: any) => {
       size: 100,
       name,
     })
-
-    res.status === 'success'
-      ? setCbeCode(res.body.data)
-      : Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    if (res.status === 'success') {
+      setCbeCode(res.body.data)
+    } else {
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      setCbeCode([])
+    }
   }
   useEffect(() => {
     const token = getCookie('token')
@@ -153,9 +155,9 @@ export const StepTwoCompanyForm = (props: any) => {
               </Form.Control>
             ) : (
               <Form.Control
-                type="number"
+                type="text"
                 name="cbeCode"
-                value={values.cbeCode}
+                value={cbeCode.length === 0 ? '' : cbeCode[0].cbeCode}
                 onBlur={handleBlur}
                 onChange={handleChange}
                 isInvalid={errors.cbeCode && touched.cbeCode}
