@@ -172,7 +172,7 @@ export const getCompanyInfo = ({
       fieldTitle: local.establishmentDate,
       fieldData:
         (company.establishmentDate &&
-          getDateAndTime(company.establishmentDate)) ||
+          timeToArabicDate(company.establishmentDate, false)) ||
         '',
       showFieldCondition: true,
     },
