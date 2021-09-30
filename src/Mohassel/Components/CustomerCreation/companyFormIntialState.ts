@@ -98,6 +98,7 @@ export const companyCreationValidationStepOne = Yup.object().shape({
       .length(9, local.lengthShouldBe9)
       .required(local.required),
   }),
+  governorate: Yup.string().required(local.required),
 })
 
 export const companyCreationValidationStepTwo = Yup.object().shape({

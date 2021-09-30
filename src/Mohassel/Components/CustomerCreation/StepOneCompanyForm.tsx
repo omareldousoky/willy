@@ -188,7 +188,7 @@ export const StepOneCompanyForm = (props: any) => {
         <Col sm={6}>
           <Form.Group controlId="governorate">
             <Form.Label className="customer-form-label">
-              {local.iscoreIssuingAuthorities}
+              {`${local.iscoreIssuingAuthorities} *`}
             </Form.Label>
             <Form.Control
               as="select"
