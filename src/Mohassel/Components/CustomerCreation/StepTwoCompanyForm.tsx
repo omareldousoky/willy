@@ -157,7 +157,9 @@ export const StepTwoCompanyForm = (props: any) => {
               <Form.Control
                 type="text"
                 name="cbeCode"
-                value={cbeCode.length === 0 ? '' : cbeCode[0].cbeCode}
+                value={
+                  cbeCode.length === 0 ? values.cbeCode : cbeCode[0].cbeCode
+                }
                 onBlur={handleBlur}
                 onChange={handleChange}
                 isInvalid={errors.cbeCode && touched.cbeCode}
