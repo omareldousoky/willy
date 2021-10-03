@@ -113,11 +113,11 @@ export const companyCreationValidationStepTwo = Yup.object().shape({
   comments: Yup.string().trim().max(500, local.maxLength100),
   paidCapital: Yup.string().trim().required(local.required),
   establishmentDate: Yup.string().trim().required(local.required),
-  smeBankName: Yup.string().trim().required(local.required),
-  smeBankBranch: Yup.string().trim().required(local.required),
-  smeBankAccountNumber: Yup.string().trim().required(local.required),
-  smeIbanNumber: Yup.string().trim().required(local.required),
-  cbeCode: Yup.string().trim().required(local.required),
+  smeBankName: Yup.string().required(local.required),
+  smeBankBranch: Yup.string().required(local.required),
+  smeBankAccountNumber: Yup.string().required(local.required),
+  smeIbanNumber: Yup.string().required(local.required),
+  cbeCode: Yup.string().required(local.required),
 })
 
 export const companyCreationValidationStepTwoEdit = Yup.object().shape({
@@ -142,4 +142,11 @@ export const companyCreationValidationStepTwoEdit = Yup.object().shape({
     .min(1, local.mustBeOneOrMore)
     .max(100, local.mustBeNotMoreThanHundred)
     .required(local.required),
+  paidCapital: Yup.string().trim().required(local.required),
+  establishmentDate: Yup.string().trim().required(local.required),
+  smeBankName: Yup.string().required(local.required),
+  smeBankBranch: Yup.string().required(local.required),
+  smeBankAccountNumber: Yup.string().required(local.required),
+  smeIbanNumber: Yup.string().required(local.required),
+  cbeCode: Yup.string().required(local.required),
 })
