@@ -1,6 +1,6 @@
 import React from 'react'
+import { OfficerBranchPercentPaymentResponse } from '../../../../Models/operationsReports'
 import { Header } from '../../pdfTemplateCommon/header'
-import { OfficerBranchPercentPaymentResponse } from '../../../../../Mohassel/Services/interfaces'
 import { formatPercent } from './officersPercentPayment'
 import './officersPercentPayment.scss'
 import OfficersPercentPaymentFooter from './officersPercentPaymentFooter'

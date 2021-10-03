@@ -204,3 +204,25 @@ interface CommonOfficerBranchPercentPayment {
   walletAmount?: number
   periodCollections?: number
 }
+interface LoansBriefRow {
+  individualLoansCount?: number
+  individualLoansCredit?: number
+  groupLoansCount?: number
+  groupLoansCredit?: number
+  loansTotal?: number
+  loansTotalAmount?: number
+  individualRequestsCount?: number
+  individualRequestsCredit?: number
+  groupRequestsCount?: number
+  groupRequestsCredit?: number
+  requestsTotalCount?: number
+  requestsTotalAmount?: number
+}
+
+export interface BranchBrief extends LoansBriefRow {
+  branchName: string
+}
+
+export interface LoansBriefingReportResponse extends LoansBriefRow {
+  branchBriefing: BranchBrief[]
+}

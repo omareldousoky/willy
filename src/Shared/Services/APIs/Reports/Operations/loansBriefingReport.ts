@@ -1,11 +1,11 @@
 import { AxiosResponse } from 'axios'
+import axios from '../../../axiosInstance'
+import { API_BASE_URL } from '../../../../envConfig'
+import { ApiResponse } from '../../../../Models/common'
 import {
-  ApiResponse,
-  OperationsReportRequest,
   LoansBriefingReportResponse,
-} from '../../interfaces'
-import axios from '../../../../Shared/Services/axiosInstance'
-import { API_BASE_URL } from '../../../../Shared/envConfig'
+  OperationsReportRequest,
+} from '../../../../Models/operationsReports'
 
 const fetchLoansBriefingReportUrl = `${API_BASE_URL}/report/loans-briefing-report`
 
