@@ -83,12 +83,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.UnpaidInstallmentsByOfficer,
           local: 'الاقساط المستحقة بالمندوب',
-          inputs: [
-            'dateFromTo',
-            'creationDateFromTo',
-            'branches',
-            'representatives',
-          ],
+          inputs: ['dateFromTo', 'branches', 'representatives'],
           permission: 'unpaidInstallmentsByOfficer',
         },
         {
@@ -112,12 +107,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.OfficersBranchPercentPayment,
           local: 'نسبة سداد المندوبين 3',
-          inputs: [
-            'dateFromTo',
-            'creationDateFromTo',
-            'branches',
-            'gracePeriod',
-          ],
+          inputs: ['dateFromTo', 'branches', 'gracePeriod'],
           permission: 'officerBranchPercentPayment',
         },
         {
@@ -275,8 +265,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       endDate: values.toDate,
       branches: values.branches,
       representatives: values.representatives,
-      creationDateFrom: values.creationDateFrom,
-      creationDateTo: values.creationDateTo,
     }
 
     const res = await unpaidInstallmentsByOfficer(request)
@@ -317,8 +305,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       branches: values.branches,
       representatives: values.representatives,
       gracePeriod: values.gracePeriod,
-      creationDateFrom: values.creationDateFrom,
-      creationDateTo: values.creationDateTo,
     }
 
     const res = await fetchOfficersBranchPercentPaymentReport(request)
