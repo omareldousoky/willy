@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import { Company, Customer } from './interfaces'
@@ -18,6 +18,8 @@ import {
 import Can from '../../Mohassel/config/Can'
 import { FieldProps } from '../Components/Profile/types'
 import { Score } from '../Models/Customer'
+import { getUserDetails } from './APIs/Users/userDetails'
+import useApi from '../hooks/useApi'
 
 interface IscoreInfo {
   score?: Score
@@ -95,6 +97,15 @@ const iscoreField = ({
     </>
   )
 }
+
+export const UserName = ({ id }: { id: string }) => {
+  const [data, api] = useApi(getUserDetails, id)
+  useEffect(() => {
+    api.get()
+  }, [])
+  return <> {data?.user?.name} </>
+}
+
 export const getCompanyInfo = ({
   company,
   score,
@@ -178,7 +189,7 @@ export const getCompanyInfo = ({
     },
     {
       fieldTitle: local.smeSourceId,
-      fieldData: company.smeSourceId || '',
+      fieldData: <UserName id={company.smeSourceId || ''} />,
       showFieldCondition: true,
     },
     {
