@@ -1,13 +1,13 @@
 import { AxiosResponse } from 'axios'
+import axios from '../../../axiosInstance'
+import { API_BASE_URL } from '../../../../envConfig'
+import { OfficerPercentPaymentResponse } from '../../../../../Mohassel/Services/interfaces'
+import { ApiResponse } from '../../../../Models/common'
 import {
-  ApiResponse,
-  OfficerBranchPercentPaymentResponse,
-  OfficerPercentPaymentResponse,
-  OfficersBranchPercentPaymentRequest,
   OfficersPercentPaymentRequest,
-} from '../../interfaces'
-import axios from '../../../../Shared/Services/axiosInstance'
-import { API_BASE_URL } from '../../../../Shared/envConfig'
+  OfficersBranchPercentPaymentRequest,
+  OfficerBranchPercentPaymentResponse,
+} from '../../../../Models/operationsReports'
 
 const fetchOfficerPercentPaymentUrl = `${API_BASE_URL}/report/officer-percent-payment`
 const fetchOfficerBranchPercentPaymentUrl = `${API_BASE_URL}/report/officer-branch-percent-payment`

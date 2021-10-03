@@ -4,15 +4,11 @@ import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import { fetchLoansBriefingReport } from '../../Services/APIs/Reports/loansBriefingReport'
-import { installmentsDuePerOfficerCustomerCard } from '../../Services/APIs/Reports/installmentsDuePerOfficerCustomerCard'
-import { unpaidInstallmentsByOfficer } from '../../Services/APIs/Reports/unpaidInstallmentsByOfficer'
-import { fetchUnpaidInstallmentsPerAreaReport } from '../../Services/APIs/Reports/unpaidInstallmentsPerArea'
 import LoansBriefing2Pdf from '../pdfTemplates/loansBriefing/loansBriefing2'
 import UnpaidInst from '../pdfTemplates/unpaidInst/unpaidInst'
 import UnpaidInstallmentsByOfficerPdf from '../pdfTemplates/unpaidInstallmentsByOfficer/unpaidInstallmentsByOfficer'
 import InstallmentsDuePerOfficerCustomerCardPdf from '../pdfTemplates/installmentsDuePerOfficerCustomerCard/installmentsDuePerOfficerCustomerCard'
 import {
-  ApiResponse,
   CustomersArrearsRequest,
   InstallmentsDuePerOfficerCustomerCardRequest,
   OfficersBranchPercentPaymentRequest,
@@ -21,34 +17,36 @@ import {
   OperationsReportRequest,
   PaidArrearsRequest,
   UnpaidInstallmentsByOfficerRequest,
-} from '../../Services/interfaces'
+} from '../../../Shared/Models/operationsReports'
 import {
-  fetchOfficersBranchPercentPaymentReport,
+  fetchUnpaidInstallmentsPerAreaReport,
   fetchOfficersPercentPaymentReport,
-} from '../../Services/APIs/Reports/officersPercentPayment'
+  fetchOfficersBranchPercentPaymentReport,
+  fetchLeakedCustomersReport,
+  fetchPaidArrearsReport,
+  fetchCustomersArrearsReport,
+  fetchMonthComparisonReport,
+  fetchActiveWalletIndividualReport,
+  ActiveWalletRequest,
+  fetchActiveWalletGroupReport,
+  installmentsDuePerOfficerCustomerCard,
+  unpaidInstallmentsByOfficer,
+  fetchDueInstallmentsReport,
+} from '../../../Shared/Services/APIs/Reports/Operations'
 import OfficersPercentPaymentPdf from '../pdfTemplates/officersPercentPayment/officersPercentPayment'
 import OfficerBranchPercentPayment from '../pdfTemplates/officersPercentPayment/officersBranchPercentPayment'
 import LeakedCustomersPDF from '../pdfTemplates/LeakedCustomers/leakedCustomers'
-import { fetchLeakedCustomersReport } from '../../Services/APIs/Reports/leakedCustomers'
-import { fetchDueInstallmentsReport } from '../../Services/APIs/Reports/dueInstallments'
 import DueInstallmentsPdf from '../pdfTemplates/dueInstallments/dueInstallments'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { fetchCustomersArrearsReport } from '../../Services/APIs/Reports/customersArrears'
 import CustomersArrearsPdf from '../pdfTemplates/customersArrears/customersArrears'
-import { fetchPaidArrearsReport } from '../../Services/APIs/Reports/paidArrears'
 import PaidArrearsPdf from '../pdfTemplates/paidArrears/paidArrears'
-import { fetchMonthComparisonReport } from '../../Services/APIs/Reports/monthComparison'
 import MonthComparisonPdf from '../pdfTemplates/monthComparison/monthComparison'
 import ActiveWalletIndividualPdf from '../pdfTemplates/activeWalletIndividual/activeWalletIndividual'
-import {
-  ActiveWalletRequest,
-  fetchActiveWalletGroupReport,
-  fetchActiveWalletIndividualReport,
-} from '../../Services/APIs/Reports/activeWallet'
 import ActiveWalletGroupPdf from '../pdfTemplates/activeWalletGroup/activeWalletGroup'
 import { PDFList } from '../../../Shared/Components/PdfList'
 import { PDF } from '../../../Shared/Components/PdfList/types'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
+import { ApiResponse } from '../../../Shared/Models/common'
 
 interface OperationsReportsState {
   showModal?: boolean

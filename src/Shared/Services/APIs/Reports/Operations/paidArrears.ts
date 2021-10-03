@@ -1,11 +1,11 @@
 import { AxiosResponse } from 'axios'
+import axios from '../../../axiosInstance'
+import { API_BASE_URL } from '../../../../envConfig'
+import { ApiResponse } from '../../../../Models/common'
 import {
-  ApiResponse,
   PaidArrearsRequest,
   PaidArrearsResponse,
-} from '../../interfaces'
-import axios from '../../../../Shared/Services/axiosInstance'
-import { API_BASE_URL } from '../../../../Shared/envConfig'
+} from '../../../../Models/operationsReports'
 
 const fetchPaidArrears = `${API_BASE_URL}/report/paid-arrears`
 

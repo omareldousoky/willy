@@ -1,11 +1,12 @@
 import { AxiosResponse } from 'axios'
+
+import axios from '../../../axiosInstance'
+import { API_BASE_URL } from '../../../../envConfig'
+import { ApiResponse } from '../../../../Models/common'
 import {
-  ApiResponse,
-  MonthComparisonReportResponse,
   OperationsReportRequest,
-} from '../../interfaces'
-import axios from '../../../../Shared/Services/axiosInstance'
-import { API_BASE_URL } from '../../../../Shared/envConfig'
+  MonthComparisonReportResponse,
+} from '../../../../Models/operationsReports'
 
 const fetchMonthComparison = `${API_BASE_URL}/report/month-comparison`
 

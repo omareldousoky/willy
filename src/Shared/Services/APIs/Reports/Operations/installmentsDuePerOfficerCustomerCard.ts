@@ -1,6 +1,6 @@
-import { InstallmentsDuePerOfficerCustomerCardRequest } from '../../interfaces'
-import axios from '../../../../Shared/Services/axiosInstance'
-import { API_BASE_URL } from '../../../../Shared/envConfig'
+import axios from '../../../axiosInstance'
+import { API_BASE_URL } from '../../../../envConfig'
+import { InstallmentsDuePerOfficerCustomerCardRequest } from '../../../../Models/operationsReports'
 
 export const installmentsDuePerOfficerCustomerCard = async (
   request: InstallmentsDuePerOfficerCustomerCardRequest
