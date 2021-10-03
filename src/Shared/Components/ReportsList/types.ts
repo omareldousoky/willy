@@ -3,6 +3,7 @@ export interface List {
   created?: { at: number; by?: string; userName?: string }
   status: 'created' | 'queued' | 'failed' | 'processing'
   generatedAt: number
+  fileGeneratedAt?: number
   fileName?: string
   failReason?: string
   key?: string
@@ -10,5 +11,5 @@ export interface List {
 }
 export interface ReportsListProps {
   list: List[]
-  onClickDownload(itemId: string): void
+  onClickDownload?: (itemId: string) => void
 }

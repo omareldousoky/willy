@@ -130,7 +130,7 @@ export const CustomerProfile = () => {
       customerCreationDate: customer.created?.at || 0,
       customerName: customer.customerName || '',
       nationalId: customer.nationalId || '',
-      customerHomeAddress: customer.currentHomeAddress || '',
+      customerHomeAddress: customer.customerHomeAddress || '',
       mobilePhoneNumber: customer.mobilePhoneNumber || '',
       initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
       customerGuarantors: customerGuarantors || [],
@@ -516,7 +516,7 @@ export const CustomerProfile = () => {
       {
         icon: 'download',
         title: local.downloadPDF,
-        permission: !['pending-initialization', 'pending-update'].includes(
+        permission: ['initialization-reviewed', 'update-reviewed'].includes(
           customerDetails?.consumerFinanceLimitStatus ?? ''
         ),
         onActionClick: () => {
@@ -566,7 +566,8 @@ export const CustomerProfile = () => {
           ((ability.can('reviewCFLimit', 'customer') &&
             (customerDetails?.initialConsumerFinanceLimit ?? 0) <
               globalLimits.CFHQMinimumApprovalLimit) ||
-            ability.can('reviewCFLimitHQ', 'customer')),
+            ability.can('reviewCFLimitHQ', 'customer')) &&
+          !customerDetails?.blocked?.isBlocked,
         onActionClick: () => setModalData('review'),
       },
       {
@@ -575,7 +576,9 @@ export const CustomerProfile = () => {
         permission:
           ['initialization-reviewed', 'update-reviewed'].includes(
             customerDetails?.consumerFinanceLimitStatus ?? ''
-          ) && ability.can('approveCFLimit', 'customer'),
+          ) &&
+          ability.can('approveCFLimit', 'customer') &&
+          !customerDetails?.blocked?.isBlocked,
         onActionClick: () => setModalData('approve'),
       },
     ]

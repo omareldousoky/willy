@@ -173,6 +173,23 @@ class PaymentIcons extends Component<PaymentIconsProps, {}> {
                 </Button>
               </div>
             )}
+          {this.props.paymentType === 'random' && (
+            <Can I="payInstallment" a="application">
+              <div className="payment-icon m-4">
+                <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
+
+                <Button
+                  className="my-4"
+                  onClick={() => {
+                    this.props.changePaymentState(3)
+                  }}
+                  variant="primary"
+                >
+                  {local.manualPayment}
+                </Button>
+              </div>
+            </Can>
+          )}
         </div>
       </Card>
     )
