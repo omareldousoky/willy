@@ -3,11 +3,6 @@ import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-import { fetchLoansBriefingReport } from '../../Services/APIs/Reports/loansBriefingReport'
-import LoansBriefing2Pdf from '../pdfTemplates/loansBriefing/loansBriefing2'
-import UnpaidInst from '../../../Shared/Components/pdfTemplates/Operations/unpaidInst/unpaidInst'
-import UnpaidInstallmentsByOfficerPdf from '../../../Shared/Components/pdfTemplates/Operations/unpaidInstallmentsByOfficer/unpaidInstallmentsByOfficer'
-import InstallmentsDuePerOfficerCustomerCardPdf from '../../../Shared/Components/pdfTemplates/Operations/installmentsDuePerOfficerCustomerCard/installmentsDuePerOfficerCustomerCard'
 import {
   CustomersArrearsRequest,
   InstallmentsDuePerOfficerCustomerCardRequest,
@@ -33,27 +28,30 @@ import {
   unpaidInstallmentsByOfficer,
   fetchDueInstallmentsReport,
 } from '../../../Shared/Services/APIs/Reports/Operations'
-import OfficersPercentPaymentPdf from '../../../Shared/Components/pdfTemplates/Operations/officersPercentPayment/officersPercentPayment'
-import OfficerBranchPercentPayment from '../../../Shared/Components/pdfTemplates/Operations/officersPercentPayment/officersBranchPercentPayment'
-import LeakedCustomersPDF from '../../../Shared/Components/pdfTemplates/Operations/LeakedCustomers/leakedCustomers'
-import DueInstallmentsPdf from '../../../Shared/Components/pdfTemplates/Operations/dueInstallments/dueInstallments'
+import { PDFList } from '../../../Shared/Components/PdfList'
+import { PDF } from '../../../Shared/Components/PdfList/types'
+import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
+import { ApiResponse } from '../../../Shared/Models/common'
 import { getErrorMessage } from '../../../Shared/Services/utils'
+import LeakedCustomersPDF from '../../../Shared/Components/pdfTemplates/Operations/LeakedCustomers/leakedCustomers'
+import OfficerBranchPercentPayment from '../../../Shared/Components/pdfTemplates/Operations/officersPercentPayment/officersBranchPercentPayment'
+import UnpaidInst from '../../../Shared/Components/pdfTemplates/Operations/unpaidInst/unpaidInst'
+import UnpaidInstallmentsByOfficerPdf from '../../../Shared/Components/pdfTemplates/Operations/unpaidInstallmentsByOfficer/unpaidInstallmentsByOfficer'
+import InstallmentsDuePerOfficerCustomerCardPdf from '../../../Shared/Components/pdfTemplates/Operations/installmentsDuePerOfficerCustomerCard/installmentsDuePerOfficerCustomerCard'
+import OfficersPercentPaymentPdf from '../../../Shared/Components/pdfTemplates/Operations/officersPercentPayment/officersPercentPayment'
+import DueInstallmentsPdf from '../../../Shared/Components/pdfTemplates/Operations/dueInstallments/dueInstallments'
 import CustomersArrearsPdf from '../../../Shared/Components/pdfTemplates/Operations/customersArrears/customersArrears'
 import PaidArrearsPdf from '../../../Shared/Components/pdfTemplates/Operations/paidArrears/paidArrears'
 import MonthComparisonPdf from '../../../Shared/Components/pdfTemplates/Operations/monthComparison/monthComparison'
 import ActiveWalletIndividualPdf from '../../../Shared/Components/pdfTemplates/Operations/activeWalletIndividual/activeWalletIndividual'
 import ActiveWalletGroupPdf from '../../../Shared/Components/pdfTemplates/Operations/activeWalletGroup/activeWalletGroup'
-import { PDFList } from '../../../Shared/Components/PdfList'
-import { PDF } from '../../../Shared/Components/PdfList/types'
-import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
-import { ApiResponse } from '../../../Shared/Models/common'
 
 interface OperationsReportsState {
   showModal?: boolean
   print?: string
   pdfsArray: Array<PDF>
   selectedPdf: PDF
-  data: any // TODO: Handle type
+  data: any
   loading: boolean
   fromDate: string
   toDate: string
@@ -61,7 +59,6 @@ interface OperationsReportsState {
 }
 
 enum Reports {
-  LoansBriefing2 = 'loansBriefing2',
   OfficersPercentPayment = 'officersPercentPayment',
   OfficersBranchPercentPayment = 'officersBranchPercentPayment',
   UnpaidInstallmentsByOfficer = 'unpaidInstallmentsByOfficer',
@@ -83,12 +80,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       showModal: false,
       print: '',
       pdfsArray: [
-        {
-          key: Reports.LoansBriefing2,
-          local: 'ملخص الحالات والقروض 2',
-          inputs: ['dateFromTo', 'branches'],
-          permission: 'briefingReport',
-        },
         {
           key: Reports.UnpaidInstallmentsByOfficer,
           local: 'الاقساط المستحقة بالمندوب',
@@ -200,8 +191,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     const { fromDate, toDate, date } = values
     this.setState({ loading: true, showModal: false, fromDate, toDate, date })
     switch (this.state.selectedPdf.key) {
-      case Reports.LoansBriefing2:
-        return this.fetchLoansBriefing(values)
       case Reports.UnpaidInstallmentsByOfficer:
         return this.fetchUnpaidInstallmentsByOfficer(values)
       case Reports.InstallmentsDuePerOfficerCustomerCard:
@@ -264,11 +253,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       endDate: toDate,
       branches,
     }
-  }
-
-  async fetchLoansBriefing(values) {
-    const res = await fetchLoansBriefingReport(this.reportRequest(values))
-    this.handleFetchReport(res, Reports.LoansBriefing2)
   }
 
   async fetchInstallmentsDuePerOfficerCustomerCard(values) {
@@ -441,13 +425,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             show={this.state.showModal}
             hideModal={() => this.setState({ showModal: false })}
             submit={(values) => this.handleSubmit(values)}
-          />
-        )}
-        {this.state.print === Reports.LoansBriefing2 && this.state.data && (
-          <LoansBriefing2Pdf
-            data={this.state.data}
-            fromDate={this.state.fromDate}
-            toDate={this.state.toDate}
           />
         )}
         {this.state.print === Reports.InstallmentsDuePerOfficerCustomerCard &&

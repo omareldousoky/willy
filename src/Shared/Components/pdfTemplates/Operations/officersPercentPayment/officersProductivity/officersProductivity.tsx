@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react'
-import { OfficersProductivityResponse } from '../../../../Models/OfficersProductivityReport'
-import Orientation from '../../../../../Shared/Components/Common/orientation'
+import { OfficersProductivityResponse } from '../../../../../../Mohassel/Models/OfficersProductivityReport'
+import Orientation from '../../../../Common/orientation'
 import { formatPercent } from '../officersPercentPayment'
 import '../officersPercentPayment.scss'
 import OfficersPercentPaymentFooter from '../officersPercentPaymentFooter'
 import ManagerTotalRow from './managerTotalRow'
-import { Header } from '../../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
+import { Header } from '../../../pdfTemplateCommon/header'
 
 interface OfficersProductivityProps {
   data: OfficersProductivityResponse

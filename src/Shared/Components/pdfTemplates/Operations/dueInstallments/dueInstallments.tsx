@@ -1,11 +1,12 @@
 import React from 'react'
-import store from '../../../../Shared/redux/store'
+import { DueInstallmentsResponse } from '../../../../Models/operationsReports'
+import store from '../../../../redux/store'
 import {
   getCurrentTime,
   numbersToArabic,
   timeToArabicDate,
-} from '../../../../Shared/Services/utils'
-import { DueInstallmentsResponse } from '../../../Services/interfaces'
+} from '../../../../Services/utils'
+
 import './dueInstallments.scss'
 
 interface DueInstallmentsProps {

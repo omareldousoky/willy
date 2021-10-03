@@ -1,9 +1,6 @@
 import React from 'react'
-import {
-  numbersToArabic,
-  timeToArabicDate,
-} from '../../../../Shared/Services/utils'
-import Orientation from '../../../../Shared/Components/Common/orientation'
+import { numbersToArabic, timeToArabicDate } from '../../../../Services/utils'
+import Orientation from '../../../Common/orientation'
 import './installmentsDuePerOfficerCustomerCard.scss'
 
 const installmentStatuses = {

@@ -1,18 +1,18 @@
 import React from 'react'
-import store from '../../../../Shared/redux/store'
+import store from '../../../../redux/store'
 import {
   beneficiaryType,
   getCurrentTime,
   groupBy,
   numbersToArabic,
   timeToArabicDate,
-} from '../../../../Shared/Services/utils'
+} from '../../../../Services/utils'
+import Orientation from '../../../Common/orientation'
+import './customersArrears.scss'
 import {
   CustomersArrearsResponse,
   CustomersArrearsSingleResponse,
-} from '../../../Services/interfaces'
-import Orientation from '../../../../Shared/Components/Common/orientation'
-import './customersArrears.scss'
+} from '../../../../Models/operationsReports'
 
 interface CustomersArrearsProps {
   date: string

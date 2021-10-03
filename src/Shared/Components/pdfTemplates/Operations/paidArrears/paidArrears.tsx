@@ -1,11 +1,12 @@
 import React from 'react'
-import store from '../../../../Shared/redux/store'
+import { PaidArrearsResponse } from '../../../../Models/operationsReports'
+import store from '../../../../redux/store'
 import {
   getCurrentTime,
-  numbersToArabic,
   timeToArabicDate,
-} from '../../../../Shared/Services/utils'
-import { PaidArrearsResponse } from '../../../Services/interfaces'
+  numbersToArabic,
+} from '../../../../Services/utils'
+
 import './paidArrears.scss'
 
 interface PaidArrearsProps {

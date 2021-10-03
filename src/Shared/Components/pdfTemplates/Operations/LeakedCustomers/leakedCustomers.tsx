@@ -1,6 +1,7 @@
 import React from 'react'
-import { timeToArabicDate } from '../../../../Shared/Services/utils'
-import { LeakedCustomersReportResponse } from '../../../Services/interfaces'
+import { LeakedCustomersReportResponse } from '../../../../Models/operationsReports'
+import { timeToArabicDate } from '../../../../Services/utils'
+
 import './leakedCustomers.scss'
 
 type Props = {

@@ -1,13 +1,13 @@
 import React from 'react'
-import store from '../../../../Shared/redux/store'
+import store from '../../../../redux/store'
 import {
   getCurrentTime,
   numbersToArabic,
   timeToArabicDate,
-} from '../../../../Shared/Services/utils'
-import { MonthComparisonReportResponse } from '../../../Services/interfaces'
-import Orientation from '../../../../Shared/Components/Common/orientation'
+} from '../../../../Services/utils'
+import Orientation from '../../../Common/orientation'
 import './monthComparison.scss'
+import { MonthComparisonReportResponse } from '../../../../Models/operationsReports'
 
 interface PaidArrearsProps {
   fromDate: string

@@ -1,11 +1,8 @@
 import React from 'react'
 import './unpaidInst.scss'
 import Table from 'react-bootstrap/Table'
-import local from '../../../../Shared/Assets/ar.json'
-import {
-  numbersToArabic,
-  timeToArabicDate,
-} from '../../../../Shared/Services/utils'
+import local from '../../../../Assets/ar.json'
+import { numbersToArabic, timeToArabicDate } from '../../../../Services/utils'
 
 const UnpaidInst = (props) => {
   const startDate = new Date(props.fromDate).valueOf()

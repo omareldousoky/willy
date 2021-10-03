@@ -6,6 +6,7 @@ import {
   Tab,
 } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import FinancialReports from './financialReports'
+import OperationsReports from './operationsReports'
 
 interface State {
   activeTab: string
@@ -37,10 +38,10 @@ class ReportsHome extends Component<{}, State> {
         //   permission: 'cibScreen',
         //   permissionKey: 'report',
         // },
-        // {
-        //   header: local.operationsReports,
-        //   stringKey: 'operationsReports',
-        // },
+        {
+          header: local.operationsReports,
+          stringKey: 'operationsReports',
+        },
         // {
         //     header: local.oracleIntegration,
         //     stringKey: 'oracleIntegration',
@@ -80,8 +81,8 @@ class ReportsHome extends Component<{}, State> {
       //   return <CIBReports />
       // case 'oracleIntegration':
       //   return <OracleIntegration />
-      // case 'operationsReports':
-      //   return <OperationsReports />
+      case 'operationsReports':
+        return <OperationsReports />
       // case 'tasaheelReports':
       //   return <TasaheelReports />
       // case 'laundryReports':
