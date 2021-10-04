@@ -189,7 +189,11 @@ export const getCompanyInfo = ({
     },
     {
       fieldTitle: local.smeSourceId,
-      fieldData: company.smeSourceId && <UserName id={company.smeSourceId} />,
+      fieldData: company.smeSourceId ? (
+        <UserName id={company.smeSourceId} />
+      ) : (
+        local.na
+      ),
       showFieldCondition: true,
     },
     {
