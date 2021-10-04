@@ -1190,5 +1190,7 @@
   "reviewCFCustomerLimit": "مراجعة الحد الائتماني",
   "uploadDocuments": "رفع المستندات",
   "downloadDocuments": "تنزيل المستندات",
-  "convertToCustomer": "تحويل إلي عميل"
+  "convertToCustomer": "تحويل إلي عميل",
+  "cbeCodes": "أكواد البنك المركزي",
+  "fileUpload": "رفع الملف"
 }
