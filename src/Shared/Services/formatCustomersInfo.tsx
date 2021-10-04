@@ -223,7 +223,7 @@ export const getCompanyInfo = ({
     },
     {
       fieldTitle: local.permanentEmployeeCount,
-      fieldData: company.permanentEmployeeCount || '',
+      fieldData: company.permanentEmployeeCount,
       showFieldCondition: true,
     },
   ]
