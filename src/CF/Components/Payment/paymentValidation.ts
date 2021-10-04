@@ -68,6 +68,23 @@ export const paymentValidation = () =>
       }),
   })
 
+export const earlyPaymentValidation = Yup.object().shape({
+  payerType: Yup.string().required(local.required),
+  payerId: Yup.string().when(['payerType', 'beneficiaryType'], {
+    is: (payerType, beneficiaryType) =>
+      (payerType === 'beneficiary' && beneficiaryType === 'group') ||
+      payerType === 'employee',
+    then: Yup.string().required(local.required),
+    otherwise: Yup.string(),
+  }),
+  payerName: Yup.string().when('payerType', {
+    is: (payerType) => payerType === 'family' || payerType === 'nonFamily',
+    then: Yup.string().required(local.required),
+    otherwise: Yup.string(),
+  }),
+  payerNationalId: Yup.string(),
+})
+
 export const manualPaymentValidation = () =>
   Yup.object().shape({
     payAmount: Yup.number()

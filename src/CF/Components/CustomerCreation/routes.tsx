@@ -5,6 +5,7 @@ import { CustomerProfile } from './CustomerProfile'
 import CustomersList from './CustomersList'
 import ClearanceCreation from '../Clearance/clearanceCreation'
 import local from '../../../Shared/Assets/ar.json'
+import MoveCustomers from '../MoveCustomers/moveCustomers'
 
 export const customerCreationRoutes = {
   path: '/customers',
@@ -40,6 +41,15 @@ export const customerCreationRoutes = {
       render: (props) => (
         <Can I="newClearance" a="application">
           <ClearanceCreation {...props} />
+        </Can>
+      ),
+    },
+    {
+      path: '/move-customers',
+      label: local.moveCustomers,
+      render: (props) => (
+        <Can I="changeOfficer" a="customer">
+          <MoveCustomers {...props} />
         </Can>
       ),
     },

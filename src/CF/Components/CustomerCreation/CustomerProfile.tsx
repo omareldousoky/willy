@@ -6,6 +6,7 @@ import { Customer } from '../../../Shared/Services/interfaces'
 import {
   cfLimitStatusLocale,
   getErrorMessage,
+  iscoreDate,
 } from '../../../Shared/Services/utils'
 import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -16,7 +17,10 @@ import {
   TabDataProps,
 } from '../../../Shared/Components/Profile/types'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
-import { getIscoreCached } from '../../../Shared/Services/APIs/iScore'
+import {
+  getIscoreCached,
+  getIscore,
+} from '../../../Shared/Services/APIs/iScore'
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCustomer'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
@@ -32,16 +36,8 @@ import {
   GlobalCFLimits,
   globalCfLimitsInitialValues,
 } from '../../Models/globalLimits'
+import { Score } from '../../../Shared/Models/Customer'
 
-export interface Score {
-  id?: string // commercialRegisterNumber
-  customerName?: string
-  activeLoans?: string
-  iscore: string
-  nationalId: string
-  url?: string
-  bankCodes?: string[]
-}
 interface LocationState {
   id: string
 }
@@ -77,7 +73,7 @@ export const CustomerProfile = () => {
     customerCFContract,
     setCustomerCFContract,
   ] = useState<ConsumerFinanceContractData>()
-  const [iScoreDetails, setIScoreDetails] = useState<Score>()
+  const [iScoreDetails, setIScoreDetails] = useState<Score[]>()
   const [activeTab, setActiveTab] = useState('workInfo')
   const [print, setPrint] = useState('')
   const [showCFLimitModal, setShowCFLimitModal] = useState(false)
@@ -85,6 +81,7 @@ export const CustomerProfile = () => {
   const [globalLimits, setGlobalLimits] = useState<GlobalCFLimits>(
     globalCfLimitsInitialValues
   )
+  const [customerGuarantors, setCustomerGuarantors] = useState<Customer[]>([])
 
   const location = useLocation<LocationState>()
   const history = useHistory()
@@ -98,11 +95,13 @@ export const CustomerProfile = () => {
     }
   }, [print])
 
-  async function getCachediScores(id) {
+  async function getCachediScores(array: string[]) {
     setLoading(true)
-    const iScores = await getIscoreCached({ nationalIds: [id] })
+    const iScores = await getIscoreCached({
+      nationalIds: array,
+    })
     if (iScores.status === 'success') {
-      setIScoreDetails(iScores.body.data[0])
+      setIScoreDetails(iScores.body.data)
       setLoading(false)
     } else {
       setLoading(false)
@@ -131,10 +130,10 @@ export const CustomerProfile = () => {
       customerCreationDate: customer.created?.at || 0,
       customerName: customer.customerName || '',
       nationalId: customer.nationalId || '',
-      customerHomeAddress: customer.currentHomeAddress || '',
+      customerHomeAddress: customer.customerHomeAddress || '',
       mobilePhoneNumber: customer.mobilePhoneNumber || '',
       initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
-      customerGuarantors: customer.customerGuarantors || [],
+      customerGuarantors: customerGuarantors || [],
     })
   }
   async function getGlobalCfLimits() {
@@ -151,10 +150,13 @@ export const CustomerProfile = () => {
     setLoading(true)
     const res = await getCustomerByID(location.state.id)
     if (res.status === 'success') {
-      await setCustomerDetails(res.body)
-      if (ability.can('viewIscore', 'customer'))
-        await getCachediScores(res.body.nationalId)
-      await getGeoArea(res.body.geoAreaId, res.body.branchId)
+      await setCustomerDetails(res.body.customer)
+      await setCustomerGuarantors(res.body.guarantors)
+      if (ability.can('viewIscore', 'customer')) {
+        const guarIds = res.body.guarantors.map((guar) => guar.nationalId)
+        await getCachediScores([res.body.customer.nationalId, ...guarIds])
+      }
+      await getGeoArea(res.body.customer.geoAreaId, res.body.customer.branchId)
     } else {
       setLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
@@ -167,6 +169,32 @@ export const CustomerProfile = () => {
   function getArRuralUrban(ruralUrban: string | undefined) {
     if (ruralUrban === 'rural') return local.rural
     return local.urban
+  }
+  const getCustomerIscore = async (data) => {
+    setLoading(true)
+    const obj = {
+      requestNumber: '148',
+      reportId: '3004',
+      product: '023',
+      loanAccountNumber: `${data.key}`,
+      number: '1703943',
+      date: '02/12/2014',
+      amount: `${1000}`, // TODO
+      lastName: `${data.customerName}`,
+      idSource: '003',
+      idValue: `${data.nationalId}`,
+      gender: data.gender === 'male' ? '001' : '002',
+      dateOfBirth: iscoreDate(data.birthDate),
+    }
+    const iScore = await getIscore(obj)
+    if (iScore.status === 'success') {
+      const guarIds = customerGuarantors.map((guar) => guar.nationalId)
+      getCachediScores([data.nationalId, ...guarIds])
+      setLoading(false)
+    } else {
+      setLoading(false)
+      Swal.fire('Error !', getErrorMessage(iScore.error.error), 'error')
+    }
   }
   const handleActivationClick = async ({ id, blocked }) => {
     const { value: text } = await Swal.fire({
@@ -237,7 +265,9 @@ export const CustomerProfile = () => {
   const mainInfo = customerDetails && [
     getCustomerInfo({
       customerDetails,
-      score: iScoreDetails,
+      score: iScoreDetails?.filter(
+        (score) => score.nationalId === customerDetails.nationalId
+      )[0],
       isLeader: false,
       isCF: true,
     }),
@@ -473,7 +503,9 @@ export const CustomerProfile = () => {
         fieldTitle: 'cfGuarantors',
         fieldData: {
           customerId: customerDetails?._id,
-          customerGuarantors: customerDetails?.customerGuarantors || [],
+          customerGuarantors,
+          getIscore: (data) => getCustomerIscore(data),
+          iscores: iScoreDetails,
         } as CFGuarantorTableViewProp,
         showFieldCondition: true,
       },
@@ -484,7 +516,7 @@ export const CustomerProfile = () => {
       {
         icon: 'download',
         title: local.downloadPDF,
-        permission: !['pending-initialization', 'pending-update'].includes(
+        permission: ['initialization-reviewed', 'update-reviewed'].includes(
           customerDetails?.consumerFinanceLimitStatus ?? ''
         ),
         onActionClick: () => {
@@ -534,7 +566,8 @@ export const CustomerProfile = () => {
           ((ability.can('reviewCFLimit', 'customer') &&
             (customerDetails?.initialConsumerFinanceLimit ?? 0) <
               globalLimits.CFHQMinimumApprovalLimit) ||
-            ability.can('reviewCFLimitHQ', 'customer')),
+            ability.can('reviewCFLimitHQ', 'customer')) &&
+          !customerDetails?.blocked?.isBlocked,
         onActionClick: () => setModalData('review'),
       },
       {
@@ -543,7 +576,9 @@ export const CustomerProfile = () => {
         permission:
           ['initialization-reviewed', 'update-reviewed'].includes(
             customerDetails?.consumerFinanceLimitStatus ?? ''
-          ) && ability.can('approveCFLimit', 'customer'),
+          ) &&
+          ability.can('approveCFLimit', 'customer') &&
+          !customerDetails?.blocked?.isBlocked,
         onActionClick: () => setModalData('approve'),
       },
     ]
@@ -629,13 +664,12 @@ export const CustomerProfile = () => {
               customerDetails?.initialConsumerFinanceLimit || 0
             }
           />
-          {customerDetails?.customerGuarantors &&
-            customerDetails?.customerGuarantors?.length > 0 &&
-            customerDetails?.customerGuarantors.map((guarantor) => (
+          {customerGuarantors?.length > 0 &&
+            customerGuarantors.map((guarantor) => (
               <BondContract
                 customerCreationDate={customerDetails?.created?.at || 0}
-                customerName={guarantor?.name || ''}
-                customerHomeAddress={guarantor?.address || ''}
+                customerName={guarantor?.customerName || ''}
+                customerHomeAddress={guarantor?.customerHomeAddress || ''}
                 nationalId={guarantor?.nationalId || ''}
                 initialConsumerFinanceLimit={
                   customerDetails?.initialConsumerFinanceLimit || 0
@@ -650,19 +684,19 @@ export const CustomerProfile = () => {
             initialConsumerFinanceLimit={
               customerDetails?.initialConsumerFinanceLimit || 0
             }
-            customerGuarantors={customerDetails?.customerGuarantors}
+            customerGuarantors={customerGuarantors}
           />
           <AuthorizationToFillInfo
             customerCreationDate={customerDetails?.created?.at || 0}
             customerName={customerDetails?.customerName || ''}
             customerHomeAddress={customerDetails?.customerHomeAddress || ''}
-            customerGuarantors={customerDetails?.customerGuarantors}
+            customerGuarantors={customerGuarantors}
           />
           <AcknowledgmentWasSignedInFront
             customerCreationDate={customerDetails?.created?.at || 0}
             customerName={customerDetails?.customerName || ''}
             nationalId={customerDetails?.nationalId || ''}
-            customerGuarantors={customerDetails?.customerGuarantors}
+            customerGuarantors={customerGuarantors}
           />
         </>
       )}

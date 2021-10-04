@@ -1,0 +1,30 @@
+@media screen,
+print {
+  .early-payment-receipt {
+    font-size: 12px;
+    font-weight: 600;
+    color: #000;
+    page-break-after: always;
+    width: 105mm;
+    padding: 20px;
+
+    & tbody,
+    .title {
+      text-align: center;
+    }
+
+    & table {
+      width: 100%;
+    }
+
+    & .frame {
+      border: 0.5px solid black;
+    }
+  }
+}
+
+@media screen {
+  .early-payment-receipt {
+    display: none;
+  }
+}

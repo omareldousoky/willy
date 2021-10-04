@@ -4,9 +4,9 @@ import {
   EarlyPaymentsSingleResponse,
 } from '../../../Models/LaundryReports'
 import Orientation from '../../../../Shared/Components/Common/orientation'
-import { Header } from '../pdfTemplateCommon/header'
 import '../customersArrears/customersArrears.scss'
-import DataRow from '../pdfTemplateCommon/dataRow'
+import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
+import DataRow from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/dataRow'
 
 interface EarlyPaymentsProps {
   toDate: string

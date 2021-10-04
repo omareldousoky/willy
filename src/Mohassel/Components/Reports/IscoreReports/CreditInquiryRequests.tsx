@@ -10,7 +10,6 @@ import { Loader } from '../../../../Shared/Components/Loader'
 
 import Can from '../../../config/Can'
 
-import ReportsModal from '../reportsModal'
 import {
   downloadFile,
   getErrorMessage,
@@ -19,6 +18,7 @@ import {
   getCreditInquiryExcel,
   postCreditInquiryExcel,
 } from '../../../Services/APIs/Reports/creditInquiryRequests'
+import ReportsModal from '../../../../Shared/Components/ReportsModal/reportsModal'
 
 interface Report {
   key: string
@@ -37,7 +37,7 @@ const CreditInquiryRequests = () => {
     {
       key: 'creditInquiryRequests',
       local: `${local.creditInquiryRequestsReport} ${local.individualAndGroup}`,
-      inputs: ['branch', 'dateFromTo', 'creditInquiryStatus'],
+      inputs: ['branches', 'dateFromTo', 'creditInquiryStatus'],
       permission: 'generateIscoreReport',
       handleExcel: {
         post: postCreditInquiryExcel,
@@ -83,11 +83,14 @@ const CreditInquiryRequests = () => {
     const { fromDate, toDate, branches, creditInquiryStatus } = values
     const startDate = dayjs(fromDate).startOf('day').valueOf()
     const endDate = dayjs(toDate).endOf('day').valueOf()
-
+    const branchesArray =
+      branches.length === 1 && branches[0]._id === ''
+        ? []
+        : branches.map((branch) => branch._id)
     const excelRequestModel = {
       startDate,
       endDate,
-      branch: branches?._id,
+      branches: branchesArray,
       status: creditInquiryStatus,
     }
 

@@ -17,7 +17,7 @@ import {
 } from './utils'
 import Can from '../../Mohassel/config/Can'
 import { FieldProps } from '../Components/Profile/types'
-import { Score } from '../../Mohassel/Components/CustomerCreation/CustomerProfile'
+import { Score } from '../Models/Customer'
 
 interface IscoreInfo {
   score?: Score

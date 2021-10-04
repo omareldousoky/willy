@@ -1,8 +1,8 @@
 import React from 'react'
+import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 
 import './index.scss'
 import { MonthlyAnalysisReportProps } from './types'
-import { Header } from '../pdfTemplateCommon/header'
 
 const MonthlyAnalysisReport = ({
   monthlyAnalysis1,

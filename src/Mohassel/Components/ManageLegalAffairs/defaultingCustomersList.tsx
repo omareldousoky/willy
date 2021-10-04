@@ -24,7 +24,6 @@ import {
   getErrorMessage,
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
-import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import { Customer } from '../../../Shared/Services/interfaces'
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan'
 import { Application } from '../LoanApplication/loanApplicationStates'
@@ -35,14 +34,15 @@ import {
   reviewCustomerDefaultedLoan,
 } from '../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
 import ability from '../../config/ability'
-import ReportsModal from '../Reports/reportsModal'
-import { PDF } from '../Reports/reports'
 import DefaultingCustomersPdfTemplate, {
   ReportDefaultedCustomer,
 } from '../pdfTemplates/defaultingCustomers/DefaultingCustomers'
 import { LtsIcon } from '../../../Shared/Components'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 import { ProductType } from '../LegalWarnings/types'
+import CustomerSearch from '../../../Shared/Components/CustomerSearch'
+import { PDF } from '../../../Shared/Components/PdfList/types'
+import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
 
 interface Review {
   at: number
@@ -257,6 +257,10 @@ class DefaultingCustomersList extends Component<Props, State> {
               onClick={() =>
                 this.props.history.push('/loans/loan-profile', {
                   id: data.loanId,
+                  sme:
+                    data.customerType === 'company' ||
+                    data.customerType === 'companyGuarantor' ||
+                    data.customerType === 'entitledToSign',
                 })
               }
             >
@@ -461,7 +465,7 @@ class DefaultingCustomersList extends Component<Props, State> {
         loanSearchResults: results.body.applications.filter(
           (loan) =>
             loan.application.status &&
-            ['pending', 'issued'].includes(loan.application.status)
+            ['pending', 'issued', 'paid'].includes(loan.application.status)
         ),
         productType: 'micro',
       })

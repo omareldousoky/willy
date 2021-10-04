@@ -4,6 +4,7 @@ import Tafgeet from 'tafgeetjs'
 import * as local from '../../../Assets/ar.json'
 import { numbersToArabic, extractGMTDate } from '../../../Services/utils'
 import { PaymentReceiptProps } from './types'
+import { companies, licenses } from '../../../Constants/pdf'
 
 const PaymentReceipt = (props: PaymentReceiptProps) => {
   const { type } = props
@@ -20,11 +21,6 @@ const PaymentReceipt = (props: PaymentReceiptProps) => {
       default:
         return ''
     }
-  }
-
-  const licenses = {
-    sme: 'ترخيص ممارسة نشاط تمويل المشروعات المتوسطة والصغيرة رقم ١ لسنه ٢٠٢١',
-    cf: 'حالا للتمويل الاستهلاكي ش. م. م. ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١',
   }
 
   return (
@@ -45,17 +41,13 @@ const PaymentReceipt = (props: PaymentReceiptProps) => {
                     <th colSpan={6}>
                       <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
                     </th>
-                    <th colSpan={6}>
-                      {licenses[type]
-                        ? licenses[type]
-                        : 'ترخيص ممارسة نشاط التمويل متناهي الصغر (2) لسنة 2015'}
-                    </th>
+                    <th colSpan={6}>{licenses[type] ?? licenses.lts}</th>
                   </tr>
                   <tr style={{ height: '10px' }} />
                 </tbody>
               </table>
               <div className="receipt-header">
-                <h5>{isCF ? local.cfName : local.tasaheelName}</h5>
+                <h5>{companies[type] ?? companies.lts}</h5>
                 <h5>{local.paymentReceipt}</h5>
               </div>
               <div className="receipt-data">

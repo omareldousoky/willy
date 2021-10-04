@@ -2,8 +2,8 @@ import React from 'react'
 import local from '../../../../Shared/Assets/ar.json'
 import Orientation from '../../../../Shared/Components/Common/orientation'
 import './legalHistory.scss'
-import DataRow from '../../pdfTemplates/pdfTemplateCommon/dataRow'
 import { LegalHistoryProps } from '../types'
+import DataRow from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/dataRow'
 
 export const LegalHistory = (props: LegalHistoryProps) => {
   return (

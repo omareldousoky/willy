@@ -6,7 +6,6 @@ import Swal from 'sweetalert2'
 import local from '../../../Shared/Assets/ar.json'
 import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-import CustomerSearch, { Results } from '../CustomerSearch/customerSearchTable'
 import {
   WarningCreationModalProps,
   WarningCreationStepEnum,
@@ -28,6 +27,9 @@ import {
 } from '../../../Shared/Services/APIs/LegalAffairs/warning'
 import { addeddSuccessfully } from '../../../Shared/localUtils'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
+import CustomerSearch, {
+  Results,
+} from '../../../Shared/Components/CustomerSearch'
 
 export const WarningCreationModal = ({
   showModal,

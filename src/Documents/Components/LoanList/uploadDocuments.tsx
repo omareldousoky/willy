@@ -182,8 +182,7 @@ class UploadDocuments extends Component<Props, State> {
               keyName="applicationId"
               keyId={this.state.application._id as string}
               view={
-                (this.state.application.status === 'paid' ||
-                  this.state.application.status === 'rejected' ||
+                (this.state.application.status === 'rejected' ||
                   this.state.application.status === 'canceled') as boolean
               }
             />

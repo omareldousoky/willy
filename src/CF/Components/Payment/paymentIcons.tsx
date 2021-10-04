@@ -7,10 +7,11 @@ import { payment } from '../../../Shared/redux/payment/actions'
 import * as local from '../../../Shared/Assets/ar.json'
 import ability from '../../../Shared/config/ability'
 import { LtsIcon } from '../../../Shared/Components'
+import Can from '../../../Shared/config/Can'
 
 type ContractType = 'standard'
 
-interface Props {
+interface PaymentIconsProps {
   paymentType: string
   application: {
     status: string
@@ -22,8 +23,10 @@ interface Props {
   }
   installments: Array<Installment>
   changePaymentState: (data) => void
+  handleClickEarlyPayment: () => void
 }
-class PaymentIcons extends Component<Props, {}> {
+
+class PaymentIcons extends Component<PaymentIconsProps, {}> {
   getRequiredAmount() {
     const todaysDate = new Date().valueOf()
     let total = 0
@@ -80,6 +83,27 @@ class PaymentIcons extends Component<Props, {}> {
               </div>
             )}
           {this.props.paymentType === 'normal' &&
+            !this.props.application.writeOff && (
+              <Can I="payEarly" a="application">
+                <div className="payment-icon m-4">
+                  <LtsIcon name="early-payment" size="90px" color="#7dc255" />
+                  <Button
+                    className="my-4"
+                    disabled={
+                      this.props.application.status === 'pending' ||
+                      this.props.installments.some(
+                        (installment) => installment.status === 'partiallyPaid'
+                      )
+                    }
+                    onClick={() => this.props.handleClickEarlyPayment()}
+                    variant="primary"
+                  >
+                    {local.earlyPayment}
+                  </Button>
+                </div>
+              </Can>
+            )}
+          {this.props.paymentType === 'normal' &&
             (ability.can('payInstallment', 'application') ||
               ability.can('payByInsurance', 'application')) && (
               <div className="payment-icon m-4">
@@ -94,6 +118,23 @@ class PaymentIcons extends Component<Props, {}> {
                 </Button>
               </div>
             )}
+          {this.props.paymentType === 'random' && (
+            <Can I="payInstallment" a="application">
+              <div className="payment-icon m-4">
+                <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
+
+                <Button
+                  className="my-4"
+                  onClick={() => {
+                    this.props.changePaymentState(3)
+                  }}
+                  variant="primary"
+                >
+                  {local.manualPayment}
+                </Button>
+              </div>
+            </Can>
+          )}
         </div>
       </Card>
     )

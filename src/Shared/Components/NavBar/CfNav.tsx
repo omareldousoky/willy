@@ -97,6 +97,11 @@ export const CfNavbar = () => {
             {local.logs}
           </Nav.Link>
         )}
+        {ability.can('getOfficersGroups', 'branch') && (
+          <Nav.Link onClick={() => history.push('/supervisions-levels')}>
+            {local.levelsOfSupervision}
+          </Nav.Link>
+        )}
         {ability.can('financialBlocking', 'application') ? (
           <Nav.Link
             onClick={() => history.push('/financial-closing/lts-blocking')}
@@ -110,6 +115,11 @@ export const CfNavbar = () => {
             {local.manageFinancialTransaction}
           </Nav.Link>
         ) : null}
+        {ability.can('viewReports', 'report') && (
+          <Nav.Link onClick={() => history.push('/reports')}>
+            {local.reports}
+          </Nav.Link>
+        )}
       </Nav>
     </Navbar.Collapse>
   )

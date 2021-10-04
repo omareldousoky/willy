@@ -1,10 +1,10 @@
 import React from 'react'
 import Tafgeet from 'tafgeetjs'
+import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 import {
   guarantorOrderLocal,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
-import { Header } from '../pdfTemplateCommon/header'
 import { AcknowledgmentOfCommitmentProps } from './types'
 
 export const AcknowledgmentOfCommitment = ({

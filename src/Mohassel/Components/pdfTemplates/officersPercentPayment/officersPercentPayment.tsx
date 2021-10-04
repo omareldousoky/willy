@@ -1,10 +1,10 @@
 import React from 'react'
+import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 import {
   OfficerPercentPaymentResponse,
   OfficerPercentPaymentRow,
   OfficerPercentPaymentTotalRow,
 } from '../../../Services/interfaces'
-import { Header } from '../pdfTemplateCommon/header'
 import './officersPercentPayment.scss'
 import OfficersPercentPaymentFooter from './officersPercentPaymentFooter'
 

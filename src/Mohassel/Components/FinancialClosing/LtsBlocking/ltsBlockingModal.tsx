@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col'
 import { Formik, Field, Form } from 'formik'
 import * as Yup from 'yup'
 import Swal from 'sweetalert2'
-import DateField from '../../../../Shared/Components/Common/FormikFields/dateField'
+import { DateField } from '../../../../Shared/Components/Common/FormikFields/dateField'
 import * as local from '../../../../Shared/Assets/ar.json'
 import { getErrorMessage } from '../../../../Shared/Services/utils'
 import {

@@ -12,12 +12,12 @@ import {
   search as searchAction,
 } from '../../../../Shared/redux/search/actions'
 import {
-  timeToDateyyymmdd,
   beneficiaryType,
   getErrorMessage,
   getFullCustomerKey,
   removeEmptyArg,
   loanChipStatusClass,
+  getFormattedLocalDate,
 } from '../../../../Shared/Services/utils'
 import { manageLoansArray } from './manageLoansInitials'
 import HeaderWithCards from '../../../../Shared/Components/HeaderWithCards/headerWithCards'
@@ -175,7 +175,7 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
       sortable: true,
       render: (data) =>
         data.application.issueDate
-          ? timeToDateyyymmdd(data.application.issueDate)
+          ? getFormattedLocalDate(data.application.issueDate)
           : '',
     },
     {

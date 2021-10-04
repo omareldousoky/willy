@@ -45,7 +45,7 @@ export const ReportsList = ({ list, onClickDownload }: ReportsListProps) => {
                     <span className="mr-5 d-flex flex-start flex-column">
                       <span>{local.creationDate}</span>
                       {timeToArabicDate(
-                        listItem.fileCompletedAt || listItem.generatedAt,
+                        listItem.fileGeneratedAt || listItem.generatedAt,
                         true
                       )}
                     </span>

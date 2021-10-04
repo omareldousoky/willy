@@ -2,6 +2,7 @@ import React from 'react'
 import { AssignLoanOfficer, EditLead, LeadProfile, Leads } from '.'
 import local from '../../../Shared/Assets/ar.json'
 import Can from '../../../Shared/config/Can'
+import CustomerCreation from '../CustomerCreation'
 
 export const leadsRoutes = {
   path: '/halan-integration',
@@ -36,6 +37,15 @@ export const leadsRoutes = {
           render: (props) => (
             <Can I="getLead" a="halanuser">
               <EditLead {...props} />
+            </Can>
+          ),
+        },
+        {
+          path: '/lead-to-customer',
+          label: local.convertToCustomer,
+          render: (props) => (
+            <Can I="getLead" a="halanuser">
+              <CustomerCreation {...props} isFromLead />
             </Can>
           ),
         },

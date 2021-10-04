@@ -358,6 +358,16 @@ class Leads extends Component<Props, State> {
             leadDetails: lead,
           }),
       },
+      {
+        actionTitle: local.convertToCustomer,
+        actionPermission:
+          lead.status === 'approved' && ability.can('getLead', 'halanuser'),
+        actionOnClick: () =>
+          this.props.history.push('/halan-integration/leads/lead-to-customer', {
+            uuid: lead.uuid,
+            phoneNumber: lead.phoneNumber,
+          }),
+      },
     ]
   }
 

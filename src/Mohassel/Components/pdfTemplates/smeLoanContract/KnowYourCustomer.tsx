@@ -1,6 +1,5 @@
 import React from 'react'
-
-import { Header } from '../pdfTemplateCommon/header'
+import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 import local from '../../../../Shared/Assets/ar.json'
 
 import {
