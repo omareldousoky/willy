@@ -10,10 +10,10 @@ export const getiScoreReportRequests = async () => {
     return { status: 'error', error: error.response.data }
   }
 }
-export const generateiScoreReport = async () => {
+export const generateiScoreReport = async (type: string) => {
   const url = API_BASE_URL + `/report/create-iscore-file`
   try {
-    const res = await axios.post(url)
+    const res = await axios.post(url, { type })
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
