@@ -1,8 +1,6 @@
 import React from 'react'
-import store from '../../../../redux/store'
 import {
   beneficiaryType,
-  getCurrentTime,
   groupBy,
   numbersToArabic,
   timeToArabicDate,
@@ -13,12 +11,14 @@ import {
   CustomersArrearsResponse,
   CustomersArrearsSingleResponse,
 } from '../../../../Models/operationsReports'
+import { Header } from '../../pdfTemplateCommon/header'
 
 interface CustomersArrearsProps {
   date: string
   data: CustomersArrearsResponse
+  isCF?: boolean
 }
-const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
+const CustomersArrears = ({ data, date, isCF }: CustomersArrearsProps) => {
   const { response } = data
   const dataGroupedByBranch: Map<string, Record<string, string>[]> = groupBy(
     response as Record<string, unknown>[],
@@ -29,26 +29,13 @@ const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
     <>
       <Orientation size="landscape" />
       <div className="customers-arrears">
-        <div className="header-wrapper">
-          <span className="logo-print" role="img" />
-          <p className="m-0">
-            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-          </p>
-        </div>
-        <div className="header-wrapper mb-0">
-          <p style={{ marginRight: '10px' }}>
-            شركة تساهيل للتمويل متناهي الصغر
-          </p>
-          <p>{store.getState().auth.name}</p>
-          <p>{getCurrentTime()}</p>
-        </div>
-        <div className="d-flex flex-column mx-3">
-          <p className="report-title">
-            متأخرات المندوب لم يستحق أو مسدد جزئي حتي :&nbsp;
-            {timeToArabicDate(new Date(date).valueOf(), false)}
-          </p>
-          <hr className="horizontal-line" />
-        </div>
+        <Header
+          title="متأخرات المندوب لم يستحق أو مسدد جزئي"
+          toDate={date}
+          showCurrentUser
+          showCurrentTime
+          cf={isCF}
+        />
         {dataGroupList && dataGroupList.length && (
           <table
             className="customers-arrears-table"

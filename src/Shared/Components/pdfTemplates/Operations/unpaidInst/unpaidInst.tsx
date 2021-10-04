@@ -3,6 +3,7 @@ import './unpaidInst.scss'
 import Table from 'react-bootstrap/Table'
 import local from '../../../../Assets/ar.json'
 import { numbersToArabic, timeToArabicDate } from '../../../../Services/utils'
+import { Header } from '../../pdfTemplateCommon/header'
 
 const UnpaidInst = (props) => {
   const startDate = new Date(props.fromDate).valueOf()
@@ -12,36 +13,12 @@ const UnpaidInst = (props) => {
       {props.data?.branches?.map((branch, index) => {
         return (
           <div key={index} className="unpaid-inst">
-            <table className="header-table">
-              <thead>
-                <tr>
-                  <th className="grey-background">
-                    شركة تساهيل للتمويل متناهى الصغر
-                  </th>
-                  <th />
-                  <th rowSpan={2}>
-                    <div className="logo-print-tb" />
-                  </th>
-                </tr>
-                <tr>
-                  <th className="frame" colSpan={1}>
-                    {branch.name}
-                  </th>
-                </tr>
-                <tr>
-                  <th style={{ fontSize: 18 }}>
-                    قائمة الاقساط الغير مسددة بمناطق العمل
-                  </th>
-                </tr>
-                <tr>
-                  <th />
-                  <th style={{ fontSize: 18 }}>
-                    من {timeToArabicDate(startDate, false)} الي
-                    {timeToArabicDate(endDate, false)}
-                  </th>
-                </tr>
-              </thead>
-            </table>
+            <Header
+              fromDate={startDate}
+              toDate={endDate}
+              cf={props.isCF}
+              title="قائمة الاقساط الغير مسددة بمناطق العمل"
+            />
             <div>
               <span>الفرع : </span>
               <span

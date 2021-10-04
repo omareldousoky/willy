@@ -1,6 +1,7 @@
 import React from 'react'
 import { numbersToArabic, timeToArabicDate } from '../../../../Services/utils'
 import Orientation from '../../../Common/orientation'
+import { Header } from '../../pdfTemplateCommon/header'
 import './installmentsDuePerOfficerCustomerCard.scss'
 
 const installmentStatuses = {
@@ -12,50 +13,12 @@ interface InstallmentsDuePerOfficerCustomerCardProps {
   fromDate: string
   toDate: string
   data: any
+  isCF?: boolean
 }
 
 const InstallmentsDuePerOfficerCustomerCard = (
   props: InstallmentsDuePerOfficerCustomerCardProps
 ) => {
-  const renderHeader = (fromDate, toDate) => {
-    return (
-      <div style={{ display: 'flex' }}>
-        <div
-          style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: 'lightgrey',
-              border: '1px solid black',
-              width: '50%',
-              textAlign: 'center',
-              marginBottom: 5,
-            }}
-          >
-            شركة تساهيل
-          </div>
-        </div>
-        <div style={{ flex: 1 }}>
-          <p style={{ margin: 0 }}>الاقساط المستحقة للمندوب كارت العميل</p>
-          <p style={{ margin: 0 }}>
-            <span>{'من '}</span>
-            <span>{fromDate}</span>
-            <span>{'إلى '}</span>
-            <span>{toDate}</span>
-          </p>
-        </div>
-        <div style={{ flex: 1 }}>
-          <p style={{ margin: 0 }}>1/1</p>
-          <p style={{ margin: 0 }}>{new Date().toDateString()}</p>
-        </div>
-      </div>
-    )
-  }
   const renderBranchNameDiv = (branchName = '') => (
     <div style={{ display: 'flex' }}>
       <div style={{ flex: 1 }}>
@@ -332,7 +295,12 @@ const InstallmentsDuePerOfficerCustomerCard = (
           dir="rtl"
           lang="ar"
         >
-          {renderHeader(fromDate, toDate)}
+          <Header
+            cf={props.isCF}
+            fromDate={fromDate}
+            toDate={toDate}
+            title="الاقساط المستحقة للمندوب كارت العميل"
+          />
           {data && data.branches
             ? data.branches.map((branch) => renderBranchData(branch))
             : null}

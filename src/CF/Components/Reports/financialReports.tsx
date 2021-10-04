@@ -141,19 +141,19 @@ class FinancialReports extends Component<{}, State> {
         {
           key: 'manualPayments',
           local: 'مراجعه حركات السداد اليدوي',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'manualPayments',
         },
         {
           key: 'customerTransactionReport',
           local: 'الحركة تبعا للعميل',
-          inputs: ['applicationKey'],
+          inputs: ['applicationKey', 'loanType'],
           permission: 'loanTransactionReport',
         },
         {
           key: 'raseedyTransactions',
           local: 'مدفوعات رصيدي',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'raseedyTransactions',
         },
       ],

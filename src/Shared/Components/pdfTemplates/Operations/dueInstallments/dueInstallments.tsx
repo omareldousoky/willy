@@ -6,6 +6,7 @@ import {
   numbersToArabic,
   timeToArabicDate,
 } from '../../../../Services/utils'
+import { Header } from '../../pdfTemplateCommon/header'
 
 import './dueInstallments.scss'
 
@@ -13,10 +14,11 @@ interface DueInstallmentsProps {
   fromDate: string
   toDate: string
   data: DueInstallmentsResponse
+  isCF?: boolean
 }
 
 const DueInstallments = (props: DueInstallmentsProps) => {
-  const { fromDate, toDate, data } = props
+  const { fromDate, toDate, data, isCF } = props
   return (
     <div className="due-installments">
       <div className="header-wrapper">
@@ -36,6 +38,12 @@ const DueInstallments = (props: DueInstallmentsProps) => {
           {timeToArabicDate(new Date(fromDate).valueOf(), false)} إلى : &nbsp;
           {timeToArabicDate(new Date(toDate).valueOf(), false)}
         </p>
+        <Header
+          title="ملخص الاقساط المستحقة"
+          fromDate={fromDate}
+          toDate={toDate}
+          cf={isCF}
+        />
         <hr className="horizontal-line" />
       </div>
       <table className="body">

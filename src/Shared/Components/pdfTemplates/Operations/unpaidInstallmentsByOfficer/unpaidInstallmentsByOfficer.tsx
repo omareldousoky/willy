@@ -1,4 +1,5 @@
 import React from 'react'
+import { Header } from '../../pdfTemplateCommon/header'
 import './unpaidInstallmentsByOfficer.scss'
 
 const numbersToArabic = (input) => {
@@ -21,50 +22,15 @@ interface UnpaidInstallmentsByOfficerProps {
   fromDate: string
   toDate: string
   data: any
+  isCF?: boolean
 }
 
-const UnpaidInstallmentsByOfficer = (
-  props: UnpaidInstallmentsByOfficerProps
-) => {
-  const renderHeader = (fromDate, toDate) => {
-    return (
-      <div style={{ display: 'flex' }}>
-        <div
-          style={{
-            flex: 1,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: 'darkgrey',
-              border: '1px solid black',
-              width: '50%',
-              textAlign: 'center',
-              marginBottom: 5,
-            }}
-          >
-            شركة تساهيل
-          </div>
-        </div>
-        <div style={{ flex: 1 }}>
-          <p style={{ margin: 0 }}>قائمة الإقساط المستحقة بالمندوب</p>
-          <p style={{ margin: 0 }}>
-            <span>{'من '}</span>
-            <span>{` ${fromDate} `}</span>
-            <span>{'إلى '}</span>
-            <span>{toDate}</span>
-          </p>
-        </div>
-        <div style={{ flex: 1 }}>
-          <p style={{ margin: 0 }}>1/1</p>
-          <p style={{ margin: 0 }}>{new Date().toDateString()}</p>
-        </div>
-      </div>
-    )
-  }
+const UnpaidInstallmentsByOfficer: React.FC<UnpaidInstallmentsByOfficerProps> = ({
+  data,
+  fromDate,
+  toDate,
+  isCF,
+}) => {
   const renderCommissaryDetailsDiv = (CommissaryName = '') => (
     <div style={{ display: 'flex', margin: '5px 0' }}>
       <div style={{ width: '70%' }}>
@@ -207,7 +173,7 @@ const UnpaidInstallmentsByOfficer = (
       </tbody>
     )
   }
-  const renderTable = (data) => {
+  const renderTable = (_data) => {
     return (
       <table className="table">
         <thead>
@@ -222,7 +188,7 @@ const UnpaidInstallmentsByOfficer = (
             <th>إسم الفرع</th>
           </tr>
         </thead>
-        {renderTableBody(data)}
+        {renderTableBody(_data)}
       </table>
     )
   }
@@ -250,10 +216,10 @@ const UnpaidInstallmentsByOfficer = (
       </div>
     )
   }
-  const calculateTotal = (data, key) => {
+  const calculateTotal = (_data, key) => {
     let total = 0
-    if (data) {
-      data.forEach((el) => {
+    if (_data) {
+      _data.forEach((el) => {
         if (el.unpaidInstallmentsByOfficerTotal[key]) {
           total += el.unpaidInstallmentsByOfficerTotal[key]
         }
@@ -261,11 +227,16 @@ const UnpaidInstallmentsByOfficer = (
     }
     return total
   }
-  const renderData = ({ data, fromDate, toDate }) => {
+  const renderData = () => {
     const _data = data.response
     return (
       <div className="unpaidInstallmentsByOfficer" dir="rtl" lang="ar">
-        {renderHeader(fromDate, toDate)}
+        <Header
+          cf={isCF}
+          fromDate={fromDate}
+          toDate={toDate}
+          title="قائمة الإقساط المستحقة بالمندوب"
+        />
         {_data ? _data.map((offficer) => renderCommissaryData(offficer)) : null}
         {renderSummary(
           'Total',
@@ -278,7 +249,7 @@ const UnpaidInstallmentsByOfficer = (
       </div>
     )
   }
-  return renderData(props)
+  return renderData()
 }
 
 export default UnpaidInstallmentsByOfficer

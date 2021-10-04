@@ -1,6 +1,6 @@
 import React from 'react'
 import { LeakedCustomersReportResponse } from '../../../../Models/operationsReports'
-import { timeToArabicDate } from '../../../../Services/utils'
+import { Header } from '../../pdfTemplateCommon/header'
 
 import './leakedCustomers.scss'
 
@@ -8,9 +8,10 @@ type Props = {
   data: LeakedCustomersReportResponse
   fromDate: string
   toDate: string
+  isCF?: boolean
 }
 
-const LeakedCustomersPDF = ({ data, fromDate, toDate }: Props) => {
+const LeakedCustomersPDF = ({ data, fromDate, toDate, isCF }: Props) => {
   const from = new Date(fromDate).valueOf()
   const to = new Date(toDate).valueOf()
   return (
@@ -18,19 +19,14 @@ const LeakedCustomersPDF = ({ data, fromDate, toDate }: Props) => {
       {data.response?.map((branchCustomers, index) => {
         return (
           <table key={index}>
+            <Header
+              title="لعملاء المتسربون عن الفتره"
+              fromDate={from}
+              toDate={to}
+              branchName={branchCustomers.branchName}
+              cf={isCF}
+            />
             <thead>
-              <tr>
-                <th colSpan={4} className="noborder">
-                  شركة تساهيل للتمويل متناهي الصغر
-                </th>
-                <th colSpan={9} className="noborder">
-                  العملاء المتسربون عن الفتره من {timeToArabicDate(from, false)}
-                  الي {timeToArabicDate(to, false)}
-                </th>
-                <th colSpan={2} className="noborder">
-                  فرع: {branchCustomers.branchName}
-                </th>
-              </tr>
               <tr>
                 <th>م</th>
                 <th>كود العميل</th>

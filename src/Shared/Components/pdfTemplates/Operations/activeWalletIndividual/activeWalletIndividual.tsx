@@ -1,7 +1,7 @@
 import React from 'react'
 import './activeWalletIndividual.scss'
 import Orientation from '../../../Common/orientation'
-import store from '../../../../redux/store'
+import { Header } from '../../pdfTemplateCommon/header'
 
 interface ActiveWalletIndividualResponse {
   response: {
@@ -56,29 +56,20 @@ interface ActiveWalletIndividualResponse {
 interface Props {
   date: string
   data: ActiveWalletIndividualResponse
+  isCF?: boolean
 }
 const ActiveWalletIndividual = (props: Props) => {
-  const { data } = props
+  const { data, isCF } = props
   return (
     <>
       <Orientation size="landscape" />
       <div className="activeWalletIndividual">
-        <div className="header-wrapper">
-          <span className="logo-print" role="img" />
-          <p className="m-0">
-            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-          </p>
-        </div>
-        <div className="header-wrapper mb-0">
-          <p style={{ marginRight: '10px' }}>
-            شركة تساهيل للتمويل متناهي الصغر
-          </p>
-          <h3>المحفظة النشطه للمندوبين - فردى</h3>
-          <div className="col-nowrap">
-            <p>{store.getState().auth.name}</p>
-            <p>{new Date().toLocaleString('en-GB', { hour12: false })}</p>
-          </div>
-        </div>
+        <Header
+          title="المحفظة النشطه للمندوبين - فردى"
+          showCurrentUser
+          showCurrentDate
+          cf={isCF}
+        />
         {
           data?.response?.map((branch, branchIndex) => {
             return (

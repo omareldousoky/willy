@@ -12,6 +12,7 @@ interface OfficerPercentPaymentProps {
   fromDate: string
   toDate: string
   data: OfficerPercentPaymentResponse
+  isCF?: boolean
 }
 
 const getPrevious3Months = (fromDate: string): Record<string, string> => {
@@ -52,7 +53,7 @@ export const formatPercent = (value?: number): string => {
     : `%${foramtted}`
 }
 const OfficerPercentPayment = (props: OfficerPercentPaymentProps) => {
-  const { fromDate, toDate, data } = props
+  const { fromDate, toDate, data, isCF } = props
   const previous3Months = getPrevious3Months(fromDate)
 
   const populateTotalRow = (
@@ -108,6 +109,7 @@ const OfficerPercentPayment = (props: OfficerPercentPaymentProps) => {
         toDate={toDate}
         fromDate={fromDate}
         title="تقرير نسب السداد و الانتاجيه للمندوبين"
+        cf={isCF}
       />
       {data.response
         ? data.response.map((branchData, i) => (

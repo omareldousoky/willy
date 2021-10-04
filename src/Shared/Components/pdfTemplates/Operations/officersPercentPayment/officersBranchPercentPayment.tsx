@@ -9,16 +9,18 @@ interface OfficerPercentPaymentProps {
   fromDate: string
   toDate: string
   data: OfficerBranchPercentPaymentResponse
+  isCF?: boolean
 }
 
 const OfficerBranchPercentPayment = (props: OfficerPercentPaymentProps) => {
-  const { fromDate, toDate, data } = props
+  const { fromDate, toDate, data, isCF } = props
   return (
     <div className="officers-payment officers-branch-payment" lang="ar">
       <Header
         toDate={toDate}
         fromDate={fromDate}
         title="تقرير نسب السداد و الانتاجيه للمندوبين"
+        cf={isCF}
       />
       <table className="body">
         <thead>

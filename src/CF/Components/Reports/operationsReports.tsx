@@ -419,6 +419,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
               data={this.state.data}
               fromDate={this.state.fromDate}
               toDate={this.state.toDate}
+              isCF
             />
           )}
         {this.state.print === Reports.UnpaidInstallmentsByOfficer &&
@@ -427,6 +428,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
               data={this.state.data}
               fromDate={this.state.fromDate}
               toDate={this.state.toDate}
+              isCF
             />
           )}
         {this.state.print === Reports.UnpaidInstallmentsPerArea &&
@@ -435,6 +437,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
               data={this.state.data}
               fromDate={this.state.fromDate}
               toDate={this.state.toDate}
+              isCF
             />
           )}
         {this.state.print === Reports.OfficersPercentPayment &&
@@ -443,6 +446,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
               data={this.state.data}
               fromDate={this.state.fromDate}
               toDate={this.state.toDate}
+              isCF
             />
           )}
         {this.state.print === Reports.OfficersBranchPercentPayment &&
@@ -451,6 +455,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
               data={this.state.data}
               fromDate={this.state.fromDate}
               toDate={this.state.toDate}
+              isCF
             />
           )}
         {this.state.print === Reports.DueInstallments && this.state.data && (
@@ -458,6 +463,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             data={this.state.data}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
+            isCF
           />
         )}
         {this.state.print === Reports.LeakedCustomers && this.state.data && (
@@ -465,16 +471,22 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             data={this.state.data}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
+            isCF
           />
         )}
         {this.state.print === Reports.CustomersArrears && this.state.data && (
-          <CustomersArrearsPdf data={this.state.data} date={this.state.date} />
+          <CustomersArrearsPdf
+            data={this.state.data}
+            date={this.state.date}
+            isCF
+          />
         )}
         {this.state.print === Reports.PaidArrears && this.state.data && (
           <PaidArrearsPdf
             data={this.state.data}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
+            isCF
           />
         )}
         {this.state.print === Reports.MonthComparison && this.state.data && (
@@ -482,6 +494,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             data={this.state.data}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
+            isCF
           />
         )}
         {this.state.print === Reports.ActiveWalletIndividual &&
@@ -489,10 +502,15 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             <ActiveWalletIndividualPdf
               date={this.state.date}
               data={this.state.data}
+              isCF
             />
           )}
         {this.state.print === Reports.ActiveWalletGroup && this.state.data && (
-          <ActiveWalletGroupPdf date={this.state.date} data={this.state.data} />
+          <ActiveWalletGroupPdf
+            date={this.state.date}
+            data={this.state.data}
+            isCF
+          />
         )}
       </>
     )
