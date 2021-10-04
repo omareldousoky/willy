@@ -30,6 +30,8 @@ import {
   randomManualPayment,
   manualPayment,
   editManualPayment,
+  payPenalties,
+  cancelPenalties,
 } from '../../../Shared/Services/APIs/payment'
 import * as local from '../../../Shared/Assets/ar.json'
 import './styles.scss'
@@ -37,9 +39,9 @@ import PaymentIcons from './paymentIcons'
 import ManualPayment from './manualPayment'
 import { LtsIcon } from '../../../Shared/Components'
 import { EarlyPayment } from './earlyPayment'
-import { calculateEarlyPayment } from '../../../Mohassel/Services/APIs/Payment'
 import { getFirstDueInstallment } from '../../../Shared/Utils/payment'
 import { calculatePenalties } from '../../../Shared/Services/APIs/clearance/calculatePenalties'
+import { calculateEarlyPayment } from '../../../Mohassel/Services/APIs/Payment'
 
 interface Props {
   installments: Array<Installment>
@@ -316,6 +318,48 @@ class Payment extends Component<Props, State> {
             Swal.fire('', getErrorMessage(res.error.error), 'error')
           )
         }
+      } else if (this.props.paymentType === 'penalties') {
+        if (this.state.penaltyAction === 'pay') {
+          const data = {
+            payAmount: values.payAmount,
+            payerType: values.payerType,
+            payerId: values.payerId,
+            payerName: values.payerName,
+            payerNationalId: values.payerNationalId.toString(),
+          }
+          const res = await payPenalties({ id: this.props.applicationId, data })
+          if (res.status === 'success') {
+            const resBody = res.body
+            resBody[0].type = 'penalty'
+            this.props.setReceiptData(resBody)
+            this.props.print({ print: 'penalty' })
+            this.setState({ loadingFullScreen: false }, () =>
+              this.props.refreshPayment()
+            )
+            this.calculatePenalties()
+          } else {
+            this.setState({ loadingFullScreen: false }, () =>
+              Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+            )
+          }
+        } else if (this.state.penaltyAction === 'cancel') {
+          const data = {
+            cancelAmount: values.payAmount,
+          }
+          const res = await cancelPenalties({
+            id: this.props.applicationId,
+            data,
+          })
+          if (res.status === 'success') {
+            this.setState({ loadingFullScreen: false })
+            Swal.fire('', local.penaltyCancelledSuccessfully, 'success')
+            this.calculatePenalties()
+          } else {
+            this.setState({ loadingFullScreen: false }, () =>
+              Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+            )
+          }
+        }
       }
     } else if (this.props.paymentState === 2) {
       const obj = {
@@ -462,6 +506,7 @@ class Payment extends Component<Props, State> {
         truthDate: timeToDateyyymmdd(pendingAction.transactions[0].truthDate),
       })
     } else {
+      const { pendingActions } = this.props
       const payAmount = this.props.pendingActions.transactions?.reduce(
         (accumulator, pendingAct) => {
           return accumulator + pendingAct.transactionAmount
@@ -470,28 +515,20 @@ class Payment extends Component<Props, State> {
       )
       this.setState({
         payAmount: payAmount || 0,
-        payerType: this.props.pendingActions.payerType
-          ? this.props.pendingActions.payerType
+        payerType: pendingActions.payerType ? pendingActions.payerType : '',
+        payerNationalId: pendingActions.payerNationalId
+          ? pendingActions.payerNationalId
           : '',
-        payerNationalId: this.props.pendingActions.payerNationalId
-          ? this.props.pendingActions.payerNationalId
+        payerName: pendingActions.payerName ? pendingActions.payerName : '',
+        payerId: pendingActions.payerId ? pendingActions.payerId : '',
+        receiptNumber: pendingActions.receiptNumber
+          ? pendingActions.receiptNumber
           : '',
-        payerName: this.props.pendingActions.payerName
-          ? this.props.pendingActions.payerName
-          : '',
-        payerId: this.props.pendingActions.payerId
-          ? this.props.pendingActions.payerId
-          : '',
-        receiptNumber: this.props.pendingActions.receiptNumber
-          ? this.props.pendingActions.receiptNumber
-          : '',
-        installmentNumber: this.props.pendingActions.transactions
-          ? this.props.pendingActions.transactions[0].installmentSerial
+        installmentNumber: pendingActions.transactions
+          ? pendingActions.transactions[0].installmentSerial
           : -1,
-        truthDate: this.props.pendingActions.transactions
-          ? timeToDateyyymmdd(
-              this.props.pendingActions.transactions[0].truthDate
-            )
+        truthDate: pendingActions.transactions
+          ? timeToDateyyymmdd(pendingActions.transactions[0].truthDate)
           : timeToDateyyymmdd(-1),
       })
     }
@@ -515,7 +552,7 @@ class Payment extends Component<Props, State> {
     const firstDueInstallment = getFirstDueInstallment(this.props.application)
     const isNormalPayment = this.props.paymentType === 'normal'
     const payAmountValue =
-      isNormalPayment && firstDueInstallment
+      isNormalPayment && firstDueInstallment && !this.props.manualPaymentEditId
         ? firstDueInstallment.installmentResponse -
           firstDueInstallment?.totalPaid
         : this.state.payAmount
@@ -654,7 +691,9 @@ class Payment extends Component<Props, State> {
                   paymentType: this.props.paymentType,
                 }}
                 onSubmit={this.handleSubmit}
-                validationSchema={manualPaymentValidation}
+                validationSchema={() =>
+                  manualPaymentValidation(this.state.penalty)
+                }
                 validateOnBlur
                 validateOnChange
               >
