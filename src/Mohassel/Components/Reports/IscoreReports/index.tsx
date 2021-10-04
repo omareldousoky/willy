@@ -96,9 +96,9 @@ class IscoreReports extends Component<{}, State> {
     })
   }
 
-  async generateReport() {
+  async generateReport(type: string) {
     this.setState({ loading: true })
-    const res = await generateiScoreReport()
+    const res = await generateiScoreReport(type)
     if (res.status === 'success') {
       Swal.fire('success', local.fileQueuedSuccess, 'success')
       this.setState(
@@ -138,18 +138,29 @@ class IscoreReports extends Component<{}, State> {
                   {this.tabs[this.state.activeTabIndex].header}
                 </Card.Title>
                 <Can I="createIscoreFile" a="report">
-                  <Button
-                    type="button"
-                    variant="primary"
-                    onClick={() => this.generateReport()}
-                  >
-                    {local.requestNewreport}
-                  </Button>
+                  <div className="w-50 d-flex justify-content-end">
+                    <Button
+                      type="button"
+                      variant="primary"
+                      onClick={() => this.generateReport('micro')}
+                      className="mx-2"
+                    >
+                      {local.requestNewreport}-{local.micro}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="primary"
+                      onClick={() => this.generateReport('sme')}
+                    >
+                      {local.requestNewreport}-{local.sme}
+                    </Button>
+                  </div>
                 </Can>
               </div>
               <ReportsList
                 list={this.state.data}
                 onClickDownload={(itemId) => this.getFile(itemId)}
+                iscoreType
               />
             </Card.Body>
           </Card>
