@@ -120,6 +120,11 @@ export const CfNavbar = () => {
             {local.reports}
           </Nav.Link>
         )}
+        {ability.can('getMerchantOutstandingSettlement', 'cfApplication') && (
+          <Nav.Link onClick={() => history.push('/vendor-settlements')}>
+            {local.vendorSettlement}
+          </Nav.Link>
+        )}
       </Nav>
     </Navbar.Collapse>
   )
