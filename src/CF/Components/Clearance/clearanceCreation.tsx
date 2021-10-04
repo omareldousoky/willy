@@ -28,11 +28,12 @@ import { createClearance } from '../../../Shared/Services/APIs/clearance/createC
 import { getClearance } from '../../../Shared/Services/APIs/clearance/getClearance'
 import { updateClearance } from '../../../Shared/Services/APIs/clearance/updateClearance'
 import { Loader } from '../../../Shared/Components/Loader'
-import PenaltyStrike from './penaltyStrike'
+import { PenaltyStrike } from './penaltyStrike'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
 import ClearanceCreationDocuments from './clearanceCreationDocuments'
 import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
+import { calculatePenalties } from '../../../Shared/Services/APIs/clearance/calculatePenalties'
 
 interface CreateClearanceRouteState {
   customerId?: string
@@ -264,6 +265,17 @@ class ClearanceCreation extends Component<Props, State> {
     this.setState({ loading: false })
   }
 
+  async calculatePenalty(loanId: string) {
+    const res = await calculatePenalties({
+      id: loanId,
+      truthDate: new Date().getTime(),
+    })
+    if (res.status === 'success') {
+      if (res.body && res.body.penalty)
+        this.setState({ penalty: res.body.penalty })
+    } else Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+  }
+
   renderStepOne() {
     return (
       <Formik
@@ -331,7 +343,7 @@ class ClearanceCreation extends Component<Props, State> {
       <>
         <Loader open={this.state.loading} type="fullscreen" />
         {this.state.step1.loanId && (
-          <PenaltyStrike loanId={this.state.step1.loanId} />
+          <PenaltyStrike penalty={this.state.penalty} />
         )}
         <Card.Title>
           <CustomerBasicsCard

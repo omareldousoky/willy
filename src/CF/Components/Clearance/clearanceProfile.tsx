@@ -117,7 +117,7 @@ class ClearanceProfile extends Component<
         data: res.body.data,
         loading: false,
       })
-      this.calculatePenalty(this.state.data.loanId)
+      await this.calculatePenalty(this.state.data.loanId)
     } else {
       this.setState({ loading: false }, () =>
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
