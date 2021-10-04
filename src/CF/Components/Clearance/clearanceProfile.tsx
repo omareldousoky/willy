@@ -23,15 +23,17 @@ import { getClearance } from '../../../Shared/Services/APIs/clearance/getClearan
 import DocumentPhoto from '../../../Shared/Components/documentPhoto/documentPhoto'
 import { getErrorMessage, timeToDate } from '../../../Shared/Services/utils'
 import './clearance.scss'
-import PenaltyStrike from './penaltyStrike'
+import { PenaltyStrike } from './penaltyStrike'
 import { reviewClearance } from '../../../Shared/Services/APIs/clearance/reviewClearance'
 import { LtsIcon } from '../../../Shared/Components'
+import { calculatePenalties } from '../../../Shared/Services/APIs/clearance/calculatePenalties'
 
 interface State {
   loading: boolean
   tabsArray: Array<Tab>
   activeTab: string
   data: Clearance
+  penalty: number
 }
 const header: CSSProperties = {
   textAlign: 'right',
@@ -86,6 +88,7 @@ class ClearanceProfile extends Component<
         registrationDate: 0,
         status: '',
       },
+      penalty: 0,
     }
   }
 
@@ -114,6 +117,7 @@ class ClearanceProfile extends Component<
         data: res.body.data,
         loading: false,
       })
+      this.calculatePenalty(this.state.data.loanId)
     } else {
       this.setState({ loading: false }, () =>
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
@@ -137,6 +141,17 @@ class ClearanceProfile extends Component<
       }
     }
     this.setState({ loading: false })
+  }
+
+  async calculatePenalty(loanId: string) {
+    const res = await calculatePenalties({
+      id: loanId,
+      truthDate: new Date().getTime(),
+    })
+    if (res.status === 'success') {
+      if (res.body && res.body.penalty)
+        this.setState({ penalty: res.body.penalty })
+    } else Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
   }
 
   renderMainInfo() {
@@ -288,8 +303,10 @@ class ClearanceProfile extends Component<
                 <Button
                   className="bg-button w-25"
                   variant="outline-primary"
+                  disabled={!!this.state.penalty}
                   onClick={async () => {
-                    await this.reviewClearanceByStatus('approved')
+                    if (!this.state.penalty)
+                      await this.reviewClearanceByStatus('approved')
                   }}
                 >
                   {local.approved}
@@ -298,8 +315,8 @@ class ClearanceProfile extends Component<
             </>
           )}
         </div>
-        {this.state.data.loanId && (
-          <PenaltyStrike loanId={this.state.data.loanId} />
+        {this.state.data.loanId && this.state.penalty && (
+          <PenaltyStrike penalty={this.state.penalty} />
         )}
         <Card>
           <CardNavBar

@@ -574,5 +574,9 @@
   "low_monthly_income": {
     "en": "monthly income is lesser than allowed minimum",
     "ar": "الدخل الشهري أقل من الحد الأدنى"
+  },
+  "clearance_penalty": {
+    "en":"The penalty needs to be paid first",
+    "ar":"يجب سداد الغرامه اولا"
   }
 }
