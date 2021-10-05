@@ -132,6 +132,7 @@ class ClearanceCreation extends Component<Props, State> {
           },
         })
         await this.getCustomerPaidLoans(res.body.data.customerId)
+        await this.calculatePenalty(res.body.data.loanId)
       }
       this.setState({ loading: false })
     }
@@ -266,13 +267,14 @@ class ClearanceCreation extends Component<Props, State> {
   }
 
   async calculatePenalty(loanId: string) {
+    this.setState({ loading: true })
     const res = await calculatePenalties({
       id: loanId,
       truthDate: new Date().getTime(),
     })
     if (res.status === 'success') {
       if (res.body && res.body.penalty)
-        this.setState({ penalty: res.body.penalty })
+        this.setState({ loading: false, penalty: res.body.penalty })
     } else Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
   }
 
@@ -294,7 +296,6 @@ class ClearanceCreation extends Component<Props, State> {
             customerKey={this.state.customer.key}
             customerType={this.state.customer.customerType}
             paidLoans={this.state.paidLoans}
-            penalty={this.state.penalty}
           />
         )}
       </Formik>
@@ -342,7 +343,7 @@ class ClearanceCreation extends Component<Props, State> {
     return (
       <>
         <Loader open={this.state.loading} type="fullscreen" />
-        {this.state.step1.loanId && (
+        {this.state.step1.loanId && !!this.state.penalty && (
           <PenaltyStrike penalty={this.state.penalty} />
         )}
         <Card.Title>

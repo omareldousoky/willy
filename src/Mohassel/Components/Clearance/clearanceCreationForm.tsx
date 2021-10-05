@@ -21,7 +21,6 @@ interface Props {
   edit: boolean
   customerKey: string
   customerType: string
-  penalty: number
   cancel: (e?: React.FormEvent<HTMLFormElement> | undefined) => void
 }
 
