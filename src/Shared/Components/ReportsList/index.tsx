@@ -57,9 +57,7 @@ export const ReportsList = ({
                   {iscoreType && (
                     <span className="mr-5 d-flex flex-start flex-column">
                       <span>{local.transactionType}</span>
-                      {listItem.fileName?.includes('-SME-')
-                        ? local.sme
-                        : local.micro}
+                      {local[listItem.type]}
                     </span>
                   )}
                 </div>
