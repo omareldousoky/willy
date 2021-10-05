@@ -144,13 +144,14 @@ class ClearanceProfile extends Component<
   }
 
   async calculatePenalty(loanId: string) {
+    this.setState({ loading: true })
     const res = await calculatePenalties({
       id: loanId,
       truthDate: new Date().getTime(),
     })
     if (res.status === 'success') {
       if (res.body && res.body.penalty)
-        this.setState({ penalty: res.body.penalty })
+        this.setState({ penalty: res.body.penalty, loading: false })
     } else Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
   }
 
@@ -315,7 +316,7 @@ class ClearanceProfile extends Component<
             </>
           )}
         </div>
-        {this.state.data.loanId && this.state.penalty && (
+        {this.state.data.loanId && !!this.state.penalty && (
           <PenaltyStrike penalty={this.state.penalty} />
         )}
         <Card>
