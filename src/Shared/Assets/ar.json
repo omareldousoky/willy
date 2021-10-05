@@ -1191,5 +1191,7 @@
   "uploadDocuments": "رفع المستندات",
   "downloadDocuments": "تنزيل المستندات",
   "convertToCustomer": "تحويل إلي عميل",
+  "cbeCodes": "أكواد البنك المركزي",
+  "fileUpload": "رفع الملف",
   "createLead": "إنشاء متقدم"
 }

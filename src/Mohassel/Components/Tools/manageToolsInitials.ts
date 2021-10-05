@@ -28,5 +28,13 @@ export const manageToolsArray = (): Card[] => {
       path: '/tools/principalRange',
     })
   }
+  if (ability.can('getCBEFiles', 'customer')) {
+    manageLoanArr.push({
+      icon: 'business-specialities',
+      header: local.cbeCodes,
+      desc: local.cbeCodes,
+      path: '/tools/cbe-codes',
+    })
+  }
   return manageLoanArr
 }

@@ -69,6 +69,7 @@ import CompanyCreation from '../Components/CustomerCreation/CompanyCreation'
 import { LegalCalendar } from '../Components/LegalCalendar'
 import { Landing } from '../../Shared/Components/Landing'
 import { legalWarningRoute } from '../Components/LegalWarnings/routes'
+import CBEFiles from '../Components/Tools/cbeCodes'
 import { CreateLead } from '../Components/HalanIntegration/createLead'
 
 const appRoutes = [
@@ -226,6 +227,15 @@ const appRoutes = [
             render: (props) => (
               <Can I="createMaxPrincipal" a="config">
                 <PrincipleThreshold {...props} />
+              </Can>
+            ),
+          },
+          {
+            path: '/cbe-codes',
+            label: local.cbeCodes,
+            render: (props) => (
+              <Can I="getCBEFiles" a="customer">
+                <CBEFiles {...props} />
               </Can>
             ),
           },
