@@ -1192,5 +1192,6 @@
   "downloadDocuments": "تنزيل المستندات",
   "convertToCustomer": "تحويل إلي عميل",
   "vendorSettlement": "vendorSettlement",
-  "vendorSettlementReports": "vendorSettlementReports"
+  "vendorSettlementReports": "vendorSettlementReports",
+  "vendor": "التاجر"
 }

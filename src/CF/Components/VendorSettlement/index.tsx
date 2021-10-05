@@ -1,66 +1,32 @@
 import React, { FunctionComponent, useState, useEffect } from 'react'
 import Card from 'react-bootstrap/Card'
 // import { useHistory } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'
-import Search from '../../../Shared/Components/Search/search'
-// import { search as searchAction } from '../../../Shared/redux/search/actions'
 import {
   beneficiaryType,
-  getErrorMessage,
-  // getFullCustomerKey,
-  // removeEmptyArg,
+  // getErrorMessage,
   loanChipStatusClass,
   getFormattedLocalDate,
 } from '../../../Shared/Services/utils'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { ActionsIconGroup } from '../../../Shared/Components'
-// import { LoanListHistoryState, LoanListProps } from './types'
 import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
 import { manageVendorSettlementsArray } from './manageVendorSettlements'
-import { getHalanVendors } from '../../Services/APIs/Vendor/getHalanVendors'
+import VendorSettlementSearch from './vendorSettlementSearch'
 
 const VendorSettlement: FunctionComponent<{}> = (props: {}) => {
-  const [from, setFrom] = useState(0)
-  const [size, setSize] = useState(10)
-
-  // const history = useHistory<LoanListHistoryState>()
-
-  // const dispatch = useDispatch()
-
-  // const { search } = {
-  //   search: (data) => dispatch(searchAction(data)),
-  // }
-
-  const { loans, error, totalCount, loading } = useSelector((state: any) => ({
-    loans: state.search.applications,
-    error: state.search.error,
-    totalCount: state.search.totalCount,
-    loading: state.loading,
-  }))
-
-  async function getVendors() {
-    const res = await getHalanVendors()
-    if (res.status === 'success') {
-      Swal.fire('success', local.userCreated)
-    } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    }
-  }
-  useEffect(() => {
-    getVendors()
-  }, [])
-  useEffect(() => {
-    if (error) Swal.fire('Error !', getErrorMessage(error), 'error')
-  }, [error])
-
-  // useEffect(() => {
-  //   // avoid trigger when from == 0
-  //   if (from) getLoans()
-  // }, [from, size])
+  // const { loans, error, totalCount, loading } = useSelector((state: any) => ({
+  //   loans: state.search.applications,
+  //   error: state.search.error,
+  //   totalCount: state.search.totalCount,
+  //   loading: state.loading,
+  // }))
+  const [loading, setLoading] = useState(false)
+  const [totalCount, setTotalCount] = useState(0)
+  const [transactions, setTransactions] = useState([])
 
   const renderActions = (data) => {
     return [
@@ -141,10 +107,6 @@ const VendorSettlement: FunctionComponent<{}> = (props: {}) => {
     },
   ]
 
-  const searchKeys = ['vendor', 'dateFromTo']
-
-  // const manageLoansTabs = manageLoansArray()
-
   return (
     <>
       <HeaderWithCards
@@ -164,37 +126,18 @@ const VendorSettlement: FunctionComponent<{}> = (props: {}) => {
               <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
                 {local.vendorSettlement}
               </Card.Title>
-              {/* <span className="text-muted">
-                {local.noOfIssuedLoans + ` (${totalCount ?? 0})`}
-              </span> */}
             </div>
           </div>
           <hr className="dashed-line" />
-          <Search
-            cf
-            searchKeys={searchKeys}
-            searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-            setFrom={(fromValue) => setFrom(fromValue)}
+          <VendorSettlementSearch
             datePlaceholder={local.issuanceDate}
-            url="loan"
-            from={from}
-            size={size}
-            hqBranchIdRequest=""
+            submit={(data) => console.log(data)}
           />
           <DynamicTable
-            pagination
-            from={from}
-            size={size}
-            url="loan"
+            pagination={false}
             totalCount={totalCount}
             mappers={tableMappers}
-            data={loans}
-            changeNumber={(key: string, number: number) => {
-              if (key === 'from') {
-                if (!number) console.log('HERE')
-                else setFrom(number)
-              } else setSize(number)
-            }}
+            data={transactions}
           />
         </Card.Body>
       </Card>
