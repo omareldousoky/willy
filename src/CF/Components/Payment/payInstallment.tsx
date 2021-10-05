@@ -66,6 +66,7 @@ interface Props {
   payAmount: number
   truthDate: string
   paymentType: string
+  penaltyAction: string
   penalty: number
 }
 interface SelectObject {
@@ -78,6 +79,7 @@ interface State {
   randomPaymentType: string
   requiredAmount: number
   paymentType: string
+  penaltyAction: string
   randomPaymentTypes: Array<SelectObject>
   payerType: string
   payerNationalId: string
@@ -96,6 +98,7 @@ class PayInstallment extends Component<Props, State> {
       randomPaymentType: '',
       requiredAmount: 0,
       paymentType: this.props.paymentType,
+      penaltyAction: this.props.penaltyAction,
       randomPaymentTypes: [
         { label: local.reissuingFees, value: 'reissuingFees' },
         { label: local.legalFees, value: 'legalFees' },
@@ -112,6 +115,27 @@ class PayInstallment extends Component<Props, State> {
         local: local.payInstallment,
       },
     }
+  }
+
+  componentDidMount() {
+    if (this.props.paymentType === 'penalties' && this.props.penaltyAction) {
+      this.props.penaltyAction !== 'cancel'
+        ? this.setState({
+            sidePaymentInfo: { image: 'pay-penalty', local: local.payPenalty },
+          })
+        : this.setState({
+            sidePaymentInfo: {
+              image: 'cancel-penalty',
+              local: local.cancelPenalty,
+            },
+          })
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.penaltyAction !== this.props.penaltyAction)
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ penaltyAction: prevProps.penaltyAction })
   }
 
   getUsersByAction = async (input: string, values) => {
@@ -187,7 +211,7 @@ class PayInstallment extends Component<Props, State> {
                   : this.state.payAmount,
             }}
             onSubmit={this.props.handleSubmit}
-            validationSchema={paymentValidation}
+            validationSchema={() => paymentValidation(this.props.penalty)}
             validateOnBlur
             validateOnChange
           >
@@ -355,48 +379,50 @@ class PayInstallment extends Component<Props, State> {
                         {formikBag.errors.truthDate}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group as={Col} md={6} controlId="whoPaid">
-                      <Form.Label
-                        className="pr-0"
-                        column
-                      >{`${local.whoMadeThePayment}`}</Form.Label>
-                      <Form.Control
-                        as="select"
-                        name="payerType"
-                        data-qc="payerType"
-                        value={formikBag.values.payerType}
-                        onChange={formikBag.handleChange}
-                        onBlur={formikBag.handleBlur}
-                        isInvalid={
-                          Boolean(formikBag.errors.payerType) &&
-                          Boolean(formikBag.touched.payerType)
-                        }
-                      >
-                        <option value="" />
-                        <Can I="payInstallment" an="application">
-                          <option value="beneficiary" data-qc="beneficiary">
-                            {local.customer}
-                          </option>
-                          <option value="employee" data-qc="employee">
-                            {local.employee}
-                          </option>
-                          <option value="family" data-qc="family">
-                            {local.familyMember}
-                          </option>
-                          <option value="nonFamily" data-qc="nonFamily">
-                            {local.nonFamilyMember}
-                          </option>
-                        </Can>
-                        <Can I="payByInsurance" an="application">
-                          <option value="insurance" data-qc="insurance">
-                            {local.byInsurance}
-                          </option>
-                        </Can>
-                      </Form.Control>
-                      <Form.Control.Feedback type="invalid">
-                        {formikBag.errors.payerType}
-                      </Form.Control.Feedback>
-                    </Form.Group>
+                    {this.props.penaltyAction !== 'cancel' && (
+                      <Form.Group as={Col} md={6} controlId="whoPaid">
+                        <Form.Label
+                          className="pr-0"
+                          column
+                        >{`${local.whoMadeThePayment}`}</Form.Label>
+                        <Form.Control
+                          as="select"
+                          name="payerType"
+                          data-qc="payerType"
+                          value={formikBag.values.payerType}
+                          onChange={formikBag.handleChange}
+                          onBlur={formikBag.handleBlur}
+                          isInvalid={
+                            Boolean(formikBag.errors.payerType) &&
+                            Boolean(formikBag.touched.payerType)
+                          }
+                        >
+                          <option value="" />
+                          <Can I="payInstallment" an="application">
+                            <option value="beneficiary" data-qc="beneficiary">
+                              {local.customer}
+                            </option>
+                            <option value="employee" data-qc="employee">
+                              {local.employee}
+                            </option>
+                            <option value="family" data-qc="family">
+                              {local.familyMember}
+                            </option>
+                            <option value="nonFamily" data-qc="nonFamily">
+                              {local.nonFamilyMember}
+                            </option>
+                          </Can>
+                          <Can I="payByInsurance" an="application">
+                            <option value="insurance" data-qc="insurance">
+                              {local.byInsurance}
+                            </option>
+                          </Can>
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikBag.errors.payerType}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    )}
                     {formikBag.values.payerType === 'beneficiary' &&
                       this.props.application.product.beneficiaryType ===
                         'group' && (
