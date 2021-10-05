@@ -623,7 +623,7 @@ class Payment extends Component<Props, State> {
     const firstDueInstallment = getFirstDueInstallment(this.props.application)
     const isNormalPayment = this.props.paymentType === 'normal'
     const payAmountValue =
-      isNormalPayment && firstDueInstallment
+      isNormalPayment && firstDueInstallment && !this.props.manualPaymentEditId
         ? firstDueInstallment.installmentResponse -
           firstDueInstallment?.totalPaid
         : this.state.payAmount
