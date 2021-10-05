@@ -1,109 +1,75 @@
-import React, { FunctionComponent, useState, useEffect } from 'react'
+import React, { FunctionComponent, useState } from 'react'
 import Card from 'react-bootstrap/Card'
-// import { useHistory } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import Button from 'react-bootstrap/esm/Button'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'
-import {
-  beneficiaryType,
-  // getErrorMessage,
-  loanChipStatusClass,
-  getFormattedLocalDate,
-} from '../../../Shared/Services/utils'
+import { getErrorMessage } from '../../../Shared/Services/utils'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
-import { ActionsIconGroup } from '../../../Shared/Components'
 import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
 import { manageVendorSettlementsArray } from './manageVendorSettlements'
 import VendorSettlementSearch from './vendorSettlementSearch'
+import { getVendorOutstandingSettlements } from '../../../Shared/Services/APIs/VendorSettlements/searchSettlements'
+import VendorSettlementModal from './VendorSettlementModal'
 
-const VendorSettlement: FunctionComponent<{}> = (props: {}) => {
-  // const { loans, error, totalCount, loading } = useSelector((state: any) => ({
-  //   loans: state.search.applications,
-  //   error: state.search.error,
-  //   totalCount: state.search.totalCount,
-  //   loading: state.loading,
-  // }))
+const VendorSettlement: FunctionComponent<{}> = () => {
   const [loading, setLoading] = useState(false)
-  const [totalCount, setTotalCount] = useState(0)
-  const [transactions, setTransactions] = useState([])
+  const [viewModal, setViewModal] = useState(false)
+  const [merchantId, setMerchantId] = useState('')
+  const [transactions, setTransactions] = useState<any>([])
+  const [
+    vendorOutstandingSettlement,
+    setVendorOutstandingSettlement,
+  ] = useState(0)
 
-  const renderActions = (data) => {
-    return [
-      {
-        actionTitle: local.view,
-        actionIcon: 'view',
-        actionPermission: true,
-        actionOnClick: () => console.log(data.application._id, props),
-      },
-    ]
+  async function getOutstandingSettlements(vendorId, date) {
+    const toDate = new Date(date).setHours(23, 59, 59, 999).valueOf()
+    const res = await getVendorOutstandingSettlements({
+      merchantId: vendorId,
+      toDate,
+    })
+    setLoading(true)
+    if (res.status === 'success') {
+      setLoading(false)
+      setTransactions(res.body.transactions ?? [])
+      setVendorOutstandingSettlement(res.body.outstandingSettlement ?? 0)
+      setMerchantId(vendorId)
+    } else {
+      setLoading(false)
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    }
   }
 
   const tableMappers: TableMapperItem[] = [
     {
       title: local.customerType,
       key: 'customerType',
-      render: (data) =>
-        beneficiaryType(data.application.product.beneficiaryType),
+      render: (data) => data.transactionType,
     },
     {
       title: local.loanCode,
       key: 'loanCode',
-      render: (data) => data.application.loanApplicationKey,
+      render: (data) => data.transactionNumber,
     },
     {
       title: local.customerName,
       key: 'name',
-      sortable: true,
       render: (data) => (
-        <div style={{ cursor: 'pointer' }}>
-          {data.application.customer.customerName}
-        </div>
+        <div style={{ cursor: 'pointer' }}>{data.customerName}</div>
       ),
     },
     {
-      title: local.nationalId,
+      title: local.vendor,
       key: 'nationalId',
       render: (data) => (
-        <div style={{ cursor: 'pointer' }}>
-          {data.application.customer.nationalId}
-        </div>
+        <div style={{ cursor: 'pointer' }}>{data.merchantName}</div>
       ),
     },
     {
       title: local.productName,
       key: 'productName',
-      render: (data) => data.application.product.productName,
-    },
-    {
-      title: local.loanIssuanceDate,
-      key: 'issueDate',
-      sortable: true,
-      render: (data) =>
-        data.application.issueDate
-          ? getFormattedLocalDate(data.application.issueDate)
-          : '',
-    },
-    {
-      title: local.status,
-      key: 'status',
-      sortable: true,
-      render: (data) => {
-        const status = loanChipStatusClass[data.application.status || 'default']
-        const isCancelled = status === 'canceled'
-        return (
-          <div className={`status-chip ${status}`}>
-            {isCancelled ? local.cancelled : local[status]}
-          </div>
-        )
-      },
-    },
-    {
-      title: '',
-      key: 'action',
-      render: (data) => (
-        <ActionsIconGroup currentId={data._id} actions={renderActions(data)} />
-      ),
+      render: (data) => data.price,
     },
   ]
 
@@ -126,21 +92,48 @@ const VendorSettlement: FunctionComponent<{}> = (props: {}) => {
               <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
                 {local.vendorSettlement}
               </Card.Title>
+              {transactions.length > 0 && (
+                <>
+                  <span className="text-muted">
+                    {local.noOfIssuedLoans + ` (${transactions.length ?? 0})`}
+                  </span>
+                  <span className="text-muted mx-2">
+                    {local.loansSelectedAmount +
+                      ` (${vendorOutstandingSettlement ?? 0})`}
+                  </span>
+                </>
+              )}
             </div>
+            {vendorOutstandingSettlement > 0 && (
+              <div className="w-50">
+                <Button onClick={() => setViewModal(true)}>Settle</Button>
+              </div>
+            )}
           </div>
           <hr className="dashed-line" />
           <VendorSettlementSearch
             datePlaceholder={local.issuanceDate}
-            submit={(data) => console.log(data)}
+            submit={(data) =>
+              getOutstandingSettlements(data.merchantId, data.toDate)
+            }
           />
           <DynamicTable
             pagination={false}
-            totalCount={totalCount}
+            totalCount={0}
             mappers={tableMappers}
             data={transactions}
           />
         </Card.Body>
       </Card>
+      {viewModal && (
+        <VendorSettlementModal
+          show={viewModal}
+          hideModal={() => setViewModal(false)}
+          onSuccess={() => window.location.reload()}
+          vendorOutstandingSettlement={vendorOutstandingSettlement}
+          merchantId={merchantId}
+        />
+      )}
     </>
   )
 }

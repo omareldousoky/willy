@@ -7,24 +7,37 @@ import Row from 'react-bootstrap/Row'
 import Swal from 'sweetalert2'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getHalanVendors } from '../../Services/APIs/Vendor/getHalanVendors'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import { getDateString, getErrorMessage } from '../../../Shared/Services/utils'
 import { Loader } from '../../../Shared/Components/Loader'
+import { getVendorLastSettlementDate } from '../../../Shared/Services/APIs/VendorSettlements/searchSettlements'
 
 const VendorSettlementSearch: FunctionComponent<{
   datePlaceholder: string
   submit: (data) => void
 }> = ({ datePlaceholder, submit }) => {
   const [loading, setLoading] = useState(false)
-  const [vendors, setVendors] = useState([])
+  const [vendors, setVendors] = useState<{ arabic_name: string; id: string }[]>(
+    []
+  )
+  const [latestSettledAt, setLatestSettledAt] = useState(0)
 
   async function getVendors() {
-    const res = await getHalanVendors()
     setLoading(true)
+    const res = await getHalanVendors()
+    setLoading(false)
     if (res.status === 'success') {
-      setLoading(false)
-      Swal.fire('success', local.userCreated)
+      setVendors(res.body.data)
     } else {
-      setLoading(false)
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    }
+  }
+  async function getLastSettlementDate(merchantId: string) {
+    setLoading(true)
+    const res = await getVendorLastSettlementDate({ merchantId })
+    setLoading(false)
+    if (res.status === 'success') {
+      setLatestSettledAt(res.body.latestSettlementDate ?? 0)
+    } else {
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
   }
@@ -35,7 +48,7 @@ const VendorSettlementSearch: FunctionComponent<{
     <Formik
       enableReinitialize
       initialValues={{
-        fromDate: '',
+        // fromDate: '',
         toDate: '',
         merchantId: '',
       }}
@@ -60,11 +73,16 @@ const VendorSettlementSearch: FunctionComponent<{
                   data-qc="merchantId"
                   className="border-0"
                   value={formikProps.values.merchantId}
-                  onChange={formikProps.handleChange}
+                  onChange={(e) => {
+                    const id = e.currentTarget.value
+                    getLastSettlementDate(id)
+                    formikProps.setFieldValue('merchantId', id)
+                  }}
                 >
                   <option value="" disabled />
-                  <option value="male">{local.male}</option>
-                  <option value="female">{local.female}</option>
+                  {vendors.map((vendor) => (
+                    <option value={vendor.id}>{vendor.arabic_name}</option>
+                  ))}
                 </Form.Control>
               </div>
             </Col>
@@ -76,7 +94,7 @@ const VendorSettlementSearch: FunctionComponent<{
                 <p className="dropdown-label text-nowrap border-0 align-self-stretch mr-2">
                   {datePlaceholder || local.creationDate}
                 </p>
-                <span>{local.from}</span>
+                {/* <span>{local.from}</span>
                 <Form.Control
                   required
                   className="border-0"
@@ -89,8 +107,7 @@ const VendorSettlementSearch: FunctionComponent<{
                     if (e.currentTarget.value === '')
                       formikProps.setFieldValue('toDate', '')
                   }}
-                  disabled={formikProps.values.merchantId.length === 0}
-                />
+                /> */}
                 <span className="mr-1">{local.to}</span>
                 <Form.Control
                   required
@@ -99,9 +116,12 @@ const VendorSettlementSearch: FunctionComponent<{
                   name="toDate"
                   data-qc="toDate"
                   value={formikProps.values.toDate}
-                  min={formikProps.values.fromDate}
+                  min={getDateString(latestSettledAt)}
+                  max={getDateString(
+                    new Date().setHours(23, 59, 59, 999).valueOf() - 86400000
+                  )}
                   onChange={formikProps.handleChange}
-                  disabled={!formikProps.values.fromDate}
+                  disabled={formikProps.values.merchantId.length === 0}
                 />
               </div>
             </Col>
@@ -111,11 +131,8 @@ const VendorSettlementSearch: FunctionComponent<{
                 className="ml-auto"
                 style={{ width: 180, height: 50, marginTop: 20 }}
                 disabled={
-                  formikProps.values.fromDate
-                    ? !(
-                        formikProps.values.fromDate && formikProps.values.toDate
-                      )
-                    : false
+                  formikProps.values.merchantId.length === 0 ||
+                  formikProps.values.toDate.length === 0
                 }
               >
                 {local.search}

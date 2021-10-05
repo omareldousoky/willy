@@ -6,8 +6,8 @@ export interface VendorOutstandingSettlementsRequest
   toDate: number
 }
 export interface VendorSettlementRequest {
-  merchantId: number
+  merchantId: string
   settlementDate: number
   settlementAmount: number
-  bankAccountNumber: number
+  bankAccountNumber: string
 }
