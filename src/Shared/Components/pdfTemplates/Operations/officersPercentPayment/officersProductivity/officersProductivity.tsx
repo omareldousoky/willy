@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { OfficersProductivityResponse } from '../../../../../../Mohassel/Models/OfficersProductivityReport'
+import { OfficersProductivityResponse } from '../../../../../Models/OfficerProductivity/OfficersProductivityReport'
 import Orientation from '../../../../Common/orientation'
 import { formatPercent } from '../officersPercentPayment'
 import '../officersPercentPayment.scss'

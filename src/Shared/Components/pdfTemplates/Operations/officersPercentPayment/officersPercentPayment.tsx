@@ -1,10 +1,10 @@
 import React from 'react'
-import { Header } from '../../pdfTemplateCommon/header'
 import {
   OfficerPercentPaymentResponse,
-  OfficerPercentPaymentRow,
   OfficerPercentPaymentTotalRow,
-} from '../../../../../Mohassel/Services/interfaces'
+  OfficerPercentPaymentRow,
+} from '../../../../Models/operationsReports'
+import { Header } from '../../pdfTemplateCommon/header'
 import './officersPercentPayment.scss'
 import OfficersPercentPaymentFooter from './officersPercentPaymentFooter'
 

@@ -12,7 +12,7 @@ import {
 import {
   OfficersProductivityRequest,
   OfficersProductivityResponse,
-} from '../../Models/OfficersProductivityReport'
+} from '../../../Shared/Models/OfficerProductivity/OfficersProductivityReport'
 import OfficersProductivity from '../../../Shared/Components/pdfTemplates/Operations/officersPercentPayment/officersProductivity/officersProductivity'
 import { ReportsList } from '../../../Shared/Components/ReportsList'
 import { CurrentHierarchiesSingleResponse } from '../../../Shared/Models/OfficerProductivity/OfficerProductivityReport'

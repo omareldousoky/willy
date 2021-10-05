@@ -1,11 +1,6 @@
 import React from 'react'
 import { DueInstallmentsResponse } from '../../../../Models/operationsReports'
-import store from '../../../../redux/store'
-import {
-  getCurrentTime,
-  numbersToArabic,
-  timeToArabicDate,
-} from '../../../../Services/utils'
+import { numbersToArabic } from '../../../../Services/utils'
 import { Header } from '../../pdfTemplateCommon/header'
 
 import './dueInstallments.scss'
@@ -21,31 +16,14 @@ const DueInstallments = (props: DueInstallmentsProps) => {
   const { fromDate, toDate, data, isCF } = props
   return (
     <div className="due-installments">
-      <div className="header-wrapper">
-        <span className="logo-print" role="img" />
-        <p className="m-0">
-          ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-        </p>
-      </div>
-      <div className="header-wrapper">
-        <p style={{ marginRight: '10px' }}>شركة تساهيل للتمويل متناهي الصغر</p>
-        <p>{store.getState().auth.name}</p>
-        <p>{getCurrentTime()}</p>
-      </div>
-      <div className="d-flex flex-column mx-3">
-        <p className="report-title">
-          ملخص الاقساط المستحقة عن فترة من : &nbsp;
-          {timeToArabicDate(new Date(fromDate).valueOf(), false)} إلى : &nbsp;
-          {timeToArabicDate(new Date(toDate).valueOf(), false)}
-        </p>
-        <Header
-          title="ملخص الاقساط المستحقة"
-          fromDate={fromDate}
-          toDate={toDate}
-          cf={isCF}
-        />
-        <hr className="horizontal-line" />
-      </div>
+      <Header
+        title="ملخص الاقساط المستحقة"
+        fromDate={fromDate}
+        toDate={toDate}
+        showCurrentDate
+        showCurrentUser
+        cf={isCF}
+      />
       <table className="body">
         <thead>
           <tr>
