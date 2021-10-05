@@ -1,12 +1,12 @@
 import { AxiosResponse } from 'axios'
 import axios from '../../../axiosInstance'
 import { API_BASE_URL } from '../../../../envConfig'
-import { OfficerPercentPaymentResponse } from '../../../../../Mohassel/Services/interfaces'
 import { ApiResponse } from '../../../../Models/common'
 import {
   OfficersPercentPaymentRequest,
   OfficersBranchPercentPaymentRequest,
   OfficerBranchPercentPaymentResponse,
+  OfficerPercentPaymentResponse,
 } from '../../../../Models/operationsReports'
 
 const fetchOfficerPercentPaymentUrl = `${API_BASE_URL}/report/officer-percent-payment`
