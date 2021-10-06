@@ -84,8 +84,18 @@ export const createLeadValidation = (maxLimit: number) =>
     businessArea: Yup.string().trim().required(local.required),
     businessCity: Yup.string().trim().required(local.required),
     businessSector: Yup.string().trim().required(local.required),
-    customerName: Yup.string().trim().required(local.required),
-    phoneNumber: Yup.string().trim().required(local.required),
+    customerName: Yup.string()
+      .trim()
+      .max(100, local.maxLength100)
+      .required(local.required)
+      .matches(
+        /^(?!.*?\s{2})([\u0621-\u064A\s]+){1,100}$/,
+        local.onlyArabicLetters
+      ),
+    phoneNumber: Yup.string()
+      .trim()
+      .min(11, local.minLength11)
+      .required(local.required),
     customerNationalId: Yup.number()
       .min(10000000000000, local.nationalIdLengthShouldBe14)
       .max(99999999999999, local.nationalIdLengthShouldBe14)
