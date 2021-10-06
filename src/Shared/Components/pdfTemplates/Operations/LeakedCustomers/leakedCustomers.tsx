@@ -16,17 +16,21 @@ const LeakedCustomersPDF = ({ data, fromDate, toDate, isCF }: Props) => {
   const to = new Date(toDate).valueOf()
   return (
     <div className="leaked-customers">
+      <Header
+        title="لعملاء المتسربون عن الفتره"
+        fromDate={from}
+        toDate={to}
+        cf={isCF}
+      />
       {data.response?.map((branchCustomers, index) => {
         return (
           <table key={index}>
-            <Header
-              title="لعملاء المتسربون عن الفتره"
-              fromDate={from}
-              toDate={to}
-              branchName={branchCustomers.branchName}
-              cf={isCF}
-            />
             <thead>
+              <tr>
+                <th className="font-weight-bold ml-auto pr-2">
+                  فرع: {branchCustomers.branchName}
+                </th>
+              </tr>
               <tr>
                 <th>م</th>
                 <th>كود العميل</th>

@@ -42,7 +42,7 @@ export const CollectionStatement: React.FC<CollectionStatementProps> = ({
           <th>ايرادات اخري</th>
           <th>إجمالي عام</th>
         </tr>
-        {branch.rows.map((row, idx) => (
+        {branch.rows?.map((row, idx) => (
           <tr key={idx}>
             <td>{row.truthDate.substring(0, 10)}</td>
             <td>{trimmedValue(row.fees)}</td>
@@ -80,7 +80,7 @@ export const CollectionStatement: React.FC<CollectionStatementProps> = ({
         />
         <Table className="w-100" striped bordered hover>
           <tbody>
-            {branches.map((branch, idx) => (
+            {branches?.map((branch, idx) => (
               <BranchComponent key={idx} branch={branch} />
             ))}
             <tr style={{ fontSize: 16 }}>
