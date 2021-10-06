@@ -627,7 +627,7 @@ export const CustomerProfile = () => {
                 </p>
               </span>
             </div>
-            {!loading && <ProfileActions actions={getProfileActions()} />}
+            <ProfileActions actions={getProfileActions()} />
           </div>
           {mainInfo && <InfoBox info={mainInfo} />}
         </div>
