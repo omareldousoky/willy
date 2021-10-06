@@ -24,12 +24,12 @@ const VendorSettlement: FunctionComponent<{}> = () => {
   ] = useState(0)
 
   async function getOutstandingSettlements(vendorId, date) {
+    setLoading(true)
     const toDate = new Date(date).setHours(23, 59, 59, 999).valueOf()
     const res = await getVendorOutstandingSettlements({
       merchantId: vendorId,
       toDate,
     })
-    setLoading(true)
     if (res.status === 'success') {
       setLoading(false)
       setTransactions(res.body.transactions ?? [])
@@ -76,7 +76,7 @@ const VendorSettlement: FunctionComponent<{}> = () => {
   return (
     <>
       <HeaderWithCards
-        header={local.issuedLoans}
+        // header={local.issuedLoans}
         array={manageVendorSettlementsArray()}
         active={manageVendorSettlementsArray()
           .map((item) => {
@@ -105,8 +105,10 @@ const VendorSettlement: FunctionComponent<{}> = () => {
               )}
             </div>
             {vendorOutstandingSettlement > 0 && (
-              <div className="w-50">
-                <Button onClick={() => setViewModal(true)}>Settle</Button>
+              <div className="w-50 d-flex justify-content-end">
+                <Button onClick={() => setViewModal(true)}>
+                  {local.settle}
+                </Button>
               </div>
             )}
           </div>

@@ -26,7 +26,7 @@ const VendorSettlementModal: FunctionComponent<CFLimitModalProps> = ({
   merchantId,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const [settlementDate, setSettlementDate] = useState('')
+  // const [settlementDate, setSettlementDate] = useState('')
   const [bankAccountNumber, setBankAccountNumber] = useState('1204022601')
 
   const handleSubmit = async () => {
@@ -34,9 +34,7 @@ const VendorSettlementModal: FunctionComponent<CFLimitModalProps> = ({
       setIsLoading(true)
       const result = await settleVendorOutstandingSettlements({
         merchantId,
-        settlementDate: new Date(settlementDate)
-          .setHours(23, 59, 59, 999)
-          .valueOf(),
+        settlementDate: new Date().valueOf(),
         settlementAmount: vendorOutstandingSettlement,
         bankAccountNumber,
       })
@@ -75,7 +73,7 @@ const VendorSettlementModal: FunctionComponent<CFLimitModalProps> = ({
               </Form.Group>
             </Col>
           </Row>
-          <Row>
+          {/* <Row>
             <Col>
               <Form.Group controlId="customerConsumerFinanceMaxLimit">
                 <Form.Label className="font-weight-bold">
@@ -89,7 +87,7 @@ const VendorSettlementModal: FunctionComponent<CFLimitModalProps> = ({
                 />
               </Form.Group>
             </Col>
-          </Row>
+          </Row> */}
           <Row>
             <Col>
               <Form.Group controlId="bankAccountNumber">

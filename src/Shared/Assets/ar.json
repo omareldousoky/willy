@@ -1191,7 +1191,8 @@
   "uploadDocuments": "رفع المستندات",
   "downloadDocuments": "تنزيل المستندات",
   "convertToCustomer": "تحويل إلي عميل",
-  "vendorSettlement": "vendorSettlement",
-  "vendorSettlementReports": "vendorSettlementReports",
-  "vendor": "التاجر"
+  "vendorSettlement": "تسوية التجار",
+  "vendorSettlementReports": "تقارير تسوية التجار",
+  "vendor": "التاجر",
+  "settle": "تسوية"
 }
