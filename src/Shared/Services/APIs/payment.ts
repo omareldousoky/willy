@@ -15,6 +15,9 @@ const approveManualOtherPaymentUrl = `${baseUrl}/approve-manual-other-payment`
 const rejectManualOtherPaymentUrl = `${baseUrl}/reject-manual-other-payment`
 const earlyPaymentUrl = `${baseUrl}/early-payment/:loanId`
 const editManualPaymentUrl = `${baseUrl}/edit-manual-payment/:loanId`
+const payPenaltiesUrl = `${baseUrl}/pay-penalties/:loanId`
+const cancelPenaltiesUrl = `${baseUrl}/cancel-penalties/:loanId`
+const calculateEarlyPaymentUrl = `${baseUrl}/calculate-early-payment/:loanId`
 
 export const manualPayment = async (obj) => {
   try {
@@ -24,7 +27,10 @@ export const manualPayment = async (obj) => {
     )
     return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: 'error', error: error.response.data }
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
   }
 }
 
@@ -36,7 +42,10 @@ export const payFutureInstallment = async (obj) => {
     )
     return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: 'error', error: error.response.data }
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
   }
 }
 
@@ -48,7 +57,10 @@ export const payInstallment = async (obj) => {
     )
     return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: 'error', error: error.response.data }
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
   }
 }
 
@@ -57,7 +69,10 @@ export const approveManualPayment = async (id: string) => {
     const res = await axios.put(approveManualPaymentUrl.replace(':loanId', id))
     return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: 'error', error: error.response.data }
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
   }
 }
 
@@ -66,7 +81,10 @@ export const rejectManualPayment = async (id: string) => {
     const res = await axios.put(rejectManualPaymentUrl.replace(':loanId', id))
     return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: 'error', error: error.response.data }
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
   }
 }
 
@@ -78,7 +96,10 @@ export const editManualOtherPayment = async (obj) => {
     )
     return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: 'error', error: error.response.data }
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
   }
 }
 
@@ -87,7 +108,10 @@ export const otherPayment = async ({ id, data }) => {
     const res = await axios.put(otherPaymentUrl.replace(':loanId', id), data)
     return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: 'error', error: error.response.data }
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
   }
 }
 
@@ -99,7 +123,10 @@ export const randomManualPayment = async (obj) => {
     )
     return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: 'error', error: error.response.data }
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
   }
 }
 
@@ -109,7 +136,10 @@ export const getManualOtherPayments = async (id) => {
 
     return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: 'error', error: error.response.data }
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
   }
 }
 
@@ -119,7 +149,10 @@ export const approveManualOtherPayment = async (id: string) => {
 
     return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: 'error', error: error.response.data }
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
   }
 }
 
@@ -128,7 +161,10 @@ export const rejectManualOtherPayment = async (id: string) => {
     const res = await axios.put(rejectManualOtherPaymentUrl, { id })
     return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: 'error', error: error.response.data }
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
   }
 }
 
@@ -152,6 +188,48 @@ export const editManualPayment = async (obj) => {
     )
     return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: 'error', error: error.response.data }
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
+  }
+}
+
+export const payPenalties = async ({ id, data }) => {
+  try {
+    const res = await axios.put(payPenaltiesUrl.replace(':loanId', id), data)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
+  }
+}
+
+export const cancelPenalties = async ({ id, data }) => {
+  try {
+    const res = await axios.put(cancelPenaltiesUrl.replace(':loanId', id), data)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
+  }
+}
+
+export const calculateEarlyPayment = async (id: string) => {
+  try {
+    const res = await axios.put(
+      calculateEarlyPaymentUrl.replace(':loanId', id),
+      {}
+    )
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return {
+      status: 'error',
+      error: (error as Record<string, any>).response.data,
+    }
   }
 }

@@ -8,8 +8,10 @@ export interface List {
   failReason?: string
   key?: string
   url?: string
+  type: 'sme' | 'micro'
 }
 export interface ReportsListProps {
   list: List[]
   onClickDownload?: (itemId: string) => void
+  iscoreType?: boolean
 }
