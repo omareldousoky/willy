@@ -151,8 +151,10 @@ class ClearanceProfile extends Component<
     })
     if (res.status === 'success') {
       if (res.body && res.body.penalty)
-        this.setState({ penalty: res.body.penalty, loading: false })
+        this.setState({ penalty: res.body.penalty })
     } else Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+
+    this.setState({ loading: false })
   }
 
   renderMainInfo() {
