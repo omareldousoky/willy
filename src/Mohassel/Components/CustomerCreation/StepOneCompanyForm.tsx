@@ -10,7 +10,10 @@ import Map from '../../../Shared/Components/Map/map'
 import local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../config/Can'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import {
+  getBranchFromCookie,
+  getErrorMessage,
+} from '../../../Shared/Services/utils'
 import { IscoreAuthority } from '../../../Shared/Services/interfaces'
 import {
   getBusinessSectors,
@@ -63,6 +66,8 @@ export const StepOneCompanyForm = (props: any) => {
     },
   ])
   const [authorities, setAuthorities] = useState<Array<IscoreAuthority>>([])
+  const branchId = getBranchFromCookie('ltsbranch')
+
   const policeStations: District[] =
     governorates.find(
       (governorate) =>
@@ -135,6 +140,7 @@ export const StepOneCompanyForm = (props: any) => {
               value={values.businessName}
               onChange={handleChange}
               isInvalid={errors.businessName && touched.businessName}
+              disabled={branchId !== 'hq'}
               onBlur={handleBlur}
             />
             <Form.Control.Feedback type="invalid">
@@ -179,6 +185,7 @@ export const StepOneCompanyForm = (props: any) => {
                 errors.businessCharacteristic && touched.businessCharacteristic
               }
               onBlur={handleBlur}
+              disabled={branchId !== 'hq'}
             />
             <Form.Control.Feedback type="invalid">
               {errors.businessCharacteristic}
@@ -199,6 +206,7 @@ export const StepOneCompanyForm = (props: any) => {
               onBlur={handleBlur}
               onChange={handleChange}
               isInvalid={errors.governorate && touched.governorate}
+              disabled={branchId !== 'hq'}
             >
               <option value="" disabled />
               {authorities.map((authority, index) => {
@@ -333,6 +341,7 @@ export const StepOneCompanyForm = (props: any) => {
                 errors.commercialRegisterNumber &&
                 touched.commercialRegisterNumber
               }
+              disabled={branchId !== 'hq'}
             />
             <Form.Control.Feedback type="invalid">
               {errors.commercialRegisterNumber}
