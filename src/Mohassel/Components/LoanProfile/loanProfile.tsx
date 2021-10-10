@@ -52,7 +52,7 @@ import UploadDocuments from './uploadDocuments'
 import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan'
 import { doubtLoan } from '../../Services/APIs/Loan/doubtLoan'
 import PaymentReceipt from '../../../Shared/Components/pdfTemplates/paymentReceipt'
-import RandomPaymentReceipt from '../pdfTemplates/randomPaymentReceipt/randomPaymentReceipt'
+import RandomPaymentReceipt from '../../../Shared/Components/pdfTemplates/randomPaymentReceipt/randomPaymentReceipt'
 import { calculatePenalties } from '../../../Shared/Services/APIs/clearance/calculatePenalties'
 import ManualRandomPaymentsActions from './manualRandomPaymentsActions'
 import { getManualOtherPayments } from '../../Services/APIs/Payment/getManualOtherPayments'
@@ -1640,10 +1640,7 @@ class LoanProfile extends Component<Props, State> {
         )}
         {this.state.print === 'randomPayment' ||
         this.state.print === 'penalty' ? (
-          <RandomPaymentReceipt
-            receiptData={this.state.receiptData}
-            data={this.state.application}
-          />
+          <RandomPaymentReceipt receiptData={this.state.receiptData} />
         ) : null}
       </Container>
     )

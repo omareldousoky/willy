@@ -43,7 +43,7 @@ export const LegalWarnings = () => {
   const [printWarnings, setPrintWarnings] = useState<LegalWarningResponse[]>()
   const [showModal, setShowModal] = useState(false)
 
-  const history = useHistory<{ id?: string }>()
+  const history = useHistory<{ id?: string; sme?: boolean }>()
   const dispatch = useDispatch()
 
   const dispatchActions = {
@@ -262,6 +262,10 @@ export const LegalWarnings = () => {
             onClick={() =>
               history.push('/loans/loan-profile', {
                 id: warning.loanId,
+                sme:
+                  warning.customerType === 'company' ||
+                  warning.customerType === 'companyGuarantor' ||
+                  warning.customerType === 'entitledToSign',
               })
             }
           >

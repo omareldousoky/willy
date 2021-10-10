@@ -15,6 +15,7 @@ import { terrorismRoutes } from '../Components/ManageTerrorism/routes'
 import { financialClosingRoutes } from '../Components/FinancialClosing/routes'
 import { manageLoansRoutes } from '../Components/ManageLoans/routes'
 import { reportRoutes } from '../Components/Reports/routes'
+import { supervisionLevelsRoute } from '../Components/ManagerHierarchy/routes'
 
 const appRoutes = [
   {
@@ -34,6 +35,7 @@ const appRoutes = [
       financialClosingRoutes,
       manageLoansRoutes,
       reportRoutes,
+      supervisionLevelsRoute,
     ],
   },
 ]

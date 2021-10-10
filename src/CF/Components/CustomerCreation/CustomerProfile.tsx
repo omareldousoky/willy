@@ -130,7 +130,7 @@ export const CustomerProfile = () => {
       customerCreationDate: customer.created?.at || 0,
       customerName: customer.customerName || '',
       nationalId: customer.nationalId || '',
-      customerHomeAddress: customer.currentHomeAddress || '',
+      customerHomeAddress: customer.customerHomeAddress || '',
       mobilePhoneNumber: customer.mobilePhoneNumber || '',
       initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
       customerGuarantors: customerGuarantors || [],
@@ -142,6 +142,7 @@ export const CustomerProfile = () => {
     if (limitsRes.status === 'success') {
       setLoading(false)
       setGlobalLimits(limitsRes.body)
+      return
     }
     setLoading(false)
     Swal.fire('Error !', getErrorMessage(limitsRes.error.error), 'error')
@@ -512,11 +513,12 @@ export const CustomerProfile = () => {
     ],
   }
   const getProfileActions = () => {
+    const isBlocked = customerDetails?.blocked?.isBlocked
     return [
       {
         icon: 'download',
         title: local.downloadPDF,
-        permission: !['pending-initialization', 'pending-update'].includes(
+        permission: ['initialization-reviewed', 'update-reviewed'].includes(
           customerDetails?.consumerFinanceLimitStatus ?? ''
         ),
         onActionClick: () => {
@@ -538,7 +540,7 @@ export const CustomerProfile = () => {
       {
         icon: 'applications',
         title: local.createClearance,
-        permission: ability.can('newClearance', 'application'),
+        permission: !isBlocked && ability.can('newClearance', 'application'),
         onActionClick: () =>
           history.push('/customers/create-clearance', {
             customerId: location.state.id,
@@ -560,6 +562,7 @@ export const CustomerProfile = () => {
         icon: 'bulk-loan-applications-review',
         title: local.reviewCFCustomerLimit,
         permission:
+          !isBlocked &&
           ['pending-initialization', 'pending-update'].includes(
             customerDetails?.consumerFinanceLimitStatus ?? ''
           ) &&
@@ -573,9 +576,11 @@ export const CustomerProfile = () => {
         icon: 'bulk-loan-applications-review',
         title: local.approveCFCustomerLimit,
         permission:
+          !isBlocked &&
           ['initialization-reviewed', 'update-reviewed'].includes(
             customerDetails?.consumerFinanceLimitStatus ?? ''
-          ) && ability.can('approveCFLimit', 'customer'),
+          ) &&
+          ability.can('approveCFLimit', 'customer'),
         onActionClick: () => setModalData('approve'),
       },
     ]

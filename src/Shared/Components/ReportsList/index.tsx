@@ -10,7 +10,11 @@ import { LtsIcon } from '../LtsIcon'
 
 import { ReportsListProps } from './types'
 
-export const ReportsList = ({ list, onClickDownload }: ReportsListProps) => {
+export const ReportsList = ({
+  list,
+  onClickDownload,
+  iscoreType,
+}: ReportsListProps) => {
   return (
     <>
       {list?.length > 0 ? (
@@ -44,11 +48,20 @@ export const ReportsList = ({ list, onClickDownload }: ReportsListProps) => {
                   {listItem.status === 'created' && (
                     <span className="mr-5 d-flex flex-start flex-column">
                       <span>{local.creationDate}</span>
-                      {timeToArabicDate(listItem.generatedAt, true)}
+                      {timeToArabicDate(
+                        listItem.fileGeneratedAt || listItem.generatedAt,
+                        true
+                      )}
+                    </span>
+                  )}
+                  {iscoreType && (
+                    <span className="mr-5 d-flex flex-start flex-column">
+                      <span>{local.transactionType}</span>
+                      {local[listItem.type]}
                     </span>
                   )}
                 </div>
-                {listItem.status === 'created' && (
+                {onClickDownload && listItem.status === 'created' && (
                   <Button
                     type="button"
                     variant="default"

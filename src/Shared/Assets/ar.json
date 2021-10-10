@@ -798,9 +798,9 @@
   "blockReason": "سبب الحظر",
   "unblockReason": "سبب إلغاءالحظر",
   "customerWillBeBlocked": "سيتم حظر العميل",
-  "customerWillBeUnblocked": "سيتم إلغاءحظر العميل",
+  "customerWillBeUnblocked": "سيتم إلغاء حظر العميل",
   "customerBlockedSuccessfully": "لقد تم حظر العميل بنجاح",
-  "customerUnblockedSuccessfully": "لقد تم إلغاءحظر العميل بنجاح",
+  "customerUnblockedSuccessfully": "لقد تم إلغاء حظر العميل بنجاح",
   "dateOfFile": "تاريخ الملف",
   "cancelledTransaction": "الحركة ملغاة",
   "hiddenInLTS": "لا تظهر في LTS",
@@ -854,7 +854,7 @@
   "clearances": "المخالصات",
   "undoReviewClearance": "إعادة مراجعة المخالصة",
   "clearanceReceiptPhoto": "صورة إيصال المخالصة",
-  "penaltyMessage": "يوجد غرامه علي العميل بقيمه",
+  "penaltyMessage": "يوجد غرامة على العميل بقيمة",
   "clearanceDocumentPhoto": "صورة مستند المخالصة",
   "printed": "تمت طباعته",
   "clearanceDetails": "تفاصيل نموذج المخالصة",
@@ -1212,7 +1212,9 @@
   "smeBankBranch": "فرع البنك التابعة له الشركة",
   "smeBankAccountNumber": "رقم الحساب البنكي للشركة",
   "smeIbanNumber": "رقم IBAN",
-  "convertToCustomer": "تحويل إلي عميل",
   "cbeCode": "كود البنك المركزي",
-  "duplicateCbeCodeMessage": "رقم الكود موجود بالفعل لشركة اخرى"
+  "duplicateCbeCodeMessage": "رقم الكود موجود بالفعل لشركة اخرى",
+  "convertToCustomer": "تحويل إلي عميل",
+  "cbeCodes": "أكواد البنك المركزي",
+  "fileUpload": "رفع الملف"
 }

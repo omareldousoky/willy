@@ -108,6 +108,8 @@ export interface SupervisionGroupsListState {
   selectedGroups: GroupsByBranch[]
   checkAll: boolean
   chosenStatus: string
+  officersModal: boolean
+  currentGroup?: GroupsByBranch
 }
 
 export interface SupervisionGroupsListProps {
