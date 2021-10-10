@@ -2,6 +2,7 @@ import jwtDecode from 'jwt-decode'
 import JsZip from 'jszip'
 import { saveAs } from 'file-saver'
 import Swal from 'sweetalert2'
+import differenceInYears from 'date-fns/differenceInYears'
 import * as local from '../Assets/ar.json'
 import errorMessages from '../Assets/errorMessages.json'
 import { API_BASE_URL } from '../envConfig'
@@ -972,11 +973,9 @@ export const removeDuplicatesByName = (list: { name: string }[]) =>
       )
     : list
 
-export function calculateAge(dateOfBirth: number) {
+export const calculateAge = (dateOfBirth: number) => {
   if (dateOfBirth) {
-    const diff = Date.now().valueOf() - dateOfBirth
-    const age = new Date(diff)
-    return Math.abs(age.getUTCFullYear() - 1970)
+    return differenceInYears(Date.now().valueOf(), dateOfBirth)
   }
   return 0
 }
