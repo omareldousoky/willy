@@ -7,7 +7,7 @@ import Swal from 'sweetalert2'
 import { FormikErrors, FormikTouched } from 'formik'
 import Button from 'react-bootstrap/Button'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import { calculateAge, getErrorMessage } from '../../../Shared/Services/utils'
 import {
   getBusinessSectors,
   getGovernorates,
@@ -15,6 +15,10 @@ import {
 import { Loader } from '../../../Shared/Components/Loader'
 import { BusinessSector, LeadCore } from '../../../Shared/Models/common'
 import { Governorate } from '../../../Shared/Models/Governorate'
+import {
+  getBirthdateFromNationalId,
+  getGenderFromNationalId,
+} from '../../../Shared/Services/nationalIdValidation'
 
 interface LeadCreationFromProps {
   values: LeadCore
@@ -25,12 +29,14 @@ interface LeadCreationFromProps {
     eventOrPath: string | React.ChangeEvent<unknown>
   ) => void | ((eventOrTextValue: string | React.ChangeEvent<unknown>) => void)
   handleBlur: (eventOrString: unknown) => void | ((e: unknown) => void)
+  setFieldValue: (field: string, value: unknown) => void
 }
 export const LeadCreationForm: React.FC<LeadCreationFromProps> = ({
   values,
   handleSubmit,
   handleBlur,
   handleChange,
+  setFieldValue,
   errors,
   touched,
 }) => {
@@ -81,22 +87,22 @@ export const LeadCreationForm: React.FC<LeadCreationFromProps> = ({
   return (
     <Form className="mx-3" onSubmit={handleSubmit}>
       <Loader open={loading} type="fullscreen" />
+      <Form.Group controlId="customerName" as={Col}>
+        <Form.Label className="data-label">{local.leadName}</Form.Label>
+        <Form.Control
+          type="text"
+          name="customerName"
+          data-qc="customerName"
+          value={values.customerName}
+          onBlur={handleBlur}
+          onChange={handleChange}
+          isInvalid={(errors.customerName && touched.customerName) as boolean}
+        />
+        <Form.Control.Feedback type="invalid">
+          {errors.customerName}
+        </Form.Control.Feedback>
+      </Form.Group>
       <Row>
-        <Form.Group controlId="customerName" as={Col}>
-          <Form.Label className="data-label">{local.leadName}</Form.Label>
-          <Form.Control
-            type="text"
-            name="customerName"
-            data-qc="customerName"
-            value={values.customerName}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            isInvalid={(errors.customerName && touched.customerName) as boolean}
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.customerName}
-          </Form.Control.Feedback>
-        </Form.Group>
         <Form.Group controlId="customerNationalId" as={Col}>
           <Form.Label className="data-label">{local.nationalId}</Form.Label>
           <Form.Control
@@ -105,7 +111,18 @@ export const LeadCreationForm: React.FC<LeadCreationFromProps> = ({
             data-qc="customerNationalId"
             value={values.customerNationalId}
             onBlur={handleBlur}
-            onChange={handleChange}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              const re = /^\d*$/
+              const { value } = event.currentTarget
+              if (
+                event.currentTarget.value === '' ||
+                re.test(event.currentTarget.value)
+              ) {
+                setFieldValue('customerNationalId', value)
+              }
+              setFieldValue('birthDate', getBirthdateFromNationalId(value))
+              setFieldValue('gender', getGenderFromNationalId(value))
+            }}
             isInvalid={
               (errors.customerNationalId &&
                 touched.customerNationalId) as boolean
@@ -114,6 +131,41 @@ export const LeadCreationForm: React.FC<LeadCreationFromProps> = ({
           <Form.Control.Feedback type="invalid">
             {errors.customerNationalId}
           </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group controlId="birthDate" as={Col} sm={3}>
+          <Form.Label className="data-label">{`${local.birthDate}*`}</Form.Label>
+          <Form.Control
+            type="date"
+            name="birthDate"
+            data-qc="birthDate"
+            value={values.birthDate}
+            disabled
+          />
+          <Form.Control.Feedback
+            type="invalid"
+            style={
+              calculateAge(new Date(values.birthDate as number).valueOf()) >= 67
+                ? { display: 'block' }
+                : {}
+            }
+          >
+            {local.customerAgeMoreThan67}
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group controlId="gender" as={Col} sm={3}>
+          <Form.Label className="data-label">{`${local.gender}*`}</Form.Label>
+          <Form.Control
+            as="select"
+            type="select"
+            name="gender"
+            data-qc="gender"
+            value={values.gender}
+            disabled
+          >
+            <option value="" disabled />
+            <option value="male">{local.male}</option>
+            <option value="female">{local.female}</option>
+          </Form.Control>
         </Form.Group>
       </Row>
       <Row>
@@ -124,8 +176,17 @@ export const LeadCreationForm: React.FC<LeadCreationFromProps> = ({
             name="phoneNumber"
             data-qc="phoneNumber"
             value={values.phoneNumber}
+            maxLength={11}
             onBlur={handleBlur}
-            onChange={handleChange}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              const re = /^\d*$/
+              if (
+                event.currentTarget.value === '' ||
+                re.test(event.currentTarget.value)
+              ) {
+                setFieldValue('phoneNumber', event.currentTarget.value)
+              }
+            }}
             isInvalid={(errors.phoneNumber && touched.phoneNumber) as boolean}
           />
           <Form.Control.Feedback type="invalid">

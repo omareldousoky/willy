@@ -79,6 +79,8 @@ export interface LeadCore {
   businessSector: string
   businessStreet: string
   loanAmount?: number
+  gender?: string
+  birthDate?: number
 }
 export interface Lead extends LeadCore {
   nationalIdIssueDate?: string

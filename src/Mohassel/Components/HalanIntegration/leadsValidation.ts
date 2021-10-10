@@ -99,7 +99,15 @@ export const createLeadValidation = (maxLimit: number) =>
     customerNationalId: Yup.number()
       .min(10000000000000, local.nationalIdLengthShouldBe14)
       .max(99999999999999, local.nationalIdLengthShouldBe14)
-      .required(local.required),
+      .when('birthDate', {
+        is: '1800-01-01',
+        then: Yup.number().test('error', local.wrongNationalId, () => false),
+        otherwise: Yup.number()
+          .required()
+          .min(10000000000000, local.nationalIdLengthShouldBe14)
+          .max(99999999999999, local.nationalIdLengthShouldBe14)
+          .required(local.required),
+      }),
     loanAmount: Yup.number()
       .max(maxLimit, maxValue(maxLimit))
       .required(local.required),
