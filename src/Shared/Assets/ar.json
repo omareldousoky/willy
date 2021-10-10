@@ -1213,5 +1213,6 @@
   "smeBankAccountNumber": "رقم الحساب البنكي للشركة",
   "smeIbanNumber": "رقم IBAN",
   "convertToCustomer": "تحويل إلي عميل",
-  "cbeCode": "كود البنك المركزي"
+  "cbeCode": "كود البنك المركزي",
+  "duplicateCbeCodeMessage": "رقم الكود موجود بالفعل لشركة اخرى"
 }

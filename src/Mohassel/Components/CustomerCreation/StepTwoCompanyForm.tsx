@@ -18,6 +18,8 @@ import { theme } from '../../../Shared/theme'
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { searchUsers } from '../../../Shared/Services/APIs/Users/searchUsers'
 import { searchCbeCode } from '../../Services/APIs/CbeCodes/CbeCodes'
+import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
+import useDebounce from '../../../Shared/hooks/useDebounce'
 
 interface GeoDivision {
   majorGeoDivisionName: { ar: string }
@@ -51,6 +53,8 @@ export const StepTwoCompanyForm = (props: any) => {
     previousStep,
     edit,
   } = props
+  const debouncedSearchTerm = useDebounce(values.cbeCode, 500)
+
   const getLoanOfficers = async (inputValue: string) => {
     const res = await searchLoanOfficer({
       from: 0,
@@ -123,6 +127,27 @@ export const StepTwoCompanyForm = (props: any) => {
     }
     getCbeCode(values.businessName)
   }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      if (debouncedSearchTerm) {
+        setLoading(true)
+        const res = await checkDuplicates('cbeCode', values.cbeCode)
+
+        if (res.status === 'success') {
+          setLoading(false)
+          setFieldValue('cbeCodeChecker', res.body.Exists)
+          res.body.Exists &&
+            setFieldValue('cbeCodeDupKey', res.body.CustomerKey)
+        } else {
+          setLoading(false)
+          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        }
+      } else {
+        setLoading(false)
+      }
+    })()
+  }, [debouncedSearchTerm])
   return (
     <Form onSubmit={handleSubmit}>
       <Loader open={loading} type="fullscreen" />
@@ -168,7 +193,11 @@ export const StepTwoCompanyForm = (props: any) => {
             )}
 
             <Form.Control.Feedback type="invalid">
-              {errors.cbeCode}
+              {errors.cbeCode === local.duplicateCbeCodeMessage
+                ? local.duplicateCbeCodeMessage +
+                  local.withCode +
+                  values.cbeCodeDupKey
+                : errors.cbeCode}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>

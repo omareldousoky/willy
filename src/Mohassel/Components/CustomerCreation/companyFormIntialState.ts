@@ -117,7 +117,15 @@ export const companyCreationValidationStepTwo = Yup.object().shape({
   smeBankBranch: Yup.string().required(local.required),
   smeBankAccountNumber: Yup.string().required(local.required),
   smeIbanNumber: Yup.string().required(local.required),
-  cbeCode: Yup.string().required(local.required),
+  cbeCode: Yup.string().when('cbeCodeChecker', {
+    is: true,
+    then: Yup.string().test(
+      'error',
+      local.duplicateCbeCodeMessage,
+      () => false
+    ),
+    otherwise: Yup.string().required(local.required),
+  }),
 })
 
 export const companyCreationValidationStepTwoEdit = Yup.object().shape({
@@ -148,5 +156,13 @@ export const companyCreationValidationStepTwoEdit = Yup.object().shape({
   smeBankBranch: Yup.string().required(local.required),
   smeBankAccountNumber: Yup.string().required(local.required),
   smeIbanNumber: Yup.string().required(local.required),
-  cbeCode: Yup.string().required(local.required),
+  cbeCode: Yup.string().when('cbeCodeChecker', {
+    is: true,
+    then: Yup.string().test(
+      'error',
+      local.duplicateCbeCodeMessage,
+      () => false
+    ),
+    otherwise: Yup.string().required(local.required),
+  }),
 })
