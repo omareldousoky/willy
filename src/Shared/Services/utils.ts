@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 import * as local from '../Assets/ar.json'
 import errorMessages from '../Assets/errorMessages.json'
 import { API_BASE_URL } from '../envConfig'
+import { getCookie } from './getCookie'
 
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
@@ -971,3 +972,7 @@ export const removeDuplicatesByName = (list: { name: string }[]) =>
           index === self.findIndex((t) => t.name === item.name)
       )
     : list
+
+export const getBranchFromCookie = (branchName) => {
+  return getCookie(branchName) ? JSON.parse(getCookie(branchName))._id : ''
+}

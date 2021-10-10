@@ -78,7 +78,12 @@ export interface Customer {
   currHomeAddressGov?: string
   policeStation?: string
   nanoLoansLimit?: number
+  monthlyIncome?: number
+  initialConsumerFinanceLimit?: number
+  consumerFinanceLimitStatus?: string
+  hasLoan?: boolean
 }
+
 export interface Score {
   id?: string // commercialRegisterNumber
   customerName?: string
