@@ -431,6 +431,7 @@ export const CustomerProfile = () => {
     ],
   }
   const getProfileActions = () => {
+    const isBlocked = customerDetails?.blocked?.isBlocked
     return [
       {
         icon: 'edit',
@@ -446,7 +447,7 @@ export const CustomerProfile = () => {
       {
         icon: 'applications',
         title: local.createClearance,
-        permission: ability.can('newClearance', 'application'),
+        permission: !isBlocked && ability.can('newClearance', 'application'),
         onActionClick: () =>
           history.push('/customers/create-clearance', {
             customerId: location.state.id,
@@ -474,6 +475,7 @@ export const CustomerProfile = () => {
         title: local.nanoCustomerLimit,
         icon: 'principal-range',
         permission:
+          !isBlocked &&
           ability.can('editCustomerNanoLoansLimit', 'customer') &&
           ability.can('getMaximumNanoLoansLimit', 'application') &&
           ability.can('getCustomerNanoLoansLimitDocument', 'customer'),
