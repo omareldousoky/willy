@@ -12,8 +12,11 @@ import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageAccountsArray } from './manageAccountsInitials'
-import { getErrorMessage, getDateAndTime } from '../../../Shared/Services/utils'
-import { getCookie } from '../../../Shared/Services/getCookie'
+import {
+  getErrorMessage,
+  getDateAndTime,
+  getBranchFromCookie,
+} from '../../../Shared/Services/utils'
 import {
   BranchDetailsResponse,
   getBranch,
@@ -51,7 +54,7 @@ class BranchesList extends Component<Props, State> {
       size: 10,
       from: 0,
       manageAccountTabs: [],
-      branchId: JSON.parse(getCookie('ltsbranch'))._id,
+      branchId: getBranchFromCookie('ltsbranch'),
       branch: {},
     }
     this.mappers = [
