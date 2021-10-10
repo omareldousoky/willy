@@ -231,7 +231,7 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
   }
 
   const iScoresExist = props.iscores && props.iscores.length > 0
-  const isHQ = getBranchFromCookie('ltsbranch') === 'hq'
+  const isHQ = getBranchFromCookie() === 'hq'
   return (
     <>
       <div className="d-flex flex-column align-items-start justify-content-center">

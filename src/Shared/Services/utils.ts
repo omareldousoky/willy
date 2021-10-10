@@ -973,6 +973,6 @@ export const removeDuplicatesByName = (list: { name: string }[]) =>
       )
     : list
 
-export const getBranchFromCookie = (branchName) => {
+export const getBranchFromCookie = (branchName = 'ltsbranch') => {
   return getCookie(branchName) ? JSON.parse(getCookie(branchName))._id : ''
 }
