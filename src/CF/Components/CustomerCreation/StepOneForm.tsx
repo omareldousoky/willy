@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
 import {
+  calculateAge,
   checkIssueDate,
   getErrorMessage,
   numbersToArabic,
@@ -22,15 +23,6 @@ import { District, Governorate } from '../../../Shared/Models/Governorate'
 import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
 import { getGovernorates } from '../../../Shared/Services/APIs/config'
 import { getCustomerLimitFromMonthlyIncome } from '../../../Shared/Services/APIs/customer/getCustomerConsumerLimit'
-
-function calculateAge(dateOfBirth: number) {
-  if (dateOfBirth) {
-    const diff = Date.now().valueOf() - dateOfBirth
-    const age = new Date(diff)
-    return Math.abs(age.getUTCFullYear() - 1970)
-  }
-  return 0
-}
 
 export const StepOneForm = (props: any) => {
   const {

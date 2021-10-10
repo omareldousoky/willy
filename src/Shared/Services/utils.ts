@@ -971,3 +971,12 @@ export const removeDuplicatesByName = (list: { name: string }[]) =>
           index === self.findIndex((t) => t.name === item.name)
       )
     : list
+
+export function calculateAge(dateOfBirth: number) {
+  if (dateOfBirth) {
+    const diff = Date.now().valueOf() - dateOfBirth
+    const age = new Date(diff)
+    return Math.abs(age.getUTCFullYear() - 1970)
+  }
+  return 0
+}
