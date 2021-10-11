@@ -666,7 +666,7 @@ const appRoutes = [
                 path: '/view-lead',
                 label: local.viewCustomerLead,
                 render: (props) => (
-                  <Can I="gestLead" a="halanuser">
+                  <Can I="getLead" a="halanuser">
                     <LeadProfile {...props} />
                   </Can>
                 ),

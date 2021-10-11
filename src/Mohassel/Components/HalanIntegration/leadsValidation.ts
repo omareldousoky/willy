@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
 import local from '../../../Shared/Assets/ar.json'
-import { maxValue } from '../../../Shared/localUtils'
+import { maxValue, minValue } from '../../../Shared/localUtils'
 import { LeadCore } from '../../../Shared/Models/common'
 import { LeadStepOne, LeadStepTwo } from './editLead'
 
@@ -110,5 +110,6 @@ export const createLeadValidation = (maxLimit: number) =>
       }),
     loanAmount: Yup.number()
       .max(maxLimit, maxValue(maxLimit))
+      .min(1, minValue(1))
       .required(local.required),
   })
