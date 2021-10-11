@@ -110,6 +110,7 @@ export const LeadCreationForm: React.FC<LeadCreationFromProps> = ({
             name="customerNationalId"
             data-qc="customerNationalId"
             value={values.customerNationalId}
+            maxLength={14}
             onBlur={handleBlur}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               const re = /^\d*$/
@@ -268,6 +269,7 @@ export const LeadCreationForm: React.FC<LeadCreationFromProps> = ({
             value={values.businessCity}
             onBlur={handleBlur}
             onChange={handleChange}
+            disabled={!values.businessGovernate}
             isInvalid={(errors.businessCity && touched.businessCity) as boolean}
           >
             <option value="" />
@@ -299,6 +301,7 @@ export const LeadCreationForm: React.FC<LeadCreationFromProps> = ({
             value={values.businessArea}
             onBlur={handleBlur}
             onChange={handleChange}
+            disabled={!values.businessCity}
             isInvalid={(errors.businessArea && touched.businessArea) as boolean}
           >
             <option value="" />
