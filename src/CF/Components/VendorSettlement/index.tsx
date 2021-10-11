@@ -18,6 +18,7 @@ const VendorSettlement: FunctionComponent<{}> = () => {
   const [viewModal, setViewModal] = useState(false)
   const [merchantId, setMerchantId] = useState('')
   const [transactions, setTransactions] = useState<any>([])
+  const [settlementDate, setSettlementDate] = useState(0)
   const [
     vendorOutstandingSettlement,
     setVendorOutstandingSettlement,
@@ -35,6 +36,7 @@ const VendorSettlement: FunctionComponent<{}> = () => {
       setTransactions(res.body.transactions ?? [])
       setVendorOutstandingSettlement(res.body.outstandingSettlement ?? 0)
       setMerchantId(vendorId)
+      setSettlementDate(toDate)
     } else {
       setLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
@@ -76,7 +78,6 @@ const VendorSettlement: FunctionComponent<{}> = () => {
   return (
     <>
       <HeaderWithCards
-        // header={local.issuedLoans}
         array={manageVendorSettlementsArray()}
         active={manageVendorSettlementsArray()
           .map((item) => {
@@ -134,6 +135,7 @@ const VendorSettlement: FunctionComponent<{}> = () => {
           onSuccess={() => window.location.reload()}
           vendorOutstandingSettlement={vendorOutstandingSettlement}
           merchantId={merchantId}
+          settlementDate={settlementDate}
         />
       )}
     </>

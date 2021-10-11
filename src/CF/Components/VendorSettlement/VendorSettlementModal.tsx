@@ -16,6 +16,7 @@ interface CFLimitModalProps {
   onSuccess: () => void
   vendorOutstandingSettlement: number
   merchantId: string
+  settlementDate: number
 }
 
 const VendorSettlementModal: FunctionComponent<CFLimitModalProps> = ({
@@ -24,6 +25,7 @@ const VendorSettlementModal: FunctionComponent<CFLimitModalProps> = ({
   onSuccess,
   vendorOutstandingSettlement,
   merchantId,
+  settlementDate,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
   // const [settlementDate, setSettlementDate] = useState('')
@@ -34,7 +36,7 @@ const VendorSettlementModal: FunctionComponent<CFLimitModalProps> = ({
       setIsLoading(true)
       const result = await settleVendorOutstandingSettlements({
         merchantId,
-        settlementDate: new Date().valueOf(),
+        settlementDate,
         settlementAmount: vendorOutstandingSettlement,
         bankAccountNumber,
       })
