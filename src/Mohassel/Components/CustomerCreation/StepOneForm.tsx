@@ -5,7 +5,11 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
-import { checkIssueDate, getErrorMessage } from '../../../Shared/Services/utils'
+import {
+  calculateAge,
+  checkIssueDate,
+  getErrorMessage,
+} from '../../../Shared/Services/utils'
 import {
   getBirthdateFromNationalId,
   getGenderFromNationalId,
@@ -14,18 +18,9 @@ import Map from '../../../Shared/Components/Map/map'
 import * as local from '../../../Shared/Assets/ar.json'
 import Can from '../../config/Can'
 import ability from '../../config/ability'
-import { Governorate, District } from './StepTwoForm'
 import { getGovernorates } from '../../../Shared/Services/APIs/config'
 import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
-
-function calculateAge(dateOfBirth: number) {
-  if (dateOfBirth) {
-    const diff = Date.now().valueOf() - dateOfBirth
-    const age = new Date(diff)
-    return Math.abs(age.getUTCFullYear() - 1970)
-  }
-  return 0
-}
+import { District, Governorate } from '../../../Shared/Models/Governorate'
 
 export const StepOneForm = (props: any) => {
   const {
