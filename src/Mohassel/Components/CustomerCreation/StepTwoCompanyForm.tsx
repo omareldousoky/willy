@@ -18,7 +18,8 @@ import {
   getIscoreIssuingAuthorities,
 } from '../../../Shared/Services/APIs/config'
 import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
-import { BusinessSector, District, Governorate } from './StepTwoForm'
+import { Governorate, District } from '../../../Shared/Models/Governorate'
+import { BusinessSector } from './StepTwoForm'
 
 const legalStructureRoles = [
   'openStockCompany',
