@@ -74,13 +74,6 @@ export const GuarantorTableView = (props: Props) => {
       const errorMessage2 = ''
       if (targetGuarantor.body.customer.blocked.isBlocked === true) {
         errorMessage1 = local.theCustomerIsBlocked
-      }
-      const newGuarantor = {
-        ...targetGuarantor.body.customer,
-        id: guarantor._id,
-      }
-      changeSelected(newGuarantor)
-      if (errorMessage1)
         Swal.fire(
           'error',
           `<span>${errorMessage1}  ${
@@ -88,6 +81,13 @@ export const GuarantorTableView = (props: Props) => {
           } ${errorMessage2}</span>`,
           'error'
         )
+      } else {
+        const newGuarantor = {
+          ...targetGuarantor.body.customer,
+          id: guarantor._id,
+        }
+        changeSelected(newGuarantor)
+      }
     } else {
       Swal.fire(
         'Error !',
