@@ -37,7 +37,8 @@ import LoanContract from '../pdfTemplates/loanContract/loanContract'
 import LoanContractForGroup from '../pdfTemplates/loanContractForGroup/loanContractForGroup'
 import Can from '../../config/Can'
 import EarlyPaymentPDF from '../../../Shared/Components/pdfTemplates/earlyPayment/earlyPayment'
-import { Customer, PendingActions } from '../../../Shared/Services/interfaces'
+import { PendingActions } from '../../../Shared/Services/interfaces'
+import { Customer } from '../../../Shared/Models/Customer'
 import {
   iscoreDate,
   getErrorMessage,

@@ -11,10 +11,11 @@ interface Suspect {
 }
 
 export interface Customer {
-  _id: string
-  customerName: string
+  _id?: string
+  customerName?: string
   nationalId?: string
   birthDate?: number
+  branchName?: string
   nationalIdIssueDate?: number
   customerAddressLatLong?: string
   customerHomeAddress?: string
@@ -52,17 +53,17 @@ export interface Customer {
   accountNumber?: string
   accountBranch?: string
   comments?: string
-  created: Signature
-  updated: Signature
+  created?: Signature
+  updated?: Signature
   isGuarantor?: boolean
   code?: number
-  key: number
+  key?: number
   allowGuarantorLoan?: boolean
   keyFormated?: string
   currentDoubtsCount?: number
   guarantorMaxLoans?: number
   maxLoansAllowed?: number
-  representativeName: string
+  representativeName?: string
   geoAreaId?: string
   maxPrincipal?: number
   blocked?: Blocked

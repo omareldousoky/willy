@@ -12,7 +12,7 @@ import {
   getCustomerLimitFromMonthlyIncome,
   reviewCustomerCFLimit,
 } from '../../../Shared/Services/APIs/customer/getCustomerConsumerLimit'
-import { Customer } from '../../../Shared/Services/interfaces'
+import { Customer } from '../../../Shared/Models/Customer'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 
 interface CFLimitModalProps {

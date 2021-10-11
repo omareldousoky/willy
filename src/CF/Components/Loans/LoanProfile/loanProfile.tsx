@@ -32,10 +32,9 @@ import FollowUpStatementPDF from '../../../../Mohassel/Components/pdfTemplates/f
 import LoanContract from '../../../../Mohassel/Components/pdfTemplates/loanContract/loanContract'
 import LoanContractForGroup from '../../../../Mohassel/Components/pdfTemplates/loanContractForGroup/loanContractForGroup'
 import Can from '../../../../Shared/config/Can'
-import {
-  Customer,
-  PendingActions,
-} from '../../../../Shared/Services/interfaces'
+import { PendingActions } from '../../../../Shared/Services/interfaces'
+import { Customer } from '../../../../Shared/Models/Customer'
+
 import {
   iscoreDate,
   getErrorMessage,
