@@ -148,6 +148,7 @@ export const Profile = ({
                     customerId={fieldData.customerId}
                     guarantors={fieldData.guarantors}
                     hasLoan={fieldData.hasLoan}
+                    isBlocked={fieldData.isBlocked}
                     getIscore={fieldData.getIscore}
                     iscores={fieldData.iscores}
                   />
