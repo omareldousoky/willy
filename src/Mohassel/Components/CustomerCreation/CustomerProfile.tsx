@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Container from 'react-bootstrap/Container'
-import { Customer } from '../../../Shared/Models/Customer'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -20,7 +19,7 @@ import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCusto
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { getIscoreCached } from '../../../Shared/Services/APIs/iScore'
 import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCustomer'
-import { Score } from '../../../Shared/Models/Customer'
+import { Score, Customer } from '../../../Shared/Models/Customer'
 
 interface LocationState {
   id: string

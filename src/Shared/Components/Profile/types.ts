@@ -1,4 +1,4 @@
-import { CFGuarantorDetailsProps } from '../../../CF/Components/CustomerCreation/types';
+import { CFGuarantorDetailsProps } from '../../../CF/Components/CustomerCreation/types'
 import { CustomerScore } from '../../Services/APIs/customer/customerCategorization'
 
 export interface FieldProps {
