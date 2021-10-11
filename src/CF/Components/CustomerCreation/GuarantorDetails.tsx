@@ -19,7 +19,6 @@ import { Customer } from '../../../Shared/Services/interfaces'
 import { addGuarantorsToCustomer } from '../../Services/APIs/Customer/customerGuarantors'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
-import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
 import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 
 interface Props {
@@ -66,85 +65,22 @@ export const GuarantorTableView = (props: Props) => {
     }
   }
 
-  async function checkCustomersLimits(customers, guarantor) {
-    const customerIds: Array<string> = []
-    customers.forEach((customer) => customerIds.push(customer._id))
-    changeLoading(true)
-    const res = await getCustomersBalances({ ids: customerIds })
-    if (res.status === 'success') {
-      changeLoading(false)
-      const merged: Array<any> = []
-      const validationObject: any = {}
-      for (let i = 0; i < customers.length; i += 1) {
-        const obj = {
-          ...customers[i],
-          ...(res.body.data
-            ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id)
-            : { id: customers[i]._id }),
-        }
-        delete obj.id
-        merged.push(obj)
-      }
-      if (res.body.data && res.body.data.length > 0) {
-        merged.forEach((customer) => {
-          if (guarantor) {
-            if (
-              customer.guarantorIds &&
-              customer.guarantorIds.length >= customer.guarantorMaxLoans
-            ) {
-              if (Object.keys(validationObject).includes(customer._id)) {
-                validationObject[customer._id] = {
-                  ...validationObject[customer._id],
-                  ...{ guarantorIds: customer.guarantorIds },
-                }
-              } else {
-                validationObject[customer._id] = {
-                  customerName: customer.customerName,
-                  guarantorIds: customer.guarantorIds,
-                }
-              }
-            }
-          }
-        })
-      }
-      if (Object.keys(validationObject).length > 0) {
-        return { flag: false, validationObject }
-      }
-      return { flag: true, customers: merged }
-    }
-    changeLoading(false)
-    Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    return { flag: false }
-  }
-
   async function selectGuarantor(guarantor) {
     changeLoading(true)
     const targetGuarantor = await getCustomerByID(guarantor._id)
 
     if (targetGuarantor.status === 'success') {
       let errorMessage1 = ''
-      let errorMessage2 = ''
+      const errorMessage2 = ''
       if (targetGuarantor.body.customer.blocked.isBlocked === true) {
         errorMessage1 = local.theCustomerIsBlocked
       }
-      const check = await checkCustomersLimits(
-        [targetGuarantor.body.customer],
-        true
-      )
-      if (
-        check.flag === true &&
-        check.customers &&
-        targetGuarantor.body.customer.blocked.isBlocked !== true
-      ) {
-        const newGuarantor = {
-          ...targetGuarantor.body.customer,
-          id: guarantor._id,
-        }
-        changeSelected(newGuarantor)
-      } else if (check.flag === false && check.validationObject) {
-        errorMessage2 = local.customerInvolvedInAnotherLoan
+      const newGuarantor = {
+        ...targetGuarantor.body.customer,
+        id: guarantor._id,
       }
-      if (errorMessage1 || errorMessage2)
+      changeSelected(newGuarantor)
+      if (errorMessage1)
         Swal.fire(
           'error',
           `<span>${errorMessage1}  ${
