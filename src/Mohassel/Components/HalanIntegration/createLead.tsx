@@ -23,12 +23,14 @@ export const CreateLead: React.FC = () => {
     setLoading(true)
     const res = await createLead(values)
     if (res.status === 'success') {
-      Swal.fire('', doneSuccessfully('createLead'), 'success')
-      history.goBack()
+      setLoading(false)
+      Swal.fire('', doneSuccessfully('createLead'), 'success').then(() =>
+        history.goBack()
+      )
     } else {
+      setLoading(false)
       Swal.fire('', getErrorMessage(res.error.error), 'error')
     }
-    setLoading(false)
   }
 
   const getGlobalPrinciple = async () => {
