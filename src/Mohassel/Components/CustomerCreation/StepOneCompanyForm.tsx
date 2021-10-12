@@ -21,8 +21,9 @@ import {
   getIscoreIssuingAuthorities,
 } from '../../../Shared/Services/APIs/config'
 import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
-import { BusinessSector, District, Governorate } from './StepTwoForm'
+import { BusinessSector } from './StepTwoForm'
 import { legalConstitutionRoles, smeCategories } from './utils'
+import { District, Governorate } from '../../../Shared/Models/Governorate'
 
 export const StepOneCompanyForm = (props: any) => {
   const {
@@ -34,6 +35,7 @@ export const StepOneCompanyForm = (props: any) => {
     touched,
     setFieldValue,
     previousStep,
+    edit,
   } = props
   const [mapState, openCloseMap] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -140,7 +142,7 @@ export const StepOneCompanyForm = (props: any) => {
               value={values.businessName}
               onChange={handleChange}
               isInvalid={errors.businessName && touched.businessName}
-              disabled={branchId !== 'hq'}
+              disabled={branchId !== 'hq' && edit}
               onBlur={handleBlur}
             />
             <Form.Control.Feedback type="invalid">
@@ -185,7 +187,7 @@ export const StepOneCompanyForm = (props: any) => {
                 errors.businessCharacteristic && touched.businessCharacteristic
               }
               onBlur={handleBlur}
-              disabled={branchId !== 'hq'}
+              disabled={branchId !== 'hq' && edit}
             />
             <Form.Control.Feedback type="invalid">
               {errors.businessCharacteristic}
@@ -206,7 +208,7 @@ export const StepOneCompanyForm = (props: any) => {
               onBlur={handleBlur}
               onChange={handleChange}
               isInvalid={errors.governorate && touched.governorate}
-              disabled={branchId !== 'hq'}
+              disabled={branchId !== 'hq' && edit}
             >
               <option value="" disabled />
               {authorities.map((authority, index) => {
@@ -341,7 +343,7 @@ export const StepOneCompanyForm = (props: any) => {
                 errors.commercialRegisterNumber &&
                 touched.commercialRegisterNumber
               }
-              disabled={branchId !== 'hq'}
+              disabled={branchId !== 'hq' && edit}
             />
             <Form.Control.Feedback type="invalid">
               {errors.commercialRegisterNumber}
