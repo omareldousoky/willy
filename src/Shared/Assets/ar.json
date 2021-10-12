@@ -1216,5 +1216,6 @@
   "duplicateCbeCodeMessage": "رقم الكود موجود بالفعل لشركة اخرى",
   "convertToCustomer": "تحويل إلي عميل",
   "cbeCodes": "أكواد البنك المركزي",
-  "fileUpload": "رفع الملف"
+  "fileUpload": "رفع الملف",
+  "createLead": "إنشاء متقدم"
 }

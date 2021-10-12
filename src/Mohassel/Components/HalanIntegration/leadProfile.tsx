@@ -9,7 +9,7 @@ import {
 } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import BackButton from '../../../Shared/Components/BackButton/back-button'
 import * as local from '../../../Shared/Assets/ar.json'
-import { Lead } from './leadInterface'
+import { Lead } from '../../../Shared/Models/common'
 
 const tabs: Array<Tab> = [
   {
@@ -52,7 +52,7 @@ const LeadProfile = (
   return (
     <>
       <div className="rowContainer print-none" style={{ paddingLeft: 30 }}>
-        <BackButton title={local.viewCustomer} className="print-none" />
+        <BackButton title={local.viewCustomerLead} className="print-none" />
       </div>
       <Card style={{ marginTop: 10 }} className="print-none">
         <CardNavBar
@@ -89,7 +89,11 @@ const LeadProfile = (
                 </tr>
                 <tr>
                   <td>{local.creationDate}</td>
-                  <td>{timeToDateyyymmdd(leadDetails.createdAt)}</td>
+                  <td>
+                    {leadDetails.createdAt
+                      ? timeToDateyyymmdd(leadDetails.createdAt)
+                      : ''}
+                  </td>
                 </tr>
               </tbody>
             </Table>
@@ -108,7 +112,11 @@ const LeadProfile = (
                 </tr>
                 <tr>
                   <td>{local.activityPeriod}</td>
-                  <td>{getPeriod(leadDetails.maxBusinessDate)}</td>
+                  <td>
+                    {leadDetails.maxBusinessDate
+                      ? getPeriod(leadDetails.maxBusinessDate)
+                      : ''}
+                  </td>
                 </tr>
                 <tr>
                   <td>{local.businessAddress}</td>

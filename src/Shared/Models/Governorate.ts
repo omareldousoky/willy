@@ -3,7 +3,7 @@ interface Village {
   villageLegacyCode: number
 }
 
-interface District {
+export interface District {
   districtName: { ar: string }
   districtLegacyCode: number
   villages: Array<Village>
