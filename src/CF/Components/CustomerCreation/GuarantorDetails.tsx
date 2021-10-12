@@ -200,7 +200,7 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
                     <th />
                   </>
                 )}
-                <th />
+                {(props.hasLoan ? isHQ : true) && <th />}
               </tr>
             </thead>
             <tbody>
@@ -240,8 +240,8 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
                           </td>
                         </>
                       )}
-                      {iScoresExist && iScore?.url && (
-                        <td>
+                      <td>
+                        {iScoresExist && iScore?.url && (
                           <Button
                             variant="default"
                             onClick={() => downloadFile(iScore.url)}
@@ -253,8 +253,8 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
                             />
                             iScore
                           </Button>
-                        </td>
-                      )}
+                        )}
+                      </td>
                       {iScoresExist && props.getIscore && (
                         <Can I="getIscore" a="customer">
                           <td>
