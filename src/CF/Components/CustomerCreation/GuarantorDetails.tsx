@@ -23,6 +23,7 @@ import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/cus
 import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 import { CFGuarantorDetailsProps } from './types'
 import { Customer } from '../../../Shared/Models/Customer'
+import { LtsIcon } from '../../../Shared/Components'
 
 export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
   const [openModal, setOpenModal] = useState(false)
@@ -263,7 +264,7 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
                     <th />
                   </>
                 )}
-                {props?.guarantors?.length > 2 && <th />}
+                <th />
               </tr>
             </thead>
             <tbody>
@@ -305,41 +306,48 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
                       )}
                       {iScoresExist && iScore?.url && (
                         <td>
-                          <span
-                            style={{ cursor: 'pointer', padding: 10 }}
+                          <Button
+                            variant="default"
                             onClick={() => downloadFile(iScore.url)}
                           >
-                            <span
-                              className="fa fa-file-pdf-o"
-                              style={{ margin: '0px 0px 0px 5px' }}
+                            <LtsIcon
+                              name="printer"
+                              size="16px"
+                              className="pl-2"
                             />
                             iScore
-                          </span>
+                          </Button>
                         </td>
                       )}
                       {iScoresExist && props.getIscore && (
                         <Can I="getIscore" a="customer">
                           <td>
-                            <span
-                              style={{ cursor: 'pointer', padding: 10 }}
+                            <Button
+                              variant="default"
                               onClick={() => getIscore(guar)}
                             >
-                              <span
-                                className="fa fa-refresh"
-                                style={{ margin: '0px 0px 0px 5px' }}
+                              <LtsIcon
+                                name="refresh"
+                                size="16px"
+                                className="pl-2"
                               />
                               iScore
-                            </span>
+                            </Button>
                           </td>
                         </Can>
                       )}
-                      <td style={{ cursor: 'pointer', padding: 10 }}>
-                        <img
-                          src={require('../../../Shared/Assets/deleteIcon.svg')}
-                          alt={local.delete}
-                          onClick={() => removeGuarantor(guar)}
-                        />
-                      </td>
+
+                      {(props.hasLoan ? isHQ : true) && (
+                        <td style={{ padding: 10 }}>
+                          <Button
+                            variant="default"
+                            onClick={() => removeGuarantor(guar)}
+                            title={local.delete}
+                          >
+                            <LtsIcon name="trash" />
+                          </Button>
+                        </td>
+                      )}
                     </tr>
                   )
                 })}
