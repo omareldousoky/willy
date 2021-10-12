@@ -139,6 +139,7 @@ export const CustomerProfile = () => {
     if (limitsRes.status === 'success') {
       setLoading(false)
       setGlobalLimits(limitsRes.body)
+      return
     }
     setLoading(false)
     Swal.fire('Error !', getErrorMessage(limitsRes.error.error), 'error')
@@ -511,6 +512,7 @@ export const CustomerProfile = () => {
     ],
   }
   const getProfileActions = () => {
+    const isBlocked = customerDetails?.blocked?.isBlocked
     return [
       {
         icon: 'download',
@@ -537,7 +539,7 @@ export const CustomerProfile = () => {
       {
         icon: 'applications',
         title: local.createClearance,
-        permission: ability.can('newClearance', 'application'),
+        permission: !isBlocked && ability.can('newClearance', 'application'),
         onActionClick: () =>
           history.push('/customers/create-clearance', {
             customerId: location.state.id,
@@ -559,25 +561,25 @@ export const CustomerProfile = () => {
         icon: 'bulk-loan-applications-review',
         title: local.reviewCFCustomerLimit,
         permission:
+          !isBlocked &&
           ['pending-initialization', 'pending-update'].includes(
             customerDetails?.consumerFinanceLimitStatus ?? ''
           ) &&
           ((ability.can('reviewCFLimit', 'customer') &&
             (customerDetails?.initialConsumerFinanceLimit ?? 0) <
               globalLimits.CFHQMinimumApprovalLimit) ||
-            ability.can('reviewCFLimitHQ', 'customer')) &&
-          !customerDetails?.blocked?.isBlocked,
+            ability.can('reviewCFLimitHQ', 'customer')),
         onActionClick: () => setModalData('review'),
       },
       {
         icon: 'bulk-loan-applications-review',
         title: local.approveCFCustomerLimit,
         permission:
+          !isBlocked &&
           ['initialization-reviewed', 'update-reviewed'].includes(
             customerDetails?.consumerFinanceLimitStatus ?? ''
           ) &&
-          ability.can('approveCFLimit', 'customer') &&
-          !customerDetails?.blocked?.isBlocked,
+          ability.can('approveCFLimit', 'customer'),
         onActionClick: () => setModalData('approve'),
       },
     ]
