@@ -37,7 +37,7 @@ import LoanContract from '../pdfTemplates/loanContract/loanContract'
 import LoanContractForGroup from '../pdfTemplates/loanContractForGroup/loanContractForGroup'
 import Can from '../../config/Can'
 import EarlyPaymentPDF from '../../../Shared/Components/pdfTemplates/earlyPayment/earlyPayment'
-import { Customer, PendingActions } from '../../../Shared/Services/interfaces'
+import { PendingActions } from '../../../Shared/Services/interfaces'
 import {
   iscoreDate,
   getErrorMessage,
@@ -97,7 +97,7 @@ import { getWriteOffReasons } from '../../../Shared/Services/APIs/config'
 import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
 import { getEarlyPaymentPdfData } from '../../../Shared/Utils/payment'
 import EarlyPaymentReceipt from '../../../Shared/Components/pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt'
-import { Score } from '../../../Shared/Models/Customer'
+import { Score, Customer } from '../../../Shared/Models/Customer'
 
 export interface IndividualWithInstallments {
   installmentTable: {

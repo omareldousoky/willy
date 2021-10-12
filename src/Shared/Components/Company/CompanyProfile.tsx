@@ -13,12 +13,11 @@ import { getErrorMessage } from '../../Services/utils'
 
 import { TabDataProps } from '../Profile/types'
 import { Tab } from '../HeaderWithCards/cardNavbar'
-import { Customer } from '../../Services/interfaces'
 import { getCompanyInfo } from '../../Services/formatCustomersInfo'
 import { getCustomerByID } from '../../Services/APIs/customer/getCustomer'
 import { getSMECachedIscore } from '../../Services/APIs/iScore'
 import { blockCustomer } from '../../Services/APIs/customer/blockCustomer'
-import { Score } from '../../Models/Customer'
+import { Score, Customer } from '../../Models/Customer'
 
 export interface CompanyProfileProps {
   data: any

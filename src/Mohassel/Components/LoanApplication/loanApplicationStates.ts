@@ -1,7 +1,7 @@
 import * as Yup from 'yup'
 import { Results } from './loanApplicationCreation'
 import * as local from '../../../Shared/Assets/ar.json'
-import { Customer } from '../../../Shared/Services/interfaces'
+import { Customer } from '../../../Shared/Models/Customer'
 
 export interface Vice {
   name: string

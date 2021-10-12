@@ -151,7 +151,7 @@ export const WarningCreationModal = ({
     if (loan && customer && warningType) {
       const warningRequest: LegalWarningRequest = {
         loanId: loan.id,
-        customerId: customer._id,
+        customerId: customer?._id ?? '',
         warningType,
       }
       setIsLoading(true)
