@@ -1,6 +1,5 @@
-import { Score } from '../../Models/Customer'
+import { CFGuarantorDetailsProps } from '../../../CF/Components/CustomerCreation/types'
 import { CustomerScore } from '../../Services/APIs/customer/customerCategorization'
-import { Customer } from '../../Services/interfaces'
 
 export interface FieldProps {
   fieldTitle: string
@@ -9,7 +8,7 @@ export interface FieldProps {
     | number
     | CustomerScore[]
     | React.ReactElement
-    | CFGuarantorTableViewProp
+    | CFGuarantorDetailsProps
   showFieldCondition: boolean
   fieldDataStyle?: React.CSSProperties
   fieldTitleStyle?: React.CSSProperties
@@ -37,11 +36,4 @@ export interface ProfileProps {
   editPermission?: boolean
   editOnClick?(): void
   tabsData: TabDataProps
-}
-
-export interface CFGuarantorTableViewProp {
-  customerId: string
-  customerGuarantors: Array<Customer>
-  getIscore?: (data) => Promise<void>
-  iscores?: Score[]
 }

@@ -18,11 +18,12 @@ import Can from '../../config/Can'
 import { Loader } from '../../../Shared/Components/Loader'
 import { editGuarantors } from '../../../Shared/Services/APIs/loanApplication/editGuarantors'
 import ability from '../../config/ability'
-import { Customer } from '../../../Shared/Services/interfaces'
+import { Customer } from '../../../Shared/Models/Customer'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 import CustomerSearch from '../../../Shared/Components/CustomerSearch'
+import { LtsIcon } from '../../../Shared/Components'
 
 type Guarantor = Customer & { position?: string }
 interface Props {
@@ -386,16 +387,17 @@ export const GuarantorTableView = (props: Props) => {
                         )}
                       {props.iScores && props.iScores.length > 0 && iScore.url && (
                         <td>
-                          <span
-                            style={{ cursor: 'pointer', padding: 10 }}
+                          <Button
+                            variant="default"
                             onClick={() => downloadFile(iScore.url)}
                           >
-                            <span
-                              className="fa fa-file-pdf-o"
-                              style={{ margin: '0px 0px 0px 5px' }}
+                            <LtsIcon
+                              name="printer"
+                              size="16px"
+                              className="pl-2"
                             />
                             iScore
-                          </span>
+                          </Button>
                         </td>
                       )}
                       {props.iScores &&
@@ -414,16 +416,17 @@ export const GuarantorTableView = (props: Props) => {
                           ].includes(props.status)) && (
                           <Can I="getIscore" a="customer">
                             <td>
-                              <span
-                                style={{ cursor: 'pointer', padding: 10 }}
+                              <Button
+                                variant="default"
                                 onClick={() => getIscore(guar.guarantor)}
                               >
-                                <span
-                                  className="fa fa-refresh"
-                                  style={{ margin: '0px 0px 0px 5px' }}
+                                <LtsIcon
+                                  name="refresh"
+                                  size="16px"
+                                  className="pl-2"
                                 />
                                 iScore
-                              </span>
+                              </Button>
                             </td>
                           </Can>
                         )}
@@ -441,12 +444,14 @@ export const GuarantorTableView = (props: Props) => {
                               'editIssuedLoanGuarantors',
                               'application'
                             ))) && (
-                          <td style={{ cursor: 'pointer', padding: 10 }}>
-                            <img
-                              src={require('../../../Shared/Assets/deleteIcon.svg')}
-                              alt={local.delete}
+                          <td style={{ padding: 10 }}>
+                            <Button
+                              variant="default"
                               onClick={() => removeGuarantor(guar.guarantor)}
-                            />
+                              title={local.delete}
+                            >
+                              <LtsIcon name="trash" />
+                            </Button>
                           </td>
                         )}
                     </tr>
@@ -556,16 +561,17 @@ export const GuarantorTableView = (props: Props) => {
                               props.iScores.length > 0 &&
                               iScore.url && (
                                 <td>
-                                  <span
-                                    style={{ cursor: 'pointer', padding: 10 }}
+                                  <Button
+                                    variant="default"
                                     onClick={() => downloadFile(iScore.url)}
                                   >
-                                    <span
-                                      className="fa fa-file-pdf-o"
-                                      style={{ margin: '0px 0px 0px 5px' }}
+                                    <LtsIcon
+                                      name="printer"
+                                      size="16px"
+                                      className="pl-2"
                                     />
                                     iScore
-                                  </span>
+                                  </Button>
                                 </td>
                               )}
                             {props.iScores &&
@@ -583,16 +589,17 @@ export const GuarantorTableView = (props: Props) => {
                               ].includes(props.status) && (
                                 <Can I="getIscore" a="customer">
                                   <td>
-                                    <span
-                                      style={{ cursor: 'pointer', padding: 10 }}
+                                    <Button
+                                      variant="default"
                                       onClick={() => getIscore(guar.guarantor)}
                                     >
-                                      <span
-                                        className="fa fa-refresh"
-                                        style={{ margin: '0px 0px 0px 5px' }}
+                                      <LtsIcon
+                                        name="refresh"
+                                        size="16px"
+                                        className="pl-2"
                                       />
                                       iScore
-                                    </span>
+                                    </Button>
                                   </td>
                                 </Can>
                               )}
@@ -609,14 +616,16 @@ export const GuarantorTableView = (props: Props) => {
                                     'editIssuedLoanGuarantors',
                                     'application'
                                   ))) && (
-                                <td style={{ cursor: 'pointer', padding: 10 }}>
-                                  <img
-                                    src={require('../../../Shared/Assets/deleteIcon.svg')}
-                                    alt={local.delete}
+                                <td style={{ padding: 10 }}>
+                                  <Button
+                                    variant="default"
                                     onClick={() =>
                                       removeGuarantor(guar.guarantor)
                                     }
-                                  />
+                                    title={local.delete}
+                                  >
+                                    <LtsIcon name="trash" />
+                                  </Button>
                                 </td>
                               )}
                           </tr>

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
-import { Company, Customer } from './interfaces'
+import { Company } from './interfaces'
 
 import local from '../Assets/ar.json'
 import ability from '../../Mohassel/config/ability'
@@ -17,9 +17,9 @@ import {
 } from './utils'
 import Can from '../../Mohassel/config/Can'
 import { FieldProps } from '../Components/Profile/types'
-import { Score } from '../Models/Customer'
 import { getUserDetails } from './APIs/Users/userDetails'
 import useApi from '../hooks/useApi'
+import { Score, Customer } from '../Models/Customer'
 
 interface IscoreInfo {
   score?: Score

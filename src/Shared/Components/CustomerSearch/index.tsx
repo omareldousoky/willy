@@ -15,7 +15,8 @@ import {
   getCompanyInfo,
   getCustomerInfo,
 } from '../../Services/formatCustomersInfo'
-import { Company, Customer } from '../../Services/interfaces'
+import { Company } from '../../Services/interfaces'
+import { Customer } from '../../Models/Customer'
 
 export interface Results {
   results: Array<object>

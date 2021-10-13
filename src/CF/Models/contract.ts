@@ -1,4 +1,4 @@
-import { Customer } from '../../Shared/Services/interfaces'
+import { Customer } from '../../Shared/Models/Customer'
 
 export interface BondContractProps {
   customerCreationDate: number
