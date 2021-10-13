@@ -983,7 +983,3 @@ export const calculateAge = (dateOfBirth: number) => {
   }
   return 0
 }
-
-export const getBranchFromCookie = (branchName = 'ltsbranch') => {
-  return getCookie(branchName) ? JSON.parse(getCookie(branchName))._id : ''
-}
