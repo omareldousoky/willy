@@ -36,12 +36,13 @@ export const StepTwoCompanyForm = (props: any) => {
   const [systemUsers, setSystemUsers] = useState<Array<any>>([])
   const [cbeCode, setCbeCode] = useState<Array<any>>([])
 
-  const [geoDivisions, setgeoDivisions] = useState<Array<GeoDivision>>([
+  const [geoDivisions, setGeoDivisions] = useState<Array<GeoDivision>>([
     {
       majorGeoDivisionName: { ar: '' },
       majorGeoDivisionLegacyCode: 0,
     },
   ])
+
   const {
     values,
     handleSubmit,
@@ -53,6 +54,7 @@ export const StepTwoCompanyForm = (props: any) => {
     previousStep,
     edit,
   } = props
+
   const debouncedSearchTerm = useDebounce(values.cbeCode, 500)
 
   const getLoanOfficers = async (inputValue: string) => {
@@ -76,6 +78,7 @@ export const StepTwoCompanyForm = (props: any) => {
     Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     return []
   }
+
   const getSystemUsers = async (inputValue: string) => {
     const res = await searchUsers({
       from: 0,
@@ -96,7 +99,7 @@ export const StepTwoCompanyForm = (props: any) => {
     const resGeo = await getGeoAreasByBranch(branch)
     if (resGeo.status === 'success') {
       setLoading(false)
-      setgeoDivisions(
+      setGeoDivisions(
         resGeo.body.data ? resGeo.body.data.filter((area) => area.active) : []
       )
     } else {
@@ -131,6 +134,7 @@ export const StepTwoCompanyForm = (props: any) => {
   useEffect(() => {
     ;(async () => {
       if (debouncedSearchTerm) {
+        if (edit && values.cbeCode === props.cbeCode) return
         setLoading(true)
         const res = await checkDuplicates('cbeCode', values.cbeCode)
 
