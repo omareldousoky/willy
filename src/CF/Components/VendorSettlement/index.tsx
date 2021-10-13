@@ -45,33 +45,41 @@ const VendorSettlement: FunctionComponent<{}> = () => {
 
   const tableMappers: TableMapperItem[] = [
     {
-      title: local.customerType,
-      key: 'customerType',
-      render: (data) => data.transactionType,
+      title: local.transactionType,
+      key: 'transactionType',
+      render: (data) => local[data.transactionType],
     },
     {
-      title: local.loanCode,
-      key: 'loanCode',
+      title: local.transactionKey,
+      key: 'transactionNumber',
       render: (data) => data.transactionNumber,
     },
     {
       title: local.customerName,
-      key: 'name',
+      key: 'customerName',
       render: (data) => (
         <div style={{ cursor: 'pointer' }}>{data.customerName}</div>
       ),
     },
     {
-      title: local.vendor,
-      key: 'nationalId',
-      render: (data) => (
-        <div style={{ cursor: 'pointer' }}>{data.merchantName}</div>
-      ),
+      title: local.transactionAmount,
+      key: 'price',
+      render: (data) => data.price,
     },
     {
-      title: local.productName,
-      key: 'productName',
-      render: (data) => data.price,
+      title: local.downPayment,
+      key: 'downPayment',
+      render: (data) => data.downPayment,
+    },
+    {
+      title: local.rebate,
+      key: 'rebate',
+      render: (data) => data.rebate,
+    },
+    {
+      title: local.totalGeneral,
+      key: 'totalPayment',
+      render: (data) => data.price - data.downPayment - data.rebate,
     },
   ]
 

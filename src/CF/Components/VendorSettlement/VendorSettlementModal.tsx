@@ -28,7 +28,6 @@ const VendorSettlementModal: FunctionComponent<CFLimitModalProps> = ({
   settlementDate,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
-  // const [settlementDate, setSettlementDate] = useState('')
   const [bankAccountNumber, setBankAccountNumber] = useState('1204022601')
 
   const handleSubmit = async () => {
@@ -57,7 +56,7 @@ const VendorSettlementModal: FunctionComponent<CFLimitModalProps> = ({
         <Loader type="fullsection" open={isLoading} />
         <Modal.Header closeButton>
           <Modal.Title className="text-mixed-lang">
-            {local.reviewCFCustomerLimit}
+            {local.vendorSettlement}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -65,7 +64,7 @@ const VendorSettlementModal: FunctionComponent<CFLimitModalProps> = ({
             <Col>
               <Form.Group controlId="vendorOutstandingSettlement">
                 <Form.Label className="font-weight-bold">
-                  {local.monthlyIncome}
+                  {local.loansSelectedAmount}
                 </Form.Label>
                 <Form.Control
                   name="vendorOutstandingSettlement"
@@ -75,21 +74,6 @@ const VendorSettlementModal: FunctionComponent<CFLimitModalProps> = ({
               </Form.Group>
             </Col>
           </Row>
-          {/* <Row>
-            <Col>
-              <Form.Group controlId="customerConsumerFinanceMaxLimit">
-                <Form.Label className="font-weight-bold">
-                  {local.dateOfPayment}
-                </Form.Label>
-                <Form.Control
-                  type="date"
-                  name="settlementDate"
-                  value={settlementDate}
-                  onChange={(e) => setSettlementDate(e.currentTarget.value)}
-                />
-              </Form.Group>
-            </Col>
-          </Row> */}
           <Row>
             <Col>
               <Form.Group controlId="bankAccountNumber">

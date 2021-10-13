@@ -1194,5 +1194,9 @@
   "vendorSettlement": "تسوية التجار",
   "vendorSettlementReports": "تقارير تسوية التجار",
   "vendor": "التاجر",
-  "settle": "تسوية"
+  "settle": "تسوية",
+  "downPayment": "المقدم",
+  "rebate": "الخصم",
+  "purchase": "شراء",
+  "refund": "إسترجاع"
 }

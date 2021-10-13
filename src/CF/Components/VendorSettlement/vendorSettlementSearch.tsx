@@ -48,7 +48,6 @@ const VendorSettlementSearch: FunctionComponent<{
     <Formik
       enableReinitialize
       initialValues={{
-        // fromDate: '',
         toDate: '',
         merchantId: '',
       }}
@@ -94,20 +93,6 @@ const VendorSettlementSearch: FunctionComponent<{
                 <p className="dropdown-label text-nowrap border-0 align-self-stretch mr-2">
                   {datePlaceholder || local.creationDate}
                 </p>
-                {/* <span>{local.from}</span>
-                <Form.Control
-                  required
-                  className="border-0"
-                  type="date"
-                  name="fromDate"
-                  data-qc="fromDate"
-                  value={formikProps.values.fromDate}
-                  onChange={(e) => {
-                    formikProps.setFieldValue('fromDate', e.currentTarget.value)
-                    if (e.currentTarget.value === '')
-                      formikProps.setFieldValue('toDate', '')
-                  }}
-                /> */}
                 <span className="mr-1">{local.to}</span>
                 <Form.Control
                   required
