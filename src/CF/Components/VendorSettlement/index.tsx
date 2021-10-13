@@ -113,7 +113,7 @@ const VendorSettlement: FunctionComponent<{}> = () => {
                 </>
               )}
             </div>
-            {vendorOutstandingSettlement > 0 && (
+            {vendorOutstandingSettlement !== 0 && (
               <div className="w-50 d-flex justify-content-end">
                 <Button onClick={() => setViewModal(true)}>
                   {local.settle}
