@@ -9,7 +9,7 @@ import {
 } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import BackButton from '../../../Shared/Components/BackButton/back-button'
 import * as local from '../../../Shared/Assets/ar.json'
-import { Lead } from './leadInterface'
+import { Lead } from '../../../Shared/Models/common'
 
 const tabs: Array<Tab> = [
   {
@@ -92,7 +92,11 @@ const LeadProfile = (
                 </tr>
                 <tr>
                   <td>{local.creationDate}</td>
-                  <td>{timeToDateyyymmdd(leadDetails.createdAt)}</td>
+                  <td>
+                    {leadDetails.createdAt
+                      ? timeToDateyyymmdd(leadDetails.createdAt)
+                      : ''}
+                  </td>
                 </tr>
               </tbody>
             </Table>

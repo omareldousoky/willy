@@ -106,6 +106,7 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
             onChange={(event: any) => {
               this.props.values.roles = event
               const check = this.hasBranch(event)
+
               this.setState({
                 hasBranch: check,
                 showRolesError: !event,
@@ -113,7 +114,7 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
               this.props.values.roles = event
               this.setState({ roles: event })
 
-              if (!this.state.hasBranch || !event) {
+              if (!check || !event) {
                 this.props.values.branches = []
                 // eslint-disable-next-line react/no-unused-state
                 this.setState({ branches: [] })

@@ -8,7 +8,7 @@ import AppForm from '../../../Shared/Components/Form'
 import { FormField } from '../../../Shared/Components/Form/types'
 import { getGovernorates } from '../../../Shared/Services/APIs/config'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { District, Governorate } from '../CustomerCreation/StepTwoForm'
+import { District, Governorate } from '../../../Shared/Models/Governorate'
 import { JudgeCustomersFormValues } from './types'
 import { defaultValidationSchema } from './validations'
 

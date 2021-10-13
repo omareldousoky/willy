@@ -16,21 +16,8 @@ import {
   getGovernorates,
 } from '../../../Shared/Services/APIs/config'
 import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
+import { Governorate } from '../../../Shared/Models/Governorate'
 
-export interface Village {
-  villageName: { ar: string }
-  villageLegacyCode: number
-}
-export interface District {
-  districtName: { ar: string }
-  districtLegacyCode: number
-  villages: Array<Village>
-}
-export interface Governorate {
-  governorateName: { ar: string }
-  governorateLegacyCode: number
-  districts: Array<District>
-}
 interface Specialty {
   businessSpecialtyName: { ar: string }
   legacyCode: number
