@@ -3,7 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Container from 'react-bootstrap/Container'
 import { Customer } from '../../../Shared/Services/interfaces'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import { getErrorMessage, iscoreDate } from '../../../Shared/Services/utils'
 import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
 import ability from '../../config/ability'
@@ -18,7 +18,10 @@ import {
 } from '../../../Shared/Services/APIs/customer/customerCategorization'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
-import { getIscoreCached } from '../../../Shared/Services/APIs/iScore'
+import {
+  getIscore,
+  getIscoreCached,
+} from '../../../Shared/Services/APIs/iScore'
 import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCustomer'
 import { Score } from '../../../Shared/Models/Customer'
 
@@ -191,8 +194,39 @@ export const CustomerProfile = () => {
       })
     }
   }
+  const getCustomerIscore = async (data) => {
+    setLoading(true)
+    const obj = {
+      requestNumber: '148',
+      reportId: '3004',
+      product: '023',
+      loanAccountNumber: `${data.key}`,
+      number: '1703943',
+      date: '02/12/2014',
+      amount: `${1000}`, // TODO
+      lastName: `${data.customerName}`,
+      idSource: '003',
+      idValue: `${data.nationalId}`,
+      gender: data.gender === 'male' ? '001' : '002',
+      dateOfBirth: iscoreDate(data.birthDate),
+    }
+    const iScore = await getIscore(obj)
+    if (iScore.status === 'success') {
+      getCachediScores(data.nationalId)
+      setLoading(false)
+    } else {
+      setLoading(false)
+      Swal.fire('Error !', getErrorMessage(iScore.error.error), 'error')
+    }
+  }
   const mainInfo = customerDetails && [
-    getCustomerInfo({ customerDetails, score: iScoreDetails, isLeader: false }),
+    getCustomerInfo({
+      customerDetails,
+      getIscore: (data) => getCustomerIscore(data),
+      score: iScoreDetails,
+      applicationStatus: 'reviewed',
+      isLeader: false,
+    }),
   ]
 
   const tabsData: TabDataProps = {
