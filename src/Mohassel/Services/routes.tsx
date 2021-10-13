@@ -69,6 +69,8 @@ import CompanyCreation from '../Components/CustomerCreation/CompanyCreation'
 import { LegalCalendar } from '../Components/LegalCalendar'
 import { Landing } from '../../Shared/Components/Landing'
 import { legalWarningRoute } from '../Components/LegalWarnings/routes'
+import CBEFiles from '../Components/Tools/cbeCodes'
+import { CreateLead } from '../Components/HalanIntegration/createLead'
 
 const appRoutes = [
   {
@@ -225,6 +227,15 @@ const appRoutes = [
             render: (props) => (
               <Can I="createMaxPrincipal" a="config">
                 <PrincipleThreshold {...props} />
+              </Can>
+            ),
+          },
+          {
+            path: '/cbe-codes',
+            label: local.cbeCodes,
+            render: (props) => (
+              <Can I="getCBEFiles" a="customer">
+                <CBEFiles {...props} />
               </Can>
             ),
           },
@@ -636,22 +647,48 @@ const appRoutes = [
       {
         path: '/halan-integration',
         label: local.halan,
-        render: (props) => <Leads {...props} />,
+        render: (props) => (
+          <Can I="getLead" a="halanuser">
+            <Leads {...props} />
+          </Can>
+        ),
         routes: [
           {
             path: '/leads',
             label: local.applicantsLeads,
-            render: (props) => <Leads {...props} />,
+            render: (props) => (
+              <Can I="getLead" a="halanuser">
+                <Leads {...props} />
+              </Can>
+            ),
             routes: [
               {
                 path: '/view-lead',
-                label: local.customersDetails,
-                render: (props) => <LeadProfile {...props} />,
+                label: local.viewCustomerLead,
+                render: (props) => (
+                  <Can I="getLead" a="halanuser">
+                    <LeadProfile {...props} />
+                  </Can>
+                ),
               },
               {
                 path: '/edit-lead',
-                label: local.editCustomer,
-                render: (props) => <EditLead {...props} />,
+                label: local.editLead,
+                render: (props) => (
+                  <Can I="getLead" a="halanuser">
+                    <EditLead {...props} />
+                  </Can>
+                ),
+              },
+              {
+                path: '/create-lead',
+                label: local.createLead,
+                render: (props) => (
+                  <Can I="getLead" a="halanuser">
+                    {' '}
+                    <CreateLead {...props} />
+                  </Can>
+                ),
               },
             ],
           },

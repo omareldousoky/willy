@@ -371,6 +371,13 @@ class LoanProfile extends Component<Props, State> {
       permissionKey: 'application',
     }
 
+    const penaltiesTab = {
+      header: local.penalties,
+      stringKey: 'penalties',
+      permission: ['payInstallment', 'cancelPenalty'],
+      permissionKey: 'application',
+    }
+
     if (application.body.status === 'paid') tabsToRender.push(customerCardTab)
     if (
       application.body.status === 'issued' ||
@@ -380,6 +387,15 @@ class LoanProfile extends Component<Props, State> {
       tabsToRender.push(paymentTab)
       tabsToRender.push(reschedulingTab)
     }
+
+    if (
+      application.body.status === 'issued' ||
+      application.body.status === 'paid' ||
+      application.body.status === 'pending'
+    ) {
+      tabsToRender.push(penaltiesTab)
+    }
+
     if (
       application.body.status === 'issued' ||
       application.body.status === 'paid' ||
@@ -1275,16 +1291,16 @@ class LoanProfile extends Component<Props, State> {
                   <span>{this.state.pendingActions?.receiptNumber}</span>
                 </div>
                 <div className="status-chip pending">{local.pending}</div>
-                {/* <Can I="payInstallment" a="application">
+                <Can I="payInstallment" a="application">
                   <div
                     style={{ color: '#000', cursor: 'pointer' }}
                     data-qc="editManualPayment"
                     onClick={() => this.editManualPayment('')}
                   >
-                    <span className="fa fa-pencil" style={{ marginLeft: 5 }} />
+                    <LtsIcon name="edit" style={{ marginLeft: 5 }} />
                     {local.edit}
                   </div>
-                </Can> */}
+                </Can>
                 <Can I="payInstallment" a="application">
                   <div
                     className="cancel"
@@ -1429,13 +1445,10 @@ class LoanProfile extends Component<Props, State> {
             type="cf"
             receiptData={this.state.receiptData}
             data={this.state.application}
-            companyReceipt={
-              this.state.application.customer.customerType === 'company'
-            }
           />
         )}
-
-        {this.state.print === 'randomPayment' && (
+        {(this.state.print === 'randomPayment' ||
+          this.state.print === 'penalty') && (
           <RandomPaymentReceipt
             receiptData={this.state.receiptData}
             appType="CF"
