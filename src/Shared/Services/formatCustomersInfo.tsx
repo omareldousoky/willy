@@ -85,8 +85,13 @@ const iscoreField = ({
                 onClick={() => getIscore(customerDetails)}
               >
                 iscore
-                <span style={{ margin: '0px 0px 0px 5px' }} />
-                <LtsIcon name="refresh" color="#000000" size="16px" />
+                {/* <span style={{ margin: '0px 0px 0px 5px' }} /> */}
+                <LtsIcon
+                  name="refresh"
+                  color="#000000"
+                  size="16px"
+                  className="mr-1"
+                />
               </span>
             </Can>
           </Col>
