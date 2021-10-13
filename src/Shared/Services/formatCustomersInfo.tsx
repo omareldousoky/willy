@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
+import { Company } from './interfaces'
 
-import * as local from '../Assets/ar.json'
+import local from '../Assets/ar.json'
 import ability from '../../Mohassel/config/ability'
 import {
   arabicGender,
@@ -16,6 +17,8 @@ import {
 } from './utils'
 import Can from '../../Mohassel/config/Can'
 import { FieldProps } from '../Components/Profile/types'
+import { getUserDetails } from './APIs/Users/userDetails'
+import useApi from '../hooks/useApi'
 import { Score, Customer } from '../Models/Customer'
 
 interface IscoreInfo {
@@ -30,7 +33,7 @@ interface CustomerInfo extends IscoreInfo {
   isCF?: boolean
 }
 interface CompanyInfo extends IscoreInfo {
-  company: Customer
+  company: Company
 }
 const iscoreField = ({
   score,
@@ -94,6 +97,15 @@ const iscoreField = ({
     </>
   )
 }
+
+export const UserName = ({ id }: { id: string }) => {
+  const [data, api] = useApi(getUserDetails, id)
+  useEffect(() => {
+    api.get()
+  }, [])
+  return <> {data?.user?.name} </>
+}
+
 export const getCompanyInfo = ({
   company,
   score,
@@ -150,6 +162,68 @@ export const getCompanyInfo = ({
     {
       fieldTitle: local.loanOfficer,
       fieldData: company.representativeName || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.legalConstitution,
+      fieldData: local[company.legalConstitution] || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.smeCategory,
+      fieldData: local[company.smeCategory] || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.paidCapital,
+      fieldData: company.paidCapital || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.establishmentDate,
+      fieldData:
+        (company.establishmentDate &&
+          timeToArabicDate(company.establishmentDate, false)) ||
+        '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.smeSourceId,
+      fieldData: company.smeSourceId ? (
+        <UserName id={company.smeSourceId} />
+      ) : (
+        local.na
+      ),
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.smeBankName,
+      fieldData: company.smeBankName || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.smeBankBranch,
+      fieldData: company.smeBankBranch || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.smeBankAccountNumber,
+      fieldData: company.smeBankAccountNumber || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.smeIbanNumber,
+      fieldData: company.smeIbanNumber || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.cbeCode,
+      fieldData: company.cbeCode || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.permanentEmployeeCount,
+      fieldData: company.permanentEmployeeCount,
       showFieldCondition: true,
     },
   ]

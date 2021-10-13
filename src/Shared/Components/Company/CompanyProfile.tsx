@@ -13,11 +13,12 @@ import { getErrorMessage } from '../../Services/utils'
 
 import { TabDataProps } from '../Profile/types'
 import { Tab } from '../HeaderWithCards/cardNavbar'
+import { Company } from '../../Services/interfaces'
 import { getCompanyInfo } from '../../Services/formatCustomersInfo'
 import { getCustomerByID } from '../../Services/APIs/customer/getCustomer'
 import { getSMECachedIscore } from '../../Services/APIs/iScore'
 import { blockCustomer } from '../../Services/APIs/customer/blockCustomer'
-import { Score, Customer } from '../../Models/Customer'
+import { Score } from '../../Models/Customer'
 
 export interface CompanyProfileProps {
   data: any
@@ -25,7 +26,7 @@ export interface CompanyProfileProps {
 export const CompanyProfile = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [activeTab, changeActiveTab] = useState('documents')
-  const [company, setCompany] = useState<Customer>()
+  const [company, setCompany] = useState<Company>()
   const [score, setScore] = useState<Score>()
   const location = useLocation<{ id: string }>()
   const history = useHistory()

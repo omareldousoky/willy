@@ -7,14 +7,15 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import produce from 'immer'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
 import { Loader } from '../../../Shared/Components/Loader'
-import { step1Company, step2Company } from './customerFormIntialState'
 import {
   companyCreationValidationStepOne,
   companyCreationValidationStepTwo,
   companyCreationValidationStepTwoEdit,
+  step1Company,
+  step2Company,
 } from './companyFormIntialState'
+import { StepOneCompanyForm } from './StepOneCompanyForm'
 import { StepTwoCompanyForm } from './StepTwoCompanyForm'
-import { StepThreeForm } from './StepThreeForm'
 import DocumentsUpload from './documentsUpload'
 import * as local from '../../../Shared/Assets/ar.json'
 import {
@@ -39,7 +40,8 @@ interface State {
     businessCharacteristic: string
     businessSector: string
     businessActivityDetails: string
-    legalStructure: string
+    legalConstitution: string
+    smeCategory: string
     businessLicenseNumber: string
     // businessLicenseIssuePlace: string
     businessLicenseIssueDate: any
@@ -61,12 +63,19 @@ interface State {
     comments: string
     guarantorMaxLoans: number
     maxLoansAllowed: number
-    maxPrincipal: number
     principals?: {
       maxIndividualPrincipal: number
       maxGroupIndividualPrincipal: number
       maxGroupPrincipal: number
     }
+    cbeCode: string
+    paidCapital: number
+    establishmentDate: number
+    smeSourceId: string
+    smeBankName: string
+    smeBankBranch: string
+    smeBankAccountNumber: string
+    smeIbanNumber: string
   }
   customerId: string
   selectedCustomer: any
@@ -122,7 +131,8 @@ class CompanyCreation extends Component<Props, State> {
         businessCharacteristic: res.body.businessCharacteristic,
         businessSector: res.body.businessSector,
         businessActivityDetails: res.body.businessActivityDetails,
-        legalStructure: res.body.legalStructure,
+        legalConstitution: res.body.legalConstitution,
+        smeCategory: res.body.smeCategory,
         businessLicenseNumber: res.body.businessLicenseNumber,
         // businessLicenseIssuePlace: res.body.businessLicenseIssuePlace,
         businessLicenseIssueDate: timeToDateyyymmdd(
@@ -155,7 +165,14 @@ class CompanyCreation extends Component<Props, State> {
         guarantorMaxLoans: res.body.guarantorMaxLoans
           ? Number(res.body.guarantorMaxLoans)
           : 1,
-        maxPrincipal: res.body.maxPrincipal ? Number(res.body.maxPrincipal) : 0,
+        cbeCode: res.body.cbeCode,
+        paidCapital: res.body.paidCapital,
+        establishmentDate: timeToDateyyymmdd(res.body.establishmentDate),
+        smeSourceId: res.body.smeSourceId,
+        smeBankName: res.body.smeBankName,
+        smeBankBranch: res.body.smeBankBranch,
+        smeBankAccountNumber: res.body.smeBankAccountNumber,
+        smeIbanNumber: res.body.smeIbanNumber,
       }
       this.formikStep1 = {
         values: { ...this.state.step1, ...customerBusiness },
@@ -259,6 +276,9 @@ class CompanyCreation extends Component<Props, State> {
     objToSubmit.applicationDate = new Date(
       objToSubmit.applicationDate
     ).valueOf()
+    objToSubmit.establishmentDate = new Date(
+      objToSubmit.establishmentDate
+    ).valueOf()
     objToSubmit.commercialRegisterExpiryDate = new Date(
       objToSubmit.commercialRegisterExpiryDate
     ).valueOf()
@@ -345,7 +365,7 @@ class CompanyCreation extends Component<Props, State> {
             this.formikStep1 = formikProps
           }
           return (
-            <StepTwoCompanyForm
+            <StepOneCompanyForm
               {...formikProps}
               hasLoan={this.state.hasLoan}
               isGuarantor={this.state.isGuarantor}
@@ -376,7 +396,7 @@ class CompanyCreation extends Component<Props, State> {
             this.formikStep2 = formikProps
           }
           return (
-            <StepThreeForm
+            <StepTwoCompanyForm
               {...formikProps}
               representativeDetails={this.state.step2}
               previousStep={(valuesOfStep3) =>
@@ -386,7 +406,6 @@ class CompanyCreation extends Component<Props, State> {
               edit={this.props.edit}
               hasLoan={this.state.hasLoan}
               branchId={this.state.branchId}
-              isCompany
             />
           )
         }}
