@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios'
 import {
   OfficersProductivityRequest,
   OfficersProductivityResponse,
-} from '../../../Models/OfficersProductivityReport'
+} from '../../../../Shared/Models/OfficerProductivity/OfficersProductivityReport'
 import axios from '../../../../Shared/Services/axiosInstance'
 import { API_BASE_URL } from '../../../../Shared/envConfig'
 import { ApiResponse } from '../../../../Shared/Models/common'
