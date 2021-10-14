@@ -16,6 +16,7 @@ import { financialClosingRoutes } from '../Components/FinancialClosing/routes'
 import { manageLoansRoutes } from '../Components/ManageLoans/routes'
 import { reportRoutes } from '../Components/Reports/routes'
 import { supervisionLevelsRoute } from '../Components/ManagerHierarchy/routes'
+import { vendorSettlementRoutes } from '../Components/VendorSettlement/routes'
 
 const appRoutes = [
   {
@@ -36,6 +37,7 @@ const appRoutes = [
       manageLoansRoutes,
       reportRoutes,
       supervisionLevelsRoute,
+      vendorSettlementRoutes,
     ],
   },
 ]
