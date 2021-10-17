@@ -27,7 +27,7 @@ export const step2Company = {
   newRepresentative: '',
   representativeName: '',
   applicationDate: timeToDateyyymmdd(-1),
-  permanentEmployeeCount: '',
+  permanentEmployeeCount: 0,
   partTimeEmployeeCount: '',
   comments: '',
   guarantorMaxLoans: 1,
@@ -39,7 +39,7 @@ export const step2Company = {
   },
   cbeCode: '',
   paidCapital: 0,
-  establishmentDate: 0,
+  establishmentDate: '',
   smeSourceId: '',
   smeBankName: '',
   smeBankBranch: '',
@@ -126,6 +126,7 @@ export const companyCreationValidationStepTwo = Yup.object().shape({
     ),
     otherwise: Yup.string().required(local.required),
   }),
+  permanentEmployeeCount: Yup.string().trim().required(local.required),
 })
 
 export const companyCreationValidationStepTwoEdit = Yup.object().shape({
@@ -137,8 +138,8 @@ export const companyCreationValidationStepTwoEdit = Yup.object().shape({
       return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
     })
     .required(local.required),
-  permanentEmployeeCount: Yup.string().trim(),
-  partTimeEmployeeCount: Yup.string().trim(),
+  permanentEmployeeCount: Yup.string().trim().required(local.required),
+  partTimeEmployeeCount: Yup.string().trim().required(local.required),
   comments: Yup.string().trim().max(500, local.maxLength100),
   guarantorMaxLoans: Yup.number()
     .required()
