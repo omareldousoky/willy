@@ -1,6 +1,6 @@
 @media screen, print {
   .promissory-note-micro {
-    page-break-after: always;
+    page-break-before: always;
     font-family: Arial;
     font-size: 14px;
     font-weight: 600;
@@ -15,9 +15,17 @@
       border-spacing: 10px;
     }
   }
+  .promissory-note-micro-last {
+    @extend .promissory-note-micro;
+    page-break-after: avoid !important;
+  }
 }
 @media screen {
   .promissory-note-micro {
+    max-width: 700px;
+    display: none;
+  }
+  .promissory-note-micro-last {
     max-width: 700px;
     display: none;
   }

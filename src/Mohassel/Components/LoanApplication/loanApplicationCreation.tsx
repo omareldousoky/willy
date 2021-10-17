@@ -49,7 +49,7 @@ import InfoBox from '../userInfoBox'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
 
 import { theme } from '../../../Shared/theme'
-import { Customer } from '../../../Shared/Services/interfaces'
+import { Customer } from '../../../Shared/Models/Customer'
 import Can from '../../config/Can'
 import { LtsIcon } from '../../../Shared/Components'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'

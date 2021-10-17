@@ -11,7 +11,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 import BackButton from '../../../Shared/Components/BackButton/back-button'
 import { removeMemberFromGroup } from '../../../Shared/Services/APIs/loanApplication/removeMemberFromGroup'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { Customer } from '../../../Shared/Services/interfaces'
+import { Customer } from '../../../Shared/Models/Customer'
 import { getSeperationReasons } from '../../../Shared/Services/APIs/config'
 
 interface Member {

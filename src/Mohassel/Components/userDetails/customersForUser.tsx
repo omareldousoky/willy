@@ -17,7 +17,8 @@ import * as local from '../../../Shared/Assets/ar.json'
 import Can from '../../config/Can'
 import { UserDateValues } from './userDetailsInterfaces'
 import { searchLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
-import { Customer, LoanOfficer } from '../../../Shared/Services/interfaces'
+import { LoanOfficer } from '../../../Shared/Services/interfaces'
+import { Customer } from '../../../Shared/Models/Customer'
 import {
   beneficiaryType,
   getErrorMessage,

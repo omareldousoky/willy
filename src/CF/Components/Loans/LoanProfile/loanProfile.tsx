@@ -32,10 +32,8 @@ import FollowUpStatementPDF from '../../../../Mohassel/Components/pdfTemplates/f
 import LoanContract from '../../../../Mohassel/Components/pdfTemplates/loanContract/loanContract'
 import LoanContractForGroup from '../../../../Mohassel/Components/pdfTemplates/loanContractForGroup/loanContractForGroup'
 import Can from '../../../../Shared/config/Can'
-import {
-  Customer,
-  PendingActions,
-} from '../../../../Shared/Services/interfaces'
+import { PendingActions } from '../../../../Shared/Services/interfaces'
+
 import {
   iscoreDate,
   getErrorMessage,
@@ -48,7 +46,7 @@ import store from '../../../../Shared/redux/store'
 import UploadDocuments from './uploadDocuments'
 import { writeOffLoan } from '../../../../Mohassel/Services/APIs/Loan/writeOffLoan'
 import { doubtLoan } from '../../../../Mohassel/Services/APIs/Loan/doubtLoan'
-import PaymentReceipt from '../../../../Shared/Components/pdfTemplates/paymentReceipt'
+import PaymentReceipt from '../../../../Shared/Components/pdfTemplates/Financial/paymentReceipt'
 import { calculatePenalties } from '../../../../Shared/Services/APIs/clearance/calculatePenalties'
 import { numTo2Decimal } from '../../../../Mohassel/Components/CIB/textFiles'
 import { FollowUpStatementView } from './followupStatementView'
@@ -84,11 +82,11 @@ import { getRollableActionsById } from '../../../../Shared/Services/APIs/loanApp
 import { returnItem } from '../../../Services/APIs/loan'
 import { doneSuccessfully } from '../../../../Shared/localUtils'
 import Rescheduling from '../../Rescheduling/rescheduling'
-import RandomPaymentReceipt from '../../../../Shared/Components/pdfTemplates/randomPaymentReceipt/randomPaymentReceipt'
-import EarlyPaymentPDF from '../../../../Shared/Components/pdfTemplates/earlyPayment/earlyPayment'
-import EarlyPaymentReceipt from '../../../../Shared/Components/pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt'
+import RandomPaymentReceipt from '../../../../Shared/Components/pdfTemplates/Financial/randomPaymentReceipt/randomPaymentReceipt'
+import EarlyPaymentPDF from '../../../../Shared/Components/pdfTemplates/Financial/earlyPayment/earlyPayment'
+import EarlyPaymentReceipt from '../../../../Shared/Components/pdfTemplates/Financial/earlyPaymentReceipt/earlyPaymentReceipt'
 import { getEarlyPaymentPdfData } from '../../../../Shared/Utils/payment'
-import { Score } from '../../../../Shared/Models/Customer'
+import { Score, Customer } from '../../../../Shared/Models/Customer'
 import ManualRandomPaymentsActions from './manualRandomPaymentsActions'
 
 export interface IndividualWithInstallments {

@@ -22,7 +22,7 @@ import {
   getCompanyInfo,
   getCustomerInfo,
 } from '../../../Shared/Services/formatCustomersInfo'
-import { Customer } from '../../../Shared/Services/interfaces'
+import { Customer } from '../../../Shared/Models/Customer'
 import { getRejectionReasons } from '../../../Shared/Services/APIs/config'
 
 interface Props {

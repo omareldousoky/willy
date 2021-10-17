@@ -6,6 +6,7 @@ import differenceInYears from 'date-fns/differenceInYears'
 import * as local from '../Assets/ar.json'
 import errorMessages from '../Assets/errorMessages.json'
 import { API_BASE_URL } from '../envConfig'
+import { getCookie } from './getCookie'
 
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
@@ -978,4 +979,8 @@ export const calculateAge = (dateOfBirth: number) => {
     return differenceInYears(Date.now().valueOf(), dateOfBirth)
   }
   return 0
+}
+
+export const getBranchFromCookie = (branchName = 'ltsbranch') => {
+  return getCookie(branchName) ? JSON.parse(getCookie(branchName))._id : ''
 }

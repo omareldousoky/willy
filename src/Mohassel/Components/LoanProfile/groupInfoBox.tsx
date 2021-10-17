@@ -5,7 +5,7 @@ import {
   Tab,
 } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import InfoBox from '../userInfoBox'
-import { Customer } from '../../../Shared/Services/interfaces'
+import { Customer } from '../../../Shared/Models/Customer'
 
 interface Props {
   group: any
