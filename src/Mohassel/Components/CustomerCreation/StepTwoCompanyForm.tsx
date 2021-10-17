@@ -170,6 +170,7 @@ export const StepTwoCompanyForm = (props: any) => {
                 isInvalid={errors.cbeCode && touched.cbeCode}
                 disabled={cbeCode.length === 1}
               >
+                <option value="" disabled />
                 {cbeCode.map((company, index) => {
                   return (
                     <option
