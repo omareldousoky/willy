@@ -1,7 +1,6 @@
 import React from 'react'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
-import { Customer } from './interfaces'
 
 import * as local from '../Assets/ar.json'
 import ability from '../../Mohassel/config/ability'
@@ -17,7 +16,7 @@ import {
 } from './utils'
 import Can from '../../Mohassel/config/Can'
 import { FieldProps } from '../Components/Profile/types'
-import { Score } from '../Models/Customer'
+import { Score, Customer } from '../Models/Customer'
 
 interface IscoreInfo {
   score?: Score

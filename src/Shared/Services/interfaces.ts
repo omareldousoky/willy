@@ -1,4 +1,5 @@
 import { Signature } from '../Models/common'
+import { Customer } from '../Models/Customer'
 
 export interface Branch {
   longitude?: number
@@ -17,80 +18,6 @@ export interface Branch {
   _id?: string
 }
 
-export interface Customer {
-  accountBranch?: string
-  accountNumber?: string
-  applicationDate?: number
-  birthDate?: number
-  branchId?: string
-  branchName?: string
-  businessActivity?: string
-  businessAddress?: string
-  businessAddressLatLong?: string
-  businessLicenseIssueDate?: number
-  businessLicenseIssuePlace?: string
-  businessLicenseNumber?: string
-  businessName?: string
-  businessPhoneNumber?: string
-  businessPostalCode?: string
-  businessSector?: string
-  businessSpeciality?: string
-  businessCharacteristic?: string
-  code?: number
-  comments?: string
-  commercialRegisterNumber?: string
-  created?: {
-    by?: string
-    at?: number
-    userName?: string
-  }
-  customerAddressLatLong?: string
-  customerHomeAddress?: string
-  currentHomeAddress?: string
-  customerName?: string
-  customerWebsite?: string
-  district?: string
-  emailAddress?: string
-  faxNumber?: string
-  gender?: string
-  geographicalDistribution?: string
-  geoAreaId?: string
-  governorate?: string
-  hasLoan?: boolean
-  homePhoneNumber?: string
-  homePostalCode?: string
-  industryRegisterNumber?: string
-  key?: number
-  mobilePhoneNumber?: string
-  nationalId?: string
-  nationalIdIssueDate?: number
-  partTimeEmployeeCount?: number
-  permanentEmployeeCount?: number
-  representative?: string
-  representativeName?: string
-  ruralUrban?: string
-  taxCardNumber?: string
-  village?: string
-  maxLoansAllowed?: number
-  allowGuarantorLoan?: boolean
-  guarantorMaxLoans?: number
-  maxPrincipal?: number
-  _id?: string
-  blocked?: {
-    isBlocked?: boolean
-    reason?: string
-  }
-  suspects?: {
-    id?: string
-    type?: string
-  }[]
-  customerType?: string
-  legalStructure?: string
-  nanoLoansLimit?: number
-  monthlyIncome?: number
-  initialConsumerFinanceLimit?: number
-  consumerFinanceLimitStatus?: string
-}
 export interface Installment {
   id: number
   installmentResponse: number

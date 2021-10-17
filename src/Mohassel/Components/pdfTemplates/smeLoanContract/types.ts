@@ -1,4 +1,5 @@
-import { Application, Customer } from '../../../../Shared/Services/interfaces'
+import { Application } from '../../../../Shared/Services/interfaces'
+import { Customer } from '../../../../Shared/Models/Customer'
 import { BranchDetails } from '../../../../Shared/Services/APIs/Branch/getBranch'
 
 export interface AcknowledgmentAndPledgeProps {

@@ -12,8 +12,9 @@ import DeathCertificate from '../../../Mohassel/Components/CustomerCreation/deat
 import { CustomerCategorization } from '../../../Mohassel/Components/CustomerCreation/customerCategorization'
 import { ProfileActions } from '../ProfileActions'
 import { CustomerReportsTab } from '../../../Mohassel/Components/CustomerCreation/customerReportsTab'
-import { CFGuarantorTableViewProp, ProfileProps } from './types'
-import { GuarantorTableView } from '../../../CF/Components/CustomerCreation/GuarantorDetails'
+import { ProfileProps } from './types'
+import { GuarantorDetails } from '../../../CF/Components/CustomerCreation/GuarantorDetails'
+import { CFGuarantorDetailsProps } from '../../../CF/Components/CustomerCreation/types'
 
 export const Profile = ({
   source,
@@ -139,15 +140,17 @@ export const Profile = ({
             })}
           {activeTab === 'cfGuarantors' &&
             tabsData[activeTab].map((field, index) => {
-              const fieldData = field.fieldData as CFGuarantorTableViewProp
+              const fieldData = field.fieldData as CFGuarantorDetailsProps
               return (
                 Object.keys(fieldData).length > 0 && (
-                  <GuarantorTableView
+                  <GuarantorDetails
                     key={index}
                     customerId={fieldData.customerId}
-                    guarantors={fieldData.customerGuarantors}
+                    guarantors={fieldData.guarantors}
+                    hasLoan={fieldData.hasLoan}
+                    isBlocked={fieldData.isBlocked}
                     getIscore={fieldData.getIscore}
-                    iScores={fieldData.iscores}
+                    iscores={fieldData.iscores}
                   />
                 )
               )

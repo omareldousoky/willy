@@ -32,10 +32,8 @@ import FollowUpStatementPDF from '../../../../Mohassel/Components/pdfTemplates/f
 import LoanContract from '../../../../Mohassel/Components/pdfTemplates/loanContract/loanContract'
 import LoanContractForGroup from '../../../../Mohassel/Components/pdfTemplates/loanContractForGroup/loanContractForGroup'
 import Can from '../../../../Shared/config/Can'
-import {
-  Customer,
-  PendingActions,
-} from '../../../../Shared/Services/interfaces'
+import { PendingActions } from '../../../../Shared/Services/interfaces'
+
 import {
   iscoreDate,
   getErrorMessage,
@@ -88,7 +86,7 @@ import RandomPaymentReceipt from '../../../../Shared/Components/pdfTemplates/Fin
 import EarlyPaymentPDF from '../../../../Shared/Components/pdfTemplates/Financial/earlyPayment/earlyPayment'
 import EarlyPaymentReceipt from '../../../../Shared/Components/pdfTemplates/Financial/earlyPaymentReceipt/earlyPaymentReceipt'
 import { getEarlyPaymentPdfData } from '../../../../Shared/Utils/payment'
-import { Score } from '../../../../Shared/Models/Customer'
+import { Score, Customer } from '../../../../Shared/Models/Customer'
 import ManualRandomPaymentsActions from './manualRandomPaymentsActions'
 
 export interface IndividualWithInstallments {
