@@ -70,7 +70,7 @@ interface State {
     }
     cbeCode: string
     paidCapital: number
-    establishmentDate: number
+    establishmentDate: number | string
     smeSourceId: string
     smeBankName: string
     smeBankBranch: string
