@@ -116,10 +116,11 @@ export const StepTwoCompanyForm = (props: any) => {
     })
     if (res.status === 'success') {
       setCbeCode(res.body.data)
-    } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      setCbeCode([])
+      return res.body.data
     }
+    Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    setCbeCode([])
+    return []
   }
   useEffect(() => {
     const token = getCookie('token')
@@ -160,29 +161,28 @@ export const StepTwoCompanyForm = (props: any) => {
           <Form.Group controlId="cbeCode">
             <Form.Label>{`${local.cbeCode} *`}</Form.Label>
             {cbeCode.length > 1 ? (
-              <Form.Control
-                as="select"
-                type="select"
+              <AsyncSelect
+                className={errors.cbeCode ? 'error' : ''}
                 name="cbeCode"
-                value={values.cbeCode}
+                data-qc="cbeCode"
+                styles={theme.selectStyleWithBorder}
+                theme={theme.selectTheme}
+                value={cbeCode?.find(
+                  (company) => company.cbeCode === values.cbeCode
+                )}
                 onBlur={handleBlur}
-                onChange={handleChange}
-                isInvalid={errors.cbeCode && touched.cbeCode}
+                onChange={(company) =>
+                  setFieldValue('cbeCode', company.cbeCode)
+                }
+                getOptionLabel={(company) =>
+                  `${company.name} | ${company.cbeCode}`
+                }
+                getOptionValue={(company) => company.cbeCode}
+                loadOptions={getCbeCode}
                 disabled={cbeCode.length === 1}
-              >
-                <option value="" disabled />
-                {cbeCode.map((company, index) => {
-                  return (
-                    <option
-                      key={index}
-                      value={company.cbeCode}
-                      selected={values.cbeCode === company.cbeCode}
-                    >
-                      {`${company.name} | ${company.cbeCode}`}
-                    </option>
-                  )
-                })}
-              </Form.Control>
+                cacheOptions
+                defaultOptions
+              />
             ) : (
               <Form.Control
                 type="text"
@@ -196,14 +196,20 @@ export const StepTwoCompanyForm = (props: any) => {
                 disabled={cbeCode.length === 1}
               />
             )}
-
-            <Form.Control.Feedback type="invalid">
+            <div
+              style={{
+                width: '100%',
+                marginTop: '0.25rem',
+                fontSize: '80%',
+                color: '#d51b1b',
+              }}
+            >
               {errors.cbeCode === local.duplicateCbeCodeMessage
                 ? local.duplicateCbeCodeMessage +
                   local.withCode +
                   values.cbeCodeDupKey
                 : errors.cbeCode}
-            </Form.Control.Feedback>
+            </div>
           </Form.Group>
         </Col>
         <Col sm={6}>
