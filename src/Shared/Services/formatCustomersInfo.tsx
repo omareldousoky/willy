@@ -3,7 +3,7 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 
 import * as local from '../Assets/ar.json'
-import ability from '../../Mohassel/config/ability'
+import ability from '../config/ability'
 import {
   arabicGender,
   downloadFile,
@@ -14,9 +14,10 @@ import {
   getDateAndTime,
   numbersToArabic,
 } from './utils'
-import Can from '../../Mohassel/config/Can'
+import Can from '../config/Can'
 import { FieldProps } from '../Components/Profile/types'
 import { Score, Customer } from '../Models/Customer'
+import { LtsIcon } from '../Components/LtsIcon'
 
 interface IscoreInfo {
   score?: Score
@@ -82,11 +83,14 @@ const iscoreField = ({
                 style={{ cursor: 'pointer', padding: 10 }}
                 onClick={() => getIscore(customerDetails)}
               >
-                <span
-                  className="fa fa-refresh"
-                  style={{ margin: '0px 0px 0px 5px' }}
-                />
                 iscore
+                {/* <span style={{ margin: '0px 0px 0px 5px' }} /> */}
+                <LtsIcon
+                  name="refresh"
+                  color="#000000"
+                  size="16px"
+                  className="mr-1"
+                />
               </span>
             </Can>
           </Col>
