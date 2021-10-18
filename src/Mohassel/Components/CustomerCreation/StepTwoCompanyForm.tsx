@@ -53,6 +53,7 @@ export const StepTwoCompanyForm = (props: any) => {
     setFieldValue,
     previousStep,
     edit,
+    companyKey,
   } = props
 
   const debouncedSearchTerm = useDebounce(values.cbeCode, 500)
@@ -134,15 +135,14 @@ export const StepTwoCompanyForm = (props: any) => {
   useEffect(() => {
     ;(async () => {
       if (debouncedSearchTerm) {
-        if (edit && values.cbeCode === props.cbeCode) return
         setLoading(true)
         const res = await checkDuplicates('cbeCode', values.cbeCode)
 
         if (res.status === 'success') {
           setLoading(false)
+          if (res.body.Exists && res.body.CustomerKey === companyKey) return
           setFieldValue('cbeCodeChecker', res.body.Exists)
-          res.body.Exists &&
-            setFieldValue('cbeCodeDupKey', res.body.CustomerKey)
+          setFieldValue('cbeCodeDupKey', res.body.CustomerKey)
         } else {
           setLoading(false)
           Swal.fire('Error !', getErrorMessage(res.error.error), 'error')

@@ -84,7 +84,7 @@ interface State {
   isGuarantor: boolean
   oldRepresentative: string
   branchId: string
-  cbeCode: string
+  companyKey: string
 }
 
 class CompanyCreation extends Component<Props, State> {
@@ -113,7 +113,7 @@ class CompanyCreation extends Component<Props, State> {
       selectedCustomer: {},
       oldRepresentative: '',
       branchId: '',
-      cbeCode: '',
+      companyKey: '',
     }
   }
 
@@ -196,7 +196,7 @@ class CompanyCreation extends Component<Props, State> {
           draftState.isGuarantor = res.body.isGuarantor
           draftState.oldRepresentative = res.body.representative
           draftState.branchId = res.body.branchId
-          draftState.cbeCode = res.body.cbeCode
+          draftState.companyKey = res.body.key
         })
       )
     } else {
@@ -409,7 +409,7 @@ class CompanyCreation extends Component<Props, State> {
               edit={this.props.edit}
               hasLoan={this.state.hasLoan}
               branchId={this.state.branchId}
-              cbeCode={this.state.cbeCode}
+              companyKey={this.state.companyKey}
             />
           )
         }}
