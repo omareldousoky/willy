@@ -263,9 +263,11 @@ export const CustomerProfile = () => {
   const mainInfo = customerDetails && [
     getCustomerInfo({
       customerDetails,
+      getIscore: (data) => getCustomerIscore(data),
       score: iScoreDetails?.filter(
         (score) => score.nationalId === customerDetails.nationalId
       )[0],
+      applicationStatus: 'reviewed',
       isLeader: false,
       isCF: true,
     }),
