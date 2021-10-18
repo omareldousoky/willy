@@ -25,7 +25,7 @@ import {
 import Can from '../../../Shared/config/Can'
 import { manageCustomersArray } from '../CustomerCreation/manageCustomersInitial'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
-import { Customer } from '../../../Shared/Services/interfaces'
+import { Customer } from '../../../Shared/Models/Customer'
 import { Pagination } from '../../../Shared/Components/Common/Pagination'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 import { moveCustomerToOfficer } from '../../../Shared/Services/APIs/customer/moveCustomerToOfficer'

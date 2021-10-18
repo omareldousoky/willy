@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Container from 'react-bootstrap/Container'
-import { Customer } from '../../../Shared/Services/interfaces'
 import {
   cfLimitStatusLocale,
   getErrorMessage,
@@ -12,10 +11,7 @@ import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
 import ability from '../../../Shared/config/ability'
 import { Profile, InfoBox, ProfileActions } from '../../../Shared/Components'
-import {
-  CFGuarantorTableViewProp,
-  TabDataProps,
-} from '../../../Shared/Components/Profile/types'
+import { TabDataProps } from '../../../Shared/Components/Profile/types'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
 import {
   getIscoreCached,
@@ -36,7 +32,8 @@ import {
   GlobalCFLimits,
   globalCfLimitsInitialValues,
 } from '../../Models/globalLimits'
-import { Score } from '../../../Shared/Models/Customer'
+import { Customer, Score } from '../../../Shared/Models/Customer'
+import { CFGuarantorDetailsProps } from './types'
 
 interface LocationState {
   id: string
@@ -506,10 +503,12 @@ export const CustomerProfile = () => {
         fieldTitle: 'cfGuarantors',
         fieldData: {
           customerId: customerDetails?._id,
-          customerGuarantors,
+          hasLoan: !!customerDetails?.hasLoan,
+          guarantors: customerGuarantors,
+          isBlocked: !!customerDetails?.blocked?.isBlocked,
           getIscore: (data) => getCustomerIscore(data),
           iscores: iScoreDetails,
-        } as CFGuarantorTableViewProp,
+        } as CFGuarantorDetailsProps,
         showFieldCondition: true,
       },
     ],

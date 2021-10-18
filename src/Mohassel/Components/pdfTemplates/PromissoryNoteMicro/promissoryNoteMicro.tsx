@@ -19,12 +19,16 @@ interface PromissoryNoteProps {
 const template = (
   customer: Customer,
   branchDetails,
-  application?: ApplicationResponse
+  application?: ApplicationResponse,
+  last?: boolean
 ) => {
   const hasGuarantors = application && application.guarantors?.length > 0
-
   return (
-    <div className="promissory-note-micro" dir="rtl" lang="ar">
+    <div
+      className={last ? 'promissory-note-micro-last' : 'promissory-note-micro'}
+      dir="rtl"
+      lang="ar"
+    >
       <Header
         title="سند لأمر"
         showCurrentUser={false}
@@ -131,8 +135,13 @@ export const PromissoryNoteMicro = ({
   <>
     {application
       ? application.product?.beneficiaryType === 'group'
-        ? application.group?.individualsInGroup.map((member) =>
-            template(member.customer, branchDetails, application)
+        ? application.group?.individualsInGroup.map((member, i) =>
+            template(
+              member.customer,
+              branchDetails,
+              application,
+              i === (application.group?.individualsInGroup.length ?? 0) - 1
+            )
           )
         : template(application?.customer, branchDetails, application)
       : template(customer, branchDetails)}

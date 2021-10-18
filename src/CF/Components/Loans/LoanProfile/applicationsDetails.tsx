@@ -46,6 +46,10 @@ export const LoanDetailsTableView = ({
           </td>
         </tr>
         <tr>
+          <td>{local.transactionKey}</td>
+          <td>{application.itemTransactionId}</td>
+        </tr>
+        <tr>
           <td>{local.contractType}</td>
           <td>{local[application.product.contractType]}</td>
         </tr>

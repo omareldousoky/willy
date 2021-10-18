@@ -15,7 +15,8 @@ import { getBranches } from '../../../Shared/Services/APIs/Branch/getBranches'
 import * as local from '../../../Shared/Assets/ar.json'
 import { UserDateValues } from './userDetailsInterfaces'
 import { searchLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
-import { Customer, LoanOfficer } from '../../../Shared/Services/interfaces'
+import { LoanOfficer } from '../../../Shared/Services/interfaces'
+import { Customer } from '../../../Shared/Models/Customer'
 import {
   beneficiaryType,
   getErrorMessage,

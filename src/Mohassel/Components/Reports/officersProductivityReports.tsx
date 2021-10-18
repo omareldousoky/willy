@@ -12,8 +12,8 @@ import {
 import {
   OfficersProductivityRequest,
   OfficersProductivityResponse,
-} from '../../Models/OfficersProductivityReport'
-import OfficersProductivity from '../pdfTemplates/officersPercentPayment/officersProductivity/officersProductivity'
+} from '../../../Shared/Models/OfficerProductivity/OfficersProductivityReport'
+import OfficersProductivity from '../../../Shared/Components/pdfTemplates/Operations/officersPercentPayment/officersProductivity/officersProductivity'
 import { ReportsList } from '../../../Shared/Components/ReportsList'
 import { CurrentHierarchiesSingleResponse } from '../../../Shared/Models/OfficerProductivity/OfficerProductivityReport'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'

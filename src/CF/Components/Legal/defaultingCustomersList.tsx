@@ -24,7 +24,8 @@ import {
   getErrorMessage,
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
-import { Application, Customer } from '../../../Shared/Services/interfaces'
+import { Application } from '../../../Shared/Services/interfaces'
+import { Customer } from '../../../Shared/Models/Customer'
 
 import ability from '../../../Shared/config/ability'
 import { LtsIcon } from '../../../Shared/Components'

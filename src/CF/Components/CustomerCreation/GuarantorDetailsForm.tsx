@@ -10,7 +10,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 import { getBirthdateFromNationalId } from '../../../Shared/Services/nationalIdValidation'
 import { getDateString } from '../../../Shared/Services/utils'
 
-export const CustomerGuarantorsForm = (props: any) => {
+export const GuarantorDetailsForm = (props: any) => {
   const {
     values,
     handleSubmit,

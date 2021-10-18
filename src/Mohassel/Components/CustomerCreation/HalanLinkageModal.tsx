@@ -16,7 +16,7 @@ import Col from 'react-bootstrap/Col'
 import Swal from 'sweetalert2'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
-import { Customer } from '../../../Shared/Services/interfaces'
+import { Customer } from '../../../Shared/Models/Customer'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import {
   checkLinkage,

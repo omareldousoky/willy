@@ -4,7 +4,7 @@ import {
   EarlyPaymentsSingleResponse,
 } from '../../../Models/LaundryReports'
 import Orientation from '../../../../Shared/Components/Common/orientation'
-import '../customersArrears/customersArrears.scss'
+import '../../../../Shared/Components/pdfTemplates/Operations/customersArrears/customersArrears.scss'
 import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 import DataRow from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/dataRow'
 

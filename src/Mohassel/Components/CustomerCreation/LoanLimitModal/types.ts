@@ -1,4 +1,5 @@
-import { Customer, Document } from '../../../../Shared/Services/interfaces'
+import { Document } from '../../../../Shared/Services/interfaces'
+import { Customer } from '../../../../Shared/Models/Customer'
 
 export interface LoanLimitForm {
   limit: number
