@@ -6,7 +6,7 @@ import local from '../../Assets/ar.json'
 export const getAuthData = () => {
   return async (dispatch) => {
     const res = await authMe()
-    if (res.status === 'success' && res.body.validBranches && res.body.roles) {
+    if (res.status === 'success' && res.body.roles) {
       dispatch({ type: 'ADD_AUTH_DATA', payload: res.body })
     } else {
       const error = res?.error?.error
