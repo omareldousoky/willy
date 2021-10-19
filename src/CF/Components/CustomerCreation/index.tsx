@@ -40,46 +40,12 @@ import {
   getBirthdateFromNationalId,
   getGenderFromNationalId,
 } from '../../../Shared/Services/nationalIdValidation'
+import {
+  CustomerCreationStep1,
+  CustomerCreationStep2,
+  CustomerCreationStep3,
+} from '../../../Shared/Models/Customer'
 
-interface CustomerInfo {
-  birthDate: number
-  customerName?: string
-  nationalIdIssueDate: number
-  monthlyIncome: number
-  initialConsumerFinanceLimit: number
-  customerConsumerFinanceMaxLimit: number
-  homePostalCode: number
-  nationalId?: string
-  customerHomeAddress?: string
-  customerAddressLatLong: string
-  customerAddressLatLongNumber: {
-    lat: number
-    lng: number
-  }
-}
-interface CustomerBusiness {
-  businessAddressLatLong: string
-  businessAddressLatLongNumber: {
-    lat: number
-    lng: number
-  }
-  businessPostalCode: any
-  businessLicenseIssueDate: any
-}
-interface CustomerExtraDetails {
-  applicationDate: any
-  permanentEmployeeCount: any
-  partTimeEmployeeCount: any
-  representative: any
-  maxLoansAllowed: number
-  allowGuarantorLoan: boolean
-  guarantorMaxLoans: number
-}
-export interface Customer {
-  customerInfo: CustomerInfo
-  customerBusiness: CustomerBusiness
-  customerExtraDetails: CustomerExtraDetails
-}
 interface Props
   extends RouteComponentProps<
     {},
@@ -91,63 +57,9 @@ interface Props
 }
 interface State {
   step: number
-  step1: {
-    birthDate: number
-    nationalIdIssueDate: number
-    monthlyIncome: number
-    initialConsumerFinanceLimit: number
-    customerConsumerFinanceMaxLimit?: number
-    homePostalCode: number
-    customerAddressLatLong: string
-    customerAddressLatLongNumber: {
-      lat: number
-      lng: number
-    }
-    customerType: string
-  }
-  step2: {
-    businessAddressLatLong: string
-    businessAddressLatLongNumber: {
-      lat: number
-      lng: number
-    }
-    businessName: string
-    businessAddress: string
-    governorate: string
-    district: string
-    village: string
-    ruralUrban: string
-    businessPostalCode: string
-    businessPhoneNumber: string
-    businessSector: string
-    businessActivity: string
-    businessSpeciality: string
-    businessLicenseNumber: string
-    businessLicenseIssuePlace: string
-    businessLicenseIssueDate: any
-    commercialRegisterNumber: string
-    industryRegisterNumber: string
-    taxCardNumber: string
-  }
-  step3: {
-    geographicalDistribution: string
-    geoAreaId: string
-    representative: any
-    newRepresentative: any
-    representativeName: string
-    applicationDate: any
-    permanentEmployeeCount: any
-    partTimeEmployeeCount: any
-    comments: string
-    guarantorMaxLoans: number
-    maxLoansAllowed: number
-    maxPrincipal: number
-    principals?: {
-      maxIndividualPrincipal: number
-      maxGroupIndividualPrincipal: number
-      maxGroupPrincipal: number
-    }
-  }
+  step1: CustomerCreationStep1
+  step2: CustomerCreationStep2
+  step3: CustomerCreationStep3
   customerId: string
   selectedCustomer: any
   loading: boolean
@@ -159,22 +71,19 @@ interface State {
 }
 
 class CustomerCreation extends Component<Props, State> {
-  formikStep1: any = {
+  formikStep1 = {
     isValid: true,
     values: step1,
-    errors: {},
   }
 
-  formikStep2: any = {
+  formikStep2 = {
     isValid: true,
     values: step2,
-    errors: {},
   }
 
-  formikStep3: any = {
+  formikStep3 = {
     isValid: true,
     values: step3,
-    errors: {},
   }
 
   constructor(props: Props) {
@@ -320,16 +229,13 @@ class CustomerCreation extends Component<Props, State> {
       }
       this.formikStep1 = {
         values: { ...this.state.step1, ...customerInfo },
-        errors: {},
         isValid: true,
       }
       this.formikStep2 = {
         values: { ...this.state.step2, ...customerBusiness },
-        errors: {},
         isValid: true,
       }
       this.formikStep3 = {
-        errors: {},
         values: { ...this.state.step3, ...customerExtraDetails },
         isValid: true,
       }
@@ -431,10 +337,10 @@ class CustomerCreation extends Component<Props, State> {
     if (res.status === 'success') {
       const birthDate = res.body.customerNationalId
         ? await getBirthdateFromNationalId(res.body.customerNationalId)
-        : null
+        : 0
       const gender = res.body.customerNationalId
         ? await getGenderFromNationalId(res.body.customerNationalId)
-        : null
+        : ''
       const customerInfo = {
         customerName: res.body.customerName?.trim(),
         nationalId: res.body.customerNationalId,
@@ -492,8 +398,8 @@ class CustomerCreation extends Component<Props, State> {
         geoAreaId: '',
         newRepresentative: '',
         applicationDate: timeToDateyyymmdd(-1),
-        permanentEmployeeCount: '',
-        partTimeEmployeeCount: '',
+        permanentEmployeeCount: 0,
+        partTimeEmployeeCount: 0,
         comments: '',
         guarantorMaxLoans: 1,
         maxLoansAllowed: 1,
@@ -507,16 +413,14 @@ class CustomerCreation extends Component<Props, State> {
 
       this.formikStep1 = {
         values: { ...this.state.step1, ...customerInfo },
-        errors: {},
         isValid: true,
       }
       this.formikStep2 = {
         values: { ...this.state.step2, ...customerBusiness },
-        errors: {},
+
         isValid: true,
       }
       this.formikStep3 = {
-        errors: {},
         values: { ...this.state.step3, ...customerExtraDetails },
         isValid: true,
       }
