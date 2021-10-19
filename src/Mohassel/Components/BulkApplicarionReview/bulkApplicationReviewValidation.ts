@@ -2,8 +2,7 @@ import * as Yup from 'yup'
 import * as local from '../../../Shared/Assets/ar.json'
 import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
 
-const endOfDay: Date = new Date()
-endOfDay.setHours(23, 59, 59, 59)
+
 
 function getMaxDate(selectedReviewedLoans) {
   let maxDate = 0

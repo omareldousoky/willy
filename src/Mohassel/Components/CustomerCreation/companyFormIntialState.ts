@@ -1,8 +1,6 @@
 import * as Yup from 'yup'
 import local from '../../../Shared/Assets/ar.json'
-
-const endOfDay: Date = new Date()
-endOfDay.setHours(23, 59, 59, 59)
+import { endOfDayValue } from '../../../Shared/Services/utils'
 
 export const companyCreationValidationStepOne = Yup.object().shape({
   businessName: Yup.string()
@@ -31,7 +29,7 @@ export const companyCreationValidationStepOne = Yup.object().shape({
   // businessLicenseIssuePlace: Yup.string().trim().max(100, maxLength100),
   businessLicenseIssueDate: Yup.string()
     .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+      return value ? new Date(value).valueOf() <= endOfDayValue : true
     })
     .required(local.required),
   commercialRegisterNumber: Yup.string()
@@ -60,7 +58,7 @@ export const companyCreationValidationStepTwo = Yup.object().shape({
   representative: Yup.string().trim().required(local.required),
   applicationDate: Yup.string()
     .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+      return value ? new Date(value).valueOf() <= endOfDayValue : true
     })
     .required(local.required),
   comments: Yup.string().trim().max(500, local.maxLength100),
@@ -72,7 +70,7 @@ export const companyCreationValidationStepTwoEdit = Yup.object().shape({
   representative: Yup.string().trim().required(local.required),
   applicationDate: Yup.string()
     .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+      return value ? new Date(value).valueOf() <= endOfDayValue : true
     })
     .required(local.required),
   permanentEmployeeCount: Yup.string().trim(),

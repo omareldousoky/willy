@@ -1,10 +1,18 @@
 import * as Yup from 'yup'
 import * as local from '../../../Shared/Assets/ar.json'
 import { maxValue, minValue } from '../../../Shared/localUtils'
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
+import {
+  CustomerCreationStep1,
+  CustomerCreationStep2,
+  CustomerCreationStep3,
+} from '../../../Shared/Models/Customer'
+import {
+  endOfDayValue,
+  timeToDateyyymmdd,
+} from '../../../Shared/Services/utils'
 import { GlobalCFLimits } from '../../Models/globalLimits'
 
-export const step1: any = {
+export const step1: CustomerCreationStep1 = {
   customerName: '',
   nationalId: '',
   nationalIdChecker: false,
@@ -30,7 +38,7 @@ export const step1: any = {
   customerType: 'individual',
 }
 
-export const step2 = {
+export const step2: CustomerCreationStep2 = {
   businessName: '',
   businessAddressLatLong: '',
   businessAddressLatLongNumber: {
@@ -55,15 +63,15 @@ export const step2 = {
   taxCardNumber: '',
 }
 
-export const step3 = {
+export const step3: CustomerCreationStep3 = {
   geographicalDistribution: '',
   geoAreaId: '',
   representative: '',
   newRepresentative: '',
   representativeName: '',
   applicationDate: timeToDateyyymmdd(-1),
-  permanentEmployeeCount: '',
-  partTimeEmployeeCount: '',
+  permanentEmployeeCount: 0,
+  partTimeEmployeeCount: 0,
   comments: '',
   guarantorMaxLoans: 1,
   maxLoansAllowed: 1,
@@ -73,10 +81,8 @@ export const step3 = {
     maxGroupIndividualPrincipal: 0,
     maxGroupPrincipal: 0,
   },
+  allowGuarantorLoan: false,
 }
-
-const endOfDay: Date = new Date()
-endOfDay.setHours(23, 59, 59, 59)
 
 export const customerCreationValidationStepOne = (limits: GlobalCFLimits) =>
   Yup.object().shape({
@@ -113,7 +119,7 @@ export const customerCreationValidationStepOne = (limits: GlobalCFLimits) =>
       }),
     nationalIdIssueDate: Yup.string()
       .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
-        return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+        return value ? new Date(value).valueOf() <= endOfDayValue : true
       })
       .required(local.required),
     monthlyIncome: Yup.number()
@@ -175,7 +181,7 @@ export const customerCreationValidationStepTwo = Yup.object().shape({
     'Max Date',
     local.dateShouldBeBeforeToday,
     (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+      return value ? new Date(value).valueOf() <= endOfDayValue : true
     }
   ),
   commercialRegisterNumber: Yup.string().trim().max(100, local.maxLength100),
@@ -189,7 +195,7 @@ export const customerCreationValidationStepThree = Yup.object().shape({
   representative: Yup.string().trim().required(local.required),
   applicationDate: Yup.string()
     .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+      return value ? new Date(value).valueOf() <= endOfDayValue : true
     })
     .required(local.required),
   permanentEmployeeCount: Yup.string().trim(),
@@ -203,11 +209,11 @@ export const customerCreationValidationStepThreeEdit = Yup.object().shape({
   representative: Yup.string().trim().required(local.required),
   applicationDate: Yup.string()
     .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+      return value ? new Date(value).valueOf() <= endOfDayValue : true
     })
     .required(local.required),
-  permanentEmployeeCount: Yup.string().trim(),
-  partTimeEmployeeCount: Yup.string().trim(),
+  permanentEmployeeCount: Yup.number(),
+  partTimeEmployeeCount: Yup.number(),
   comments: Yup.string().trim().max(500, local.maxLength100),
   guarantorMaxLoans: Yup.number()
     .required()
