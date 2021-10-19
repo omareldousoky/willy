@@ -114,21 +114,18 @@ export const StepTwoCompanyForm = (props: any) => {
     }
   }
   const getCbeCode = async (name) => {
-    const res = await searchCbeCode({
-      from: 0,
-      size: 100,
-      name,
-    })
-    if (res.status === 'success') {
-      setCbeCode(res.body.data)
-      if (
-        !res.body.data.find((company) => company.cbeCode === values.cbeCode)
-      ) {
-        setFieldValue('cbeCode', '')
+    if (name) {
+      const res = await searchCbeCode({
+        from: 0,
+        size: 100,
+        name,
+      })
+      if (res.status === 'success') {
+        setCbeCode(res.body.data)
+      } else {
+        Swal.fire('Error !', getErrorMessage(res.error?.error), 'error')
+        setCbeCode([])
       }
-    } else {
-      Swal.fire('Error !', getErrorMessage(res.error?.error), 'error')
-      setCbeCode([])
     }
   }
   useEffect(() => {
@@ -183,12 +180,6 @@ export const StepTwoCompanyForm = (props: any) => {
                   label: `${company.name} | ${company.cbeCode}`,
                   value: company.cbeCode,
                 }))}
-                value={cbeCode
-                  .filter((company) => company.cbeCode === values.cbeCode)
-                  .map((foundCbe) => ({
-                    label: `${foundCbe.name} | ${foundCbe.cbeCode}`,
-                    value: foundCbe.cbeCode,
-                  }))}
                 isDisabled={cbeCode.length === 1}
                 isOptionSelected={(option) => option.value === values.cbeCode}
                 formatOptionLabel={(option) =>
@@ -214,20 +205,22 @@ export const StepTwoCompanyForm = (props: any) => {
                 disabled={cbeCode.length === 1}
               />
             )}
-            <div
-              style={{
-                width: '100%',
-                marginTop: '0.25rem',
-                fontSize: '80%',
-                color: '#d51b1b',
-              }}
-            >
-              {errors.cbeCode === local.duplicateCbeCodeMessage
-                ? local.duplicateCbeCodeMessage +
-                  local.withCode +
-                  values.cbeCodeDupKey
-                : errors.cbeCode}
-            </div>
+            {errors.cbeCode && (
+              <div
+                style={{
+                  width: '100%',
+                  marginTop: '0.25rem',
+                  fontSize: '80%',
+                  color: '#d51b1b',
+                }}
+              >
+                {errors.cbeCode === local.duplicateCbeCodeMessage
+                  ? local.duplicateCbeCodeMessage +
+                    local.withCode +
+                    values.cbeCodeDupKey
+                  : errors.cbeCode}
+              </div>
+            )}
           </Form.Group>
         </Col>
         <Col sm={6}>
