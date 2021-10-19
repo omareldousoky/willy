@@ -2,6 +2,7 @@ import * as Yup from 'yup'
 import local from '../../../Shared/Assets/ar.json'
 import { maxValue, minValue } from '../../../Shared/localUtils'
 import { LeadCore } from '../../../Shared/Models/common'
+import { endOfDayValue } from '../../../Shared/Services/utils'
 import { LeadStepOne, LeadStepTwo } from './editLead'
 
 export const leadStepOne: LeadStepOne = {

@@ -2,8 +2,6 @@ import * as Yup from 'yup'
 import * as local from '../../../Shared/Assets/ar.json'
 import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
 
-
-
 function getMaxDate(selectedReviewedLoans) {
   let maxDate = 0
   selectedReviewedLoans.forEach((loan) => {
