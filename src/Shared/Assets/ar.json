@@ -1217,5 +1217,14 @@
   "convertToCustomer": "تحويل إلي عميل",
   "cbeCodes": "أكواد البنك المركزي",
   "fileUpload": "رفع الملف",
-  "createLead": "إنشاء متقدم"
+  "noRoleOrBranchError": "برجاء مراجعة الصلاحيات والفروع لدي الموظف أولا",
+  "createLead": "إنشاء متقدم",
+  "vendorSettlement": "تسوية التجار",
+  "vendorSettlementReports": "تقارير تسوية التجار",
+  "vendor": "التاجر",
+  "settle": "تسوية",
+  "downPayment": "المقدم",
+  "rebate": "الخصم",
+  "purchase": "شراء",
+  "refund": "إسترجاع"
 }

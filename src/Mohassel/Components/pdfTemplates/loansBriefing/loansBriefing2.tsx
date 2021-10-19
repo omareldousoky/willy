@@ -1,10 +1,10 @@
 import React from 'react'
+import { LoansBriefingReportResponse } from '../../../../Shared/Models/operationsReports'
 import store from '../../../../Shared/redux/store'
 import {
   getCurrentTime,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
-import { LoansBriefingReportResponse } from '../../../Services/interfaces'
 import './loansBriefing.scss'
 
 interface LoansBriefing2Props {
