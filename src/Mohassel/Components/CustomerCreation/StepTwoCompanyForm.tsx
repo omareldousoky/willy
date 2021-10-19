@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/async'
+import Select, { ValueType } from 'react-select'
 import Swal from 'sweetalert2'
 
 import Button from 'react-bootstrap/Button'
@@ -29,6 +30,10 @@ interface LoanOfficer {
   _id: string
   username: string
   name: string
+}
+interface Option {
+  label: string
+  value: string
 }
 export const StepTwoCompanyForm = (props: any) => {
   const [loading, setLoading] = useState(false)
@@ -116,11 +121,15 @@ export const StepTwoCompanyForm = (props: any) => {
     })
     if (res.status === 'success') {
       setCbeCode(res.body.data)
-      return res.body.data
+      if (
+        !res.body.data.find((company) => company.cbeCode === values.cbeCode)
+      ) {
+        setFieldValue('cbeCode', '')
+      }
+    } else {
+      Swal.fire('Error !', getErrorMessage(res.error?.error), 'error')
+      setCbeCode([])
     }
-    Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    setCbeCode([])
-    return []
   }
   useEffect(() => {
     const token = getCookie('token')
@@ -161,27 +170,36 @@ export const StepTwoCompanyForm = (props: any) => {
           <Form.Group controlId="cbeCode">
             <Form.Label>{`${local.cbeCode} *`}</Form.Label>
             {cbeCode.length > 1 ? (
-              <AsyncSelect
-                className={errors.cbeCode ? 'error' : ''}
-                name="cbeCode"
-                data-qc="cbeCode"
+              <Select<Option>
                 styles={theme.selectStyleWithBorder}
+                name="cbeCode"
                 theme={theme.selectTheme}
-                value={cbeCode?.find(
-                  (company) => company.cbeCode === values.cbeCode
-                )}
-                onBlur={handleBlur}
-                onChange={(company) =>
-                  setFieldValue('cbeCode', company.cbeCode)
+                placeholder={local.cbeCode}
+                onChange={(event: ValueType<Option> | Option) => {
+                  const { value } = event as Option
+                  setFieldValue('cbeCode', value)
+                }}
+                options={cbeCode.map((company) => ({
+                  label: `${company.name} | ${company.cbeCode}`,
+                  value: company.cbeCode,
+                }))}
+                value={cbeCode
+                  .filter((company) => company.cbeCode === values.cbeCode)
+                  .map((foundCbe) => ({
+                    label: `${foundCbe.name} | ${foundCbe.cbeCode}`,
+                    value: foundCbe.cbeCode,
+                  }))}
+                isDisabled={cbeCode.length === 1}
+                isOptionSelected={(option) => option.value === values.cbeCode}
+                formatOptionLabel={(option) =>
+                  `${option.label} | ${option.value}`
                 }
-                getOptionLabel={(company) =>
-                  `${company.name} | ${company.cbeCode}`
-                }
-                getOptionValue={(company) => company.cbeCode}
-                loadOptions={getCbeCode}
-                disabled={cbeCode.length === 1}
-                cacheOptions
-                defaultOptions
+                defaultValue={cbeCode
+                  .filter((company) => company.cbeCode === values.cbeCode)
+                  .map((foundCbe) => ({
+                    label: `${foundCbe.name} | ${foundCbe.cbeCode}`,
+                    value: foundCbe.cbeCode,
+                  }))}
               />
             ) : (
               <Form.Control
