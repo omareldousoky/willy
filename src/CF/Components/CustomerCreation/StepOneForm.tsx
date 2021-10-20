@@ -39,7 +39,7 @@ export const StepOneForm = (props: any) => {
 
   const [mapState, setMapState] = useState(false)
   const [loading, setLoading] = useState(false)
-
+  const calculatedAge = calculateAge(new Date(values.birthDate).valueOf())
   const [governorates, setGovernorates] = useState<Governorate[]>([])
   const policeStations: District[] =
     governorates.find(
@@ -218,12 +218,12 @@ export const StepOneForm = (props: any) => {
             <Form.Control.Feedback
               type="invalid"
               style={
-                calculateAge(new Date(values.birthDate).valueOf()) >= 67
+                calculatedAge > 65 || calculatedAge < 21
                   ? { display: 'block' }
                   : {}
               }
             >
-              {local.customerAgeMoreThan67}
+              {local.ageRangeError}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
