@@ -1,90 +1,10 @@
 import * as Yup from 'yup'
-import * as local from '../../../Shared/Assets/ar.json'
-import { maxValue, minValue } from '../../../Shared/localUtils'
-import {
-  CustomerCreationStep1,
-  CustomerCreationStep2,
-  CustomerCreationStep3,
-} from '../../../Shared/Models/Customer'
-import {
-  endOfDayValue,
-  timeToDateyyymmdd,
-} from '../../../Shared/Services/utils'
-import { GlobalCFLimits } from '../../Models/globalLimits'
+import { GlobalCFLimits } from '../../CF/Models/globalLimits'
+import local from '../Assets/ar.json'
+import { minValue, maxValue } from '../localUtils'
+import { endOfDayValue } from '../Services/utils'
 
-export const step1: CustomerCreationStep1 = {
-  customerName: '',
-  nationalId: '',
-  nationalIdChecker: false,
-  birthDate: '',
-  gender: '',
-  nationalIdIssueDate: '',
-  monthlyIncome: 0,
-  initialConsumerFinanceLimit: 0,
-  customerConsumerFinanceMaxLimit: 0,
-  customerAddressLatLong: '',
-  customerAddressLatLongNumber: {
-    lat: 0,
-    lng: 0,
-  },
-  customerHomeAddress: '',
-  currentHomeAddress: '',
-  homePostalCode: '',
-  homePhoneNumber: '',
-  mobilePhoneNumber: '',
-  faxNumber: '',
-  emailAddress: '',
-  customerWebsite: '',
-  customerType: 'individual',
-}
-
-export const step2: CustomerCreationStep2 = {
-  businessName: '',
-  businessAddressLatLong: '',
-  businessAddressLatLongNumber: {
-    lat: 0,
-    lng: 0,
-  },
-  businessAddress: '',
-  governorate: '',
-  district: '',
-  village: '',
-  ruralUrban: '',
-  businessPostalCode: '',
-  businessPhoneNumber: '',
-  businessSector: '',
-  businessActivity: '',
-  businessSpeciality: '',
-  businessLicenseNumber: '',
-  businessLicenseIssuePlace: '',
-  businessLicenseIssueDate: '',
-  commercialRegisterNumber: '',
-  industryRegisterNumber: '',
-  taxCardNumber: '',
-}
-
-export const step3: CustomerCreationStep3 = {
-  geographicalDistribution: '',
-  geoAreaId: '',
-  representative: '',
-  newRepresentative: '',
-  representativeName: '',
-  applicationDate: timeToDateyyymmdd(-1),
-  permanentEmployeeCount: 0,
-  partTimeEmployeeCount: 0,
-  comments: '',
-  guarantorMaxLoans: 1,
-  maxLoansAllowed: 1,
-  maxPrincipal: 0,
-  principals: {
-    maxIndividualPrincipal: 0,
-    maxGroupIndividualPrincipal: 0,
-    maxGroupPrincipal: 0,
-  },
-  allowGuarantorLoan: false,
-}
-
-export const customerCreationValidationStepOne = (limits: GlobalCFLimits) =>
+export const customerCreationValidationStepOne = (limits?: GlobalCFLimits) =>
   Yup.object().shape({
     customerName: Yup.string()
       .trim()
@@ -123,11 +43,20 @@ export const customerCreationValidationStepOne = (limits: GlobalCFLimits) =>
       })
       .required(local.required),
     monthlyIncome: Yup.number()
-      .min(limits.DBRPercentLowStart, minValue(limits.DBRPercentLowStart))
+      .min(
+        limits?.DBRPercentLowStart as number,
+        minValue(limits?.DBRPercentLowStart as number)
+      )
       .required(local.required),
     initialConsumerFinanceLimit: Yup.number()
-      .min(limits.globalCFMin, minValue(limits.globalCFMin))
-      .max(limits.globalCFMax, maxValue(limits.globalCFMax))
+      .min(
+        limits?.globalCFMin as number,
+        minValue(limits?.globalCFMin as number)
+      )
+      .max(
+        limits?.globalCFMax as number,
+        maxValue(limits?.globalCFMax as number)
+      )
       .test(
         'initialConsumerFinanceLimit',
         local.customerMaxPrincipalError,
