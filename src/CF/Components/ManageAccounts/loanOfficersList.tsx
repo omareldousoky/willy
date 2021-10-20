@@ -22,8 +22,11 @@ import HeaderWithCards, {
   Tab,
 } from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageAccountsArray } from './manageAccountsInitials'
-import { getErrorMessage, getDateAndTime } from '../../../Shared/Services/utils'
-import { getCookie } from '../../../Shared/Services/getCookie'
+import {
+  getErrorMessage,
+  getDateAndTime,
+  getBranchFromCookie,
+} from '../../../Shared/Services/utils'
 import { editLoanOfficerValidation } from './loanOfficersValidation'
 import { checkUsernameDuplicates } from '../../../Shared/Services/APIs/User-Creation/checkUsernameDup'
 import { updateLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/updateLoanOfficer'
@@ -73,7 +76,7 @@ class LoanOfficersList extends Component<Props, State> {
       from: 0,
       manageAccountTabs: [],
       showModal: false,
-      branchId: JSON.parse(getCookie('ltsbranch'))._id,
+      branchId: getBranchFromCookie('ltsbranch'),
       loanOfficer: {
         id: '',
         name: '',

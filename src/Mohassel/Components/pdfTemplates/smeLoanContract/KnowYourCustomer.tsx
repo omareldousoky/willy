@@ -9,11 +9,14 @@ import {
 } from '../../../../Shared/Services/utils'
 
 import { KnowYourCustomerProps } from './types'
+import { Company } from '../../../../Shared/Services/interfaces'
 
 export const KnowYourCustomer = ({
   application,
   loanUsage,
 }: KnowYourCustomerProps) => {
+  const { entitledToSign, principal, guarantors, creationDate } = application
+  const company: Company = application.customer as Company
   return (
     <>
       <div className="contract-container p-0" dir="rtl" lang="ar">
@@ -26,41 +29,39 @@ export const KnowYourCustomer = ({
         <p className="font-weight-bolder border-bottom w-25">بيانات الشركة:-</p>
         <p>
           اســـــــــــم الشــــركـــــــــة :-
-          {application.customer?.businessName ?? ''}
+          {company?.businessName ?? ''}
         </p>
         <p>
           السمــــــــــة التجاريـــــــــة :-
-          {application.customer?.businessCharacteristic ?? ''}
+          {company?.businessCharacteristic ?? ''}
         </p>
         <p>
           الشكـــــــــل القانونــــــــــي :-
-          {application.customer?.legalStructure
-            ? local[application.customer.legalStructure]
-            : ''}
+          {company?.legalConstitution ? local[company.legalConstitution] : ''}
         </p>
         <p>
           رقــــــم السجــــــل التجاري :-
-          {application.customer?.commercialRegisterNumber ?? ''}
+          {company?.commercialRegisterNumber ?? ''}
         </p>
         <p>
           رقــــم البطاقــــة الضريبيـــة :-
-          {application.customer?.taxCardNumber ?? ''}
+          {company?.taxCardNumber ?? ''}
         </p>
         <p>
           ترخيــص مزاولـــة النشـــاط :-
-          {application.customer?.businessLicenseNumber ?? ''}
+          {company?.businessLicenseNumber ?? ''}
         </p>
         <p>
           نشـــــــــــاط الشــركـــــــــــة :-
-          {application.customer?.businessSector ?? ''}
+          {company?.businessSector ?? ''}
         </p>
         <p>
           عنــوان النشــاط تفصيلـــــي :-
-          {application.customer?.businessAddress ?? ''}
+          {company?.businessAddress ?? ''}
         </p>
         <p>
           حجــم التمويــل المطلــــــوب :-
-          {application.principal ?? ''}
+          {principal ?? ''}
         </p>
         <p>
           الغـــرض مـــن التمــويـــــل :-
@@ -69,7 +70,7 @@ export const KnowYourCustomer = ({
         <p className="font-weight-bolder border-bottom w-25">
           من له حق التوقيع والاقتراض :-
         </p>
-        {application.entitledToSign?.map((person, index) => (
+        {entitledToSign?.map((person, index) => (
           <div key={index}>
             <p className="font-weight-bold border-bottom w-25">
               الشخص {orderLocal[index]}
@@ -98,10 +99,10 @@ export const KnowYourCustomer = ({
                 ? person.customer.homePhoneNumber
                 : person.customer.businessPhoneNumber || ''}
             </p>
-            <p>الصفة في النشاط :- {person.position}</p>
+            <p>الصفة في النشاط :- {local[person.position]}</p>
           </div>
         ))}
-        {application.guarantors?.map((person, index) => (
+        {guarantors?.map((person, index) => (
           <div key={index}>
             <p className="font-weight-bold border-bottom w-25">
               بيانات {guarantorOrderLocal[index]}
@@ -150,18 +151,16 @@ export const KnowYourCustomer = ({
         </p>
         <p>
           اسم الشركة المدينة :-
-          {application.customer?.businessName ?? ''}
+          {company?.businessName ?? ''}
         </p>
-        {application.entitledToSign?.map((person, index) => (
+        {entitledToSign?.map((person, index) => (
           <div key={index}>
             <p>
               اسم من له حق التوقيع والاقتراض :-
               {person.customer.customerName ?? ''}
             </p>
             <p>التوقيع /</p>
-            <p>
-              التاريخ &emsp; {timeToArabicDate(application.creationDate, false)}
-            </p>
+            <p>التاريخ &emsp; {timeToArabicDate(creationDate, false)}</p>
           </div>
         ))}
         <p>
@@ -171,16 +170,12 @@ export const KnowYourCustomer = ({
         <div className="d-flex justify-content-between">
           <span>أسم عضو الرقابة</span>
           <span>توقيع عضو الرقابة</span>
-          <span>
-            التاريخ &emsp; {timeToArabicDate(application.creationDate, false)}
-          </span>
+          <span>التاريخ &emsp; {timeToArabicDate(creationDate, false)}</span>
         </div>
         <div className="d-flex justify-content-between">
           <span>اسم مدير الفرع </span>
           <span>توقيع مدير الفرع</span>
-          <span>
-            التاريخ &emsp; {timeToArabicDate(application.creationDate, false)}
-          </span>
+          <span>التاريخ &emsp; {timeToArabicDate(creationDate, false)}</span>
         </div>
       </div>
     </>
