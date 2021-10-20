@@ -6,15 +6,6 @@ import Swal from 'sweetalert2'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
 import { Loader } from '../../../Shared/Components/Loader'
-import {
-  step1,
-  step2,
-  step3,
-  customerCreationValidationStepOne,
-  customerCreationValidationStepTwo,
-  customerCreationValidationStepThree,
-  customerCreationValidationStepThreeEdit,
-} from './customerFormIntialState'
 import { StepOneForm } from './StepOneForm'
 import { StepTwoForm } from './StepTwoForm'
 import { StepThreeForm } from './StepThreeForm'
@@ -45,6 +36,13 @@ import {
   CustomerCreationStep2,
   CustomerCreationStep3,
 } from '../../../Shared/Models/Customer'
+import { step1, step2, step3 } from '../../../Shared/Constants/customer'
+import {
+  customerCreationValidationStepOne,
+  customerCreationValidationStepTwo,
+  customerCreationValidationStepThreeEdit,
+  customerCreationValidationStepThree,
+} from '../../../Shared/Validations/customer'
 
 interface Props
   extends RouteComponentProps<
