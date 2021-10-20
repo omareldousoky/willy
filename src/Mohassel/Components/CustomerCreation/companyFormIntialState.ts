@@ -1,7 +1,46 @@
 import * as Yup from 'yup'
 import local from '../../../Shared/Assets/ar.json'
-import { endOfDayValue } from '../../../Shared/Services/utils'
+import {
+  endOfDayValue,
+  timeToDateyyymmdd,
+} from '../../../Shared/Services/utils'
 
+export const step1Company = {
+  businessName: '',
+  businessAddress: '',
+  businessCharacteristic: '',
+  businessSector: '',
+  businessActivityDetails: '',
+  businessLicenseNumber: '',
+  // businessLicenseIssuePlace: '',
+  businessLicenseIssueDate: '',
+  commercialRegisterNumber: '',
+  // industryRegisterNumber: '',
+  taxCardNumber: '',
+  legalStructure: 'other',
+  commercialRegisterExpiryDate: '',
+  customerType: 'company',
+  governorate: '',
+}
+export const step2Company = {
+  geographicalDistribution: '',
+  geoAreaId: '',
+  representative: '',
+  newRepresentative: '',
+  representativeName: '',
+  applicationDate: timeToDateyyymmdd(-1),
+  permanentEmployeeCount: '',
+  partTimeEmployeeCount: '',
+  comments: '',
+  guarantorMaxLoans: 1,
+  maxLoansAllowed: 1,
+  maxPrincipal: 0,
+  principals: {
+    maxIndividualPrincipal: 0,
+    maxGroupIndividualPrincipal: 0,
+    maxGroupPrincipal: 0,
+  },
+}
 export const companyCreationValidationStepOne = Yup.object().shape({
   businessName: Yup.string()
     .trim()

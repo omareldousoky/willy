@@ -7,8 +7,9 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import produce from 'immer'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
 import { Loader } from '../../../Shared/Components/Loader'
-import { step1Company, step2Company } from './customerFormIntialState'
 import {
+  step1Company,
+  step2Company,
   companyCreationValidationStepOne,
   companyCreationValidationStepTwo,
   companyCreationValidationStepTwoEdit,
