@@ -18,6 +18,18 @@ export interface Branch {
   _id?: string
 }
 
+export interface Company extends Customer {
+  legalConstitution: string
+  smeCategory: string
+  cbeCode: string
+  paidCapital: number
+  establishmentDate: number
+  smeSourceId?: string
+  smeBankName: string
+  smeBankBranch: string
+  smeBankAccountNumber: string
+  smeIbanNumber: string
+}
 export interface Installment {
   id: number
   installmentResponse: number
@@ -146,7 +158,7 @@ export interface Application {
   branchManagerName?: string
   created?: Signature
   creationDate: number
-  customer?: Customer
+  customer?: Customer | Company
   earlyPaymentAmount?: number
   enquirerName?: string
   enquirorId?: string

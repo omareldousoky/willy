@@ -1,6 +1,51 @@
 import * as Yup from 'yup'
 import local from '../../../Shared/Assets/ar.json'
+import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
 
+export const step1Company = {
+  businessName: '',
+  businessAddress: '',
+  businessCharacteristic: '',
+  businessSector: '',
+  businessActivityDetails: '',
+  businessLicenseNumber: '',
+  // businessLicenseIssuePlace: '',
+  businessLicenseIssueDate: '',
+  commercialRegisterNumber: '',
+  // industryRegisterNumber: '',
+  taxCardNumber: '',
+  legalConstitution: 'other',
+  smeCategory: 'other',
+  commercialRegisterExpiryDate: '',
+  customerType: 'company',
+  governorate: '',
+}
+export const step2Company = {
+  geographicalDistribution: '',
+  geoAreaId: '',
+  representative: '',
+  newRepresentative: '',
+  representativeName: '',
+  applicationDate: timeToDateyyymmdd(-1),
+  permanentEmployeeCount: 0,
+  partTimeEmployeeCount: '',
+  comments: '',
+  guarantorMaxLoans: 1,
+  maxLoansAllowed: 1,
+  principals: {
+    maxIndividualPrincipal: 0,
+    maxGroupIndividualPrincipal: 0,
+    maxGroupPrincipal: 0,
+  },
+  cbeCode: '',
+  paidCapital: 0,
+  establishmentDate: '',
+  smeSourceId: '',
+  smeBankName: '',
+  smeBankBranch: '',
+  smeBankAccountNumber: '',
+  smeIbanNumber: '',
+}
 const endOfDay: Date = new Date()
 endOfDay.setHours(23, 59, 59, 59)
 
@@ -18,7 +63,8 @@ export const companyCreationValidationStepOne = Yup.object().shape({
     .max(500, local.maxLength500)
     .required(local.required),
   businessCharacteristic: Yup.string().trim().required(local.required),
-  legalStructure: Yup.string().trim().required(local.required),
+  legalConstitution: Yup.string().trim().required(local.required),
+  smeCategory: Yup.string().trim().required(local.required),
   businessLicenseNumber: Yup.string()
     .max(20, local.maxLength20)
     .required(local.required),
@@ -52,6 +98,7 @@ export const companyCreationValidationStepOne = Yup.object().shape({
       .length(9, local.lengthShouldBe9)
       .required(local.required),
   }),
+  governorate: Yup.string().required(local.required),
 })
 
 export const companyCreationValidationStepTwo = Yup.object().shape({
@@ -64,6 +111,22 @@ export const companyCreationValidationStepTwo = Yup.object().shape({
     })
     .required(local.required),
   comments: Yup.string().trim().max(500, local.maxLength100),
+  paidCapital: Yup.string().trim().required(local.required),
+  establishmentDate: Yup.string().trim().required(local.required),
+  smeBankName: Yup.string().required(local.required),
+  smeBankBranch: Yup.string().required(local.required),
+  smeBankAccountNumber: Yup.string().required(local.required),
+  smeIbanNumber: Yup.string().required(local.required),
+  cbeCode: Yup.string().when('cbeCodeChecker', {
+    is: true,
+    then: Yup.string().test(
+      'error',
+      local.duplicateCbeCodeMessage,
+      () => false
+    ),
+    otherwise: Yup.string().required(local.required),
+  }),
+  permanentEmployeeCount: Yup.string().trim().required(local.required),
 })
 
 export const companyCreationValidationStepTwoEdit = Yup.object().shape({
@@ -75,8 +138,8 @@ export const companyCreationValidationStepTwoEdit = Yup.object().shape({
       return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
     })
     .required(local.required),
-  permanentEmployeeCount: Yup.string().trim(),
-  partTimeEmployeeCount: Yup.string().trim(),
+  permanentEmployeeCount: Yup.string().trim().required(local.required),
+  partTimeEmployeeCount: Yup.string().trim().required(local.required),
   comments: Yup.string().trim().max(500, local.maxLength100),
   guarantorMaxLoans: Yup.number()
     .required()
@@ -88,18 +151,19 @@ export const companyCreationValidationStepTwoEdit = Yup.object().shape({
     .min(1, local.mustBeOneOrMore)
     .max(100, local.mustBeNotMoreThanHundred)
     .required(local.required),
-  maxPrincipal: Yup.number()
-    .min(0, local.mustBeGreaterThanZero)
-    // .test(
-    //   'maxPrincipal',
-    //   maxGlobalLimitReachedError,
-    //   function (this: any, value: any) {
-    //     const { principals } = this.parent
-    //     if (value <= principals.maxIndividualPrincipal) {
-    //       return true
-    //     }
-    //     return false
-    //   }
-    // )
-    .required(local.required),
+  paidCapital: Yup.string().trim().required(local.required),
+  establishmentDate: Yup.string().trim().required(local.required),
+  smeBankName: Yup.string().required(local.required),
+  smeBankBranch: Yup.string().required(local.required),
+  smeBankAccountNumber: Yup.string().required(local.required),
+  smeIbanNumber: Yup.string().required(local.required),
+  cbeCode: Yup.string().when('cbeCodeChecker', {
+    is: true,
+    then: Yup.string().test(
+      'error',
+      local.duplicateCbeCodeMessage,
+      () => false
+    ),
+    otherwise: Yup.string().required(local.required),
+  }),
 })

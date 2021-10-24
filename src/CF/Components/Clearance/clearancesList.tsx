@@ -13,10 +13,10 @@ import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'
 import {
+  getBranchFromCookie,
   getErrorMessage,
   timeToDateyyymmdd,
 } from '../../../Shared/Services/utils'
-import { getCookie } from '../../../Shared/Services/getCookie'
 import ClearancePaper from './clearancePaper'
 import {
   ChangeClearancePrintStatusRequest,
@@ -56,9 +56,7 @@ class ClearancesList extends Component<Props, State> {
   constructor(props) {
     super(props)
 
-    let branchId = getCookie('ltsbranch')
-      ? JSON.parse(getCookie('ltsbranch'))._id
-      : ''
+    let branchId = getBranchFromCookie('ltsbranch')
     branchId = branchId === 'hq' ? '' : branchId
 
     this.state = {
