@@ -122,6 +122,8 @@ export const StepTwoCompanyForm = (props: any) => {
       })
       if (res.status === 'success') {
         setCbeCode(res.body.data)
+        res.body.data.length === 1 &&
+          setFieldValue('cbeCode', res.body.data[0].cbeCode)
       } else {
         Swal.fire('Error !', getErrorMessage(res.error?.error), 'error')
         setCbeCode([])
@@ -196,7 +198,7 @@ export const StepTwoCompanyForm = (props: any) => {
               <Form.Control
                 type="text"
                 name="cbeCode"
-                value={
+                defaultValue={
                   cbeCode.length === 0 ? values.cbeCode : cbeCode[0].cbeCode
                 }
                 onBlur={handleBlur}

@@ -133,8 +133,8 @@ class CompanyCreation extends Component<Props, State> {
         businessCharacteristic: res.body.businessCharacteristic,
         businessSector: res.body.businessSector,
         businessActivityDetails: res.body.businessActivityDetails,
-        legalConstitution: res.body.legalConstitution,
-        smeCategory: res.body.smeCategory,
+        legalConstitution: res.body.legalConstitution || 'other',
+        smeCategory: res.body.smeCategory || 'other',
         businessLicenseNumber: res.body.businessLicenseNumber,
         // businessLicenseIssuePlace: res.body.businessLicenseIssuePlace,
         businessLicenseIssueDate: timeToDateyyymmdd(
