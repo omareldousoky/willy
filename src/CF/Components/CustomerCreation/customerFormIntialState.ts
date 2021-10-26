@@ -114,9 +114,15 @@ export const customerCreationValidationStepOne = (limits: GlobalCFLimits) =>
     birthDate: Yup.string().test(
       'ageValidation',
       local.ageRangeError,
-      (value) => {
-        const calculatedAge = calculateAge(new Date(value).valueOf())
-        return value && calculatedAge < 65 && calculatedAge > 21
+      function checkAge(this) {
+        const { birthDate, nationalId } = this.parent
+        if (birthDate && nationalId) {
+          const calculatedAge = calculateAge(new Date(birthDate).valueOf())
+          return (
+            birthDate && nationalId && calculatedAge < 65 && calculatedAge > 21
+          )
+        }
+        return true
       }
     ),
     nationalIdIssueDate: Yup.string()
