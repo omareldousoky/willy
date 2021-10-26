@@ -5,6 +5,7 @@ import {
   numbersToArabic,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
+import local from '../../../../Shared/Assets/ar.json'
 
 import { PromissoryNoteProps } from './types'
 
@@ -73,7 +74,9 @@ export const PromissoryNote = ({
         {noteKind === 'sme' && (
           <p>من له حق التوقيع عن الشركة : {person?.customerName}</p>
         )}
-        {personPosition && <p>الصفة : {personPosition}</p>}
+        {personPosition && (
+          <p>الصفة : {local[personPosition] || personPosition}</p>
+        )}
         <p>
           {noteKind === 'sme'
             ? ` السجل التجاري: ${application.customer?.commercialRegisterNumber} `
