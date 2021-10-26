@@ -1,7 +1,7 @@
 import * as Yup from 'yup'
 import * as local from '../../../Shared/Assets/ar.json'
 import { maxValue, minValue } from '../../../Shared/localUtils'
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
+import { calculateAge, timeToDateyyymmdd } from '../../../Shared/Services/utils'
 import { GlobalCFLimits } from '../../Models/globalLimits'
 
 export const step1: any = {
@@ -111,6 +111,14 @@ export const customerCreationValidationStepOne = (limits: GlobalCFLimits) =>
           .max(99999999999999, local.nationalIdLengthShouldBe14)
           .required(local.required),
       }),
+    birthDate: Yup.string().test(
+      'ageValidation',
+      local.ageRangeError,
+      (value) => {
+        const calculatedAge = calculateAge(new Date(value).valueOf())
+        return value && calculatedAge < 65 && calculatedAge > 21
+      }
+    ),
     nationalIdIssueDate: Yup.string()
       .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
         return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
