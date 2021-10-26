@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
 import {
-  calculateAge,
   checkIssueDate,
   getErrorMessage,
   numbersToArabic,
