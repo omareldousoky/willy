@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
 import {
-  calculateAge,
   checkIssueDate,
   getErrorMessage,
   numbersToArabic,
@@ -39,7 +38,6 @@ export const StepOneForm = (props: any) => {
 
   const [mapState, setMapState] = useState(false)
   const [loading, setLoading] = useState(false)
-
   const [governorates, setGovernorates] = useState<Governorate[]>([])
   const policeStations: District[] =
     governorates.find(
@@ -215,15 +213,8 @@ export const StepOneForm = (props: any) => {
               value={values.birthDate}
               disabled
             />
-            <Form.Control.Feedback
-              type="invalid"
-              style={
-                calculateAge(new Date(values.birthDate).valueOf()) >= 67
-                  ? { display: 'block' }
-                  : {}
-              }
-            >
-              {local.customerAgeMoreThan67}
+            <Form.Control.Feedback type="invalid" className="d-block">
+              {errors.birthDate}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>

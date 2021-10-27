@@ -15,14 +15,17 @@ import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWi
 import { Loader } from '../../../Shared/Components/Loader'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import Search from '../../../Shared/Components/Search/search'
-import { getCookie } from '../../../Shared/Services/getCookie'
 import { searchLoanOfficer } from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import { searchBranches } from '../../../Shared/Services/APIs/Branch/searchBranches'
 import { search } from '../../../Shared/redux/search/actions'
 import { loading } from '../../../Shared/redux/loading/actions'
 import local from '../../../Shared/Assets/ar.json'
 import './leads.scss'
-import { getErrorMessage, getDateAndTime } from '../../../Shared/Services/utils'
+import {
+  getErrorMessage,
+  getDateAndTime,
+  getBranchFromCookie,
+} from '../../../Shared/Services/utils'
 import { theme } from '../../../Shared/theme'
 import { ActionsGroup } from '../../../Shared/Components/ActionsGroup'
 import { LtsIcon } from '../../../Shared/Components'
@@ -218,9 +221,8 @@ class Leads extends Component<Props, State> {
   }
 
   componentDidMount() {
-    let branchId = getCookie('ltsbranch')
-      ? JSON.parse(getCookie('ltsbranch'))._id
-      : ''
+    let branchId = getBranchFromCookie('ltsbranch')
+
     branchId = branchId === 'hq' ? '' : branchId
     this.setState({ branchId })
     this.props

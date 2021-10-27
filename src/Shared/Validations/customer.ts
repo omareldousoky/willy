@@ -37,6 +37,20 @@ export const customerCreationValidationStepOne = (limits?: GlobalCFLimits) =>
           .max(99999999999999, local.nationalIdLengthShouldBe14)
           .required(local.required),
       }),
+    birthDate: Yup.string().test(
+      'ageValidation',
+      local.ageRangeError,
+      function checkAge(this) {
+        const { birthDate, nationalId } = this.parent
+        if (birthDate && nationalId) {
+          const calculatedAge = calculateAge(new Date(birthDate).valueOf())
+          return (
+            birthDate && nationalId && calculatedAge < 65 && calculatedAge > 21
+          )
+        }
+        return true
+      }
+    ),
     nationalIdIssueDate: Yup.string()
       .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
         return value ? new Date(value).valueOf() <= endOfDayValue : true

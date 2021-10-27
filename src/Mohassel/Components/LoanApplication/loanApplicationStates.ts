@@ -426,6 +426,13 @@ export const SMELoanApplicationStep2Validation = Yup.object().shape({
   entitledToSignIds: Yup.array()
     .min(1, local.atLeastOneEntiitledToSign)
     .required(local.required),
+  entitledToSign: Yup.array()
+    .test(
+      'entitledToSignIds',
+      `${local.required} : ${local.position}`,
+      (value) => !(value.filter((person) => !person.position)?.length > 0)
+    )
+    .required(local.required),
 })
 export const ReviewLoanValidation = Yup.object().shape({
   reviewStatus: Yup.string().required(local.required),

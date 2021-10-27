@@ -974,13 +974,12 @@ export const removeDuplicatesByName = (list: { name: string }[]) =>
       )
     : list
 
+export const getBranchFromCookie = (branchName = 'ltsbranch') => {
+  return getCookie(branchName) ? JSON.parse(getCookie(branchName))._id : ''
+}
 export const calculateAge = (dateOfBirth: number) => {
   if (dateOfBirth) {
     return differenceInYears(Date.now().valueOf(), dateOfBirth)
   }
   return 0
-}
-
-export const getBranchFromCookie = (branchName = 'ltsbranch') => {
-  return getCookie(branchName) ? JSON.parse(getCookie(branchName))._id : ''
 }

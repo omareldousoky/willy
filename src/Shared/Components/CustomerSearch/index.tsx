@@ -15,6 +15,7 @@ import {
   getCompanyInfo,
   getCustomerInfo,
 } from '../../Services/formatCustomersInfo'
+import { Company } from '../../Services/interfaces'
 import { Customer } from '../../Models/Customer'
 
 export interface Results {
@@ -27,7 +28,7 @@ interface Props {
   handleSearch: Function
   selectCustomer: Function
   removeCustomer?: Function
-  selectedCustomer?: Customer
+  selectedCustomer?: Customer | Company
   style?: object
   header?: string
   className?: string
@@ -398,7 +399,11 @@ class CustomerSearch extends Component<Props, State> {
             <InfoBox
               info={
                 this.props.sme
-                  ? [getCompanyInfo({ company: this.props.selectedCustomer })]
+                  ? [
+                      getCompanyInfo({
+                        company: this.props.selectedCustomer as Company,
+                      }),
+                    ]
                   : [
                       getCustomerInfo({
                         customerDetails: this.props.selectedCustomer,

@@ -12,7 +12,7 @@ import {
   orderLocal,
   timeToArabicDate,
 } from '../../../../Shared/Services/utils'
-import * as local from '../../../../Shared/Assets/ar.json'
+import local from '../../../../Shared/Assets/ar.json'
 
 export const SmeLoanContract = ({ data, branchDetails }) => {
   return (
@@ -161,7 +161,10 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                             </div>
                             <div>
                               <b> المهنه : </b>
-                              <span>{entitledToSign.position}</span>
+                              <span>
+                                {local[entitledToSign.position] ||
+                                  entitledToSign.position}
+                              </span>
                             </div>
                           </div>
                         ))}
