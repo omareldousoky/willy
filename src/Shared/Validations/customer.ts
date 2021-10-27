@@ -45,7 +45,10 @@ export const customerCreationValidationStepOne = (limits?: GlobalCFLimits) =>
         if (birthDate && nationalId) {
           const calculatedAge = calculateAge(new Date(birthDate).valueOf())
           return (
-            birthDate && nationalId && calculatedAge < 65 && calculatedAge > 21
+            birthDate &&
+            nationalId &&
+            calculatedAge <= 65 &&
+            calculatedAge >= 21
           )
         }
         return true
