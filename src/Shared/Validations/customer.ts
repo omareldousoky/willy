@@ -2,7 +2,7 @@ import * as Yup from 'yup'
 import { GlobalCFLimits } from '../../CF/Models/globalLimits'
 import local from '../Assets/ar.json'
 import { minValue, maxValue } from '../localUtils'
-import { endOfDayValue } from '../Services/utils'
+import { calculateAge, endOfDayValue } from '../Services/utils'
 
 export const customerCreationValidationStepOne = (limits?: GlobalCFLimits) =>
   Yup.object().shape({
