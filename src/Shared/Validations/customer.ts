@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { GlobalCFLimits } from '../../CF/Models/globalLimits'
+import { GlobalCFLimits } from '../Models/globalLimits'
 import local from '../Assets/ar.json'
 import { minValue, maxValue } from '../localUtils'
 import { calculateAge, endOfDayValue } from '../Services/utils'

@@ -25,7 +25,7 @@ import { getCFLimits } from '../../Services/APIs/config'
 import {
   GlobalCFLimits,
   globalCfLimitsInitialValues,
-} from '../../Models/globalLimits'
+} from '../../../Shared/Models/globalLimits'
 import { getLead } from '../../../Shared/Services/APIs/Leads/getLead'
 import {
   getBirthdateFromNationalId,
