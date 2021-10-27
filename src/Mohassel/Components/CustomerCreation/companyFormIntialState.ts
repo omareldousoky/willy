@@ -1,6 +1,9 @@
 import * as Yup from 'yup'
 import local from '../../../Shared/Assets/ar.json'
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
+import {
+  endOfDayValue,
+  timeToDateyyymmdd,
+} from '../../../Shared/Services/utils'
 
 export const step1Company = {
   businessName: '',
