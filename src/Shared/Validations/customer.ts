@@ -1,9 +1,14 @@
 import * as Yup from 'yup'
 import { GlobalCFLimits } from '../Models/globalLimits'
 import local from '../Assets/ar.json'
-import { minValue, maxValue } from '../localUtils'
+import { minValue, maxValue, ageRangeError } from '../localUtils'
 import { calculateAge, endOfDayValue } from '../Services/utils'
 
+const getMinMaxAgeErrorMessage = (isCF?: boolean) => {
+  const maxAge = isCF ? 65 : 67
+  const minAge = isCF ? 21 : 18
+  return ageRangeError(minAge, maxAge)
+}
 export const customerCreationValidationStepOne = (
   limits?: GlobalCFLimits,
   isCF?: boolean
@@ -42,7 +47,7 @@ export const customerCreationValidationStepOne = (
       }),
     birthDate: Yup.string().test(
       'ageValidation',
-      local.ageRangeError,
+      getMinMaxAgeErrorMessage(isCF),
       function checkAge(this) {
         const { birthDate, nationalId } = this.parent
         if (birthDate && nationalId) {
