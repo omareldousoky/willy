@@ -360,13 +360,7 @@ export const StepTwoCompanyForm = (props: any) => {
               styles={theme.selectStyleWithBorder}
               theme={theme.selectTheme}
               value={systemUsers?.find(
-                (user) =>
-                  user._id ===
-                  (typeof values.smeSourceId === 'string'
-                    ? values.smeSourceId
-                    : values.smeSourceId
-                    ? values.smeSourceId._id
-                    : '')
+                (user) => user._id === values.smeSourceId
               )}
               onBlur={handleBlur}
               onChange={(user) => {
