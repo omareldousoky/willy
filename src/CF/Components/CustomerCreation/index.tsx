@@ -539,7 +539,8 @@ class CustomerCreation extends Component<Props, State> {
         initialValues={this.state.step1}
         onSubmit={this.submit}
         validationSchema={customerCreationValidationStepOne(
-          this.state.globalLimits
+          this.state.globalLimits,
+          true
         )}
         validateOnBlur
         validateOnChange

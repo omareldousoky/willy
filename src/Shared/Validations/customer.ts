@@ -4,7 +4,10 @@ import local from '../Assets/ar.json'
 import { minValue, maxValue } from '../localUtils'
 import { calculateAge, endOfDayValue } from '../Services/utils'
 
-export const customerCreationValidationStepOne = (limits?: GlobalCFLimits) =>
+export const customerCreationValidationStepOne = (
+  limits?: GlobalCFLimits,
+  isCF?: boolean
+) =>
   Yup.object().shape({
     customerName: Yup.string()
       .trim()
@@ -44,11 +47,13 @@ export const customerCreationValidationStepOne = (limits?: GlobalCFLimits) =>
         const { birthDate, nationalId } = this.parent
         if (birthDate && nationalId) {
           const calculatedAge = calculateAge(new Date(birthDate).valueOf())
+          const maxAge = isCF ? 65 : 67
+          const minAge = isCF ? 21 : 18
           return (
             birthDate &&
             nationalId &&
-            calculatedAge <= 65 &&
-            calculatedAge >= 21
+            calculatedAge <= maxAge &&
+            calculatedAge >= minAge
           )
         }
         return true
