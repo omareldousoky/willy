@@ -9,11 +9,13 @@ const getMinMaxAgeErrorMessage = (isCF?: boolean) => {
   const minAge = isCF ? 21 : 18
   return ageRangeError(minAge, maxAge)
 }
+
 export const customerCreationValidationStepOne = (
   limits?: GlobalCFLimits,
   isCF?: boolean
 ) =>
   Yup.object().shape({
+    CF: Yup.boolean().default(isCF),
     customerName: Yup.string()
       .trim()
       .max(100, local.maxLength100)
@@ -69,39 +71,49 @@ export const customerCreationValidationStepOne = (
         return value ? new Date(value).valueOf() <= endOfDayValue : true
       })
       .required(local.required),
-    monthlyIncome: Yup.number()
-      .min(
-        limits?.DBRPercentLowStart as number,
-        minValue(limits?.DBRPercentLowStart as number)
-      )
-      .required(local.required),
-    initialConsumerFinanceLimit: Yup.number()
-      .min(
-        limits?.globalCFMin as number,
-        minValue(limits?.globalCFMin as number)
-      )
-      .max(
-        limits?.globalCFMax as number,
-        maxValue(limits?.globalCFMax as number)
-      )
-      .test(
-        'initialConsumerFinanceLimit',
-        local.customerMaxPrincipalError,
-        function (this: any, value: any) {
-          const { customerConsumerFinanceMaxLimit } = this.parent
-          return value <= customerConsumerFinanceMaxLimit
-        }
-      )
-      .required(local.required),
+    monthlyIncome: Yup.number().when('CF', {
+      is: true,
+      then: Yup.number()
+        .min(
+          limits?.DBRPercentLowStart as number,
+          minValue(limits?.DBRPercentLowStart as number)
+        )
+        .required(local.required),
+      otherwise: Yup.number(),
+    }),
+    initialConsumerFinanceLimit: Yup.number().when('CF', {
+      is: true,
+      then: Yup.number()
+        .min(
+          limits?.globalCFMin as number,
+          minValue(limits?.globalCFMin as number)
+        )
+        .max(
+          limits?.globalCFMax as number,
+          maxValue(limits?.globalCFMax as number)
+        )
+        .test(
+          'initialConsumerFinanceLimit',
+          local.customerMaxPrincipalError,
+          function (this: any, value: any) {
+            const { customerConsumerFinanceMaxLimit } = this.parent
+            return value <= customerConsumerFinanceMaxLimit
+          }
+        )
+        .required(local.required),
+      otherwise: Yup.number(),
+    }),
     customerHomeAddress: Yup.string()
       .trim()
       .max(500, "Can't be more than 500 characters")
       .required(local.required),
     homePostalCode: Yup.string().min(5, local.minLength5),
     homePhoneNumber: Yup.string().min(10, local.minLength10),
-    mobilePhoneNumber: Yup.string()
-      .min(11, local.minLength11)
-      .required(local.required),
+    mobilePhoneNumber: Yup.string().when('CF', {
+      is: true,
+      then: Yup.string().min(11, local.minLength11).required(local.required),
+      otherwise: Yup.string().min(11, local.minLength11),
+    }),
     faxNumber: Yup.string()
       .max(11, local.maxLength10)
       .min(10, local.minLength10),
