@@ -83,6 +83,7 @@ export interface Customer {
   initialConsumerFinanceLimit?: number
   consumerFinanceLimitStatus?: string
   hasLoan?: boolean
+  guarantorMaxCustomers?: number
 }
 
 export interface Score {

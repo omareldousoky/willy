@@ -1227,5 +1227,6 @@
   "rebate": "الخصم",
   "purchase": "شراء",
   "refund": "إسترجاع",
-  "confirmAddLateCustomer": "تأكيد إضافة عميل لقائمة المتأخرين عن السداد"
+  "confirmAddLateCustomer": "تأكيد إضافة عميل لقائمة المتأخرين عن السداد",
+  "noOfGuarantorMaxCustomers": "عدد العملاء الذي يمكن ضمانهم"
 }

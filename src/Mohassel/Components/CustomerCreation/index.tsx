@@ -118,6 +118,7 @@ class CustomerCreation extends Component<Props, State> {
         emailAddress: res.body.emailAddress?.trim(),
         currHomeAddressGov: res.body.currHomeAddressGov,
         policeStation: res.body.policeStation,
+        initialConsumerFinanceLimit: res.body.initialConsumerFinanceLimit,
       }
       const customerBusiness = {
         businessAddressLatLong: res.body.businessAddressLatLong,
@@ -166,6 +167,9 @@ class CustomerCreation extends Component<Props, State> {
           ? Number(res.body.guarantorMaxLoans)
           : 1,
         maxPrincipal: res.body.maxPrincipal ? Number(res.body.maxPrincipal) : 0,
+        guarantorMaxCustomers: res.body.guarantorMaxCustomers
+          ? Number(res.body.guarantorMaxCustomers)
+          : 1,
       }
       this.formikStep1 = {
         values: { ...this.state.step1, ...customerInfo },
