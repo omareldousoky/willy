@@ -1,5 +1,6 @@
 import * as Yup from 'yup'
 import local from '../../../Shared/Assets/ar.json'
+import { endOfDayValue } from '../../../Shared/Services/utils'
 import { LeadStepOne, LeadStepTwo } from './editLead'
 
 export const leadStepOne: LeadStepOne = {
@@ -20,9 +21,6 @@ export const leadStepTwo: LeadStepTwo = {
   businessStreet: '',
   businessAddressDescription: '',
 }
-
-const endOfDay: Date = new Date()
-endOfDay.setHours(23, 59, 59, 59)
 
 export const leadValidationStepOne = Yup.object().shape({
   customerName: Yup.string()
@@ -48,7 +46,7 @@ export const leadValidationStepOne = Yup.object().shape({
     'Max Date',
     local.dateShouldBeBeforeToday,
     (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+      return value ? new Date(value).valueOf() <= endOfDayValue : true
     }
   ),
 })

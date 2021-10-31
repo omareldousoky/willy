@@ -5,7 +5,10 @@ import {
   RolesBranchesValues,
   MainChoosesValues,
 } from './userCreationinterfaces'
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
+import {
+  endOfDayValue,
+  timeToDateyyymmdd,
+} from '../../../Shared/Services/utils'
 
 const date: number = new Date().valueOf()
 const today = timeToDateyyymmdd(date)
@@ -45,8 +48,6 @@ export const wizardStepsArr = [
   },
 ]
 
-const endOfDay: Date = new Date()
-endOfDay.setHours(23, 59, 59, 59)
 export const userCreationValidationStepOne = Yup.object().shape({
   name: Yup.string()
     .trim()
@@ -115,7 +116,7 @@ export const userCreationValidationStepOne = Yup.object().shape({
     }),
   nationalIdIssueDate: Yup.string()
     .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+      return value ? new Date(value).valueOf() <= endOfDayValue : true
     })
     .required(local.required),
   password: Yup.string()
@@ -181,7 +182,7 @@ export const editUserValidationStepOne = Yup.object().shape({
     'Max Date',
     local.dateShouldBeBeforeToday,
     (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+      return value ? new Date(value).valueOf() <= endOfDayValue : true
     }
   ),
   // .required(local.required),

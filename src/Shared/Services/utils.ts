@@ -8,6 +8,8 @@ import errorMessages from '../Assets/errorMessages.json'
 import { API_BASE_URL } from '../envConfig'
 import { getCookie } from './getCookie'
 
+export const endOfDayValue = new Date().setHours(23, 59, 59, 59)
+
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
     const date = new Date(timeStampe).toLocaleDateString()
@@ -176,9 +178,7 @@ export function ageCalculate(val) {
 
 export function checkIssueDate(issueDate) {
   const date = new Date(issueDate).valueOf()
-  const endOfDay: Date = new Date()
-  endOfDay.setHours(23, 59, 59, 59)
-  const diffTime = Math.abs(endOfDay.valueOf() - date)
+  const diffTime = Math.abs(endOfDayValue - date)
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
   // 2555 = 7 years
   if (diffDays > 2555) {

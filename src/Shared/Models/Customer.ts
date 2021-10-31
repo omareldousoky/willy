@@ -94,3 +94,75 @@ export interface Score {
   url?: string
   bankCodes?: string[]
 }
+export interface CustomerCreationStep1 {
+  customerName: string
+  nationalId: string
+  nationalIdChecker?: boolean
+  birthDate: string | number
+  gender: string
+  nationalIdIssueDate: string | number
+  monthlyIncome?: number // for CF only
+  initialConsumerFinanceLimit: number
+  customerConsumerFinanceMaxLimit?: number // for CF only
+  customerAddressLatLong: string
+  customerAddressLatLongNumber: {
+    lat: number
+    lng: number
+  }
+  customerHomeAddress: string
+  currentHomeAddress: string
+  currHomeAddressGov?: string
+  policeStation?: string
+  homePostalCode: string
+  homePhoneNumber: string
+  mobilePhoneNumber: string
+  faxNumber: string
+  emailAddress: string
+  customerWebsite: string
+  customerType: string
+}
+
+export interface CustomerCreationStep2 {
+  businessName: string
+  businessAddressLatLong: string
+  businessAddressLatLongNumber: {
+    lat: number
+    lng: number
+  }
+  businessAddress: string
+  governorate: string
+  district: string
+  village: string
+  ruralUrban: string
+  businessPostalCode: string
+  businessPhoneNumber: string
+  businessSector: string
+  businessActivity: string
+  businessSpeciality: string
+  businessLicenseNumber: string
+  businessLicenseIssuePlace: string
+  businessLicenseIssueDate: string | number
+  commercialRegisterNumber: string
+  industryRegisterNumber: string
+  taxCardNumber: string
+}
+export interface CustomerCreationStep3 {
+  geographicalDistribution: string
+  geoAreaId: string
+  representative: string
+  newRepresentative?: string
+  representativeName: string
+  applicationDate: number
+  permanentEmployeeCount: number
+  partTimeEmployeeCount: number
+  comments: string
+  guarantorMaxLoans: number
+  maxLoansAllowed: number
+  maxPrincipal: number
+  allowGuarantorLoan: boolean
+  principals?: {
+    maxIndividualPrincipal: number
+    maxGroupIndividualPrincipal: number
+    maxGroupPrincipal: number
+  }
+}

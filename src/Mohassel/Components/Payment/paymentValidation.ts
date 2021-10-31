@@ -1,8 +1,7 @@
 import * as Yup from 'yup'
 import * as local from '../../../Shared/Assets/ar.json'
+import { endOfDayValue } from '../../../Shared/Services/utils'
 
-const endOfDay: Date = new Date()
-endOfDay.setHours(23, 59, 59, 59)
 const beforeFeb2021 = new Date('1-31-2021').setHours(23, 59, 59, 59).valueOf()
 
 export const paymentValidation = (penalty) =>
@@ -53,7 +52,7 @@ export const paymentValidation = (penalty) =>
     payerNationalId: Yup.string(),
     truthDate: Yup.string()
       .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
-        return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+        return value ? new Date(value).valueOf() <= endOfDayValue : true
       })
       .when('paymentType', {
         is: (paymentType) => paymentType !== 'normal',
@@ -110,7 +109,7 @@ export const manualPaymentValidation = (penalty) =>
       }),
     truthDate: Yup.string()
       .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
-        return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+        return value ? new Date(value).valueOf() <= endOfDayValue : true
       })
       .test(
         'not before 1-2-2021',
@@ -153,7 +152,7 @@ export const manualBankPaymentValidation = Yup.object().shape({
     }),
   truthDate: Yup.string()
     .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+      return value ? new Date(value).valueOf() <= endOfDayValue : true
     })
     .test(
       'not before 1-2-2021',

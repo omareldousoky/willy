@@ -13,3 +13,5 @@ export const addeddSuccessfully = (entity: string) =>
 
 export const doneSuccessfully = (entity?: string) =>
   `تم ${entity ? local[entity] : ''} بنجاح`
+export const ageRangeError = (minAge: number, maxAge: number) =>
+  `يجب ان يكون عمر العميل من ${minAge} الى ${maxAge} عاما`

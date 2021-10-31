@@ -5,11 +5,7 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
-import {
-  calculateAge,
-  checkIssueDate,
-  getErrorMessage,
-} from '../../../Shared/Services/utils'
+import { checkIssueDate, getErrorMessage } from '../../../Shared/Services/utils'
 import {
   getBirthdateFromNationalId,
   getGenderFromNationalId,
@@ -196,15 +192,8 @@ export const StepOneForm = (props: any) => {
               value={values.birthDate}
               disabled
             />
-            <Form.Control.Feedback
-              type="invalid"
-              style={
-                calculateAge(new Date(values.birthDate).valueOf()) >= 67
-                  ? { display: 'block' }
-                  : {}
-              }
-            >
-              {local.customerAgeMoreThan67}
+            <Form.Control.Feedback type="invalid" className="d-block">
+              {errors.birthDate}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>

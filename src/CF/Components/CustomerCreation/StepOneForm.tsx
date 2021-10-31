@@ -289,6 +289,7 @@ export const StepOneForm = (props: any) => {
                 if (event.currentTarget.value >= limits.DBRPercentLowStart)
                   getCustomerLimitFromIncome(event.currentTarget.value)
               }}
+              required
               onBlur={handleBlur}
               isInvalid={errors.monthlyIncome && touched.monthlyIncome}
               disabled={
