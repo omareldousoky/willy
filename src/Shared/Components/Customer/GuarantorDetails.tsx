@@ -3,7 +3,7 @@ import Swal from 'sweetalert2'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Table from 'react-bootstrap/Table'
-import local from '../../../Shared/Assets/ar.json'
+import local from '../../Assets/ar.json'
 import {
   downloadFile,
   getBranchFromCookie,
@@ -12,17 +12,16 @@ import {
   iscoreBank,
   iscoreStatusColor,
   timeToArabicDate,
-} from '../../../Shared/Services/utils'
-import Can from '../../../Shared/config/Can'
-import { Loader } from '../../../Shared/Components/Loader'
-import ability from '../../../Shared/config/ability'
-import { addGuarantorsToCustomer } from '../../Services/APIs/Customer/customerGuarantors'
-import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
-import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
-import CustomerSearch from '../../../Shared/Components/CustomerSearch'
-import { CFGuarantorDetailsProps } from './types'
-import { Customer } from '../../../Shared/Models/Customer'
-import { LtsIcon } from '../../../Shared/Components'
+} from '../../Services/utils'
+import Can from '../../config/Can'
+import { Loader } from '../Loader'
+import ability from '../../config/ability'
+import { addGuarantorsToCustomer } from '../../../CF/Services/APIs/Customer/customerGuarantors'
+import { getCustomerByID } from '../../Services/APIs/customer/getCustomer'
+import { searchCustomer } from '../../Services/APIs/customer/searchCustomer'
+import CustomerSearch from '../CustomerSearch'
+import { Customer, CFGuarantorDetailsProps } from '../../Models/Customer'
+import { LtsIcon } from '../LtsIcon'
 
 export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
   const [openModal, setOpenModal] = useState(false)

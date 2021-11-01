@@ -6,9 +6,9 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import { FieldArray } from 'formik'
 
-import * as local from '../../../Shared/Assets/ar.json'
-import { getBirthdateFromNationalId } from '../../../Shared/Services/nationalIdValidation'
-import { getDateString } from '../../../Shared/Services/utils'
+import * as local from '../../Assets/ar.json'
+import { getBirthdateFromNationalId } from '../../Services/nationalIdValidation'
+import { getDateString } from '../../Services/utils'
 
 export const GuarantorDetailsForm = (props: any) => {
   const {

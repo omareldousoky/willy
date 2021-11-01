@@ -11,13 +11,13 @@ import { CardNavBar } from '../HeaderWithCards/cardNavbar'
 import { CustomerCategorization } from '../Customer/customerCategorization'
 import { ProfileActions } from '../ProfileActions'
 import { ProfileProps } from './types'
-import { GuarantorDetails } from '../../../CF/Components/CustomerCreation/GuarantorDetails'
-import { CFGuarantorDetailsProps } from '../../../CF/Components/CustomerCreation/types'
 import {
   CustomerReportsTab,
   DeathCertificate,
   DocumentsUpload,
+  GuarantorDetails,
 } from '../Customer'
+import { CFGuarantorDetailsProps } from '../../Models/Customer'
 
 export const Profile = ({
   source,

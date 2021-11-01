@@ -27,8 +27,11 @@ import {
   GlobalCFLimits,
   globalCfLimitsInitialValues,
 } from '../../../Shared/Models/globalLimits'
-import { Customer, Score } from '../../../Shared/Models/Customer'
-import { CFGuarantorDetailsProps } from './types'
+import {
+  Customer,
+  Score,
+  CFGuarantorDetailsProps,
+} from '../../../Shared/Models/Customer'
 
 import {
   AcknowledgmentWasSignedInFront,

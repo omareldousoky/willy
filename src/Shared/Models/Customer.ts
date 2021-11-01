@@ -183,3 +183,11 @@ export interface ConfirmLinkageRequest {
   phoneNumber: string
   customerKey: number
 }
+export interface CFGuarantorDetailsProps {
+  customerId: string
+  guarantors: Array<Customer>
+  hasLoan: boolean
+  isBlocked: boolean
+  getIscore?: (data) => Promise<void>
+  iscores?: Score[]
+}

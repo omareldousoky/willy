@@ -26,7 +26,11 @@ import {
   getIscoreCached,
 } from '../../../Shared/Services/APIs/iScore'
 import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCustomer'
-import { Score, Customer } from '../../../Shared/Models/Customer'
+import {
+  Score,
+  Customer,
+  CFGuarantorDetailsProps,
+} from '../../../Shared/Models/Customer'
 import CFLimitModal from '../../../Shared/Components/CFLimitModal/CFLimitModal'
 import { ConsumerFinanceContractData } from '../../../Shared/Models/consumerContract'
 import {
@@ -56,6 +60,10 @@ const tabs: Array<Tab> = [
   {
     header: local.documents,
     stringKey: 'documents',
+  },
+  {
+    header: local.guarantorInfo,
+    stringKey: 'cfGuarantors',
   },
   {
     header: local.deathCertificate,
@@ -144,7 +152,7 @@ export const CustomerProfile = () => {
     setLoading(true)
     const res = await getCustomerByID(location.state.id)
     if (res.status === 'success') {
-      await setCustomerDetails(res.body)
+      await setCustomerDetails(res.body.customer)
       await setCustomerGuarantors(res.body.guarantors)
       if (ability.can('viewIscore', 'customer'))
         await getCachediScores(res.body.nationalId)
@@ -506,6 +514,20 @@ export const CustomerProfile = () => {
         fieldTitle: 'deathCertificate',
         fieldData: location.state.id,
         showFieldCondition: ability.can('deathCertificate', 'customer'),
+      },
+    ],
+    cfGuarantors: [
+      {
+        fieldTitle: 'cfGuarantors',
+        fieldData: {
+          customerId: customerDetails?._id,
+          hasLoan: !!customerDetails?.hasLoan,
+          guarantors: customerGuarantors,
+          isBlocked: !!customerDetails?.blocked?.isBlocked,
+          getIscore: (data) => getCustomerIscore(data),
+          iscores: iScoreDetails,
+        } as CFGuarantorDetailsProps,
+        showFieldCondition: true,
       },
     ],
   }

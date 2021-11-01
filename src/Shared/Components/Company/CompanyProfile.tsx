@@ -49,7 +49,7 @@ export const CompanyProfile = () => {
     setIsLoading(true)
     const res = await getCustomerByID(location.state.id)
     if (res.status === 'success') {
-      await setCompany(res.body)
+      await setCompany(res.body.customer)
       setIsLoading(false)
       if (ability.can('viewIscore', 'customer')) await getiScores(res.body)
     } else {

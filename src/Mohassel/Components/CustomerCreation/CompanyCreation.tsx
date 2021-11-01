@@ -128,53 +128,57 @@ class CompanyCreation extends Component<Props, State> {
     const res = await getCustomerByID(id)
     if (res.status === 'success') {
       const customerBusiness = {
-        businessName: res.body.businessName,
-        businessAddress: res.body.businessAddress,
-        businessCharacteristic: res.body.businessCharacteristic,
-        businessSector: res.body.businessSector,
-        businessActivityDetails: res.body.businessActivityDetails,
-        legalConstitution: res.body.legalConstitution || 'other',
-        smeCategory: res.body.smeCategory || 'other',
-        businessLicenseNumber: res.body.businessLicenseNumber,
-        // businessLicenseIssuePlace: res.body.businessLicenseIssuePlace,
+        businessName: res.body.customer.businessName,
+        businessAddress: res.body.customer.businessAddress,
+        businessCharacteristic: res.body.customer.businessCharacteristic,
+        businessSector: res.body.customer.businessSector,
+        businessActivityDetails: res.body.customer.businessActivityDetails,
+        legalConstitution: res.body.customer.legalConstitution || 'other',
+        smeCategory: res.body.customer.smeCategory || 'other',
+        businessLicenseNumber: res.body.customer.businessLicenseNumber,
+        // businessLicenseIssuePlace: res.body.customer.businessLicenseIssuePlace,
         businessLicenseIssueDate: timeToDateyyymmdd(
-          res.body.businessLicenseIssueDate
+          res.body.customer.businessLicenseIssueDate
         ),
         commercialRegisterExpiryDate: timeToDateyyymmdd(
-          res.body.commercialRegisterExpiryDate
+          res.body.customer.commercialRegisterExpiryDate
         ),
-        commercialRegisterNumber: res.body.commercialRegisterNumber,
-        // industryRegisterNumber: res.body.industryRegisterNumber,
-        taxCardNumber: res.body.taxCardNumber,
-        governorate: res.body.governorate,
-        policeStation: res.body.policeStation,
-        currHomeAddressGov: res.body.currHomeAddressGov,
-        currentHomeAddress: res.body.currentHomeAddress,
+        commercialRegisterNumber: res.body.customer.commercialRegisterNumber,
+        // industryRegisterNumber: res.body.customer.industryRegisterNumber,
+        taxCardNumber: res.body.customer.taxCardNumber,
+        governorate: res.body.customer.governorate,
+        policeStation: res.body.customer.policeStation,
+        currHomeAddressGov: res.body.customer.currHomeAddressGov,
+        currentHomeAddress: res.body.customer.currentHomeAddress,
       }
       const customerExtraDetails = {
-        geographicalDistribution: res.body.geographicalDistribution,
-        geoAreaId: res.body.geoAreaId ? res.body.geoAreaId : '',
-        representative: res.body.representative,
-        representativeName: res.body.representativeName,
-        applicationDate: timeToDateyyymmdd(res.body.applicationDate),
-        permanentEmployeeCount: res.body.permanentEmployeeCount,
-        partTimeEmployeeCount: res.body.partTimeEmployeeCount,
-        comments: res.body.comments,
-        maxLoansAllowed: res.body.maxLoansAllowed
-          ? Number(res.body.maxLoansAllowed)
+        geographicalDistribution: res.body.customer.geographicalDistribution,
+        geoAreaId: res.body.customer.geoAreaId
+          ? res.body.customer.geoAreaId
+          : '',
+        representative: res.body.customer.representative,
+        representativeName: res.body.customer.representativeName,
+        applicationDate: timeToDateyyymmdd(res.body.customer.applicationDate),
+        permanentEmployeeCount: res.body.customer.permanentEmployeeCount,
+        partTimeEmployeeCount: res.body.customer.partTimeEmployeeCount,
+        comments: res.body.customer.comments,
+        maxLoansAllowed: res.body.customer.maxLoansAllowed
+          ? Number(res.body.customer.maxLoansAllowed)
           : 1,
-        allowGuarantorLoan: res.body.allowGuarantorLoan,
-        guarantorMaxLoans: res.body.guarantorMaxLoans
-          ? Number(res.body.guarantorMaxLoans)
+        allowGuarantorLoan: res.body.customer.allowGuarantorLoan,
+        guarantorMaxLoans: res.body.customer.guarantorMaxLoans
+          ? Number(res.body.customer.guarantorMaxLoans)
           : 1,
-        cbeCode: res.body.cbeCode,
-        paidCapital: res.body.paidCapital,
-        establishmentDate: timeToDateyyymmdd(res.body.establishmentDate),
-        smeSourceId: res.body.smeSourceId,
-        smeBankName: res.body.smeBankName,
-        smeBankBranch: res.body.smeBankBranch,
-        smeBankAccountNumber: res.body.smeBankAccountNumber,
-        smeIbanNumber: res.body.smeIbanNumber,
+        cbeCode: res.body.customer.cbeCode,
+        paidCapital: res.body.customer.paidCapital,
+        establishmentDate: timeToDateyyymmdd(
+          res.body.customer.establishmentDate
+        ),
+        smeSourceId: res.body.customer.smeSourceId,
+        smeBankName: res.body.customer.smeBankName,
+        smeBankBranch: res.body.customer.smeBankBranch,
+        smeBankAccountNumber: res.body.customer.smeBankAccountNumber,
+        smeIbanNumber: res.body.customer.smeIbanNumber,
       }
       this.formikStep1 = {
         values: { ...this.state.step1, ...customerBusiness },
