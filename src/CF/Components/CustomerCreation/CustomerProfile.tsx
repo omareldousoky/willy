@@ -671,6 +671,7 @@ export const CustomerProfile = () => {
             initialConsumerFinanceLimit={
               customerDetails?.initialConsumerFinanceLimit || 0
             }
+            isCF
           />
           {customerGuarantors?.length > 0 &&
             customerGuarantors.map((guarantor) => (
@@ -682,6 +683,7 @@ export const CustomerProfile = () => {
                 initialConsumerFinanceLimit={
                   customerDetails?.initialConsumerFinanceLimit || 0
                 }
+                isCF
               />
             ))}
           <PromissoryNote
@@ -693,18 +695,21 @@ export const CustomerProfile = () => {
               customerDetails?.initialConsumerFinanceLimit || 0
             }
             customerGuarantors={customerGuarantors}
+            isCF
           />
           <AuthorizationToFillInfo
             customerCreationDate={customerDetails?.created?.at || 0}
             customerName={customerDetails?.customerName || ''}
             customerHomeAddress={customerDetails?.customerHomeAddress || ''}
             customerGuarantors={customerGuarantors}
+            isCF
           />
           <AcknowledgmentWasSignedInFront
             customerCreationDate={customerDetails?.created?.at || 0}
             customerName={customerDetails?.customerName || ''}
             nationalId={customerDetails?.nationalId || ''}
             customerGuarantors={customerGuarantors}
+            isCF
           />
         </>
       )}
