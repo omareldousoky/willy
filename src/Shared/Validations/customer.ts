@@ -1,85 +1,21 @@
 import * as Yup from 'yup'
-import * as local from '../../../Shared/Assets/ar.json'
-import { maxValue, minValue } from '../../../Shared/localUtils'
-import { calculateAge, timeToDateyyymmdd } from '../../../Shared/Services/utils'
-import { GlobalCFLimits } from '../../Models/globalLimits'
+import { GlobalCFLimits } from '../Models/globalLimits'
+import local from '../Assets/ar.json'
+import { minValue, maxValue, ageRangeError } from '../localUtils'
+import { calculateAge, endOfDayValue } from '../Services/utils'
 
-export const step1: any = {
-  customerName: '',
-  nationalId: '',
-  nationalIdChecker: false,
-  birthDate: '',
-  gender: '',
-  nationalIdIssueDate: '',
-  monthlyIncome: 0,
-  initialConsumerFinanceLimit: 0,
-  customerConsumerFinanceMaxLimit: 0,
-  customerAddressLatLong: '',
-  customerAddressLatLongNumber: {
-    lat: 0,
-    lng: 0,
-  },
-  customerHomeAddress: '',
-  currentHomeAddress: '',
-  homePostalCode: '',
-  homePhoneNumber: '',
-  mobilePhoneNumber: '',
-  faxNumber: '',
-  emailAddress: '',
-  customerWebsite: '',
-  customerType: 'individual',
+const getMinMaxAgeErrorMessage = (isCF?: boolean) => {
+  const maxAge = isCF ? 65 : 67
+  const minAge = isCF ? 21 : 18
+  return ageRangeError(minAge, maxAge)
 }
 
-export const step2 = {
-  businessName: '',
-  businessAddressLatLong: '',
-  businessAddressLatLongNumber: {
-    lat: 0,
-    lng: 0,
-  },
-  businessAddress: '',
-  governorate: '',
-  district: '',
-  village: '',
-  ruralUrban: '',
-  businessPostalCode: '',
-  businessPhoneNumber: '',
-  businessSector: '',
-  businessActivity: '',
-  businessSpeciality: '',
-  businessLicenseNumber: '',
-  businessLicenseIssuePlace: '',
-  businessLicenseIssueDate: '',
-  commercialRegisterNumber: '',
-  industryRegisterNumber: '',
-  taxCardNumber: '',
-}
-
-export const step3 = {
-  geographicalDistribution: '',
-  geoAreaId: '',
-  representative: '',
-  newRepresentative: '',
-  representativeName: '',
-  applicationDate: timeToDateyyymmdd(-1),
-  permanentEmployeeCount: '',
-  partTimeEmployeeCount: '',
-  comments: '',
-  guarantorMaxLoans: 1,
-  maxLoansAllowed: 1,
-  maxPrincipal: 0,
-  principals: {
-    maxIndividualPrincipal: 0,
-    maxGroupIndividualPrincipal: 0,
-    maxGroupPrincipal: 0,
-  },
-}
-
-const endOfDay: Date = new Date()
-endOfDay.setHours(23, 59, 59, 59)
-
-export const customerCreationValidationStepOne = (limits: GlobalCFLimits) =>
+export const customerCreationValidationStepOne = (
+  limits?: GlobalCFLimits,
+  isCF?: boolean
+) =>
   Yup.object().shape({
+    CF: Yup.boolean().default(isCF),
     customerName: Yup.string()
       .trim()
       .max(100, local.maxLength100)
@@ -113,16 +49,18 @@ export const customerCreationValidationStepOne = (limits: GlobalCFLimits) =>
       }),
     birthDate: Yup.string().test(
       'ageValidation',
-      local.ageRangeError,
+      getMinMaxAgeErrorMessage(isCF),
       function checkAge(this) {
         const { birthDate, nationalId } = this.parent
         if (birthDate && nationalId) {
           const calculatedAge = calculateAge(new Date(birthDate).valueOf())
+          const maxAge = isCF ? 65 : 67
+          const minAge = isCF ? 21 : 18
           return (
             birthDate &&
             nationalId &&
-            calculatedAge <= 65 &&
-            calculatedAge >= 21
+            calculatedAge <= maxAge &&
+            calculatedAge >= minAge
           )
         }
         return true
@@ -130,33 +68,52 @@ export const customerCreationValidationStepOne = (limits: GlobalCFLimits) =>
     ),
     nationalIdIssueDate: Yup.string()
       .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
-        return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+        return value ? new Date(value).valueOf() <= endOfDayValue : true
       })
       .required(local.required),
-    monthlyIncome: Yup.number()
-      .min(limits.DBRPercentLowStart, minValue(limits.DBRPercentLowStart))
-      .required(local.required),
-    initialConsumerFinanceLimit: Yup.number()
-      .min(limits.globalCFMin, minValue(limits.globalCFMin))
-      .max(limits.globalCFMax, maxValue(limits.globalCFMax))
-      .test(
-        'initialConsumerFinanceLimit',
-        local.customerMaxPrincipalError,
-        function (this: any, value: any) {
-          const { customerConsumerFinanceMaxLimit } = this.parent
-          return value <= customerConsumerFinanceMaxLimit
-        }
-      )
-      .required(local.required),
+    monthlyIncome: Yup.number().when('CF', {
+      is: true,
+      then: Yup.number()
+        .min(
+          limits?.DBRPercentLowStart as number,
+          minValue(limits?.DBRPercentLowStart as number)
+        )
+        .required(local.required),
+      otherwise: Yup.number(),
+    }),
+    initialConsumerFinanceLimit: Yup.number().when('CF', {
+      is: true,
+      then: Yup.number()
+        .min(
+          limits?.globalCFMin as number,
+          minValue(limits?.globalCFMin as number)
+        )
+        .max(
+          limits?.globalCFMax as number,
+          maxValue(limits?.globalCFMax as number)
+        )
+        .test(
+          'initialConsumerFinanceLimit',
+          local.customerMaxPrincipalError,
+          function (this: any, value: any) {
+            const { customerConsumerFinanceMaxLimit } = this.parent
+            return value <= customerConsumerFinanceMaxLimit
+          }
+        )
+        .required(local.required),
+      otherwise: Yup.number(),
+    }),
     customerHomeAddress: Yup.string()
       .trim()
       .max(500, "Can't be more than 500 characters")
       .required(local.required),
     homePostalCode: Yup.string().min(5, local.minLength5),
     homePhoneNumber: Yup.string().min(10, local.minLength10),
-    mobilePhoneNumber: Yup.string()
-      .min(11, local.minLength11)
-      .required(local.required),
+    mobilePhoneNumber: Yup.string().when('CF', {
+      is: true,
+      then: Yup.string().min(11, local.minLength11).required(local.required),
+      otherwise: Yup.string().min(11, local.minLength11),
+    }),
     faxNumber: Yup.string()
       .max(11, local.maxLength10)
       .min(10, local.minLength10),
@@ -192,7 +149,7 @@ export const customerCreationValidationStepTwo = Yup.object().shape({
     'Max Date',
     local.dateShouldBeBeforeToday,
     (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+      return value ? new Date(value).valueOf() <= endOfDayValue : true
     }
   ),
   commercialRegisterNumber: Yup.string().trim().max(100, local.maxLength100),
@@ -206,7 +163,7 @@ export const customerCreationValidationStepThree = Yup.object().shape({
   representative: Yup.string().trim().required(local.required),
   applicationDate: Yup.string()
     .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+      return value ? new Date(value).valueOf() <= endOfDayValue : true
     })
     .required(local.required),
   permanentEmployeeCount: Yup.string().trim(),
@@ -220,11 +177,11 @@ export const customerCreationValidationStepThreeEdit = Yup.object().shape({
   representative: Yup.string().trim().required(local.required),
   applicationDate: Yup.string()
     .test('Max Date', local.dateShouldBeBeforeToday, (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true
+      return value ? new Date(value).valueOf() <= endOfDayValue : true
     })
     .required(local.required),
-  permanentEmployeeCount: Yup.string().trim(),
-  partTimeEmployeeCount: Yup.string().trim(),
+  permanentEmployeeCount: Yup.number(),
+  partTimeEmployeeCount: Yup.number(),
   comments: Yup.string().trim().max(500, local.maxLength100),
   guarantorMaxLoans: Yup.number()
     .required()

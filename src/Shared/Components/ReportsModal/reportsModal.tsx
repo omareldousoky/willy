@@ -25,7 +25,7 @@ import {
 } from '../dropDowns/allDropDowns'
 import * as local from '../../Assets/ar.json'
 import { Branch } from '../../Services/interfaces'
-import { required } from '../../validations'
+import { required } from '../../Validations/common'
 import TextField from '../Common/FormikFields/textField'
 
 import { generateArrayOfYears, getFullCustomerKey } from '../../Services/utils'

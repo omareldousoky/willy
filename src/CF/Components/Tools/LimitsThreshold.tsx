@@ -15,7 +15,7 @@ import { getCFLimits, setCFLimits } from '../../Services/APIs/config'
 import {
   GlobalCFLimits,
   globalCfLimitsInitialValues,
-} from '../../Models/globalLimits'
+} from '../../../Shared/Models/globalLimits'
 import { limitThresholdValidationSchema } from './limitThresholdValidation'
 import { minValue } from '../../../Shared/localUtils'
 
