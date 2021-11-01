@@ -20,13 +20,8 @@ import {
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCustomer'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
-import { BondContract } from '../PdfTemplates/BondContractCF'
-import { ConsumerFinanceContract } from '../PdfTemplates/ConsumerFinanceContract'
-import { ConsumerFinanceContractData } from '../../Models/contract'
-import { AcknowledgmentWasSignedInFront } from '../PdfTemplates/AcknowledgmentWasSignedInFront'
-import { PromissoryNote } from '../PdfTemplates/PromissoryNote'
-import { AuthorizationToFillInfo } from '../PdfTemplates/AuthorizationToFillInfo'
-import CFLimitModal from './CFLimitModal'
+
+import CFLimitModal from '../../../Shared/Components/CFLimitModal/CFLimitModal'
 import { getCFLimits } from '../../Services/APIs/config'
 import {
   GlobalCFLimits,
@@ -34,6 +29,15 @@ import {
 } from '../../../Shared/Models/globalLimits'
 import { Customer, Score } from '../../../Shared/Models/Customer'
 import { CFGuarantorDetailsProps } from './types'
+
+import {
+  AcknowledgmentWasSignedInFront,
+  AuthorizationToFillInfo,
+  BondContract,
+  PromissoryNote,
+} from '../../../Shared/Components/pdfTemplates/ConsumerContract'
+import { ConsumerFinanceContract } from '../../../Shared/Components/pdfTemplates/ConsumerContract/ConsumerFinanceContract'
+import { ConsumerFinanceContractData } from '../../../Shared/Models/consumerContract'
 
 interface LocationState {
   id: string
@@ -131,6 +135,7 @@ export const CustomerProfile = () => {
       mobilePhoneNumber: customer.mobilePhoneNumber || '',
       initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
       customerGuarantors: customerGuarantors || [],
+      isCF: true,
     })
   }
   async function getGlobalCfLimits() {
@@ -412,9 +417,9 @@ export const CustomerProfile = () => {
         showFieldCondition: true,
       },
       {
-        fieldTitle: local.guarantorMaxLoans,
-        fieldData: customerDetails?.guarantorMaxLoans
-          ? customerDetails.guarantorMaxLoans
+        fieldTitle: local.noOfGuarantorMaxCustomers,
+        fieldData: customerDetails?.guarantorMaxCustomers
+          ? customerDetails.guarantorMaxCustomers
           : '-',
         showFieldCondition: true,
       },
@@ -588,7 +593,7 @@ export const CustomerProfile = () => {
   }
   return (
     <>
-      <Container className="print-none">
+      <Container className="print-none" fluid>
         <div>
           <div className="d-flex flex-row justify-content-between m-2">
             <div

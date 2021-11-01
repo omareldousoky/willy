@@ -1,7 +1,8 @@
 import React from 'react'
-import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
-import { timeToArabicDate } from '../../../../Shared/Services/utils'
-import { AuthorizationToFillInfoProps } from '../../../Models/contract'
+import { AuthorizationToFillInfoProps } from '../../../../Models/consumerContract'
+import { timeToArabicDate } from '../../../../Services/utils'
+import { Header } from '../../pdfTemplateCommon/header'
+
 import './styles.scss'
 
 export const AuthorizationToFillInfo = ({
@@ -9,11 +10,17 @@ export const AuthorizationToFillInfo = ({
   customerHomeAddress,
   customerName,
   customerGuarantors,
+  isCF,
 }: AuthorizationToFillInfoProps) => (
   <>
     <div className="contract-container" dir="rtl" lang="ar">
       <table>
-        <Header title="" showCurrentUser={false} showCurrentTime={false} cf />
+        <Header
+          title=""
+          showCurrentUser={false}
+          showCurrentTime={false}
+          cf={isCF}
+        />
         <div>
           <p className="head-title">تفويض بملء بيانات</p>
         </div>

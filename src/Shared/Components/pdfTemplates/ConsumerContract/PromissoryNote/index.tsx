@@ -1,12 +1,13 @@
 import React from 'react'
 import Tafgeet from 'tafgeetjs'
-import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
+import { PromissoryNoteProps } from '../../../../Models/consumerContract'
 import {
-  guarantorOrderLocal,
-  numbersToArabic,
   timeToArabicDate,
-} from '../../../../Shared/Services/utils'
-import { PromissoryNoteProps } from '../../../Models/contract'
+  numbersToArabic,
+  guarantorOrderLocal,
+} from '../../../../Services/utils'
+import { Header } from '../../pdfTemplateCommon/header'
+
 import './styles.scss'
 
 export const PromissoryNote = ({
@@ -16,10 +17,16 @@ export const PromissoryNote = ({
   initialConsumerFinanceLimit,
   customerGuarantors,
   nationalId,
+  isCF,
 }: PromissoryNoteProps) => (
   <div className="promissory-note" dir="rtl" lang="ar">
     <table>
-      <Header title="" showCurrentUser={false} showCurrentTime={false} cf />
+      <Header
+        title=""
+        showCurrentUser={false}
+        showCurrentTime={false}
+        cf={isCF}
+      />
       <div>
         <p className="head-title">سند لأمر</p>
       </div>

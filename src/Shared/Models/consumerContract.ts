@@ -1,4 +1,4 @@
-import { Customer } from '../../Shared/Models/Customer'
+import { Customer } from './Customer'
 
 export interface BondContractProps {
   customerCreationDate: number
@@ -6,6 +6,7 @@ export interface BondContractProps {
   nationalId: string
   customerHomeAddress: string
   initialConsumerFinanceLimit: number
+  isCF?: boolean
 }
 export interface ConsumerFinanceContractData extends BondContractProps {
   mobilePhoneNumber: string
@@ -17,6 +18,7 @@ export interface AcknowledgmentWasSignedInFrontProps {
   nationalId: string
   customerCreationDate: number
   customerGuarantors?: Customer[]
+  isCF?: boolean
 }
 export interface PromissoryNoteProps extends BondContractProps {
   customerGuarantors?: Customer[]
@@ -27,4 +29,5 @@ export interface AuthorizationToFillInfoProps {
   customerName: string
   customerHomeAddress: string
   customerGuarantors?: Customer[]
+  isCF?: boolean
 }

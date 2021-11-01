@@ -373,6 +373,11 @@ export const getCustomerInfo = ({
       fieldData: representativeName || '',
       showFieldCondition: true,
     },
+    {
+      fieldTitle: local.initialConsumerFinanceLimit,
+      fieldData: numbersToArabic(initialConsumerFinanceLimit || 0),
+      showFieldCondition: true,
+    },
   ]
 
   // monthlyIncome && initialConsumerFinanceLimit
@@ -387,11 +392,6 @@ export const getCustomerInfo = ({
     {
       fieldTitle: local.monthlyIncome,
       fieldData: numbersToArabic(monthlyIncome || 0),
-      showFieldCondition: true,
-    },
-    {
-      fieldTitle: local.initialConsumerFinanceLimit,
-      fieldData: numbersToArabic(initialConsumerFinanceLimit || 0),
       showFieldCondition: true,
     },
   ]

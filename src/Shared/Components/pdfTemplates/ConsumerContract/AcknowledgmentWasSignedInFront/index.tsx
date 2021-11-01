@@ -1,11 +1,12 @@
 import React from 'react'
-import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
+import { AcknowledgmentWasSignedInFrontProps } from '../../../../Models/consumerContract'
 import {
-  guarantorOrderLocal,
-  numbersToArabic,
   timeToArabicDate,
-} from '../../../../Shared/Services/utils'
-import { AcknowledgmentWasSignedInFrontProps } from '../../../Models/contract'
+  numbersToArabic,
+  guarantorOrderLocal,
+} from '../../../../Services/utils'
+import { Header } from '../../pdfTemplateCommon/header'
+
 import './styles.scss'
 
 export const AcknowledgmentWasSignedInFront = ({
@@ -13,12 +14,18 @@ export const AcknowledgmentWasSignedInFront = ({
   nationalId,
   customerCreationDate,
   customerGuarantors,
+  isCF,
 }: AcknowledgmentWasSignedInFrontProps) => {
   return (
     <>
       <div className="contract-container" dir="rtl" lang="ar">
         <table>
-          <Header title="" showCurrentUser={false} showCurrentTime={false} cf />
+          <Header
+            title=""
+            showCurrentUser={false}
+            showCurrentTime={false}
+            cf={isCF}
+          />
           <div>
             <p className="head-title">إقرار تم التوقيع امامي</p>
           </div>

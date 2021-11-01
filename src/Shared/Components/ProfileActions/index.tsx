@@ -7,7 +7,7 @@ import { ProfileActionsProps } from './types'
 
 export const ProfileActions = ({ actions }: ProfileActionsProps) => {
   return (
-    <div className="d-flex justify-content-end" style={{ width: '65%' }}>
+    <div className="d-flex justify-content-end">
       {actions.map((action, index) => {
         const { title, permission, onActionClick, isLoading } = action
         return isLoading ? (

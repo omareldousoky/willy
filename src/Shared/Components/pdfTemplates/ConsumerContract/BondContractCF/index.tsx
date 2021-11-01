@@ -5,16 +5,21 @@ import {
   numbersToArabic,
   timeToArabicDate,
   dayToArabic,
-} from '../../../../Shared/Services/utils'
-import { BondContractProps } from '../../../Models/contract'
-import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
+} from '../../../../Services/utils'
+import { BondContractProps } from '../../../../Models/consumerContract'
+import { Header } from '../../pdfTemplateCommon/header'
 
 export const BondContract: React.FC<BondContractProps> = (props) => {
   return (
     <>
       <div className="loan-contract" dir="rtl" lang="ar">
         <table className="report-container">
-          <Header title="" showCurrentUser={false} showCurrentTime={false} cf />
+          <Header
+            title=""
+            showCurrentUser={false}
+            showCurrentTime={false}
+            cf={props.isCF}
+          />
           <tbody className="report-content">
             <tr>
               <td

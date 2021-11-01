@@ -5,15 +5,15 @@ import Swal from 'sweetalert2'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
-import local from '../../../Shared/Assets/ar.json'
-import { Loader } from '../../../Shared/Components/Loader'
+import local from '../../Assets/ar.json'
+import { Loader } from '../Loader'
 import {
   approveCustomerCFLimit,
   getCustomerLimitFromMonthlyIncome,
   reviewCustomerCFLimit,
-} from '../../../Shared/Services/APIs/customer/getCustomerConsumerLimit'
-import { Customer } from '../../../Shared/Models/Customer'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+} from '../../Services/APIs/customer/getCustomerConsumerLimit'
+import { Customer } from '../../Models/Customer'
+import { getErrorMessage } from '../../Services/utils'
 
 interface CFLimitModalProps {
   show: boolean
@@ -82,42 +82,59 @@ const CFLimitModal: FunctionComponent<CFLimitModalProps> = ({
         </Modal.Header>
         <Modal.Body>
           <Row>
-            <Col>
-              <Form.Group controlId="name">
-                <Form.Label className="font-weight-bold">
-                  {local.monthlyIncome}
-                </Form.Label>
-                <Form.Control
-                  name="monthlyIncome"
-                  value={customer.monthlyIncome}
-                  disabled
-                />
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group controlId="customerConsumerFinanceMaxLimit">
-                <Form.Label className="font-weight-bold">
-                  {local.consumerFinanceMaxLimit}
-                </Form.Label>
-                <Form.Control
-                  name="customerConsumerFinanceMaxLimit"
-                  value={customerConsumerFinanceMaxLimit}
-                  disabled
-                />
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group controlId="initialConsumerFinanceLimit">
-                <Form.Label className="font-weight-bold">
-                  {local.initialConsumerFinanceLimit}
-                </Form.Label>
-                <Form.Control
-                  name="initialConsumerFinanceLimit"
-                  value={customer.initialConsumerFinanceLimit}
-                  disabled
-                />
-              </Form.Group>
-            </Col>
+            <>
+              {Boolean(
+                customer.monthlyIncome && customer.monthlyIncome > 0
+              ) && (
+                <Col>
+                  <Form.Group controlId="name">
+                    <Form.Label className="font-weight-bold">
+                      {local.monthlyIncome}
+                    </Form.Label>
+                    <Form.Control
+                      name="monthlyIncome"
+                      value={customer.monthlyIncome}
+                      disabled
+                    />
+                  </Form.Group>
+                </Col>
+              )}
+            </>
+            <>
+              {Boolean(
+                customerConsumerFinanceMaxLimit &&
+                  customerConsumerFinanceMaxLimit > 0
+              ) && (
+                <Col>
+                  <Form.Group controlId="customerConsumerFinanceMaxLimit">
+                    <Form.Label className="font-weight-bold">
+                      {local.consumerFinanceMaxLimit}
+                    </Form.Label>
+                    <Form.Control
+                      name="customerConsumerFinanceMaxLimit"
+                      value={customerConsumerFinanceMaxLimit}
+                      disabled
+                    />
+                  </Form.Group>
+                </Col>
+              )}
+            </>
+            <>
+              {Boolean(customer.initialConsumerFinanceLimit) && (
+                <Col>
+                  <Form.Group controlId="initialConsumerFinanceLimit">
+                    <Form.Label className="font-weight-bold">
+                      {local.initialConsumerFinanceLimit}
+                    </Form.Label>
+                    <Form.Control
+                      name="initialConsumerFinanceLimit"
+                      value={customer.initialConsumerFinanceLimit}
+                      disabled
+                    />
+                  </Form.Group>
+                </Col>
+              )}
+            </>
           </Row>
           <Row>
             <Col>

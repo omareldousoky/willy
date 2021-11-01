@@ -1,6 +1,6 @@
 import React from 'react'
 import Tafgeet from 'tafgeetjs'
-import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
+import { Header } from '../../pdfTemplateCommon/header'
 import {
   dayToArabic,
   guarantorOrderLocal,
@@ -9,8 +9,8 @@ import {
   addYearToTimeStamp,
   getNumbersOfGuarantor,
   numbersToArabic,
-} from '../../../../Shared/Services/utils'
-import { ConsumerFinanceContractData } from '../../../Models/contract'
+} from '../../../../Services/utils'
+import { ConsumerFinanceContractData } from '../../../../Models/consumerContract'
 import './styles.scss'
 
 interface ConsumerFinanceContractProps {
@@ -35,7 +35,12 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
   }
   return (
     <table className="cf-contract-container">
-      <Header title="" showCurrentUser={false} showCurrentTime={false} cf />
+      <Header
+        title=""
+        showCurrentUser={false}
+        showCurrentTime={false}
+        cf={props.contractData.isCF}
+      />
       <div className="head-title">
         <p>عقد تمويل استهلاكي</p>
         <p>
