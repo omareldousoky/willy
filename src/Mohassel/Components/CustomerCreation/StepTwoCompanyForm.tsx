@@ -168,7 +168,7 @@ export const StepTwoCompanyForm = (props: any) => {
       <Row>
         <Col sm={6}>
           <Form.Group controlId="cbeCode">
-            <Form.Label>{`${local.cbeCode} *`}</Form.Label>
+            <Form.Label>{local.cbeCode}</Form.Label>
             {cbeCode.length > 1 ? (
               <Select<Option>
                 styles={theme.selectStyleWithBorder}

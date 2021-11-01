@@ -124,7 +124,6 @@ export const companyCreationValidationStepTwo = Yup.object().shape({
       local.duplicateCbeCodeMessage,
       () => false
     ),
-    otherwise: Yup.string().required(local.required),
   }),
   permanentEmployeeCount: Yup.string().trim().required(local.required),
 })
@@ -164,6 +163,5 @@ export const companyCreationValidationStepTwoEdit = Yup.object().shape({
       local.duplicateCbeCodeMessage,
       () => false
     ),
-    otherwise: Yup.string().required(local.required),
   }),
 })
