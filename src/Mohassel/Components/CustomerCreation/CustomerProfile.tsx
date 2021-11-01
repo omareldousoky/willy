@@ -12,7 +12,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 import ability from '../../config/ability'
 import { Profile, InfoBox, ProfileActions } from '../../../Shared/Components'
 import { TabDataProps } from '../../../Shared/Components/Profile/types'
-import HalanLinkageModal from './HalanLinkageModal'
+import { HalanLinkageModal } from '../../../Shared/Components/Customer'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
 import LoanLimitModal from './LoanLimitModal'
 import {
