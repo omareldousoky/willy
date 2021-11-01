@@ -156,8 +156,8 @@ export const CustomerProfile = () => {
     setLoading(true)
     const res = await getCustomerByID(location.state.id)
     if (res.status === 'success') {
-      await setCustomerDetails(res.body.customer)
-      await setCustomerGuarantors(res.body.guarantors)
+      setCustomerDetails(res.body.customer)
+      setCustomerGuarantors(res.body.guarantors)
       if (ability.can('viewIscore', 'customer')) {
         const guarIds = res.body.guarantors.map((guar) => guar.nationalId)
         await getCachediScores([res.body.customer.nationalId, ...guarIds])
@@ -195,7 +195,7 @@ export const CustomerProfile = () => {
     const iScore = await getIscore(obj)
     if (iScore.status === 'success') {
       const guarIds = customerGuarantors.map((guar) => guar.nationalId)
-      getCachediScores([data.nationalId, ...guarIds])
+      await getCachediScores([data.nationalId, ...guarIds])
       setLoading(false)
     } else {
       setLoading(false)
@@ -599,10 +599,7 @@ export const CustomerProfile = () => {
       <Container className="print-none" fluid>
         <div>
           <div className="d-flex flex-row justify-content-between m-2">
-            <div
-              className="d-flex justify-content-start align-items-center"
-              style={{ width: '45%' }}
-            >
+            <div className="d-flex justify-content-start align-items-center text-nowrap">
               <h4> {local.viewCustomer}</h4>
               <span
                 style={{

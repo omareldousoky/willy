@@ -120,7 +120,9 @@ const CFLimitModal: FunctionComponent<CFLimitModalProps> = ({
               )}
             </>
             <>
-              {Boolean(customer.initialConsumerFinanceLimit) && (
+              {Boolean(
+                (customer?.initialConsumerFinanceLimit as number) >= 0
+              ) && (
                 <Col>
                   <Form.Group controlId="initialConsumerFinanceLimit">
                     <Form.Label className="font-weight-bold">

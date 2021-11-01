@@ -154,6 +154,7 @@ class CompanyCreation extends Component<Props, State> {
         currentHomeAddress: res.body.customer.currentHomeAddress,
         initialConsumerFinanceLimit:
           res.body.customer.initialConsumerFinanceLimit,
+        mobilePhoneNumber: res.body.customer.mobilePhoneNumber,
       }
       const customerExtraDetails = {
         geographicalDistribution: res.body.customer.geographicalDistribution,
@@ -200,14 +201,14 @@ class CompanyCreation extends Component<Props, State> {
       this.setState(
         produce<State>((draftState) => {
           draftState.loading = false
-          draftState.selectedCustomer = res.body
+          draftState.selectedCustomer = res.body.customer
           draftState.step1 = { ...draftState.step1, ...customerBusiness }
           draftState.step2 = { ...draftState.step2, ...customerExtraDetails }
-          draftState.hasLoan = res.body.hasLoan
-          draftState.isGuarantor = res.body.isGuarantor
-          draftState.oldRepresentative = res.body.representative
-          draftState.branchId = res.body.branchId
-          draftState.companyKey = res.body.key
+          draftState.hasLoan = res.body.customer.hasLoan
+          draftState.isGuarantor = res.body.customer.isGuarantor
+          draftState.oldRepresentative = res.body.customer.representative
+          draftState.branchId = res.body.customer.branchId
+          draftState.companyKey = res.body.customer.key
         })
       )
     } else {

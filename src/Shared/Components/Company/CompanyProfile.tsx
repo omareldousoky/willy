@@ -7,14 +7,22 @@ import Container from 'react-bootstrap/Container'
 
 import local from '../../Assets/ar.json'
 import ability from '../../../Mohassel/config/ability'
-import { cfLimitStatusLocale, getErrorMessage } from '../../Services/utils'
+import {
+  cfLimitStatusLocale,
+  getErrorMessage,
+  iscoreDate,
+} from '../../Services/utils'
 
 import { TabDataProps } from '../Profile/types'
 import { Tab } from '../HeaderWithCards/cardNavbar'
 import { Company } from '../../Services/interfaces'
 import { getCompanyInfo } from '../../Services/formatCustomersInfo'
 import { getCustomerByID } from '../../Services/APIs/customer/getCustomer'
-import { getSMECachedIscore } from '../../Services/APIs/iScore'
+import {
+  getIscore,
+  getIscoreCached,
+  getSMECachedIscore,
+} from '../../Services/APIs/iScore'
 import { blockCustomer } from '../../Services/APIs/customer/blockCustomer'
 import { CFGuarantorDetailsProps, Customer, Score } from '../../Models/Customer'
 import { ProfileActions } from '../ProfileActions'
@@ -46,6 +54,7 @@ export const CompanyProfile = () => {
   const [cfModalAction, setCFModalAction] = useState('')
   const [customerGuarantors, setCustomerGuarantors] = useState<Customer[]>([])
   const [score, setScore] = useState<Score>()
+  const [iScoreDetails, setIScoreDetails] = useState<Score[]>()
   const location = useLocation<{ id: string }>()
   const history = useHistory()
 
@@ -70,15 +79,57 @@ export const CompanyProfile = () => {
       Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
     }
   }
-
+  const getCachediScores = async (array: string[]) => {
+    setIsLoading(true)
+    const iScores = await getIscoreCached({
+      nationalIds: array,
+    })
+    if (iScores.status === 'success') {
+      setIScoreDetails(iScores.body.data)
+      setIsLoading(false)
+    } else {
+      setIsLoading(false)
+      Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
+    }
+  }
+  const getCustomerIscore = async (data) => {
+    setIsLoading(true)
+    const obj = {
+      requestNumber: '148',
+      reportId: '3004',
+      product: '023',
+      loanAccountNumber: `${data.key}`,
+      number: '1703943',
+      date: '02/12/2014',
+      amount: `${1000}`, // TODO
+      lastName: `${data.customerName}`,
+      idSource: '003',
+      idValue: `${data.nationalId}`,
+      gender: data.gender === 'male' ? '001' : '002',
+      dateOfBirth: iscoreDate(data.birthDate),
+    }
+    const iScore = await getIscore(obj)
+    if (iScore.status === 'success') {
+      const guarIds = customerGuarantors.map((guar) => guar.nationalId)
+      await getCachediScores([data.nationalId, ...guarIds])
+      setIsLoading(false)
+    } else {
+      setIsLoading(false)
+      Swal.fire('Error !', getErrorMessage(iScore.error.error), 'error')
+    }
+  }
   const getCompanyDetails = async () => {
     setIsLoading(true)
     const res = await getCustomerByID(location.state.id)
     if (res.status === 'success') {
-      await setCompany(res.body.customer)
-      await setCustomerGuarantors(res.body.guarantors)
+      setCompany(res.body.customer)
+      setCustomerGuarantors(res.body.guarantors)
+      if (ability.can('viewIscore', 'customer')) {
+        await getIScores(res.body.customer)
+        const guarIds = res.body.guarantors.map((guar) => guar.nationalId)
+        await getCachediScores(guarIds as Array<string>)
+      }
       setIsLoading(false)
-      if (ability.can('viewIscore', 'customer')) await getIScores(res.body)
     } else {
       setIsLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
@@ -103,6 +154,8 @@ export const CompanyProfile = () => {
           customerId: company?._id,
           hasLoan: !!company?.hasLoan,
           guarantors: customerGuarantors,
+          getIscore: (data) => getCustomerIscore(data),
+          iscores: iScoreDetails,
           isBlocked: !!company?.blocked?.isBlocked,
         } as CFGuarantorDetailsProps,
         showFieldCondition: true,
@@ -122,7 +175,6 @@ export const CompanyProfile = () => {
       mobilePhoneNumber: customer.mobilePhoneNumber || '',
       initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
       customerGuarantors: customerGuarantors || [],
-      isCF: true,
     })
   }
   const mainInfo = company && [getCompanyInfo({ company, score })]
@@ -130,6 +182,10 @@ export const CompanyProfile = () => {
     {
       header: local.documents,
       stringKey: 'documents',
+    },
+    {
+      header: local.guarantorInfo,
+      stringKey: 'cfGuarantors',
     },
   ]
   const handleActivationClick = async ({ id, blocked }) => {
@@ -265,40 +321,42 @@ export const CompanyProfile = () => {
     <>
       <Container className="print-none" fluid>
         <div style={{ margin: 15 }}>
-          <div className="d-flex flex-row justify-content-between">
-            <div>
-              <span
-                style={{
-                  display: 'flex',
-                  padding: 10,
-                  marginRight: 10,
-                  borderRadius: 30,
-                  border: `1px solid ${
-                    cfLimitStatusLocale[
-                      company?.consumerFinanceLimitStatus || 'default'
-                    ].color
-                  }`,
-                }}
-              >
-                <p
+          <div className="d-flex flex-row justify-content-between m-2">
+            <div className="d-flex flex-row justify-content-start align-items-center text-nowrap mx-2">
+              <h4>{local.viewCompany}</h4>
+              {company?.consumerFinanceLimitStatus && (
+                <span
                   style={{
-                    margin: 0,
-                    color: `${
+                    display: 'flex',
+                    padding: 10,
+                    marginRight: 10,
+                    borderRadius: 30,
+                    border: `1px solid ${
                       cfLimitStatusLocale[
                         company?.consumerFinanceLimitStatus || 'default'
                       ].color
                     }`,
-                    fontSize: '.8rem',
                   }}
                 >
-                  {
-                    cfLimitStatusLocale[
-                      company?.consumerFinanceLimitStatus || 'default'
-                    ].text
-                  }
-                </p>
-              </span>
-              <h3>{local.viewCompany}</h3>
+                  <p
+                    style={{
+                      margin: 0,
+                      color: `${
+                        cfLimitStatusLocale[
+                          company?.consumerFinanceLimitStatus || 'default'
+                        ].color
+                      }`,
+                      fontSize: '.8rem',
+                    }}
+                  >
+                    {
+                      cfLimitStatusLocale[
+                        company?.consumerFinanceLimitStatus || 'default'
+                      ].text
+                    }
+                  </p>
+                </span>
+              )}
             </div>
             <ProfileActions actions={getProfileActions()} />
           </div>
@@ -338,7 +396,6 @@ export const CompanyProfile = () => {
             initialConsumerFinanceLimit={
               company?.initialConsumerFinanceLimit || 0
             }
-            isCF
           />
           {customerGuarantors?.length > 0 &&
             customerGuarantors.map((guarantor) => (
@@ -350,7 +407,6 @@ export const CompanyProfile = () => {
                 initialConsumerFinanceLimit={
                   company?.initialConsumerFinanceLimit || 0
                 }
-                isCF
               />
             ))}
           <PromissoryNote
@@ -362,21 +418,18 @@ export const CompanyProfile = () => {
               company?.initialConsumerFinanceLimit || 0
             }
             customerGuarantors={customerGuarantors}
-            isCF
           />
           <AuthorizationToFillInfo
             customerCreationDate={company?.created?.at || 0}
             customerName={company?.customerName || ''}
             customerHomeAddress={company?.customerHomeAddress || ''}
             customerGuarantors={customerGuarantors}
-            isCF
           />
           <AcknowledgmentWasSignedInFront
             customerCreationDate={company?.created?.at || 0}
             customerName={company?.customerName || ''}
             nationalId={company?.nationalId || ''}
             customerGuarantors={customerGuarantors}
-            isCF
           />
         </>
       )}

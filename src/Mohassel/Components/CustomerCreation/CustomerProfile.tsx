@@ -120,11 +120,11 @@ export const CustomerProfile = () => {
     }
   }, [print])
 
-  async function getCachediScores(id) {
+  async function getCachediScores(array) {
     setLoading(true)
-    const iScores = await getIscoreCached({ nationalIds: [id] })
+    const iScores = await getIscoreCached({ nationalIds: array })
     if (iScores.status === 'success') {
-      setIScoreDetails(iScores.body.data[0])
+      setIScoreDetails(iScores.body.data)
       setLoading(false)
     } else {
       setLoading(false)
@@ -152,11 +152,13 @@ export const CustomerProfile = () => {
     setLoading(true)
     const res = await getCustomerByID(location.state.id)
     if (res.status === 'success') {
-      await setCustomerDetails(res.body.customer)
-      await setCustomerGuarantors(res.body.guarantors)
-      if (ability.can('viewIscore', 'customer'))
-        await getCachediScores(res.body.nationalId)
-      await getGeoArea(res.body.geoAreaId, res.body.branchId)
+      setCustomerDetails(res.body.customer)
+      setCustomerGuarantors(res.body.guarantors)
+      if (ability.can('viewIscore', 'customer')) {
+        const guarIds = res.body.guarantors.map((guar) => guar.nationalId)
+        await getCachediScores([res.body.customer.nationalId, ...guarIds])
+      }
+      await getGeoArea(res.body.customer.geoAreaId, res.body.customer.branchId)
     } else {
       setLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
@@ -261,7 +263,8 @@ export const CustomerProfile = () => {
     }
     const iScore = await getIscore(obj)
     if (iScore.status === 'success') {
-      getCachediScores(data.nationalId)
+      const guarIds = customerGuarantors.map((guar) => guar.nationalId)
+      await getCachediScores([data.nationalId, ...guarIds])
       setLoading(false)
     } else {
       setLoading(false)
@@ -624,8 +627,8 @@ export const CustomerProfile = () => {
     <>
       <Container className="print-none mx-2" fluid>
         <div style={{ margin: 15 }}>
-          <div className="d-flex flex-row justify-content-between">
-            <div className="d-flex flex-row justify-content-between text-nowrap mx-2">
+          <div className="d-flex flex-row justify-content-between m-2">
+            <div className="d-flex flex-row justify-content-start align-items-center text-nowrap">
               <h4> {local.viewCustomer}</h4>
               {customerDetails?.consumerFinanceLimitStatus && (
                 <span
