@@ -5,11 +5,9 @@ import { useHistory, useLocation } from 'react-router-dom'
 
 import Container from 'react-bootstrap/Container'
 
-import { InfoBox, Profile, ProfileActions } from '..'
-
 import local from '../../Assets/ar.json'
 import ability from '../../../Mohassel/config/ability'
-import { getErrorMessage } from '../../Services/utils'
+import { cfLimitStatusLocale, getErrorMessage } from '../../Services/utils'
 
 import { TabDataProps } from '../Profile/types'
 import { Tab } from '../HeaderWithCards/cardNavbar'
@@ -18,7 +16,19 @@ import { getCompanyInfo } from '../../Services/formatCustomersInfo'
 import { getCustomerByID } from '../../Services/APIs/customer/getCustomer'
 import { getSMECachedIscore } from '../../Services/APIs/iScore'
 import { blockCustomer } from '../../Services/APIs/customer/blockCustomer'
-import { Score } from '../../Models/Customer'
+import { CFGuarantorDetailsProps, Customer, Score } from '../../Models/Customer'
+import { ProfileActions } from '../ProfileActions'
+import { Profile } from '../Profile'
+import { InfoBox } from '../InfoBox'
+import {
+  AcknowledgmentWasSignedInFront,
+  AuthorizationToFillInfo,
+  BondContract,
+  PromissoryNote,
+  ConsumerFinanceContract,
+} from '../pdfTemplates/ConsumerContract'
+import { ConsumerFinanceContractData } from '../../Models/consumerContract'
+import CFLimitModal from '../CFLimitModal/CFLimitModal'
 
 export interface CompanyProfileProps {
   data: any
@@ -27,11 +37,27 @@ export const CompanyProfile = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [activeTab, changeActiveTab] = useState('documents')
   const [company, setCompany] = useState<Company>()
+  const [
+    customerCFContract,
+    setCustomerCFContract,
+  ] = useState<ConsumerFinanceContractData>()
+  const [print, setPrint] = useState('')
+  const [showCFLimitModal, setShowCFLimitModal] = useState(false)
+  const [cfModalAction, setCFModalAction] = useState('')
+  const [customerGuarantors, setCustomerGuarantors] = useState<Customer[]>([])
   const [score, setScore] = useState<Score>()
   const location = useLocation<{ id: string }>()
   const history = useHistory()
 
-  const getiScores = async (companyObj) => {
+  useEffect(() => {
+    if (print.length > 0) {
+      window.print()
+    }
+    window.onafterprint = () => {
+      setPrint('')
+    }
+  }, [print])
+  const getIScores = async (companyObj) => {
     setIsLoading(true)
     const iScores = await getSMECachedIscore({
       ids: [`${companyObj.governorate}-${companyObj.commercialRegisterNumber}`],
@@ -50,8 +76,9 @@ export const CompanyProfile = () => {
     const res = await getCustomerByID(location.state.id)
     if (res.status === 'success') {
       await setCompany(res.body.customer)
+      await setCustomerGuarantors(res.body.guarantors)
       setIsLoading(false)
-      if (ability.can('viewIscore', 'customer')) await getiScores(res.body)
+      if (ability.can('viewIscore', 'customer')) await getIScores(res.body)
     } else {
       setIsLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
@@ -69,6 +96,34 @@ export const CompanyProfile = () => {
         showFieldCondition: true,
       },
     ],
+    cfGuarantors: [
+      {
+        fieldTitle: 'cfGuarantors',
+        fieldData: {
+          customerId: company?._id,
+          hasLoan: !!company?.hasLoan,
+          guarantors: customerGuarantors,
+          isBlocked: !!company?.blocked?.isBlocked,
+        } as CFGuarantorDetailsProps,
+        showFieldCondition: true,
+      },
+    ],
+  }
+  function setModalData(type) {
+    setCFModalAction(type)
+    setShowCFLimitModal(true)
+  }
+  function setCustomerContractData(customer: Customer) {
+    setCustomerCFContract({
+      customerCreationDate: customer.created?.at || 0,
+      customerName: customer.customerName || '',
+      nationalId: customer.nationalId || '',
+      customerHomeAddress: customer.customerHomeAddress || '',
+      mobilePhoneNumber: customer.mobilePhoneNumber || '',
+      initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
+      customerGuarantors: customerGuarantors || [],
+      isCF: true,
+    })
   }
   const mainInfo = company && [getCompanyInfo({ company, score })]
   const tabs: Array<Tab> = [
@@ -140,6 +195,17 @@ export const CompanyProfile = () => {
   const getProfileActions = () => {
     return [
       {
+        icon: 'download',
+        title: local.downloadPDF,
+        permission: ['initialization-reviewed', 'update-reviewed'].includes(
+          company?.consumerFinanceLimitStatus ?? ''
+        ),
+        onActionClick: () => {
+          setCustomerContractData(company as Customer)
+          setPrint('all')
+        },
+      },
+      {
         icon: 'edit',
         title: local.edit,
         permission:
@@ -170,25 +236,150 @@ export const CompanyProfile = () => {
             blocked: company?.blocked,
           }),
       },
+      {
+        icon: 'bulk-loan-applications-review',
+        title: local.reviewCFCustomerLimit,
+        permission:
+          !company?.blocked?.isBlocked &&
+          ['pending-initialization', 'pending-update'].includes(
+            company?.consumerFinanceLimitStatus ?? ''
+          ) &&
+          (ability.can('reviewCFLimit', 'customer') ||
+            ability.can('reviewCFLimitHQ', 'customer')),
+        onActionClick: () => setModalData('review'),
+      },
+      {
+        icon: 'bulk-loan-applications-review',
+        title: local.approveCFCustomerLimit,
+        permission:
+          !company?.blocked?.isBlocked &&
+          ['initialization-reviewed', 'update-reviewed'].includes(
+            company?.consumerFinanceLimitStatus ?? ''
+          ) &&
+          ability.can('approveCFLimit', 'customer'),
+        onActionClick: () => setModalData('approve'),
+      },
     ]
   }
   return (
-    <Container className="print-none">
-      <div style={{ margin: 15 }}>
-        <div className="d-flex flex-row justify-content-between">
-          <h3>{local.viewCompany}</h3>
-          <ProfileActions actions={getProfileActions()} />
+    <>
+      <Container className="print-none" fluid>
+        <div style={{ margin: 15 }}>
+          <div className="d-flex flex-row justify-content-between">
+            <div>
+              <span
+                style={{
+                  display: 'flex',
+                  padding: 10,
+                  marginRight: 10,
+                  borderRadius: 30,
+                  border: `1px solid ${
+                    cfLimitStatusLocale[
+                      company?.consumerFinanceLimitStatus || 'default'
+                    ].color
+                  }`,
+                }}
+              >
+                <p
+                  style={{
+                    margin: 0,
+                    color: `${
+                      cfLimitStatusLocale[
+                        company?.consumerFinanceLimitStatus || 'default'
+                      ].color
+                    }`,
+                    fontSize: '.8rem',
+                  }}
+                >
+                  {
+                    cfLimitStatusLocale[
+                      company?.consumerFinanceLimitStatus || 'default'
+                    ].text
+                  }
+                </p>
+              </span>
+              <h3>{local.viewCompany}</h3>
+            </div>
+            <ProfileActions actions={getProfileActions()} />
+          </div>
+          {mainInfo && <InfoBox info={mainInfo} />}
         </div>
-        {mainInfo && <InfoBox info={mainInfo} />}
-      </div>
-      <Profile
-        source="company"
-        loading={isLoading}
-        tabs={tabs}
-        activeTab={activeTab}
-        setActiveTab={(stringKey) => changeActiveTab(stringKey)}
-        tabsData={tabsData}
-      />
-    </Container>
+        <Profile
+          source="company"
+          loading={isLoading}
+          tabs={tabs}
+          activeTab={activeTab}
+          setActiveTab={(stringKey) => changeActiveTab(stringKey)}
+          tabsData={tabsData}
+        />
+        {showCFLimitModal && company && (
+          <CFLimitModal
+            show={showCFLimitModal}
+            hideModal={() => {
+              setShowCFLimitModal(false)
+              setCFModalAction('')
+            }}
+            customer={company}
+            onSuccess={() => getCompanyDetails()}
+            action={cfModalAction}
+          />
+        )}
+      </Container>
+      {print === 'all' && (
+        <>
+          <ConsumerFinanceContract
+            contractData={customerCFContract as ConsumerFinanceContractData}
+          />
+          <BondContract
+            customerCreationDate={company?.created?.at || 0}
+            customerName={company?.customerName || ''}
+            customerHomeAddress={company?.customerHomeAddress || ''}
+            nationalId={company?.nationalId || ''}
+            initialConsumerFinanceLimit={
+              company?.initialConsumerFinanceLimit || 0
+            }
+            isCF
+          />
+          {customerGuarantors?.length > 0 &&
+            customerGuarantors.map((guarantor) => (
+              <BondContract
+                customerCreationDate={company?.created?.at || 0}
+                customerName={guarantor?.customerName || ''}
+                customerHomeAddress={guarantor?.customerHomeAddress || ''}
+                nationalId={guarantor?.nationalId || ''}
+                initialConsumerFinanceLimit={
+                  company?.initialConsumerFinanceLimit || 0
+                }
+                isCF
+              />
+            ))}
+          <PromissoryNote
+            customerCreationDate={company?.created?.at || 0}
+            customerName={company?.customerName || ''}
+            customerHomeAddress={company?.customerHomeAddress || ''}
+            nationalId={company?.nationalId || ''}
+            initialConsumerFinanceLimit={
+              company?.initialConsumerFinanceLimit || 0
+            }
+            customerGuarantors={customerGuarantors}
+            isCF
+          />
+          <AuthorizationToFillInfo
+            customerCreationDate={company?.created?.at || 0}
+            customerName={company?.customerName || ''}
+            customerHomeAddress={company?.customerHomeAddress || ''}
+            customerGuarantors={customerGuarantors}
+            isCF
+          />
+          <AcknowledgmentWasSignedInFront
+            customerCreationDate={company?.created?.at || 0}
+            customerName={company?.customerName || ''}
+            nationalId={company?.nationalId || ''}
+            customerGuarantors={customerGuarantors}
+            isCF
+          />
+        </>
+      )}
+    </>
   )
 }

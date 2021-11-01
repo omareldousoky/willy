@@ -254,7 +254,7 @@ export const StepOneForm = (props: any) => {
         <Col>
           <Form.Group controlId="initialConsumerFinanceLimit">
             <Form.Label className="customer-form-label">
-              {`${local.initialConsumerFinanceLimit}*`}
+              {local.initialConsumerFinanceLimit}
             </Form.Label>
             <Form.Control
               type="number"

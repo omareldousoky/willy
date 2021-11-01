@@ -50,6 +50,7 @@ interface State {
     // industryRegisterNumber: string
     taxCardNumber: string
     customerType: string
+    initialConsumerFinanceLimit?: number
   }
   step2: {
     geographicalDistribution: string
@@ -76,6 +77,7 @@ interface State {
     smeBankBranch: string
     smeBankAccountNumber: string
     smeIbanNumber: string
+    guarantorMaxCustomers: number
   }
   customerId: string
   selectedCustomer: any
@@ -150,6 +152,8 @@ class CompanyCreation extends Component<Props, State> {
         policeStation: res.body.customer.policeStation,
         currHomeAddressGov: res.body.customer.currHomeAddressGov,
         currentHomeAddress: res.body.customer.currentHomeAddress,
+        initialConsumerFinanceLimit:
+          res.body.customer.initialConsumerFinanceLimit,
       }
       const customerExtraDetails = {
         geographicalDistribution: res.body.customer.geographicalDistribution,
@@ -179,6 +183,9 @@ class CompanyCreation extends Component<Props, State> {
         smeBankBranch: res.body.customer.smeBankBranch,
         smeBankAccountNumber: res.body.customer.smeBankAccountNumber,
         smeIbanNumber: res.body.customer.smeIbanNumber,
+        guarantorMaxCustomers: res.body.customer.guarantorMaxCustomers
+          ? Number(res.body.customer.guarantorMaxCustomers)
+          : 1,
       }
       this.formikStep1 = {
         values: { ...this.state.step1, ...customerBusiness },
@@ -377,6 +384,9 @@ class CompanyCreation extends Component<Props, State> {
               hasLoan={this.state.hasLoan}
               isGuarantor={this.state.isGuarantor}
               edit={this.props.edit}
+              consumerFinanceLimitStatus={
+                this.state.selectedCustomer.consumerFinanceLimitStatus
+              }
             />
           )
         }}

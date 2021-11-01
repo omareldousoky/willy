@@ -38,8 +38,8 @@ import {
   AuthorizationToFillInfo,
   BondContract,
   PromissoryNote,
+  ConsumerFinanceContract,
 } from '../../../Shared/Components/pdfTemplates/ConsumerContract'
-import { ConsumerFinanceContract } from '../../../Shared/Components/pdfTemplates/ConsumerContract/ConsumerFinanceContract'
 import { ConsumerFinanceContractData } from '../../../Shared/Models/consumerContract'
 
 interface LocationState {
