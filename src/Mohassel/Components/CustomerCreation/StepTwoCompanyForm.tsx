@@ -119,6 +119,7 @@ export const StepTwoCompanyForm = (props: any) => {
         from: 0,
         size: 100,
         name,
+        type: 'company',
       })
       if (res.status === 'success') {
         setCbeCode(res.body.data)
