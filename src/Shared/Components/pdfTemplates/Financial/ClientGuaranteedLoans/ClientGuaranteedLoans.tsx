@@ -1,7 +1,7 @@
 import React from 'react'
 import './ClientGuaranteedLoans.scss'
 import Col from 'react-bootstrap/Col'
-import * as local from '../../../../Shared/Assets/ar.json'
+import * as local from '../../../../Assets/ar.json'
 
 const ClientGuaranteedLoans = (props) => {
   const { GuarantorName } = props.data

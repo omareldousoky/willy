@@ -2,19 +2,23 @@ import React, { FunctionComponent, useEffect, useState } from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/esm/Button'
 import Swal from 'sweetalert2'
-import * as local from '../../../Shared/Assets/ar.json'
-import { LtsIcon } from '../../../Shared/Components'
-import { Loader } from '../../../Shared/Components/Loader'
-import { errorResponseHandler } from '../../../Shared/Services/utils'
+import * as local from '../../Assets/ar.json'
+import { LtsIcon } from '../LtsIcon'
+import { Loader } from '../Loader'
+import { errorResponseHandler } from '../../Services/utils'
 import Can from '../../config/Can'
-import { missingKey } from '../../../Shared/localUtils'
+import { missingKey } from '../../localUtils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
-import { getCustomerDetails, guaranteed } from '../../Services/APIs/Reports'
-import { getLoanDetails } from '../../Services/APIs/Reports/loanDetails'
-import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
-import ClientGuaranteedLoans from '../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans'
-import { CustomerStatusDetails } from '../pdfTemplates/customerStatusDetails'
-import { LoanApplicationDetails } from '../pdfTemplates/loanApplicationDetails'
+import {
+  getCustomerDetails,
+  guaranteed,
+  getLoanDetails,
+} from '../../Services/APIs/Reports/Financial'
+
+import { PdfPortal } from '../Common/PdfPortal'
+import ClientGuaranteedLoans from '../pdfTemplates/Financial/ClientGuaranteedLoans/ClientGuaranteedLoans'
+import { CustomerStatusDetails } from '../pdfTemplates/Financial/customerStatusDetails'
+import { LoanApplicationDetails } from '../pdfTemplates/Financial/loanApplicationDetails'
 
 const PDF_LIST = [
   {

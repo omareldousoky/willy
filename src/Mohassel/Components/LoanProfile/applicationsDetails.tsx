@@ -16,7 +16,7 @@ import {
   statusLocale,
   extractGMTDate,
 } from '../../../Shared/Services/utils'
-import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
+import { remainingLoan } from '../../../Shared/Services/APIs/Loan/remainingLoan'
 import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
 
 interface Props {

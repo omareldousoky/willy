@@ -14,26 +14,26 @@ import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 
 import Swal from 'sweetalert2'
-import * as local from '../../../Shared/Assets/ar.json'
-import { Loader } from '../../../Shared/Components/Loader'
-import { Customer } from '../../../Shared/Models/Customer'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import * as local from '../../Assets/ar.json'
+import { Loader } from '../Loader'
+import {
+  CheckLinkageResponse,
+  Customer,
+  LinkageStatusEnum,
+} from '../../Models/Customer'
+import { getErrorMessage } from '../../Services/utils'
 import {
   checkLinkage,
   confirmLinkage,
   removeLinkage,
-} from '../../../Shared/Services/APIs/Leads/halanLinkage'
-import {
-  CheckLinkageResponse,
-  LinkageStatusEnum,
-} from '../../Services/interfaces'
+} from '../../Services/APIs/Leads/halanLinkage'
 
 interface HalanLinkageModalProps {
   show: boolean
   hideModal: Function
   customer?: Customer
 }
-const HalanLinkageModal = (props: HalanLinkageModalProps) => {
+export const HalanLinkageModal = (props: HalanLinkageModalProps) => {
   const [isLoading, setIsLoading] = useState(true)
   const [checkResponse, setCheckResponse] = useState<CheckLinkageResponse>()
   // confirmation code
@@ -241,5 +241,3 @@ const HalanLinkageModal = (props: HalanLinkageModalProps) => {
     </Modal>
   )
 }
-
-export default HalanLinkageModal

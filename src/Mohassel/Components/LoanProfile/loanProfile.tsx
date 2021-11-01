@@ -60,7 +60,7 @@ import { rejectManualOtherPayment } from '../../Services/APIs/Payment/rejectManu
 import { approveManualOtherPayment } from '../../Services/APIs/Payment/approveManualOtherPayment'
 import { numTo2Decimal } from '../CIB/textFiles'
 import { FollowUpStatementView } from './followupStatementView'
-import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
+import { remainingLoan } from '../../../Shared/Services/APIs/Loan/remainingLoan'
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares'
 import { InfoBox, LtsIcon, ProfileActions } from '../../../Shared/Components'
 

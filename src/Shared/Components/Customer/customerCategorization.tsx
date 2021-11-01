@@ -1,7 +1,7 @@
 import React from 'react'
 import Table from 'react-bootstrap/Table'
-import local from '../../../Shared/Assets/ar.json'
-import { CustomerScore } from '../../../Shared/Services/APIs/customer/customerCategorization'
+import local from '../../Assets/ar.json'
+import { CustomerScore } from '../../Services/APIs/customer/customerCategorization'
 
 type Props = {
   ratings: Array<CustomerScore>

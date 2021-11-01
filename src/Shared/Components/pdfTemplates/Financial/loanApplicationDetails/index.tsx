@@ -1,6 +1,6 @@
 import React from 'react'
 import './loanApplicationDetails.scss'
-import * as local from '../../../../Shared/Assets/ar.json'
+import * as local from '../../../../Assets/ar.json'
 import {
   beneficiaryType,
   arabicGender,
@@ -12,7 +12,7 @@ import {
   numbersToArabic,
   orderLocal,
   timeToArabicDate,
-} from '../../../../Shared/Services/utils'
+} from '../../../../Services/utils'
 
 export const LoanApplicationDetails = (props) => {
   const getStatus = (status: string) => {

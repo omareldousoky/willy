@@ -12,9 +12,9 @@ import {
   timeToArabicDateNow,
   guarantorOrderLocal,
   orderLocal,
-} from '../../../../Shared/Services/utils'
+} from '../../../../Services/utils'
 import { CustomerIsBlocked, CustomerStatusLocal } from './types'
-import local from '../../../../Shared/Assets/ar.json'
+import local from '../../../../Assets/ar.json'
 
 export const CustomerStatusDetails = (props) => {
   const {
