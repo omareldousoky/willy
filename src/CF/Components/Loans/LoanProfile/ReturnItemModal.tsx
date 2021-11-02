@@ -7,14 +7,14 @@ import Form from 'react-bootstrap/Form'
 import local from '../../../../Shared/Assets/ar.json'
 import { getDateString } from '../../../../Shared/Services/utils'
 
-interface CFLimitModalProps {
+interface ReturnItemModalProps {
   show: boolean
   hideModal: () => void
   submit: (date) => void
   issueDate: number
 }
 
-const ReturnItemModal: FunctionComponent<CFLimitModalProps> = ({
+const ReturnItemModal: FunctionComponent<ReturnItemModalProps> = ({
   show,
   hideModal,
   submit,
