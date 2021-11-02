@@ -351,7 +351,7 @@ class CustomerCreation extends Component<Props, State> {
             ' ' +
             local.withCode +
             ' ' +
-            res.body.customer.customerKey,
+            res.body.customerKey,
           'success'
         ).then(() => {
           this.setState({ step: 4, customerId: res.body.customerId })
