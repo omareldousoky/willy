@@ -596,8 +596,8 @@ export const CustomerProfile = () => {
   }
   return (
     <>
-      <Container className="print-none" fluid>
-        <div>
+      <Container className="print-none mx-2" fluid>
+        <div style={{ margin: 15 }}>
           <div className="d-flex flex-row justify-content-between m-2">
             <div className="d-flex justify-content-start align-items-center text-nowrap">
               <h4> {local.viewCustomer}</h4>
@@ -606,6 +606,7 @@ export const CustomerProfile = () => {
                   display: 'flex',
                   padding: 10,
                   marginRight: 10,
+                  marginBottom: 10,
                   borderRadius: 30,
                   border: `1px solid ${
                     cfLimitStatusLocale[
