@@ -1229,5 +1229,6 @@
   "refund": "إسترجاع",
   "confirmAddLateCustomer": "تأكيد إضافة عميل لقائمة المتأخرين عن السداد",
   "noOfGuarantorMaxCustomers": "عدد العملاء الذي يمكن ضمنهم",
-  "initialCFCompanyLimit": "الحد المبدئي للشركة"
+  "initialCFCompanyLimit": "الحد المبدئي للشركة",
+  "cfLoan": "تمويل الاستهلاكي"
 }
