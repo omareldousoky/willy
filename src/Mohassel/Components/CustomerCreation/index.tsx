@@ -334,7 +334,7 @@ class CustomerCreation extends Component<Props, State> {
       if (res.status === 'success') {
         this.setState({ loading: false })
         Swal.fire('', local.customerEdited, 'success').then(() => {
-          this.setState({ step: 4, customerId: res.body.customer.customerId })
+          this.setState({ step: 4, customerId: res.body.customerId })
         })
       } else {
         this.setState({ loading: false }, () =>
@@ -354,7 +354,7 @@ class CustomerCreation extends Component<Props, State> {
             res.body.customer.customerKey,
           'success'
         ).then(() => {
-          this.setState({ step: 4, customerId: res.body.customer.customerId })
+          this.setState({ step: 4, customerId: res.body.customerId })
         })
       } else {
         this.setState({ loading: false }, () =>
