@@ -10,13 +10,15 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import * as local from '../../Assets/ar.json'
 
 import { getFullCustomerKey, getRenderDate } from '../../Services/utils'
-import { InfoBox, LtsIcon } from '..'
+
 import {
   getCompanyInfo,
   getCustomerInfo,
 } from '../../Services/formatCustomersInfo'
 import { Company } from '../../Services/interfaces'
 import { Customer } from '../../Models/Customer'
+import { LtsIcon } from '../LtsIcon'
+import { InfoBox } from '../InfoBox'
 
 export interface Results {
   results: Array<object>

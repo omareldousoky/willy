@@ -957,11 +957,11 @@ export const cfLimitStatusLocale = {
   },
   'update-reviewed': {
     text: 'تم مراجعه الحد الائتماني',
-    color: '#edb600',
+    color: '#ed7600',
   },
   'initialization-reviewed': {
     text: 'تم مراجعه الحد الائتماني المبدئي',
-    color: '#edb600',
+    color: '#ed7600',
   },
   default: { text: 'الحد الائتماني المبدئي قيد التحقيق', color: '#edb600' },
 }
