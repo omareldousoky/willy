@@ -133,7 +133,7 @@ export const StepTwoCompanyForm = (props: any) => {
   useEffect(() => {
     const token = getCookie('token')
     const details = parseJwt(token)
-    if (!edit && details.branchId?.length > 0) {
+    if (!edit && details.branch?.length > 0) {
       getConfig(details.branch)
     } else if (props.branchId?.length > 0) {
       getConfig(props.branchId)
