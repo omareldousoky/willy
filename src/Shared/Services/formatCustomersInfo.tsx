@@ -164,6 +164,16 @@ export const getCompanyInfo = ({
       showFieldCondition: true,
     },
     {
+      fieldTitle: local.initialConsumerFinanceLimit,
+      fieldData: numbersToArabic(company.initialConsumerFinanceLimit || 0),
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.mobilePhoneNumber,
+      fieldData: company.mobilePhoneNumber || '',
+      showFieldCondition: true,
+    },
+    {
       fieldTitle: local.loanOfficer,
       fieldData: company.representativeName || '',
       showFieldCondition: true,
@@ -230,6 +240,11 @@ export const getCompanyInfo = ({
       fieldData: company.permanentEmployeeCount,
       showFieldCondition: true,
     },
+    {
+      fieldTitle: local.noOfGuarantorMaxCustomers,
+      fieldData: company.guarantorMaxCustomers || '',
+      showFieldCondition: true,
+    },
   ]
 }
 export const getCustomerInfo = ({
@@ -263,6 +278,7 @@ export const getCustomerInfo = ({
     representativeName,
     monthlyIncome,
     initialConsumerFinanceLimit,
+    guarantorMaxCustomers,
   } = customerDetails
   const info: FieldProps[] = [
     {
@@ -341,6 +357,11 @@ export const getCustomerInfo = ({
     {
       fieldTitle: local.partTimeEmployeeCount,
       fieldData: partTimeEmployeeCount || 0,
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.noOfGuarantorMaxCustomers,
+      fieldData: guarantorMaxCustomers || '',
       showFieldCondition: true,
     },
     {
