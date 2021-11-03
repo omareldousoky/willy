@@ -181,7 +181,7 @@ export const StepThreeForm = (props: any) => {
             <Form.Control
               type="date"
               name="applicationDate"
-              data-qc=""
+              data-qc="applicationDate"
               value={values.applicationDate}
               onBlur={handleBlur}
               onChange={handleChange}
@@ -201,23 +201,12 @@ export const StepThreeForm = (props: any) => {
                 {local.permanentEmployeeCount}
               </Form.Label>
               <Form.Control
-                type="text"
+                type="number"
                 name="permanentEmployeeCount"
                 data-qc="permanentEmployeeCount"
                 value={values.permanentEmployeeCount}
                 onBlur={handleBlur}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  const re = /^\d*$/
-                  if (
-                    event.currentTarget.value === '' ||
-                    re.test(event.currentTarget.value)
-                  ) {
-                    setFieldValue(
-                      'permanentEmployeeCount',
-                      event.currentTarget.value
-                    )
-                  }
-                }}
+                onChange={handleChange}
                 isInvalid={
                   errors.permanentEmployeeCount &&
                   touched.permanentEmployeeCount
@@ -234,23 +223,12 @@ export const StepThreeForm = (props: any) => {
                 {local.partTimeEmployeeCount}
               </Form.Label>
               <Form.Control
-                type="text"
+                type="number"
                 name="partTimeEmployeeCount"
                 data-qc="partTimeEmployeeCount"
                 value={values.partTimeEmployeeCount}
                 onBlur={handleBlur}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  const re = /^\d*$/
-                  if (
-                    event.currentTarget.value === '' ||
-                    re.test(event.currentTarget.value)
-                  ) {
-                    setFieldValue(
-                      'partTimeEmployeeCount',
-                      event.currentTarget.value
-                    )
-                  }
-                }}
+                onChange={handleChange}
                 isInvalid={
                   errors.partTimeEmployeeCount && touched.partTimeEmployeeCount
                 }

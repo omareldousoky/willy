@@ -31,7 +31,7 @@ import { getCFLimits } from '../../Services/APIs/config'
 import {
   GlobalCFLimits,
   globalCfLimitsInitialValues,
-} from '../../Models/globalLimits'
+} from '../../../Shared/Models/globalLimits'
 import { Customer, Score } from '../../../Shared/Models/Customer'
 import { CFGuarantorDetailsProps } from './types'
 
