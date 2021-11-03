@@ -170,7 +170,7 @@ export const getCompanyInfo = ({
     },
     {
       fieldTitle: local.mobilePhoneNumber,
-      fieldData: company.mobilePhoneNumber || '',
+      fieldData: company.mobilePhoneNumber || local.na,
       showFieldCondition: true,
     },
     {
