@@ -112,6 +112,7 @@ interface State {
   randomPaymentType: string
   bankOfPayment: string
   bankOfPaymentBranch: string
+  isPendingAction: boolean
 }
 
 class Payment extends Component<Props, State> {
@@ -188,11 +189,14 @@ class Payment extends Component<Props, State> {
       randomPaymentType: '',
       bankOfPayment: '',
       bankOfPaymentBranch: '',
+      isPendingAction: false,
     }
     this.mappers = normalTableMappers
   }
 
   componentDidMount() {
+    if (this.props.randomPendingActions.length > 0)
+      this.setState({ isPendingAction: true })
     if (this.props.paymentType === 'penalties' && this.state.penalty === -1) {
       this.calculatePenalties()
     }
@@ -212,6 +216,11 @@ class Payment extends Component<Props, State> {
     if (prevProps.manualPaymentEditId !== this.props.manualPaymentEditId) {
       this.setManualPaymentValues()
     }
+    if (
+      this.props.randomPendingActions.length === 0 &&
+      this.props.randomPendingActions !== prevProps.randomPendingActions
+    )
+      this.clearIsPendingAction()
   }
 
   componentWillUnmount() {
@@ -605,6 +614,10 @@ class Payment extends Component<Props, State> {
     }
   }
 
+  clearIsPendingAction = () => {
+    this.setState({ isPendingAction: false })
+  }
+
   async calculatePenalties() {
     this.setState({ loadingFullScreen: true })
     const res = await calculatePenalties({
@@ -640,6 +653,7 @@ class Payment extends Component<Props, State> {
             handleChangePenaltyAction={(key: string) =>
               this.setState({ penaltyAction: key })
             }
+            isPendingAction={this.state.isPendingAction}
           />
         )
       case 1:
