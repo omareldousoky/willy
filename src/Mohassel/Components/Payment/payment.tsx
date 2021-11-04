@@ -195,8 +195,12 @@ class Payment extends Component<Props, State> {
   }
 
   componentDidMount() {
-    if (this.props.randomPendingActions.length > 0)
+    if (
+      this.props.randomPendingActions.length > 0 &&
+      this.props.randomPendingActions[0].transactions[0].action === 'penalty'
+    ) {
       this.setState({ isPendingAction: true })
+    }
     if (this.props.paymentType === 'penalties' && this.state.penalty === -1) {
       this.calculatePenalties()
     }
