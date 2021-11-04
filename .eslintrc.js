@@ -35,8 +35,8 @@ module.exports = {
     'consistent-return': 'warn',
     'array-callback-return': 'off',
     'no-bitwise': 'off',
-    'no-param-reassign': ['error', { 'props': false }],
-    'prefer-destructuring': ['error', {'object': true, 'array': false}],
+    'no-param-reassign': ['error', { props: false }],
+    'prefer-destructuring': ['error', { object: true, array: false }],
     'import/no-cycle': 'warn',
     'import/no-dynamic-require': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -67,6 +67,7 @@ module.exports = {
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
     'jsx-a11y/no-noninteractive-element-interactions': 'warn',
+    'import/no-duplicates': 'warn',
     'prettier/prettier': [
       'error',
       {
@@ -76,10 +77,22 @@ module.exports = {
         trailingComma: 'es5',
       },
     ],
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: true,
+      },
+    ],
   },
   settings: {
     react: {
       version: 'detect',
+    },
+    'import/resolver': {
+      typescript: {},
+      alias: {
+        map: [['@Shared', './src/Shared/*']],
+      },
     },
   },
 }
