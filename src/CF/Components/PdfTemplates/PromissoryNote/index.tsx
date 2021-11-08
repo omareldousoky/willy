@@ -2,8 +2,8 @@ import React from 'react'
 import Tafgeet from 'tafgeetjs'
 import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 import {
-  numbersToArabic,
   timeToArabicDate,
+  numbersToArabic,
   promissoryNoteGuarantorOrderLocal,
 } from '../../../../Shared/Services/utils'
 import { PromissoryNoteProps } from '../../../Models/contract'
