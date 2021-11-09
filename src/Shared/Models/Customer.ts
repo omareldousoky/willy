@@ -83,6 +83,7 @@ export interface Customer {
   initialConsumerFinanceLimit?: number
   consumerFinanceLimitStatus?: string
   hasLoan?: boolean
+  guarantorMaxCustomers?: number
 }
 
 export interface Score {
@@ -165,4 +166,28 @@ export interface CustomerCreationStep3 {
     maxGroupIndividualPrincipal: number
     maxGroupPrincipal: number
   }
+}
+export enum LinkageStatusEnum {
+  Pending = 'pending',
+  Linked = 'linked',
+  Removed = 'removed',
+}
+
+export interface CheckLinkageResponse {
+  status: LinkageStatusEnum
+  phoneNumber: string
+}
+
+export interface ConfirmLinkageRequest {
+  customerId: string
+  phoneNumber: string
+  customerKey: number
+}
+export interface CFGuarantorDetailsProps {
+  customerId: string
+  guarantors: Array<Customer>
+  hasLoan: boolean
+  isBlocked: boolean
+  getIscore?: (data) => Promise<void>
+  iscores?: Score[]
 }

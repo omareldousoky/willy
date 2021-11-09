@@ -166,7 +166,9 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
           }
         >
           {data.application.product.beneficiaryType === 'individual' &&
-          ['micro', 'nano'].includes(data.application.product.type) ? (
+          ['micro', 'nano', 'consumerFinance'].includes(
+            data.application.product.type
+          ) ? (
             data.application.customer.customerName
           ) : data.application.product.beneficiaryType === 'individual' &&
             data.application.product.type === 'sme' ? (
