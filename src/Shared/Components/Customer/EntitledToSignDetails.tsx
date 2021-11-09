@@ -7,7 +7,7 @@ import local from '../../Assets/ar.json'
 import {
   downloadFile,
   getErrorMessage,
-  guarantorOrderLocal,
+  orderLocal,
   iscoreBank,
   iscoreStatusColor,
   timeToArabicDate,
@@ -213,11 +213,7 @@ export const EntitledToSignDetails = (props: CFEntitledToSignDetailsProps) => {
                   return (
                     <tr key={index}>
                       <td>
-                        {
-                          guarantorOrderLocal[
-                            index && index > 10 ? 'default' : index
-                          ]
-                        }
+                        {orderLocal[index && index > 10 ? 'default' : index]}
                       </td>
                       <td>{guar.customerName}</td>
                       <td>{guar.nationalId}</td>
@@ -301,7 +297,7 @@ export const EntitledToSignDetails = (props: CFEntitledToSignDetailsProps) => {
             <Modal.Title>
               {local.add}
               {
-                guarantorOrderLocal[
+                orderLocal[
                   props.entitledToSignCustomers.length > 10
                     ? 'default'
                     : props.entitledToSignCustomers.length
@@ -320,7 +316,7 @@ export const EntitledToSignDetails = (props: CFEntitledToSignDetailsProps) => {
               }}
               selectedCustomer={selectedEntitledToSignCustomer}
               header={
-                guarantorOrderLocal[
+                orderLocal[
                   props.entitledToSignCustomers.length > 10
                     ? 'default'
                     : props.entitledToSignCustomers.length
