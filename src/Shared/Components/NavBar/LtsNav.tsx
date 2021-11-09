@@ -215,11 +215,7 @@ export const LtsNav = ({ hide }: Props) => {
             <Can I="getIssuedSMELoan" a="application">
               <NavDropdown.Item
                 className="primary"
-                onClick={() =>
-                  history.push('/loans', {
-                    sme: true,
-                  })
-                }
+                onClick={() => history.push('/company-loans')}
               >
                 {local.companies}
               </NavDropdown.Item>
