@@ -191,3 +191,10 @@ export interface CFGuarantorDetailsProps {
   getIscore?: (data) => Promise<void>
   iscores?: Score[]
 }
+export interface CFEntitledToSignDetailsProps {
+  customerId: string
+  entitledToSignCustomers: Array<Customer>
+  isBlocked: boolean
+  getIscore?: (data) => Promise<void>
+  iscores?: Score[]
+}
