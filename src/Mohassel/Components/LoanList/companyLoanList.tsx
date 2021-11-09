@@ -108,7 +108,7 @@ const CompanyLoanList: FunctionComponent<LoanListProps> = (
         actionIcon: 'view',
         actionPermission: true,
         actionOnClick: () =>
-          history.push('/loans/loan-profile', {
+          history.push('/company-loans/loan-profile', {
             id: data.application._id,
           }),
       },
@@ -139,7 +139,7 @@ const CompanyLoanList: FunctionComponent<LoanListProps> = (
         <div
           style={{ cursor: 'pointer' }}
           onClick={() =>
-            history.push('/loans/loan-profile', {
+            history.push('/company-loans/loan-profile', {
               id: data.application._id,
             })
           }

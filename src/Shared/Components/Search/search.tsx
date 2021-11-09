@@ -872,10 +872,14 @@ const Search: FunctionComponent<SearchProps> = ({
                           },
                         ]
                       : []),
-                    {
-                      value: 'consumerFinance',
-                      text: local.consumerFinance,
-                    },
+                    ...(isLoanUrl
+                      ? [
+                          {
+                            value: 'consumerFinance',
+                            text: local.consumerFinance,
+                          },
+                        ]
+                      : []),
                   ],
                   'type',
                   local.productName
