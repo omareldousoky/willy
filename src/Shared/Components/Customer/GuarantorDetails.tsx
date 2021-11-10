@@ -173,7 +173,7 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
       <div className="d-flex flex-column align-items-start justify-content-center">
         {ability.can('addCustomerGuarantors', 'customer') &&
           !props.isBlocked &&
-          (props.hasLoan ? isHQ : true) &&
+          (props.limitStatus === 'approved' ? isHQ : true) &&
           props.guarantors.length < 2 && (
             <div className="mt-5 mb-5">
               <Button variant="primary" onClick={() => setOpenModal(true)}>
@@ -272,7 +272,7 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
                         </Can>
                       )}
 
-                      {(props.hasLoan ? isHQ : true) && (
+                      {(props.limitStatus === 'approved' ? isHQ : true) && (
                         <td style={{ padding: 10 }}>
                           <Button
                             variant="default"

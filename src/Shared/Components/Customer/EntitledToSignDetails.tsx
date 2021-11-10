@@ -11,6 +11,7 @@ import {
   iscoreBank,
   iscoreStatusColor,
   timeToArabicDate,
+  getBranchFromCookie,
 } from '../../Services/utils'
 import Can from '../../config/Can'
 import { Loader } from '../Loader'
@@ -171,11 +172,13 @@ export const EntitledToSignDetails = (props: CFEntitledToSignDetailsProps) => {
   }
 
   const iScoresExist = props.iscores && props.iscores.length > 0
+  const isHQ = getBranchFromCookie() === 'hq'
   return (
     <>
       <div className="d-flex flex-column align-items-start justify-content-center">
         {ability.can('addCustomerGuarantors', 'customer') &&
           !props.isBlocked &&
+          (props.limitStatus === 'approved' ? isHQ : true) &&
           props.entitledToSignCustomers.length < 2 && (
             <div className="mt-5 mb-5">
               <Button variant="primary" onClick={() => setOpenModal(true)}>
@@ -270,7 +273,7 @@ export const EntitledToSignDetails = (props: CFEntitledToSignDetailsProps) => {
                         </Can>
                       )}
 
-                      {!props.isBlocked && (
+                      {(props.limitStatus === 'approved' ? isHQ : true) && (
                         <td style={{ padding: 10 }}>
                           <Button
                             variant="default"

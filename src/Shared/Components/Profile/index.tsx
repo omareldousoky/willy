@@ -154,10 +154,10 @@ export const Profile = ({
                     key={index}
                     customerId={fieldData.customerId}
                     guarantors={fieldData.guarantors}
-                    hasLoan={fieldData.hasLoan}
                     isBlocked={fieldData.isBlocked}
                     getIscore={fieldData.getIscore}
                     iscores={fieldData.iscores}
+                    limitStatus={fieldData.limitStatus}
                   />
                 )
               )
@@ -174,6 +174,7 @@ export const Profile = ({
                     isBlocked={fieldData.isBlocked}
                     getIscore={fieldData.getIscore}
                     iscores={fieldData.iscores}
+                    limitStatus={fieldData.limitStatus}
                   />
                 )
               )
