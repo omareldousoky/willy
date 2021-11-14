@@ -1589,6 +1589,11 @@ class LoanProfile extends Component<Props, State> {
                 value={this.state.application.loanApplicationKey.toString()}
               />
             </div>
+            <FollowUpStatementPDF
+              data={this.state.application}
+              branchDetails={this.state.branchDetails}
+              members={this.state.individualsWithInstallments}
+            />
           </>
         )}
         {this.state.print === 'followUpStatement' && (
