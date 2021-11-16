@@ -4,6 +4,8 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
+import { LtsIcon } from 'Shared/Components'
+import InputGroup from 'react-bootstrap/InputGroup'
 import { Loader } from '../../../Shared/Components/Loader'
 import {
   checkIssueDate,
@@ -34,6 +36,9 @@ export const StepOneForm = (props: any) => {
     setFieldValue,
     consumerFinanceLimitStatus,
     limits,
+    changeMobileNumber,
+    setEditMobileNumber,
+    editMobileNumber,
   } = props
 
   const [mapState, setMapState] = useState(false)
@@ -44,7 +49,8 @@ export const StepOneForm = (props: any) => {
       (governorate) =>
         governorate.governorateName.ar === values.currHomeAddressGov
     )?.districts || []
-
+  // const [editMobile, setEditMobile] = useState(!props.edit)
+  const [tempMobile, setTempMobile] = useState('')
   const fetchGovernorates = async () => {
     setLoading(true)
     const resGov = await getGovernorates()
@@ -558,34 +564,85 @@ export const StepOneForm = (props: any) => {
           </Form.Group>
         </Col>
       </Row>
-
+      {/* <Row> */}
+      {/* <Col sm={6}> */}
       <Form.Group controlId="mobilePhoneNumber">
         <Form.Label className="customer-form-label">
           {local.cfMobileNumber}*
         </Form.Label>
-        <Form.Control
-          type="text"
-          name="mobilePhoneNumber"
-          data-qc="mobilePhoneNumber"
-          value={values.mobilePhoneNumber}
-          onBlur={handleBlur}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            const re = /^\d*$/
-            if (
-              event.currentTarget.value === '' ||
-              re.test(event.currentTarget.value)
-            ) {
-              setFieldValue('mobilePhoneNumber', event.currentTarget.value)
-            }
-          }}
-          maxLength={11}
-          isInvalid={errors.mobilePhoneNumber && touched.mobilePhoneNumber}
-        />
-        <Form.Control.Feedback type="invalid">
-          {errors.mobilePhoneNumber}
-        </Form.Control.Feedback>
+        <InputGroup>
+          <Form.Control
+            type="text"
+            name="mobilePhoneNumber"
+            data-qc="mobilePhoneNumber"
+            value={values.mobilePhoneNumber}
+            onBlur={handleBlur}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              const re = /^\d*$/
+              if (
+                event.currentTarget.value === '' ||
+                re.test(event.currentTarget.value)
+              ) {
+                setFieldValue('mobilePhoneNumber', event.currentTarget.value)
+              }
+            }}
+            maxLength={11}
+            isInvalid={errors.mobilePhoneNumber && touched.mobilePhoneNumber}
+            disabled={!editMobileNumber}
+          />
+          {props.edit && !editMobileNumber && (
+            <InputGroup.Prepend>
+              <Button
+                size="sm"
+                variant="outline-primary"
+                onClick={() => {
+                  setEditMobileNumber(true)
+                  setTempMobile(values.mobilePhoneNumber)
+                }}
+                className="d-flex"
+              >
+                <LtsIcon name="edit" tooltipText={local.edit} />
+              </Button>
+            </InputGroup.Prepend>
+          )}
+          {props.edit && editMobileNumber && (
+            <>
+              <InputGroup.Append>
+                <Button
+                  size="sm"
+                  variant="outline-primary"
+                  onClick={() => {
+                    changeMobileNumber(values.mobilePhoneNumber)
+                  }}
+                  className="d-flex"
+                  disabled={
+                    values.mobilePhoneNumber === tempMobile ||
+                    errors.mobilePhoneNumber
+                  }
+                >
+                  <LtsIcon name="edit" tooltipText={local.edit} />
+                </Button>
+              </InputGroup.Append>
+              <InputGroup.Prepend>
+                <Button
+                  size="sm"
+                  variant="outline-primary"
+                  onClick={() => {
+                    setEditMobileNumber(false)
+                    setFieldValue('mobilePhoneNumber', tempMobile)
+                  }}
+                  className="d-flex"
+                >
+                  <LtsIcon name="remove" tooltipText={local.cancel} />
+                </Button>
+              </InputGroup.Prepend>
+            </>
+          )}
+          <Form.Control.Feedback type="invalid">
+            {errors.mobilePhoneNumber}
+          </Form.Control.Feedback>
+        </InputGroup>
       </Form.Group>
-
       <Form.Group controlId="emailAddress">
         <Form.Label className="customer-form-label">
           {local.emailAddress}
@@ -624,7 +681,7 @@ export const StepOneForm = (props: any) => {
         <Button disabled className="mr-3">
           {local.previous}
         </Button>
-        <Button type="submit" data-qc="next">
+        <Button type="submit" data-qc="next" disabled={editMobileNumber}>
           {local.next}
         </Button>
       </div>

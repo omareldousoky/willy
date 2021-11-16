@@ -66,6 +66,7 @@ interface State {
   oldRepresentative: string
   branchId: string
   globalLimits: GlobalCFLimits
+  editMobileNumber: boolean
 }
 
 class CustomerCreation extends Component<Props, State> {
@@ -99,6 +100,7 @@ class CustomerCreation extends Component<Props, State> {
       oldRepresentative: '',
       branchId: '',
       globalLimits: globalCfLimitsInitialValues,
+      editMobileNumber: !this.props.edit,
     }
   }
 
@@ -525,6 +527,47 @@ class CustomerCreation extends Component<Props, State> {
     }
   }
 
+  changeMobileNumber(number) {
+    console.log(number)
+    // Swal.fire({
+    //   title: local.areYouSure,
+    //   text:
+    //     blocked?.isBlocked === true
+    //       ? local.customerWillBeUnblocked
+    //       : local.customerWillBeBlocked,
+    //   icon: 'warning',
+    //   showCancelButton: true,
+    //   confirmButtonColor: '#3085d6',
+    //   cancelButtonColor: '#d33',
+    //   confirmButtonText:
+    //     blocked?.isBlocked === true
+    //       ? local.unblockCustomer
+    //       : local.blockCustomer,
+    //   cancelButtonText: local.cancel,
+    // }).then(async (result) => {
+    //   if (result.value) {
+    //     setLoading(true)
+    //     const res = await blockCustomer(id, {
+    //       toBeBlocked: blocked?.isBlocked !== true,
+    //       reason: text,
+    //     })
+    //     if (res.status === 'success') {
+    //       setLoading(false)
+    //       Swal.fire(
+    //         '',
+    //         blocked?.isBlocked === true
+    //           ? local.customerUnblockedSuccessfully
+    //           : local.customerBlockedSuccessfully,
+    //         'success'
+    //       ).then(() => window.location.reload())
+    //     } else {
+    //       setLoading(false)
+    //       Swal.fire('', local.searchError, 'error')
+    //     }
+    //   }
+    // })
+  }
+
   previousStep(values, step: number): void {
     this.setState({
       step: step - 1,
@@ -560,6 +603,11 @@ class CustomerCreation extends Component<Props, State> {
               consumerFinanceLimitStatus={
                 this.state.selectedCustomer.consumerFinanceLimitStatus
               }
+              changeMobileNumber={(number) => this.changeMobileNumber(number)}
+              setEditMobileNumber={(bool: boolean) =>
+                this.setState({ editMobileNumber: bool })
+              }
+              editMobileNumber={this.state.editMobileNumber}
             />
           )
         }}
@@ -673,7 +721,9 @@ class CustomerCreation extends Component<Props, State> {
             <Wizard
               currentStepNumber={this.state.step - 1}
               edit={this.props.edit}
-              onClick={this.handleWizardClick}
+              onClick={
+                this.state.editMobileNumber ? null : this.handleWizardClick
+              }
               stepsDescription={[
                 local.mainInfo,
                 local.workInfo,
