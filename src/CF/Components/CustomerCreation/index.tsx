@@ -220,8 +220,8 @@ class CustomerCreation extends Component<Props, State> {
           ? Number(res.body.customer.maxLoansAllowed)
           : 1,
         allowGuarantorLoan: res.body.customer.allowGuarantorLoan,
-        guarantorMaxLoans: res.body.customer.guarantorMaxLoans
-          ? Number(res.body.customer.guarantorMaxLoans)
+        guarantorMaxCustomers: res.body.customer.guarantorMaxCustomers
+          ? Number(res.body.customer.guarantorMaxCustomers)
           : 1,
         maxPrincipal: res.body.customer.maxPrincipal
           ? Number(res.body.customer.maxPrincipal)
