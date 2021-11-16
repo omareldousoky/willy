@@ -1,12 +1,8 @@
 {
   "compilerOptions": {
     "target": "es5",
-		"sourceMap": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "sourceMap": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -19,9 +15,15 @@
     "isolatedModules": true,
     "noEmit": true,
     "noImplicitAny": false,
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": "./src",
+    "paths": {
+      "@Shared/*": ["../src/Shared/*"],
+      "@Mohassel/*": ["../src/Mohassel/*"],
+      "@CF/*": ["../src/CF/*"]
+    }
   },
-	"outDir": "./build/",
+  "outDir": "./build/",
   "include": ["src"],
-	"exclude": ["node_modules"]
+  "exclude": ["node_modules"]
 }

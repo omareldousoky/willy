@@ -88,6 +88,7 @@ import EarlyPaymentReceipt from '../../../../Shared/Components/pdfTemplates/Fina
 import { getEarlyPaymentPdfData } from '../../../../Shared/Utils/payment'
 import { Score, Customer } from '../../../../Shared/Models/Customer'
 import ManualRandomPaymentsActions from './manualRandomPaymentsActions'
+import ReturnItemModal from './ReturnItemModal'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -123,6 +124,7 @@ interface State {
   remainingLoan?: RemainingLoanResponse
   individualsWithInstallments: IndividualWithInstallments
   canReturnItem?: boolean
+  returnItemModalOpen: boolean
 }
 
 interface LoanProfileRouteState {
@@ -162,6 +164,7 @@ class LoanProfile extends Component<Props, State> {
         _id: '',
         status: '',
       },
+      returnItemModalOpen: false,
     }
   }
 
@@ -469,7 +472,7 @@ class LoanProfile extends Component<Props, State> {
         icon: 'rollback',
         title: local.returnItem,
         permission: !!this.state.canReturnItem,
-        onActionClick: () => this.returnItem(),
+        onActionClick: () => this.setState({ returnItemModalOpen: true }),
         isLoading: this.state.canReturnItem === undefined,
       },
       {
@@ -754,7 +757,9 @@ class LoanProfile extends Component<Props, State> {
     )
   }
 
-  async returnItem() {
+  async returnItem(date) {
+    const truthDate = new Date(date).setHours(23, 59, 59, 999).valueOf()
+    this.setState({ returnItemModalOpen: false })
     await Swal.fire({
       title: local.areYouSure,
       text: local.returnItem,
@@ -768,7 +773,7 @@ class LoanProfile extends Component<Props, State> {
       const appId = this.props.location.state.id
       if (result.value) {
         this.setState({ loading: true })
-        const res = await returnItem(appId)
+        const res = await returnItem(appId, truthDate)
         if (res.status === 'success') {
           this.successHandler(doneSuccessfully('returnItem'), () =>
             this.getAppByID(appId)
@@ -1366,6 +1371,14 @@ class LoanProfile extends Component<Props, State> {
                 {this.renderContent()}
               </div>
             </Card>
+            {this.state.returnItemModalOpen && (
+              <ReturnItemModal
+                show={this.state.returnItemModalOpen}
+                hideModal={() => this.setState({ returnItemModalOpen: false })}
+                issueDate={this.state.application.issueDate}
+                submit={(date) => this.returnItem(date)}
+              />
+            )}
           </div>
         )}
         {this.state.print === 'all' && (

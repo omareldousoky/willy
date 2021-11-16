@@ -53,7 +53,9 @@ export const customerCreationValidationStepOne = (
       function checkAge(this) {
         const { birthDate, nationalId } = this.parent
         if (birthDate && nationalId) {
-          const calculatedAge = calculateAge(new Date(birthDate).valueOf())
+          const calculatedAge = calculateAge(
+            new Date(birthDate).setHours(0, 0, 0, 0).valueOf()
+          )
           const maxAge = isCF ? 65 : 67
           const minAge = isCF ? 21 : 18
           return (

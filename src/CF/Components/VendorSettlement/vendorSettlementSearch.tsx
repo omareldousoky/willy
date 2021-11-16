@@ -5,20 +5,22 @@ import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Swal from 'sweetalert2'
+import Select from 'react-select'
+import { theme } from '../../../Shared/theme'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getHalanVendors } from '../../Services/APIs/Vendor/getHalanVendors'
 import { getDateString, getErrorMessage } from '../../../Shared/Services/utils'
 import { Loader } from '../../../Shared/Components/Loader'
 import { getVendorLastSettlementDate } from '../../../Shared/Services/APIs/VendorSettlements/searchSettlements'
 
+export type FormattedVendor = { arabic_name: string; id: string }
+
 const VendorSettlementSearch: FunctionComponent<{
   datePlaceholder: string
   submit: (data) => void
 }> = ({ datePlaceholder, submit }) => {
   const [loading, setLoading] = useState(false)
-  const [vendors, setVendors] = useState<{ arabic_name: string; id: string }[]>(
-    []
-  )
+  const [vendors, setVendors] = useState<FormattedVendor[]>([])
   const [latestSettledAt, setLatestSettledAt] = useState(0)
 
   async function getVendors() {
@@ -56,33 +58,38 @@ const VendorSettlementSearch: FunctionComponent<{
       validateOnChange
     >
       {(formikProps) => (
-        <Form
-          onSubmit={formikProps.handleSubmit}
-          style={{ padding: '10px 30px 26px 30px' }}
-        >
+        <Form onSubmit={formikProps.handleSubmit} className="p-4">
           <Loader open={loading} type="fullsection" />
           <Row>
             <Col sm={6}>
               <div className="dropdown-container">
                 <p className="dropdown-label">{`${local.vendor}*`}</p>
-                <Form.Control
-                  as="select"
-                  type="select"
-                  name="merchantId"
+                <Select
                   data-qc="merchantId"
-                  className="border-0"
-                  value={formikProps.values.merchantId}
-                  onChange={(e) => {
-                    const id = e.currentTarget.value
+                  value={
+                    vendors.find(
+                      (vendor) => vendor.id === formikProps.values.merchantId
+                    ) || null
+                  }
+                  getOptionLabel={(option) => option.arabic_name}
+                  getOptionValue={(option) => option.id}
+                  options={vendors}
+                  theme={theme.selectTheme}
+                  className="w-100"
+                  styles={{
+                    control: (provided) => ({
+                      ...provided,
+                      border: 'none',
+                    }),
+                  }}
+                  placeholder={local.selectFromDropDown}
+                  onChange={(selectedVendor) => {
+                    if (!selectedVendor) return
+                    const { id } = selectedVendor as FormattedVendor
                     getLastSettlementDate(id)
                     formikProps.setFieldValue('merchantId', id)
                   }}
-                >
-                  <option value="" disabled />
-                  {vendors.map((vendor) => (
-                    <option value={vendor.id}>{vendor.arabic_name}</option>
-                  ))}
-                </Form.Control>
+                />
               </div>
             </Col>
             <Col sm={6} className="d-flex align-items-center">
@@ -110,11 +117,11 @@ const VendorSettlementSearch: FunctionComponent<{
                 />
               </div>
             </Col>
-            <Col className="d-flex">
+            <Col className="d-flex my-4">
               <Button
                 type="submit"
-                className="ml-auto"
-                style={{ width: 180, height: 50, marginTop: 20 }}
+                size="lg"
+                className="ml-auto px-4 py-2"
                 disabled={
                   formikProps.values.merchantId.length === 0 ||
                   formikProps.values.toDate.length === 0
