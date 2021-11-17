@@ -7,7 +7,10 @@ import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'
 import Search from '../../../Shared/Components/Search/search'
-import { search as searchAction } from '../../../Shared/redux/search/actions'
+import {
+  issuedLoansSearchFilters as issuedLoansSearchFiltersAction,
+  search as searchAction,
+} from '../../../Shared/redux/search/actions'
 import {
   timeToDateyyymmdd,
   beneficiaryType,
@@ -32,8 +35,10 @@ const CompanyLoanList: FunctionComponent<LoanListProps> = (
 
   const dispatch = useDispatch()
 
-  const { search } = {
+  const { search, setIssuedLoansSearchFilters } = {
     search: (data) => dispatch(searchAction(data)),
+    setIssuedLoansSearchFilters: (data: Record<string, any>) =>
+      dispatch(issuedLoansSearchFiltersAction(data)),
   }
 
   const {
@@ -51,6 +56,12 @@ const CompanyLoanList: FunctionComponent<LoanListProps> = (
   }))
 
   useEffect(() => {
+    const type = ['sme', 'consumerFinance'].includes(
+      issuedLoansSearchFilters.type
+    )
+      ? issuedLoansSearchFilters.type
+      : 'sme'
+    setIssuedLoansSearchFilters({ type })
     let query = {
       ...issuedLoansSearchFilters,
       keyword: undefined, // prevent sending key to BE
@@ -58,9 +69,7 @@ const CompanyLoanList: FunctionComponent<LoanListProps> = (
       from,
       url: 'loan',
       sort: 'issueDate',
-      type: ['sme', 'consumerFinance'].includes(issuedLoansSearchFilters.type)
-        ? issuedLoansSearchFilters.type
-        : 'sme',
+      type,
       customerType: 'company',
     }
 
