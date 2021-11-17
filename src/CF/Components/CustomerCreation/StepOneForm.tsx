@@ -683,7 +683,11 @@ export const StepOneForm = (props: any) => {
         <Button disabled className="mr-3">
           {local.previous}
         </Button>
-        <Button type="submit" data-qc="next" disabled={editMobileNumber}>
+        <Button
+          type="submit"
+          data-qc="next"
+          disabled={props.edit && editMobileNumber}
+        >
           {local.next}
         </Button>
       </div>

@@ -725,7 +725,11 @@ export const StepOneCompanyForm = (props: any) => {
         >
           {local.previous}
         </Button>
-        <Button type="submit" data-qc="next" disabled={editMobileNumber}>
+        <Button
+          type="submit"
+          data-qc="next"
+          disabled={props.edit && editMobileNumber}
+        >
           {local.next}
         </Button>
       </div>
