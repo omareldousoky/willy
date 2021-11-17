@@ -2,9 +2,9 @@ import React from 'react'
 import Tafgeet from 'tafgeetjs'
 import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 import {
-  guarantorOrderLocal,
-  numbersToArabic,
   timeToArabicDate,
+  numbersToArabic,
+  promissoryNoteGuarantorOrderLocal,
 } from '../../../../Shared/Services/utils'
 import { PromissoryNoteProps } from '../../../Models/contract'
 import './styles.scss'
@@ -76,7 +76,15 @@ export const PromissoryNote = ({
           {customerGuarantors.map((guarantor, i) => (
             <div className="mt-5">
               <p>
-                <u>{guarantorOrderLocal[i && i > 10 ? 'default' : i]}</u>
+                <u>
+                  {
+                    promissoryNoteGuarantorOrderLocal[
+                      (i && i > 10) || customerGuarantors.length === 1
+                        ? 'default'
+                        : i
+                    ]
+                  }
+                </u>
               </p>
               <p>الاسم : {guarantor.customerName}</p>
               <p>

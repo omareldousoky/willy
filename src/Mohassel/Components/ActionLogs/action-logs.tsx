@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import { connect } from 'react-redux'
 import Swal from 'sweetalert2'
-import { Loader } from '../../../Shared/Components/Loader'
-import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-import Search from '../../../Shared/Components/Search/search'
-import { search, searchFilters } from '../../../Shared/redux/search/actions'
-import * as local from '../../../Shared/Assets/ar.json'
-import { getErrorMessage, getDateAndTime } from '../../../Shared/Services/utils'
+import { Loader } from '@Shared/Components/Loader'
+import DynamicTable from '@Shared/Components/DynamicTable/dynamicTable'
+import Search from '@Shared/Components/Search/search'
+import { search, searchFilters } from '@Shared/redux/search/actions'
+import * as local from '@Shared/Assets/ar.json'
+import { getErrorMessage, getDateAndTime } from '@Shared/Services/utils'
 
 interface State {
   size: number
