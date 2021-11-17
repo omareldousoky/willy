@@ -1231,5 +1231,7 @@
   "noOfGuarantorMaxCustomers": "عدد العملاء الذي يمكن ضمنهم",
   "initialCFCompanyLimit": "الحد المبدئي للشركة",
   "cfLoan": "تمويل الاستهلاكي",
-  "selectFromDropDown": "اختر من القائمه"
+  "selectFromDropDown": "اختر من القائمه",
+  "changeCfMobileNumber": "تغيير محمول الحد الائتماني",
+  "will": "سيتم"
 }

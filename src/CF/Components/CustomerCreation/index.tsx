@@ -4,6 +4,8 @@ import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 import Swal from 'sweetalert2'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { doneSuccessfully } from 'Shared/localUtils'
+import { changeCustomerMobilePhoneNumber } from 'Shared/Services/APIs/customer/changeCustomerMobileNumber'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
 import { Loader } from '../../../Shared/Components/Loader'
 import { StepOneForm } from './StepOneForm'
@@ -527,45 +529,46 @@ class CustomerCreation extends Component<Props, State> {
     }
   }
 
-  changeMobileNumber(number) {
-    console.log(number)
-    // Swal.fire({
-    //   title: local.areYouSure,
-    //   text:
-    //     blocked?.isBlocked === true
-    //       ? local.customerWillBeUnblocked
-    //       : local.customerWillBeBlocked,
-    //   icon: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#3085d6',
-    //   cancelButtonColor: '#d33',
-    //   confirmButtonText:
-    //     blocked?.isBlocked === true
-    //       ? local.unblockCustomer
-    //       : local.blockCustomer,
-    //   cancelButtonText: local.cancel,
-    // }).then(async (result) => {
-    //   if (result.value) {
-    //     setLoading(true)
-    //     const res = await blockCustomer(id, {
-    //       toBeBlocked: blocked?.isBlocked !== true,
-    //       reason: text,
-    //     })
-    //     if (res.status === 'success') {
-    //       setLoading(false)
-    //       Swal.fire(
-    //         '',
-    //         blocked?.isBlocked === true
-    //           ? local.customerUnblockedSuccessfully
-    //           : local.customerBlockedSuccessfully,
-    //         'success'
-    //       ).then(() => window.location.reload())
-    //     } else {
-    //       setLoading(false)
-    //       Swal.fire('', local.searchError, 'error')
-    //     }
-    //   }
-    // })
+  changeMobileNumber(customerId, mobileNumber) {
+    Swal.fire({
+      title: local.areYouSure,
+      text: `${
+        local.will +
+        ' ' +
+        local.changeCfMobileNumber +
+        ' ' +
+        local.from +
+        ' ' +
+        this.state.step1.mobilePhoneNumber +
+        ' ' +
+        local.to +
+        ' ' +
+        mobileNumber
+      }`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: local.changeCfMobileNumber,
+      cancelButtonText: local.cancel,
+    }).then(async (result) => {
+      if (result.value) {
+        this.setState({ loading: true })
+        const res = await changeCustomerMobilePhoneNumber(
+          customerId,
+          mobileNumber
+        )
+        if (res.status === 'success') {
+          this.setState({ loading: false })
+          Swal.fire('', doneSuccessfully(), 'success').then(() =>
+            this.getCustomerById()
+          )
+        } else {
+          this.setState({ loading: false })
+          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        }
+      }
+    })
   }
 
   previousStep(values, step: number): void {
@@ -603,7 +606,9 @@ class CustomerCreation extends Component<Props, State> {
               consumerFinanceLimitStatus={
                 this.state.selectedCustomer.consumerFinanceLimitStatus
               }
-              changeMobileNumber={(number) => this.changeMobileNumber(number)}
+              changeMobileNumber={(number) =>
+                this.changeMobileNumber(this.state.selectedCustomer._id, number)
+              }
               setEditMobileNumber={(bool: boolean) =>
                 this.setState({ editMobileNumber: bool })
               }

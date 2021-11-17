@@ -62,7 +62,12 @@ export const StepOneForm = (props: any) => {
       Swal.fire('Error !', getErrorMessage(resGov.error.error), 'error')
     }
   }
-
+  const editMobilePermission =
+    ((values.initialConsumerFinanceLimit === 0 &&
+      ability.can('updateCustomer', 'customer') &&
+      consumerFinanceLimitStatus !== 'approved') ||
+      ability.can('editPhoneNumber', 'customer')) &&
+    props.edit
   const getCustomerLimitFromIncome = async (income) => {
     setLoading(true)
     const limitRes = await getCustomerLimitFromMonthlyIncome(income)
@@ -564,8 +569,6 @@ export const StepOneForm = (props: any) => {
           </Form.Group>
         </Col>
       </Row>
-      {/* <Row> */}
-      {/* <Col sm={6}> */}
       <Form.Group controlId="mobilePhoneNumber">
         <Form.Label className="customer-form-label">
           {local.cfMobileNumber}*
@@ -590,7 +593,7 @@ export const StepOneForm = (props: any) => {
             isInvalid={errors.mobilePhoneNumber && touched.mobilePhoneNumber}
             disabled={!editMobileNumber}
           />
-          {props.edit && !editMobileNumber && (
+          {editMobilePermission && !editMobileNumber && (
             <InputGroup.Prepend>
               <Button
                 size="sm"
@@ -605,7 +608,7 @@ export const StepOneForm = (props: any) => {
               </Button>
             </InputGroup.Prepend>
           )}
-          {props.edit && editMobileNumber && (
+          {editMobilePermission && editMobileNumber && (
             <>
               <InputGroup.Append>
                 <Button
