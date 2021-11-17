@@ -102,7 +102,7 @@ class CustomerCreation extends Component<Props, State> {
       oldRepresentative: '',
       branchId: '',
       globalLimits: globalCfLimitsInitialValues,
-      editMobileNumber: !this.props.edit,
+      editMobileNumber: !props.edit,
     }
   }
 
@@ -559,7 +559,7 @@ class CustomerCreation extends Component<Props, State> {
           mobileNumber
         )
         if (res.status === 'success') {
-          this.setState({ loading: false })
+          this.setState({ loading: false, editMobileNumber: false })
           Swal.fire('', doneSuccessfully(), 'success').then(() =>
             this.getCustomerById()
           )

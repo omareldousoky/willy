@@ -49,7 +49,6 @@ export const StepOneForm = (props: any) => {
       (governorate) =>
         governorate.governorateName.ar === values.currHomeAddressGov
     )?.districts || []
-  // const [editMobile, setEditMobile] = useState(!props.edit)
   const [tempMobile, setTempMobile] = useState('')
   const fetchGovernorates = async () => {
     setLoading(true)
