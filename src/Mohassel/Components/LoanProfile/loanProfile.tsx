@@ -440,7 +440,7 @@ class LoanProfile extends Component<Props, State> {
     }
     if (application.body.product.beneficiaryType === 'individual')
       tabsToRender.push(guarantorsTab)
-    if (application.body.product.type === 'sme')
+    if (application.body.product.type === ['sme', 'consumerFinance'])
       tabsToRender.push(entitledToSignTab)
     if (application.body.status === 'paid') tabsToRender.push(customerCardTab)
     if (
