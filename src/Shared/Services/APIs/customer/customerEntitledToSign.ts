@@ -3,7 +3,7 @@ import axios from '../../axiosInstance'
 
 export const addEntitledToSignToCustomer = async (data: {
   customerId: string
-  entitledToSignIds: Array<string>
+  entitledToSign: { id: string; position: string }[]
 }) => {
   const url = API_BASE_URL + `/customer/add-entitled-to-sign`
   try {

@@ -10,6 +10,9 @@ interface Suspect {
   type?: string
 }
 
+type Guarantor = Customer & { position?: string }
+type EntitledToSign = Guarantor
+
 export interface Customer {
   _id?: string
   customerName?: string
@@ -194,7 +197,7 @@ export interface CFGuarantorDetailsProps {
 }
 export interface CFEntitledToSignDetailsProps {
   customerId: string
-  entitledToSignCustomers: Array<Customer>
+  entitledToSignCustomers: Array<EntitledToSign>
   isBlocked: boolean
   getIscore?: (data) => Promise<void>
   iscores?: Score[]

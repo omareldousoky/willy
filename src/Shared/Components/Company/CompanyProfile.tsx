@@ -133,13 +133,27 @@ export const CompanyProfile = () => {
       Swal.fire('Error !', getErrorMessage(iScore.error.error), 'error')
     }
   }
+  function mapEntitledToSignToCustomer({
+    customer,
+    position,
+  }: {
+    customer: Customer
+    position: string
+  }) {
+    return {
+      ...customer,
+      position,
+    }
+  }
   const getCompanyDetails = async () => {
     setIsLoading(true)
     const res = await getCustomerByID(location.state.id)
     if (res.status === 'success') {
       setCompany(res.body.customer)
       setCustomerGuarantors(res.body.guarantors)
-      setEntitledToSignCustomers(res.body.entitledToSign)
+      setEntitledToSignCustomers(
+        res.body.entitledToSign.map(mapEntitledToSignToCustomer)
+      )
       if (ability.can('viewIscore', 'customer')) {
         await getIScores(res.body.customer)
         const guarIds = res.body.guarantors.map((guar) => guar.nationalId)
