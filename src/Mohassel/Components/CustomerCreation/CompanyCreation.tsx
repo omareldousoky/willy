@@ -432,6 +432,9 @@ class CompanyCreation extends Component<Props, State> {
               hasLoan={this.state.hasLoan}
               isGuarantor={this.state.isGuarantor}
               edit={this.props.edit}
+              consumerFinanceLimit={
+                this.state.selectedCustomer.initialConsumerFinanceLimit
+              }
               consumerFinanceLimitStatus={
                 this.state.selectedCustomer.consumerFinanceLimitStatus
               }

@@ -35,6 +35,7 @@ export const StepOneForm = (props: any) => {
     touched,
     setFieldValue,
     consumerFinanceLimitStatus,
+    consumerFinanceLimit,
     limits,
     changeMobileNumber,
     setEditMobileNumber,
@@ -62,7 +63,7 @@ export const StepOneForm = (props: any) => {
     }
   }
   const editMobilePermission =
-    ((values.initialConsumerFinanceLimit === 0 &&
+    ((consumerFinanceLimit === 0 &&
       ability.can('updateCustomer', 'customer') &&
       consumerFinanceLimitStatus !== 'approved') ||
       ability.can('editPhoneNumber', 'customer')) &&

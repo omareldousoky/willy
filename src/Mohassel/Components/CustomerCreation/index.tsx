@@ -438,6 +438,9 @@ class CustomerCreation extends Component<Props, State> {
               edit={this.props.edit}
               hasLoan={this.state.hasLoan}
               isGuarantor={this.state.isGuarantor}
+              consumerFinanceLimit={
+                this.state.selectedCustomer.initialConsumerFinanceLimit
+              }
               consumerFinanceLimitStatus={
                 this.state.selectedCustomer.consumerFinanceLimitStatus
               }
