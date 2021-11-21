@@ -1228,5 +1228,7 @@
   "purchase": "شراء",
   "refund": "إسترجاع",
   "confirmAddLateCustomer": "تأكيد إضافة عميل لقائمة المتأخرين عن السداد",
-  "selectFromDropDown": "اختر من القائمه"
+  "selectFromDropDown": "اختر من القائمه",
+  "microLeads": "متقدمون تمويل متناهي الصغر",
+  "nanoLeads": "متقدمون النانو"
 }
