@@ -1228,5 +1228,12 @@
   "purchase": "شراء",
   "refund": "إسترجاع",
   "confirmAddLateCustomer": "تأكيد إضافة عميل لقائمة المتأخرين عن السداد",
-  "selectFromDropDown": "اختر من القائمه"
+  "selectFromDropDown": "اختر من القائمه",
+  "lastUnpaidInstallmentDate": "تاريخ اخر قسط غير مسدد",
+  "daysSinceLastUnpaidInstallments": "عدد ايام التاخير",
+  "unpaidInstallmentsCount": "عدد الاقساط المتاخره",
+  "principalRemaining": "المتبقي من اصل القرض",
+  "penaltiesPaid": "غرامات مسدده",
+  "penaltiesCanceled": "غرامات معفيه",
+  "penaltiesRemaining": "غرامات مستحقه"
 }

@@ -76,3 +76,17 @@ export interface LegalWarningRequest {
   warningType: LegalWarningType
   customerId: string
 }
+
+export interface WarningExtraDetailsRespose {
+  lastUnpaidInstallmentDate?: number
+  daysSinceLastUnpaidInstallments?: number
+  unpaidInstallmentsCount?: number
+}
+
+export interface SettlementExtraDetailsRespose {
+  principalRemaining?: number
+  courtFees?: number
+  penaltiesPaid?: number
+  penaltiesCanceled?: number
+  penaltiesRemaining?: number
+}
