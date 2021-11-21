@@ -1,4 +1,4 @@
-type activeTabs = 'micro' | 'nano' | 'cf' | 'micro-cf'
+type leadType = 'micro' | 'nano' | 'cf' | 'micro-cf'
 type mapper = {
   title: (() => void) | string
   key: string

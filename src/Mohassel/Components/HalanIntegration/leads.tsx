@@ -49,7 +49,7 @@ export const Leads = () => {
   const [selectedLeadNumber, setSelectedLeadNumber] = useState<string>('')
 
   // active tabs and action modals
-  const [activeTab, setActiveTab] = useState<activeTabs>('micro')
+  const [activeTab, setActiveTab] = useState<leadType>('micro')
   const [rejectLeadModal, setRejectLeadModal] = useState<boolean>(false)
   const [viewRejectionModal, setViewRejectionModal] = useState<boolean>(false)
   const [activeModal, setActiveModal] = useState<'loanOfficer' | 'branch' | ''>(
@@ -246,7 +246,7 @@ export const Leads = () => {
 
   useEffect(() => {
     searchLeads()
-  }, [activeTab, size, from, searchFilters, selectedLead])
+  }, [activeTab, size, from, selectedLead])
 
   useEffect(() => {
     error && Swal.fire(local.error, getErrorMessage(error), 'error')
@@ -261,7 +261,7 @@ export const Leads = () => {
         header={local.applicantsLeads}
         array={leadsTabs}
         active={leadsTabs.findIndex((tab) => tab.stringKey === activeTab)}
-        selectTab={(selected) => setActiveTab(selected as activeTabs)}
+        selectTab={(selected) => setActiveTab(selected as leadType)}
       />
       <Card className="m-4">
         <Loader type="fullscreen" open={isLoading} />
@@ -292,6 +292,7 @@ export const Leads = () => {
             url="lead"
             from={from}
             size={size}
+            leadType={activeTab}
           />
           {leads && (
             <DynamicTable
