@@ -222,6 +222,7 @@ export const CompanyProfile = () => {
       mobilePhoneNumber: customer.mobilePhoneNumber || '',
       initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
       customerGuarantors: customerGuarantors || [],
+      entitledToSignCustomers: entitledToSignCustomers || [],
     })
   }
   const mainInfo = company && [getCompanyInfo({ company, score })]

@@ -2,6 +2,7 @@ import React from 'react'
 import Tafgeet from 'tafgeetjs'
 import { ConsumerFinanceContractData } from '@Shared/Models/consumerContract'
 import {
+  addYearToTimeStamp,
   dayToArabic,
   getNumbersOfGuarantor,
   numbersToArabic,
@@ -16,10 +17,12 @@ export const MicroCFContract = ({
   sme,
   contractData,
   merchantName = 'امكاي فودز',
+  merchantCreationDate = '13/10/2021',
 }: {
   sme: boolean
   contractData: ConsumerFinanceContractData
   merchantName?: string
+  merchantCreationDate?: string
 }) => {
   const noOfGuarantors = contractData.customerGuarantors?.length as number
   const term8Condition = (guarantorsLength: number) => {
@@ -118,12 +121,11 @@ export const MicroCFContract = ({
           تحت رقم 1 لسنه 2021 وذلك اعمالا لاحكام القانون رقم 141 لسنه 2014 الخاص
           بتمويل المشروعات المتوسطه والصغيره ومتناهيه الصغر وقد تقدم الطرف
           الثاني صاحب نشاط تجاري – تجاره مواد غذائيه بطلب الحصول على تمويل من
-          فرع اسيوط – مساره الكائن شارع السنترال امام السنترال وفوق صيدليه د-
-          سمير – مساره – مركز ديروط – محافظة اسيوط وذلك وفقا لاحكام القانون رقم
-          141 لسنه 2014 المشار اليه وذلك بضمان وتضامن الطرف الثالث وقد وافقه
-          الطرف الاول علي ذلك وفقا للشروط والضوابط الوارده بهذا العقد وبعد ان
-          اقر الاطراف باهليتهم القانونيه للتصرف والتعاقد فقد اتفقوا علي بنود
-          العقد التاليه
+          فرع {contractData.branchName}
+          وذلك وفقا لاحكام القانون رقم 141 لسنه 2014 المشار اليه وذلك بضمان
+          وتضامن الطرف الثالث وقد وافقه الطرف الاول علي ذلك وفقا للشروط والضوابط
+          الوارده بهذا العقد وبعد ان اقر الاطراف باهليتهم القانونيه للتصرف
+          والتعاقد فقد اتفقوا علي بنود العقد التاليه
         </p>
       </div>
       <section className="term-container" title="first-term">
@@ -140,9 +142,9 @@ export const MicroCFContract = ({
           الشركة ( الطرف الاول ) نظير تقديم بضاعه من شركه {merchantName} بناء
           علي طلب الطرف الثاني علي ان يتم تحويل هذا التمويل لشركه {merchantName}{' '}
           نظير تقديم البضاعه المسلمه للطرف الثاني استناداً الي العقد المورخ
-          بتاريخ 13/10/2021 بين الطرف الاول وشركه {merchantName} وذلك تمويلا
-          للبضاعه المقدمه منها للعميل ( الطرف الثاني ) وفقا للوارد تفصيلا بالبند
-          التمهيدي
+          بتاريخ {merchantCreationDate} بين الطرف الاول وشركه {merchantName}{' '}
+          وذلك تمويلا للبضاعه المقدمه منها للعميل ( الطرف الثاني ) وفقا للوارد
+          تفصيلا بالبند التمهيدي
         </p>
         <p>
           كما يقرر ويقر الطرف الثاني بان مبلغ التمويل موضوع هذا العقد يتم تحويله
@@ -170,10 +172,12 @@ export const MicroCFContract = ({
           وكافه المصروفات الاخري
         </p>
         <p>
-          ومده هذا العقد 12 شهر تبدا في 13/07/2021 وتنتهي في 13/07/2022 علي ان
-          يتم السداد النقدي بمقر فرع الطرف الاول الكائن في اسيوط - مساره الكائن
-          شارع السنترال امام السنترال وفوق صيدليه د- سمير – مساره – مركز ديروط
-          او باحدي وسائل الدفع الالكتروني المعتمده من هيئه الرقابه الماليه
+          مدة هذا العقد سنة تبدأ من&nbsp;
+          {timeToArabicDateNow(false)}
+          وتنتهي في
+          {addYearToTimeStamp(new Date().valueOf())}علي ان يتم السداد النقدي
+          بمقر فرع الطرف الاول او باحدي وسائل الدفع الالكتروني المعتمده من هيئه
+          الرقابه الماليه
         </p>
         <p>
           اتفق الطرفين الاول والثاني بان تكاليف التمويل سوف تتحملها شركه امكاي
@@ -319,9 +323,39 @@ export const MicroCFContract = ({
           مسجل بعلم الوصول والا اعتبر اعلانه علي العنوان الاول صحيحا ونافذا
           ومنتجا لكافه اثاره القانونيه .
         </p>
-        <div>
-          <p>الطرف الاول</p>
+        <div className="d-flex justify-content-between">
+          <div>
+            <p>الطرف الاول</p>
+            <p>الاسم/ شركه تساهيل للتمويل متناهي الصغر</p>
+            <p> التوقيع/ ..........................</p>
+          </div>
+          <div>
+            <p>الطرف الثاني</p>
+            <p>
+              الأسم/{' '}
+              {contractData.entitledToSignCustomers?.length
+                ? contractData?.entitledToSignCustomers[0].customerName
+                : ''}
+            </p>
+            <p> التوقيع/ ..........................</p>
+          </div>
         </div>
+        <br />
+        {noOfGuarantors ? (
+          <div className="d-flex  justify-content-between">
+            {contractData.customerGuarantors?.map((guarnator, index) => {
+              return (
+                <div key={index}>
+                  <p>الطرف {orderLocal[index + 2]}</p>
+                  <p> الأسم/ {guarnator.customerName}</p>
+                  <p> التوقيع/ ..........................</p>
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          ''
+        )}
       </section>
     </table>
   )

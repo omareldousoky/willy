@@ -8,11 +8,14 @@ export interface BondContractProps {
   initialConsumerFinanceLimit: number
   commercialRegisterNumber?: number
   businessAddress?: string
+  branchName?: string
+  branchAddress?: string
   isCF?: boolean
 }
 export interface ConsumerFinanceContractData extends BondContractProps {
   mobilePhoneNumber: string
   customerGuarantors?: Customer[]
+  entitledToSignCustomers?: Customer[]
 }
 
 export interface AcknowledgmentWasSignedInFrontProps {
