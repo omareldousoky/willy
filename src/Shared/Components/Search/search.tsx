@@ -891,6 +891,10 @@ const Search: FunctionComponent<SearchProps> = ({
                           },
                         ]
                       : []),
+                    {
+                      value: 'consumerFinance',
+                      text: local.cfLoan,
+                    },
                   ],
                   'type',
                   local.productName

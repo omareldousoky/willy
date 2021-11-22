@@ -27,6 +27,7 @@ export const StepOneForm = (props: any) => {
     errors,
     touched,
     setFieldValue,
+    consumerFinanceLimitStatus,
   } = props
 
   const [mapState, setMapState] = useState(false)
@@ -245,6 +246,35 @@ export const StepOneForm = (props: any) => {
             >
               {errors.nationalIdIssueDate ||
                 checkIssueDate(values.nationalIdIssueDate)}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Form.Group controlId="initialConsumerFinanceLimit">
+            <Form.Label className="customer-form-label">
+              {local.initialConsumerFinanceLimit}
+            </Form.Label>
+            <Form.Control
+              type="number"
+              name="initialConsumerFinanceLimit"
+              data-qc="initialConsumerFinanceLimit"
+              value={values.initialConsumerFinanceLimit}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              disabled={
+                props.edit &&
+                !ability.can('editCFLimit', 'customer') &&
+                consumerFinanceLimitStatus === 'approved'
+              }
+              isInvalid={
+                errors.initialConsumerFinanceLimit &&
+                touched.initialConsumerFinanceLimit
+              }
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.initialConsumerFinanceLimit}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>

@@ -855,21 +855,21 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const selectedCustomer = await getCustomerByID(customer._id)
     if (selectedCustomer.status === 'success') {
-      if (selectedCustomer.body.blocked.isBlocked === true) {
+      if (selectedCustomer.body.customer.blocked.isBlocked === true) {
         customerIsBlockerError = local.theCustomerIsBlocked
       }
       if (
-        getAge(selectedCustomer.body.birthDate) >= 21 &&
-        getAge(selectedCustomer.body.birthDate) <= 65
+        getAge(selectedCustomer.body.customer.birthDate) >= 21 &&
+        getAge(selectedCustomer.body.customer.birthDate) <= 65
       ) {
         const check = await this.checkCustomersLimits(
-          [selectedCustomer.body],
+          [selectedCustomer.body.customer],
           false
         )
         if (
           check.flag === true &&
           check.customers &&
-          selectedCustomer.body.blocked.isBlocked !== true
+          selectedCustomer.body.customer.blocked.isBlocked !== true
         ) {
           this.populateCustomer(check.customers[0])
 
@@ -923,25 +923,28 @@ class LoanApplicationCreation extends Component<Props, State> {
     if (selectedGuarantor.status === 'success') {
       let customerIsBlockedError = ''
       let customerInvolvedInAnotherLoanError = ''
-      if (selectedGuarantor.body.blocked.isBlocked === true) {
+      if (selectedGuarantor.body.customer.blocked.isBlocked === true) {
         customerIsBlockedError =
-          selectedGuarantor.body.customerType === 'company'
+          selectedGuarantor.body.customer.customerType === 'company'
             ? local.theCompanyIsBlocked
             : local.theCustomerIsBlocked
       }
       const check = await this.checkCustomersLimits(
-        [selectedGuarantor.body],
+        [selectedGuarantor.body.customer],
         true
       )
       if (
         check.flag === true &&
         check.customers &&
-        selectedGuarantor.body.blocked.isBlocked !== true
+        selectedGuarantor.body.customer.blocked.isBlocked !== true
       ) {
         const application = produce(values as Application, (draftApp) => {
           const defaultGuarantors = { ...draftApp.guarantors }
           const defaultGuar = { ...defaultGuarantors[index] }
-          defaultGuar.guarantor = { ...selectedGuarantor.body, id: obj._id }
+          defaultGuar.guarantor = {
+            ...selectedGuarantor.body.customer,
+            id: obj._id,
+          }
           draftApp.guarantorIds.push(obj._id)
           draftApp.guarantors[index] = defaultGuar
         })
@@ -972,12 +975,12 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const selectedGuarantor = await getCustomerByID(obj._id)
     if (selectedGuarantor.status === 'success') {
-      if (selectedGuarantor.body.blocked.isBlocked !== true) {
+      if (selectedGuarantor.body.customer.blocked.isBlocked !== true) {
         const application = produce(values as Application, (draftApp) => {
           const defaultentitledToSign = { ...draftApp.entitledToSign }
           const defaultCustomer = { ...defaultentitledToSign[index] }
           defaultCustomer.entitledToSign = {
-            ...selectedGuarantor.body,
+            ...selectedGuarantor.body.customer,
             id: obj._id,
           }
           draftApp.entitledToSignIds.push({ customerId: obj._id })
@@ -1147,7 +1150,7 @@ class LoanApplicationCreation extends Component<Props, State> {
     const selectedCustomer = await getCustomerByID(id)
     if (selectedCustomer.status === 'success') {
       this.setState({
-        customerToView: selectedCustomer.body,
+        customerToView: selectedCustomer.body.customer,
         loading: false,
         showModal: true,
       })
@@ -1376,8 +1379,10 @@ class LoanApplicationCreation extends Component<Props, State> {
       const merged: Array<any> = []
       const validationObject: any = {}
       for (let i = 0; i < customers.length; i += 1) {
+        const customer = { ...customers[i] }
+        delete customer.guarantorIds
         const obj = {
-          ...customers[i],
+          ...customer,
           ...(res.body.data
             ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id)
             : { id: customers[i]._id }),
