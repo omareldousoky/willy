@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, useEffect } from 'react'
 import Card from 'react-bootstrap/Card'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
@@ -19,21 +19,18 @@ import {
   removeEmptyArg,
   loanChipStatusClass,
 } from '../../../Shared/Services/utils'
-import { manageLoansArray, manageSMELoansArray } from './manageLoansInitials'
+import { manageSMELoansArray } from './manageLoansInitials'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { ActionsIconGroup } from '../../../Shared/Components'
-import {
-  LoanListLocationState,
-  LoanListHistoryState,
-  LoanListProps,
-} from './types'
+import { LoanListHistoryState, LoanListProps } from './types'
 import { TableMapperItem } from '../../../Shared/Components/DynamicTable/types'
 
-const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
+const CompanyLoanList: FunctionComponent<LoanListProps> = (
+  props: LoanListProps
+) => {
   const [from, setFrom] = useState(0)
   const [size, setSize] = useState(10)
 
-  const location = useLocation<LoanListLocationState>()
   const history = useHistory<LoanListHistoryState>()
 
   const dispatch = useDispatch()
@@ -58,36 +55,27 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
     issuedLoansSearchFilters: state.issuedLoansSearchFilters,
   }))
 
-  const previousLoanType = issuedLoansSearchFilters.type
-  const currentLoanType = location.state?.sme
-    ? 'sme'
-    : previousLoanType && previousLoanType !== 'sme'
-    ? previousLoanType
-    : 'micro'
-
   useEffect(() => {
-    let searchFiltersQuery = {}
-
-    if (previousLoanType === currentLoanType) {
-      searchFiltersQuery = issuedLoansSearchFilters
-    } else {
-      setIssuedLoansSearchFilters({ type: currentLoanType })
-    }
-
+    const type = ['sme', 'consumerFinance'].includes(
+      issuedLoansSearchFilters.type
+    )
+      ? issuedLoansSearchFilters.type
+      : 'sme'
+    setIssuedLoansSearchFilters({ type })
     let query = {
-      ...searchFiltersQuery,
+      ...issuedLoansSearchFilters,
       keyword: undefined, // prevent sending key to BE
       size,
       from,
       url: 'loan',
       sort: 'issueDate',
-      type: currentLoanType,
-      customerType: 'individual',
+      type,
+      customerType: 'company',
     }
 
     query = removeEmptyArg(query)
     search(query)
-  }, [location.state?.sme])
+  }, [])
 
   useEffect(() => {
     if (error) Swal.fire('Error !', getErrorMessage(error), 'error')
@@ -110,6 +98,7 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
       from,
       url: 'loan',
       sort: 'issueDate',
+      customerType: 'company',
     }
 
     query = removeEmptyArg(query)
@@ -128,9 +117,8 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
         actionIcon: 'view',
         actionPermission: true,
         actionOnClick: () =>
-          history.push('/loans/loan-profile', {
+          history.push('/company-loans/loan-profile', {
             id: data.application._id,
-            sme: currentLoanType === 'sme',
           }),
       },
     ]
@@ -160,62 +148,24 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
         <div
           style={{ cursor: 'pointer' }}
           onClick={() =>
-            history.push('/loans/loan-profile', {
+            history.push('/company-loans/loan-profile', {
               id: data.application._id,
-              sme: currentLoanType === 'sme',
             })
           }
         >
-          {data.application.product.beneficiaryType === 'individual' &&
-          ['micro', 'nano', 'consumerFinance'].includes(
-            data.application.product.type
-          ) ? (
-            data.application.customer.customerName
-          ) : data.application.product.beneficiaryType === 'individual' &&
-            data.application.product.type === 'sme' ? (
-            data.application.customer.businessName
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {data.application.group?.individualsInGroup?.map((member) =>
-                member.type === 'leader' ? (
-                  <span key={member.customer._id}>
-                    {member.customer.customerName}
-                  </span>
-                ) : null
-              )}
-            </div>
-          )}
+          {data.application.customer.customerName}
         </div>
       ),
     },
     {
-      title: local.nationalId,
-      key: 'nationalId',
-      render: (data) => (
-        <div
-          style={{ cursor: 'pointer' }}
-          onClick={() =>
-            history.push('/loans/loan-profile', {
-              id: data.application._id,
-              sme: currentLoanType === 'sme',
-            })
-          }
-        >
-          {data.application.product.beneficiaryType === 'individual' ? (
-            data.application.customer.nationalId
-          ) : (
-            <div className="d-flex flex-column">
-              {data.application.group?.individualsInGroup.map((member) =>
-                member.type === 'leader' ? (
-                  <span key={member.customer._id}>
-                    {member.customer.nationalId}
-                  </span>
-                ) : null
-              )}
-            </div>
-          )}
-        </div>
-      ),
+      title: local.commercialRegisterNumber,
+      key: 'commercialRegisterNumber',
+      render: (data) => data.application.customer.commercialRegisterNumber,
+    },
+    {
+      title: local.taxCardNumber,
+      key: 'taxCardNumber',
+      render: (data) => data.application.customer.taxCardNumber,
     },
     {
       title: local.productName,
@@ -254,13 +204,12 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
     },
   ]
 
-  const smePermission = !!location.state?.sme
-
   const searchKeys = [
     'keyword',
     'dateFromTo',
     'status',
     'branch',
+    'companyLoanType',
     'doubtful',
     'writtenOff',
   ]
@@ -271,30 +220,11 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
     'customerKey',
     'customerCode',
     'customerShortenedCode',
+    'taxCardNumber',
+    'commercialRegisterNumber',
   ]
 
-  const manageLoansTabs = smePermission
-    ? manageSMELoansArray()
-    : manageLoansArray()
-  const filteredMappers = smePermission
-    ? tableMappers.filter((mapper) => mapper.key !== 'nationalId')
-    : tableMappers
-  if (smePermission) {
-    filteredMappers.splice(3, 0, {
-      title: local.commercialRegisterNumber,
-      key: 'commercialRegisterNumber',
-      render: (data) => data.application.customer.commercialRegisterNumber,
-    })
-    filteredMappers.splice(4, 0, {
-      title: local.taxCardNumber,
-      key: 'taxCardNumber',
-      render: (data) => data.application.customer.taxCardNumber,
-    })
-    dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
-  } else {
-    dropDownKeys.push('nationalId')
-    searchKeys.splice(4, 0, 'loanType')
-  }
+  const manageLoansTabs = manageSMELoansArray()
 
   return (
     <>
@@ -321,28 +251,26 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
             </div>
           </div>
           <hr className="dashed-line" />
-          {currentLoanType === previousLoanType && (
-            <Search
-              searchKeys={searchKeys}
-              dropDownKeys={dropDownKeys}
-              searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-              setFrom={(fromValue) => setFrom(fromValue)}
-              datePlaceholder={local.issuanceDate}
-              url="loan"
-              from={from}
-              size={size}
-              submitClassName="mt-0"
-              hqBranchIdRequest={props.branchId}
-              sme={location.state?.sme}
-            />
-          )}
+          <Search
+            searchKeys={searchKeys}
+            dropDownKeys={dropDownKeys}
+            searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+            setFrom={(fromValue) => setFrom(fromValue)}
+            datePlaceholder={local.issuanceDate}
+            url="loan"
+            from={from}
+            size={size}
+            submitClassName="mt-0"
+            hqBranchIdRequest={props.branchId}
+            // sme={location.state?.sme}
+          />
           <DynamicTable
             pagination
             from={from}
             size={size}
             url="loan"
             totalCount={totalCount}
-            mappers={filteredMappers}
+            mappers={tableMappers}
             data={loans}
             changeNumber={(key: string, number: number) => {
               if (key === 'from') {
@@ -357,4 +285,4 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
   )
 }
 
-export default LoanList
+export default CompanyLoanList
