@@ -28,15 +28,9 @@ import { CFGuarantorDetailsProps, Customer, Score } from '../../Models/Customer'
 import { ProfileActions } from '../ProfileActions'
 import { Profile } from '../Profile'
 import { InfoBox } from '../InfoBox'
-import {
-  AcknowledgmentWasSignedInFront,
-  AuthorizationToFillInfo,
-  BondContract,
-  PromissoryNote,
-  ConsumerFinanceContract,
-} from '../pdfTemplates/ConsumerContract'
 import { ConsumerFinanceContractData } from '../../Models/consumerContract'
 import CFLimitModal from '../CFLimitModal/CFLimitModal'
+import { MicroCFContract } from '../../../Mohassel/Components/Reports/microCFContract'
 
 export interface CompanyProfileProps {
   data: any
@@ -384,54 +378,10 @@ export const CompanyProfile = () => {
         )}
       </Container>
       {print === 'all' && (
-        <>
-          <ConsumerFinanceContract
-            contractData={customerCFContract as ConsumerFinanceContractData}
-          />
-          <BondContract
-            customerCreationDate={company?.created?.at || 0}
-            customerName={company?.customerName || ''}
-            customerHomeAddress={company?.customerHomeAddress || ''}
-            nationalId={company?.nationalId || ''}
-            initialConsumerFinanceLimit={
-              company?.initialConsumerFinanceLimit || 0
-            }
-          />
-          {customerGuarantors?.length > 0 &&
-            customerGuarantors.map((guarantor) => (
-              <BondContract
-                customerCreationDate={company?.created?.at || 0}
-                customerName={guarantor?.customerName || ''}
-                customerHomeAddress={guarantor?.customerHomeAddress || ''}
-                nationalId={guarantor?.nationalId || ''}
-                initialConsumerFinanceLimit={
-                  company?.initialConsumerFinanceLimit || 0
-                }
-              />
-            ))}
-          <PromissoryNote
-            customerCreationDate={company?.created?.at || 0}
-            customerName={company?.customerName || ''}
-            customerHomeAddress={company?.customerHomeAddress || ''}
-            nationalId={company?.nationalId || ''}
-            initialConsumerFinanceLimit={
-              company?.initialConsumerFinanceLimit || 0
-            }
-            customerGuarantors={customerGuarantors}
-          />
-          <AuthorizationToFillInfo
-            customerCreationDate={company?.created?.at || 0}
-            customerName={company?.customerName || ''}
-            customerHomeAddress={company?.customerHomeAddress || ''}
-            customerGuarantors={customerGuarantors}
-          />
-          <AcknowledgmentWasSignedInFront
-            customerCreationDate={company?.created?.at || 0}
-            customerName={company?.customerName || ''}
-            nationalId={company?.nationalId || ''}
-            customerGuarantors={customerGuarantors}
-          />
-        </>
+        <MicroCFContract
+          contractData={customerCFContract as ConsumerFinanceContractData}
+          sme
+        />
       )}
     </>
   )
