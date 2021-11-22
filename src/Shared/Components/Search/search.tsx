@@ -878,7 +878,7 @@ const Search: FunctionComponent<SearchProps> = ({
                       ? [
                           {
                             value: 'consumerFinance',
-                            text: local.consumerFinance,
+                            text: local.cfLoan,
                           },
                         ]
                       : []),
@@ -898,7 +898,7 @@ const Search: FunctionComponent<SearchProps> = ({
                     },
                     {
                       value: 'consumerFinance',
-                      text: local.consumerFinance,
+                      text: local.cfLoan,
                     },
                   ],
                   'type',
