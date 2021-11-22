@@ -1232,6 +1232,8 @@
   "initialCFCompanyLimit": "الحد المبدئي للشركة",
   "cfLoan": "تمويل الاستهلاكي",
   "selectFromDropDown": "اختر من القائمه",
+  "microLeads": "متقدمون تمويل متناهي الصغر",
+  "nanoLeads": "متقدمون النانو",
   "changeCfMobileNumber": "تغيير رقم المحمول",
   "will": "سيتم"
 }

@@ -53,6 +53,7 @@ const Search: FunctionComponent<SearchProps> = ({
   setFrom,
   dropDownKeys,
   submitClassName,
+  leadType,
 }) => {
   const isLoanUrl = url === 'loan'
   const isIssuedLoansSearch = url === 'loan' && !fundSource
@@ -324,6 +325,7 @@ const Search: FunctionComponent<SearchProps> = ({
       url,
       branchId: hqBranchIdRequest || values.branchId,
     }
+    if (leadType) searchQuery.leadType = leadType
     if (isCibUrl) {
       searchQuery.offset = 0
       searchQuery.branchId = values.branchId || ''
