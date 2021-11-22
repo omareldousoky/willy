@@ -6,6 +6,8 @@ export interface BondContractProps {
   nationalId: string
   customerHomeAddress: string
   initialConsumerFinanceLimit: number
+  commercialRegisterNumber?: number
+  businessAddress?: string
   isCF?: boolean
 }
 export interface ConsumerFinanceContractData extends BondContractProps {

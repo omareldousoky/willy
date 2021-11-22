@@ -1,11 +1,13 @@
 import React from 'react'
+import Tafgeet from 'tafgeetjs'
+import { ConsumerFinanceContractData } from '@Shared/Models/consumerContract'
 import {
   dayToArabic,
   getNumbersOfGuarantor,
   numbersToArabic,
   orderLocal,
   promissoryNoteGuarantorOrderLocal,
-  timeToArabicDate,
+  timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
 import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 import './styles.scss'
@@ -13,9 +15,11 @@ import './styles.scss'
 export const MicroCFContract = ({
   sme,
   contractData,
+  merchantName = 'امكاي فودز',
 }: {
   sme: boolean
-  contractData: any
+  contractData: ConsumerFinanceContractData
+  merchantName?: string
 }) => {
   const noOfGuarantors = contractData.customerGuarantors?.length as number
   const term8Condition = (guarantorsLength: number) => {
@@ -38,9 +42,9 @@ export const MicroCFContract = ({
       </div>
       <p>
         انه في يوم &nbsp;
-        {dayToArabic(new Date(contractData.customerCreationDate).getDay())}
+        {dayToArabic(new Date().getDay())}
         &nbsp; &nbsp; الموافق &nbsp;
-        {timeToArabicDate(contractData.customerCreationDate, false)}
+        {timeToArabicDateNow(false)}
       </p>
       <p>
         <span>حرر هذا العقد في فرع</span>
@@ -133,17 +137,17 @@ export const MicroCFContract = ({
         <p className="head-title">البند الثاني</p>
         <p>
           بموجب هذا العقد وافق الطرف الاول علي منح الطرف الثاني تمويلاُ من
-          الشركة ( الطرف الاول ) نظير تقديم بضاعه من شركه امكاي فودز بناء علي
-          طلب الطرف الثاني علي ان يتم تحويل هذا التمويل لشركه امكاي فودز نظير
-          تقديم البضاعه المسلمه للطرف الثاني استناداً الي العقد المورخ بتاريخ
-          13/10/2021 بين الطرف الاول وشركه امكاي فودز وذلك تمويلا للبضاعه
-          المقدمه منها للعميل ( الطرف الثاني ) وفقا للوارد تفصيلا بالبند
+          الشركة ( الطرف الاول ) نظير تقديم بضاعه من شركه {merchantName} بناء
+          علي طلب الطرف الثاني علي ان يتم تحويل هذا التمويل لشركه {merchantName}{' '}
+          نظير تقديم البضاعه المسلمه للطرف الثاني استناداً الي العقد المورخ
+          بتاريخ 13/10/2021 بين الطرف الاول وشركه {merchantName} وذلك تمويلا
+          للبضاعه المقدمه منها للعميل ( الطرف الثاني ) وفقا للوارد تفصيلا بالبند
           التمهيدي
         </p>
         <p>
           كما يقرر ويقر الطرف الثاني بان مبلغ التمويل موضوع هذا العقد يتم تحويله
-          لحساب شركه امكاي فودز والتزام الطرف الثاني بضمانه وتضامن الطرف الثالث
-          بسداد كامل هذا التمويل
+          لحساب شركه {merchantName} والتزام الطرف الثاني بضمانه وتضامن الطرف
+          الثالث بسداد كامل هذا التمويل
         </p>
         <p>
           ويقر الطرف الثاني بان هذا المبلغ يمثل تمويلاُ له علي ان يلتزم الطرف
@@ -155,11 +159,18 @@ export const MicroCFContract = ({
         <p className="head-title">البند الثالث</p>
         <p>
           يلتزم الطرفان الثاني والثالث ضامنين متضامنين فيما بينهم بسداد اجمالي
-          قيمه التمويل البالغ الحد الاقصي لها 25000 جنيه ( فقط خمسه وعشرون الف
-          جنيه مصري لاغير ) وكافه المصروفات الاخري
+          قيمه التمويل البالغ الحد الاقصي لها{' '}
+          {contractData.initialConsumerFinanceLimit}{' '}
+          {contractData.initialConsumerFinanceLimit
+            ? `(${new Tafgeet(
+                contractData.initialConsumerFinanceLimit,
+                'EGP'
+              ).parse()}))`
+            : ''}{' '}
+          وكافه المصروفات الاخري
         </p>
         <p>
-          ومده هذا العقد 12 شهر تبدا في 13/07/2021 وتنتهي في 13/12/2022 علي ان
+          ومده هذا العقد 12 شهر تبدا في 13/07/2021 وتنتهي في 13/07/2022 علي ان
           يتم السداد النقدي بمقر فرع الطرف الاول الكائن في اسيوط - مساره الكائن
           شارع السنترال امام السنترال وفوق صيدليه د- سمير – مساره – مركز ديروط
           او باحدي وسائل الدفع الالكتروني المعتمده من هيئه الرقابه الماليه
