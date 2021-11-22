@@ -511,6 +511,7 @@ export const CustomerProfile = () => {
         fieldTitle: 'cfGuarantors',
         fieldData: {
           customerId: customerDetails?._id,
+          customerBranch: customerDetails?.branchId,
           hasLoan: !!customerDetails?.hasLoan,
           guarantors: customerGuarantors,
           isBlocked: !!customerDetails?.blocked?.isBlocked,

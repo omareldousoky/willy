@@ -47,6 +47,7 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
         props.customerId,
         ...props.guarantors.map((guar) => guar._id),
       ],
+      branchId: props.customerBranch,
       customerType: companySearch ? 'company' : 'individual',
     }
     setLoading(true)

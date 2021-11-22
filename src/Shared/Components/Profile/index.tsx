@@ -153,6 +153,7 @@ export const Profile = ({
                   <GuarantorDetails
                     key={index}
                     customerId={fieldData.customerId}
+                    customerBranch={fieldData.customerBranch}
                     guarantors={fieldData.guarantors}
                     isBlocked={fieldData.isBlocked}
                     getIscore={fieldData.getIscore}
@@ -170,6 +171,7 @@ export const Profile = ({
                   <EntitledToSignDetails
                     key={index}
                     customerId={fieldData.customerId}
+                    customerBranch={fieldData.customerBranch}
                     entitledToSignCustomers={fieldData.entitledToSignCustomers}
                     isBlocked={fieldData.isBlocked}
                     getIscore={fieldData.getIscore}
