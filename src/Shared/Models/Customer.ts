@@ -188,6 +188,7 @@ export interface ConfirmLinkageRequest {
 }
 export interface CFGuarantorDetailsProps {
   customerId: string
+  customerBranch: string
   guarantors: Array<Customer>
   hasLoan?: boolean
   isBlocked: boolean
@@ -197,6 +198,7 @@ export interface CFGuarantorDetailsProps {
 }
 export interface CFEntitledToSignDetailsProps {
   customerId: string
+  customerBranch: string
   entitledToSignCustomers: Array<EntitledToSign>
   isBlocked: boolean
   getIscore?: (data) => Promise<void>

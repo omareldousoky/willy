@@ -56,6 +56,7 @@ export const EntitledToSignDetails = (props: CFEntitledToSignDetailsProps) => {
         props.customerId,
         ...props.entitledToSignCustomers.map((customer) => customer._id),
       ],
+      branchId: props.customerBranch,
       customerType: 'individual',
     }
     setLoading(true)

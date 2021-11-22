@@ -188,6 +188,7 @@ export const CompanyProfile = () => {
         fieldTitle: 'cfGuarantors',
         fieldData: {
           customerId: company?._id,
+          customerBranch: company?.branchId,
           hasLoan: !!company?.hasLoan,
           guarantors: customerGuarantors,
           getIscore: (data) => getCustomerIscore(data),
@@ -203,6 +204,7 @@ export const CompanyProfile = () => {
         fieldTitle: 'cfEntitledToSign',
         fieldData: {
           customerId: company?._id,
+          customerBranch: company?.branchId,
           entitledToSignCustomers,
           getIscore: (data) => getCustomerIscore(data),
           iscores: iScoreDetails,
