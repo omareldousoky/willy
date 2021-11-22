@@ -330,6 +330,9 @@ class CustomerCreation extends Component<Props, State> {
       objToSubmit.maxLoansAllowed = Number(objToSubmit.maxLoansAllowed)
     else objToSubmit.maxLoansAllowed = 1
     delete objToSubmit.principals
+    objToSubmit.initialConsumerFinanceLimit = Number(
+      objToSubmit.initialConsumerFinanceLimit
+    )
     if (this.props.edit) {
       const res = await editCustomer(
         objToSubmit,
