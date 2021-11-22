@@ -1238,5 +1238,7 @@
   "removeEntitledToSign": "إزالة حق التوقيع",
   "entitledToSignRemovedSuccessfully": "تم إزالة حق التوقيع بنجاح",
   "addEntitledToSign": "إضافة من له حق التوقيع",
-  "noEntitledToSign": "لا يوجد من له حق التوقيع"
+  "noEntitledToSign": "لا يوجد من له حق التوقيع",
+  "changeCfMobileNumber": "تغيير رقم المحمول",
+  "will": "سيتم"
 }

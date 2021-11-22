@@ -6,6 +6,8 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 
+import { LtsIcon } from 'Shared/Components'
+import InputGroup from 'react-bootstrap/InputGroup'
 import Map from '../../../Shared/Components/Map/map'
 import local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -38,6 +40,10 @@ export const StepOneCompanyForm = (props: any) => {
     previousStep,
     edit,
     consumerFinanceLimitStatus,
+    consumerFinanceLimit,
+    changeMobileNumber,
+    setEditMobileNumber,
+    editMobileNumber,
   } = props
   const [mapState, openCloseMap] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -70,6 +76,7 @@ export const StepOneCompanyForm = (props: any) => {
     },
   ])
   const [authorities, setAuthorities] = useState<Array<IscoreAuthority>>([])
+  const [tempMobile, setTempMobile] = useState('')
   const branchId = getBranchFromCookie('ltsbranch')
 
   const policeStations: District[] =
@@ -113,6 +120,12 @@ export const StepOneCompanyForm = (props: any) => {
     setFieldValue('policeStation', '')
     handleChange(event)
   }
+  const editMobilePermission =
+    ((consumerFinanceLimit === 0 &&
+      ability.can('updateCustomer', 'customer') &&
+      consumerFinanceLimitStatus !== 'approved') ||
+      ability.can('editPhoneNumber', 'customer')) &&
+    props.edit
   return (
     <Form onSubmit={handleSubmit}>
       <Loader open={loading} type="fullscreen" />
@@ -207,27 +220,83 @@ export const StepOneCompanyForm = (props: any) => {
             <Form.Label className="customer-form-label">
               {local.mobilePhoneNumber}
             </Form.Label>
-            <Form.Control
-              type="text"
-              name="mobilePhoneNumber"
-              data-qc="mobilePhoneNumber"
-              value={values.mobilePhoneNumber}
-              onBlur={handleBlur}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const re = /^\d*$/
-                if (
-                  event.currentTarget.value === '' ||
-                  re.test(event.currentTarget.value)
-                ) {
-                  setFieldValue('mobilePhoneNumber', event.currentTarget.value)
+            <InputGroup>
+              <Form.Control
+                type="text"
+                name="mobilePhoneNumber"
+                data-qc="mobilePhoneNumber"
+                value={values.mobilePhoneNumber}
+                onBlur={handleBlur}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  const re = /^\d*$/
+                  if (
+                    event.currentTarget.value === '' ||
+                    re.test(event.currentTarget.value)
+                  ) {
+                    setFieldValue(
+                      'mobilePhoneNumber',
+                      event.currentTarget.value
+                    )
+                  }
+                }}
+                maxLength={11}
+                isInvalid={
+                  errors.mobilePhoneNumber && touched.mobilePhoneNumber
                 }
-              }}
-              maxLength={11}
-              isInvalid={errors.mobilePhoneNumber && touched.mobilePhoneNumber}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.mobilePhoneNumber}
-            </Form.Control.Feedback>
+                disabled={!editMobileNumber}
+              />
+              {editMobilePermission && !editMobileNumber && (
+                <InputGroup.Prepend>
+                  <Button
+                    size="sm"
+                    variant="outline-primary"
+                    onClick={() => {
+                      setEditMobileNumber(true)
+                      setTempMobile(values.mobilePhoneNumber)
+                    }}
+                    className="d-flex"
+                  >
+                    <LtsIcon name="edit" tooltipText={local.edit} />
+                  </Button>
+                </InputGroup.Prepend>
+              )}
+              {editMobilePermission && editMobileNumber && (
+                <>
+                  <InputGroup.Append>
+                    <Button
+                      size="sm"
+                      variant="outline-primary"
+                      onClick={() => {
+                        changeMobileNumber(values.mobilePhoneNumber)
+                      }}
+                      className="d-flex"
+                      disabled={
+                        values.mobilePhoneNumber === tempMobile ||
+                        errors.mobilePhoneNumber
+                      }
+                    >
+                      <LtsIcon name="edit" tooltipText={local.edit} />
+                    </Button>
+                  </InputGroup.Append>
+                  <InputGroup.Prepend>
+                    <Button
+                      size="sm"
+                      variant="outline-primary"
+                      onClick={() => {
+                        setEditMobileNumber(false)
+                        setFieldValue('mobilePhoneNumber', tempMobile)
+                      }}
+                      className="d-flex"
+                    >
+                      <LtsIcon name="remove" tooltipText={local.cancel} />
+                    </Button>
+                  </InputGroup.Prepend>
+                </>
+              )}
+              <Form.Control.Feedback type="invalid">
+                {errors.mobilePhoneNumber}
+              </Form.Control.Feedback>
+            </InputGroup>
           </Form.Group>
         </Col>
       </Row>
@@ -657,7 +726,11 @@ export const StepOneCompanyForm = (props: any) => {
         >
           {local.previous}
         </Button>
-        <Button type="submit" data-qc="next">
+        <Button
+          type="submit"
+          data-qc="next"
+          disabled={props.edit && editMobileNumber}
+        >
           {local.next}
         </Button>
       </div>
