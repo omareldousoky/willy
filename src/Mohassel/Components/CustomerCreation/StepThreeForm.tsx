@@ -366,6 +366,29 @@ export const StepThreeForm = (props: any) => {
                     </Form.Group>
                   </Col>
                 )}
+                <Col>
+                  <Form.Group controlId="guarantorMaxCustomers">
+                    <Form.Label className="customer-form-label">{`${local.noOfGuarantorMaxCustomers}`}</Form.Label>
+                    <Form.Control
+                      type="number"
+                      name="guarantorMaxCustomers"
+                      data-qc="guarantorMaxCustomers"
+                      value={values.guarantorMaxCustomers}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      disabled={
+                        !allowed && (props.hasLoan || props.isGuarantor)
+                      }
+                      isInvalid={
+                        errors.guarantorMaxCustomers &&
+                        touched.guarantorMaxCustomers
+                      }
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.guarantorMaxCustomers}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
               </Row>
             </>
           )
