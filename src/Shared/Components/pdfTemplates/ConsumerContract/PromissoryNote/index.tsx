@@ -4,7 +4,7 @@ import { PromissoryNoteProps } from '../../../../Models/consumerContract'
 import {
   timeToArabicDate,
   numbersToArabic,
-  guarantorOrderLocal,
+  promissoryNoteGuarantorOrderLocal,
 } from '../../../../Services/utils'
 import { Header } from '../../pdfTemplateCommon/header'
 
@@ -83,7 +83,15 @@ export const PromissoryNote = ({
           {customerGuarantors.map((guarantor, i) => (
             <div className="mt-5">
               <p>
-                <u>{guarantorOrderLocal[i && i > 10 ? 'default' : i]}</u>
+                <u>
+                  {
+                    promissoryNoteGuarantorOrderLocal[
+                      (i && i > 10) || customerGuarantors.length === 1
+                        ? 'default'
+                        : i
+                    ]
+                  }
+                </u>
               </p>
               <p>الاسم : {guarantor.customerName}</p>
               <p>

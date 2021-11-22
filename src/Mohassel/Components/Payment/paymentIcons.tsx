@@ -26,6 +26,7 @@ interface Props {
   changePaymentState: (data) => void
   handleClickEarlyPayment: () => void
   handleChangePenaltyAction: (key: string) => void
+  isPendingAction: boolean
 }
 class PaymentIcons extends Component<Props, {}> {
   getRequiredAmount() {
@@ -85,8 +86,10 @@ class PaymentIcons extends Component<Props, {}> {
                 <Button
                   className="my-4"
                   disabled={
-                    this.props.application.status === 'pending' &&
-                    this.props.paymentType === 'normal'
+                    (this.props.application.status === 'pending' &&
+                      this.props.paymentType === 'normal') ||
+                    (this.props.paymentType === 'penalties' &&
+                      this.props.isPendingAction)
                   }
                   onClick={() => {
                     if (this.props.paymentType === 'penalties') {
@@ -115,6 +118,7 @@ class PaymentIcons extends Component<Props, {}> {
                       this.props.changePaymentState(1)
                     }}
                     variant="primary"
+                    disabled={this.props.isPendingAction}
                   >
                     {local.cancelPenalty}
                   </Button>
@@ -130,6 +134,7 @@ class PaymentIcons extends Component<Props, {}> {
                       this.props.changePaymentState(3)
                     }}
                     variant="primary"
+                    disabled={this.props.isPendingAction}
                   >
                     {local.manualPayment}
                   </Button>
