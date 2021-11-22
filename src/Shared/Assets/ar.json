@@ -1228,10 +1228,15 @@
   "purchase": "شراء",
   "refund": "إسترجاع",
   "confirmAddLateCustomer": "تأكيد إضافة عميل لقائمة المتأخرين عن السداد",
+  "selectFromDropDown": "اختر من القائمه",
+  "microLeads": "متقدمون تمويل متناهي الصغر",
+  "nanoLeads": "متقدمون النانو",
   "noOfGuarantorMaxCustomers": "عدد العملاء الذي يمكن ضمنهم",
   "initialCFCompanyLimit": "الحد المبدئي للشركة",
   "cfLoan": "تمويل الاستهلاكي",
-  "selectFromDropDown": "اختر من القائمه",
-  "microLeads": "متقدمون تمويل متناهي الصغر",
-  "nanoLeads": "متقدمون النانو"
+  "willNotBeEntitledToSign": "لن يكون له حق التوقيع",
+  "removeEntitledToSign": "إزالة حق التوقيع",
+  "entitledToSignRemovedSuccessfully": "تم إزالة حق التوقيع بنجاح",
+  "addEntitledToSign": "إضافة من له حق التوقيع",
+  "noEntitledToSign": "لا يوجد من له حق التوقيع"
 }
