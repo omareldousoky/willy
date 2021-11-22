@@ -516,6 +516,7 @@ export const CustomerProfile = () => {
           isBlocked: !!customerDetails?.blocked?.isBlocked,
           getIscore: (data) => getCustomerIscore(data),
           iscores: iScoreDetails,
+          limitStatus: customerDetails?.consumerFinanceLimitStatus,
         } as CFGuarantorDetailsProps,
         showFieldCondition: true,
       },
