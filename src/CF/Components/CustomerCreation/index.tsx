@@ -4,6 +4,8 @@ import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 import Swal from 'sweetalert2'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { doneSuccessfully } from 'Shared/localUtils'
+import { changeCustomerMobilePhoneNumber } from 'Shared/Services/APIs/customer/changeCustomerMobileNumber'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
 import { Loader } from '../../../Shared/Components/Loader'
 import { StepOneForm } from './StepOneForm'
@@ -66,6 +68,7 @@ interface State {
   oldRepresentative: string
   branchId: string
   globalLimits: GlobalCFLimits
+  editMobileNumber: boolean
 }
 
 class CustomerCreation extends Component<Props, State> {
@@ -99,6 +102,7 @@ class CustomerCreation extends Component<Props, State> {
       oldRepresentative: '',
       branchId: '',
       globalLimits: globalCfLimitsInitialValues,
+      editMobileNumber: !props.edit,
     }
   }
 
@@ -525,6 +529,48 @@ class CustomerCreation extends Component<Props, State> {
     }
   }
 
+  changeMobileNumber(customerId, mobileNumber) {
+    Swal.fire({
+      title: local.areYouSure,
+      text: `${
+        local.will +
+        ' ' +
+        local.changeCfMobileNumber +
+        ' ' +
+        local.from +
+        ' ' +
+        this.state.step1.mobilePhoneNumber +
+        ' ' +
+        local.to +
+        ' ' +
+        mobileNumber
+      }`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: local.changeCfMobileNumber,
+      cancelButtonText: local.cancel,
+    }).then(async (result) => {
+      if (result.value) {
+        this.setState({ loading: true })
+        const res = await changeCustomerMobilePhoneNumber(
+          customerId,
+          mobileNumber
+        )
+        if (res.status === 'success') {
+          this.setState({ loading: false, editMobileNumber: false })
+          Swal.fire('', doneSuccessfully(), 'success').then(() =>
+            this.getCustomerById()
+          )
+        } else {
+          this.setState({ loading: false })
+          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        }
+      }
+    })
+  }
+
   previousStep(values, step: number): void {
     this.setState({
       step: step - 1,
@@ -557,9 +603,19 @@ class CustomerCreation extends Component<Props, State> {
               hasLoan={this.state.hasLoan}
               isGuarantor={this.state.isGuarantor}
               limits={this.state.globalLimits}
+              consumerFinanceLimit={
+                this.state.selectedCustomer.initialConsumerFinanceLimit
+              }
               consumerFinanceLimitStatus={
                 this.state.selectedCustomer.consumerFinanceLimitStatus
               }
+              changeMobileNumber={(number) =>
+                this.changeMobileNumber(this.state.selectedCustomer._id, number)
+              }
+              setEditMobileNumber={(bool: boolean) =>
+                this.setState({ editMobileNumber: bool })
+              }
+              editMobileNumber={this.state.editMobileNumber}
             />
           )
         }}
@@ -673,7 +729,9 @@ class CustomerCreation extends Component<Props, State> {
             <Wizard
               currentStepNumber={this.state.step - 1}
               edit={this.props.edit}
-              onClick={this.handleWizardClick}
+              onClick={
+                this.state.editMobileNumber ? null : this.handleWizardClick
+              }
               stepsDescription={[
                 local.mainInfo,
                 local.workInfo,

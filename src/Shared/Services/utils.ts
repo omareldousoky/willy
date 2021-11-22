@@ -983,3 +983,16 @@ export const calculateAge = (dateOfBirth: number) => {
   }
   return 0
 }
+
+export const entitledToSignPositionOptions = [
+  { label: local.authorizedPartner, value: 'authorizedPartner' },
+  { label: local.director, value: 'director' },
+  { label: local.manager, value: 'manager' },
+  { label: local.partner, value: 'partner' },
+  { label: local.proprietor, value: 'proprietor' },
+  { label: local.managingDirector, value: 'managingDirector' },
+  { label: local.chairman, value: 'chairman' },
+  { label: local.guarantor, value: 'guarantor' },
+  { label: local.user, value: 'user' },
+  { label: local.other, value: 'other' },
+]

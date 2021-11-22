@@ -24,7 +24,12 @@ import {
   getSMECachedIscore,
 } from '../../Services/APIs/iScore'
 import { blockCustomer } from '../../Services/APIs/customer/blockCustomer'
-import { CFGuarantorDetailsProps, Customer, Score } from '../../Models/Customer'
+import {
+  CFEntitledToSignDetailsProps,
+  CFGuarantorDetailsProps,
+  Customer,
+  Score,
+} from '../../Models/Customer'
 import { ProfileActions } from '../ProfileActions'
 import { Profile } from '../Profile'
 import { InfoBox } from '../InfoBox'
@@ -47,6 +52,9 @@ export const CompanyProfile = () => {
   const [showCFLimitModal, setShowCFLimitModal] = useState(false)
   const [cfModalAction, setCFModalAction] = useState('')
   const [customerGuarantors, setCustomerGuarantors] = useState<Customer[]>([])
+  const [entitledToSignCustomers, setEntitledToSignCustomers] = useState<
+    Customer[]
+  >([])
   const [score, setScore] = useState<Score>()
   const [iScoreDetails, setIScoreDetails] = useState<Score[]>()
   const location = useLocation<{ id: string }>()
@@ -105,11 +113,30 @@ export const CompanyProfile = () => {
     const iScore = await getIscore(obj)
     if (iScore.status === 'success') {
       const guarIds = customerGuarantors.map((guar) => guar.nationalId)
-      await getCachediScores([data.nationalId, ...guarIds])
+      const entitledToSignIds = entitledToSignCustomers.map(
+        (customer) => customer.nationalId
+      )
+      await getCachediScores([
+        data.nationalId,
+        ...guarIds,
+        ...entitledToSignIds,
+      ])
       setIsLoading(false)
     } else {
       setIsLoading(false)
       Swal.fire('Error !', getErrorMessage(iScore.error.error), 'error')
+    }
+  }
+  function mapEntitledToSignToCustomer({
+    customer,
+    position,
+  }: {
+    customer: Customer
+    position: string
+  }) {
+    return {
+      ...customer,
+      position,
     }
   }
   const getCompanyDetails = async () => {
@@ -118,10 +145,19 @@ export const CompanyProfile = () => {
     if (res.status === 'success') {
       setCompany(res.body.customer)
       setCustomerGuarantors(res.body.guarantors)
+      setEntitledToSignCustomers(
+        res.body.entitledToSign.map(mapEntitledToSignToCustomer)
+      )
       if (ability.can('viewIscore', 'customer')) {
         await getIScores(res.body.customer)
         const guarIds = res.body.guarantors.map((guar) => guar.nationalId)
-        await getCachediScores(guarIds as Array<string>)
+        const entitledToSignIds = res.body.entitledToSign.map(
+          (customer) => customer.nationalId
+        )
+        await getCachediScores([
+          ...guarIds,
+          ...entitledToSignIds,
+        ] as Array<string>)
       }
       setIsLoading(false)
     } else {
@@ -146,12 +182,29 @@ export const CompanyProfile = () => {
         fieldTitle: 'cfGuarantors',
         fieldData: {
           customerId: company?._id,
+          customerBranch: company?.branchId,
           hasLoan: !!company?.hasLoan,
           guarantors: customerGuarantors,
           getIscore: (data) => getCustomerIscore(data),
           iscores: iScoreDetails,
           isBlocked: !!company?.blocked?.isBlocked,
+          limitStatus: company?.consumerFinanceLimitStatus,
         } as CFGuarantorDetailsProps,
+        showFieldCondition: true,
+      },
+    ],
+    cfEntitledToSign: [
+      {
+        fieldTitle: 'cfEntitledToSign',
+        fieldData: {
+          customerId: company?._id,
+          customerBranch: company?.branchId,
+          entitledToSignCustomers,
+          getIscore: (data) => getCustomerIscore(data),
+          iscores: iScoreDetails,
+          isBlocked: !!company?.blocked?.isBlocked,
+          limitStatus: company?.consumerFinanceLimitStatus,
+        } as CFEntitledToSignDetailsProps,
         showFieldCondition: true,
       },
     ],
@@ -180,6 +233,10 @@ export const CompanyProfile = () => {
     {
       header: local.guarantorInfo,
       stringKey: 'cfGuarantors',
+    },
+    {
+      header: local.entitledToSign,
+      stringKey: 'cfEntitledToSign',
     },
   ]
   const handleActivationClick = async ({ id, blocked }) => {

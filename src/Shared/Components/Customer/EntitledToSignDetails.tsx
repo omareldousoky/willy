@@ -3,34 +3,43 @@ import Swal from 'sweetalert2'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Table from 'react-bootstrap/Table'
+import Form from 'react-bootstrap/Form'
+import Select from 'react-select'
 import local from '../../Assets/ar.json'
 import {
   downloadFile,
-  getBranchFromCookie,
   getErrorMessage,
-  guarantorOrderLocal,
+  orderLocal,
   iscoreBank,
   iscoreStatusColor,
   timeToArabicDate,
+  getBranchFromCookie,
+  entitledToSignPositionOptions,
 } from '../../Services/utils'
 import Can from '../../config/Can'
 import { Loader } from '../Loader'
 import ability from '../../config/ability'
-import { addGuarantorsToCustomer } from '../../Services/APIs/customer/customerGuarantors'
 import { getCustomerByID } from '../../Services/APIs/customer/getCustomer'
 import { searchCustomer } from '../../Services/APIs/customer/searchCustomer'
 import CustomerSearch from '../CustomerSearch'
-import { Customer, CFGuarantorDetailsProps } from '../../Models/Customer'
+import { Customer, CFEntitledToSignDetailsProps } from '../../Models/Customer'
 import { LtsIcon } from '../LtsIcon'
+import { addEntitledToSignToCustomer } from '../../Services/APIs/customer/customerEntitledToSign'
+import { OptionType } from '../dropDowns/types'
+import { theme } from '../../theme'
 
-export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
+export const EntitledToSignDetails = (props: CFEntitledToSignDetailsProps) => {
   const [openModal, setOpenModal] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [selectedGuarantor, setSelectedGuarantor] = useState<Customer>()
+  const [
+    selectedEntitledToSignCustomer,
+    setSelectedEntitledToSignCustomer,
+  ] = useState<Customer>()
   const [searchResults, setSearchResults] = useState({
     results: [],
     empty: false,
   })
+  const [selectedPosition, setSelectedPosition] = useState('')
 
   function getIscore(data) {
     if (props.getIscore) {
@@ -38,17 +47,17 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
     }
   }
 
-  async function handleSearch(key, query, companySearch?: boolean) {
+  async function handleSearch(key, query) {
     const obj = {
       [key]: query,
       from: 0,
       size: 1000,
       excludedIds: [
         props.customerId,
-        ...props.guarantors.map((guar) => guar._id),
+        ...props.entitledToSignCustomers.map((customer) => customer._id),
       ],
       branchId: props.customerBranch,
-      customerType: companySearch ? 'company' : 'individual',
+      customerType: 'individual',
     }
     setLoading(true)
     const results = await searchCustomer(obj)
@@ -86,7 +95,7 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
           ...targetGuarantor.body.customer,
           id: guarantor._id,
         }
-        setSelectedGuarantor(newGuarantor)
+        setSelectedEntitledToSignCustomer(newGuarantor)
       }
     } else {
       Swal.fire(
@@ -100,15 +109,17 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
 
   async function addGuarantor() {
     const currentGuarantors = [
-      selectedGuarantor?._id,
-      ...props.guarantors.map((guar) => guar._id),
-    ] as string[]
+      { id: selectedEntitledToSignCustomer?._id, position: selectedPosition },
+      ...props.entitledToSignCustomers.map((guar) => {
+        return { id: guar._id, position: guar.position }
+      }),
+    ] as { id: string; position: string }[]
     const obj = {
       customerId: props.customerId,
-      guarantorIds: currentGuarantors,
+      entitledToSign: currentGuarantors,
     }
     if (currentGuarantors.length > 0) {
-      const res = await addGuarantorsToCustomer(obj)
+      const res = await addEntitledToSignToCustomer(obj)
       if (res.status === 'success') {
         setLoading(false)
         Swal.fire('', local.success, 'success').then(() =>
@@ -124,30 +135,34 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
   async function removeGuarantor(guarantor) {
     Swal.fire({
       title: local.areYouSure,
-      text: `${guarantor.customerName} ${local.willNotBeAGuarantor}`,
+      text: `${guarantor.customerName} ${local.willNotBeEntitledToSign}`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: local.removeGuarantor,
+      confirmButtonText: local.removeEntitledToSign,
       cancelButtonText: local.cancel,
     }).then(async (result) => {
       if (result.value) {
-        const guarIds = props.guarantors.filter(
+        const guarIds = props.entitledToSignCustomers.filter(
           (guar) => guar._id !== guarantor._id
         )
-        const ids: string[] = guarIds.map((guar) => guar._id || '')
+        const currentGuarantors = guarIds.map((guar) => {
+          return { id: guar._id, position: guar.position }
+        }) as { id: string; position: string }[]
         setLoading(true)
-        const guarantorToRemove = await addGuarantorsToCustomer({
+        const guarantorToRemove = await addEntitledToSignToCustomer({
           customerId: props.customerId,
-          guarantorIds: ids,
+          entitledToSign: currentGuarantors,
         })
         if (guarantorToRemove.status === 'success') {
-          Swal.fire(local.guarantorRemovedSuccessfully, '', 'success').then(
-            () => {
-              window.location.reload()
-            }
-          )
+          Swal.fire(
+            local.entitledToSignRemovedSuccessfully,
+            '',
+            'success'
+          ).then(() => {
+            window.location.reload()
+          })
         } else {
           Swal.fire(
             'Error !',
@@ -163,7 +178,7 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
   function cancelModal() {
     setOpenModal(false)
     setLoading(false)
-    setSelectedGuarantor(undefined)
+    setSelectedEntitledToSignCustomer(undefined)
     setSearchResults({ results: [], empty: false })
   }
 
@@ -175,14 +190,14 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
         {ability.can('addCustomerGuarantors', 'customer') &&
           !props.isBlocked &&
           (props.limitStatus === 'approved' ? isHQ : true) &&
-          props.guarantors.length < 2 && (
+          props.entitledToSignCustomers.length < 2 && (
             <div className="mt-5 mb-5">
               <Button variant="primary" onClick={() => setOpenModal(true)}>
-                {local.addEditOrRemoveGuarantor}
+                {local.addEntitledToSign}
               </Button>
             </div>
           )}
-        {props.guarantors.length ? (
+        {props.entitledToSignCustomers.length ? (
           <Table style={{ textAlign: 'right' }}>
             <thead>
               <tr>
@@ -191,6 +206,7 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
                 <th>{local.nationalId}</th>
                 <th>{local.birthDate}</th>
                 <th>{local.customerHomeAddress}</th>
+                <th>{local.position}</th>
                 {iScoresExist && (
                   <>
                     <th>iScore</th>
@@ -200,28 +216,25 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
                     <th />
                   </>
                 )}
-                {(props.hasLoan ? isHQ : true) && <th />}
+                {!props.isBlocked && <th />}
               </tr>
             </thead>
             <tbody>
-              {props.guarantors.length &&
-                props.guarantors.map((guar, index) => {
+              {props.entitledToSignCustomers.length &&
+                props.entitledToSignCustomers.map((guar, index) => {
                   const iScore = props?.iscores?.find(
                     (score) => score.nationalId === guar.nationalId
                   )
                   return (
                     <tr key={index}>
                       <td>
-                        {
-                          guarantorOrderLocal[
-                            index && index > 10 ? 'default' : index
-                          ]
-                        }
+                        {orderLocal[index && index > 10 ? 'default' : index]}
                       </td>
                       <td>{guar.customerName}</td>
                       <td>{guar.nationalId}</td>
                       <td>{timeToArabicDate(guar.birthDate ?? 0, false)}</td>
                       <td>{guar.customerHomeAddress}</td>
+                      <td>{guar.position && local[guar.position]}</td>
                       {iScore?.nationalId && iScore.nationalId?.length && (
                         <>
                           <td
@@ -290,7 +303,7 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
             </tbody>
           </Table>
         ) : (
-          <p>{local.noGuarantors}</p>
+          <p>{local.noEntitledToSign}</p>
         )}
       </div>
       {openModal && (
@@ -300,10 +313,10 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
             <Modal.Title>
               {local.add}
               {
-                guarantorOrderLocal[
-                  props.guarantors.length > 10
+                orderLocal[
+                  props.entitledToSignCustomers.length > 10
                     ? 'default'
-                    : props.guarantors.length
+                    : props.entitledToSignCustomers.length
                 ]
               }
             </Modal.Title>
@@ -317,15 +330,41 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
               selectCustomer={(guarantor) => {
                 selectGuarantor(guarantor)
               }}
-              selectedCustomer={selectedGuarantor}
+              selectedCustomer={selectedEntitledToSignCustomer}
               header={
-                guarantorOrderLocal[
-                  props.guarantors.length > 10
+                orderLocal[
+                  props.entitledToSignCustomers.length > 10
                     ? 'default'
-                    : props.guarantors.length
+                    : props.entitledToSignCustomers.length
                 ]
               }
             />
+            {selectedEntitledToSignCustomer && (
+              <div className="d-flex align-items-center">
+                <Form.Label className="font-weight-bold mr-2 mb-0">
+                  {`${local.position} *`}
+                </Form.Label>
+                <Select<OptionType>
+                  name="position"
+                  data-qc="position"
+                  styles={theme.selectStyleWithBorder}
+                  theme={theme?.selectTheme}
+                  className="full-width"
+                  options={entitledToSignPositionOptions}
+                  value={entitledToSignPositionOptions.find(
+                    (el) => el.value === selectedPosition
+                  )}
+                  defaultValue={{
+                    label: local.other,
+                    value: 'other',
+                  }}
+                  onChange={(event) => {
+                    const { value } = event as OptionType
+                    setSelectedPosition(value)
+                  }}
+                />
+              </div>
+            )}
           </Modal.Body>
           <Modal.Footer>
             <Button
@@ -339,7 +378,7 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
             <Button
               variant="primary"
               onClick={() => addGuarantor()}
-              disabled={!selectedGuarantor}
+              disabled={!selectedEntitledToSignCustomer || !selectedPosition}
             >
               {local.submit}
             </Button>

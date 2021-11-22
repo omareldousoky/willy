@@ -524,11 +524,13 @@ export const CustomerProfile = () => {
         fieldTitle: 'cfGuarantors',
         fieldData: {
           customerId: customerDetails?._id,
+          customerBranch: customerDetails?.branchId,
           hasLoan: !!customerDetails?.hasLoan,
           guarantors: customerGuarantors,
           isBlocked: !!customerDetails?.blocked?.isBlocked,
           getIscore: (data) => getCustomerIscore(data),
           iscores: iScoreDetails,
+          limitStatus: customerDetails?.consumerFinanceLimitStatus,
         } as CFGuarantorDetailsProps,
         showFieldCondition: true,
       },

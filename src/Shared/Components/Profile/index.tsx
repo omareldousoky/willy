@@ -17,7 +17,11 @@ import {
   DocumentsUpload,
   GuarantorDetails,
 } from '../Customer'
-import { CFGuarantorDetailsProps } from '../../Models/Customer'
+import {
+  CFEntitledToSignDetailsProps,
+  CFGuarantorDetailsProps,
+} from '../../Models/Customer'
+import { EntitledToSignDetails } from '../Customer/EntitledToSignDetails'
 
 export const Profile = ({
   source,
@@ -149,11 +153,30 @@ export const Profile = ({
                   <GuarantorDetails
                     key={index}
                     customerId={fieldData.customerId}
+                    customerBranch={fieldData.customerBranch}
                     guarantors={fieldData.guarantors}
-                    hasLoan={fieldData.hasLoan}
                     isBlocked={fieldData.isBlocked}
                     getIscore={fieldData.getIscore}
                     iscores={fieldData.iscores}
+                    limitStatus={fieldData.limitStatus}
+                  />
+                )
+              )
+            })}
+          {activeTab === 'cfEntitledToSign' &&
+            tabsData[activeTab].map((field, index) => {
+              const fieldData = field.fieldData as CFEntitledToSignDetailsProps
+              return (
+                Object.keys(fieldData).length > 0 && (
+                  <EntitledToSignDetails
+                    key={index}
+                    customerId={fieldData.customerId}
+                    customerBranch={fieldData.customerBranch}
+                    entitledToSignCustomers={fieldData.entitledToSignCustomers}
+                    isBlocked={fieldData.isBlocked}
+                    getIscore={fieldData.getIscore}
+                    iscores={fieldData.iscores}
+                    limitStatus={fieldData.limitStatus}
                   />
                 )
               )
