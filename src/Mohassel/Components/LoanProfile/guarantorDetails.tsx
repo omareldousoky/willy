@@ -84,8 +84,10 @@ export const GuarantorTableView = (props: Props) => {
       const merged: Array<any> = []
       const validationObject: any = {}
       for (let i = 0; i < customers.length; i += 1) {
+        const customer = { ...customers[i] }
+        delete customer.guarantorIds
         const obj = {
-          ...customers[i],
+          ...customer,
           ...(res.body.data
             ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id)
             : { id: customers[i]._id }),
