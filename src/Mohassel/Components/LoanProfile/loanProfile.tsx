@@ -9,7 +9,7 @@ import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 
 import { getRollableActionsById } from 'Shared/Services/APIs/loanApplication/rollBack'
-import ReturnItemModal from 'CF/Components/Loans/LoanProfile/ReturnItemModal'
+import ReturnItemModal from 'Shared/Components/LoanApplication/ReturnItemModal'
 import { doneSuccessfully } from 'Shared/localUtils'
 import { returnItem } from 'Shared/Services/APIs/loanApplication/returnItemCF'
 import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
