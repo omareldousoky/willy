@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
+import Tafgeet from 'tafgeetjs'
 import local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import {
@@ -52,21 +53,37 @@ const CFLimitModal: FunctionComponent<CFLimitModalProps> = ({
   }, [])
 
   const handleSubmit = async () => {
-    if (customer._id) {
-      setIsLoading(true)
-      const result =
-        action === 'approve'
-          ? await approveCustomerCFLimit(customer._id)
-          : await reviewCustomerCFLimit(customer._id)
-      setIsLoading(false)
-      if (result.status === 'success') {
-        hideModal()
-        await Swal.fire('', local.success, 'success')
-        onSuccess()
-      } else {
-        Swal.fire(local.error, getErrorMessage(result.error.error), 'error')
+    Swal.fire({
+      title: local.areYouSure,
+      text: `${local.approveCFCustomerLimit} ${new Tafgeet(
+        customer.initialConsumerFinanceLimit,
+        'EGP'
+      ).parse()}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: local.approveCFCustomerLimit,
+      cancelButtonText: local.cancel,
+    }).then(async (res) => {
+      if (res.value) {
+        if (customer._id) {
+          setIsLoading(true)
+          const result =
+            action === 'approve'
+              ? await approveCustomerCFLimit(customer._id)
+              : await reviewCustomerCFLimit(customer._id)
+          setIsLoading(false)
+          if (result.status === 'success') {
+            hideModal()
+            await Swal.fire('', local.success, 'success')
+            onSuccess()
+          } else {
+            Swal.fire(local.error, getErrorMessage(result.error.error), 'error')
+          }
+        }
       }
-    }
+    })
   }
 
   return (
