@@ -53,17 +53,22 @@ const CFLimitModal: FunctionComponent<CFLimitModalProps> = ({
   }, [])
 
   const handleSubmit = async () => {
+    const text =
+      action === 'approve'
+        ? local.approveCFCustomerLimit
+        : local.reviewCFCustomerLimit
     Swal.fire({
       title: local.areYouSure,
-      text: `${local.approveCFCustomerLimit} ${new Tafgeet(
-        customer.initialConsumerFinanceLimit,
-        'EGP'
-      ).parse()}`,
+      text: `${text} ${
+        (customer?.initialConsumerFinanceLimit as number) > 0
+          ? new Tafgeet(customer.initialConsumerFinanceLimit, 'EGP').parse()
+          : ''
+      }`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: local.approveCFCustomerLimit,
+      confirmButtonText: text,
       cancelButtonText: local.cancel,
     }).then(async (res) => {
       if (res.value) {
