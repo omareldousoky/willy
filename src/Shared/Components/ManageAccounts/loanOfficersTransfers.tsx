@@ -73,23 +73,25 @@ export const LoanOfficersTransfers = () => {
     {
       title: local.oldRepresentativeName,
       key: 'oldRepresentativeName',
-      render: (data) => data.oldRepresentativeName,
+      render: (data) => data.oldRepresentativeName || local.noDataAvaliable,
     },
     {
       title: local.newRepresentativeName,
       key: 'newRepresentativeName',
-      render: (data) => data.newRepresentativeName,
+      render: (data) => data.newRepresentativeName || local.noDataAvaliable,
     },
     {
       title: local.actionDate,
       key: 'updatedAt',
       render: (data) =>
-        data.updated?.at ? getDateAndTime(data.updated?.at) : '',
+        data.updated?.at
+          ? getDateAndTime(data.updated?.at)
+          : local.noDataAvaliable,
     },
     {
       title: local.updatedBy,
       key: 'userName',
-      render: (data) => data.updated.userName,
+      render: (data) => data.updated.userName || local.noDataAvaliable,
     },
   ]
 
@@ -107,7 +109,7 @@ export const LoanOfficersTransfers = () => {
         <Card.Body>
           <Card.Title>{local.loanOfficersTransfers}</Card.Title>
           <hr className="dashed-line" />
-          <Form>
+          <Form className="mb-3">
             <Row>
               <Col sm={4}>
                 <Form.Group controlId="oldRepresentativeId">
@@ -194,21 +196,18 @@ export const LoanOfficersTransfers = () => {
               </Col>
             </Row>
           </Form>
-
-          {logsData.totalCount > 0 && (
-            <DynamicTable
-              from={from}
-              size={size}
-              pagination
-              totalCount={logsData.totalCount}
-              mappers={mappers}
-              data={logsData.data}
-              changeNumber={(key: string, number: number) => {
-                if (key === 'size') setSize(number)
-                if (key === 'from') setFrom(number)
-              }}
-            />
-          )}
+          <DynamicTable
+            from={from}
+            size={size}
+            pagination
+            totalCount={logsData.totalCount}
+            mappers={mappers}
+            data={logsData.data}
+            changeNumber={(key: string, number: number) => {
+              key === 'size' && setSize(number)
+              key === 'from' && setFrom(number)
+            }}
+          />
         </Card.Body>
       </Card>
     </>
