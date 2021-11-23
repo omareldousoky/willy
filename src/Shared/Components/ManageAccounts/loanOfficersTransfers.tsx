@@ -31,7 +31,6 @@ export const LoanOfficersTransfers = () => {
   const [loanOfficers, setLoanOfficers] = useState<LoanOfficer[]>([])
   const [size, setSize] = useState<number>(10)
   const [from, setFrom] = useState<number>(0)
-
   const [logsInput, setLogsInput] = useState<LogsInput>({
     oldRepresentativeId: '',
     newRepresentativeId: '',
