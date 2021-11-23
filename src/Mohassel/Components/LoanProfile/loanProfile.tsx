@@ -8,6 +8,10 @@ import * as Barcode from 'react-barcode'
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 
+import { getRollableActionsById } from 'Shared/Services/APIs/loanApplication/rollBack'
+import ReturnItemModal from 'CF/Components/Loans/LoanProfile/ReturnItemModal'
+import { doneSuccessfully } from 'Shared/localUtils'
+import { returnItem } from 'Shared/Services/APIs/loanApplication/returnItemCF'
 import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
 import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions'
 import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment'
@@ -133,6 +137,8 @@ interface State {
   remainingLoan?: RemainingLoanResponse
   individualsWithInstallments: IndividualWithInstallments
   loanUsage: string
+  canReturnItem?: boolean
+  returnItemModalOpen: boolean
 }
 
 interface LoanProfileRouteState {
@@ -173,6 +179,7 @@ class LoanProfile extends Component<Props, State> {
         _id: '',
         status: '',
       },
+      returnItemModalOpen: false,
     }
   }
 
@@ -215,6 +222,15 @@ class LoanProfile extends Component<Props, State> {
     }
   }
 
+  async getAppRollableActionsByID(id) {
+    const actions = await getRollableActionsById(id)
+    if (actions.status === 'success') {
+      this.setState({ canReturnItem: Object.keys(actions.body).length === 0 })
+    } else {
+      this.setState({ canReturnItem: true })
+    }
+  }
+
   async getAppByID(id) {
     await this.getMembersShare(id)
     this.setState({
@@ -239,6 +255,13 @@ class LoanProfile extends Component<Props, State> {
       } else this.setTabsToRender(application)
       if (ability.can('viewIscore', 'customer'))
         this.getCachediScores(application.body)
+      if (
+        application.body.status === 'issued' &&
+        application.body.product.type === 'consumerFinance' &&
+        ability.can('returnCFItem', 'cfApplication')
+      )
+        this.getAppRollableActionsByID(application.body._id)
+      else this.setState({ canReturnItem: false })
       await this.getLoanUsages()
     } else {
       this.setState({ loading: false }, () =>
@@ -678,6 +701,13 @@ class LoanProfile extends Component<Props, State> {
           }),
       },
       {
+        icon: 'rollback',
+        title: local.returnItem,
+        permission: !!this.state.canReturnItem,
+        onActionClick: () => this.setState({ returnItemModalOpen: true }),
+        isLoading: this.state.canReturnItem === undefined,
+      },
+      {
         icon: 'close',
         title: local.writeOffLoan,
         permission:
@@ -1114,6 +1144,47 @@ class LoanProfile extends Component<Props, State> {
     }
   }
 
+  successHandler(successMsg: string, callback?: () => void) {
+    this.setState({ loading: false })
+    Swal.fire('', successMsg, 'success').then(() =>
+      callback ? callback() : undefined
+    )
+  }
+
+  failureHandler(res: any) {
+    this.setState({ loading: false }, () =>
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    )
+  }
+
+  async returnItem(date) {
+    const truthDate = new Date(date).setHours(23, 59, 59, 999).valueOf()
+    this.setState({ returnItemModalOpen: false })
+    await Swal.fire({
+      title: local.areYouSure,
+      text: local.returnItem,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#7dc356',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: local.returnItem,
+      cancelButtonText: local.cancel,
+    }).then(async (result) => {
+      const appId = this.props.location.state.id
+      if (result.value) {
+        this.setState({ loading: true })
+        const res = await returnItem(appId, truthDate)
+        if (res.status === 'success') {
+          this.successHandler(doneSuccessfully('returnItem'), () =>
+            this.getAppByID(appId)
+          )
+        } else {
+          this.failureHandler(res)
+        }
+      }
+    })
+  }
+
   renderContent() {
     switch (this.state.activeTab) {
       case 'loanDetails':
@@ -1466,6 +1537,14 @@ class LoanProfile extends Component<Props, State> {
                 {this.renderContent()}
               </div>
             </Card>
+            {this.state.returnItemModalOpen && (
+              <ReturnItemModal
+                show={this.state.returnItemModalOpen}
+                hideModal={() => this.setState({ returnItemModalOpen: false })}
+                issueDate={this.state.application.issueDate}
+                submit={(date) => this.returnItem(date)}
+              />
+            )}
           </div>
         )}
         {this.state.print === 'all' && (
