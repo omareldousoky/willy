@@ -1,6 +1,7 @@
 /* eslint-disable react/display-name */
 
 import * as React from 'react'
+import { LoanOfficersTransfers } from 'Shared/Components/ManageAccounts'
 import CustomerCreation from '../Components/CustomerCreation'
 import UserCreation from '../Components/UserCreation/userCreation'
 import FormulaCreation from '../Components/LoanFormulaCreation/loanFormulaCreation'
@@ -586,6 +587,11 @@ const appRoutes = [
                 path: '/loanOfficer-details',
                 label: local.loanOfficer,
                 render: (props) => <UserDetails {...props} />,
+              },
+              {
+                path: '/transfer-logs',
+                label: local.loanOfficersTransfers,
+                render: () => <LoanOfficersTransfers />,
               },
             ],
           },
