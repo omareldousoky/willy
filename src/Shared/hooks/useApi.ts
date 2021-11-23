@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Swal from 'sweetalert2'
+import * as local from 'Shared/Assets/ar.json'
 import { getErrorMessage } from '../Services/utils'
 
 export default function useApi(apiCall, params) {
@@ -9,7 +10,7 @@ export default function useApi(apiCall, params) {
     if (res.status === 'success') {
       setData(res.body)
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
     }
   }
 
