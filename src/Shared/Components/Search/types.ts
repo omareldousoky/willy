@@ -40,4 +40,5 @@ export interface SearchProps {
   submitClassName?: string
   sme?: boolean
   cf?: boolean
+  leadType?: leadType
 }

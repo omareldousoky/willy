@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { LoanOfficersTransfers } from 'Shared/Components/ManageAccounts'
+import { Leads } from 'Mohassel/Components/HalanIntegration/leads'
 import CustomerCreation from '../Components/CustomerCreation'
 import UserCreation from '../Components/UserCreation/userCreation'
 import FormulaCreation from '../Components/LoanFormulaCreation/loanFormulaCreation'
@@ -43,7 +44,7 @@ import ReportsHome from '../Components/Reports/reportsHome'
 import MoveCustomers from '../Components/MoveCustomers/moveCustomers'
 import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation'
 import AssignProductsToBranches from '../Components/Branch/assignProductsToBranches'
-import Leads from '../Components/HalanIntegration/leads'
+
 import AssignLoanOfficer from '../Components/HalanIntegration/assignLoanOfficer'
 import PrincipleThreshold from '../Components/ManageFinance/principleThreshold'
 import LeadProfile from '../Components/HalanIntegration/leadProfile'
@@ -653,18 +654,18 @@ const appRoutes = [
       {
         path: '/halan-integration',
         label: local.halan,
-        render: (props) => (
+        render: () => (
           <Can I="getLead" a="halanuser">
-            <Leads {...props} />
+            <Leads />
           </Can>
         ),
         routes: [
           {
             path: '/leads',
             label: local.applicantsLeads,
-            render: (props) => (
+            render: () => (
               <Can I="getLead" a="halanuser">
-                <Leads {...props} />
+                <Leads />
               </Can>
             ),
             routes: [

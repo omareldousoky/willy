@@ -1232,5 +1232,7 @@
   "loanOfficersTransfers": "تحويلات المندوبين",
   "oldRepresentativeName": "اسم المندوب السابق",
   "newRepresentativeName": "اسم المندوب الحالي",
-  "updatedBy": "تم التعديل بواسطة"
+  "updatedBy": "تم التعديل بواسطة",
+  "microLeads": "متقدمون تمويل متناهي الصغر",
+  "nanoLeads": "متقدمون النانو"
 }
