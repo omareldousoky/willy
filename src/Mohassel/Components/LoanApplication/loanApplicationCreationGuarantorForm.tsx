@@ -9,7 +9,11 @@ import Select from 'react-select'
 
 import * as local from '../../../Shared/Assets/ar.json'
 import GroupInfoBox from '../LoanProfile/groupInfoBox'
-import { guarantorOrderLocal, orderLocal } from '../../../Shared/Services/utils'
+import {
+  entitledToSignPositionOptions,
+  guarantorOrderLocal,
+  orderLocal,
+} from '../../../Shared/Services/utils'
 import { InfoBox } from '../../../Shared/Components'
 import {
   getCompanyInfo,
@@ -29,18 +33,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
     setFieldValue,
   } = props
   const companyCheck = props.customer.customerType === 'company'
-  const entitledToSignOptions = [
-    { label: local.authorizedPartner, value: 'authorizedPartner' },
-    { label: local.director, value: 'director' },
-    { label: local.manager, value: 'manager' },
-    { label: local.partner, value: 'partner' },
-    { label: local.proprietor, value: 'proprietor' },
-    { label: local.managingDirector, value: 'managingDirector' },
-    { label: local.chairman, value: 'chairman' },
-    { label: local.guarantor, value: 'guarantor' },
-    { label: local.user, value: 'user' },
-    { label: local.other, value: 'other' },
-  ]
+
   return (
     <>
       <Form style={{ width: '90%', padding: 20 }} onSubmit={handleSubmit}>
@@ -182,8 +175,8 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                               styles={theme.selectStyleWithBorder}
                               theme={theme?.selectTheme}
                               className="full-width"
-                              options={entitledToSignOptions}
-                              value={entitledToSignOptions.find(
+                              options={entitledToSignPositionOptions}
+                              value={entitledToSignPositionOptions.find(
                                 (el) =>
                                   el.value === values.entitledToSign[i].position
                               )}

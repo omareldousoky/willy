@@ -50,7 +50,7 @@ import PaymentReceipt from '../../../../Shared/Components/pdfTemplates/Financial
 import { calculatePenalties } from '../../../../Shared/Services/APIs/clearance/calculatePenalties'
 import { numTo2Decimal } from '../../../../Mohassel/Components/CIB/textFiles'
 import { FollowUpStatementView } from './followupStatementView'
-import { remainingLoan } from '../../../../Mohassel/Services/APIs/Loan/remainingLoan'
+import { remainingLoan } from '../../../../Shared/Services/APIs/Loan/remainingLoan'
 import { getGroupMemberShares } from '../../../../Mohassel/Services/APIs/Loan/groupMemberShares'
 import { InfoBox, LtsIcon, ProfileActions } from '../../../../Shared/Components'
 

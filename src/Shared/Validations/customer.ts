@@ -103,7 +103,7 @@ export const customerCreationValidationStepOne = (
           }
         )
         .required(local.required),
-      otherwise: Yup.number(),
+      otherwise: Yup.number().min(0).max(200000, maxValue(200000)),
     }),
     customerHomeAddress: Yup.string()
       .trim()
@@ -114,7 +114,11 @@ export const customerCreationValidationStepOne = (
     mobilePhoneNumber: Yup.string().when('CF', {
       is: true,
       then: Yup.string().min(11, local.minLength11).required(local.required),
-      otherwise: Yup.string().min(11, local.minLength11),
+      otherwise: Yup.string().when('initialConsumerFinanceLimit', {
+        is: (initialConsumerFinanceLimit) => initialConsumerFinanceLimit > 0,
+        then: Yup.string().min(11, local.minLength11).required(local.required),
+        otherwise: Yup.string().min(11, local.minLength11),
+      }),
     }),
     faxNumber: Yup.string()
       .max(11, local.maxLength10)
@@ -186,15 +190,15 @@ export const customerCreationValidationStepThreeEdit = Yup.object().shape({
   partTimeEmployeeCount: Yup.number(),
   comments: Yup.string().trim().max(500, local.maxLength100),
   guarantorMaxLoans: Yup.number()
-    .required()
     .min(1, local.mustBeOneOrMore)
-    .max(100, local.mustBeNotMoreThanHundred)
-    .required(local.required),
+    .max(100, local.mustBeNotMoreThanHundred),
+  guarantorMaxCustomers: Yup.number()
+    .min(1, local.mustBeOneOrMore)
+    .max(100, local.mustBeNotMoreThanHundred),
   maxLoansAllowed: Yup.number()
     .required()
     .min(1, local.mustBeOneOrMore)
-    .max(100, local.mustBeNotMoreThanHundred)
-    .required(local.required),
+    .max(100, local.mustBeNotMoreThanHundred),
   maxPrincipal: Yup.number()
     .min(0, local.mustBeGreaterThanZero)
     .test(

@@ -20,20 +20,27 @@ import {
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCustomer'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
-import { BondContract } from '../PdfTemplates/BondContractCF'
-import { ConsumerFinanceContract } from '../PdfTemplates/ConsumerFinanceContract'
-import { ConsumerFinanceContractData } from '../../Models/contract'
-import { AcknowledgmentWasSignedInFront } from '../PdfTemplates/AcknowledgmentWasSignedInFront'
-import { PromissoryNote } from '../PdfTemplates/PromissoryNote'
-import { AuthorizationToFillInfo } from '../PdfTemplates/AuthorizationToFillInfo'
-import CFLimitModal from './CFLimitModal'
+
+import CFLimitModal from '../../../Shared/Components/CFLimitModal/CFLimitModal'
 import { getCFLimits } from '../../Services/APIs/config'
 import {
   GlobalCFLimits,
   globalCfLimitsInitialValues,
 } from '../../../Shared/Models/globalLimits'
-import { Customer, Score } from '../../../Shared/Models/Customer'
-import { CFGuarantorDetailsProps } from './types'
+import {
+  Customer,
+  Score,
+  CFGuarantorDetailsProps,
+} from '../../../Shared/Models/Customer'
+
+import {
+  AcknowledgmentWasSignedInFront,
+  AuthorizationToFillInfo,
+  BondContract,
+  PromissoryNote,
+  ConsumerFinanceContract,
+} from '../../../Shared/Components/pdfTemplates/ConsumerContract'
+import { ConsumerFinanceContractData } from '../../../Shared/Models/consumerContract'
 
 interface LocationState {
   id: string
@@ -131,6 +138,7 @@ export const CustomerProfile = () => {
       mobilePhoneNumber: customer.mobilePhoneNumber || '',
       initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
       customerGuarantors: customerGuarantors || [],
+      isCF: true,
     })
   }
   async function getGlobalCfLimits() {
@@ -148,8 +156,8 @@ export const CustomerProfile = () => {
     setLoading(true)
     const res = await getCustomerByID(location.state.id)
     if (res.status === 'success') {
-      await setCustomerDetails(res.body.customer)
-      await setCustomerGuarantors(res.body.guarantors)
+      setCustomerDetails(res.body.customer)
+      setCustomerGuarantors(res.body.guarantors)
       if (ability.can('viewIscore', 'customer')) {
         const guarIds = res.body.guarantors.map((guar) => guar.nationalId)
         await getCachediScores([res.body.customer.nationalId, ...guarIds])
@@ -187,7 +195,7 @@ export const CustomerProfile = () => {
     const iScore = await getIscore(obj)
     if (iScore.status === 'success') {
       const guarIds = customerGuarantors.map((guar) => guar.nationalId)
-      getCachediScores([data.nationalId, ...guarIds])
+      await getCachediScores([data.nationalId, ...guarIds])
       setLoading(false)
     } else {
       setLoading(false)
@@ -412,9 +420,9 @@ export const CustomerProfile = () => {
         showFieldCondition: true,
       },
       {
-        fieldTitle: local.guarantorMaxLoans,
-        fieldData: customerDetails?.guarantorMaxLoans
-          ? customerDetails.guarantorMaxLoans
+        fieldTitle: local.noOfGuarantorMaxCustomers,
+        fieldData: customerDetails?.guarantorMaxCustomers
+          ? customerDetails.guarantorMaxCustomers
           : '-',
         showFieldCondition: true,
       },
@@ -503,11 +511,13 @@ export const CustomerProfile = () => {
         fieldTitle: 'cfGuarantors',
         fieldData: {
           customerId: customerDetails?._id,
+          customerBranch: customerDetails?.branchId,
           hasLoan: !!customerDetails?.hasLoan,
           guarantors: customerGuarantors,
           isBlocked: !!customerDetails?.blocked?.isBlocked,
           getIscore: (data) => getCustomerIscore(data),
           iscores: iScoreDetails,
+          limitStatus: customerDetails?.consumerFinanceLimitStatus,
         } as CFGuarantorDetailsProps,
         showFieldCondition: true,
       },
@@ -588,19 +598,17 @@ export const CustomerProfile = () => {
   }
   return (
     <>
-      <Container className="print-none">
-        <div>
+      <Container className="print-none mx-2" fluid>
+        <div style={{ margin: 15 }}>
           <div className="d-flex flex-row justify-content-between m-2">
-            <div
-              className="d-flex justify-content-start align-items-center"
-              style={{ width: '45%' }}
-            >
+            <div className="d-flex justify-content-start align-items-center text-nowrap">
               <h4> {local.viewCustomer}</h4>
               <span
                 style={{
                   display: 'flex',
                   padding: 10,
                   marginRight: 10,
+                  marginBottom: 10,
                   borderRadius: 30,
                   border: `1px solid ${
                     cfLimitStatusLocale[
@@ -666,6 +674,7 @@ export const CustomerProfile = () => {
             initialConsumerFinanceLimit={
               customerDetails?.initialConsumerFinanceLimit || 0
             }
+            isCF
           />
           {customerGuarantors?.length > 0 &&
             customerGuarantors.map((guarantor) => (
@@ -677,6 +686,7 @@ export const CustomerProfile = () => {
                 initialConsumerFinanceLimit={
                   customerDetails?.initialConsumerFinanceLimit || 0
                 }
+                isCF
               />
             ))}
           <PromissoryNote
@@ -688,18 +698,21 @@ export const CustomerProfile = () => {
               customerDetails?.initialConsumerFinanceLimit || 0
             }
             customerGuarantors={customerGuarantors}
+            isCF
           />
           <AuthorizationToFillInfo
             customerCreationDate={customerDetails?.created?.at || 0}
             customerName={customerDetails?.customerName || ''}
             customerHomeAddress={customerDetails?.customerHomeAddress || ''}
             customerGuarantors={customerGuarantors}
+            isCF
           />
           <AcknowledgmentWasSignedInFront
             customerCreationDate={customerDetails?.created?.at || 0}
             customerName={customerDetails?.customerName || ''}
             nationalId={customerDetails?.nationalId || ''}
             customerGuarantors={customerGuarantors}
+            isCF
           />
         </>
       )}
