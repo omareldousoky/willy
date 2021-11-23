@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Swal from 'sweetalert2'
-import * as local from 'Shared/Assets/ar.json'
+import * as local from '../Assets/ar.json'
 import { getErrorMessage } from '../Services/utils'
 
 export default function useApi(apiCall, params) {
