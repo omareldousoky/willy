@@ -1,4 +1,5 @@
 import React from 'react'
+import { LoanOfficersTransfers } from 'Shared/Components/ManageAccounts'
 import { BranchesList, LoanOfficersList, RolesList, UsersList } from '.'
 import local from '../../../Shared/Assets/ar.json'
 import Can from '../../../Shared/config/Can'
@@ -144,6 +145,11 @@ export const manageAccountsRoute = {
           path: '/loanOfficer-details',
           label: local.loanOfficer,
           render: (props) => <UserDetails {...props} />,
+        },
+        {
+          path: '/transfer-logs',
+          label: local.loanOfficersTransfers,
+          render: () => <LoanOfficersTransfers />,
         },
       ],
     },
