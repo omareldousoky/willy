@@ -1,5 +1,5 @@
-import { API_BASE_URL } from '../../../Shared/envConfig'
-import axios from '../../../Shared/Services/axiosInstance'
+import { API_BASE_URL } from 'Shared/envConfig'
+import axios from 'Shared/Services/axiosInstance'
 
 const returnItemUrl = `${API_BASE_URL}/application/return-cf-item`
 
