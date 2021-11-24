@@ -66,7 +66,7 @@ const LoanLimitModal: FunctionComponent<LoanLimitModalProps> = ({
     getCustomerBranch()
   }, [])
 
-  const LOAN_LIMIT_MIN = 1000
+  const LOAN_LIMIT_MIN = 100
 
   const [currentLoanLimit, setCurrentLoanLimitValue] = useState<number | null>(
     defaultValues.limit
