@@ -5,6 +5,8 @@ import Container from 'react-bootstrap/Container'
 import Swal from 'sweetalert2'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import produce from 'immer'
+import { doneSuccessfully } from 'Shared/localUtils'
+import { changeCustomerMobilePhoneNumber } from 'Shared/Services/APIs/customer/changeCustomerMobileNumber'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
 import { Loader } from '../../../Shared/Components/Loader'
 import {
@@ -16,7 +18,7 @@ import {
 } from './companyFormIntialState'
 import { StepOneCompanyForm } from './StepOneCompanyForm'
 import { StepTwoCompanyForm } from './StepTwoCompanyForm'
-import DocumentsUpload from './documentsUpload'
+import { DocumentsUpload } from '../../../Shared/Components/Customer'
 import * as local from '../../../Shared/Assets/ar.json'
 import {
   getErrorMessage,
@@ -50,6 +52,8 @@ interface State {
     // industryRegisterNumber: string
     taxCardNumber: string
     customerType: string
+    initialConsumerFinanceLimit?: number
+    mobilePhoneNumber: string
   }
   step2: {
     geographicalDistribution: string
@@ -76,6 +80,7 @@ interface State {
     smeBankBranch: string
     smeBankAccountNumber: string
     smeIbanNumber: string
+    guarantorMaxCustomers: number
   }
   customerId: string
   selectedCustomer: any
@@ -85,6 +90,7 @@ interface State {
   oldRepresentative: string
   branchId: string
   companyKey: string
+  editMobileNumber: boolean
 }
 
 class CompanyCreation extends Component<Props, State> {
@@ -114,6 +120,7 @@ class CompanyCreation extends Component<Props, State> {
       oldRepresentative: '',
       branchId: '',
       companyKey: '',
+      editMobileNumber: !props.edit,
     }
   }
 
@@ -128,53 +135,63 @@ class CompanyCreation extends Component<Props, State> {
     const res = await getCustomerByID(id)
     if (res.status === 'success') {
       const customerBusiness = {
-        businessName: res.body.businessName,
-        businessAddress: res.body.businessAddress,
-        businessCharacteristic: res.body.businessCharacteristic,
-        businessSector: res.body.businessSector,
-        businessActivityDetails: res.body.businessActivityDetails,
-        legalConstitution: res.body.legalConstitution || 'other',
-        smeCategory: res.body.smeCategory || 'other',
-        businessLicenseNumber: res.body.businessLicenseNumber,
-        // businessLicenseIssuePlace: res.body.businessLicenseIssuePlace,
+        businessName: res.body.customer.businessName,
+        businessAddress: res.body.customer.businessAddress,
+        businessCharacteristic: res.body.customer.businessCharacteristic,
+        businessSector: res.body.customer.businessSector,
+        businessActivityDetails: res.body.customer.businessActivityDetails,
+        legalConstitution: res.body.customer.legalConstitution || 'other',
+        smeCategory: res.body.customer.smeCategory || 'other',
+        businessLicenseNumber: res.body.customer.businessLicenseNumber,
+        // businessLicenseIssuePlace: res.body.customer.businessLicenseIssuePlace,
         businessLicenseIssueDate: timeToDateyyymmdd(
-          res.body.businessLicenseIssueDate
+          res.body.customer.businessLicenseIssueDate
         ),
         commercialRegisterExpiryDate: timeToDateyyymmdd(
-          res.body.commercialRegisterExpiryDate
+          res.body.customer.commercialRegisterExpiryDate
         ),
-        commercialRegisterNumber: res.body.commercialRegisterNumber,
-        // industryRegisterNumber: res.body.industryRegisterNumber,
-        taxCardNumber: res.body.taxCardNumber,
-        governorate: res.body.governorate,
-        policeStation: res.body.policeStation,
-        currHomeAddressGov: res.body.currHomeAddressGov,
-        currentHomeAddress: res.body.currentHomeAddress,
+        commercialRegisterNumber: res.body.customer.commercialRegisterNumber,
+        // industryRegisterNumber: res.body.customer.industryRegisterNumber,
+        taxCardNumber: res.body.customer.taxCardNumber,
+        governorate: res.body.customer.governorate,
+        policeStation: res.body.customer.policeStation,
+        currHomeAddressGov: res.body.customer.currHomeAddressGov,
+        currentHomeAddress: res.body.customer.currentHomeAddress,
+        initialConsumerFinanceLimit:
+          res.body.customer.initialConsumerFinanceLimit,
+        mobilePhoneNumber: res.body.customer.mobilePhoneNumber,
       }
       const customerExtraDetails = {
-        geographicalDistribution: res.body.geographicalDistribution,
-        geoAreaId: res.body.geoAreaId ? res.body.geoAreaId : '',
-        representative: res.body.representative,
-        representativeName: res.body.representativeName,
-        applicationDate: timeToDateyyymmdd(res.body.applicationDate),
-        permanentEmployeeCount: res.body.permanentEmployeeCount,
-        partTimeEmployeeCount: res.body.partTimeEmployeeCount,
-        comments: res.body.comments,
-        maxLoansAllowed: res.body.maxLoansAllowed
-          ? Number(res.body.maxLoansAllowed)
+        geographicalDistribution: res.body.customer.geographicalDistribution,
+        geoAreaId: res.body.customer.geoAreaId
+          ? res.body.customer.geoAreaId
+          : '',
+        representative: res.body.customer.representative,
+        representativeName: res.body.customer.representativeName,
+        applicationDate: timeToDateyyymmdd(res.body.customer.applicationDate),
+        permanentEmployeeCount: res.body.customer.permanentEmployeeCount,
+        partTimeEmployeeCount: res.body.customer.partTimeEmployeeCount,
+        comments: res.body.customer.comments,
+        maxLoansAllowed: res.body.customer.maxLoansAllowed
+          ? Number(res.body.customer.maxLoansAllowed)
           : 1,
-        allowGuarantorLoan: res.body.allowGuarantorLoan,
-        guarantorMaxLoans: res.body.guarantorMaxLoans
-          ? Number(res.body.guarantorMaxLoans)
+        allowGuarantorLoan: res.body.customer.allowGuarantorLoan,
+        guarantorMaxLoans: res.body.customer.guarantorMaxLoans
+          ? Number(res.body.customer.guarantorMaxLoans)
           : 1,
-        cbeCode: res.body.cbeCode,
-        paidCapital: res.body.paidCapital,
-        establishmentDate: timeToDateyyymmdd(res.body.establishmentDate),
-        smeSourceId: res.body.smeSourceId,
-        smeBankName: res.body.smeBankName,
-        smeBankBranch: res.body.smeBankBranch,
-        smeBankAccountNumber: res.body.smeBankAccountNumber,
-        smeIbanNumber: res.body.smeIbanNumber,
+        cbeCode: res.body.customer.cbeCode,
+        paidCapital: res.body.customer.paidCapital,
+        establishmentDate: timeToDateyyymmdd(
+          res.body.customer.establishmentDate
+        ),
+        smeSourceId: res.body.customer.smeSourceId,
+        smeBankName: res.body.customer.smeBankName,
+        smeBankBranch: res.body.customer.smeBankBranch,
+        smeBankAccountNumber: res.body.customer.smeBankAccountNumber,
+        smeIbanNumber: res.body.customer.smeIbanNumber,
+        guarantorMaxCustomers: res.body.customer.guarantorMaxCustomers
+          ? Number(res.body.customer.guarantorMaxCustomers)
+          : 1,
       }
       this.formikStep1 = {
         values: { ...this.state.step1, ...customerBusiness },
@@ -189,14 +206,14 @@ class CompanyCreation extends Component<Props, State> {
       this.setState(
         produce<State>((draftState) => {
           draftState.loading = false
-          draftState.selectedCustomer = res.body
+          draftState.selectedCustomer = res.body.customer
           draftState.step1 = { ...draftState.step1, ...customerBusiness }
           draftState.step2 = { ...draftState.step2, ...customerExtraDetails }
-          draftState.hasLoan = res.body.hasLoan
-          draftState.isGuarantor = res.body.isGuarantor
-          draftState.oldRepresentative = res.body.representative
-          draftState.branchId = res.body.branchId
-          draftState.companyKey = res.body.key
+          draftState.hasLoan = res.body.customer.hasLoan
+          draftState.isGuarantor = res.body.customer.isGuarantor
+          draftState.oldRepresentative = res.body.customer.representative
+          draftState.branchId = res.body.customer.branchId
+          draftState.companyKey = res.body.customer.key
         })
       )
     } else {
@@ -346,6 +363,48 @@ class CompanyCreation extends Component<Props, State> {
     }
   }
 
+  changeMobileNumber(customerId, mobileNumber) {
+    Swal.fire({
+      title: local.areYouSure,
+      text: `${
+        local.will +
+        ' ' +
+        local.changeCfMobileNumber +
+        ' ' +
+        local.from +
+        ' ' +
+        this.state.step1.mobilePhoneNumber +
+        ' ' +
+        local.to +
+        ' ' +
+        mobileNumber
+      }`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: local.changeCfMobileNumber,
+      cancelButtonText: local.cancel,
+    }).then(async (result) => {
+      if (result.value) {
+        this.setState({ loading: true })
+        const res = await changeCustomerMobilePhoneNumber(
+          customerId,
+          mobileNumber
+        )
+        if (res.status === 'success') {
+          this.setState({ loading: false, editMobileNumber: false })
+          Swal.fire('', doneSuccessfully(), 'success').then(() =>
+            this.getCustomerById(this.props.location.state.id)
+          )
+        } else {
+          this.setState({ loading: false })
+          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        }
+      }
+    })
+  }
+
   previousStep(values, step: number): void {
     this.setState({
       step: step - 1,
@@ -373,6 +432,19 @@ class CompanyCreation extends Component<Props, State> {
               hasLoan={this.state.hasLoan}
               isGuarantor={this.state.isGuarantor}
               edit={this.props.edit}
+              consumerFinanceLimit={
+                this.state.selectedCustomer.initialConsumerFinanceLimit
+              }
+              consumerFinanceLimitStatus={
+                this.state.selectedCustomer.consumerFinanceLimitStatus
+              }
+              changeMobileNumber={(number) =>
+                this.changeMobileNumber(this.state.selectedCustomer._id, number)
+              }
+              setEditMobileNumber={(bool: boolean) =>
+                this.setState({ editMobileNumber: bool })
+              }
+              editMobileNumber={this.state.editMobileNumber}
             />
           )
         }}
@@ -455,7 +527,9 @@ class CompanyCreation extends Component<Props, State> {
             <Wizard
               currentStepNumber={this.state.step - 1}
               edit={this.props.edit}
-              onClick={this.handleWizardClick}
+              onClick={
+                this.state.editMobileNumber ? null : this.handleWizardClick
+              }
               stepsDescription={[
                 local.workInfo,
                 local.differentInfo,

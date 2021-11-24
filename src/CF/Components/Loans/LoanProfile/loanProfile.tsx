@@ -7,6 +7,8 @@ import { connect } from 'react-redux'
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 
+import { returnItem } from 'Shared/Services/APIs/loanApplication/returnItemCF'
+import ReturnItemModal from 'Shared/Components/LoanApplication/ReturnItemModal'
 import { getApplication } from '../../../../Shared/Services/APIs/loanApplication/getApplication'
 import { getPendingActions } from '../../../../Mohassel/Services/APIs/Loan/getPendingActions'
 import {
@@ -50,7 +52,7 @@ import PaymentReceipt from '../../../../Shared/Components/pdfTemplates/Financial
 import { calculatePenalties } from '../../../../Shared/Services/APIs/clearance/calculatePenalties'
 import { numTo2Decimal } from '../../../../Mohassel/Components/CIB/textFiles'
 import { FollowUpStatementView } from './followupStatementView'
-import { remainingLoan } from '../../../../Mohassel/Services/APIs/Loan/remainingLoan'
+import { remainingLoan } from '../../../../Shared/Services/APIs/Loan/remainingLoan'
 import { getGroupMemberShares } from '../../../../Mohassel/Services/APIs/Loan/groupMemberShares'
 import { InfoBox, LtsIcon, ProfileActions } from '../../../../Shared/Components'
 
@@ -79,7 +81,6 @@ import {
   rejectManualPayment,
 } from '../../../../Shared/Services/APIs/payment'
 import { getRollableActionsById } from '../../../../Shared/Services/APIs/loanApplication/rollBack'
-import { returnItem } from '../../../Services/APIs/loan'
 import { doneSuccessfully } from '../../../../Shared/localUtils'
 import Rescheduling from '../../Rescheduling/rescheduling'
 import RandomPaymentReceipt from '../../../../Shared/Components/pdfTemplates/Financial/randomPaymentReceipt/randomPaymentReceipt'
@@ -88,7 +89,6 @@ import EarlyPaymentReceipt from '../../../../Shared/Components/pdfTemplates/Fina
 import { getEarlyPaymentPdfData } from '../../../../Shared/Utils/payment'
 import { Score, Customer } from '../../../../Shared/Models/Customer'
 import ManualRandomPaymentsActions from './manualRandomPaymentsActions'
-import ReturnItemModal from './ReturnItemModal'
 
 export interface IndividualWithInstallments {
   installmentTable: {

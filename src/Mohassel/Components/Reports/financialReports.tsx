@@ -3,10 +3,9 @@ import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-import { CustomerStatusDetails } from '../pdfTemplates/customerStatusDetails'
-import { getCustomerDetails } from '../../Services/APIs/Reports/customerDetails'
-import { getLoanDetails } from '../../Services/APIs/Reports/loanDetails'
-import { LoanApplicationDetails } from '../pdfTemplates/loanApplicationDetails'
+import { CustomerStatusDetails } from '../../../Shared/Components/pdfTemplates/Financial/customerStatusDetails'
+import { getCustomerDetails } from '../../../Shared/Services/APIs/Reports/Financial/customerDetails'
+import { LoanApplicationDetails } from '../../../Shared/Components/pdfTemplates/Financial/loanApplicationDetails'
 import { BranchesLoanList } from '../pdfTemplates/branchesLoanList'
 import {
   getBranchLoanList,
@@ -36,7 +35,7 @@ import {
 import { LoanApplicationFees } from '../pdfTemplates/loanApplicationFees'
 import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport'
 import { downloadFile } from '../../../Shared/Services/utils'
-import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
+import { remainingLoan } from '../../../Shared/Services/APIs/Loan/remainingLoan'
 import { CustomerTransactionReport } from '../../../Shared/Components/pdfTemplates/Financial/customerTransactionReport'
 import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
 import RaseedyTransactionsReport from '../../../Shared/Components/pdfTemplates/Financial/RaseedyTransactions'
@@ -76,6 +75,7 @@ import {
   getRescheduledLoanList,
   postRescheduledLoanExcel,
   getRescheduledLoanExcel,
+  getLoanDetails,
 } from '../../../Shared/Services/APIs/Reports/Financial'
 
 interface State {

@@ -164,6 +164,16 @@ export const getCompanyInfo = ({
       showFieldCondition: true,
     },
     {
+      fieldTitle: local.initialConsumerFinanceLimit,
+      fieldData: numbersToArabic(company.initialConsumerFinanceLimit || 0),
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.mobilePhoneNumber,
+      fieldData: company.mobilePhoneNumber || local.na,
+      showFieldCondition: true,
+    },
+    {
       fieldTitle: local.loanOfficer,
       fieldData: company.representativeName || '',
       showFieldCondition: true,
@@ -230,6 +240,11 @@ export const getCompanyInfo = ({
       fieldData: company.permanentEmployeeCount,
       showFieldCondition: true,
     },
+    {
+      fieldTitle: local.noOfGuarantorMaxCustomers,
+      fieldData: company.guarantorMaxCustomers || '',
+      showFieldCondition: true,
+    },
   ]
 }
 export const getCustomerInfo = ({
@@ -263,6 +278,7 @@ export const getCustomerInfo = ({
     representativeName,
     monthlyIncome,
     initialConsumerFinanceLimit,
+    guarantorMaxCustomers,
   } = customerDetails
   const info: FieldProps[] = [
     {
@@ -344,6 +360,11 @@ export const getCustomerInfo = ({
       showFieldCondition: true,
     },
     {
+      fieldTitle: local.noOfGuarantorMaxCustomers,
+      fieldData: guarantorMaxCustomers || '',
+      showFieldCondition: true,
+    },
+    {
       fieldTitle: local.customerHomeAddress,
       fieldData: customerHomeAddress || local.na,
       showFieldCondition: true,
@@ -373,6 +394,11 @@ export const getCustomerInfo = ({
       fieldData: representativeName || '',
       showFieldCondition: true,
     },
+    {
+      fieldTitle: local.initialConsumerFinanceLimit,
+      fieldData: numbersToArabic(initialConsumerFinanceLimit || 0),
+      showFieldCondition: true,
+    },
   ]
 
   // monthlyIncome && initialConsumerFinanceLimit
@@ -387,11 +413,6 @@ export const getCustomerInfo = ({
     {
       fieldTitle: local.monthlyIncome,
       fieldData: numbersToArabic(monthlyIncome || 0),
-      showFieldCondition: true,
-    },
-    {
-      fieldTitle: local.initialConsumerFinanceLimit,
-      fieldData: numbersToArabic(initialConsumerFinanceLimit || 0),
       showFieldCondition: true,
     },
   ]

@@ -6,6 +6,8 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 
+import { LtsIcon } from 'Shared/Components'
+import InputGroup from 'react-bootstrap/InputGroup'
 import Map from '../../../Shared/Components/Map/map'
 import local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -24,6 +26,7 @@ import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNat
 import { BusinessSector } from './StepTwoForm'
 import { legalConstitutionRoles, smeCategories } from './utils'
 import { District, Governorate } from '../../../Shared/Models/Governorate'
+import ability from '../../config/ability'
 
 export const StepOneCompanyForm = (props: any) => {
   const {
@@ -36,6 +39,11 @@ export const StepOneCompanyForm = (props: any) => {
     setFieldValue,
     previousStep,
     edit,
+    consumerFinanceLimitStatus,
+    consumerFinanceLimit,
+    changeMobileNumber,
+    setEditMobileNumber,
+    editMobileNumber,
   } = props
   const [mapState, openCloseMap] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -68,6 +76,7 @@ export const StepOneCompanyForm = (props: any) => {
     },
   ])
   const [authorities, setAuthorities] = useState<Array<IscoreAuthority>>([])
+  const [tempMobile, setTempMobile] = useState('')
   const branchId = getBranchFromCookie('ltsbranch')
 
   const policeStations: District[] =
@@ -111,6 +120,12 @@ export const StepOneCompanyForm = (props: any) => {
     setFieldValue('policeStation', '')
     handleChange(event)
   }
+  const editMobilePermission =
+    ((consumerFinanceLimit === 0 &&
+      ability.can('updateCustomer', 'customer') &&
+      consumerFinanceLimitStatus !== 'approved') ||
+      ability.can('editPhoneNumber', 'customer')) &&
+    props.edit
   return (
     <Form onSubmit={handleSubmit}>
       <Loader open={loading} type="fullscreen" />
@@ -172,7 +187,119 @@ export const StepOneCompanyForm = (props: any) => {
           </Form.Group>
         </Col>
       </Row>
-
+      <Row>
+        <Col sm={6}>
+          <Form.Group controlId="initialConsumerFinanceLimit">
+            <Form.Label className="customer-form-label">
+              {local.initialCFCompanyLimit}
+            </Form.Label>
+            <Form.Control
+              type="number"
+              name="initialConsumerFinanceLimit"
+              data-qc="initialConsumerFinanceLimit"
+              value={values.initialConsumerFinanceLimit}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              disabled={
+                props.edit &&
+                !ability.can('editCFLimit', 'customer') &&
+                consumerFinanceLimitStatus === 'approved'
+              }
+              isInvalid={
+                errors.initialConsumerFinanceLimit &&
+                touched.initialConsumerFinanceLimit
+              }
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.initialConsumerFinanceLimit}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+        <Col sm={6}>
+          <Form.Group controlId="mobilePhoneNumber">
+            <Form.Label className="customer-form-label">
+              {local.mobilePhoneNumber}
+            </Form.Label>
+            <InputGroup>
+              <Form.Control
+                type="text"
+                name="mobilePhoneNumber"
+                data-qc="mobilePhoneNumber"
+                value={values.mobilePhoneNumber}
+                onBlur={handleBlur}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  const re = /^\d*$/
+                  if (
+                    event.currentTarget.value === '' ||
+                    re.test(event.currentTarget.value)
+                  ) {
+                    setFieldValue(
+                      'mobilePhoneNumber',
+                      event.currentTarget.value
+                    )
+                  }
+                }}
+                maxLength={11}
+                isInvalid={
+                  errors.mobilePhoneNumber && touched.mobilePhoneNumber
+                }
+                disabled={!editMobileNumber}
+              />
+              {editMobilePermission && !editMobileNumber && (
+                <InputGroup.Prepend>
+                  <Button
+                    size="sm"
+                    variant="outline-primary"
+                    onClick={() => {
+                      setEditMobileNumber(true)
+                      setTempMobile(values.mobilePhoneNumber)
+                    }}
+                    className="d-flex"
+                  >
+                    <LtsIcon name="edit" tooltipText={local.edit} />
+                  </Button>
+                </InputGroup.Prepend>
+              )}
+              {editMobilePermission && editMobileNumber && (
+                <>
+                  <InputGroup.Append>
+                    <Button
+                      size="sm"
+                      variant="outline-primary"
+                      onClick={() => {
+                        changeMobileNumber(values.mobilePhoneNumber)
+                      }}
+                      className="d-flex"
+                      disabled={
+                        values.mobilePhoneNumber === tempMobile ||
+                        errors.mobilePhoneNumber
+                      }
+                    >
+                      <LtsIcon name="edit" tooltipText={local.edit} />
+                    </Button>
+                  </InputGroup.Append>
+                  <InputGroup.Prepend>
+                    <Button
+                      size="sm"
+                      variant="outline-primary"
+                      onClick={() => {
+                        setEditMobileNumber(false)
+                        setFieldValue('mobilePhoneNumber', tempMobile)
+                      }}
+                      className="d-flex"
+                    >
+                      <LtsIcon name="remove" tooltipText={local.cancel} />
+                    </Button>
+                  </InputGroup.Prepend>
+                </>
+              )}
+              <Form.Control.Feedback type="invalid">
+                {errors.mobilePhoneNumber}
+              </Form.Control.Feedback>
+            </InputGroup>
+          </Form.Group>
+        </Col>
+      </Row>
       <Row>
         <Col sm={6}>
           <Form.Group controlId="businessCharacteristic">
@@ -211,7 +338,7 @@ export const StepOneCompanyForm = (props: any) => {
               disabled={branchId !== 'hq' && edit}
             >
               <option value="" disabled />
-              {authorities.map((authority, index) => {
+              {authorities?.map((authority, index) => {
                 return (
                   <option key={index} value={authority.code}>
                     {authority.nameArabic}
@@ -365,7 +492,7 @@ export const StepOneCompanyForm = (props: any) => {
               onChange={handleChange}
               isInvalid={errors.legalConstitution && touched.legalConstitution}
             >
-              {legalConstitutionRoles.map((role) => (
+              {legalConstitutionRoles?.map((role) => (
                 <option
                   key={role}
                   value={role}
@@ -417,7 +544,7 @@ export const StepOneCompanyForm = (props: any) => {
               onChange={handleChange}
               isInvalid={errors.smeCategory && touched.smeCategory}
             >
-              {smeCategories.map((category) => (
+              {smeCategories?.map((category) => (
                 <option
                   key={category}
                   value={category}
@@ -547,7 +674,7 @@ export const StepOneCompanyForm = (props: any) => {
               onChange={handleGovernorateChange}
             >
               <option value="" disabled />
-              {governorates.map(
+              {governorates?.map(
                 ({ governorateName, governorateLegacyCode }) => (
                   <option
                     key={governorateLegacyCode}
@@ -577,7 +704,7 @@ export const StepOneCompanyForm = (props: any) => {
               disabled={!policeStations.length}
             >
               <option value="" disabled />
-              {policeStations.map(({ districtName, districtLegacyCode }) => (
+              {policeStations?.map(({ districtName, districtLegacyCode }) => (
                 <option
                   key={districtLegacyCode}
                   value={districtName.ar}
@@ -599,7 +726,11 @@ export const StepOneCompanyForm = (props: any) => {
         >
           {local.previous}
         </Button>
-        <Button type="submit" data-qc="next">
+        <Button
+          type="submit"
+          data-qc="next"
+          disabled={props.edit && editMobileNumber}
+        >
           {local.next}
         </Button>
       </div>
