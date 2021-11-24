@@ -178,6 +178,9 @@ const ReportsModal = (props: Props) => {
         case 'loanType':
           initValues.loanType = 'all'
           break
+        case 'loanTypeWithoutAll':
+          initValues.loanType = 'micro'
+          break
         case 'month':
           initValues.date = ''
           break
@@ -191,6 +194,7 @@ const ReportsModal = (props: Props) => {
           break
       }
     })
+
     return initValues
   }
 
@@ -731,6 +735,39 @@ const ReportsModal = (props: Props) => {
                             >
                               {[
                                 { value: 'all', text: local.all },
+                                { value: 'sme', text: 'sme' },
+                                { value: 'micro', text: 'micro' },
+                              ].map(({ value, text }) => (
+                                <option
+                                  key={value}
+                                  value={value}
+                                  data-qc={value}
+                                >
+                                  {text}
+                                </option>
+                              ))}
+                            </Form.Control>
+                          </div>
+                          <span className="text-danger">
+                            {formikProps.errors.loanType}
+                          </span>
+                        </Col>
+                      )
+                    }
+                    if (!props.isCF && input === 'loanTypeWithoutAll') {
+                      return (
+                        <Col key={input} sm={12}>
+                          <div className="dropdown-container">
+                            <p className="dropdown-label">{local.loanType}</p>
+                            <Form.Control
+                              as="select"
+                              className="dropdown-select"
+                              data-qc="loanType"
+                              name="loanType"
+                              value={formikProps.values.loanType}
+                              onChange={formikProps.handleChange}
+                            >
+                              {[
                                 { value: 'sme', text: 'sme' },
                                 { value: 'micro', text: 'micro' },
                               ].map(({ value, text }) => (

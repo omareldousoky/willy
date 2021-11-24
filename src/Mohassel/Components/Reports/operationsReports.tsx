@@ -86,13 +86,14 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.LoansBriefing2,
           local: 'ملخص الحالات والقروض 2',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['loanTypeWithoutAll', 'dateFromTo', 'branches'],
           permission: 'briefingReport',
         },
         {
           key: Reports.UnpaidInstallmentsByOfficer,
           local: 'الاقساط المستحقة بالمندوب',
           inputs: [
+            'loanTypeWithoutAll',
             'dateFromTo',
             'creationDateFromTo',
             'branches',
@@ -103,25 +104,37 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.InstallmentsDuePerOfficerCustomerCard,
           local: 'الاقساط المستحقة للمندوب كارت العميل',
-          inputs: ['dateFromTo', 'branches', 'representatives'],
+          inputs: [
+            'loanTypeWithoutAll',
+            'dateFromTo',
+            'branches',
+            'representatives',
+          ],
           permission: 'installmentsDuePerOfficerCustomerCard',
         },
         {
           key: Reports.UnpaidInstallmentsPerArea,
           local: 'قائمة الاقساط الغير مسددة بمناطق العمل',
-          inputs: ['dateFromTo', 'branches', 'geoAreas'],
+          inputs: ['loanTypeWithoutAll', 'dateFromTo', 'branches', 'geoAreas'],
           permission: 'unpaidInstallmentsPerArea',
         },
         {
           key: Reports.OfficersPercentPayment,
           local: 'نسبة سداد المندوبين 1',
-          inputs: ['dateFromTo', 'branches', 'representatives', 'gracePeriod'],
+          inputs: [
+            'loanTypeWithoutAll',
+            'dateFromTo',
+            'branches',
+            'representatives',
+            'gracePeriod',
+          ],
           permission: 'officerPercentPayment',
         },
         {
           key: Reports.OfficersBranchPercentPayment,
           local: 'نسبة سداد المندوبين 3',
           inputs: [
+            'loanTypeWithoutAll',
             'dateFromTo',
             'creationDateFromTo',
             'branches',
@@ -132,44 +145,58 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.DueInstallments,
           local: 'ملخص الأقساط المستحقة (تقرير السداد الجزئي)',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['loanTypeWithoutAll', 'dateFromTo', 'branches'],
           permission: 'dueInstallments',
         },
         {
           key: Reports.LeakedCustomers,
           local: 'تقرير العملاء المتسربون',
-          inputs: ['dateFromTo', 'branches', 'representatives'],
+          inputs: [
+            'loanTypeWithoutAll',
+            'dateFromTo',
+            'branches',
+            'representatives',
+          ],
           permission: 'churnedCustomers',
         },
         {
           key: Reports.CustomersArrears,
           local: 'متأخرات المندوب لم يستحق أو مسدد جزئي',
-          inputs: ['date', 'branches', 'representatives'],
+          inputs: ['loanTypeWithoutAll', 'date', 'branches', 'representatives'],
           permission: 'customersArrears',
         },
         {
           key: Reports.PaidArrears,
           local: 'تقرير ما تم تحصيله من المتأخرات',
-          inputs: ['dateFromTo', 'branches', 'representatives'],
+          inputs: [
+            'loanTypeWithoutAll',
+            'dateFromTo',
+            'branches',
+            'representatives',
+          ],
           permission: 'paidArrears',
         },
         {
           key: Reports.MonthComparison,
           local:
             'مقارنه تقرير ملخص الاقساط المستحقه (تقرير السداد الجزئي ) بالشهر السابق',
-          inputs: ['monthComparisonDateFromTo', 'branches'],
+          inputs: [
+            'loanTypeWithoutAll',
+            'monthComparisonDateFromTo',
+            'branches',
+          ],
           permission: 'monthComparison',
         },
         {
           key: Reports.ActiveWalletIndividual,
           local: 'المحفظة النشطه للمندوبين - فردى',
-          inputs: ['date', 'branches', 'representatives'],
+          inputs: ['loanTypeWithoutAll', 'date', 'branches', 'representatives'],
           permission: 'individualActiveWallet',
         },
         {
           key: Reports.ActiveWalletGroup,
           local: 'المحفظة النشطه للمندوبين - جماعى',
-          inputs: ['date', 'branches', 'representatives'],
+          inputs: ['loanTypeWithoutAll', 'date', 'branches', 'representatives'],
           permission: 'groupActiveLoans',
         },
       ],
@@ -258,11 +285,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   reportRequest(values): OperationsReportRequest {
-    const { fromDate, toDate, branches } = values
+    const { fromDate, toDate, branches, loanType } = values
     return {
       startDate: fromDate,
       endDate: toDate,
       branches,
+      loanType,
     }
   }
 
@@ -277,6 +305,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       endDate: values.toDate,
       branches: values.branches,
       representatives: values.representatives,
+      loanType: values.loanType,
     }
     const res = await installmentsDuePerOfficerCustomerCard(request)
     this.handleFetchReport(
@@ -293,6 +322,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       representatives: values.representatives,
       creationDateFrom: values.creationDateFrom,
       creationDateTo: values.creationDateTo,
+      loanType: values.loanType,
     }
 
     const res = await unpaidInstallmentsByOfficer(request)
@@ -314,13 +344,21 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   async fetchOfficersPercentPayment(values) {
-    const { fromDate, toDate, branches, representatives, gracePeriod } = values
+    const {
+      fromDate,
+      toDate,
+      branches,
+      representatives,
+      gracePeriod,
+      loanType,
+    } = values
     const request: OfficersPercentPaymentRequest = {
       startDate: fromDate,
       endDate: toDate,
       branches,
       representatives,
       gracePeriod,
+      loanType,
     }
     const res = await fetchOfficersPercentPaymentReport({ ...request })
     this.handleFetchReport(res, Reports.OfficersPercentPayment)
@@ -335,6 +373,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       gracePeriod: values.gracePeriod,
       creationDateFrom: values.creationDateFrom,
       creationDateTo: values.creationDateTo,
+      loanType: values.loanType,
     }
 
     const res = await fetchOfficersBranchPercentPaymentReport(request)
@@ -356,22 +395,24 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   async fetchPaidArrears(values) {
-    const { fromDate, toDate, branches, loanOfficerIds } = values
+    const { fromDate, toDate, branches, loanOfficerIds, loanType } = values
     const res = await fetchPaidArrearsReport({
       startDate: fromDate,
       endDate: toDate,
       branches,
       loanOfficerIds,
+      loanType,
     } as PaidArrearsRequest)
     this.handleFetchReport(res, Reports.PaidArrears)
   }
 
   async fetchCustomersArrears(values) {
-    const { date, branches, loanOfficers } = values
+    const { date, branches, loanOfficers, loanType } = values
     const res = await fetchCustomersArrearsReport({
       date,
       branches,
       loanOfficers,
+      loanType,
     } as CustomersArrearsRequest)
     this.handleFetchReport(res, Reports.CustomersArrears)
   }
@@ -392,26 +433,29 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         999
       ),
       branches: values.branches,
+      loanType: values.loanType,
     })
     this.handleFetchReport(res, Reports.MonthComparison)
   }
 
   async fetchActiveWalletIndividual(values) {
-    const { date, branches, loanOfficerIds } = values
+    const { date, branches, loanOfficerIds, loanType } = values
     const res = await fetchActiveWalletIndividualReport({
       date,
       branches,
       loanOfficerIds,
+      loanType,
     } as ActiveWalletRequest)
     this.handleFetchReport(res, Reports.ActiveWalletIndividual)
   }
 
   async fetchActiveWalletGroup(values) {
-    const { date, branches, loanOfficerIds } = values
+    const { date, branches, loanOfficerIds, loanType } = values
     const res = await fetchActiveWalletGroupReport({
       date,
       branches,
       loanOfficerIds,
+      loanType,
     } as ActiveWalletRequest)
     this.handleFetchReport(res, Reports.ActiveWalletGroup)
   }
