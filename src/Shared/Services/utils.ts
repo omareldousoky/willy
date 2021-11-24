@@ -957,11 +957,11 @@ export const cfLimitStatusLocale = {
   },
   'update-reviewed': {
     text: 'تم مراجعه الحد الائتماني',
-    color: '#edb600',
+    color: '#ed7600',
   },
   'initialization-reviewed': {
     text: 'تم مراجعه الحد الائتماني المبدئي',
-    color: '#edb600',
+    color: '#ed7600',
   },
   default: { text: 'الحد الائتماني المبدئي قيد التحقيق', color: '#edb600' },
 }
@@ -983,3 +983,16 @@ export const calculateAge = (dateOfBirth: number) => {
   }
   return 0
 }
+
+export const entitledToSignPositionOptions = [
+  { label: local.authorizedPartner, value: 'authorizedPartner' },
+  { label: local.director, value: 'director' },
+  { label: local.manager, value: 'manager' },
+  { label: local.partner, value: 'partner' },
+  { label: local.proprietor, value: 'proprietor' },
+  { label: local.managingDirector, value: 'managingDirector' },
+  { label: local.chairman, value: 'chairman' },
+  { label: local.guarantor, value: 'guarantor' },
+  { label: local.user, value: 'user' },
+  { label: local.other, value: 'other' },
+]

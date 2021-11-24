@@ -576,7 +576,11 @@
     "ar": "الدخل الشهري أقل من الحد الأدنى"
   },
   "clearance_penalty": {
-    "en":"The penalty needs to be paid first",
-    "ar":"يجب سداد الغرامه اولا"
+    "en": "The penalty needs to be paid first",
+    "ar": "يجب سداد الغرامه اولا"
+  },
+  "action_from_other_branch_not_allowed": {
+    "en": "Different Branches",
+    "ar": "يوجد إختلاف في الفروع"
   }
 }

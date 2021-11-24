@@ -1,8 +1,8 @@
 import React, { CSSProperties } from 'react'
 import Button from 'react-bootstrap/Button'
 import { useHistory } from 'react-router-dom'
-import { LtsIcon } from '..'
 import { theme } from '../../theme'
+import { LtsIcon } from '../LtsIcon'
 
 interface Props {
   title: string
