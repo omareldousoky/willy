@@ -49,10 +49,10 @@ const tabs: Array<Tab> = [
     header: local.differentInfo,
     stringKey: 'differentInfo',
   },
-  {
-    header: local.customerCategorization,
-    stringKey: 'customerScore',
-  },
+  // {
+  //   header: local.customerCategorization,
+  //   stringKey: 'customerScore',
+  // },
   {
     header: local.documents,
     stringKey: 'documents',
