@@ -11,10 +11,6 @@ import { TabDataProps } from '../../../Shared/Components/Profile/types'
 import HalanLinkageModal from './HalanLinkageModal'
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
 import LoanLimitModal from './LoanLimitModal'
-import {
-  CustomerScore,
-  getCustomerCategorization,
-} from '../../../Shared/Services/APIs/customer/customerCategorization'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
 import {
@@ -58,24 +54,24 @@ const tabs: Array<Tab> = [
   },
 ]
 
-const getCustomerCategorizationRating = async (
-  id: string,
-  setRating: (rating: Array<CustomerScore>) => void
-) => {
-  const res = await getCustomerCategorization({ customerId: id })
-  if (res.status === 'success' && res.body?.customerScores !== undefined) {
-    setRating(res.body?.customerScores)
-  } else {
-    setRating([])
-  }
-}
+// const getCustomerCategorizationRating = async (
+//   id: string,
+//   setRating: (rating: Array<CustomerScore>) => void
+// ) => {
+//   const res = await getCustomerCategorization({ customerId: id })
+//   if (res.status === 'success' && res.body?.customerScores !== undefined) {
+//     setRating(res.body?.customerScores)
+//   } else {
+//     setRating([])
+//   }
+// }
 
 export const CustomerProfile = () => {
   const [loading, setLoading] = useState(false)
   const [customerDetails, setCustomerDetails] = useState<Customer>()
   const [iScoreDetails, setIScoreDetails] = useState<Score>()
   const [activeTab, setActiveTab] = useState('workInfo')
-  const [ratings, setRatings] = useState<Array<CustomerScore>>([])
+  // const [ratings, setRatings] = useState<Array<CustomerScore>>([])
   const [showHalanLinkageModal, setShowHalanLinkageModal] = useState<boolean>(
     false
   )
@@ -127,6 +123,7 @@ export const CustomerProfile = () => {
 
   useEffect(() => {
     getCustomerDetails()
+    // getCustomerCategorizationRating(location.state.id, setRatings)
   }, [])
   function getArRuralUrban(ruralUrban: string | undefined) {
     if (ruralUrban === 'rural') return local.rural
@@ -431,15 +428,15 @@ export const CustomerProfile = () => {
         showFieldCondition: true,
       },
     ],
-    customerScore: [
-      {
-        fieldTitle: 'ratings',
-        fieldData: ratings,
-        showFieldCondition: Boolean(
-          ability.can('customerCategorization', 'customer')
-        ),
-      },
-    ],
+    // customerScore: [
+    //   {
+    //     fieldTitle: 'ratings',
+    //     fieldData: ratings,
+    //     showFieldCondition: Boolean(
+    //       ability.can('customerCategorization', 'customer')
+    //     ),
+    //   },
+    // ],
     documents: [
       {
         fieldTitle: 'customer id',
