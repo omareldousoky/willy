@@ -158,6 +158,7 @@ export const LoanProductCreationForm = (props: any) => {
                   <>
                     <option value="sme">SME</option>
                     <option value="nano">Nano</option>
+                    <option value="consumerFinance">Consumer Finance</option>
                   </>
                 )}
               </Form.Control>
