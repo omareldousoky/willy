@@ -127,7 +127,6 @@ export const CustomerProfile = () => {
 
   useEffect(() => {
     getCustomerDetails()
-    getCustomerCategorizationRating(location.state.id, setRatings)
   }, [])
   function getArRuralUrban(ruralUrban: string | undefined) {
     if (ruralUrban === 'rural') return local.rural
