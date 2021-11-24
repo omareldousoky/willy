@@ -42,7 +42,7 @@ export const manageAccountsArray = (): Card[] => {
       path: '/manage-accounts/loan-officers',
     })
   }
-  if (ability.can('getUpdateCustomerOfficerLog', 'customer')) {
+  if (ability.can('getUpdateCustomerOfficerLog', 'search')) {
     mangeAccountArr.push({
       icon: 'customers',
       header: local.loanOfficersTransfers,
