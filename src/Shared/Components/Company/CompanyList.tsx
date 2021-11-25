@@ -188,7 +188,7 @@ const List = ({
           </div>
           <hr className="dashed-line" />
           <Search
-            searchKeys={['keyword', 'dateFromTo']}
+            searchKeys={['keyword', 'dateFromTo', 'consumerFinanceLimitStatus']}
             dropDownKeys={[
               'name',
               'taxCardNumber',
@@ -196,6 +196,7 @@ const List = ({
               'key',
               'code',
               'customerShortenedCode',
+              'phoneNumber',
             ]}
             searchPlaceholder={local.searchCompanyList}
             url="customer"
