@@ -61,7 +61,7 @@ export const StepTwoCompanyForm = (props: any) => {
     companyKey,
   } = props
 
-  const debouncedSearchTerm = useDebounce(values.cbeCode, 500)
+  const debouncedSearchTerm = useDebounce(values.cbeCode, 300)
 
   const getLoanOfficers = async (inputValue: string) => {
     const res = await searchLoanOfficer({
@@ -155,7 +155,7 @@ export const StepTwoCompanyForm = (props: any) => {
           setFieldValue('cbeCodeDupKey', res.body.CustomerKey)
         } else {
           setLoading(false)
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
         }
       } else {
         setLoading(false)
@@ -199,8 +199,8 @@ export const StepTwoCompanyForm = (props: any) => {
               <Form.Control
                 type="text"
                 name="cbeCode"
-                defaultValue={
-                  cbeCode.length === 0 ? values.cbeCode : cbeCode[0].cbeCode
+                value={
+                  cbeCode?.length === 0 ? values.cbeCode : cbeCode[0]?.cbeCode
                 }
                 onBlur={handleBlur}
                 onChange={handleChange}
