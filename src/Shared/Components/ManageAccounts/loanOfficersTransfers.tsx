@@ -35,7 +35,6 @@ export const LoanOfficersTransfers = () => {
     oldRepresentativeId: '',
     newRepresentativeId: '',
     customerKey: null,
-    branchId: branchId === 'hq' ? '' : branchId,
     from,
     size,
   })
@@ -47,6 +46,7 @@ export const LoanOfficersTransfers = () => {
       size: 100,
       name: inputValue,
       status: 'active',
+      branchId: branchId === 'hq' ? '' : branchId,
     })
     if (res.status === 'success') {
       setLoanOfficers([...res.body.data])

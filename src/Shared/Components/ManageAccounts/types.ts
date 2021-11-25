@@ -2,7 +2,6 @@ export type LogsInput = {
   oldRepresentativeId: string
   newRepresentativeId: string
   customerKey: number | null
-  branchId?: string
   from: number
   size: number
 }
