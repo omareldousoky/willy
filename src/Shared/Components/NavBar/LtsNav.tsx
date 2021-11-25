@@ -182,6 +182,12 @@ export const LtsNav = ({ hide }: Props) => {
           >
             {local.manageAccounts}
           </Nav.Link>
+        ) : ability.can('getUpdateCustomerOfficerLog', 'search') ? (
+          <Nav.Link
+            onClick={() => history.push('/manage-accounts/transfer-logs')}
+          >
+            {local.manageAccounts}
+          </Nav.Link>
         ) : null}
         {!hide && ability.can('documentTypes', 'config') ? (
           <Nav.Link onClick={() => history.push('/tools/encoding-files')}>
