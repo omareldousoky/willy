@@ -156,9 +156,9 @@ export const LoanProductCreationForm = (props: any) => {
                 <option value="micro">Micro</option>
                 {values.contractType !== 'masterGas' && (
                   <>
-                    <option value="sme">SME</option>
-                    <option value="nano">Nano</option>
-                    <option value="consumerFinance">Consumer Finance</option>
+                    <option value="sme">{local.sme}</option>
+                    <option value="nano">{local.nano}</option>
+                    <option value="consumerFinance">{local.cfLoan}</option>
                   </>
                 )}
               </Form.Control>

@@ -1005,7 +1005,7 @@ const Search: FunctionComponent<SearchProps> = ({
                           { value: 'sme', text: local.sme },
                           {
                             value: 'consumerFinance',
-                            text: local.consumerFinance,
+                            text: local.cfLoan,
                           },
                         ].map(({ value, text }) => (
                           <option key={value} value={value} data-qc={value}>
