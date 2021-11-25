@@ -589,12 +589,12 @@ const appRoutes = [
                 label: local.loanOfficer,
                 render: (props) => <UserDetails {...props} />,
               },
-              {
-                path: '/transfer-logs',
-                label: local.loanOfficersTransfers,
-                render: () => <LoanOfficersTransfers />,
-              },
             ],
+          },
+          {
+            path: '/transfer-logs',
+            label: local.loanOfficersTransfers,
+            render: () => <LoanOfficersTransfers />,
           },
         ],
       },

@@ -47,7 +47,7 @@ export const manageAccountsArray = (): Card[] => {
       icon: 'customers',
       header: local.loanOfficersTransfers,
       desc: local.loanOfficersTransfers,
-      path: '/manage-accounts/loan-officers/transfer-logs',
+      path: '/manage-accounts/transfer-logs',
     })
   }
   return mangeAccountArr
