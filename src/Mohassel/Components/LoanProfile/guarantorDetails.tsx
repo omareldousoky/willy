@@ -84,8 +84,10 @@ export const GuarantorTableView = (props: Props) => {
       const merged: Array<any> = []
       const validationObject: any = {}
       for (let i = 0; i < customers.length; i += 1) {
+        const customer = { ...customers[i] }
+        delete customer.guarantorIds
         const obj = {
-          ...customers[i],
+          ...customer,
           ...(res.body.data
             ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id)
             : { id: customers[i]._id }),
@@ -158,16 +160,22 @@ export const GuarantorTableView = (props: Props) => {
     if (targetGuarantor.status === 'success') {
       let errorMessage1 = ''
       let errorMessage2 = ''
-      if (targetGuarantor.body.blocked.isBlocked === true) {
+      if (targetGuarantor.body.customer.blocked.isBlocked === true) {
         errorMessage1 = local.theCustomerIsBlocked
       }
-      const check = await checkCustomersLimits([targetGuarantor.body], true)
+      const check = await checkCustomersLimits(
+        [targetGuarantor.body.customer],
+        true
+      )
       if (
         check.flag === true &&
         check.customers &&
-        targetGuarantor.body.blocked.isBlocked !== true
+        targetGuarantor.body.customer.blocked.isBlocked !== true
       ) {
-        const newGuarantor = { ...targetGuarantor.body, id: guarantor._id }
+        const newGuarantor = {
+          ...targetGuarantor.body.customer,
+          id: guarantor._id,
+        }
         changeSelected(newGuarantor)
         changeSelectedId(guarantor._id)
       } else if (check.flag === false && check.validationObject) {

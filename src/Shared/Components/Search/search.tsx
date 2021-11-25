@@ -53,6 +53,7 @@ const Search: FunctionComponent<SearchProps> = ({
   setFrom,
   dropDownKeys,
   submitClassName,
+  leadType,
 }) => {
   const isLoanUrl = url === 'loan'
   const isIssuedLoansSearch = url === 'loan' && !fundSource
@@ -192,6 +193,11 @@ const Search: FunctionComponent<SearchProps> = ({
             ? issuedLoansSearchFilters.type
             : 'micro'
           break
+        case 'companyLoanType':
+          initialState.type = isIssuedLoansSearch
+            ? issuedLoansSearchFilters.type
+            : 'sme'
+          break
         case 'warningType':
           initialState.warningType = ''
           break
@@ -296,11 +302,10 @@ const Search: FunctionComponent<SearchProps> = ({
       obj.toDate = fromDate.endOf(obj.lastDates).valueOf()
     }
 
-    if (url === 'customer')
+    if (url === 'customer' || isLoanUrl)
       obj.customerType = dropDownKeys?.includes('commercialRegisterNumber')
         ? 'company'
         : 'individual'
-
     obj = removeEmptyArg(obj)
 
     if (isCibUrl) {
@@ -324,6 +329,7 @@ const Search: FunctionComponent<SearchProps> = ({
       url,
       branchId: hqBranchIdRequest || values.branchId,
     }
+    if (leadType) searchQuery.leadType = leadType
     if (isCibUrl) {
       searchQuery.offset = 0
       searchQuery.branchId = values.branchId || ''
@@ -848,27 +854,6 @@ const Search: FunctionComponent<SearchProps> = ({
                   local.judgementStatus
                 )
               }
-              if (searchKey === 'sme') {
-                return (
-                  <Col key={index} sm={3} style={{ marginTop: 20 }}>
-                    <Form.Group className="row-nowrap" controlId="sme">
-                      <Form.Check
-                        type="checkbox"
-                        name="sme"
-                        data-qc="sme"
-                        checked={formikProps.values.type === 'sme'}
-                        onChange={(e) =>
-                          formikProps.setFieldValue(
-                            'type',
-                            e.currentTarget.checked ? 'sme' : 'micro'
-                          )
-                        }
-                        label="sme"
-                      />
-                    </Form.Group>
-                  </Col>
-                )
-              }
               if (searchKey === 'loanType') {
                 return statusDropdown(
                   formikProps,
@@ -889,6 +874,32 @@ const Search: FunctionComponent<SearchProps> = ({
                           },
                         ]
                       : []),
+                    ...(isLoanUrl
+                      ? [
+                          {
+                            value: 'consumerFinance',
+                            text: local.cfLoan,
+                          },
+                        ]
+                      : []),
+                  ],
+                  'type',
+                  local.productName
+                )
+              }
+              if (searchKey === 'companyLoanType') {
+                return statusDropdown(
+                  formikProps,
+                  index,
+                  [
+                    {
+                      value: 'sme',
+                      text: local.sme,
+                    },
+                    {
+                      value: 'consumerFinance',
+                      text: local.cfLoan,
+                    },
                   ],
                   'type',
                   local.productName

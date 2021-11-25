@@ -21,6 +21,9 @@ interface Props {
       type: string
       contractType: ContractType
     }
+    customer: {
+      customerType: string
+    }
   }
   installments: Array<Installment>
   changePaymentState: (data) => void
@@ -72,7 +75,7 @@ class PaymentIcons extends Component<Props, {}> {
         <div className="payment-icons-container p-4">
           {(ability.can('payInstallment', 'application') ||
             ability.can('payByInsurance', 'application')) &&
-            this.props.application.product.type !== 'sme' && (
+            this.props.application.customer.customerType !== 'company' && (
               <div className="payment-icon m-4">
                 <LtsIcon
                   name={
@@ -145,7 +148,7 @@ class PaymentIcons extends Component<Props, {}> {
           {this.props.paymentType === 'normal' &&
             (ability.can('payInstallment', 'application') ||
               ability.can('payByInsurance', 'application')) &&
-            this.props.application.product.type === 'sme' && (
+            this.props.application.customer.customerType === 'company' && (
               <div className="payment-icon m-4">
                 <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
 
