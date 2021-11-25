@@ -286,6 +286,8 @@ code {
 
 .text-mixed-lang {
   unicode-bidi: plaintext;
+  font-size: small;
+  font-weight: bold;
 }
 
 // this will be replaced later by icon font, but now to avoid redundant requests

@@ -1,6 +1,7 @@
 /* eslint-disable react/display-name */
 
 import * as React from 'react'
+import { Leads } from 'Mohassel/Components/HalanIntegration/leads'
 import CustomerCreation from '../Components/CustomerCreation'
 import UserCreation from '../Components/UserCreation/userCreation'
 import FormulaCreation from '../Components/LoanFormulaCreation/loanFormulaCreation'
@@ -42,7 +43,7 @@ import ReportsHome from '../Components/Reports/reportsHome'
 import MoveCustomers from '../Components/MoveCustomers/moveCustomers'
 import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation'
 import AssignProductsToBranches from '../Components/Branch/assignProductsToBranches'
-import Leads from '../Components/HalanIntegration/leads'
+
 import AssignLoanOfficer from '../Components/HalanIntegration/assignLoanOfficer'
 import PrincipleThreshold from '../Components/ManageFinance/principleThreshold'
 import LeadProfile from '../Components/HalanIntegration/leadProfile'
@@ -71,6 +72,7 @@ import { Landing } from '../../Shared/Components/Landing'
 import { legalWarningRoute } from '../Components/LegalWarnings/routes'
 import CBEFiles from '../Components/Tools/cbeCodes'
 import { CreateLead } from '../Components/HalanIntegration/createLead'
+import CompanyLoanList from '../Components/LoanList/companyLoanList'
 
 const appRoutes = [
   {
@@ -631,6 +633,18 @@ const appRoutes = [
         ],
       },
       {
+        path: '/company-loans',
+        label: local.issuedLoans,
+        render: (props) => <CompanyLoanList {...props} />,
+        routes: [
+          {
+            path: '/loan-profile',
+            label: local.loanDetails,
+            render: (props) => <LoanProfile {...props} />,
+          },
+        ],
+      },
+      {
         path: '/logs',
         label: local.logs,
         render: (props) => (
@@ -647,18 +661,18 @@ const appRoutes = [
       {
         path: '/halan-integration',
         label: local.halan,
-        render: (props) => (
+        render: () => (
           <Can I="getLead" a="halanuser">
-            <Leads {...props} />
+            <Leads />
           </Can>
         ),
         routes: [
           {
             path: '/leads',
             label: local.applicantsLeads,
-            render: (props) => (
+            render: () => (
               <Can I="getLead" a="halanuser">
-                <Leads {...props} />
+                <Leads />
               </Can>
             ),
             routes: [

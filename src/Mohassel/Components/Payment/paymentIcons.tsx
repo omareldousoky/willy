@@ -21,11 +21,15 @@ interface Props {
       type: string
       contractType: ContractType
     }
+    customer: {
+      customerType: string
+    }
   }
   installments: Array<Installment>
   changePaymentState: (data) => void
   handleClickEarlyPayment: () => void
   handleChangePenaltyAction: (key: string) => void
+  isPendingAction: boolean
 }
 class PaymentIcons extends Component<Props, {}> {
   getRequiredAmount() {
@@ -71,7 +75,7 @@ class PaymentIcons extends Component<Props, {}> {
         <div className="payment-icons-container p-4">
           {(ability.can('payInstallment', 'application') ||
             ability.can('payByInsurance', 'application')) &&
-            this.props.application.product.type !== 'sme' && (
+            this.props.application.customer.customerType !== 'company' && (
               <div className="payment-icon m-4">
                 <LtsIcon
                   name={
@@ -85,8 +89,10 @@ class PaymentIcons extends Component<Props, {}> {
                 <Button
                   className="my-4"
                   disabled={
-                    this.props.application.status === 'pending' &&
-                    this.props.paymentType === 'normal'
+                    (this.props.application.status === 'pending' &&
+                      this.props.paymentType === 'normal') ||
+                    (this.props.paymentType === 'penalties' &&
+                      this.props.isPendingAction)
                   }
                   onClick={() => {
                     if (this.props.paymentType === 'penalties') {
@@ -115,6 +121,7 @@ class PaymentIcons extends Component<Props, {}> {
                       this.props.changePaymentState(1)
                     }}
                     variant="primary"
+                    disabled={this.props.isPendingAction}
                   >
                     {local.cancelPenalty}
                   </Button>
@@ -130,6 +137,7 @@ class PaymentIcons extends Component<Props, {}> {
                       this.props.changePaymentState(3)
                     }}
                     variant="primary"
+                    disabled={this.props.isPendingAction}
                   >
                     {local.manualPayment}
                   </Button>
@@ -140,7 +148,7 @@ class PaymentIcons extends Component<Props, {}> {
           {this.props.paymentType === 'normal' &&
             (ability.can('payInstallment', 'application') ||
               ability.can('payByInsurance', 'application')) &&
-            this.props.application.product.type === 'sme' && (
+            this.props.application.customer.customerType === 'company' && (
               <div className="payment-icon m-4">
                 <LtsIcon name="pay-installment" size="90px" color="#7dc255" />
 

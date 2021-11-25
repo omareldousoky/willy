@@ -134,9 +134,9 @@ export const StepTwoCompanyForm = (props: any) => {
   useEffect(() => {
     const token = getCookie('token')
     const details = parseJwt(token)
-    if (!edit && details.branch.length > 0) {
+    if (!edit && details.branch?.length > 0) {
       getConfig(details.branch)
-    } else if (props.branchId.length > 0) {
+    } else if (props.branchId?.length > 0) {
       getConfig(props.branchId)
     }
     getCbeCode(values.businessName)
@@ -512,10 +512,36 @@ export const StepTwoCompanyForm = (props: any) => {
                   </>
                 )}
               </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="guarantorMaxCustomers">
+                    <Form.Label className="customer-form-label">{`${local.noOfGuarantorMaxCustomers}`}</Form.Label>
+                    <Form.Control
+                      type="number"
+                      name="guarantorMaxCustomers"
+                      data-qc="guarantorMaxCustomers"
+                      value={values.guarantorMaxCustomers}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      disabled={
+                        !allowed && (props.hasLoan || props.isGuarantor)
+                      }
+                      isInvalid={
+                        errors.guarantorMaxCustomers &&
+                        touched.guarantorMaxCustomers
+                      }
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.guarantorMaxCustomers}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
+              </Row>
             </>
           )
         }
       </Can>
+
       <Row>
         <Col sm={6}>
           <Form.Group controlId="smeBankName">
