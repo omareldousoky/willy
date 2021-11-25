@@ -46,33 +46,29 @@ export const WarningExtraDetailsModal = ({
       <Modal.Body>
         <Table striped bordered hover>
           <tbody className="px-0 py-2">
-            {extraWarningDetails.daysSinceLastUnpaidInstallments && (
-              <tr>
-                <td style={header}>{local.daysSinceLastUnpaidInstallments}</td>
-                <td style={cell}>
-                  {extraWarningDetails.daysSinceLastUnpaidInstallments}
-                </td>
-              </tr>
-            )}
-            {extraWarningDetails.lastUnpaidInstallmentDate && (
-              <tr>
-                <td style={header}>{local.lastUnpaidInstallmentDate}</td>
-                <td style={cell}>
-                  {timeToArabicDate(
-                    extraWarningDetails.lastUnpaidInstallmentDate,
-                    false
-                  )}
-                </td>
-              </tr>
-            )}
-            {extraWarningDetails.unpaidInstallmentsCount && (
-              <tr>
-                <td style={header}>{local.unpaidInstallmentsCount}</td>
-                <td style={cell}>
-                  {extraWarningDetails.unpaidInstallmentsCount}
-                </td>
-              </tr>
-            )}
+            <tr>
+              <td style={header}>{local.daysSinceLastUnpaidInstallments}</td>
+              <td style={cell}>
+                {extraWarningDetails.daysSinceLastUnpaidInstallments || 0}
+              </td>
+            </tr>
+            <tr>
+              <td style={header}>{local.lastUnpaidInstallmentDate}</td>
+              <td style={cell}>
+                {extraWarningDetails.lastUnpaidInstallmentDate
+                  ? timeToArabicDate(
+                      extraWarningDetails.lastUnpaidInstallmentDate,
+                      false
+                    )
+                  : '-'}
+              </td>
+            </tr>
+            <tr>
+              <td style={header}>{local.unpaidInstallmentsCount}</td>
+              <td style={cell}>
+                {extraWarningDetails.unpaidInstallmentsCount || 0}
+              </td>
+            </tr>
           </tbody>
         </Table>
       </Modal.Body>

@@ -447,7 +447,7 @@ const LegalCustomersList: FunctionComponent = () => {
         },
       },
       {
-        actionTitle: local.view,
+        actionTitle: local.moreInfo,
         actionPermission: true,
         actionOnClick: async () => {
           await getSettlementDetails(customer.loanId)

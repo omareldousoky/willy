@@ -44,40 +44,32 @@ export const SettlementExtraDetailsModal = ({
       <Modal.Body>
         <Table striped bordered hover>
           <tbody className="px-0 py-2">
-            {extraSettlementDetails.principalRemaining && (
-              <tr>
-                <td style={header}>{local.principalRemaining}</td>
-                <td style={cell}>
-                  {extraSettlementDetails.principalRemaining}
-                </td>
-              </tr>
-            )}
-            {extraSettlementDetails.courtFees && (
-              <tr>
-                <td style={header}>{local.courtFees}</td>
-                <td style={cell}>{extraSettlementDetails.courtFees}</td>
-              </tr>
-            )}
-            {extraSettlementDetails.penaltiesPaid && (
-              <tr>
-                <td style={header}>{local.penaltiesPaid}</td>
-                <td style={cell}>{extraSettlementDetails.penaltiesPaid}</td>
-              </tr>
-            )}
-            {extraSettlementDetails.penaltiesCanceled && (
-              <tr>
-                <td style={header}>{local.penaltiesCanceled}</td>
-                <td style={cell}>{extraSettlementDetails.penaltiesCanceled}</td>
-              </tr>
-            )}
-            {extraSettlementDetails.penaltiesRemaining && (
-              <tr>
-                <td style={header}>{local.penaltiesRemaining}</td>
-                <td style={cell}>
-                  {extraSettlementDetails.penaltiesRemaining}
-                </td>
-              </tr>
-            )}
+            <tr>
+              <td style={header}>{local.principalRemaining}</td>
+              <td style={cell}>
+                {extraSettlementDetails.principalRemaining || 0}
+              </td>
+            </tr>
+            <tr>
+              <td style={header}>{local.courtFees}</td>
+              <td style={cell}>{extraSettlementDetails.courtFees || 0}</td>
+            </tr>
+            <tr>
+              <td style={header}>{local.penaltiesPaid}</td>
+              <td style={cell}>{extraSettlementDetails.penaltiesPaid || 0}</td>
+            </tr>
+            <tr>
+              <td style={header}>{local.penaltiesCanceled}</td>
+              <td style={cell}>
+                {extraSettlementDetails.penaltiesCanceled || 0}
+              </td>
+            </tr>
+            <tr>
+              <td style={header}>{local.penaltiesRemaining}</td>
+              <td style={cell}>
+                {extraSettlementDetails.penaltiesRemaining || 0}
+              </td>
+            </tr>
           </tbody>
         </Table>
       </Modal.Body>

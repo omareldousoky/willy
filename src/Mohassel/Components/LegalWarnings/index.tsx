@@ -326,7 +326,12 @@ export const LegalWarnings = () => {
                 warning.loanId && getWarningDetails(warning.loanId)
               }
             >
-              <LtsIcon name="view" size="25px" color="#7dc356" />
+              <LtsIcon
+                name="encoding-files"
+                size="25px"
+                color="#7dc356"
+                tooltipText={local.moreInfo}
+              />
             </Button>
             <Button
               variant="default"
