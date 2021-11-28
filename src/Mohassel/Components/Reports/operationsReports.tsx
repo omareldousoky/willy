@@ -290,7 +290,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       startDate: fromDate,
       endDate: toDate,
       branches,
-      loanType,
+      type: loanType,
     }
   }
 
@@ -305,7 +305,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       endDate: values.toDate,
       branches: values.branches,
       representatives: values.representatives,
-      loanType: values.loanType,
+      type: values.loanType,
     }
     const res = await installmentsDuePerOfficerCustomerCard(request)
     this.handleFetchReport(
@@ -322,7 +322,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       representatives: values.representatives,
       creationDateFrom: values.creationDateFrom,
       creationDateTo: values.creationDateTo,
-      loanType: values.loanType,
+      type: values.loanType,
     }
 
     const res = await unpaidInstallmentsByOfficer(request)
@@ -358,7 +358,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       branches,
       representatives,
       gracePeriod,
-      loanType,
+      type: loanType,
     }
     const res = await fetchOfficersPercentPaymentReport({ ...request })
     this.handleFetchReport(res, Reports.OfficersPercentPayment)
@@ -373,7 +373,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       gracePeriod: values.gracePeriod,
       creationDateFrom: values.creationDateFrom,
       creationDateTo: values.creationDateTo,
-      loanType: values.loanType,
+      type: values.loanType,
     }
 
     const res = await fetchOfficersBranchPercentPaymentReport(request)
@@ -401,7 +401,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       endDate: toDate,
       branches,
       loanOfficerIds,
-      loanType,
+      type: loanType,
     } as PaidArrearsRequest)
     this.handleFetchReport(res, Reports.PaidArrears)
   }
@@ -412,7 +412,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       date,
       branches,
       loanOfficers,
-      loanType,
+      type: loanType,
     } as CustomersArrearsRequest)
     this.handleFetchReport(res, Reports.CustomersArrears)
   }
@@ -433,7 +433,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         999
       ),
       branches: values.branches,
-      loanType: values.loanType,
+      type: values.loanType,
     })
     this.handleFetchReport(res, Reports.MonthComparison)
   }
@@ -444,7 +444,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       date,
       branches,
       loanOfficerIds,
-      loanType,
+      type: loanType,
     } as ActiveWalletRequest)
     this.handleFetchReport(res, Reports.ActiveWalletIndividual)
   }
@@ -455,7 +455,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       date,
       branches,
       loanOfficerIds,
-      loanType,
+      type: loanType,
     } as ActiveWalletRequest)
     this.handleFetchReport(res, Reports.ActiveWalletGroup)
   }
