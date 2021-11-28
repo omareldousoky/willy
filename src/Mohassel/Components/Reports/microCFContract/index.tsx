@@ -1,5 +1,6 @@
 import React from 'react'
 import Tafgeet from 'tafgeetjs'
+
 import { ConsumerFinanceContractData } from '@Shared/Models/consumerContract'
 import local from '@Shared/Assets/ar.json'
 
@@ -31,6 +32,20 @@ export const MicroCFContract = ({
   const entitledToSignCustomer = contractData.entitledToSignCustomers?.length
     ? contractData.entitledToSignCustomers[0]
     : {}
+
+  const guarantorsOrder = (guarantorsLength: number) => {
+    switch (guarantorsLength) {
+      case 0:
+        return 'الطرف الثاني'
+      case 1:
+        return 'الطرفان الثاني و الثالت'
+      default:
+        return ` الاطراف الثاني و ${getNumbersOfGuarantor(
+          'and',
+          guarantorsLength
+        )}`
+    }
+  }
   const term8Condition = (guarantorsLength: number) => {
     switch (guarantorsLength) {
       case 0:
@@ -60,8 +75,6 @@ export const MicroCFContract = ({
           {' '}
           &nbsp; حرر هذا العقد في فرع {contractData.branchName} &nbsp;
         </span>
-        <span>&nbsp; الكائن في عماره رقم &nbsp;</span>
-        <span> شارع &nbsp;</span>
       </p>
       <p>بين كلا من :-</p>
       <p>
@@ -79,17 +92,15 @@ export const MicroCFContract = ({
             <span>
               ثانيا: شركه &nbsp;/ {contractData.customerName || ' '}&nbsp;
             </span>
-
             <span>
               {' '}
               &nbsp; سجل تجاري : {contractData.commercialRegisterNumber || ' '}
               &nbsp;
             </span>
-
             <span>
               <span>
                 &nbsp; والكائن مقرها الرئيسي :{' '}
-                {numbersToArabic(contractData.businessAddress) || ' '}
+                {contractData.businessAddress || ' '}
                 &nbsp;
               </span>
               <sub>&quot;يشار إليه فيما بعد بالطرف الثاني&quot;</sub>
@@ -97,16 +108,17 @@ export const MicroCFContract = ({
             <span>
               &nbsp;ويمثلها في التوقيع السيد{' '}
               {entitledToSignCustomer.customerName}
-              &nbsp;
-            </span>
+            </span>{' '}
+            <br />
+            &nbsp;
             <span>
-              &nbsp; ويحمل الرقم القومي&nbsp;{' '}
-              {entitledToSignCustomer.nationalId}&nbsp;
+              ويحمل الرقم القومي &nbsp;{entitledToSignCustomer.nationalId}
             </span>
             <span>
               {' '}
-              &nbsp;التليفون {entitledToSignCustomer.mobilePhoneNumber} &nbsp;
+              التليفون &nbsp;{entitledToSignCustomer.mobilePhoneNumber}
             </span>
+            &nbsp;
             <span>
               السن &nbsp;
               {calculateAge(
@@ -114,18 +126,22 @@ export const MicroCFContract = ({
               )}
               &nbsp;
             </span>
+            &nbsp;
             <span>
-              &nbsp; المهنة: &nbsp;
+              المهنة: &nbsp;
               {local[entitledToSignCustomer?.position || '']}
               &nbsp;
             </span>
           </p>
         ) : (
           <p>
-            <span>ثانيا: السيد/ {contractData.customerName || ' '}</span>
-            <span> الكائن في: {contractData.customerHomeAddress || ' '}</span>
+            <span>ثانيا: السيد/ &nbsp;{contractData.customerName || ' '}</span>
             <span>
-              يحمل بطاقة رقم قومي:
+              {' '}
+              الكائن في: &nbsp;{contractData.customerHomeAddress || ' '}
+            </span>
+            <span>
+              يحمل بطاقة رقم قومي: &nbsp;
               {numbersToArabic(contractData.nationalId) || ' '}
             </span>
           </p>
@@ -225,9 +241,9 @@ export const MicroCFContract = ({
         <p className="head-title">البند الرابع</p>
         <p>
           {' '}
-          يقر الطرفان الثاني والثالث متضامنين فيما بينهم بسداد كافه المبالغ
-          الوارده بالبند السابق وفقا للمواعيد المذكوره وان هذه المبالغ تعد قيمه
-          القرض وكافه مصروفاته{' '}
+          يقر {guarantorsOrder(noOfGuarantors)} متضامنين فيما بينهم بسداد كافه
+          المبالغ الوارده بالبند السابق وفقا للمواعيد المذكوره وان هذه المبالغ
+          تعد قيمه القرض وكافه مصروفاته{' '}
         </p>
       </section>
       <section className="term-container" title="fifth-term">
@@ -235,7 +251,7 @@ export const MicroCFContract = ({
         {sme ? (
           <>
             <p>
-              يلتزم الاطراف الثاني والثالث والرابع متضامنين فيما بينهم بسداد
+              يلتزم {guarantorsOrder(noOfGuarantors)} متضامنين فيما بينهم بسداد
               اقساط القرض وفقا لما هو وارد بالبند الثالث من هذا العقد وفي حاله
               تاخرهم في سداد قيمه اي قسط في تاريخ استحقاقه يلتزموا بسداد غرامه
               تاخير واحد جنيه عن كل الف عن كل يوم تاخير تبدا من اليوم التالي
@@ -327,8 +343,8 @@ export const MicroCFContract = ({
           </li>
           <li>
             {' '}
-            يلتزم الاطراف الثاني والثالث بسداد كافه المصروفات والمصاريف القضائيه
-            بكافة انواعها .
+            يلتزم {guarantorsOrder(noOfGuarantors)} بسداد كافه المصروفات
+            والمصاريف القضائيه بكافة انواعها .
           </li>
         </ul>
       </section>
