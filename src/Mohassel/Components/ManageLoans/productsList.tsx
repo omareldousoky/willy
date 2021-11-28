@@ -70,7 +70,8 @@ class LoanProducts extends Component<Props, State> {
       {
         title: local.actionType,
         key: 'type',
-        render: (data) => local[data.type],
+        render: (data) =>
+          data.type === 'consumerFinance' ? local.cfLoan : local[data.type],
       },
       {
         title: local.customerType,

@@ -1003,6 +1003,10 @@ const Search: FunctionComponent<SearchProps> = ({
                           { value: 'micro', text: local.micro },
                           { value: 'nano', text: local.nano },
                           { value: 'sme', text: local.sme },
+                          {
+                            value: 'consumerFinance',
+                            text: local.cfLoan,
+                          },
                         ].map(({ value, text }) => (
                           <option key={value} value={value} data-qc={value}>
                             {text}
