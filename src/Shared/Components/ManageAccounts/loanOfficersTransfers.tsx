@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import HeaderWithCards from 'Shared/Components/HeaderWithCards/headerWithCards'
 import DynamicTable from 'Shared/Components/DynamicTable/dynamicTable'
 import * as local from 'Shared/Assets/ar.json'
@@ -22,23 +22,29 @@ import {
 import AsyncSelect from 'react-select/async'
 import Button from 'react-bootstrap/esm/Button'
 import { manageAccountsArray } from 'Mohassel/Components/ManageAccounts/manageAccountsInitials'
-import useApi from 'Shared/hooks/useApi'
 import { LogsInput } from './types'
 
 export const LoanOfficersTransfers = () => {
   const branchId = getBranchFromCookie()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [loanOfficers, setLoanOfficers] = useState<LoanOfficer[]>([])
-  const [size, setSize] = useState<number>(10)
-  const [from, setFrom] = useState<number>(0)
   const [logsInput, setLogsInput] = useState<LogsInput>({
     oldRepresentativeId: '',
     newRepresentativeId: '',
     customerKey: null,
-    from,
-    size,
+    from: 0,
+    size: 10,
   })
-  const [logsData, logsApi] = useApi(searchLoanOfficerLogs, logsInput)
+  const [logsData, setLogsData] = useState({ totalCount: 0, data: [] })
+
+  const getLogs = async (newInput) => {
+    setIsLoading(true)
+    const res = await searchLoanOfficerLogs(newInput)
+    if (res.status === 'success') {
+      setLogsData({ ...res.body })
+    } else Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
+    setIsLoading(false)
+  }
 
   const getLoanOfficers = async (inputValue: string) => {
     const res = await searchLoanOfficer({
@@ -53,16 +59,18 @@ export const LoanOfficersTransfers = () => {
       return res.body.data
     }
     setLoanOfficers([])
-    Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
     return []
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-    logsApi.get()
-    setIsLoading(false)
-  }
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault()
+      getLogs(logsInput)
+    },
+    [logsInput]
+  )
+
   const mappers = [
     {
       title: local.customerName,
@@ -196,15 +204,12 @@ export const LoanOfficersTransfers = () => {
             </Row>
           </Form>
           <DynamicTable
-            from={from}
-            size={size}
             pagination
             totalCount={logsData.totalCount}
             mappers={mappers}
             data={logsData.data}
             changeNumber={(key: string, number: number) => {
-              key === 'size' && setSize(number)
-              key === 'from' && setFrom(number)
+              getLogs({ ...logsInput, [key]: number })
             }}
           />
         </Card.Body>
