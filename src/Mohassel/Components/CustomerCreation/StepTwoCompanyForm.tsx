@@ -185,9 +185,6 @@ export const StepTwoCompanyForm = (props: any) => {
                 }))}
                 isDisabled={cbeCode.length === 1}
                 isOptionSelected={(option) => option.value === values.cbeCode}
-                formatOptionLabel={(option) =>
-                  `${option.label} | ${option.value}`
-                }
                 defaultValue={cbeCode
                   .filter((company) => company.cbeCode === values.cbeCode)
                   .map((foundCbe) => ({
