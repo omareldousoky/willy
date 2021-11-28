@@ -1,8 +1,11 @@
 import React from 'react'
 import Tafgeet from 'tafgeetjs'
 import { ConsumerFinanceContractData } from '@Shared/Models/consumerContract'
+import local from '@Shared/Assets/ar.json'
+
 import {
   addYearToTimeStamp,
+  calculateAge,
   dayToArabic,
   getNumbersOfGuarantor,
   numbersToArabic,
@@ -25,6 +28,9 @@ export const MicroCFContract = ({
   merchantCreationDate?: string
 }) => {
   const noOfGuarantors = contractData.customerGuarantors?.length as number
+  const entitledToSignCustomer = contractData.entitledToSignCustomers?.length
+    ? contractData.entitledToSignCustomers[0]
+    : {}
   const term8Condition = (guarantorsLength: number) => {
     switch (guarantorsLength) {
       case 0:
@@ -50,8 +56,11 @@ export const MicroCFContract = ({
         {timeToArabicDateNow(false)}
       </p>
       <p>
-        <span>حرر هذا العقد في فرع {contractData.branchName} &nbsp;</span>
-        <span> الكائن في عماره رقم &nbsp;</span>
+        <span>
+          {' '}
+          &nbsp; حرر هذا العقد في فرع {contractData.branchName} &nbsp;
+        </span>
+        <span>&nbsp; الكائن في عماره رقم &nbsp;</span>
         <span> شارع &nbsp;</span>
       </p>
       <p>بين كلا من :-</p>
@@ -67,32 +76,58 @@ export const MicroCFContract = ({
       <div>
         {sme ? (
           <p>
-            <span>ثانيا: شركه/ {contractData.customerName || ' '}</span>
-            &nbsp;
+            <span>
+              ثانيا: شركه &nbsp;/ {contractData.customerName || ' '}&nbsp;
+            </span>
+
             <span>
               {' '}
-              سجل تجاري : {contractData.commercialRegisterNumber || ' '}
+              &nbsp; سجل تجاري : {contractData.commercialRegisterNumber || ' '}
+              &nbsp;
             </span>
-            &nbsp;
+
             <span>
-              والكائن مقرها الرئيسي :{' '}
-              {numbersToArabic(contractData.businessAddress) || ' '}
+              <span>
+                &nbsp; والكائن مقرها الرئيسي :{' '}
+                {numbersToArabic(contractData.businessAddress) || ' '}
+                &nbsp;
+              </span>
+              <sub>&quot;يشار إليه فيما بعد بالطرف الثاني&quot;</sub>
             </span>
-            &nbsp;
-            <sub>&quot;يشار إليه فيما بعد بالطرف الثاني&quot;</sub>
+            <span>
+              &nbsp;ويمثلها في التوقيع السيد{' '}
+              {entitledToSignCustomer.customerName}
+              &nbsp;
+            </span>
+            <span>
+              &nbsp; ويحمل الرقم القومي&nbsp;{' '}
+              {entitledToSignCustomer.nationalId}&nbsp;
+            </span>
+            <span>
+              {' '}
+              &nbsp;التليفون {entitledToSignCustomer.mobilePhoneNumber} &nbsp;
+            </span>
+            <span>
+              السن &nbsp;
+              {calculateAge(
+                new Date(entitledToSignCustomer.birthDate as number).valueOf()
+              )}
+              &nbsp;
+            </span>
+            <span>
+              &nbsp; المهنة: &nbsp;
+              {local[entitledToSignCustomer?.position || '']}
+              &nbsp;
+            </span>
           </p>
         ) : (
           <p>
             <span>ثانيا: السيد/ {contractData.customerName || ' '}</span>
-            &nbsp;
             <span> الكائن في: {contractData.customerHomeAddress || ' '}</span>
-            &nbsp;
             <span>
-              يحمل بطاقة رقم قومي:{' '}
+              يحمل بطاقة رقم قومي:
               {numbersToArabic(contractData.nationalId) || ' '}
             </span>
-            &nbsp;
-            <sub>&quot;يشار إليه فيما بعد بالطرف الثاني&quot;</sub>
           </p>
         )}
       </div>
@@ -122,10 +157,10 @@ export const MicroCFContract = ({
           بتمويل المشروعات المتوسطه والصغيره ومتناهيه الصغر وقد تقدم الطرف
           الثاني صاحب نشاط تجاري – تجاره مواد غذائيه بطلب الحصول على تمويل من
           فرع {contractData.branchName}
-          وذلك وفقا لاحكام القانون رقم 141 لسنه 2014 المشار اليه وذلك بضمان
-          وتضامن الطرف الثالث وقد وافقه الطرف الاول علي ذلك وفقا للشروط والضوابط
-          الوارده بهذا العقد وبعد ان اقر الاطراف باهليتهم القانونيه للتصرف
-          والتعاقد فقد اتفقوا علي بنود العقد التاليه
+          وذلك وفقا لاحكام القانون رقم 141 لسنه 2014 المشار اليه طرف ثاني مقترض
+          وذلك بضمان وتضامن الطرف الثالث وقد وافقه الطرف الاول علي ذلك وفقا
+          للشروط والضوابط الوارده بهذا العقد وبعد ان اقر الاطراف باهليتهم
+          القانونيه للتصرف والتعاقد فقد اتفقوا علي بنود العقد التاليه
         </p>
       </div>
       <section className="term-container" title="first-term">
@@ -181,7 +216,9 @@ export const MicroCFContract = ({
         </p>
         <p>
           اتفق الطرفين الاول والثاني بان تكاليف التمويل سوف تتحملها شركه امكاي
-          فودز وفقا للعقد المبرم بينه وبين الطرف الاول.
+          وفودز وفقا للعقد المبرم بينه وبين الطرف الاول ولا يحق لاي منهما
+          المنازعة في ذلك إعمالا للمادة ١٦ من القانون رقم ١٤١ لسنة ٢٠١٤ الخاص
+          بتمويل المشروعات المتوسطة و الصغيرة و متناهية الصغر.
         </p>
       </section>
       <section className="term-container" title="fourth-term">
@@ -348,12 +385,7 @@ export const MicroCFContract = ({
           </div>
           <div>
             <p>الطرف الثاني</p>
-            <p>
-              الأسم/{' '}
-              {contractData.entitledToSignCustomers?.length
-                ? contractData?.entitledToSignCustomers[0].customerName
-                : ''}
-            </p>
+            <p>الأسم/ {entitledToSignCustomer.customerName}</p>
             <p> التوقيع/ ..........................</p>
           </div>
         </div>

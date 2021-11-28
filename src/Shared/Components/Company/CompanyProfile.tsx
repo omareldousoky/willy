@@ -4,7 +4,6 @@ import Swal from 'sweetalert2'
 import { useHistory, useLocation } from 'react-router-dom'
 
 import Container from 'react-bootstrap/Container'
-
 import local from '../../Assets/ar.json'
 import ability from '../../../Mohassel/config/ability'
 import {
@@ -28,6 +27,7 @@ import {
   CFEntitledToSignDetailsProps,
   CFGuarantorDetailsProps,
   Customer,
+  EntitledToSign,
   Score,
 } from '../../Models/Customer'
 import { ProfileActions } from '../ProfileActions'
@@ -53,7 +53,7 @@ export const CompanyProfile = () => {
   const [cfModalAction, setCFModalAction] = useState('')
   const [customerGuarantors, setCustomerGuarantors] = useState<Customer[]>([])
   const [entitledToSignCustomers, setEntitledToSignCustomers] = useState<
-    Customer[]
+    EntitledToSign[]
   >([])
   const [score, setScore] = useState<Score>()
   const [iScoreDetails, setIScoreDetails] = useState<Score[]>()
@@ -221,6 +221,9 @@ export const CompanyProfile = () => {
       customerHomeAddress: customer.customerHomeAddress || '',
       mobilePhoneNumber: customer.mobilePhoneNumber || '',
       initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
+      branchName: customer.branchName || '',
+      commercialRegisterNumber: customer.commercialRegisterNumber || '',
+      businessAddress: customer.businessAddress || '',
       customerGuarantors: customerGuarantors || [],
       entitledToSignCustomers: entitledToSignCustomers || [],
     })
