@@ -1,8 +1,8 @@
 import React from 'react'
 import Tafgeet from 'tafgeetjs'
 
-import { ConsumerFinanceContractData } from '@Shared/Models/consumerContract'
-import local from '@Shared/Assets/ar.json'
+import { ConsumerFinanceContractData } from '../../../../Shared/Models/consumerContract'
+import local from '../../../../Shared/Assets/ar.json'
 
 import {
   addYearToTimeStamp,
