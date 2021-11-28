@@ -211,8 +211,8 @@ export const MicroCFContract = ({
       <section className="term-container" title="third-term">
         <p className="head-title">البند الثالث</p>
         <p>
-          يلتزم الطرفان الثاني والثالث ضامنين متضامنين فيما بينهم بسداد اجمالي
-          قيمه التمويل البالغ الحد الاقصي لها{' '}
+          يلتزم {guarantorsOrder(noOfGuarantors)} ضامنين متضامنين فيما بينهم
+          بسداد اجمالي قيمه التمويل البالغ الحد الاقصي لها{' '}
           {contractData.initialConsumerFinanceLimit}{' '}
           {contractData.initialConsumerFinanceLimit
             ? `(${new Tafgeet(
