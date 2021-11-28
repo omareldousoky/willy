@@ -90,7 +90,7 @@ const tabs: Array<Tab> = [
 export const CustomerProfile = () => {
   const [loading, setLoading] = useState(false)
   const [customerDetails, setCustomerDetails] = useState<Customer>()
-  const [iScoreDetails, setIScoreDetails] = useState<Score>()
+  const [iScoreDetails, setIScoreDetails] = useState<Score[]>()
   const [activeTab, setActiveTab] = useState('workInfo')
   const [print, setPrint] = useState('')
   // const [ratings, setRatings] = useState<Array<CustomerScore>>([])
@@ -260,7 +260,7 @@ export const CustomerProfile = () => {
     const iScore = await getIscore(obj)
     if (iScore.status === 'success') {
       const guarIds = customerGuarantors.map((guar) => guar.nationalId)
-      await getCachediScores([data.nationalId, ...guarIds])
+      await getCachediScores([customerDetails?.nationalId, ...guarIds])
       setLoading(false)
     } else {
       setLoading(false)
@@ -275,7 +275,9 @@ export const CustomerProfile = () => {
     getCustomerInfo({
       customerDetails,
       getIscore: (data) => getCustomerIscore(data),
-      score: iScoreDetails,
+      score: iScoreDetails?.filter(
+        (score) => score.nationalId === customerDetails.nationalId
+      )[0],
       applicationStatus: 'reviewed',
       isLeader: false,
     }),
