@@ -153,11 +153,12 @@ export const LoanProductCreationForm = (props: any) => {
                 }}
                 isInvalid={errors.type && touched.type}
               >
-                <option value="micro">Micro</option>
+                <option value="micro">{local.micro}</option>
                 {values.contractType !== 'masterGas' && (
                   <>
-                    <option value="sme">SME</option>
-                    <option value="nano">Nano</option>
+                    <option value="sme">{local.sme}</option>
+                    <option value="nano">{local.nano}</option>
+                    <option value="consumerFinance">{local.cfLoan}</option>
                   </>
                 )}
               </Form.Control>
