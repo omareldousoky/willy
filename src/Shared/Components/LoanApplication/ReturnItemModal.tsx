@@ -4,8 +4,8 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
-import local from '../../../../Shared/Assets/ar.json'
-import { getDateString } from '../../../../Shared/Services/utils'
+import local from '../../Assets/ar.json'
+import { getDateString } from '../../Services/utils'
 
 interface ReturnItemModalProps {
   show: boolean
@@ -48,7 +48,11 @@ const ReturnItemModal: FunctionComponent<ReturnItemModalProps> = ({
           </Row>
           <Row>
             <Col>
-              <Button variant="primary" onClick={() => submit(truthDate)}>
+              <Button
+                variant="primary"
+                onClick={() => submit(truthDate)}
+                disabled={!truthDate}
+              >
                 {local.submit}
               </Button>
             </Col>

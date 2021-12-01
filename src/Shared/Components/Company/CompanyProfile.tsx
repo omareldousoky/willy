@@ -228,7 +228,14 @@ export const CompanyProfile = () => {
       entitledToSignCustomers: entitledToSignCustomers || [],
     })
   }
-  const mainInfo = company && [getCompanyInfo({ company, score })]
+  const mainInfo = company && [
+    getCompanyInfo({
+      company,
+      score,
+      // getIscore: (data) => getCustomerIscore(data),
+      applicationStatus: 'reviewed',
+    }),
+  ]
   const tabs: Array<Tab> = [
     {
       header: local.documents,
