@@ -1,6 +1,7 @@
 /* eslint-disable react/display-name */
 
 import * as React from 'react'
+import { LoanOfficersTransfers } from 'Shared/Components/ManageAccounts'
 import { Leads } from 'Mohassel/Components/HalanIntegration/leads'
 import CustomerCreation from '../Components/CustomerCreation'
 import UserCreation from '../Components/UserCreation/userCreation'
@@ -590,6 +591,11 @@ const appRoutes = [
                 render: (props) => <UserDetails {...props} />,
               },
             ],
+          },
+          {
+            path: '/transfer-logs',
+            label: local.loanOfficersTransfers,
+            render: () => <LoanOfficersTransfers />,
           },
         ],
       },

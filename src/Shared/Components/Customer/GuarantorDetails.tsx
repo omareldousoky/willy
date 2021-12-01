@@ -175,7 +175,7 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
         {ability.can('addCustomerGuarantors', 'customer') &&
           !props.isBlocked &&
           (props.limitStatus === 'approved' ? isHQ : true) &&
-          props.guarantors.length < 2 && (
+          props.guarantors.length < 3 && (
             <div className="mt-5 mb-5">
               <Button variant="primary" onClick={() => setOpenModal(true)}>
                 {local.addEditOrRemoveGuarantor}

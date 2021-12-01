@@ -162,6 +162,8 @@ export const LoanApplicationDetails = (props) => {
                       <tr>
                         <th>العنوان</th>
                         <td>{props.data.customerHomeAddress}</td>
+                        <th>السمه التجاريه</th>
+                        <td>{props.data.businessCharacteristic}</td>
                       </tr>
                     </>
                   ) : (
