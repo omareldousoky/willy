@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/async'
-import Select, { ValueType } from 'react-select'
+import Select from 'react-select'
 import Swal from 'sweetalert2'
 
 import Button from 'react-bootstrap/Button'
