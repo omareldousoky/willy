@@ -89,9 +89,9 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
           <div key={index}>
             <p>
               {index === 0 ? 'ثالثا' : 'رابعا'} : السيد/{' '}
-              {guarantor.customerName}
-              الكائن في: {guarantor.customerHomeAddress}
-              {numbersToArabic(guarantor.nationalId)} يحمل بطاقة رقم قومي:
+              {guarantor.customerName} الكائن في:{' '}
+              {guarantor.customerHomeAddress}&nbsp; يحمل بطاقة رقم قومي:{' '}
+              {numbersToArabic(guarantor.nationalId)}
               <sub>
                 &quot;يشار إليه فيما بعد بالطرف {orderLocal[index + 2]} (
                 {guarantorOrderLocal[index]}
