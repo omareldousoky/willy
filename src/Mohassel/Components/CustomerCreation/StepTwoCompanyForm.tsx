@@ -175,15 +175,15 @@ export const StepTwoCompanyForm = (props: any) => {
                 name="cbeCode"
                 theme={theme.selectTheme}
                 placeholder={local.cbeCode}
-                onChange={(event: ValueType<Option> | Option) => {
-                  const { value } = event as Option
+                onChange={(event: any) => {
+                  const value = event?.value || ' '
+
                   setFieldValue('cbeCode', value)
                 }}
                 options={cbeCode.map((company) => ({
                   label: `${company.name} | ${company.cbeCode}`,
                   value: company.cbeCode,
                 }))}
-                isDisabled={cbeCode.length === 1}
                 isOptionSelected={(option) => option.value === values.cbeCode}
                 defaultValue={cbeCode
                   .filter((company) => company.cbeCode === values.cbeCode)
@@ -191,6 +191,7 @@ export const StepTwoCompanyForm = (props: any) => {
                     label: `${foundCbe.name} | ${foundCbe.cbeCode}`,
                     value: foundCbe.cbeCode,
                   }))}
+                isClearable
               />
             ) : (
               <Form.Control
@@ -202,7 +203,6 @@ export const StepTwoCompanyForm = (props: any) => {
                 onBlur={handleBlur}
                 onChange={handleChange}
                 isInvalid={errors.cbeCode && touched.cbeCode}
-                disabled={cbeCode.length === 1}
               />
             )}
             {errors.cbeCode && (
