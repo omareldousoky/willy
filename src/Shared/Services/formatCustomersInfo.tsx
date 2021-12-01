@@ -68,7 +68,6 @@ const iscoreField = ({
         </Col>
       )}
       {applicationStatus &&
-        ability.can('viewIscore', 'customer') &&
         (productType === 'nano' ||
           ![
             'approved',
@@ -140,7 +139,7 @@ export const getCompanyInfo = ({
         applicationStatus,
         customerDetails: company,
       }),
-      showFieldCondition: !!score,
+      showFieldCondition: ability.can('viewIscore', 'customer'),
     },
     {
       fieldTitle: local.taxCardNumber,
@@ -305,7 +304,7 @@ export const getCustomerInfo = ({
         customerDetails,
         productType,
       }),
-      showFieldCondition: !!score,
+      showFieldCondition: ability.can('viewIscore', 'customer'),
     },
     {
       fieldTitle: local.nationalId,

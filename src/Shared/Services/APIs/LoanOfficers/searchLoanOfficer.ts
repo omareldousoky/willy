@@ -16,6 +16,15 @@ export const searchLoanOfficer = async (data: object) => {
     return { status: 'error', error: error.response.data }
   }
 }
+export const searchLoanOfficerLogs = async (data: object) => {
+  const url = API_BASE_URL + `/search/customer-officer-log`
+  try {
+    const res = await axios.post(url, data)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
+}
 
 export const getLoanOfficer = async (id: string) => {
   const url = API_BASE_URL + `/user/loan-officer?id=${id}`
