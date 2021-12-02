@@ -3,6 +3,7 @@ export interface PDF {
   local?: string
   inputs?: Array<string>
   permission: string
+  isPdfDisabled?: boolean
 }
 
 export interface PDFListProps {
