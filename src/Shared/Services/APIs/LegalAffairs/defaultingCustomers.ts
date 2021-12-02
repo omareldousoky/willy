@@ -167,3 +167,13 @@ export const getLegalHistory = async (
     return { status: 'error', error: error.response.data }
   }
 }
+
+export const getSettlementExtraDetails = async (loanId: string) => {
+  const url = API_BASE_URL + `/legal/settlement-calculations/${loanId}`
+  try {
+    const res = await axios.get(url)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
+}

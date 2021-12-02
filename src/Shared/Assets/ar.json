@@ -1244,5 +1244,13 @@
   "addEntitledToSign": "إضافة من له حق التوقيع",
   "noEntitledToSign": "لا يوجد من له حق التوقيع",
   "changeCfMobileNumber": "تغيير رقم المحمول",
-  "will": "سيتم"
+  "will": "سيتم",
+  "lastUnpaidInstallmentDate": "تاريخ اخر قسط غير مسدد",
+  "daysSinceLastUnpaidInstallments": "عدد ايام التاخير",
+  "unpaidInstallmentsCount": "عدد الاقساط المتاخره",
+  "principalRemaining": "المتبقي من اصل القرض",
+  "penaltiesPaid": "غرامات مسدده",
+  "penaltiesCanceled": "غرامات معفيه",
+  "penaltiesRemaining": "غرامات مستحقه",
+  "moreInfo": "المزيد من المعلومات"
 }
