@@ -52,6 +52,12 @@ export const CfNavbar = () => {
           >
             {local.manageAccounts}
           </Nav.Link>
+        ) : ability.can('getUpdateCustomerOfficerLog', 'search') ? (
+          <Nav.Link
+            onClick={() => history.push('/manage-accounts/transfer-logs')}
+          >
+            {local.manageAccounts}
+          </Nav.Link>
         ) : null}
         {(ability.can('getIssuedLoan', 'application') ||
           ability.can('branchIssuedLoan', 'application')) && (
