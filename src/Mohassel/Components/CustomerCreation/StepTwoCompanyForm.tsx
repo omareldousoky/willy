@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/async'
-import Select, { ValueType } from 'react-select'
+import Select from 'react-select'
 import Swal from 'sweetalert2'
 
 import Button from 'react-bootstrap/Button'
@@ -61,7 +61,7 @@ export const StepTwoCompanyForm = (props: any) => {
     companyKey,
   } = props
 
-  const debouncedSearchTerm = useDebounce(values.cbeCode, 500)
+  const debouncedSearchTerm = useDebounce(values.cbeCode, 300)
 
   const getLoanOfficers = async (inputValue: string) => {
     const res = await searchLoanOfficer({
@@ -119,6 +119,7 @@ export const StepTwoCompanyForm = (props: any) => {
         from: 0,
         size: 100,
         name,
+        type: 'company',
       })
       if (res.status === 'success') {
         setCbeCode(res.body.data)
@@ -154,7 +155,7 @@ export const StepTwoCompanyForm = (props: any) => {
           setFieldValue('cbeCodeDupKey', res.body.CustomerKey)
         } else {
           setLoading(false)
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
         }
       } else {
         setLoading(false)
@@ -167,44 +168,41 @@ export const StepTwoCompanyForm = (props: any) => {
       <Row>
         <Col sm={6}>
           <Form.Group controlId="cbeCode">
-            <Form.Label>{`${local.cbeCode} *`}</Form.Label>
+            <Form.Label>{local.cbeCode}</Form.Label>
             {cbeCode.length > 1 ? (
               <Select<Option>
                 styles={theme.selectStyleWithBorder}
                 name="cbeCode"
                 theme={theme.selectTheme}
                 placeholder={local.cbeCode}
-                onChange={(event: ValueType<Option> | Option) => {
-                  const { value } = event as Option
+                onChange={(event: any) => {
+                  const value = event?.value || ' '
+
                   setFieldValue('cbeCode', value)
                 }}
                 options={cbeCode.map((company) => ({
                   label: `${company.name} | ${company.cbeCode}`,
                   value: company.cbeCode,
                 }))}
-                isDisabled={cbeCode.length === 1}
                 isOptionSelected={(option) => option.value === values.cbeCode}
-                formatOptionLabel={(option) =>
-                  `${option.label} | ${option.value}`
-                }
                 defaultValue={cbeCode
                   .filter((company) => company.cbeCode === values.cbeCode)
                   .map((foundCbe) => ({
                     label: `${foundCbe.name} | ${foundCbe.cbeCode}`,
                     value: foundCbe.cbeCode,
                   }))}
+                isClearable
               />
             ) : (
               <Form.Control
                 type="text"
                 name="cbeCode"
-                defaultValue={
-                  cbeCode.length === 0 ? values.cbeCode : cbeCode[0].cbeCode
+                value={
+                  cbeCode?.length === 0 ? values.cbeCode : cbeCode[0]?.cbeCode
                 }
                 onBlur={handleBlur}
                 onChange={handleChange}
                 isInvalid={errors.cbeCode && touched.cbeCode}
-                disabled={cbeCode.length === 1}
               />
             )}
             {errors.cbeCode && (
