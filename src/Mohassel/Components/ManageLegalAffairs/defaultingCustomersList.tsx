@@ -9,6 +9,8 @@ import FormCheck from 'react-bootstrap/FormCheck'
 import Modal from 'react-bootstrap/Modal'
 import Table from 'react-bootstrap/Table'
 import Form from 'react-bootstrap/Form'
+import { getWarningExtraDetails } from 'Shared/Services/APIs/LegalAffairs/warning'
+import { WarningExtraDetailsRespose } from 'Shared/Models/LegalAffairs'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'
@@ -43,6 +45,7 @@ import { ProductType } from '../LegalWarnings/types'
 import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 import { PDF } from '../../../Shared/Components/PdfList/types'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
+import { WarningExtraDetailsModal } from '../LegalWarnings/WarningExtraDetailsModal'
 
 interface Review {
   at: number
@@ -124,6 +127,8 @@ interface State {
   rowToView: DefaultedCustomer
   showReportsModal: boolean
   productType: ProductType
+  showExtraDetailsModal: boolean
+  warningExtraDetails: WarningExtraDetailsRespose
 }
 const rowToViewInit = {
   _id: '',
@@ -180,6 +185,8 @@ class DefaultingCustomersList extends Component<Props, State> {
       rowToView: rowToViewInit,
       showReportsModal: false,
       productType: 'micro',
+      showExtraDetailsModal: false,
+      warningExtraDetails: {},
     }
     this.mappers = [
       {
@@ -424,6 +431,20 @@ class DefaultingCustomersList extends Component<Props, State> {
       })
   }
 
+  async getWarningDetails(loanId: string) {
+    this.setState({ loading: true })
+    const res = await getWarningExtraDetails(loanId)
+    if (res.status === 'success') {
+      this.setState({
+        warningExtraDetails: res.body,
+        showExtraDetailsModal: true,
+      })
+    } else {
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    }
+    this.setState({ loading: false })
+  }
+
   addRemoveItemFromChecked(selectedEntry: DefaultedCustomer) {
     if (
       this.state.selectedEntries.findIndex(
@@ -630,6 +651,12 @@ class DefaultingCustomersList extends Component<Props, State> {
     const daysSince = this.getRecordAgeInDays(data.created?.at)
     return (
       <>
+        <Button
+          variant="default"
+          onClick={() => data.loanId && this.getWarningDetails(data.loanId)}
+        >
+          <LtsIcon name="encoding-files" tooltipText={local.moreInfo} />
+        </Button>
         {(data.branchManagerReview ||
           data.areaManagerReview ||
           data.areaSupervisorReview ||
@@ -975,6 +1002,16 @@ class DefaultingCustomersList extends Component<Props, State> {
               show={this.state.showReportsModal}
               hideModal={() => this.setState({ showReportsModal: false })}
               submit={(values) => this.handlePrintReport(values)}
+            />
+          )}
+          {this.state.showExtraDetailsModal && (
+            <WarningExtraDetailsModal
+              setShowModal={(bool) =>
+                this.setState({ showExtraDetailsModal: bool })
+              }
+              showModal={this.state.showExtraDetailsModal}
+              resetData={() => this.setState({ warningExtraDetails: {} })}
+              extraWarningDetails={this.state.warningExtraDetails}
             />
           )}
         </div>
