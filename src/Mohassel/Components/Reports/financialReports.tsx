@@ -199,7 +199,7 @@ class FinancialReports extends Component<{}, State> {
           key: 'getPostpones',
           local: 'الترحيلات',
           inputs: ['dateFromTo', 'branches'],
-          permission: 'raseedyTransactions',
+          permission: 'getPostpones',
           isPdfDisabled: true,
         },
       ],
