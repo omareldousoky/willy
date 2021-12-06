@@ -86,14 +86,14 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.LoansBriefing2,
           local: 'ملخص الحالات والقروض 2',
-          inputs: ['loanTypeWithoutAll', 'dateFromTo', 'branches'],
+          inputs: ['loanTypeWithoutMicro', 'dateFromTo', 'branches'],
           permission: 'briefingReport',
         },
         {
           key: Reports.UnpaidInstallmentsByOfficer,
           local: 'الاقساط المستحقة بالمندوب',
           inputs: [
-            'loanTypeWithoutAll',
+            'loanTypeWithoutMicro',
             'dateFromTo',
             'creationDateFromTo',
             'branches',
@@ -105,7 +105,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           key: Reports.InstallmentsDuePerOfficerCustomerCard,
           local: 'الاقساط المستحقة للمندوب كارت العميل',
           inputs: [
-            'loanTypeWithoutAll',
+            'loanTypeWithoutMicro',
             'dateFromTo',
             'branches',
             'representatives',
@@ -115,14 +115,19 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.UnpaidInstallmentsPerArea,
           local: 'قائمة الاقساط الغير مسددة بمناطق العمل',
-          inputs: ['loanTypeWithoutAll', 'dateFromTo', 'branches', 'geoAreas'],
+          inputs: [
+            'loanTypeWithoutMicro',
+            'dateFromTo',
+            'branches',
+            'geoAreas',
+          ],
           permission: 'unpaidInstallmentsPerArea',
         },
         {
           key: Reports.OfficersPercentPayment,
           local: 'نسبة سداد المندوبين 1',
           inputs: [
-            'loanTypeWithoutAll',
+            'loanTypeWithoutMicro',
             'dateFromTo',
             'branches',
             'representatives',
@@ -134,7 +139,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           key: Reports.OfficersBranchPercentPayment,
           local: 'نسبة سداد المندوبين 3',
           inputs: [
-            'loanTypeWithoutAll',
+            'loanTypeWithoutMicro',
             'dateFromTo',
             'creationDateFromTo',
             'branches',
@@ -145,14 +150,14 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.DueInstallments,
           local: 'ملخص الأقساط المستحقة (تقرير السداد الجزئي)',
-          inputs: ['loanTypeWithoutAll', 'dateFromTo', 'branches'],
+          inputs: ['loanTypeWithoutMicro', 'dateFromTo', 'branches'],
           permission: 'dueInstallments',
         },
         {
           key: Reports.LeakedCustomers,
           local: 'تقرير العملاء المتسربون',
           inputs: [
-            'loanTypeWithoutAll',
+            'loanTypeWithoutMicro',
             'dateFromTo',
             'branches',
             'representatives',
@@ -162,14 +167,19 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.CustomersArrears,
           local: 'متأخرات المندوب لم يستحق أو مسدد جزئي',
-          inputs: ['loanTypeWithoutAll', 'date', 'branches', 'representatives'],
+          inputs: [
+            'loanTypeWithoutMicro',
+            'date',
+            'branches',
+            'representatives',
+          ],
           permission: 'customersArrears',
         },
         {
           key: Reports.PaidArrears,
           local: 'تقرير ما تم تحصيله من المتأخرات',
           inputs: [
-            'loanTypeWithoutAll',
+            'loanTypeWithoutMicro',
             'dateFromTo',
             'branches',
             'representatives',
@@ -181,7 +191,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           local:
             'مقارنه تقرير ملخص الاقساط المستحقه (تقرير السداد الجزئي ) بالشهر السابق',
           inputs: [
-            'loanTypeWithoutAll',
+            'loanTypeWithoutMicro',
             'monthComparisonDateFromTo',
             'branches',
           ],
@@ -190,13 +200,23 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.ActiveWalletIndividual,
           local: 'المحفظة النشطه للمندوبين - فردى',
-          inputs: ['loanTypeWithoutAll', 'date', 'branches', 'representatives'],
+          inputs: [
+            'loanTypeWithoutMicro',
+            'date',
+            'branches',
+            'representatives',
+          ],
           permission: 'individualActiveWallet',
         },
         {
           key: Reports.ActiveWalletGroup,
           local: 'المحفظة النشطه للمندوبين - جماعى',
-          inputs: ['loanTypeWithoutAll', 'date', 'branches', 'representatives'],
+          inputs: [
+            'loanTypeWithoutMicro',
+            'date',
+            'branches',
+            'representatives',
+          ],
           permission: 'groupActiveLoans',
         },
       ],

@@ -178,8 +178,8 @@ const ReportsModal = (props: Props) => {
         case 'loanType':
           initValues.loanType = 'all'
           break
-        case 'loanTypeWithoutAll':
-          initValues.loanType = 'micro'
+        case 'loanTypeWithoutMicro':
+          initValues.loanType = 'all'
           break
         case 'month':
           initValues.date = ''
@@ -754,7 +754,7 @@ const ReportsModal = (props: Props) => {
                         </Col>
                       )
                     }
-                    if (!props.isCF && input === 'loanTypeWithoutAll') {
+                    if (!props.isCF && input === 'loanTypeWithoutMicro') {
                       return (
                         <Col key={input} sm={12}>
                           <div className="dropdown-container">
@@ -768,8 +768,8 @@ const ReportsModal = (props: Props) => {
                               onChange={formikProps.handleChange}
                             >
                               {[
+                                { value: 'all', text: 'all' },
                                 { value: 'sme', text: 'sme' },
-                                { value: 'micro', text: 'micro' },
                               ].map(({ value, text }) => (
                                 <option
                                   key={value}
