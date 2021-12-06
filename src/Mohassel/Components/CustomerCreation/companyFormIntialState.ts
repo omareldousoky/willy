@@ -60,11 +60,7 @@ export const companyCreationValidationStepOne = Yup.object().shape({
   businessName: Yup.string()
     .trim()
     .max(100, local.maxLength100)
-    .required(local.required)
-    .matches(
-      /^(?!.*?\s{2})([\u0621-\u064A\s]+){1,100}$/,
-      local.onlyArabicLetters
-    ),
+    .required(local.required),
   businessAddress: Yup.string()
     .trim()
     .max(500, local.maxLength500)
