@@ -892,11 +892,6 @@ class FinancialReports extends Component<{}, State> {
     }
   }
 
-  async getPostpones(values) {
-    console.log(values)
-    this.setState({ showModal: false })
-  }
-
   async getExcelFile(func, pollFunc, values) {
     const { branches, fromDate, toDate, loanType } = values
     this.setState({
