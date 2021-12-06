@@ -1,4 +1,7 @@
-import { CFGuarantorDetailsProps } from '../../../CF/Components/CustomerCreation/types'
+import {
+  CFEntitledToSignDetailsProps,
+  CFGuarantorDetailsProps,
+} from '../../Models/Customer'
 import { CustomerScore } from '../../Services/APIs/customer/customerCategorization'
 
 export interface FieldProps {
@@ -9,6 +12,7 @@ export interface FieldProps {
     | CustomerScore[]
     | React.ReactElement
     | CFGuarantorDetailsProps
+    | CFEntitledToSignDetailsProps
   showFieldCondition: boolean
   fieldDataStyle?: React.CSSProperties
   fieldTitleStyle?: React.CSSProperties

@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import Card from 'react-bootstrap/Card'
 import { useHistory } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from '../ManageLegalAffairs/manageLegalAffairsInitials'
 import local from '../../../Shared/Assets/ar.json'
@@ -15,8 +16,12 @@ import {
   LegalWarningResponse,
   LegalWarningsSearchRequest,
   LegalWarningType,
+  WarningExtraDetailsRespose,
 } from '../../../Shared/Models/LegalAffairs'
-import { timeToArabicDate } from '../../../Shared/Services/utils'
+import {
+  getErrorMessage,
+  timeToArabicDate,
+} from '../../../Shared/Services/utils'
 import ability from '../../config/ability'
 import { search as searchAction } from '../../../Shared/redux/search/actions'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -24,10 +29,14 @@ import SearchForm from '../../../Shared/Components/Search/search'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { LegalWarning } from '../pdfTemplates/LegalWarning'
 import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
-import { setPrintWarningFlag } from '../../../Shared/Services/APIs/LegalAffairs/warning'
+import {
+  getWarningExtraDetails,
+  setPrintWarningFlag,
+} from '../../../Shared/Services/APIs/LegalAffairs/warning'
 import { WarningCreationModal } from './WarningCreationModal'
 import { loading as loadingAction } from '../../../Shared/redux/loading/actions'
 import { LtsIcon } from '../../../Shared/Components'
+import { WarningExtraDetailsModal } from './WarningExtraDetailsModal'
 
 export const LegalWarnings = () => {
   const [from, setFrom] = useState(0)
@@ -42,6 +51,12 @@ export const LegalWarnings = () => {
   const [printWarningType, setPrintWarningType] = useState<LegalWarningType>()
   const [printWarnings, setPrintWarnings] = useState<LegalWarningResponse[]>()
   const [showModal, setShowModal] = useState(false)
+  const [showExtraDetailsModal, setExtraDetailsModalView] = useState(false)
+
+  const [
+    warningExtraDetails,
+    setWarningExtraDetails,
+  ] = useState<WarningExtraDetailsRespose>({})
 
   const history = useHistory<{ id?: string; sme?: boolean }>()
   const dispatch = useDispatch()
@@ -97,6 +112,18 @@ export const LegalWarnings = () => {
     }
     setSelectedWarnings(undefined)
     search(request as LegalWarningsSearchRequest)
+  }
+
+  const getWarningDetails = async (loanId: string) => {
+    setLoading(true)
+    const res = await getWarningExtraDetails(loanId)
+    if (res.status === 'success') {
+      setWarningExtraDetails(res.body)
+      setExtraDetailsModalView(true)
+    } else {
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    }
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -292,17 +319,32 @@ export const LegalWarnings = () => {
       render: (warning) => {
         const canPrintWarning = canPrint(warning)
         return (
-          <Button
-            variant="default"
-            onClick={() => (canPrintWarning ? print(warning) : undefined)}
-            disabled={!canPrintWarning}
-          >
-            <LtsIcon
-              name="printer"
-              size="25px"
-              color={canPrintWarning ? '#7dc356' : '#6c757d'}
-            />
-          </Button>
+          <>
+            <Button
+              variant="default"
+              onClick={() =>
+                warning.loanId && getWarningDetails(warning.loanId)
+              }
+            >
+              <LtsIcon
+                name="encoding-files"
+                size="25px"
+                color="#7dc356"
+                tooltipText={local.moreInfo}
+              />
+            </Button>
+            <Button
+              variant="default"
+              onClick={() => (canPrintWarning ? print(warning) : undefined)}
+              disabled={!canPrintWarning}
+            >
+              <LtsIcon
+                name="printer"
+                size="25px"
+                color={canPrintWarning ? '#7dc356' : '#6c757d'}
+              />
+            </Button>
+          </>
         )
       },
     },
@@ -390,6 +432,14 @@ export const LegalWarnings = () => {
           setShowModal={setShowModal}
           showModal={showModal}
           getLegalWarnings={getLegalWarnings}
+        />
+      )}
+      {showExtraDetailsModal && (
+        <WarningExtraDetailsModal
+          setShowModal={setExtraDetailsModalView}
+          showModal={showExtraDetailsModal}
+          resetData={() => setWarningExtraDetails({})}
+          extraWarningDetails={warningExtraDetails}
         />
       )}
       {printWarningType && printWarnings && (

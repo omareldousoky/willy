@@ -167,10 +167,10 @@ class ClearanceCreation extends Component<Props, State> {
     if (res.status === 'success') {
       this.setState({
         customer: {
-          key: res.body.key,
-          branchName: res.body.branchName,
-          customerName: res.body.customerName,
-          customerType: res.body.customerType,
+          key: res.body.customer.key,
+          branchName: res.body.customer.branchName,
+          customerName: res.body.customer.customerName,
+          customerType: res.body.customer.customerType,
         },
       })
     } else {

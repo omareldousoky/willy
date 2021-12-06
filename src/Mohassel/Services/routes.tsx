@@ -1,6 +1,7 @@
 /* eslint-disable react/display-name */
 
 import * as React from 'react'
+import { LoanOfficersTransfers } from 'Shared/Components/ManageAccounts'
 import { Leads } from 'Mohassel/Components/HalanIntegration/leads'
 import CustomerCreation from '../Components/CustomerCreation'
 import UserCreation from '../Components/UserCreation/userCreation'
@@ -72,6 +73,7 @@ import { Landing } from '../../Shared/Components/Landing'
 import { legalWarningRoute } from '../Components/LegalWarnings/routes'
 import CBEFiles from '../Components/Tools/cbeCodes'
 import { CreateLead } from '../Components/HalanIntegration/createLead'
+import CompanyLoanList from '../Components/LoanList/companyLoanList'
 
 const appRoutes = [
   {
@@ -590,6 +592,11 @@ const appRoutes = [
               },
             ],
           },
+          {
+            path: '/transfer-logs',
+            label: local.loanOfficersTransfers,
+            render: () => <LoanOfficersTransfers />,
+          },
         ],
       },
       // {
@@ -628,6 +635,18 @@ const appRoutes = [
                 <CIB />
               </Can>
             ),
+          },
+        ],
+      },
+      {
+        path: '/company-loans',
+        label: local.issuedLoans,
+        render: (props) => <CompanyLoanList {...props} />,
+        routes: [
+          {
+            path: '/loan-profile',
+            label: local.loanDetails,
+            render: (props) => <LoanProfile {...props} />,
           },
         ],
       },

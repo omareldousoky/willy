@@ -1,11 +1,12 @@
 import { AxiosResponse } from 'axios'
-import {
-  ApiResponse,
-  CheckLinkageResponse,
-  ConfirmLinkageRequest,
-} from '../../../../Mohassel/Services/interfaces'
+
 import axios from '../../axiosInstance'
 import { API_BASE_URL } from '../../../envConfig'
+import { ApiResponse } from '../../../Models/common'
+import {
+  CheckLinkageResponse,
+  ConfirmLinkageRequest,
+} from '../../../Models/Customer'
 
 const checkLinkageUrl = `${API_BASE_URL}/lead/check-linkage/:customerId`
 const confirmLinkageUrl = `${API_BASE_URL}/lead/confirm-linkage`

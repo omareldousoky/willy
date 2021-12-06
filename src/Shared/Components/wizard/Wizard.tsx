@@ -84,7 +84,7 @@ export default class Wizard extends Component<Props, State> {
             this.props.edit ? 'step-wrapper steps-interactive' : 'step-wrapper'
           }
           key={index}
-          onClick={() => this.handleClick(index)}
+          onClick={() => this.props.onClick && this.handleClick(index)}
         >
           <div
             className={`step-description ${

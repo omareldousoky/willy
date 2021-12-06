@@ -14,6 +14,7 @@ const fetchWarningUrl = `${legalService}/get-warning`
 const createWarningUrl = `${legalService}/warning`
 const setPrintWarningFlagUrl = `${legalService}/print-warning`
 const searchWarningsUrl = `${API_BASE_URL}/search/legal-warnings`
+const warningCalculationsUrl = `${legalService}/warning-calculations`
 
 export const fetchWarning = async (
   request: LegalWarningRequest
@@ -51,6 +52,15 @@ export const searchWarnings = async (
 ): Promise<ApiResponse<LegalWarningsSearchResponse>> => {
   try {
     const res = await axios.post(searchWarningsUrl, request)
+    return { status: 'success', body: res.data }
+  } catch (error) {
+    return { status: 'error', error: error.response.data }
+  }
+}
+
+export const getWarningExtraDetails = async (loanId: string) => {
+  try {
+    const res = await axios.get(`${warningCalculationsUrl}/${loanId}`)
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }

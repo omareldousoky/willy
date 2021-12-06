@@ -1,5 +1,6 @@
 import * as Yup from 'yup'
 import local from '../../../Shared/Assets/ar.json'
+import { maxValue } from '../../../Shared/localUtils'
 import {
   endOfDayValue,
   timeToDateyyymmdd,
@@ -22,6 +23,8 @@ export const step1Company = {
   commercialRegisterExpiryDate: '',
   customerType: 'company',
   governorate: '',
+  initialConsumerFinanceLimit: 0,
+  mobilePhoneNumber: '',
 }
 export const step2Company = {
   geographicalDistribution: '',
@@ -48,6 +51,7 @@ export const step2Company = {
   smeBankBranch: '',
   smeBankAccountNumber: '',
   smeIbanNumber: '',
+  guarantorMaxCustomers: 0,
 }
 const endOfDay: Date = new Date()
 endOfDay.setHours(23, 59, 59, 59)
@@ -102,6 +106,14 @@ export const companyCreationValidationStepOne = Yup.object().shape({
       .required(local.required),
   }),
   governorate: Yup.string().required(local.required),
+  initialConsumerFinanceLimit: Yup.number()
+    .min(0)
+    .max(2000000, maxValue(2000000)),
+  mobilePhoneNumber: Yup.string().when('initialConsumerFinanceLimit', {
+    is: (initialConsumerFinanceLimit) => initialConsumerFinanceLimit > 0,
+    then: Yup.string().min(11, local.minLength11).required(local.required),
+    otherwise: Yup.string().min(11, local.minLength11),
+  }),
 })
 
 export const companyCreationValidationStepTwo = Yup.object().shape({
@@ -127,7 +139,6 @@ export const companyCreationValidationStepTwo = Yup.object().shape({
       local.duplicateCbeCodeMessage,
       () => false
     ),
-    otherwise: Yup.string().required(local.required),
   }),
   permanentEmployeeCount: Yup.string().trim().required(local.required),
 })
@@ -167,6 +178,5 @@ export const companyCreationValidationStepTwoEdit = Yup.object().shape({
       local.duplicateCbeCodeMessage,
       () => false
     ),
-    otherwise: Yup.string().required(local.required),
   }),
 })

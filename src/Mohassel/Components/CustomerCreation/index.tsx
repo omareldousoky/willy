@@ -4,12 +4,14 @@ import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 import Swal from 'sweetalert2'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { doneSuccessfully } from 'Shared/localUtils'
+import { changeCustomerMobilePhoneNumber } from 'Shared/Services/APIs/customer/changeCustomerMobileNumber'
 import Wizard from '../../../Shared/Components/wizard/Wizard'
 import { Loader } from '../../../Shared/Components/Loader'
 import { StepOneForm } from './StepOneForm'
 import { StepTwoForm } from './StepTwoForm'
 import { StepThreeForm } from './StepThreeForm'
-import DocumentsUpload from './documentsUpload'
+import { DocumentsUpload } from '../../../Shared/Components/Customer'
 import * as local from '../../../Shared/Assets/ar.json'
 import {
   getErrorMessage,
@@ -48,6 +50,7 @@ interface State {
   isGuarantor: boolean
   oldRepresentative: string
   branchId: string
+  editMobileNumber: boolean
 }
 
 class CustomerCreation extends Component<Props, State> {
@@ -80,6 +83,7 @@ class CustomerCreation extends Component<Props, State> {
       selectedCustomer: {},
       oldRepresentative: '',
       branchId: '',
+      editMobileNumber: !props.edit,
     }
   }
 
@@ -94,78 +98,89 @@ class CustomerCreation extends Component<Props, State> {
     const res = await getCustomerByID(this.props.location.state.id)
     if (res.status === 'success') {
       const customerInfo = {
-        customerName: res.body.customerName?.trim(),
-        nationalId: res.body.nationalId,
-        birthDate: timeToDateyyymmdd(res.body.birthDate),
-        gender: res.body.gender,
-        nationalIdIssueDate: timeToDateyyymmdd(res.body.nationalIdIssueDate),
-        homePostalCode: res.body.homePostalCode,
-        customerHomeAddress: res.body.customerHomeAddress,
-        currentHomeAddress: res.body.currentHomeAddress,
-        customerAddressLatLong: res.body.customerAddressLatLong,
+        customerName: res.body.customer.customerName?.trim(),
+        nationalId: res.body.customer.nationalId,
+        birthDate: timeToDateyyymmdd(res.body.customer.birthDate),
+        gender: res.body.customer.gender,
+        nationalIdIssueDate: timeToDateyyymmdd(
+          res.body.customer.nationalIdIssueDate
+        ),
+        homePostalCode: res.body.customer.homePostalCode,
+        customerHomeAddress: res.body.customer.customerHomeAddress,
+        currentHomeAddress: res.body.customer.currentHomeAddress,
+        customerAddressLatLong: res.body.customer.customerAddressLatLong,
         customerAddressLatLongNumber: {
-          lat: res.body.customerAddressLatLong
-            ? Number(res.body.customerAddressLatLong.split(',')[0])
+          lat: res.body.customer.customerAddressLatLong
+            ? Number(res.body.customer.customerAddressLatLong.split(',')[0])
             : 0,
-          lng: res.body.customerAddressLatLong
-            ? Number(res.body.customerAddressLatLong.split(',')[1])
+          lng: res.body.customer.customerAddressLatLong
+            ? Number(res.body.customer.customerAddressLatLong.split(',')[1])
             : 0,
         },
-        homePhoneNumber: res.body.homePhoneNumber,
-        faxNumber: res.body.faxNumber,
-        mobilePhoneNumber: res.body.mobilePhoneNumber,
-        customerWebsite: res.body.customerWebsite?.trim(),
-        emailAddress: res.body.emailAddress?.trim(),
-        currHomeAddressGov: res.body.currHomeAddressGov,
-        policeStation: res.body.policeStation,
+        homePhoneNumber: res.body.customer.homePhoneNumber,
+        faxNumber: res.body.customer.faxNumber,
+        mobilePhoneNumber: res.body.customer.mobilePhoneNumber,
+        customerWebsite: res.body.customer.customerWebsite?.trim(),
+        emailAddress: res.body.customer.emailAddress?.trim(),
+        currHomeAddressGov: res.body.customer.currHomeAddressGov,
+        policeStation: res.body.customer.policeStation,
+        initialConsumerFinanceLimit:
+          res.body.customer.initialConsumerFinanceLimit,
       }
       const customerBusiness = {
-        businessAddressLatLong: res.body.businessAddressLatLong,
+        businessAddressLatLong: res.body.customer.businessAddressLatLong,
         businessAddressLatLongNumber: {
-          lat: res.body.businessAddressLatLong
-            ? Number(res.body.businessAddressLatLong.split(',')[0])
+          lat: res.body.customer.businessAddressLatLong
+            ? Number(res.body.customer.businessAddressLatLong.split(',')[0])
             : 0,
-          lng: res.body.businessAddressLatLong
-            ? Number(res.body.businessAddressLatLong.split(',')[1])
+          lng: res.body.customer.businessAddressLatLong
+            ? Number(res.body.customer.businessAddressLatLong.split(',')[1])
             : 0,
         },
-        businessName: res.body.businessName,
-        businessAddress: res.body.businessAddress,
-        governorate: res.body.governorate,
-        district: res.body.district,
-        village: res.body.village,
-        ruralUrban: res.body.ruralUrban,
-        businessPostalCode: res.body.businessPostalCode,
-        businessPhoneNumber: res.body.businessPhoneNumber,
-        businessSector: res.body.businessSector,
-        businessActivity: res.body.businessActivity,
-        businessSpeciality: res.body.businessSpeciality,
-        businessLicenseNumber: res.body.businessLicenseNumber,
-        businessLicenseIssuePlace: res.body.businessLicenseIssuePlace,
+        businessName: res.body.customer.businessName,
+        businessAddress: res.body.customer.businessAddress,
+        governorate: res.body.customer.governorate,
+        district: res.body.customer.district,
+        village: res.body.customer.village,
+        ruralUrban: res.body.customer.ruralUrban,
+        businessPostalCode: res.body.customer.businessPostalCode,
+        businessPhoneNumber: res.body.customer.businessPhoneNumber,
+        businessSector: res.body.customer.businessSector,
+        businessActivity: res.body.customer.businessActivity,
+        businessSpeciality: res.body.customer.businessSpeciality,
+        businessLicenseNumber: res.body.customer.businessLicenseNumber,
+        businessLicenseIssuePlace: res.body.customer.businessLicenseIssuePlace,
         businessLicenseIssueDate: timeToDateyyymmdd(
-          res.body.businessLicenseIssueDate
+          res.body.customer.businessLicenseIssueDate
         ),
-        commercialRegisterNumber: res.body.commercialRegisterNumber,
-        industryRegisterNumber: res.body.industryRegisterNumber,
-        taxCardNumber: res.body.taxCardNumber,
+        commercialRegisterNumber: res.body.customer.commercialRegisterNumber,
+        industryRegisterNumber: res.body.customer.industryRegisterNumber,
+        taxCardNumber: res.body.customer.taxCardNumber,
       }
       const customerExtraDetails = {
-        geographicalDistribution: res.body.geographicalDistribution,
-        geoAreaId: res.body.geoAreaId ? res.body.geoAreaId : '',
-        representative: res.body.representative,
-        representativeName: res.body.representativeName,
-        applicationDate: timeToDateyyymmdd(res.body.applicationDate),
-        permanentEmployeeCount: res.body.permanentEmployeeCount,
-        partTimeEmployeeCount: res.body.partTimeEmployeeCount,
-        comments: res.body.comments,
-        maxLoansAllowed: res.body.maxLoansAllowed
-          ? Number(res.body.maxLoansAllowed)
+        geographicalDistribution: res.body.customer.geographicalDistribution,
+        geoAreaId: res.body.customer.geoAreaId
+          ? res.body.customer.geoAreaId
+          : '',
+        representative: res.body.customer.representative,
+        representativeName: res.body.customer.representativeName,
+        applicationDate: timeToDateyyymmdd(res.body.customer.applicationDate),
+        permanentEmployeeCount: res.body.customer.permanentEmployeeCount,
+        partTimeEmployeeCount: res.body.customer.partTimeEmployeeCount,
+        comments: res.body.customer.comments,
+        maxLoansAllowed: res.body.customer.maxLoansAllowed
+          ? Number(res.body.customer.maxLoansAllowed)
           : 1,
-        allowGuarantorLoan: res.body.allowGuarantorLoan,
-        guarantorMaxLoans: res.body.guarantorMaxLoans
-          ? Number(res.body.guarantorMaxLoans)
+        allowGuarantorLoan: res.body.customer.allowGuarantorLoan,
+        guarantorMaxLoans: res.body.customer.guarantorMaxLoans
+          ? Number(res.body.customer.guarantorMaxLoans)
           : 1,
-        maxPrincipal: res.body.maxPrincipal ? Number(res.body.maxPrincipal) : 0,
+        maxPrincipal: res.body.customer.maxPrincipal
+          ? Number(res.body.customer.maxPrincipal)
+          : 0,
+        guarantorMaxCustomers: res.body.customer.guarantorMaxCustomers
+          ? Number(res.body.customer.guarantorMaxCustomers)
+          : 1,
       }
       this.formikStep1 = {
         values: { ...this.state.step1, ...customerInfo },
@@ -185,14 +200,14 @@ class CustomerCreation extends Component<Props, State> {
         (prevState) =>
           ({
             loading: false,
-            selectedCustomer: res.body,
+            selectedCustomer: res.body.customer,
             step1: { ...prevState.step1, ...customerInfo },
             step2: { ...prevState.step2, ...customerBusiness },
             step3: { ...prevState.step3, ...customerExtraDetails },
-            hasLoan: res.body.hasLoan,
-            isGuarantor: res.body.isGuarantor,
-            oldRepresentative: res.body.representative,
-            branchId: res.body.branchId,
+            hasLoan: res.body.customer.hasLoan,
+            isGuarantor: res.body.customer.isGuarantor,
+            oldRepresentative: res.body.customer.representative,
+            branchId: res.body.customer.branchId,
           } as any)
       )
     } else {
@@ -315,6 +330,9 @@ class CustomerCreation extends Component<Props, State> {
       objToSubmit.maxLoansAllowed = Number(objToSubmit.maxLoansAllowed)
     else objToSubmit.maxLoansAllowed = 1
     delete objToSubmit.principals
+    objToSubmit.initialConsumerFinanceLimit = Number(
+      objToSubmit.initialConsumerFinanceLimit
+    )
     if (this.props.edit) {
       const res = await editCustomer(
         objToSubmit,
@@ -353,6 +371,48 @@ class CustomerCreation extends Component<Props, State> {
     }
   }
 
+  changeMobileNumber(customerId, mobileNumber) {
+    Swal.fire({
+      title: local.areYouSure,
+      text: `${
+        local.will +
+        ' ' +
+        local.changeCfMobileNumber +
+        ' ' +
+        local.from +
+        ' ' +
+        this.state.step1.mobilePhoneNumber +
+        ' ' +
+        local.to +
+        ' ' +
+        mobileNumber
+      }`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: local.changeCfMobileNumber,
+      cancelButtonText: local.cancel,
+    }).then(async (result) => {
+      if (result.value) {
+        this.setState({ loading: true })
+        const res = await changeCustomerMobilePhoneNumber(
+          customerId,
+          mobileNumber
+        )
+        if (res.status === 'success') {
+          this.setState({ loading: false, editMobileNumber: false })
+          Swal.fire('', doneSuccessfully(), 'success').then(() =>
+            this.getCustomerById()
+          )
+        } else {
+          this.setState({ loading: false })
+          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        }
+      }
+    })
+  }
+
   previousStep(values, step: number): void {
     this.setState({
       step: step - 1,
@@ -381,6 +441,19 @@ class CustomerCreation extends Component<Props, State> {
               edit={this.props.edit}
               hasLoan={this.state.hasLoan}
               isGuarantor={this.state.isGuarantor}
+              consumerFinanceLimit={
+                this.state.selectedCustomer.initialConsumerFinanceLimit
+              }
+              consumerFinanceLimitStatus={
+                this.state.selectedCustomer.consumerFinanceLimitStatus
+              }
+              changeMobileNumber={(number) =>
+                this.changeMobileNumber(this.state.selectedCustomer._id, number)
+              }
+              setEditMobileNumber={(bool: boolean) =>
+                this.setState({ editMobileNumber: bool })
+              }
+              editMobileNumber={this.state.editMobileNumber}
             />
           )
         }}
@@ -494,7 +567,9 @@ class CustomerCreation extends Component<Props, State> {
             <Wizard
               currentStepNumber={this.state.step - 1}
               edit={this.props.edit}
-              onClick={this.handleWizardClick}
+              onClick={
+                this.state.editMobileNumber ? null : this.handleWizardClick
+              }
               stepsDescription={[
                 local.mainInfo,
                 local.workInfo,
