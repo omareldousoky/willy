@@ -78,7 +78,7 @@ export const generateQuarterlyReport = async (quarter: { quarter: string }) => {
 export const getTasaheelRisksReport = async (id: string) => {
   const url = API_BASE_URL + `/report/tasaheel-risks`
   try {
-    const res = await axios.get(url, { params: { id } })
+    const res = await axios.get(url, { params: id })
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
@@ -87,7 +87,7 @@ export const getTasaheelRisksReport = async (id: string) => {
 export const getLoanAgeReport = async (id: string) => {
   const url = API_BASE_URL + `/report/debts-aging`
   try {
-    const res = await axios.get(url, { params: { id } })
+    const res = await axios.get(url, { params: id })
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
