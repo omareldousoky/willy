@@ -909,11 +909,12 @@ const ReportsModal = (props: Props) => {
                       {local.downloadExcel}
                     </Button>
                   )}
-                {props.pdf.key !== 'creditInquiryRequests' && (
-                  <Button type="submit" variant="primary">
-                    {props.submitButtonText || local.downloadPDF}
-                  </Button>
-                )}
+                {!props.pdf.hidePdf &&
+                  props.pdf.key !== 'creditInquiryRequests' && (
+                    <Button type="submit" variant="primary">
+                      {props.submitButtonText || local.downloadPDF}
+                    </Button>
+                  )}
               </Modal.Footer>
             </Form>
           )
