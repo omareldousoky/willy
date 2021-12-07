@@ -2,6 +2,7 @@ export interface CustomersArrearsRequest {
   date: string
   branches: string[]
   loanOfficers: string[]
+  type?: 'sme' | 'all'
 }
 export interface CustomersArrearsSingleResponse {
   issueDate?: string
@@ -44,6 +45,7 @@ export interface OperationsReportRequest {
   startDate: string | number
   endDate: string | number
   branches: string[]
+  type?: 'sme' | 'all'
 }
 
 export interface OfficersPercentPaymentRequest extends OperationsReportRequest {
@@ -62,6 +64,7 @@ export interface OfficersBranchPercentPaymentRequest
   extends OfficersPercentPaymentRequest {
   creationDateFrom?: string
   creationDateTo?: string
+  type?: 'sme' | 'all'
 }
 
 export interface UnpaidInstallmentsPerAreaRequest
