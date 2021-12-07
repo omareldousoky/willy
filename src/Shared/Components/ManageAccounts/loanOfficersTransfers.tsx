@@ -212,10 +212,9 @@ export const LoanOfficersTransfers = () => {
                     (branch) => branch._id === logsInput.oldCustomerBranchId
                   )}
                   onChange={(branch) => {
-                    const { _id } = branch as Branch
                     setLogsInput({
                       ...logsInput,
-                      oldCustomerBranchId: _id || '',
+                      oldCustomerBranchId: (branch as Branch) ? branch._id : '',
                     })
                   }}
                   loadOptions={getBranches}
@@ -229,10 +228,9 @@ export const LoanOfficersTransfers = () => {
                     (branch) => branch._id === logsInput.newCustomerBranchId
                   )}
                   onChange={(branch) => {
-                    const { _id } = branch as Branch
                     setLogsInput({
                       ...logsInput,
-                      newCustomerBranchId: _id || '',
+                      newCustomerBranchId: (branch as Branch) ? branch._id : '',
                     })
                   }}
                   loadOptions={getBranches}
