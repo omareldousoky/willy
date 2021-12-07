@@ -178,6 +178,9 @@ const ReportsModal = (props: Props) => {
         case 'loanType':
           initValues.loanType = 'all'
           break
+        case 'loanTypeWithoutMicro':
+          initValues.loanType = 'all'
+          break
         case 'month':
           initValues.date = ''
           break
@@ -191,6 +194,7 @@ const ReportsModal = (props: Props) => {
           break
       }
     })
+
     return initValues
   }
 
@@ -750,6 +754,39 @@ const ReportsModal = (props: Props) => {
                         </Col>
                       )
                     }
+                    if (!props.isCF && input === 'loanTypeWithoutMicro') {
+                      return (
+                        <Col key={input} sm={12}>
+                          <div className="dropdown-container">
+                            <p className="dropdown-label">{local.loanType}</p>
+                            <Form.Control
+                              as="select"
+                              className="dropdown-select"
+                              data-qc="loanType"
+                              name="loanType"
+                              value={formikProps.values.loanType}
+                              onChange={formikProps.handleChange}
+                            >
+                              {[
+                                { value: 'all', text: 'all' },
+                                { value: 'sme', text: 'sme' },
+                              ].map(({ value, text }) => (
+                                <option
+                                  key={value}
+                                  value={value}
+                                  data-qc={value}
+                                >
+                                  {text}
+                                </option>
+                              ))}
+                            </Form.Control>
+                          </div>
+                          <span className="text-danger">
+                            {formikProps.errors.loanType}
+                          </span>
+                        </Col>
+                      )
+                    }
                     if (input === 'month') {
                       return (
                         <Field
@@ -872,11 +909,12 @@ const ReportsModal = (props: Props) => {
                       {local.downloadExcel}
                     </Button>
                   )}
-                {props.pdf.key !== 'creditInquiryRequests' && (
-                  <Button type="submit" variant="primary">
-                    {props.submitButtonText || local.downloadPDF}
-                  </Button>
-                )}
+                {!props.pdf.hidePdf &&
+                  props.pdf.key !== 'creditInquiryRequests' && (
+                    <Button type="submit" variant="primary">
+                      {props.submitButtonText || local.downloadPDF}
+                    </Button>
+                  )}
               </Modal.Footer>
             </Form>
           )
