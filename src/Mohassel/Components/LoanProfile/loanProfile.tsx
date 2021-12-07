@@ -795,8 +795,8 @@ class LoanProfile extends Component<Props, State> {
             productId: '104',
             amount: `${this.state.application.principal}`,
             name: `${data.businessName}`,
-            idSource: `${this.state.application.customer.governorate}`,
-            idValue: `${data.commercialRegisterNumber}`,
+            idSource: '031',
+            idValue: `${data.cbeCode}`,
           }
         : {
             requestNumber: '148',
