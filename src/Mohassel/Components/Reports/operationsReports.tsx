@@ -211,12 +211,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.ActiveWalletGroup,
           local: 'المحفظة النشطه للمندوبين - جماعى',
-          inputs: [
-            'loanTypeWithoutMicro',
-            'date',
-            'branches',
-            'representatives',
-          ],
+          inputs: ['date', 'branches', 'representatives'],
           permission: 'groupActiveLoans',
         },
       ],
@@ -470,12 +465,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   async fetchActiveWalletGroup(values) {
-    const { date, branches, loanOfficerIds, loanType } = values
+    const { date, branches, loanOfficerIds } = values
     const res = await fetchActiveWalletGroupReport({
       date,
       branches,
       loanOfficerIds,
-      type: loanType,
+      type: 'all',
     } as ActiveWalletRequest)
     this.handleFetchReport(res, Reports.ActiveWalletGroup)
   }
