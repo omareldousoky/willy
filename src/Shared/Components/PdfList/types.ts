@@ -3,7 +3,7 @@ export interface PDF {
   local?: string
   inputs?: Array<string>
   permission: string
-  isPdfDisabled?: boolean
+  hidePdf?: boolean
 }
 
 export interface PDFListProps {

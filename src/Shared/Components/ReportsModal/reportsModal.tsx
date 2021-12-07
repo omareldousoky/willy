@@ -872,13 +872,9 @@ const ReportsModal = (props: Props) => {
                       {local.downloadExcel}
                     </Button>
                   )}
-                {!props.pdf.isPdfDisabled &&
+                {!props.pdf.hidePdf &&
                   props.pdf.key !== 'creditInquiryRequests' && (
-                    <Button
-                      type="submit"
-                      variant="primary"
-                      disabled={props.pdf.isPdfDisabled}
-                    >
+                    <Button type="submit" variant="primary">
                       {props.submitButtonText || local.downloadPDF}
                     </Button>
                   )}

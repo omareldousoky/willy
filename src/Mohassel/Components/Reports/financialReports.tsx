@@ -200,7 +200,7 @@ class FinancialReports extends Component<{}, State> {
           local: 'الترحيلات',
           inputs: ['dateFromTo', 'branches'],
           permission: 'getPostpones',
-          isPdfDisabled: true,
+          hidePdf: true,
         },
       ],
       selectedPdf: { permission: '' },
