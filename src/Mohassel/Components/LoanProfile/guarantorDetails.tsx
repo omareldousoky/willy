@@ -26,6 +26,7 @@ import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 import { LtsIcon } from '../../../Shared/Components'
 
 type Guarantor = Customer & { position?: string }
+type CompanyGuarantor = Customer & { position?: string; cbeCode?: string }
 interface Props {
   guarantors: Array<Guarantor>
   iScores?: any
@@ -265,7 +266,7 @@ export const GuarantorTableView = (props: Props) => {
       props.status
     )
   const individualGuarantors: { guarantor: Guarantor; index: number }[] = []
-  const companyGuarantors: { guarantor: Guarantor; index: number }[] = []
+  const companyGuarantors: { guarantor: CompanyGuarantor; index: number }[] = []
   props.guarantors.forEach((guarantor, i) => {
     const guarObj = { guarantor, index: i }
     guarantor.customerType === 'company'
@@ -511,9 +512,7 @@ export const GuarantorTableView = (props: Props) => {
                         const iScore =
                           props.iScores && props.iScores.length > 0
                             ? props.iScores.filter(
-                                (score) =>
-                                  score.id ===
-                                  guar.guarantor.commercialRegisterNumber
+                                (score) => score.id === guar.guarantor.cbeCode
                               )[0]
                             : {}
                         // const area = props.getGeoArea(guar.geoAreaId);

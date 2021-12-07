@@ -330,7 +330,7 @@ class LoanProfile extends Component<Props, State> {
 
   async getCachediScores(application) {
     const ids: string[] = []
-    const commercialRegisterNumbers: string[] = []
+    const cbeCodes: string[] = []
     const entitledToSign = application.entitledToSign?.map(
       this.mapEntitledToSignToCustomer
     )
@@ -343,7 +343,7 @@ class LoanProfile extends Component<Props, State> {
       if (application.guarantors.length > 0) {
         application.guarantors.forEach((guar) =>
           guar.customerType === 'company'
-            ? commercialRegisterNumbers.push(guar.commercialRegisterNumber)
+            ? cbeCodes.push(guar.cbeCode)
             : ids.push(guar.nationalId)
         )
       }
@@ -351,16 +351,14 @@ class LoanProfile extends Component<Props, State> {
         entitledToSign.forEach((cust) => ids.push(cust.nationalId))
       }
       application.customer.customerType === 'company'
-        ? commercialRegisterNumbers.push(
-            `${application.customer.governorate}-${application.customer.commercialRegisterNumber}`
-          )
+        ? cbeCodes.push(application.customer.cbeCode)
         : ids.push(application.customer.nationalId)
     }
     const obj: { nationalIds: string[]; date?: Date } = {
       nationalIds: ids,
     }
     const smeObj: { ids: string[]; date?: Date } = {
-      ids: commercialRegisterNumbers,
+      ids: cbeCodes,
     }
     if (
       [
@@ -741,9 +739,7 @@ class LoanProfile extends Component<Props, State> {
     ) {
       if (this.state.application.product?.type === 'sme') {
         const smeScore = this.state.iscores.filter(
-          (score) =>
-            score.id ===
-            `${this.state.application.customer.governorate}-${this.state.application.customer.commercialRegisterNumber}`
+          (score) => score.id === this.state.application.customer.cbeCode
         )[0]
         const info: FieldProps[] = getCompanyInfo({
           company: this.state.application.customer,
