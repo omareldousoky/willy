@@ -102,6 +102,7 @@ import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsa
 import { getEarlyPaymentPdfData } from '../../../Shared/Utils/payment'
 import EarlyPaymentReceipt from '../../../Shared/Components/pdfTemplates/Financial/earlyPaymentReceipt/earlyPaymentReceipt'
 import { Score, Customer } from '../../../Shared/Models/Customer'
+import LoanProfileComments from './loanProfileComments'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -407,6 +408,10 @@ class LoanProfile extends Component<Props, State> {
       {
         header: local.documents,
         stringKey: 'documents',
+      },
+      {
+        header: local.comments,
+        stringKey: 'comments',
       },
     ]
     const guarantorsTab = {
@@ -1346,6 +1351,14 @@ class LoanProfile extends Component<Props, State> {
             iScores={this.state.iscores}
             status={this.state.application.status}
             entitledToSign
+          />
+        )
+      case 'comments':
+        return (
+          <LoanProfileComments
+            applicationId={this.props.location.state.id}
+            comments={this.state.application.reviewNotes ?? []}
+            recallAPI={() => this.getAppByID(this.props.location.state.id)}
           />
         )
       default:

@@ -96,7 +96,7 @@ class LoanUses extends Component<{}, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('loanUses')}
+            .indexOf('loan-uses')}
         />
         <CRUDList
           source="loanUses"

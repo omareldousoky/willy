@@ -20,13 +20,7 @@ interface Props {
   canCreate?: boolean
   canEdit?: boolean
 }
-interface State {
-  options: Array<CrudOption>
-  loading: boolean
-  filterOptions: string
-  temp: Array<string>
-  source: string
-}
+
 export const CRUDList = (props: Props) => {
   const [options, setOptions] = useState<Array<CrudOption>>(props.options)
   const [filterOptions, setFilterOptions] = useState('')
