@@ -10,6 +10,7 @@ export interface ActiveWalletRequest {
   date: string
   branches?: Array<string>
   loanOfficerIds?: Array<string>
+  loanType?: 'sme' | 'micro'
 }
 
 export interface ActiveWalletIndividualResponse {
