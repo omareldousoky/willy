@@ -51,6 +51,8 @@ import {
   getRescheduledLoanExcel,
   getRescheduledLoanList,
   postRescheduledLoanExcel,
+  getPostponesExcel,
+  postPostponesExcel,
 } from '../../../Shared/Services/APIs/Reports/Financial'
 
 import { downloadFile } from '../../../Shared/Services/utils'
@@ -155,6 +157,13 @@ class FinancialReports extends Component<{}, State> {
           local: 'مدفوعات رصيدي',
           inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'raseedyTransactions',
+        },
+        {
+          key: 'getPostpones',
+          local: 'الترحيلات',
+          inputs: ['dateFromTo', 'branches'],
+          permission: 'getPostpones',
+          isPdfDisabled: true,
         },
       ],
       selectedPdf: { permission: '' },
@@ -267,6 +276,8 @@ class FinancialReports extends Component<{}, State> {
           getRaseedyTransactionsExcel,
           values
         )
+      case 'getPostpones':
+        return this.getExcelFile(postPostponesExcel, getPostponesExcel, values)
       default:
         return null
     }
