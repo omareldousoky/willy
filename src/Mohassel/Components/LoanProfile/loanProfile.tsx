@@ -343,7 +343,7 @@ class LoanProfile extends Component<Props, State> {
       if (application.guarantors.length > 0) {
         application.guarantors.forEach((guar) =>
           guar.customerType === 'company'
-            ? cbeCodes.push(guar.cbeCode)
+            ? guar.cbeCode && cbeCodes.push(guar.cbeCode)
             : ids.push(guar.nationalId)
         )
       }
@@ -351,7 +351,8 @@ class LoanProfile extends Component<Props, State> {
         entitledToSign.forEach((cust) => ids.push(cust.nationalId))
       }
       application.customer.customerType === 'company'
-        ? cbeCodes.push(application.customer.cbeCode)
+        ? application.customer.cbeCode &&
+          cbeCodes.push(application.customer.cbeCode)
         : ids.push(application.customer.nationalId)
     }
     const obj: { nationalIds: string[]; date?: Date } = {

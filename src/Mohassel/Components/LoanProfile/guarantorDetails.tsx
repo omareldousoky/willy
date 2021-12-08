@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Table from 'react-bootstrap/Table'
 
+import { missingKey } from 'Shared/localUtils'
 import * as local from '../../../Shared/Assets/ar.json'
 import {
   downloadFile,
@@ -515,6 +516,11 @@ export const GuarantorTableView = (props: Props) => {
                                 (score) => score.id === guar.guarantor.cbeCode
                               )[0]
                             : {}
+                        const hasScore =
+                          props.iScores &&
+                          props.iScores.length > 0 &&
+                          iScore &&
+                          iScore.id.length > 0
                         // const area = props.getGeoArea(guar.geoAreaId);
                         return (
                           <tr key={guar.index}>
@@ -535,52 +541,41 @@ export const GuarantorTableView = (props: Props) => {
                               {guar.guarantor.commercialRegisterNumber || ''}
                             </td>
                             <td>{guar.guarantor.businessAddress || ''}</td>
-                            {props.iScores &&
-                              props.iScores.length > 0 &&
-                              iScore.id.length > 0 && (
-                                <td
-                                  style={{
-                                    color: iscoreStatusColor(iScore.iscore)
-                                      .color,
-                                  }}
+                            {hasScore && (
+                              <td
+                                style={{
+                                  color: iscoreStatusColor(iScore.iscore).color,
+                                }}
+                              >
+                                {iScore.iscore}
+                              </td>
+                            )}
+                            {hasScore && (
+                              <td>{iscoreStatusColor(iScore.iscore).status}</td>
+                            )}
+                            {hasScore && (
+                              <td>
+                                {iScore.bankCodes &&
+                                  iScore.bankCodes.map(
+                                    (code) => `${iscoreBank(code)} `
+                                  )}
+                              </td>
+                            )}
+                            {hasScore && iScore.url && (
+                              <td>
+                                <Button
+                                  variant="default"
+                                  onClick={() => downloadFile(iScore.url)}
                                 >
-                                  {iScore.iscore}
-                                </td>
-                              )}
-                            {props.iScores &&
-                              props.iScores.length > 0 &&
-                              iScore.id.length > 0 && (
-                                <td>
-                                  {iscoreStatusColor(iScore.iscore).status}
-                                </td>
-                              )}
-                            {props.iScores &&
-                              props.iScores.length > 0 &&
-                              iScore.id.length > 0 && (
-                                <td>
-                                  {iScore.bankCodes &&
-                                    iScore.bankCodes.map(
-                                      (code) => `${iscoreBank(code)} `
-                                    )}
-                                </td>
-                              )}
-                            {props.iScores &&
-                              props.iScores.length > 0 &&
-                              iScore.url && (
-                                <td>
-                                  <Button
-                                    variant="default"
-                                    onClick={() => downloadFile(iScore.url)}
-                                  >
-                                    <LtsIcon
-                                      name="printer"
-                                      size="16px"
-                                      className="pl-2"
-                                    />
-                                    iScore
-                                  </Button>
-                                </td>
-                              )}
+                                  <LtsIcon
+                                    name="printer"
+                                    size="16px"
+                                    className="pl-2"
+                                  />
+                                  iScore
+                                </Button>
+                              </td>
+                            )}
                             {props.iScores &&
                               props.iScores.length > 0 &&
                               props.getIscore &&
@@ -598,7 +593,15 @@ export const GuarantorTableView = (props: Props) => {
                                   <td>
                                     <Button
                                       variant="default"
-                                      onClick={() => getIscore(guar.guarantor)}
+                                      onClick={() =>
+                                        !guar.guarantor.cbeCode
+                                          ? Swal.fire(
+                                              local.error,
+                                              missingKey('cbeCode'),
+                                              'error'
+                                            )
+                                          : getIscore(guar.guarantor)
+                                      }
                                     >
                                       <LtsIcon
                                         name="refresh"
