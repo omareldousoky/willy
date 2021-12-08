@@ -1582,17 +1582,20 @@ class LoanProfile extends Component<Props, State> {
             {this.state.application.product.type === 'nano' ? (
               <NanoLoanContract
                 data={this.state.application}
+                loanUsage={this.state.loanUsage}
                 branchDetails={this.state.branchDetails}
               />
             ) : this.state.application.product.beneficiaryType ===
               'individual' ? (
               <LoanContract
                 data={this.state.application}
+                loanUsage={this.state.loanUsage}
                 branchDetails={this.state.branchDetails}
               />
             ) : (
               <LoanContractForGroup
                 data={this.state.application}
+                loanUsage={this.state.loanUsage}
                 branchDetails={this.state.branchDetails}
               />
             )}
