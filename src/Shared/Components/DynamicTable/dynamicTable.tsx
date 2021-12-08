@@ -154,7 +154,10 @@ const DynamicTable = (props: DynamicTableProps) => {
           </tbody>
         </Table>
       ) : (
-        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+        <div
+          style={{ textAlign: 'center', marginBottom: 40 }}
+          className="print-none"
+        >
           <img
             alt="no-data-found"
             src={require('../../Assets/no-results-found.svg')}
@@ -195,7 +198,7 @@ const DynamicTable = (props: DynamicTableProps) => {
                 })}
             </Form.Control>
           </div>
-          <div className="pagination-container">
+          <div className="pagination-container print-none">
             <div
               className={
                 page === 0
