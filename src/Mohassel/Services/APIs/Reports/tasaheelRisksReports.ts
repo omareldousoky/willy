@@ -87,11 +87,7 @@ export const getTasaheelRisksReport = async (id: string) => {
 export const getLoanAgeReport = async (id: string) => {
   const url = API_BASE_URL + `/report/debts-aging/${id}`
   try {
-<<<<<<< HEAD
-    const res = await axios.get(url, { params: id })
-=======
     const res = await axios.get(url)
->>>>>>> 85a20b827ec574b429cdc4411ffcfb3924dee431
     return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }

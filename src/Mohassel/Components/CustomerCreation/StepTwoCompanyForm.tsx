@@ -47,6 +47,7 @@ export const StepTwoCompanyForm = (props: any) => {
       majorGeoDivisionLegacyCode: 0,
     },
   ])
+  const [smeSourceLoading, setSmeSourceLoading] = useState<boolean>(false)
 
   const {
     values,
@@ -85,9 +86,11 @@ export const StepTwoCompanyForm = (props: any) => {
     return []
   }
 
-  const getMissingUser = async (id: string): Promise<void> => {
+  const getSmeSourceName = async (id: string): Promise<void> => {
+    setSmeSourceLoading(true)
     const res = await getUserDetails(id)
     if (res.status === 'success') {
+      setSmeSourceLoading(false)
       setSystemUsers((prevUsers) => [...prevUsers, res.body.user])
     }
   }
@@ -151,7 +154,7 @@ export const StepTwoCompanyForm = (props: any) => {
   useEffect(() => {
     const getUser = systemUsers?.find((user) => user._id === values.smeSourceId)
     if (!getUser && values.smeSourceId) {
-      getMissingUser(values.smeSourceId)
+      getSmeSourceName(values.smeSourceId)
     }
   }, [systemUsers])
 
@@ -384,6 +387,7 @@ export const StepTwoCompanyForm = (props: any) => {
               loadOptions={getSystemUsers}
               cacheOptions
               defaultOptions
+              isLoading={smeSourceLoading}
             />
 
             <div
