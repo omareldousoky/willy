@@ -20,6 +20,7 @@ import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getG
 import { searchUsers } from '../../../Shared/Services/APIs/Users/searchUsers'
 import { searchCbeCode } from '../../Services/APIs/CbeCodes/CbeCodes'
 import { checkDuplicates } from '../../../Shared/Services/APIs/customer/checkNationalIdDup'
+import { getUserDetails } from '../../../Shared/Services/APIs/Users/userDetails'
 import useDebounce from '../../../Shared/hooks/useDebounce'
 
 interface GeoDivision {
@@ -40,13 +41,13 @@ export const StepTwoCompanyForm = (props: any) => {
   const [loanOfficers, setLoanOfficers] = useState<Array<any>>([])
   const [systemUsers, setSystemUsers] = useState<Array<any>>([])
   const [cbeCode, setCbeCode] = useState<Array<any>>([])
-
   const [geoDivisions, setGeoDivisions] = useState<Array<GeoDivision>>([
     {
       majorGeoDivisionName: { ar: '' },
       majorGeoDivisionLegacyCode: 0,
     },
   ])
+  const [smeSourceLoading, setSmeSourceLoading] = useState<boolean>(false)
 
   const {
     values,
@@ -85,6 +86,15 @@ export const StepTwoCompanyForm = (props: any) => {
     return []
   }
 
+  const getSmeSourceName = async (id: string): Promise<void> => {
+    setSmeSourceLoading(true)
+    const res = await getUserDetails(id)
+    if (res.status === 'success') {
+      setSmeSourceLoading(false)
+      setSystemUsers((prevUsers) => [...prevUsers, res.body.user])
+    }
+  }
+
   const getSystemUsers = async (inputValue: string) => {
     const res = await searchUsers({
       from: 0,
@@ -92,7 +102,6 @@ export const StepTwoCompanyForm = (props: any) => {
       name: inputValue,
       status: 'active',
     })
-
     if (res.status === 'success') {
       setSystemUsers(res.body.data)
       return res.body.data
@@ -141,6 +150,13 @@ export const StepTwoCompanyForm = (props: any) => {
     }
     getCbeCode(values.businessName)
   }, [])
+
+  useEffect(() => {
+    const getUser = systemUsers?.find((user) => user._id === values.smeSourceId)
+    if (!getUser && values.smeSourceId) {
+      getSmeSourceName(values.smeSourceId)
+    }
+  }, [systemUsers])
 
   useEffect(() => {
     ;(async () => {
@@ -197,9 +213,7 @@ export const StepTwoCompanyForm = (props: any) => {
               <Form.Control
                 type="text"
                 name="cbeCode"
-                value={
-                  cbeCode?.length === 0 ? values.cbeCode : cbeCode[0]?.cbeCode
-                }
+                value={values.cbeCode}
                 onBlur={handleBlur}
                 onChange={handleChange}
                 isInvalid={errors.cbeCode && touched.cbeCode}
@@ -373,6 +387,7 @@ export const StepTwoCompanyForm = (props: any) => {
               loadOptions={getSystemUsers}
               cacheOptions
               defaultOptions
+              isLoading={smeSourceLoading}
             />
 
             <div
