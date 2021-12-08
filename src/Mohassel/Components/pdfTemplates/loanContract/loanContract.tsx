@@ -19,6 +19,7 @@ const LoanContract = (props) => {
       installmentsObject,
     },
     branchDetails,
+    loanUsage,
   } = props
 
   const installments = installmentsObject?.installments?.filter(
@@ -257,7 +258,7 @@ const LoanContract = (props) => {
                         &nbsp; قرض من فرع &nbsp;{props.branchDetails.name}{' '}
                         الكائن
                         {props.branchDetails.address} لحاجته للسيوله النقديه
-                        يخصص استخدامه في تمويل رأس المال العامل وذلك وفقا لاحكام
+                        يخصص استخدامه في تمويل {loanUsage} وذلك وفقا لاحكام
                         القانون رقم ١٤١ لسنة ٢٠١٤ المشار اليه وذلك بضمان وتضامن
                         الطرف
                         {getNumbersOfGuarantor(
