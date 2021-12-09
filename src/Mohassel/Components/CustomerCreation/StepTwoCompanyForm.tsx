@@ -347,23 +347,21 @@ export const StepTwoCompanyForm = (props: any) => {
       </Can>
       <Row>
         <Col sm={6}>
-          <Form.Group controlId="smeSourceId">
+          <Form.Group controlId="sourceId">
             <Form.Label>{local.smeSourceId}</Form.Label>
             <AsyncSelect
-              className={errors.smeSourceId ? 'error' : ''}
-              name="smeSourceId"
-              data-qc="smeSourceId"
+              className={errors.sourceId ? 'error' : ''}
+              name="sourceId"
+              data-qc="sourceId"
               styles={theme.selectStyleWithBorder}
               theme={theme.selectTheme}
-              value={systemUsers?.find(
-                (user) => user._id === values.smeSourceId
-              )}
+              value={systemUsers?.find((user) => user._id === values.sourceId)}
               onBlur={handleBlur}
               onChange={(user) => {
-                if (props.edit && values.smeSourceId !== user._id) {
+                if (props.edit && values.sourceId !== user._id) {
                   setFieldValue('newUser', user._id)
-                  setFieldValue('smeSourceId', user._id)
-                } else setFieldValue('smeSourceId', user._id)
+                  setFieldValue('sourceId', user._id)
+                } else setFieldValue('sourceId', user._id)
                 setFieldValue('userName', user.name)
               }}
               getOptionLabel={(option) => option.name}
@@ -381,7 +379,7 @@ export const StepTwoCompanyForm = (props: any) => {
                 color: '#d51b1b',
               }}
             >
-              {errors.smeSourceId}
+              {errors.sourceId}
             </div>
           </Form.Group>
         </Col>
@@ -539,68 +537,66 @@ export const StepTwoCompanyForm = (props: any) => {
 
       <Row>
         <Col sm={6}>
-          <Form.Group controlId="smeBankName">
+          <Form.Group controlId="bankName">
             <Form.Label>{`${local.smeBankName} *`}</Form.Label>
             <Form.Control
               type="text"
-              name="smeBankName"
-              value={values.smeBankName}
+              name="bankName"
+              value={values.bankName}
               onBlur={handleBlur}
               onChange={handleChange}
-              isInvalid={errors.smeBankName && touched.smeBankName}
+              isInvalid={errors.bankName && touched.bankName}
             />
             <Form.Control.Feedback type="invalid">
-              {errors.smeBankName}
+              {errors.bankName}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
         <Col sm={6}>
-          <Form.Group controlId="smeBankBranch">
+          <Form.Group controlId="bankBranch">
             <Form.Label>{`${local.smeBankBranch} *`}</Form.Label>
             <Form.Control
               type="text"
-              name="smeBankBranch"
-              value={values.smeBankBranch}
+              name="bankBranch"
+              value={values.bankBranch}
               onBlur={handleBlur}
               onChange={handleChange}
-              isInvalid={errors.smeBankBranch && touched.smeBankBranch}
+              isInvalid={errors.bankBranch && touched.bankBranch}
             />
             <Form.Control.Feedback type="invalid">
-              {errors.smeBankBranch}
+              {errors.bankBranch}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
         <Col sm={6}>
-          <Form.Group controlId="smeBankAccountNumber">
+          <Form.Group controlId="bankAccountNumber">
             <Form.Label>{`${local.smeBankAccountNumber} *`}</Form.Label>
             <Form.Control
               type="text"
-              name="smeBankAccountNumber"
-              value={values.smeBankAccountNumber}
+              name="bankAccountNumber"
+              value={values.bankAccountNumber}
               onBlur={handleBlur}
               onChange={handleChange}
-              isInvalid={
-                errors.smeBankAccountNumber && touched.smeBankAccountNumber
-              }
+              isInvalid={errors.bankAccountNumber && touched.bankAccountNumber}
             />
             <Form.Control.Feedback type="invalid">
-              {errors.smeBankAccountNumber}
+              {errors.bankAccountNumber}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
         <Col sm={6}>
-          <Form.Group controlId="smeIbanNumber">
-            <Form.Label>{`${local.smeIbanNumber} *`}</Form.Label>
+          <Form.Group controlId="ibanNumber">
+            <Form.Label>{`${local.ibanNumber} *`}</Form.Label>
             <Form.Control
               type="text"
-              name="smeIbanNumber"
-              value={values.smeIbanNumber}
+              name="ibanNumber"
+              value={values.ibanNumber}
               onBlur={handleBlur}
               onChange={handleChange}
-              isInvalid={errors.smeIbanNumber && touched.smeIbanNumber}
+              isInvalid={errors.ibanNumber && touched.ibanNumber}
             />
             <Form.Control.Feedback type="invalid">
-              {errors.smeIbanNumber}
+              {errors.ibanNumber}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
