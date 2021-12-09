@@ -1253,5 +1253,7 @@
   "penaltiesCanceled": "غرامات معفيه",
   "penaltiesRemaining": "غرامات مستحقه",
   "moreInfo": "المزيد من المعلومات",
-  "bankAccountNumber": "رقم الحساب البنكي للعميل"
+  "bankAccountNumber": "رقم الحساب البنكي للعميل",
+  "newCustomerBranch": "الفرع الحالي",
+  "oldCustomerBranch": "الفرع السابق"
 }

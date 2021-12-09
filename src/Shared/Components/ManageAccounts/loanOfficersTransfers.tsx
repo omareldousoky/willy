@@ -7,8 +7,7 @@ import { Loader } from 'Shared/Components/Loader'
 import Form from 'react-bootstrap/esm/Form'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-import { theme } from 'Shared/theme'
-import { LoanOfficer } from 'Shared/Services/interfaces'
+import { Branch, LoanOfficer } from 'Shared/Services/interfaces'
 import {
   searchLoanOfficer,
   searchLoanOfficerLogs,
@@ -19,18 +18,22 @@ import {
   getDateAndTime,
   getErrorMessage,
 } from 'Shared/Services/utils'
-import AsyncSelect from 'react-select/async'
 import Button from 'react-bootstrap/esm/Button'
 import { manageAccountsArray } from 'Mohassel/Components/ManageAccounts/manageAccountsInitials'
+import { searchBranches } from 'Shared/Services/APIs/Branch/searchBranches'
 import { LogsInput } from './types'
+import { CustomizedAsyncSelect } from './CustomizedAsyncSelect'
 
 export const LoanOfficersTransfers = () => {
   const branchId = getBranchFromCookie()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [loanOfficers, setLoanOfficers] = useState<LoanOfficer[]>([])
+  const [branches, setBranches] = useState<Branch[]>([])
   const [logsInput, setLogsInput] = useState<LogsInput>({
     oldRepresentativeId: '',
     newRepresentativeId: '',
+    oldCustomerBranchId: '',
+    newCustomerBranchId: '',
     customerKey: null,
     from: 0,
     size: 10,
@@ -62,6 +65,17 @@ export const LoanOfficersTransfers = () => {
     Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
     return []
   }
+  const getBranches = async (inputValue: string) => {
+    const res = await searchBranches({ from: 0, size: 1000, name: inputValue })
+
+    if (res.status === 'success') {
+      setBranches([...res.body.data])
+      return res.body.data
+    }
+    setBranches([])
+    Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
+    return []
+  }
 
   const handleSubmit = useCallback(
     (e) => {
@@ -88,6 +102,16 @@ export const LoanOfficersTransfers = () => {
       render: (data) => data.newRepresentativeName || local.noDataAvaliable,
     },
     {
+      title: local.oldCustomerBranch,
+      key: 'oldCustomerBranchId',
+      render: (data) => data.oldCustomerBranchName || local.noDataAvaliable,
+    },
+    {
+      title: local.newCustomerBranch,
+      key: 'newCustomerBranchId',
+      render: (data) => data.newCustomerBranchName || local.noDataAvaliable,
+    },
+    {
       title: local.actionDate,
       key: 'updatedAt',
       render: (data) =>
@@ -101,82 +125,66 @@ export const LoanOfficersTransfers = () => {
       render: (data) => data.updated.userName || local.noDataAvaliable,
     },
   ]
+  const handlePrint = () => {
+    window.print()
+  }
 
   return (
     <>
-      <HeaderWithCards
-        header={local.manageAccounts}
-        array={manageAccountsArray()}
-        active={manageAccountsArray().findIndex(
-          (item) => item.header === local.loanOfficersTransfers
-        )}
-      />
+      <div className="print-none">
+        <HeaderWithCards
+          header={local.manageAccounts}
+          array={manageAccountsArray()}
+          active={manageAccountsArray().findIndex(
+            (item) => item.header === local.loanOfficersTransfers
+          )}
+        />
+      </div>
       <Card className="p-3">
         <Loader type="fullsection" open={isLoading} />
         <Card.Body>
-          <Card.Title>{local.loanOfficersTransfers}</Card.Title>
+          <div className="d-flex justify-content-between">
+            <Card.Title>{local.loanOfficersTransfers}</Card.Title>
+            <Button className="print-none" onClick={handlePrint}>
+              {local.print}
+            </Button>
+          </div>
           <hr className="dashed-line" />
           <Form className="mb-3">
             <Row>
               <Col sm={4}>
-                <Form.Group controlId="oldRepresentativeId">
-                  <Form.Label className="text-primary font-weight-bolder">
-                    {local.oldRepresentativeName}
-                  </Form.Label>
-                  <AsyncSelect
-                    name="oldRepresentativeId"
-                    data-qc="oldRepresentativeId"
-                    styles={theme.selectStyleWithBorder}
-                    theme={theme.selectTheme}
-                    value={loanOfficers.find(
-                      (lo) => lo._id === logsInput.oldRepresentativeId
-                    )}
-                    onChange={(selectedLoanOfficer) => {
-                      const loanOfficer = selectedLoanOfficer as LoanOfficer
-                      setLogsInput({
-                        ...logsInput,
-                        oldRepresentativeId: loanOfficer?._id || '',
-                      })
-                    }}
-                    getOptionLabel={(option) => option.name}
-                    getOptionValue={(option) => option._id}
-                    loadOptions={getLoanOfficers}
-                    cacheOptions
-                    defaultOptions
-                    placeholder={local.selectFromDropDown}
-                    isClearable
-                  />
-                </Form.Group>
+                <CustomizedAsyncSelect
+                  name="oldRepresentativeId"
+                  label={local.oldRepresentativeName}
+                  value={loanOfficers.find(
+                    (lo) => lo._id === logsInput.oldRepresentativeId
+                  )}
+                  onChange={(selectedLoanOfficer) => {
+                    const loanOfficer = selectedLoanOfficer as LoanOfficer
+                    setLogsInput({
+                      ...logsInput,
+                      oldRepresentativeId: loanOfficer?._id || '',
+                    })
+                  }}
+                  loadOptions={getLoanOfficers}
+                />
               </Col>
               <Col sm={4}>
-                <Form.Group controlId="newRepresentativeId">
-                  <Form.Label className="text-primary font-weight-bolder">
-                    {local.newRepresentativeName}
-                  </Form.Label>
-                  <AsyncSelect
-                    name="newRepresentativeId"
-                    data-qc="newRepresentativeId"
-                    styles={theme.selectStyleWithBorder}
-                    theme={theme.selectTheme}
-                    value={loanOfficers.find(
-                      (lo) => lo._id === logsInput.newRepresentativeId
-                    )}
-                    onChange={(selectedLoanOfficer) => {
-                      const loanOfficer = selectedLoanOfficer as LoanOfficer
-                      setLogsInput({
-                        ...logsInput,
-                        newRepresentativeId: loanOfficer?._id || '',
-                      })
-                    }}
-                    getOptionLabel={(option) => option.name}
-                    getOptionValue={(option) => option._id}
-                    loadOptions={getLoanOfficers}
-                    cacheOptions
-                    defaultOptions
-                    placeholder={local.selectFromDropDown}
-                    isClearable
-                  />
-                </Form.Group>
+                <CustomizedAsyncSelect
+                  name="newRepresentativeId"
+                  label={local.newRepresentativeName}
+                  value={loanOfficers.find(
+                    (lo) => lo._id === logsInput.newRepresentativeId
+                  )}
+                  onChange={(selectedLoanOfficer) => {
+                    const loanOfficer = selectedLoanOfficer as LoanOfficer
+                    setLogsInput({
+                      ...logsInput,
+                      newRepresentativeId: loanOfficer?._id || '',
+                    })
+                  }}
+                  loadOptions={getLoanOfficers}
+                />
               </Col>
               <Col sm={4}>
                 <Form.Group controlId="customerKey">
@@ -193,6 +201,40 @@ export const LoanOfficersTransfers = () => {
                     }
                   />
                 </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6}>
+                <CustomizedAsyncSelect
+                  name="oldCustomerBranchId"
+                  label={local.oldCustomerBranch}
+                  value={branches.find(
+                    (branch) => branch._id === logsInput.oldCustomerBranchId
+                  )}
+                  onChange={(branch) => {
+                    setLogsInput({
+                      ...logsInput,
+                      oldCustomerBranchId: (branch as Branch) ? branch._id : '',
+                    })
+                  }}
+                  loadOptions={getBranches}
+                />
+              </Col>
+              <Col sm={6}>
+                <CustomizedAsyncSelect
+                  name="newCustomerBranchId"
+                  label={local.newCustomerBranch}
+                  value={branches.find(
+                    (branch) => branch._id === logsInput.newCustomerBranchId
+                  )}
+                  onChange={(branch) => {
+                    setLogsInput({
+                      ...logsInput,
+                      newCustomerBranchId: (branch as Branch) ? branch._id : '',
+                    })
+                  }}
+                  loadOptions={getBranches}
+                />
               </Col>
             </Row>
             <Row>
