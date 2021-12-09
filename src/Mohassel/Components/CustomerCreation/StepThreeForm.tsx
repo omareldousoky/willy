@@ -395,6 +395,72 @@ export const StepThreeForm = (props: any) => {
         }
       </Can>
       <Row>
+        <Col sm={6}>
+          <Form.Group controlId="bankName">
+            <Form.Label>{`${local.bankName} *`}</Form.Label>
+            <Form.Control
+              type="text"
+              name="bankName"
+              value={values.bankName}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              isInvalid={errors.bankName && touched.bankName}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.bankName}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+        <Col sm={6}>
+          <Form.Group controlId="bankBranch">
+            <Form.Label>{`${local.bankBranch} *`}</Form.Label>
+            <Form.Control
+              type="text"
+              name="bankBranch"
+              value={values.bankBranch}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              isInvalid={errors.bankBranch && touched.bankBranch}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.bankBranch}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+        <Col sm={6}>
+          <Form.Group controlId="bankAccountNumber">
+            <Form.Label>{`${local.bankAccountNumber} *`}</Form.Label>
+            <Form.Control
+              type="text"
+              name="bankAccountNumber"
+              value={values.bankAccountNumber}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              isInvalid={errors.bankAccountNumber && touched.bankAccountNumber}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.bankAccountNumber}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+        <Col sm={6}>
+          <Form.Group controlId="ibanNumber">
+            <Form.Label>{`${local.ibanNumber} *`}</Form.Label>
+            <Form.Control
+              type="text"
+              name="ibanNumber"
+              value={values.ibanNumber}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              isInvalid={errors.ibanNumber && touched.ibanNumber}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.ibanNumber}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
         <Col sm={12}>
           <Form.Group controlId="comments">
             <Form.Label className="customer-form-label">

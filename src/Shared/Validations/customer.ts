@@ -175,6 +175,10 @@ export const customerCreationValidationStepThree = Yup.object().shape({
   permanentEmployeeCount: Yup.string().trim(),
   partTimeEmployeeCount: Yup.string().trim(),
   comments: Yup.string().trim().max(500, local.maxLength100),
+  bankName: Yup.string().required(local.required),
+  bankBranch: Yup.string().required(local.required),
+  bankAccountNumber: Yup.string().required(local.required),
+  ibanNumber: Yup.string().required(local.required),
 })
 
 export const customerCreationValidationStepThreeEdit = Yup.object().shape({
@@ -213,4 +217,8 @@ export const customerCreationValidationStepThreeEdit = Yup.object().shape({
       }
     )
     .required(local.required),
+  bankName: Yup.string().required(local.required),
+  bankBranch: Yup.string().required(local.required),
+  bankAccountNumber: Yup.string().required(local.required),
+  ibanNumber: Yup.string().required(local.required),
 })

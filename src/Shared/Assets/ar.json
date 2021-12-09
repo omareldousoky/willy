@@ -1211,7 +1211,7 @@
   "smeBankName": "اسم البنك التابعة له الشركة",
   "smeBankBranch": "فرع البنك التابعة له الشركة",
   "smeBankAccountNumber": "رقم الحساب البنكي للشركة",
-  "smeIbanNumber": "رقم IBAN",
+  "ibanNumber": "رقم IBAN",
   "cbeCode": "كود البنك المركزي",
   "duplicateCbeCodeMessage": "رقم الكود موجود بالفعل لشركة اخرى",
   "convertToCustomer": "تحويل إلي عميل",
@@ -1252,5 +1252,6 @@
   "penaltiesPaid": "غرامات مسدده",
   "penaltiesCanceled": "غرامات معفيه",
   "penaltiesRemaining": "غرامات مستحقه",
-  "moreInfo": "المزيد من المعلومات"
+  "moreInfo": "المزيد من المعلومات",
+  "bankAccountNumber": "رقم الحساب البنكي للعميل"
 }

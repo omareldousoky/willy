@@ -202,8 +202,8 @@ export const getCompanyInfo = ({
     },
     {
       fieldTitle: local.smeSourceId,
-      fieldData: company.smeSourceId ? (
-        <UserName id={company.smeSourceId} />
+      fieldData: company.sourceId ? (
+        <UserName id={company.sourceId} />
       ) : (
         local.na
       ),
@@ -211,22 +211,22 @@ export const getCompanyInfo = ({
     },
     {
       fieldTitle: local.smeBankName,
-      fieldData: company.smeBankName || '',
+      fieldData: company.bankName || '',
       showFieldCondition: true,
     },
     {
       fieldTitle: local.smeBankBranch,
-      fieldData: company.smeBankBranch || '',
+      fieldData: company.bankBranch || '',
       showFieldCondition: true,
     },
     {
       fieldTitle: local.smeBankAccountNumber,
-      fieldData: company.smeBankAccountNumber || '',
+      fieldData: company.bankAccountNumber || '',
       showFieldCondition: true,
     },
     {
-      fieldTitle: local.smeIbanNumber,
-      fieldData: company.smeIbanNumber || '',
+      fieldTitle: local.ibanNumber,
+      fieldData: company.ibanNumber || '',
       showFieldCondition: true,
     },
     {
@@ -278,6 +278,10 @@ export const getCustomerInfo = ({
     monthlyIncome,
     initialConsumerFinanceLimit,
     guarantorMaxCustomers,
+    bankName,
+    bankBranch,
+    bankAccountNumber,
+    ibanNumber,
   } = customerDetails
   const info: FieldProps[] = [
     {
@@ -396,6 +400,26 @@ export const getCustomerInfo = ({
     {
       fieldTitle: local.initialConsumerFinanceLimit,
       fieldData: numbersToArabic(initialConsumerFinanceLimit || 0),
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.bankName,
+      fieldData: bankName || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.bankBranch,
+      fieldData: bankBranch || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.bankAccountNumber,
+      fieldData: bankAccountNumber || '',
+      showFieldCondition: true,
+    },
+    {
+      fieldTitle: local.ibanNumber,
+      fieldData: ibanNumber || '',
       showFieldCondition: true,
     },
   ]
