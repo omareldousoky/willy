@@ -107,9 +107,15 @@ export const CompanyProfile = () => {
     }
     const iScore = await getIscore(obj)
     if (iScore.status === 'success') {
-      const guarIds = customerGuarantors.map((guar: any) => guar.nationalId)
-      const entitledToSignIds = entitledToSignCustomers.map(
-        (customer: any) => customer.nationalId
+      const guarIds: string[] = []
+      customerGuarantors.forEach(
+        (guar) => guar.nationalId && guarIds.push(guar.nationalId)
+      )
+
+      const entitledToSignIds: string[] = []
+      entitledToSignCustomers.forEach(
+        (customer) =>
+          customer.nationalId && entitledToSignIds.push(customer.nationalId)
       )
       const idArray = guarIds.concat(entitledToSignIds)
       await getIScores(company)

@@ -19,15 +19,13 @@ import Can from '../../config/Can'
 import { Loader } from '../../../Shared/Components/Loader'
 import { editGuarantors } from '../../../Shared/Services/APIs/loanApplication/editGuarantors'
 import ability from '../../config/ability'
-import { Customer } from '../../../Shared/Models/Customer'
+import { CompanyGuarantor, Guarantor } from '../../../Shared/Models/Customer'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 import { LtsIcon } from '../../../Shared/Components'
 
-type Guarantor = Customer & { position?: string }
-type CompanyGuarantor = Customer & { position?: string; cbeCode?: string }
 interface Props {
   guarantors: Array<Guarantor>
   iScores?: any
