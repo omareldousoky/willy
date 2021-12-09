@@ -1357,7 +1357,8 @@ class LoanProfile extends Component<Props, State> {
         return (
           <LoanProfileComments
             applicationId={this.props.location.state.id}
-            comments={this.state.application.reviewNotes ?? []}
+            applicationStatus={this.state.application.status}
+            comments={this.state.application.inReviewNotes ?? []}
             recallAPI={() => this.getAppByID(this.props.location.state.id)}
           />
         )

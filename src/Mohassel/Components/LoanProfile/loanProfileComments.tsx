@@ -3,7 +3,11 @@ import Swal from 'sweetalert2'
 import { getLoanComments } from 'Shared/Services/APIs/LoanComments/getLoanComments'
 import { Loader } from 'Shared/Components/Loader'
 import * as local from 'Shared/Assets/ar.json'
-import { customFilterOption, getErrorMessage } from 'Shared/Services/utils'
+import {
+  customFilterOption,
+  getErrorMessage,
+  numbersToArabic,
+} from 'Shared/Services/utils'
 import ability from 'Shared/config/ability'
 import Button from 'react-bootstrap/Button'
 import { LtsIcon } from 'Shared/Components'
@@ -17,13 +21,14 @@ interface LoanProfileCommentsProps {
   comments: string[]
   applicationId: string
   recallAPI: () => void
+  applicationStatus: string
 }
 const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
   props: LoanProfileCommentsProps
 ) => {
   const [selectedLoanComments, setSelectedLoanComments] = useState<
     { value: string; label: string }[]
-  >()
+  >([])
   const [allLoanComments, setAllLoanComments] = useState<object[]>()
   const [loading, setLoading] = useState(false)
   const [openModal, setOpenModal] = useState(false)
@@ -49,10 +54,6 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
     }
   }
 
-  // useEffect(() => {
-  //   getComments()
-  // }, [])
-
   const setLoanApplicationComments = async (comments) => {
     setLoading(true)
     const res = await setApplicationComments(props.applicationId, comments)
@@ -64,17 +65,23 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
   }
-  const removeLoanApplicationComments = (comment) => {
-    console.log(comment)
+  const removeLoanApplicationComments = (commentToRemove) => {
+    const comments = props.comments.filter(
+      (comment) => comment !== commentToRemove
+    )
+    setLoanApplicationComments(comments)
   }
 
   const addComments = () => {
     const selected = selectedLoanComments?.map((comment) => comment.label)
-    setLoanApplicationComments(selected)
+    setLoanApplicationComments([...props.comments, ...selected])
   }
-  // const array = manageLoanDetailsArray()
 
-  const canChangeComments = ability.can('addCustomerGuarantors', 'customer')
+  const canChangeComments =
+    ability.can('addCustomerGuarantors', 'customer') &&
+    !['pending', 'paid', 'canceled', 'issued', 'rejected'].includes(
+      props.applicationStatus
+    )
   return (
     <>
       <Loader type="fullscreen" open={loading} />
@@ -88,7 +95,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
                 setOpenModal(true)
               }}
             >
-              {local.addEditOrRemoveGuarantor}
+              {local.add} {local.comments}
             </Button>
           </div>
         )}
@@ -98,6 +105,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
               <tr>
                 <th />
                 <th>{local.comments}</th>
+                {canChangeComments && <th>{local.delete}</th>}
               </tr>
             </thead>
             <tbody>
@@ -105,7 +113,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
                 props.comments.map((comment, index) => {
                   return (
                     <tr key={index}>
-                      <td>{index}</td>
+                      <td>{numbersToArabic(index)}</td>
                       <td>{comment}</td>
                       {canChangeComments && (
                         <td style={{ padding: 10 }}>
@@ -126,7 +134,9 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
             </tbody>
           </Table>
         ) : (
-          <p>{local.noGuarantors}</p>
+          <p>
+            {local.na} {local.comments}
+          </p>
         )}
       </div>
       {openModal && (
@@ -134,8 +144,9 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
           <Loader type="fullsection" open={loading} />
           <Modal.Header>
             <Modal.Title>
-              {local.add}
-              {local.comments}
+              <>
+                {local.add} {local.comments}
+              </>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -148,14 +159,12 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
               placeholder={
                 <span style={{ width: '100%', padding: '5px', margin: '5px' }}>
                   <LtsIcon name="search" />
-
-                  {local.searchByUserRole}
+                  {local.search}
                 </span>
               }
-              name="roles"
-              data-qc="roles"
+              name="comments"
+              data-qc="comments"
               onChange={(event: any) => {
-                console.log(event)
                 setSelectedLoanComments(event)
               }}
               value={selectedLoanComments}
@@ -167,6 +176,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
               variant="secondary"
               onClick={() => {
                 setOpenModal(false)
+                setSelectedLoanComments([])
               }}
             >
               {local.cancel}
@@ -174,7 +184,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
             <Button
               variant="primary"
               onClick={() => addComments()}
-              disabled={!selectedLoanComments}
+              disabled={!selectedLoanComments.length}
             >
               {local.submit}
             </Button>
