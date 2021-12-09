@@ -28,7 +28,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
   props: LoanProfileCommentsProps
 ) => {
   const [selectedLoanComments, setSelectedLoanComments] = useState<
-  OptionType[]
+    OptionType[]
   >([])
   const [allLoanComments, setAllLoanComments] = useState<OptionType[]>()
   const [loading, setLoading] = useState(false)
@@ -79,7 +79,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
   }
 
   const canChangeComments =
-    ability.can('addCustomerGuarantors', 'customer') &&
+    ability.can('editLoanApplication', 'application') &&
     !['pending', 'paid', 'canceled', 'issued', 'rejected'].includes(
       props.applicationStatus
     )
