@@ -7,17 +7,11 @@ import { Loader } from 'Shared/Components/Loader'
 import * as local from 'Shared/Assets/ar.json'
 import HeaderWithCards from 'Shared/Components/HeaderWithCards/headerWithCards'
 import { getErrorMessage } from 'Shared/Services/utils'
-import { CRUDList } from 'Shared/Components/CRUDList/crudList'
+import { CRUDList, CrudOption } from 'Shared/Components/CRUDList/crudList'
 import { manageLoanDetailsArray } from './manageLoanDetailsInitials'
 
-interface LoanComment {
-  name: string
-  disabledUi: boolean
-  id: string
-  activated: boolean
-}
 const LoanComments: FunctionComponent = () => {
-  const [loanComments, setLoanComments] = useState<LoanComment[]>([])
+  const [loanComments, setLoanComments] = useState<CrudOption[]>([])
   const [loading, setLoading] = useState(false)
 
   const getComments = async () => {

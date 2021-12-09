@@ -16,6 +16,7 @@ import { setApplicationComments } from 'Shared/Services/APIs/LoanComments/addCom
 import Modal from 'react-bootstrap/esm/Modal'
 import Select from 'react-select'
 import { theme } from 'Shared/theme'
+import { OptionType } from 'Shared/Components/dropDowns/types'
 
 interface LoanProfileCommentsProps {
   comments: string[]
@@ -27,9 +28,9 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
   props: LoanProfileCommentsProps
 ) => {
   const [selectedLoanComments, setSelectedLoanComments] = useState<
-    { value: string; label: string }[]
+  OptionType[]
   >([])
-  const [allLoanComments, setAllLoanComments] = useState<object[]>()
+  const [allLoanComments, setAllLoanComments] = useState<OptionType[]>()
   const [loading, setLoading] = useState(false)
   const [openModal, setOpenModal] = useState(false)
 
@@ -37,7 +38,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
     setLoading(true)
     const res = await getLoanComments()
     if (res.status === 'success') {
-      const labeldComments: Array<object> = []
+      const labeldComments: Array<OptionType> = []
       res.body.reviewNotes
         .filter((note) => !props.comments.includes(note.name))
         .forEach((note) => {
