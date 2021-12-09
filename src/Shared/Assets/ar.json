@@ -1252,5 +1252,7 @@
   "penaltiesPaid": "غرامات مسدده",
   "penaltiesCanceled": "غرامات معفيه",
   "penaltiesRemaining": "غرامات مستحقه",
-  "moreInfo": "المزيد من المعلومات"
+  "moreInfo": "المزيد من المعلومات",
+  "newCustomerBranch": "الفرع الحالي",
+  "oldCustomerBranch": "الفرع السابق"
 }
