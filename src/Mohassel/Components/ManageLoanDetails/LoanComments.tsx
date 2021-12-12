@@ -83,6 +83,7 @@ const LoanComments: FunctionComponent = () => {
         }}
         canCreate
         canEdit
+        noMaxLength
       />
     </>
   )

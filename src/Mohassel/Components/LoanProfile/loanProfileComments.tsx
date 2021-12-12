@@ -40,7 +40,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
     if (res.status === 'success') {
       const labeldComments: Array<OptionType> = []
       res.body.reviewNotes
-        .filter((note) => !props.comments.includes(note.name))
+        .filter((note) => !props.comments.includes(note.name) && note.activated)
         .forEach((note) => {
           labeldComments.push({
             label: note.name,
@@ -115,7 +115,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
                   return (
                     <tr key={index}>
                       <td>{numbersToArabic(index + 1)}</td>
-                      <td>{comment}</td>
+                      <td className="text-break">{comment}</td>
                       {canChangeComments && (
                         <td style={{ padding: 10 }}>
                           <Button

@@ -19,6 +19,7 @@ interface Props {
   disableNameEdit?: boolean
   canCreate?: boolean
   canEdit?: boolean
+  noMaxLength?: boolean
 }
 
 export const CRUDList = (props: Props) => {
@@ -150,7 +151,7 @@ export const CRUDList = (props: Props) => {
                   <Form.Control
                     type="text"
                     data-qc="loanUsageInput"
-                    maxLength={100}
+                    maxLength={props.noMaxLength ? undefined : 100}
                     title={option.name}
                     value={option.name}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
