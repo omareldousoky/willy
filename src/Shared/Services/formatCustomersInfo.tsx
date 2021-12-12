@@ -211,27 +211,27 @@ export const getCompanyInfo = ({
     },
     {
       fieldTitle: local.smeBankName,
-      fieldData: company.bankName || '',
+      fieldData: company.bankName || local.na,
       showFieldCondition: true,
     },
     {
       fieldTitle: local.smeBankBranch,
-      fieldData: company.bankBranch || '',
+      fieldData: company.bankBranch || local.na,
       showFieldCondition: true,
     },
     {
       fieldTitle: local.smeBankAccountNumber,
-      fieldData: company.bankAccountNumber || '',
+      fieldData: company.bankAccountNumber || local.na,
       showFieldCondition: true,
     },
     {
       fieldTitle: local.ibanNumber,
-      fieldData: company.ibanNumber || '',
+      fieldData: company.ibanNumber || local.na,
       showFieldCondition: true,
     },
     {
       fieldTitle: local.cbeCode,
-      fieldData: company.cbeCode || '',
+      fieldData: company.cbeCode || local.na,
       showFieldCondition: true,
     },
     {
@@ -404,23 +404,23 @@ export const getCustomerInfo = ({
     },
     {
       fieldTitle: local.bankName,
-      fieldData: bankName || '',
-      showFieldCondition: true,
+      fieldData: bankName || local.na,
+      showFieldCondition: !isCF,
     },
     {
       fieldTitle: local.bankBranch,
-      fieldData: bankBranch || '',
-      showFieldCondition: true,
+      fieldData: bankBranch || local.na,
+      showFieldCondition: !isCF,
     },
     {
       fieldTitle: local.bankAccountNumber,
-      fieldData: bankAccountNumber || '',
-      showFieldCondition: true,
+      fieldData: bankAccountNumber || local.na,
+      showFieldCondition: !isCF,
     },
     {
       fieldTitle: local.ibanNumber,
-      fieldData: ibanNumber || '',
-      showFieldCondition: true,
+      fieldData: ibanNumber || local.na,
+      showFieldCondition: !isCF,
     },
   ]
 
