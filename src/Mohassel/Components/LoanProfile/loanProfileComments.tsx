@@ -79,8 +79,8 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
   }
 
   const canChangeComments =
-    ability.can('editLoanApplication', 'application') &&
-    !['pending', 'paid', 'canceled', 'issued', 'rejected'].includes(
+    ability.can('assignLoanReviewNote', 'application') &&
+    !['pending', 'paid', 'canceled', 'issued', 'rejected', 'created'].includes(
       props.applicationStatus
     )
   return (
@@ -114,7 +114,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
                 props.comments.map((comment, index) => {
                   return (
                     <tr key={index}>
-                      <td>{numbersToArabic(index)}</td>
+                      <td>{numbersToArabic(index + 1)}</td>
                       <td>{comment}</td>
                       {canChangeComments && (
                         <td style={{ padding: 10 }}>
