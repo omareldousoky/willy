@@ -174,10 +174,10 @@ export interface CustomerCreationStep3 {
     maxGroupIndividualPrincipal: number
     maxGroupPrincipal: number
   }
-  bankName: string
-  bankBranch: string
-  bankAccountNumber: string
-  ibanNumber: string
+  bankName?: string
+  bankBranch?: string
+  bankAccountNumber?: string
+  ibanNumber?: string
 }
 export enum LinkageStatusEnum {
   Pending = 'pending',

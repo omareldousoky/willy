@@ -397,7 +397,7 @@ export const StepThreeForm = (props: any) => {
       <Row>
         <Col sm={6}>
           <Form.Group controlId="bankName">
-            <Form.Label>{`${local.bankName} *`}</Form.Label>
+            <Form.Label>{local.bankName}</Form.Label>
             <Form.Control
               type="text"
               name="bankName"
@@ -413,7 +413,7 @@ export const StepThreeForm = (props: any) => {
         </Col>
         <Col sm={6}>
           <Form.Group controlId="bankBranch">
-            <Form.Label>{`${local.bankBranch} *`}</Form.Label>
+            <Form.Label>{local.bankBranch}</Form.Label>
             <Form.Control
               type="text"
               name="bankBranch"
@@ -429,7 +429,7 @@ export const StepThreeForm = (props: any) => {
         </Col>
         <Col sm={6}>
           <Form.Group controlId="bankAccountNumber">
-            <Form.Label>{`${local.bankAccountNumber} *`}</Form.Label>
+            <Form.Label>{local.bankAccountNumber}</Form.Label>
             <Form.Control
               type="text"
               name="bankAccountNumber"
@@ -445,7 +445,7 @@ export const StepThreeForm = (props: any) => {
         </Col>
         <Col sm={6}>
           <Form.Group controlId="ibanNumber">
-            <Form.Label>{`${local.ibanNumber} *`}</Form.Label>
+            <Form.Label>{local.ibanNumber}</Form.Label>
             <Form.Control
               type="text"
               name="ibanNumber"
