@@ -250,7 +250,7 @@ export const getCustomerInfo = ({
   customerDetails,
   score,
   isLeader,
-  isCF,
+  isCF = false,
   getIscore,
   applicationStatus,
   productType,
@@ -403,6 +403,11 @@ export const getCustomerInfo = ({
       showFieldCondition: true,
     },
     {
+      fieldTitle: local.monthlyIncome,
+      fieldData: numbersToArabic(monthlyIncome || 0),
+      showFieldCondition: isCF,
+    },
+    {
       fieldTitle: local.bankName,
       fieldData: bankName || local.na,
       showFieldCondition: !isCF,
@@ -423,24 +428,6 @@ export const getCustomerInfo = ({
       showFieldCondition: !isCF,
     },
   ]
-
-  // monthlyIncome && initialConsumerFinanceLimit
-  const cfFields: FieldProps[] = [
-    // hidden field to display both fields in a new row
-    // TODO: make a better way
-    {
-      fieldTitle: 'empty dummy field',
-      fieldData: 0,
-      showFieldCondition: false,
-    },
-    {
-      fieldTitle: local.monthlyIncome,
-      fieldData: numbersToArabic(monthlyIncome || 0),
-      showFieldCondition: true,
-    },
-  ]
-
-  if (isCF) return [...info, ...cfFields]
 
   return info
 }
