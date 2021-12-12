@@ -51,7 +51,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
       setAllLoanComments(labeldComments)
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
     }
   }
 
@@ -63,7 +63,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
       props.recallAPI()
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
     }
   }
   const removeLoanApplicationComments = (commentToRemove) => {
@@ -101,7 +101,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
           </div>
         )}
         {props.comments.length ? (
-          <Table style={{ textAlign: 'right' }}>
+          <Table className="text-left">
             <thead>
               <tr>
                 <th />
