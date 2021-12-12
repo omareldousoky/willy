@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { LoanOfficersTransfers } from 'Shared/Components/ManageAccounts'
 import { Leads } from 'Mohassel/Components/HalanIntegration/leads'
+import LoanComments from 'Mohassel/Components/ManageLoanDetails/LoanComments'
 import CustomerCreation from '../Components/CustomerCreation'
 import UserCreation from '../Components/UserCreation/userCreation'
 import FormulaCreation from '../Components/LoanFormulaCreation/loanFormulaCreation'
@@ -352,6 +353,15 @@ const appRoutes = [
             render: () => (
               <Can I="viewBusinessSectorConfig" a="config">
                 <BusinessSpecialities />
+              </Can>
+            ),
+          },
+          {
+            path: '/comments',
+            label: local.comments,
+            render: () => (
+              <Can I="loanReviewNote" a="config">
+                <LoanComments />
               </Can>
             ),
           },
