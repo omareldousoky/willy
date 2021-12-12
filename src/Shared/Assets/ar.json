@@ -1254,5 +1254,8 @@
   "penaltiesRemaining": "غرامات مستحقه",
   "moreInfo": "المزيد من المعلومات",
   "newCustomerBranch": "الفرع الحالي",
-  "oldCustomerBranch": "الفرع السابق"
+  "oldCustomerBranch": "الفرع السابق",
+  "cfCategory": "التصنيف الرئيسي",
+  "cfSubcategory": "التصنيف الفرعي",
+  "cfBrand": "العلامه التجاريه"
 }
