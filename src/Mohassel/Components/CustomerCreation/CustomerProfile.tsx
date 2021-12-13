@@ -666,6 +666,8 @@ export const CustomerProfile = () => {
                 </span>
               )}
             </div>
+          </div>
+          <div className="d-flex">
             <ProfileActions actions={getProfileActions()} />
           </div>
           {mainInfo && <InfoBox info={mainInfo} />}
