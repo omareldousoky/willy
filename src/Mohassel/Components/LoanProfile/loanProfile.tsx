@@ -102,6 +102,7 @@ import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsa
 import { getEarlyPaymentPdfData } from '../../../Shared/Utils/payment'
 import EarlyPaymentReceipt from '../../../Shared/Components/pdfTemplates/Financial/earlyPaymentReceipt/earlyPaymentReceipt'
 import { Score, Customer } from '../../../Shared/Models/Customer'
+import LoanProfileComments from './loanProfileComments'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -407,6 +408,10 @@ class LoanProfile extends Component<Props, State> {
       {
         header: local.documents,
         stringKey: 'documents',
+      },
+      {
+        header: local.comments,
+        stringKey: 'comments',
       },
     ]
     const guarantorsTab = {
@@ -1348,6 +1353,15 @@ class LoanProfile extends Component<Props, State> {
             entitledToSign
           />
         )
+      case 'comments':
+        return (
+          <LoanProfileComments
+            applicationId={this.props.location.state.id}
+            applicationStatus={this.state.application.status}
+            comments={this.state.application.inReviewNotes ?? []}
+            recallAPI={() => this.getAppByID(this.props.location.state.id)}
+          />
+        )
       default:
         return null
     }
@@ -1582,17 +1596,20 @@ class LoanProfile extends Component<Props, State> {
             {this.state.application.product.type === 'nano' ? (
               <NanoLoanContract
                 data={this.state.application}
+                loanUsage={this.state.loanUsage}
                 branchDetails={this.state.branchDetails}
               />
             ) : this.state.application.product.beneficiaryType ===
               'individual' ? (
               <LoanContract
                 data={this.state.application}
+                loanUsage={this.state.loanUsage}
                 branchDetails={this.state.branchDetails}
               />
             ) : (
               <LoanContractForGroup
                 data={this.state.application}
+                loanUsage={this.state.loanUsage}
                 branchDetails={this.state.branchDetails}
               />
             )}

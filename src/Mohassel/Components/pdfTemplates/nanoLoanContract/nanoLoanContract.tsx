@@ -16,6 +16,7 @@ const NanoLoanContract = (props) => {
   const {
     data: { installmentsObject, guarantors, customer },
     branchDetails,
+    loanUsage,
   } = props
 
   const installments = installmentsObject?.installments?.filter(
@@ -241,12 +242,11 @@ const NanoLoanContract = (props) => {
                       {props.data.customer.businessActivity} بطلب للحصول علي قرض{' '}
                       {local.nano} من فرع {branchDetails.name} الكائن{' '}
                       {branchDetails.address} لحاجته للسيوله النقديه يخصص
-                      استخدامه في تمويل رأس المال العامل وذلك وفقا لاحكام
-                      القانون رقم ١٤١ لسنة ٢٠١٤ وقرار الهيئة رقم ١٤٢ لسنة ٢٠١٩
-                      المشار اليه. وقد وافقه الطرف الاول على ذلك وفقا للشروط
-                      والضوابط الوارده بهذا العقد وبعد أن اقر الأطراف بأهليتهم
-                      القانونية للتصرف والتعاقد فقد اتفقوا على بنود العقد
-                      التالية.
+                      استخدامه في تمويل {loanUsage} وذلك وفقا لاحكام القانون رقم
+                      ١٤١ لسنة ٢٠١٤ وقرار الهيئة رقم ١٤٢ لسنة ٢٠١٩ المشار اليه.
+                      وقد وافقه الطرف الاول على ذلك وفقا للشروط والضوابط الوارده
+                      بهذا العقد وبعد أن اقر الأطراف بأهليتهم القانونية للتصرف
+                      والتعاقد فقد اتفقوا على بنود العقد التالية.
                     </div>
                   </section>
 
