@@ -4,6 +4,7 @@ import * as React from 'react'
 import { LoanOfficersTransfers } from 'Shared/Components/ManageAccounts'
 import { Leads } from 'Mohassel/Components/HalanIntegration/leads'
 import LoanComments from 'Mohassel/Components/ManageLoanDetails/LoanComments'
+import SourceOfFundHome from 'Mohassel/Components/SourceOfFund/sourceOfFundHome'
 import CustomerCreation from '../Components/CustomerCreation'
 import UserCreation from '../Components/UserCreation/userCreation'
 import FormulaCreation from '../Components/LoanFormulaCreation/loanFormulaCreation'
@@ -39,7 +40,6 @@ import EncodingFiles from '../Components/Tools/encodingFiles'
 import DocumentTypeCreation from '../Components/documentTypeCreation/documentTypeCreation'
 import { CustomerProfile } from '../Components/CustomerCreation/CustomerProfile'
 import ActionLogs from '../Components/ActionLogs/action-logs'
-import SourceOfFund from '../Components/SourceOfFund/sourceOfFund'
 import CIB from '../Components/CIB'
 import ReportsHome from '../Components/Reports/reportsHome'
 import MoveCustomers from '../Components/MoveCustomers/moveCustomers'
@@ -633,7 +633,7 @@ const appRoutes = [
             label: local.changeSourceOfFund,
             render: (props) => (
               <Can I="cibScreen" a="report">
-                <SourceOfFund {...props} />
+                <SourceOfFundHome {...props} />
               </Can>
             ),
           },

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, ReactNode } from 'react'
 import Card from 'react-bootstrap/Card'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -20,13 +20,12 @@ import { loading } from '../../../Shared/redux/loading/actions'
 import { changeSourceFund } from '../../../Shared/Services/APIs/loanApplication/changeSourceFund'
 import { cibExtractions } from '../../../Shared/Services/APIs/loanApplication/cibExtractions'
 import { downloadTxtFile } from '../CIB/textFiles'
-import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
-import { manageLoansArray } from '../LoanList/manageLoansInitials'
 import { ActionsIconGroup, LtsIcon } from '../../../Shared/Components'
 
 interface Props extends RouteComponentProps {
   data: any
-  branchId: string
+  children?: ReactNode
+  branchId?: string
   fromBranch?: boolean
   totalCount: number
   loading: boolean
@@ -42,7 +41,6 @@ interface State {
   selectedCustomers: Array<string>
   selectedFund: string
   oldFilesDate: string
-  manageLoansTabs: any[]
 }
 
 class SourceOfFund extends Component<Props, State> {
@@ -62,7 +60,6 @@ class SourceOfFund extends Component<Props, State> {
       selectedCustomers: [],
       selectedFund: '',
       oldFilesDate: '',
-      manageLoansTabs: [],
     }
     this.mappers = [
       {
@@ -168,7 +165,6 @@ class SourceOfFund extends Component<Props, State> {
       fundSource: 'cib',
       type: 'micro',
     })
-    this.setState({ manageLoansTabs: manageLoansArray() })
   }
 
   componentWillUnmount() {
@@ -301,15 +297,6 @@ class SourceOfFund extends Component<Props, State> {
   render() {
     return (
       <>
-        <HeaderWithCards
-          header={local.changeSourceOfFund}
-          array={this.state.manageLoansTabs}
-          active={this.state.manageLoansTabs
-            .map((item) => {
-              return item.icon
-            })
-            .indexOf('change-source-of-fund')}
-        />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullscreen" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>

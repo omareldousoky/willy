@@ -1257,5 +1257,7 @@
   "oldCustomerBranch": "الفرع السابق",
   "cfCategory": "التصنيف الرئيسي",
   "cfSubcategory": "التصنيف الفرعي",
-  "cfBrand": "العلامه التجاريه"
+  "cfBrand": "العلامه التجاريه",
+  "fromCibToTasaheel": "من CIB لتساهيل",
+  "fromTasaheelToCib": "من تساهيل لCIB"
 }

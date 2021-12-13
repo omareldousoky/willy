@@ -14,7 +14,6 @@ export interface CIBState {
   size: number
   from: number
   principalSelectedSum: number
-  manageLoansTabs: any[]
   selectedLoans?: string[]
   showNoResultMessage?: boolean
 }
