@@ -10,7 +10,11 @@ interface Suspect {
   type?: string
 }
 
-type Guarantor = Customer & { position?: string }
+export type Guarantor = Customer & { position?: string }
+export type CompanyGuarantor = Customer & {
+  position?: string
+  cbeCode?: string
+}
 type EntitledToSign = Guarantor
 
 export interface Customer {
