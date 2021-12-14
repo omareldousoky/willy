@@ -15,7 +15,7 @@ export type CompanyGuarantor = Customer & {
   position?: string
   cbeCode?: string
 }
-type EntitledToSign = Guarantor
+export type EntitledToSign = Guarantor
 
 export interface Customer {
   _id?: string
