@@ -29,5 +29,13 @@ export const manageLoanDetailsArray = (): Card[] => {
       }
     )
   }
+  if (ability.can('loanReviewNote', 'config')) {
+    mangeLoanDetailsArr.push({
+      icon: 'applications',
+      header: local.comments,
+      desc: local.comments,
+      path: '/manage-loan-details/comments',
+    })
+  }
   return mangeLoanDetailsArr
 }

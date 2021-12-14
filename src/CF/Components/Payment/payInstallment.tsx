@@ -221,64 +221,6 @@ class PayInstallment extends Component<Props, State> {
                   <Form.Group as={Row} md={12}>
                     {this.props.paymentType === 'normal' ? (
                       <>
-                        <Form.Group
-                          as={Col}
-                          md={6}
-                          controlId="installmentNumber"
-                        >
-                          <Form.Label
-                            className="pr-0"
-                            column
-                          >{`${local.installmentToBePaid}`}</Form.Label>
-                          <Col className="pr-0">
-                            <Form.Control
-                              as="select"
-                              name="installmentNumber"
-                              data-qc="installmentNumber"
-                              onChange={(event) => {
-                                const installment = this.props.installments.find(
-                                  (inst) =>
-                                    inst.id ===
-                                    Number(event.currentTarget.value)
-                                )
-                                formikBag.setFieldValue(
-                                  'installmentNumber',
-                                  event.currentTarget.value
-                                )
-                                formikBag.setFieldValue(
-                                  'requiredAmount',
-                                  installment
-                                    ? installment.installmentResponse -
-                                        installment?.totalPaid
-                                    : 0
-                                )
-                                formikBag.setFieldValue(
-                                  'payAmount',
-                                  installment
-                                    ? installment.installmentResponse -
-                                        installment?.totalPaid
-                                    : 0
-                                )
-                              }}
-                            >
-                              <option value={-1} />
-                              {this.props.installments.map((installment) => {
-                                if (
-                                  installment.status !== 'paid' &&
-                                  installment.status !== 'rescheduled'
-                                )
-                                  return (
-                                    <option
-                                      key={installment.id}
-                                      value={installment.id}
-                                    >
-                                      {installment.id}
-                                    </option>
-                                  )
-                              })}
-                            </Form.Control>
-                          </Col>
-                        </Form.Group>
                         <Form.Group as={Col} md={6} controlId="requiredAmount">
                           <Form.Label
                             className="pr-0"
