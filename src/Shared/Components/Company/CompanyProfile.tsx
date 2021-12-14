@@ -15,9 +15,9 @@ import { Company } from '../../Services/interfaces'
 import { getCompanyInfo } from '../../Services/formatCustomersInfo'
 import { getCustomerByID } from '../../Services/APIs/customer/getCustomer'
 import {
-  getIscore,
   getIscoreCached,
   getSMECachedIscore,
+  getSMEIscore,
 } from '../../Services/APIs/iScore'
 import { blockCustomer } from '../../Services/APIs/customer/blockCustomer'
 import {
@@ -105,7 +105,7 @@ export const CompanyProfile = () => {
       idSource: '031',
       idValue: `${data.cbeCode}`,
     }
-    const iScore = await getIscore(obj)
+    const iScore = await getSMEIscore(obj)
     if (iScore.status === 'success') {
       const guarIds: string[] = []
       customerGuarantors.forEach(
