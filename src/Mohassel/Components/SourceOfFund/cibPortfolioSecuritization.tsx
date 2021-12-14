@@ -17,7 +17,7 @@ import {
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import { loading } from '../../../Shared/redux/loading/actions'
-import { changeSourceFund } from '../../../Shared/Services/APIs/loanApplication/changeSourceFund'
+import { changeSourceFundCibPortfolio } from '../../../Shared/Services/APIs/loanApplication/changeSourceFund'
 import { cibExtractions } from '../../../Shared/Services/APIs/loanApplication/cibExtractions'
 import { downloadTxtFile } from '../CIB/textFiles'
 import { ActionsIconGroup, LtsIcon } from '../../../Shared/Components'
@@ -176,6 +176,7 @@ class CibPortfolioSecuritization extends Component<Props, State> {
   componentDidUpdate(prevProps) {
     if (prevProps.source !== this.props.source) {
       this.getLoans()
+      this.props.setSearchFilters({})
     }
   }
 
@@ -278,12 +279,10 @@ class CibPortfolioSecuritization extends Component<Props, State> {
     this.setState({ openModal: '', selectedFund: '', selectedCustomers: [] })
     this.props.setLoading(true)
     const obj = {
-      fundSource: this.state.selectedFund,
-      applicationIds: this.state.selectedCustomers,
-      returnDetails: false,
-      approvalDate: new Date().valueOf(),
+      sourceOfFund: this.state.selectedFund,
+      loanIds: this.state.selectedCustomers,
     }
-    const res = await changeSourceFund(obj)
+    const res = await changeSourceFundCibPortfolio(obj)
     if (res.status === 'success') {
       this.props.setLoading(false)
       Swal.fire('', local.changeSourceFundSuccess, 'success').then(() =>
