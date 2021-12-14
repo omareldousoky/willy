@@ -43,7 +43,7 @@ interface State {
   oldFilesDate: string
 }
 
-class SourceOfFund extends Component<Props, State> {
+class CibToTasaheel extends Component<Props, State> {
   mappers: {
     title: string
     key: string
@@ -303,7 +303,7 @@ class SourceOfFund extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                  {local.changeSourceOfFund}
+                  {`${local.from} ${local.cib} ${local.to} ${local.tasaheel}`}
                 </Card.Title>
                 <span className="text-muted">
                   {local.noOfSelectedLoans +
@@ -471,4 +471,4 @@ const mapStateToProps = (state) => {
 export default connect(
   mapStateToProps,
   addSearchToProps
-)(withRouter(SourceOfFund))
+)(withRouter(CibToTasaheel))

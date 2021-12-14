@@ -1,6 +1,42 @@
-import * as local from '../../../Shared/Assets/ar.json'
+import * as local from 'Shared/Assets/ar.json'
+import { Tab } from 'Shared/Components/HeaderWithCards/headerWithCards'
 import { Card } from '../ManageAccounts/manageAccountsInitials'
 import ability from '../../config/ability'
+
+const changeSourceOfFundTabs = [
+  {
+    header: `${local.from} ${local.tasaheel} ${local.to} ${local.cib}`,
+    stringKey: 'tasaheelToCib',
+    permission: 'cibScreen',
+    permissionKey: 'report',
+  },
+  {
+    header: `${local.from} ${local.cib} ${local.to} ${local.tasaheel}`,
+    stringKey: 'cibToTasaheel',
+    permission: 'cibScreen',
+    permissionKey: 'report',
+  },
+  {
+    header: `${local.from} ${local.tasaheel} ${local.to} ${local.cibPortfolioSecuritization}`,
+    stringKey: 'cibPortfolioSecuritization',
+    permission: 'cibPortfolioSecuritization',
+    permissionKey: 'application',
+  },
+  {
+    header: `${local.from} ${local.cibPortfolioSecuritization} ${local.to} ${local.tasaheel}`,
+    stringKey: 'fromCibPortToTasaheel',
+    permission: 'cibPortfolioSecuritization',
+    permissionKey: 'application',
+  },
+]
+
+export const handleSourceOfFundTabs = (): Tab[] => {
+  const canTabs: Tab[] = []
+  changeSourceOfFundTabs.forEach(
+    (t) => ability.can(t.permission, t.permissionKey) && canTabs.push(t)
+  )
+  return canTabs
+}
 
 export const manageLoansArray = (): Card[] => {
   const manageLoanArr: Card[] = []

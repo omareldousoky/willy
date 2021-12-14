@@ -1,40 +1,23 @@
 import React, { ReactNode, useState } from 'react'
-import { CardNavBar, Tab } from 'Shared/Components/HeaderWithCards/cardNavbar'
 import CardBT from 'react-bootstrap/Card'
 import { RouteComponentProps } from 'react-router-dom'
+import * as local from 'Shared/Assets/ar.json'
+import HeaderWithCards, {
+  Tab,
+} from 'Shared/Components/HeaderWithCards/headerWithCards'
 import CIB from '../CIB'
-import SourceOfFund from './sourceOfFund'
-import * as local from '../../../Shared/Assets/ar.json'
-import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
-import { manageLoansArray } from '../LoanList/manageLoansInitials'
-import ability from '../../config/ability'
+import CibToTasaheel from './cibToTasaheel'
+import {
+  manageLoansArray,
+  handleSourceOfFundTabs,
+} from '../LoanList/manageLoansInitials'
 import { Card } from '../ManageAccounts/manageAccountsInitials'
-
-const tabsTemplate = [
-  {
-    header: local.fromTasaheelToCib,
-    stringKey: 'tasaheelToCib',
-    permission: 'cibScreen',
-    permissionKey: 'report',
-  },
-  {
-    header: local.fromCibToTasaheel,
-    stringKey: 'cibToTasaheel',
-    permission: 'cibScreen',
-    permissionKey: 'report',
-  },
-]
+import CibPortfolioSecuritization from './cibPortfolioSecuritization'
 
 const SourceOfFundHome: React.FC<RouteComponentProps> = (props) => {
   const [activeTab, setActiveTab] = useState<string>('tasaheelToCib')
   const [manageLoansHeader] = useState<Card[]>(manageLoansArray())
-  const [tabs] = useState<Tab[]>(() => {
-    const canTabs: Tab[] = []
-    tabsTemplate.forEach(
-      (t) => ability.can(t.permission, t.permissionKey) && canTabs.push(t)
-    )
-    return canTabs
-  })
+  const [tabs] = useState<Tab[]>(handleSourceOfFundTabs())
 
   const renderTab = (): ReactNode => {
     switch (activeTab) {
@@ -42,7 +25,13 @@ const SourceOfFundHome: React.FC<RouteComponentProps> = (props) => {
         return <CIB />
       }
       case 'cibToTasaheel': {
-        return <SourceOfFund {...props} />
+        return <CibToTasaheel {...props} />
+      }
+      case 'cibPortfolioSecuritization': {
+        return <CibPortfolioSecuritization source="tasaheel" />
+      }
+      case 'fromCibPortToTasaheel': {
+        return <CibPortfolioSecuritization source="cib" />
       }
       default:
         return null
@@ -54,16 +43,14 @@ const SourceOfFundHome: React.FC<RouteComponentProps> = (props) => {
       <HeaderWithCards
         header={local.changeSourceOfFund}
         array={manageLoansHeader}
-        active={manageLoansHeader
-          .map((item) => {
-            return item.icon
-          })
-          .indexOf('change-source-of-fund')}
+        active={manageLoansHeader.findIndex(
+          (t) => t.icon === 'change-source-of-fund'
+        )}
       />
       <CardBT>
-        <CardNavBar
+        <HeaderWithCards
           array={tabs}
-          active={activeTab}
+          active={tabs.findIndex((t) => t.stringKey === activeTab)}
           selectTab={(tab: string) => {
             setActiveTab(tab)
           }}

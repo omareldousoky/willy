@@ -161,7 +161,7 @@ class CIB extends Component<CIBProps, CIBState> {
             <div className="custom-card-header">
               <div className="d-flex align-items-center">
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                  {local.cib}
+                  {`${local.from} ${local.tasaheel} ${local.to} ${local.cib}`}
                 </Card.Title>
                 <span className="font-weight-bold" style={{ marginLeft: 10 }}>
                   {local.noOfSelectedLoans}
