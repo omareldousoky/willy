@@ -46,6 +46,7 @@ import {
   getSettlementFees,
   reviewLegalCustomer,
   getLegalHistory,
+  getSettlementExtraDetails,
 } from '../../../../Shared/Services/APIs/LegalAffairs/defaultingCustomers'
 import { defaultValidationSchema } from '../validations'
 import UploadLegalCustomers from './UploadCustomersForm'
@@ -62,12 +63,16 @@ import {
 import JudgeLegalCustomersForm from '../JudgeLegalCustomersForm'
 import LegalJudgePdf from '../../pdfTemplates/LegalJudge'
 import { getConvictedReport } from '../../../Services/APIs/Reports/legal'
-import { LegalHistoryResponse } from '../../../../Shared/Models/LegalAffairs'
+import {
+  LegalHistoryResponse,
+  SettlementExtraDetailsRespose,
+} from '../../../../Shared/Models/LegalAffairs'
 import { ActionsGroup } from '../../../../Shared/Components/ActionsGroup'
 import { TableMapperItem } from '../../../../Shared/Components/DynamicTable/types'
 import useDidUpdateEffect from '../../../../Shared/hooks/useDidUpdateEffect'
 import { FormField } from '../../../../Shared/Components/Form/types'
 import AppForm from '../../../../Shared/Components/Form'
+import { SettlementExtraDetailsModal } from './SettlementExtraDetailsModal'
 
 const LegalCustomersList: FunctionComponent = () => {
   const [from, setFrom] = useState<number>(0)
@@ -116,6 +121,11 @@ const LegalCustomersList: FunctionComponent = () => {
     null
   )
   const [isJudgeModalOpen, setIsJudgeModalOpen] = useState(false)
+  const [showExtraDetailsModal, setExtraDetailsModalView] = useState(false)
+  const [
+    settlementExtraDetails,
+    setSettlementExtraDetails,
+  ] = useState<SettlementExtraDetailsRespose>({})
   const data: SettledCustomer[] =
     useSelector((state: any) => state.search.data) || []
   const error: string = useSelector((state: any) => state.search.error)
@@ -339,6 +349,17 @@ const LegalCustomersList: FunctionComponent = () => {
     setIsSettlementLoading(false)
   }
 
+  const getSettlementDetails = async (loanId: string) => {
+    setIsSettlementLoading(true)
+    const res = await getSettlementExtraDetails(loanId)
+    if (res.status === 'success') {
+      setSettlementExtraDetails(res.body)
+      setExtraDetailsModalView(true)
+    } else {
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    }
+    setIsSettlementLoading(false)
+  }
   const handleJudgeReport = async (values: JudgeCustomersFormValues) => {
     setConvictedReportInfo({
       governorate: values.governorate,
@@ -423,6 +444,13 @@ const LegalCustomersList: FunctionComponent = () => {
         actionPermission: ability.can('getDefaultingCustomer', 'legal'),
         actionOnClick: async () => {
           await handleDownloadHistory(customer._id)
+        },
+      },
+      {
+        actionTitle: local.moreInfo,
+        actionPermission: true,
+        actionOnClick: async () => {
+          await getSettlementDetails(customer.loanId)
         },
       },
     ]
@@ -786,6 +814,14 @@ const LegalCustomersList: FunctionComponent = () => {
             />
           </Modal.Body>
         </Modal>
+        {showExtraDetailsModal && (
+          <SettlementExtraDetailsModal
+            setShowModal={setExtraDetailsModalView}
+            showModal={showExtraDetailsModal}
+            resetData={() => setSettlementExtraDetails({})}
+            extraSettlementDetails={settlementExtraDetails}
+          />
+        )}
       </div>
 
       {customerForPrint && branchForPrint && (

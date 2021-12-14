@@ -6,11 +6,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import Container from 'react-bootstrap/Container'
 import local from '../../Assets/ar.json'
 import ability from '../../../Mohassel/config/ability'
-import {
-  cfLimitStatusLocale,
-  getErrorMessage,
-  iscoreDate,
-} from '../../Services/utils'
+import { cfLimitStatusLocale, getErrorMessage } from '../../Services/utils'
 
 import { TabDataProps } from '../Profile/types'
 import { Tab } from '../HeaderWithCards/cardNavbar'
@@ -71,7 +67,7 @@ export const CompanyProfile = () => {
   const getIScores = async (companyObj) => {
     setIsLoading(true)
     const iScores = await getSMECachedIscore({
-      ids: [`${companyObj.governorate}-${companyObj.commercialRegisterNumber}`],
+      ids: [companyObj.cbeCode],
     })
     if (iScores.status === 'success') {
       setScore(iScores?.body?.data[0])
@@ -97,30 +93,27 @@ export const CompanyProfile = () => {
   const getCustomerIscore = async (data) => {
     setIsLoading(true)
     const obj = {
-      requestNumber: '148',
-      reportId: '3004',
-      product: '023',
-      loanAccountNumber: `${data.key}`,
-      number: '1703943',
-      date: '02/12/2014',
-      amount: `${1000}`, // TODO
-      lastName: `${data.customerName}`,
-      idSource: '003',
-      idValue: `${data.nationalId}`,
-      gender: data.gender === 'male' ? '001' : '002',
-      dateOfBirth: iscoreDate(data.birthDate),
+      productId: '104',
+      amount: `${1000}`,
+      name: `${data.businessName}`,
+      idSource: '031',
+      idValue: `${data.cbeCode}`,
     }
     const iScore = await getIscore(obj)
     if (iScore.status === 'success') {
-      const guarIds = customerGuarantors.map((guar) => guar.nationalId)
-      const entitledToSignIds = entitledToSignCustomers.map(
-        (customer) => customer.nationalId
+      const guarIds: string[] = []
+      customerGuarantors.forEach(
+        (guar) => guar.nationalId && guarIds.push(guar.nationalId)
       )
-      await getCachediScores([
-        data.nationalId,
-        ...guarIds,
-        ...entitledToSignIds,
-      ])
+
+      const entitledToSignIds: string[] = []
+      entitledToSignCustomers.forEach(
+        (customer) =>
+          customer.nationalId && entitledToSignIds.push(customer.nationalId)
+      )
+      const idArray = guarIds.concat(entitledToSignIds)
+      await getIScores(company)
+      await getCachediScores(idArray)
       setIsLoading(false)
     } else {
       setIsLoading(false)
@@ -232,7 +225,7 @@ export const CompanyProfile = () => {
     getCompanyInfo({
       company,
       score,
-      // getIscore: (data) => getCustomerIscore(data),
+      getIscore: (data) => getCustomerIscore(data),
       applicationStatus: 'reviewed',
     }),
   ]

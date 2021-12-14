@@ -19,14 +19,9 @@ interface Props {
   disableNameEdit?: boolean
   canCreate?: boolean
   canEdit?: boolean
+  noMaxLength?: boolean
 }
-interface State {
-  options: Array<CrudOption>
-  loading: boolean
-  filterOptions: string
-  temp: Array<string>
-  source: string
-}
+
 export const CRUDList = (props: Props) => {
   const [options, setOptions] = useState<Array<CrudOption>>(props.options)
   const [filterOptions, setFilterOptions] = useState('')
@@ -156,7 +151,7 @@ export const CRUDList = (props: Props) => {
                   <Form.Control
                     type="text"
                     data-qc="loanUsageInput"
-                    maxLength={100}
+                    maxLength={props.noMaxLength ? undefined : 100}
                     title={option.name}
                     value={option.name}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

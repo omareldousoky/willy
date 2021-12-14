@@ -102,6 +102,7 @@ import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsa
 import { getEarlyPaymentPdfData } from '../../../Shared/Utils/payment'
 import EarlyPaymentReceipt from '../../../Shared/Components/pdfTemplates/Financial/earlyPaymentReceipt/earlyPaymentReceipt'
 import { Score, Customer } from '../../../Shared/Models/Customer'
+import LoanProfileComments from './loanProfileComments'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -330,7 +331,7 @@ class LoanProfile extends Component<Props, State> {
 
   async getCachediScores(application) {
     const ids: string[] = []
-    const commercialRegisterNumbers: string[] = []
+    const cbeCodes: string[] = []
     const entitledToSign = application.entitledToSign?.map(
       this.mapEntitledToSignToCustomer
     )
@@ -343,7 +344,7 @@ class LoanProfile extends Component<Props, State> {
       if (application.guarantors.length > 0) {
         application.guarantors.forEach((guar) =>
           guar.customerType === 'company'
-            ? commercialRegisterNumbers.push(guar.commercialRegisterNumber)
+            ? guar.cbeCode && cbeCodes.push(guar.cbeCode)
             : ids.push(guar.nationalId)
         )
       }
@@ -351,16 +352,15 @@ class LoanProfile extends Component<Props, State> {
         entitledToSign.forEach((cust) => ids.push(cust.nationalId))
       }
       application.customer.customerType === 'company'
-        ? commercialRegisterNumbers.push(
-            `${application.customer.governorate}-${application.customer.commercialRegisterNumber}`
-          )
+        ? application.customer.cbeCode &&
+          cbeCodes.push(application.customer.cbeCode)
         : ids.push(application.customer.nationalId)
     }
     const obj: { nationalIds: string[]; date?: Date } = {
       nationalIds: ids,
     }
     const smeObj: { ids: string[]; date?: Date } = {
-      ids: commercialRegisterNumbers,
+      ids: cbeCodes,
     }
     if (
       [
@@ -407,6 +407,10 @@ class LoanProfile extends Component<Props, State> {
       {
         header: local.documents,
         stringKey: 'documents',
+      },
+      {
+        header: local.comments,
+        stringKey: 'comments',
       },
     ]
     const guarantorsTab = {
@@ -741,9 +745,7 @@ class LoanProfile extends Component<Props, State> {
     ) {
       if (this.state.application.product?.type === 'sme') {
         const smeScore = this.state.iscores.filter(
-          (score) =>
-            score.id ===
-            `${this.state.application.customer.governorate}-${this.state.application.customer.commercialRegisterNumber}`
+          (score) => score.id === this.state.application.customer.cbeCode
         )[0]
         const info: FieldProps[] = getCompanyInfo({
           company: this.state.application.customer,
@@ -795,8 +797,8 @@ class LoanProfile extends Component<Props, State> {
             productId: '104',
             amount: `${this.state.application.principal}`,
             name: `${data.businessName}`,
-            idSource: `${this.state.application.customer.governorate}`,
-            idValue: `${data.commercialRegisterNumber}`,
+            idSource: '031',
+            idValue: `${data.cbeCode}`,
           }
         : {
             requestNumber: '148',
@@ -1348,6 +1350,15 @@ class LoanProfile extends Component<Props, State> {
             entitledToSign
           />
         )
+      case 'comments':
+        return (
+          <LoanProfileComments
+            applicationId={this.props.location.state.id}
+            applicationStatus={this.state.application.status}
+            comments={this.state.application.inReviewNotes ?? []}
+            recallAPI={() => this.getAppByID(this.props.location.state.id)}
+          />
+        )
       default:
         return null
     }
@@ -1582,17 +1593,20 @@ class LoanProfile extends Component<Props, State> {
             {this.state.application.product.type === 'nano' ? (
               <NanoLoanContract
                 data={this.state.application}
+                loanUsage={this.state.loanUsage}
                 branchDetails={this.state.branchDetails}
               />
             ) : this.state.application.product.beneficiaryType ===
               'individual' ? (
               <LoanContract
                 data={this.state.application}
+                loanUsage={this.state.loanUsage}
                 branchDetails={this.state.branchDetails}
               />
             ) : (
               <LoanContractForGroup
                 data={this.state.application}
+                loanUsage={this.state.loanUsage}
                 branchDetails={this.state.branchDetails}
               />
             )}

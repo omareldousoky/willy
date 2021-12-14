@@ -12,7 +12,6 @@ import { searchUserByAction } from '../../../Mohassel/Services/APIs/UserByAction
 import {
   getErrorMessage,
   getFormattedLocalDate,
-  timeToDateyyymmdd,
 } from '../../../Shared/Services/utils'
 import { payment } from '../../../Shared/redux/payment/actions'
 import { Employee } from '.'
@@ -21,7 +20,6 @@ import './styles.scss'
 import Can from '../../../Shared/config/Can'
 import { theme } from '../../../Shared/theme'
 import { ApplicationResponse } from '../../../Shared/Models/Application'
-import { getFirstDueInstallment } from '../../../Shared/Utils/payment'
 
 interface SelectObject {
   label: string
@@ -91,9 +89,6 @@ class ManualPayment extends Component<Props, State> {
   }
 
   render() {
-    const firstDueInstallment = getFirstDueInstallment(this.props.application)
-    const isNormalPayment = this.props.paymentType === 'normal'
-
     return (
       <Form onSubmit={this.props.formikProps.handleSubmit}>
         {this.props.paymentType === 'random' && (
@@ -221,65 +216,6 @@ class ManualPayment extends Component<Props, State> {
               {this.props.formikProps.errors.receiptNumber}
             </Form.Control.Feedback>
           </Form.Group>
-          {isNormalPayment && (
-            <Form.Group as={Col} md={6} controlId="installmentNumber">
-              <Form.Label
-                column
-                className="pr-0"
-              >{`${local.installmentToBePaid}`}</Form.Label>
-              <Form.Control
-                as="select"
-                name="installmentNumber"
-                data-qc="installmentNumber"
-                defaultValue={
-                  isNormalPayment
-                    ? firstDueInstallment?.id ||
-                      this.props.formikProps.values.installmentNumber
-                    : this.props.formikProps.values.installmentNumber
-                }
-                onChange={(event) => {
-                  const installment = this.props.application?.installmentsObject?.installments?.find(
-                    (inst) => inst.id === Number(event.currentTarget.value)
-                  )
-                  this.props.formikProps.setFieldValue(
-                    'installmentNumber',
-                    event.currentTarget.value
-                  )
-                  this.props.formikProps.setFieldValue(
-                    'requiredAmount',
-                    installment
-                      ? installment.installmentResponse - installment?.totalPaid
-                      : 0
-                  )
-                  this.props.formikProps.setFieldValue(
-                    'payAmount',
-                    installment
-                      ? installment.installmentResponse - installment?.totalPaid
-                      : 0
-                  )
-                  this.props.formikProps.setFieldValue(
-                    'dueDate',
-                    timeToDateyyymmdd(installment?.dateOfPayment || -1)
-                  )
-                }}
-              >
-                <option value={-1} />
-                {this.props.application?.installmentsObject?.installments?.map(
-                  (installment) => {
-                    if (
-                      installment.status !== 'paid' &&
-                      installment.status !== 'rescheduled'
-                    )
-                      return (
-                        <option key={installment.id} value={installment.id}>
-                          {installment.id}
-                        </option>
-                      )
-                  }
-                )}
-              </Form.Control>
-            </Form.Group>
-          )}
           <Form.Group as={Col} md={6} controlId="whoPaid">
             <Form.Label
               style={{ paddingRight: 0 }}
