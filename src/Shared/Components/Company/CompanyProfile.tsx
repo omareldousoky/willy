@@ -4,7 +4,6 @@ import Swal from 'sweetalert2'
 import { useHistory, useLocation } from 'react-router-dom'
 
 import Container from 'react-bootstrap/Container'
-
 import local from '../../Assets/ar.json'
 import ability from '../../../Mohassel/config/ability'
 import { cfLimitStatusLocale, getErrorMessage } from '../../Services/utils'
@@ -15,29 +14,24 @@ import { Company } from '../../Services/interfaces'
 import { getCompanyInfo } from '../../Services/formatCustomersInfo'
 import { getCustomerByID } from '../../Services/APIs/customer/getCustomer'
 import {
-  getIscore,
   getIscoreCached,
   getSMECachedIscore,
+  getSMEIscore,
 } from '../../Services/APIs/iScore'
 import { blockCustomer } from '../../Services/APIs/customer/blockCustomer'
 import {
   CFEntitledToSignDetailsProps,
   CFGuarantorDetailsProps,
   Customer,
+  EntitledToSign,
   Score,
 } from '../../Models/Customer'
 import { ProfileActions } from '../ProfileActions'
 import { Profile } from '../Profile'
 import { InfoBox } from '../InfoBox'
-import {
-  AcknowledgmentWasSignedInFront,
-  AuthorizationToFillInfo,
-  BondContract,
-  PromissoryNote,
-  ConsumerFinanceContract,
-} from '../pdfTemplates/ConsumerContract'
 import { ConsumerFinanceContractData } from '../../Models/consumerContract'
 import CFLimitModal from '../CFLimitModal/CFLimitModal'
+import { MicroCFContract } from '../../../Mohassel/Components/Reports/microCFContract'
 
 export interface CompanyProfileProps {
   data: any
@@ -55,7 +49,7 @@ export const CompanyProfile = () => {
   const [cfModalAction, setCFModalAction] = useState('')
   const [customerGuarantors, setCustomerGuarantors] = useState<Customer[]>([])
   const [entitledToSignCustomers, setEntitledToSignCustomers] = useState<
-    Customer[]
+    EntitledToSign[]
   >([])
   const [score, setScore] = useState<Score>()
   const [iScoreDetails, setIScoreDetails] = useState<Score[]>()
@@ -105,7 +99,7 @@ export const CompanyProfile = () => {
       idSource: '031',
       idValue: `${data.cbeCode}`,
     }
-    const iScore = await getIscore(obj)
+    const iScore = await getSMEIscore(obj)
     if (iScore.status === 'success') {
       const guarIds: string[] = []
       customerGuarantors.forEach(
@@ -220,7 +214,11 @@ export const CompanyProfile = () => {
       customerHomeAddress: customer.customerHomeAddress || '',
       mobilePhoneNumber: customer.mobilePhoneNumber || '',
       initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
+      branchName: customer.branchName || '',
+      commercialRegisterNumber: customer.commercialRegisterNumber || '',
+      businessAddress: customer.businessAddress || '',
       customerGuarantors: customerGuarantors || [],
+      entitledToSignCustomers: entitledToSignCustomers || [],
     })
   }
   const mainInfo = company && [
@@ -441,54 +439,10 @@ export const CompanyProfile = () => {
         )}
       </Container>
       {print === 'all' && (
-        <>
-          <ConsumerFinanceContract
-            contractData={customerCFContract as ConsumerFinanceContractData}
-          />
-          <BondContract
-            customerCreationDate={company?.created?.at || 0}
-            customerName={company?.customerName || ''}
-            customerHomeAddress={company?.customerHomeAddress || ''}
-            nationalId={company?.nationalId || ''}
-            initialConsumerFinanceLimit={
-              company?.initialConsumerFinanceLimit || 0
-            }
-          />
-          {customerGuarantors?.length > 0 &&
-            customerGuarantors.map((guarantor) => (
-              <BondContract
-                customerCreationDate={company?.created?.at || 0}
-                customerName={guarantor?.customerName || ''}
-                customerHomeAddress={guarantor?.customerHomeAddress || ''}
-                nationalId={guarantor?.nationalId || ''}
-                initialConsumerFinanceLimit={
-                  company?.initialConsumerFinanceLimit || 0
-                }
-              />
-            ))}
-          <PromissoryNote
-            customerCreationDate={company?.created?.at || 0}
-            customerName={company?.customerName || ''}
-            customerHomeAddress={company?.customerHomeAddress || ''}
-            nationalId={company?.nationalId || ''}
-            initialConsumerFinanceLimit={
-              company?.initialConsumerFinanceLimit || 0
-            }
-            customerGuarantors={customerGuarantors}
-          />
-          <AuthorizationToFillInfo
-            customerCreationDate={company?.created?.at || 0}
-            customerName={company?.customerName || ''}
-            customerHomeAddress={company?.customerHomeAddress || ''}
-            customerGuarantors={customerGuarantors}
-          />
-          <AcknowledgmentWasSignedInFront
-            customerCreationDate={company?.created?.at || 0}
-            customerName={company?.customerName || ''}
-            nationalId={company?.nationalId || ''}
-            customerGuarantors={customerGuarantors}
-          />
-        </>
+        <MicroCFContract
+          contractData={customerCFContract as ConsumerFinanceContractData}
+          sme
+        />
       )}
     </>
   )
