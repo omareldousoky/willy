@@ -37,6 +37,7 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
   const [selectedCustomers, setSelectedCustomers] = useState<string[]>([])
   const [selectedFund, setSelectedFund] = useState<string>('')
   const [oldFilesDate, setOldFilesDate] = useState<string>('')
+  const [selectedAll, setSelectedAll] = useState<boolean>(false)
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -96,31 +97,18 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
   }
 
   const getLoans = async (): Promise<void> => {
-    let query = {}
-
+    let query = {
+      ...searchFilters,
+      size,
+      from,
+      url: 'loan',
+      sort: 'issueDate',
+      status: 'issued',
+      fundSource: props.source,
+      type: 'micro',
+    }
     if (props.fromBranch) {
-      query = {
-        ...searchFilters,
-        size,
-        from,
-        url: 'loan',
-        branchId: props.branchId,
-        sort: 'issueDate',
-        status: 'issued',
-        fundSource: props.source,
-        type: 'micro',
-      }
-    } else {
-      query = {
-        ...searchFilters,
-        size,
-        from,
-        url: 'loan',
-        sort: 'issueDate',
-        status: 'issued',
-        fundSource: props.source,
-        type: 'micro',
-      }
+      query = { ...query, branchId: props.branchId }
     }
     search(query)
   }
@@ -142,7 +130,24 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
 
   const mappers: TableMapperItem[] = [
     {
-      title: '',
+      title: () => (
+        <FormCheck
+          type="checkbox"
+          checked={selectedAll}
+          onChange={() => {
+            if (selectedAll) {
+              setSelectedCustomers([])
+              setSelectedAll(false)
+            } else {
+              setSelectedCustomers((prevCustomers) => [
+                ...prevCustomers,
+                ...loans.map((l) => l.id),
+              ])
+              setSelectedAll(true)
+            }
+          }}
+        />
+      ),
       key: 'selected',
       render: (data) => (
         <FormCheck
@@ -271,7 +276,8 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
     setSelectedCustomers([])
     setLoading(true)
     const obj = {
-      sourceOfFund: selectedFund,
+      sourceOfFund:
+        props.source === 'tasaheel' ? 'cibPortfolioSecuritization' : 'tasaheel',
       loanIds: selectedCustomers,
     }
     const res = await changeSourceFundCibPortfolio(obj)
@@ -309,20 +315,6 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
               </span>
             </div>
             <div>
-              <Button
-                onClick={() => {
-                  setOpenModal('downloadOldFiles')
-                }}
-                className="big-button"
-                style={{ marginLeft: 20 }}
-              >
-                {local.downloadOldFiles}
-                <LtsIcon
-                  name="download-big-file"
-                  color="#fff"
-                  className="pl-2 align-bottom"
-                />
-              </Button>
               <Button
                 onClick={() => {
                   setOpenModal('changeFund')
