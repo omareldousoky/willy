@@ -139,10 +139,7 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
               setSelectedCustomers([])
               setSelectedAll(false)
             } else {
-              setSelectedCustomers((prevCustomers) => [
-                ...prevCustomers,
-                ...loans.map((l) => l.id),
-              ])
+              setSelectedCustomers([...loans.map((l) => l.id).slice(0, size)])
               setSelectedAll(true)
             }
           }}
@@ -251,6 +248,10 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
   }, [])
 
   useEffect(() => {
+    getLoans()
+  }, [from, size])
+
+  useEffect(() => {
     setSearchFilters({})
     getLoans()
     setSelectedCustomers([])
@@ -276,6 +277,7 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
     setOpenModal('')
     setSelectedFund('')
     setSelectedCustomers([])
+    setSelectedAll(false)
     setLoading(true)
     const obj = {
       sourceOfFund:
