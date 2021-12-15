@@ -40,4 +40,5 @@ export interface ProfileProps {
   editPermission?: boolean
   editOnClick?(): void
   tabsData: TabDataProps
+  profileId?: string
 }

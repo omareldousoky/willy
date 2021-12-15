@@ -34,6 +34,7 @@ export const Profile = ({
   activeTab,
   setActiveTab,
   tabsData,
+  profileId,
 }: ProfileProps) => {
   return (
     <>
@@ -121,11 +122,13 @@ export const Profile = ({
           {activeTab === 'reports' &&
             tabsData[activeTab].map((field, index) => {
               const { fieldData, showFieldCondition } = field
+              console.log(fieldData)
               return (
                 showFieldCondition && (
                   <CustomerReportsTab
                     customerKey={fieldData as string}
                     key={index}
+                    customerId={profileId}
                   />
                 )
               )
