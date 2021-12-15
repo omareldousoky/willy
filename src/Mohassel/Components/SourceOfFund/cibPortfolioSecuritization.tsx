@@ -248,7 +248,7 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
   }, [])
 
   useEffect(() => {
-    if (from) getLoans()
+    getLoans()
   }, [from, size])
 
   useEffect(() => {
@@ -358,8 +358,7 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
             data={loans}
             changeNumber={(key: string, number: number) => {
               if (key === 'from') {
-                if (!number) getLoans()
-                else setFrom(number)
+                setFrom(number)
               } else setSize(number)
             }}
           />
