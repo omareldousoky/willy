@@ -122,7 +122,6 @@ export const Profile = ({
           {activeTab === 'reports' &&
             tabsData[activeTab].map((field, index) => {
               const { fieldData, showFieldCondition } = field
-              console.log(fieldData)
               return (
                 showFieldCondition && (
                   <CustomerReportsTab
