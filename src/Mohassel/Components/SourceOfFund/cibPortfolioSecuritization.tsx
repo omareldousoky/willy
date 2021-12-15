@@ -253,6 +253,8 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
   useEffect(() => {
     setSearchFilters({})
     getLoans()
+    setSelectedCustomers([])
+    setSelectedAll(false)
   }, [props.source])
 
   const getOldFiles = async (): Promise<void> => {
