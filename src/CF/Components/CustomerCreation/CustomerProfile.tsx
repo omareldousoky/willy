@@ -68,6 +68,12 @@ const tabs: Array<Tab> = [
     permission: 'deathCertificate',
     permissionKey: 'customer',
   },
+  {
+    header: local.reports,
+    stringKey: 'reports',
+    permission: 'guaranteed',
+    permissionKey: 'report',
+  },
 ]
 
 export const CustomerProfile = () => {
@@ -647,6 +653,7 @@ export const CustomerProfile = () => {
           activeTab={activeTab}
           setActiveTab={(stringKey) => setActiveTab(stringKey)}
           tabsData={tabsData}
+          profileId={customerDetails?._id}
         />
         {showCFLimitModal && customerDetails && (
           <CFLimitModal

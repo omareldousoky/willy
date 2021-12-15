@@ -5,7 +5,7 @@ import Swal from 'sweetalert2'
 import * as local from '../../Assets/ar.json'
 import { LtsIcon } from '../LtsIcon'
 import { Loader } from '../Loader'
-import { errorResponseHandler } from '../../Services/utils'
+import { downloadFile, errorResponseHandler } from '../../Services/utils'
 import Can from '../../config/Can'
 import { missingKey } from '../../localUtils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
@@ -13,6 +13,8 @@ import {
   getCustomerDetails,
   guaranteed,
   getLoanDetails,
+  postCustomerGuaranteedExcel,
+  getCustomerGuaranteedExcel,
 } from '../../Services/APIs/Reports/Financial'
 
 import { PdfPortal } from '../Common/PdfPortal'
@@ -33,16 +35,23 @@ const PDF_LIST = [
     key: 'loanDetails',
     local: 'تفاصيل طلب القرض',
   },
+  {
+    key: 'getGuarantors',
+    local: local.customerGuaranteed,
+  },
 ]
 
 interface CustomerReportsTabProps {
   customerKey?: string
+  customerId?: string
 }
 
 type PdfKey = 'customerDetails' | 'guaranteed' | 'loanDetails'
+type ExcelKey = 'getGuarantors'
 
 export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
   customerKey,
+  customerId,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [printPdfKey, setPrintPdfKey] = useState<PdfKey>()
@@ -124,8 +133,54 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
     }
   }, [pdfData])
 
-  const downloadClickHandler = (key: PdfKey) => {
-    setPrintPdfKey(key)
+  const getExcelPoll = async (func, id, pollStart) => {
+    const pollInstant = new Date().valueOf()
+    if (pollInstant - pollStart < 300000) {
+      const file = await func(id)
+      if (file.status === 'success') {
+        if (['created', 'failed'].includes(file.body.status)) {
+          if (file.body.status === 'created')
+            downloadFile(file.body.presignedUrl)
+          if (file.body.status === 'failed') Swal.fire('error', local.failed)
+          setIsLoading(false)
+        } else {
+          setTimeout(() => getExcelPoll(func, id, pollStart), 5000)
+        }
+      } else {
+        setIsLoading(false)
+        console.log(file)
+      }
+    } else {
+      setIsLoading(false)
+      Swal.fire('error', 'TimeOut')
+    }
+  }
+  const getExcelFile = async (func, pollFunc) => {
+    setIsLoading(true)
+    const obj = {
+      guarantorId: customerId,
+    }
+    const res = await func(obj)
+    if (res.status === 'success') {
+      if (!res.body) {
+        setIsLoading(false)
+        Swal.fire('error', local.noResults)
+      } else {
+        setIsLoading(true)
+        const pollStart = new Date().valueOf()
+        getExcelPoll(pollFunc, res.body.fileId, pollStart)
+      }
+    } else {
+      setIsLoading(false)
+      console.log(res)
+    }
+  }
+  const downloadClickHandler = (key: PdfKey | ExcelKey) => {
+    if (key === 'getGuarantors') {
+      getExcelFile(postCustomerGuaranteedExcel, getCustomerGuaranteedExcel)
+    } else {
+      setPrintPdfKey(key as PdfKey)
+    }
   }
 
   return (
@@ -152,7 +207,9 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
                       </div>
                       <Button
                         variant="default"
-                        onClick={() => downloadClickHandler(pdf.key as PdfKey)}
+                        onClick={() =>
+                          downloadClickHandler(pdf.key as PdfKey | ExcelKey)
+                        }
                       >
                         <LtsIcon name="download" size="35px" color="#7dc356" />
                       </Button>
