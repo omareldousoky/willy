@@ -248,7 +248,7 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
   }, [])
 
   useEffect(() => {
-    getLoans()
+    if (from) getLoans()
   }, [from, size])
 
   useEffect(() => {
