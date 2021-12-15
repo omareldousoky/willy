@@ -31,9 +31,8 @@ const changeSourceOfFundTabs = [
 ]
 
 export const handleSourceOfFundTabs = (): Tab[] => {
-  const canTabs: Tab[] = []
-  changeSourceOfFundTabs.forEach(
-    (t) => ability.can(t.permission, t.permissionKey) && canTabs.push(t)
+  const canTabs: Tab[] = changeSourceOfFundTabs.filter((t) =>
+    ability.can(t.permission, t.permissionKey)
   )
   return canTabs
 }

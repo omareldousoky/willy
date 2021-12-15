@@ -1,190 +1,75 @@
-import React, { Component, ReactNode } from 'react'
+import React, { useState, ReactNode, useEffect, FC } from 'react'
 import Card from 'react-bootstrap/Card'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import FormCheck from 'react-bootstrap/FormCheck'
 import Form from 'react-bootstrap/Form'
 import Swal from 'sweetalert2'
-import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-import { Loader } from '../../../Shared/Components/Loader'
-import * as local from '../../../Shared/Assets/ar.json'
-import Search from '../../../Shared/Components/Search/search'
-import { search, searchFilters } from '../../../Shared/redux/search/actions'
-import {
-  timeToDateyyymmdd,
-  getErrorMessage,
-} from '../../../Shared/Services/utils'
-import { loading } from '../../../Shared/redux/loading/actions'
-import { changeSourceFundCibPortfolio } from '../../../Shared/Services/APIs/loanApplication/changeSourceFund'
-import { cibExtractions } from '../../../Shared/Services/APIs/loanApplication/cibExtractions'
-import { downloadTxtFile } from '../CIB/textFiles'
-import { ActionsIconGroup, LtsIcon } from '../../../Shared/Components'
+import { TableMapperItem } from 'Shared/Components/DynamicTable/types'
+import { changeSourceFundCibPortfolio } from 'Shared/Services/APIs/loanApplication/changeSourceFund'
+import { loading as loadingAction } from 'Shared/redux/loading/actions'
+import { cibExtractions } from 'Shared/Services/APIs/loanApplication/cibExtractions'
+import { ActionsIconGroup, LtsIcon } from 'Shared/Components'
+import DynamicTable from 'Shared/Components/DynamicTable/dynamicTable'
+import { Loader } from 'Shared/Components/Loader'
+import * as local from 'Shared/Assets/ar.json'
+import Search from 'Shared/Components/Search/search'
 
-interface Props extends RouteComponentProps {
-  data: any
-  children?: ReactNode
+import {
+  searchFilters as searchFiltersAction,
+  search as searchAction,
+} from 'Shared/redux/search/actions'
+import { timeToDateyyymmdd, getErrorMessage } from 'Shared/Services/utils'
+import { downloadTxtFile } from '../CIB/textFiles'
+
+interface Props {
   branchId?: string
   fromBranch?: boolean
-  totalCount: number
-  loading: boolean
-  searchFilters: any
   source: string
-  search: (data) => void
-  setSearchFilters: (data) => void
-  setLoading: (data) => void
 }
 
-interface State {
-  size: number
-  from: number
-  openModal: string
-  selectedCustomers: Array<string>
-  selectedFund: string
-  oldFilesDate: string
-}
+const CibPortfolioSecuritization: FC<Props> = (props) => {
+  const [size, setSize] = useState<number>(10)
+  const [from, setFrom] = useState<number>(0)
+  const [openModal, setOpenModal] = useState<string>('')
+  const [selectedCustomers, setSelectedCustomers] = useState<string[]>([])
+  const [selectedFund, setSelectedFund] = useState<string>('')
+  const [oldFilesDate, setOldFilesDate] = useState<string>('')
+  const dispatch = useDispatch()
+  const history = useHistory()
 
-class CibPortfolioSecuritization extends Component<Props, State> {
-  mappers: {
-    title: string
-    key: string
-    sortable?: boolean
-    render: (data: any) => void
-  }[]
-
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      size: 10,
-      from: 0,
-      openModal: '',
-      selectedCustomers: [],
-      selectedFund: '',
-      oldFilesDate: '',
-    }
-    this.mappers = [
-      {
-        title: '',
-        key: 'selected',
-        render: (data) => (
-          <FormCheck
-            type="checkbox"
-            checked={this.state.selectedCustomers.includes(data.id)}
-            onChange={() => this.addRemoveItemFromChecked(data.id)}
-          />
-        ),
-      },
-      {
-        title: local.customerCode,
-        key: 'customerCode',
-        render: (data) =>
-          data.application.product.beneficiaryType === 'individual'
-            ? data.application.customer.key
-            : data.application.group?.individualsInGroup.map((member) =>
-                member.type === 'leader' ? member.customer.key : null
-              ),
-      },
-      {
-        title: local.customerName,
-        key: 'name',
-        sortable: true,
-        render: (data) => (
-          <div
-            style={{ cursor: 'pointer' }}
-            onClick={() =>
-              this.props.history.push('/loans/loan-profile', {
-                id: data.application._id,
-              })
-            }
-          >
-            {data.application.product.beneficiaryType === 'individual' ? (
-              data.application.customer.customerName
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {data.application.group?.individualsInGroup.map((member) =>
-                  member.type === 'leader' ? (
-                    <span key={member.customer._id}>
-                      {member.customer.customerName}
-                    </span>
-                  ) : null
-                )}
-              </div>
-            )}
-          </div>
-        ),
-      },
-      {
-        title: 'local.fundSource',
-        key: 'fundSource',
-        render: (data) => this.getSourceOfFund(data.application.fundSource),
-      },
-      {
-        title: local.productName,
-        key: 'productName',
-        render: (data) => data.application.product.productName,
-      },
-      {
-        title: local.loanIssuanceDate,
-        key: 'issueDate',
-        sortable: true,
-        render: (data) =>
-          data.application.issueDate
-            ? timeToDateyyymmdd(data.application.issueDate)
-            : '',
-      },
-      {
-        title: local.principal,
-        key: 'principal',
-        render: (data) => data.application.principal,
-      },
-      {
-        title: local.status,
-        key: 'status',
-        sortable: true,
-        render: (data) => this.getStatus(data.application.status),
-      },
-      {
-        title: '',
-        key: 'action',
-        render: (data) => (
-          <ActionsIconGroup
-            currentId={data._id}
-            actions={this.renderActions(data)}
-          />
-        ),
-      },
-    ]
-  }
-
-  componentDidMount() {
-    const fundSource =
-      this.props.source === 'tasaheel'
-        ? 'tasaheel'
-        : 'cibPortfolioSecuritization'
-    this.props.search({
-      size: this.state.size,
-      from: this.state.from,
-      url: 'loan',
-      sort: 'issueDate',
-      status: 'issued',
-      fundSource,
-      type: 'micro',
+  const { searchFilters, loading, totalCount, loans } = useSelector(
+    (state: any) => ({
+      searchFilters: state.searchFilters,
+      loading: state.loading,
+      totalCount: state.search.totalCount,
+      loans: state.search.applications,
     })
+  )
+
+  const { search, setSearchFilters, setLoading } = {
+    search: (data) => dispatch(searchAction(data)),
+    setSearchFilters: (data) => dispatch(searchFiltersAction(data)),
+    setLoading: (data) => dispatch(loadingAction(data)),
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.source !== this.props.source) {
-      this.getLoans()
-      this.props.setSearchFilters({})
+  const addRemoveItemFromChecked = (customerId: string) => {
+    if (
+      selectedCustomers.findIndex(
+        (selectedCustomerId) => selectedCustomerId === customerId
+      ) > -1
+    ) {
+      setSelectedCustomers((prevCustomers) =>
+        prevCustomers.filter((el) => el !== customerId)
+      )
+    } else {
+      setSelectedCustomers((prevCustomers) => [...prevCustomers, customerId])
     }
   }
 
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
-  }
-
-  getSourceOfFund(sourceOfFund: string) {
+  const getSourceOfFund = (sourceOfFund: string): string => {
     switch (sourceOfFund) {
       case 'tasaheel':
         return local.tasaheel
@@ -195,7 +80,52 @@ class CibPortfolioSecuritization extends Component<Props, State> {
     }
   }
 
-  getStatus(status: string) {
+  const renderActions = (data) => {
+    return [
+      {
+        actionTitle: local.view,
+        actionIcon: 'view',
+
+        actionPermission: true,
+        actionOnClick: () =>
+          history.push('/track-loan-applications/loan-profile', {
+            id: data.application._id,
+          }),
+      },
+    ]
+  }
+
+  const getLoans = async (): Promise<void> => {
+    let query = {}
+
+    if (props.fromBranch) {
+      query = {
+        ...searchFilters,
+        size,
+        from,
+        url: 'loan',
+        branchId: props.branchId,
+        sort: 'issueDate',
+        status: 'issued',
+        fundSource: props.source,
+        type: 'micro',
+      }
+    } else {
+      query = {
+        ...searchFilters,
+        size,
+        from,
+        url: 'loan',
+        sort: 'issueDate',
+        status: 'issued',
+        fundSource: props.source,
+        type: 'micro',
+      }
+    }
+    search(query)
+  }
+
+  const getStatus = (status: string): ReactNode => {
     switch (status) {
       case 'paid':
         return <div className="status-chip paid">{local.paid}</div>
@@ -210,305 +140,297 @@ class CibPortfolioSecuritization extends Component<Props, State> {
     }
   }
 
-  async getOldFiles() {
-    this.setState({ openModal: '', oldFilesDate: '' })
-    this.props.setLoading(true)
-    const date = new Date(this.state.oldFilesDate).valueOf()
+  const mappers: TableMapperItem[] = [
+    {
+      title: '',
+      key: 'selected',
+      render: (data) => (
+        <FormCheck
+          type="checkbox"
+          checked={selectedCustomers.includes(data.id)}
+          onChange={() => addRemoveItemFromChecked(data.id)}
+        />
+      ),
+    },
+    {
+      title: local.customerCode,
+      key: 'customerCode',
+      render: (data) =>
+        data.application.product.beneficiaryType === 'individual'
+          ? data.application.customer.key
+          : data.application.group?.individualsInGroup.map((member) =>
+              member.type === 'leader' ? member.customer.key : null
+            ),
+    },
+    {
+      title: local.customerName,
+      key: 'name',
+      sortable: true,
+      render: (data) => (
+        <div
+          style={{ cursor: 'pointer' }}
+          onClick={() =>
+            history.push('/loans/loan-profile', {
+              id: data.application._id,
+            })
+          }
+        >
+          {data.application.product.beneficiaryType === 'individual' ? (
+            data.application.customer.customerName
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {data.application.group?.individualsInGroup.map((member) =>
+                member.type === 'leader' ? (
+                  <span key={member.customer._id}>
+                    {member.customer.customerName}
+                  </span>
+                ) : null
+              )}
+            </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: local.fundSource,
+      key: 'fundSource',
+      render: (data) => getSourceOfFund(data.application.fundSource),
+    },
+    {
+      title: local.productName,
+      key: 'productName',
+      render: (data) => data.application.product.productName,
+    },
+    {
+      title: local.loanIssuanceDate,
+      key: 'issueDate',
+      sortable: true,
+      render: (data) =>
+        data.application.issueDate
+          ? timeToDateyyymmdd(data.application.issueDate)
+          : '',
+    },
+    {
+      title: local.principal,
+      key: 'principal',
+      render: (data) => data.application.principal,
+    },
+    {
+      title: local.status,
+      key: 'status',
+      sortable: true,
+      render: (data) => getStatus(data.application.status),
+    },
+    {
+      title: '',
+      key: 'action',
+      render: (data) => (
+        <ActionsIconGroup currentId={data._id} actions={renderActions(data)} />
+      ),
+    },
+  ]
+
+  useEffect(() => {
+    search({
+      size,
+      from,
+      url: 'loan',
+      sort: 'issueDate',
+      status: 'issued',
+      fundSource: props.source,
+      type: 'micro',
+    })
+    return () => {
+      setSearchFilters({})
+    }
+  }, [])
+
+  useEffect(() => {
+    setSearchFilters({})
+    getLoans()
+  }, [props.source])
+
+  const getOldFiles = async (): Promise<void> => {
+    setOpenModal('')
+    setOldFilesDate('')
+    setLoading(true)
+    const date = new Date(oldFilesDate).valueOf()
     const res = await cibExtractions(date)
     if (res.status === 'success') {
-      this.props.setLoading(false)
+      setLoading(false)
       downloadTxtFile(res.body.loans, false, date)
     } else {
-      this.props.setLoading(false)
+      setLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
   }
 
-  async getLoans() {
-    let query = {}
-    const fundSource =
-      this.props.source === 'tasaheel'
-        ? 'tasaheel'
-        : 'cibPortfolioSecuritization'
-    if (this.props.fromBranch) {
-      query = {
-        ...this.props.searchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'loan',
-        branchId: this.props.branchId,
-        sort: 'issueDate',
-        status: 'issued',
-        fundSource,
-        type: 'micro',
-      }
-    } else {
-      query = {
-        ...this.props.searchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'loan',
-        sort: 'issueDate',
-        status: 'issued',
-        fundSource,
-        type: 'micro',
-      }
-    }
-    this.props.search(query)
-  }
-
-  addRemoveItemFromChecked(customerId: string) {
-    if (
-      this.state.selectedCustomers.findIndex(
-        (selectedCustomerId) => selectedCustomerId === customerId
-      ) > -1
-    ) {
-      this.setState((prevState) => ({
-        selectedCustomers: prevState.selectedCustomers.filter(
-          (el) => el !== customerId
-        ),
-      }))
-    } else {
-      this.setState((prevState) => ({
-        selectedCustomers: [...prevState.selectedCustomers, customerId],
-      }))
-    }
-  }
-
-  async submit() {
-    this.setState({ openModal: '', selectedFund: '', selectedCustomers: [] })
-    this.props.setLoading(true)
+  const submit = async (): Promise<void> => {
+    setOpenModal('')
+    setSelectedFund('')
+    setSelectedCustomers([])
+    setLoading(true)
     const obj = {
-      sourceOfFund: this.state.selectedFund,
-      loanIds: this.state.selectedCustomers,
+      sourceOfFund: selectedFund,
+      loanIds: selectedCustomers,
     }
     const res = await changeSourceFundCibPortfolio(obj)
     if (res.status === 'success') {
-      this.props.setLoading(false)
+      setLoading(false)
       Swal.fire('', local.changeSourceFundSuccess, 'success').then(() =>
-        this.getLoans()
+        getLoans()
       )
     } else {
-      this.props.setLoading(false)
+      setLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
   }
 
-  renderActions(data) {
-    return [
-      {
-        actionTitle: local.view,
-        actionIcon: 'view',
-
-        actionPermission: true,
-        actionOnClick: () =>
-          this.props.history.push('/track-loan-applications/loan-profile', {
-            id: data.application._id,
-          }),
-      },
-    ]
-  }
-
-  render() {
-    return (
-      <>
-        <Card style={{ margin: '20px 50px' }}>
-          <Loader type="fullscreen" open={this.props.loading} />
-          <Card.Body style={{ padding: 0 }}>
-            <div className="custom-card-header">
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                  {`${local.from} ${
-                    this.props.source === 'tasaheel'
-                      ? local.tasaheel
-                      : local.cibPortfolioSecuritization
-                  } ${local.to} ${
-                    this.props.source === 'tasaheel'
-                      ? local.cibPortfolioSecuritization
-                      : local.tasaheel
-                  }`}
-                </Card.Title>
-                <span className="text-muted">
-                  {local.noOfSelectedLoans +
-                    ` (${this.state.selectedCustomers.length})`}
-                </span>
-              </div>
-              <div>
-                <Button
-                  onClick={() => {
-                    this.setState({ openModal: 'downloadOldFiles' })
-                  }}
-                  className="big-button"
-                  style={{ marginLeft: 20 }}
-                >
-                  {local.downloadOldFiles}
-                  <LtsIcon
-                    name="download-big-file"
-                    color="#fff"
-                    className="pl-2 align-bottom"
-                  />
-                </Button>
-                <Button
-                  onClick={() => {
-                    this.setState({ openModal: 'changeFund' })
-                  }}
-                  disabled={!this.state.selectedCustomers.length}
-                  className="big-button"
-                >
-                  {local.changeFund}
-                  <LtsIcon
-                    name="exchange"
-                    color={`#${
-                      this.state.selectedCustomers.length ? 'fff' : '343a40'
-                    }`}
-                    className="pl-2 align-bottom"
-                  />
-                </Button>
-              </div>
-            </div>
-            <hr className="dashed-line" />
-            <Search
-              searchKeys={['keyword', 'dateFromTo', 'branch']}
-              dropDownKeys={[
-                'name',
-                'nationalId',
-                'key',
-                'code',
-                'customerKey',
-              ]}
-              searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-              datePlaceholder={local.issuanceDate}
-              url="loan"
-              from={this.state.from}
-              size={this.state.size}
-              status="issued"
-              fundSource={
-                this.props.source === 'tasaheel'
-                  ? 'tasaheel'
-                  : 'cibPortfolioSecuritization'
-              }
-              hqBranchIdRequest={this.props.branchId}
-            />
-            <DynamicTable
-              from={this.state.from}
-              size={this.state.size}
-              url="loan"
-              totalCount={this.props.totalCount}
-              mappers={this.mappers}
-              pagination
-              data={this.props.data}
-              changeNumber={(key: string, number: number) => {
-                this.setState({ [key]: number } as any, () => this.getLoans())
-              }}
-            />
-          </Card.Body>
-        </Card>
-        <Modal show={this.state.openModal === 'changeFund'} backdrop="static">
-          <Modal.Header style={{ padding: '20px 30px' }}>
-            <Modal.Title>{local.chooseSourceOfFund}</Modal.Title>
-            <div
-              style={{ cursor: 'pointer' }}
-              onClick={() => this.setState({ openModal: '' })}
-            >
-              X
-            </div>
-          </Modal.Header>
-          <Modal.Body style={{ padding: '20px 60px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-              <Form.Control
-                as="select"
-                data-qc="change-fund"
-                style={{ marginLeft: 20 }}
-                onChange={(e) =>
-                  this.setState({ selectedFund: e.currentTarget.value })
-                }
-                value={this.state.selectedFund}
-              >
-                <option value="" data-qc="" />
-                <option
-                  value={
-                    this.props.source === 'tasaheel'
-                      ? 'cibPortfolioSecuritization'
-                      : 'tasaheel'
-                  }
-                  data-qc={
-                    this.props.source === 'tasaheel'
-                      ? 'cibPortfolioSecuritization'
-                      : 'tasaheel'
-                  }
-                >
-                  {this.props.source === 'tasaheel'
+  return (
+    <>
+      <Card style={{ margin: '20px 50px' }}>
+        <Loader type="fullscreen" open={loading} />
+        <Card.Body style={{ padding: 0 }}>
+          <div className="custom-card-header">
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
+                {`${local.from} ${
+                  props.source === 'tasaheel'
+                    ? local.tasaheel
+                    : local.cibPortfolioSecuritization
+                } ${local.to} ${
+                  props.source === 'tasaheel'
                     ? local.cibPortfolioSecuritization
-                    : local.tasaheel}
-                </option>
-              </Form.Control>
+                    : local.tasaheel
+                }`}
+              </Card.Title>
+              <span className="text-muted">
+                {local.noOfSelectedLoans + ` (${selectedCustomers.length})`}
+              </span>
+            </div>
+            <div>
               <Button
+                onClick={() => {
+                  setOpenModal('downloadOldFiles')
+                }}
                 className="big-button"
-                data-qc="submit"
-                onClick={() => this.submit()}
-                disabled={this.state.selectedFund === ''}
-              >
-                {local.submit}
-              </Button>
-            </div>
-          </Modal.Body>
-        </Modal>
-        <Modal
-          show={this.state.openModal === 'downloadOldFiles'}
-          backdrop="static"
-        >
-          <Modal.Header style={{ padding: '20px 30px' }}>
-            <Modal.Title>{local.dateOfFile}</Modal.Title>
-            <div
-              style={{ cursor: 'pointer' }}
-              onClick={() => this.setState({ openModal: '' })}
-            >
-              X
-            </div>
-          </Modal.Header>
-          <Modal.Body style={{ padding: '20px 60px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-              <Form.Control
-                type="date"
-                data-qc="download-old-files"
                 style={{ marginLeft: 20 }}
-                onChange={(e) =>
-                  this.setState({ oldFilesDate: e.currentTarget.value })
-                }
-              />
-              <Button
-                className="big-button"
-                data-qc="submit"
-                onClick={() => this.getOldFiles()}
-                disabled={this.state.oldFilesDate === ''}
               >
-                {local.submit}
+                {local.downloadOldFiles}
+                <LtsIcon
+                  name="download-big-file"
+                  color="#fff"
+                  className="pl-2 align-bottom"
+                />
+              </Button>
+              <Button
+                onClick={() => {
+                  setOpenModal('changeFund')
+                }}
+                disabled={!selectedCustomers.length}
+                className="big-button"
+              >
+                {local.changeFund}
+                <LtsIcon
+                  name="exchange"
+                  color={`#${selectedCustomers.length ? 'fff' : '343a40'}`}
+                  className="pl-2 align-bottom"
+                />
               </Button>
             </div>
-          </Modal.Body>
-        </Modal>
-      </>
-    )
-  }
+          </div>
+          <hr className="dashed-line" />
+          <Search
+            searchKeys={['keyword', 'dateFromTo', 'branch']}
+            dropDownKeys={['name', 'nationalId', 'key', 'code', 'customerKey']}
+            searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+            datePlaceholder={local.issuanceDate}
+            url="loan"
+            from={from}
+            size={size}
+            status="issued"
+            fundSource={props.source}
+            hqBranchIdRequest={props.branchId}
+          />
+          <DynamicTable
+            from={from}
+            size={size}
+            url="loan"
+            totalCount={totalCount}
+            mappers={mappers}
+            pagination
+            data={loans}
+            changeNumber={(key: string, number: number) => {
+              if (key === 'from') {
+                if (!number) getLoans()
+                else setFrom(number)
+              } else setSize(number)
+            }}
+          />
+        </Card.Body>
+      </Card>
+      <Modal show={openModal === 'changeFund'} backdrop="static">
+        <Modal.Header style={{ padding: '20px 30px' }}>
+          <Modal.Title>{local.chooseSourceOfFund}</Modal.Title>
+          <div style={{ cursor: 'pointer' }} onClick={() => setOpenModal('')}>
+            X
+          </div>
+        </Modal.Header>
+        <Modal.Body style={{ padding: '20px 60px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <Form.Control
+              as="select"
+              data-qc="change-fund"
+              style={{ marginLeft: 20 }}
+              onChange={(e) => setSelectedFund(e.currentTarget.value)}
+              value={selectedFund}
+            >
+              <option value="" data-qc="" />
+              <option value={props.source} data-qc={props.source}>
+                {props.source === 'tasaheel'
+                  ? local.cibPortfolioSecuritization
+                  : local.tasaheel}
+              </option>
+            </Form.Control>
+            <Button
+              className="big-button"
+              data-qc="submit"
+              onClick={() => submit()}
+              disabled={selectedFund === ''}
+            >
+              {local.submit}
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal show={openModal === 'downloadOldFiles'} backdrop="static">
+        <Modal.Header style={{ padding: '20px 30px' }}>
+          <Modal.Title>{local.dateOfFile}</Modal.Title>
+          <div style={{ cursor: 'pointer' }} onClick={() => setOpenModal('')}>
+            X
+          </div>
+        </Modal.Header>
+        <Modal.Body style={{ padding: '20px 60px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <Form.Control
+              type="date"
+              data-qc="download-old-files"
+              style={{ marginLeft: 20 }}
+              onChange={(e) => setOldFilesDate(e.currentTarget.value)}
+            />
+            <Button
+              className="big-button"
+              data-qc="submit"
+              onClick={() => getOldFiles()}
+              disabled={oldFilesDate === ''}
+            >
+              {local.submit}
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
+    </>
+  )
 }
 
-const addSearchToProps = (dispatch) => {
-  return {
-    search: (data) => dispatch(search(data)),
-    setSearchFilters: (data) => dispatch(searchFilters(data)),
-    setLoading: (data) => dispatch(loading(data)),
-  }
-}
-const mapStateToProps = (state) => {
-  return {
-    data: state.search.applications,
-    totalCount: state.search.totalCount,
-    loading: state.loading,
-    searchFilters: state.searchFilters,
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  addSearchToProps
-)(withRouter(CibPortfolioSecuritization))
+export default CibPortfolioSecuritization
