@@ -12,7 +12,8 @@ import {
   handleSourceOfFundTabs,
 } from '../LoanList/manageLoansInitials'
 import { Card } from '../ManageAccounts/manageAccountsInitials'
-import CibPortfolioSecuritization from './cibPortfolioSecuritization'
+import CibPortToTasaheel from './cibPortToTasaheel'
+import TasaheelToCibPort from './tasaheelToCibPort'
 
 const SourceOfFundHome: React.FC<RouteComponentProps> = (props) => {
   const [activeTab, setActiveTab] = useState<string>('tasaheelToCib')
@@ -28,12 +29,10 @@ const SourceOfFundHome: React.FC<RouteComponentProps> = (props) => {
         return <CibToTasaheel {...props} />
       }
       case 'cibPortfolioSecuritization': {
-        return <CibPortfolioSecuritization source="tasaheel" />
+        return <TasaheelToCibPort />
       }
       case 'fromCibPortToTasaheel': {
-        return (
-          <CibPortfolioSecuritization source="cibPortfolioSecuritization" />
-        )
+        return <CibPortToTasaheel />
       }
       default:
         return null

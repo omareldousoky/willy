@@ -27,7 +27,6 @@ import { downloadTxtFile } from '../CIB/textFiles'
 interface Props {
   branchId?: string
   fromBranch?: boolean
-  source: string
 }
 
 const CibPortfolioSecuritization: FC<Props> = (props) => {
@@ -96,15 +95,15 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
     ]
   }
 
-  const getLoans = async (): Promise<void> => {
+  const getLoans = async (fromZero?: boolean): Promise<void> => {
     let query = {
       ...searchFilters,
       size,
-      from,
+      from: fromZero ? 0 : from,
       url: 'loan',
       sort: 'issueDate',
       status: 'issued',
-      fundSource: props.source,
+      fundSource: 'tasaheel',
       type: 'micro',
     }
     if (props.fromBranch) {
@@ -239,7 +238,7 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
       url: 'loan',
       sort: 'issueDate',
       status: 'issued',
-      fundSource: props.source,
+      fundSource: 'tasaheel',
       type: 'micro',
     })
     return () => {
@@ -248,15 +247,8 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
   }, [])
 
   useEffect(() => {
-    getLoans()
+    if (from) getLoans()
   }, [from, size])
-
-  useEffect(() => {
-    setSearchFilters({})
-    getLoans()
-    setSelectedCustomers([])
-    setSelectedAll(false)
-  }, [props.source])
 
   const getOldFiles = async (): Promise<void> => {
     setOpenModal('')
@@ -280,8 +272,7 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
     setSelectedAll(false)
     setLoading(true)
     const obj = {
-      sourceOfFund:
-        props.source === 'tasaheel' ? 'cibPortfolioSecuritization' : 'tasaheel',
+      sourceOfFund: 'cibPortfolioSecuritization',
       loanIds: selectedCustomers,
     }
     const res = await changeSourceFundCibPortfolio(obj)
@@ -304,15 +295,7 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
           <div className="custom-card-header">
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                {`${local.from} ${
-                  props.source === 'tasaheel'
-                    ? local.tasaheel
-                    : local.cibPortfolioSecuritization
-                } ${local.to} ${
-                  props.source === 'tasaheel'
-                    ? local.cibPortfolioSecuritization
-                    : local.tasaheel
-                }`}
+                {`${local.from} ${local.tasaheel} ${local.to} ${local.cibPortfolioSecuritization}`}
               </Card.Title>
               <span className="text-muted">
                 {local.noOfSelectedLoans + ` (${selectedCustomers.length})`}
@@ -345,7 +328,7 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
             from={from}
             size={size}
             status="issued"
-            fundSource={props.source}
+            fundSource="tasaheel"
             hqBranchIdRequest={props.branchId}
           />
           <DynamicTable
@@ -358,7 +341,8 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
             data={loans}
             changeNumber={(key: string, number: number) => {
               if (key === 'from') {
-                setFrom(number)
+                if (!number) getLoans(true)
+                else setFrom(number)
               } else setSize(number)
             }}
           />
@@ -381,10 +365,8 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
               value={selectedFund}
             >
               <option value="" data-qc="" />
-              <option value={props.source} data-qc={props.source}>
-                {props.source === 'tasaheel'
-                  ? local.cibPortfolioSecuritization
-                  : local.tasaheel}
+              <option value="tasaheel" data-qc="tasaheel">
+                {local.cibPortfolioSecuritization}
               </option>
             </Form.Control>
             <Button
