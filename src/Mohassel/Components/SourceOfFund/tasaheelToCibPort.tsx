@@ -365,7 +365,10 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
               value={selectedFund}
             >
               <option value="" data-qc="" />
-              <option value="tasaheel" data-qc="tasaheel">
+              <option
+                value="cibPortfolioSecuritization"
+                data-qc="cibPortfolioSecuritization"
+              >
                 {local.cibPortfolioSecuritization}
               </option>
             </Form.Control>
