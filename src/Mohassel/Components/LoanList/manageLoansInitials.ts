@@ -47,7 +47,10 @@ export const manageLoansArray = (): Card[] => {
       path: '/loans',
     })
   }
-  if (ability.can('cibScreen', 'report')) {
+  if (
+    ability.can('cibScreen', 'report') ||
+    ability.can('cibPortfolioSecuritization', 'application')
+  ) {
     manageLoanArr.push({
       icon: 'change-source-of-fund',
       header: local.changeSourceOfFund,

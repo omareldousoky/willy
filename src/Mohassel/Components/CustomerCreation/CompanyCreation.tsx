@@ -75,11 +75,11 @@ interface State {
     cbeCode: string
     paidCapital: number
     establishmentDate: number | string
-    smeSourceId: string
-    smeBankName: string
-    smeBankBranch: string
-    smeBankAccountNumber: string
-    smeIbanNumber: string
+    sourceId: string
+    bankName: string
+    bankBranch: string
+    bankAccountNumber: string
+    ibanNumber: string
     guarantorMaxCustomers: number
   }
   customerId: string
@@ -184,11 +184,11 @@ class CompanyCreation extends Component<Props, State> {
         establishmentDate: timeToDateyyymmdd(
           res.body.customer.establishmentDate
         ),
-        smeSourceId: res.body.customer.smeSourceId,
-        smeBankName: res.body.customer.smeBankName,
-        smeBankBranch: res.body.customer.smeBankBranch,
-        smeBankAccountNumber: res.body.customer.smeBankAccountNumber,
-        smeIbanNumber: res.body.customer.smeIbanNumber,
+        sourceId: res.body.customer.sourceId,
+        bankName: res.body.customer.bankName,
+        bankBranch: res.body.customer.bankBranch,
+        bankAccountNumber: res.body.customer.bankAccountNumber,
+        ibanNumber: res.body.customer.ibanNumber,
         guarantorMaxCustomers: res.body.customer.guarantorMaxCustomers
           ? Number(res.body.customer.guarantorMaxCustomers)
           : 1,

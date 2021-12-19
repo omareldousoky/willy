@@ -10,8 +10,12 @@ interface Suspect {
   type?: string
 }
 
-type Guarantor = Customer & { position?: string }
-type EntitledToSign = Guarantor
+export type Guarantor = Customer & { position?: string }
+export type CompanyGuarantor = Customer & {
+  position?: string
+  cbeCode?: string
+}
+export type EntitledToSign = Guarantor
 
 export interface Customer {
   _id?: string
@@ -87,6 +91,11 @@ export interface Customer {
   consumerFinanceLimitStatus?: string
   hasLoan?: boolean
   guarantorMaxCustomers?: number
+  sourceId?: string
+  bankName?: string
+  bankBranch?: string
+  bankAccountNumber?: string
+  ibanNumber?: string
 }
 
 export interface Score {
@@ -169,6 +178,10 @@ export interface CustomerCreationStep3 {
     maxGroupIndividualPrincipal: number
     maxGroupPrincipal: number
   }
+  bankName?: string
+  bankBranch?: string
+  bankAccountNumber?: string
+  ibanNumber?: string
 }
 export enum LinkageStatusEnum {
   Pending = 'pending',
