@@ -209,3 +209,13 @@ export interface CFEntitledToSignDetailsProps {
   iscores?: Score[]
   limitStatus: string
 }
+
+export interface OtpCustomer {
+  nationalId: string
+  phoneNumber: string
+  name: string
+}
+export interface CompanyOtpCustomersProps {
+  customerId: string
+  otpCustomers: OtpCustomer[]
+}
