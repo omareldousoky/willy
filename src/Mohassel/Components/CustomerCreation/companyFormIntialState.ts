@@ -46,11 +46,11 @@ export const step2Company = {
   cbeCode: '',
   paidCapital: 0,
   establishmentDate: '',
-  smeSourceId: '',
-  smeBankName: '',
-  smeBankBranch: '',
-  smeBankAccountNumber: '',
-  smeIbanNumber: '',
+  sourceId: '',
+  bankName: '',
+  bankBranch: '',
+  bankAccountNumber: '',
+  ibanNumber: '',
   guarantorMaxCustomers: 0,
 }
 const endOfDay: Date = new Date()
@@ -124,10 +124,10 @@ export const companyCreationValidationStepTwo = Yup.object().shape({
   comments: Yup.string().trim().max(500, local.maxLength100),
   paidCapital: Yup.string().trim().required(local.required),
   establishmentDate: Yup.string().trim().required(local.required),
-  smeBankName: Yup.string().required(local.required),
-  smeBankBranch: Yup.string().required(local.required),
-  smeBankAccountNumber: Yup.string().required(local.required),
-  smeIbanNumber: Yup.string().required(local.required),
+  bankName: Yup.string().required(local.required),
+  bankBranch: Yup.string().required(local.required),
+  bankAccountNumber: Yup.string().required(local.required),
+  ibanNumber: Yup.string().required(local.required),
   cbeCode: Yup.string().when('cbeCodeChecker', {
     is: true,
     then: Yup.string().test(
@@ -163,10 +163,10 @@ export const companyCreationValidationStepTwoEdit = Yup.object().shape({
     .required(local.required),
   paidCapital: Yup.string().trim().required(local.required),
   establishmentDate: Yup.string().trim().required(local.required),
-  smeBankName: Yup.string().required(local.required),
-  smeBankBranch: Yup.string().required(local.required),
-  smeBankAccountNumber: Yup.string().required(local.required),
-  smeIbanNumber: Yup.string().required(local.required),
+  bankName: Yup.string().required(local.required),
+  bankBranch: Yup.string().required(local.required),
+  bankAccountNumber: Yup.string().required(local.required),
+  ibanNumber: Yup.string().required(local.required),
   cbeCode: Yup.string().when('cbeCodeChecker', {
     is: true,
     then: Yup.string().test(
