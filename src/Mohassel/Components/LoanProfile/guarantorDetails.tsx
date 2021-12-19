@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Table from 'react-bootstrap/Table'
 
+import { missingKey } from 'Shared/localUtils'
 import * as local from '../../../Shared/Assets/ar.json'
 import {
   downloadFile,
@@ -18,14 +19,13 @@ import Can from '../../config/Can'
 import { Loader } from '../../../Shared/Components/Loader'
 import { editGuarantors } from '../../../Shared/Services/APIs/loanApplication/editGuarantors'
 import ability from '../../config/ability'
-import { Customer } from '../../../Shared/Models/Customer'
+import { CompanyGuarantor, Guarantor } from '../../../Shared/Models/Customer'
 import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
 import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
 import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
 import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 import { LtsIcon } from '../../../Shared/Components'
 
-type Guarantor = Customer & { position?: string }
 interface Props {
   guarantors: Array<Guarantor>
   iScores?: any
@@ -265,7 +265,7 @@ export const GuarantorTableView = (props: Props) => {
       props.status
     )
   const individualGuarantors: { guarantor: Guarantor; index: number }[] = []
-  const companyGuarantors: { guarantor: Guarantor; index: number }[] = []
+  const companyGuarantors: { guarantor: CompanyGuarantor; index: number }[] = []
   props.guarantors.forEach((guarantor, i) => {
     const guarObj = { guarantor, index: i }
     guarantor.customerType === 'company'
@@ -511,11 +511,14 @@ export const GuarantorTableView = (props: Props) => {
                         const iScore =
                           props.iScores && props.iScores.length > 0
                             ? props.iScores.filter(
-                                (score) =>
-                                  score.id ===
-                                  guar.guarantor.commercialRegisterNumber
+                                (score) => score.id === guar.guarantor.cbeCode
                               )[0]
                             : {}
+                        const hasScore =
+                          props.iScores &&
+                          props.iScores.length > 0 &&
+                          iScore &&
+                          iScore.id.length > 0
                         // const area = props.getGeoArea(guar.geoAreaId);
                         return (
                           <tr key={guar.index}>
@@ -536,52 +539,41 @@ export const GuarantorTableView = (props: Props) => {
                               {guar.guarantor.commercialRegisterNumber || ''}
                             </td>
                             <td>{guar.guarantor.businessAddress || ''}</td>
-                            {props.iScores &&
-                              props.iScores.length > 0 &&
-                              iScore.id.length > 0 && (
-                                <td
-                                  style={{
-                                    color: iscoreStatusColor(iScore.iscore)
-                                      .color,
-                                  }}
+                            {hasScore && (
+                              <td
+                                style={{
+                                  color: iscoreStatusColor(iScore.iscore).color,
+                                }}
+                              >
+                                {iScore.iscore}
+                              </td>
+                            )}
+                            {hasScore && (
+                              <td>{iscoreStatusColor(iScore.iscore).status}</td>
+                            )}
+                            {hasScore && (
+                              <td>
+                                {iScore.bankCodes &&
+                                  iScore.bankCodes.map(
+                                    (code) => `${iscoreBank(code)} `
+                                  )}
+                              </td>
+                            )}
+                            {hasScore && iScore.url && (
+                              <td>
+                                <Button
+                                  variant="default"
+                                  onClick={() => downloadFile(iScore.url)}
                                 >
-                                  {iScore.iscore}
-                                </td>
-                              )}
-                            {props.iScores &&
-                              props.iScores.length > 0 &&
-                              iScore.id.length > 0 && (
-                                <td>
-                                  {iscoreStatusColor(iScore.iscore).status}
-                                </td>
-                              )}
-                            {props.iScores &&
-                              props.iScores.length > 0 &&
-                              iScore.id.length > 0 && (
-                                <td>
-                                  {iScore.bankCodes &&
-                                    iScore.bankCodes.map(
-                                      (code) => `${iscoreBank(code)} `
-                                    )}
-                                </td>
-                              )}
-                            {props.iScores &&
-                              props.iScores.length > 0 &&
-                              iScore.url && (
-                                <td>
-                                  <Button
-                                    variant="default"
-                                    onClick={() => downloadFile(iScore.url)}
-                                  >
-                                    <LtsIcon
-                                      name="printer"
-                                      size="16px"
-                                      className="pl-2"
-                                    />
-                                    iScore
-                                  </Button>
-                                </td>
-                              )}
+                                  <LtsIcon
+                                    name="printer"
+                                    size="16px"
+                                    className="pl-2"
+                                  />
+                                  iScore
+                                </Button>
+                              </td>
+                            )}
                             {props.iScores &&
                               props.iScores.length > 0 &&
                               props.getIscore &&
@@ -599,7 +591,15 @@ export const GuarantorTableView = (props: Props) => {
                                   <td>
                                     <Button
                                       variant="default"
-                                      onClick={() => getIscore(guar.guarantor)}
+                                      onClick={() =>
+                                        !guar.guarantor.cbeCode
+                                          ? Swal.fire(
+                                              local.error,
+                                              missingKey('cbeCode'),
+                                              'error'
+                                            )
+                                          : getIscore(guar.guarantor)
+                                      }
                                     >
                                       <LtsIcon
                                         name="refresh"

@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
+import Swal from 'sweetalert2'
+import { missingKey } from '../localUtils'
 import { Company } from './interfaces'
 
 import * as local from '../Assets/ar.json'
@@ -42,6 +44,7 @@ const iscoreField = ({
   applicationStatus,
   customerDetails,
   productType = '',
+  error = '',
 }) => {
   return (
     <>
@@ -83,7 +86,11 @@ const iscoreField = ({
             <Can I="getIscore" a="customer">
               <span
                 style={{ cursor: 'pointer', padding: 10 }}
-                onClick={() => getIscore(customerDetails)}
+                onClick={() =>
+                  error
+                    ? Swal.fire(local.error, error, 'error')
+                    : getIscore(customerDetails)
+                }
               >
                 iscore
                 {/* <span style={{ margin: '0px 0px 0px 5px' }} /> */}
@@ -138,6 +145,7 @@ export const getCompanyInfo = ({
         getIscore,
         applicationStatus,
         customerDetails: company,
+        error: !company.cbeCode ? missingKey('cbeCode') : '',
       }),
       showFieldCondition: ability.can('viewIscore', 'customer'),
     },
