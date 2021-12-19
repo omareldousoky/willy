@@ -5,6 +5,7 @@ import { LoanOfficersTransfers } from 'Shared/Components/ManageAccounts'
 import { Leads } from 'Mohassel/Components/HalanIntegration/leads'
 import LoanComments from 'Mohassel/Components/ManageLoanDetails/LoanComments'
 import SourceOfFundHome from 'Mohassel/Components/SourceOfFund/sourceOfFundHome'
+import ability from 'Shared/config/ability'
 import CustomerCreation from '../Components/CustomerCreation'
 import UserCreation from '../Components/UserCreation/userCreation'
 import FormulaCreation from '../Components/LoanFormulaCreation/loanFormulaCreation'
@@ -631,11 +632,14 @@ const appRoutes = [
           {
             path: '/source-of-fund',
             label: local.changeSourceOfFund,
-            render: (props) => (
-              <Can I="cibScreen" a="report">
-                <SourceOfFundHome {...props} />
-              </Can>
-            ),
+            render: (props) => {
+              return (
+                (ability.can('cibScreen', 'report') ||
+                  ability.can('cibPortfolioSecuritization', 'application')) && (
+                  <SourceOfFundHome {...props} />
+                )
+              )
+            },
           },
           {
             path: '/cib',

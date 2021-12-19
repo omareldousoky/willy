@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useState, FC } from 'react'
 import CardBT from 'react-bootstrap/Card'
 import { RouteComponentProps } from 'react-router-dom'
 import * as local from 'Shared/Assets/ar.json'
@@ -15,10 +15,10 @@ import { Card } from '../ManageAccounts/manageAccountsInitials'
 import CibPortToTasaheel from './cibPortToTasaheel'
 import TasaheelToCibPort from './tasaheelToCibPort'
 
-const SourceOfFundHome: React.FC<RouteComponentProps> = (props) => {
-  const [activeTab, setActiveTab] = useState<string>('tasaheelToCib')
-  const manageLoansHeader: Card[] = manageLoansArray()
+const SourceOfFundHome: FC<RouteComponentProps> = (props) => {
   const tabs: Tab[] = handleSourceOfFundTabs()
+  const manageLoansHeader: Card[] = manageLoansArray()
+  const [activeTab, setActiveTab] = useState<string>(tabs[0].stringKey || '')
 
   const renderTab = (): ReactNode => {
     switch (activeTab) {
