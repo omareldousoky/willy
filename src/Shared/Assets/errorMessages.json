@@ -582,5 +582,9 @@
   "action_from_other_branch_not_allowed": {
     "en": "Different Branches",
     "ar": "يوجد إختلاف في الفروع"
+  },
+  "customer_use_CF_credit_more_than_initial": {
+    "en": "Customer has exceeded the limit",
+    "ar": "تخطى العميل الحد الأقصى"
   }
 }
