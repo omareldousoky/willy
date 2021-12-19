@@ -47,17 +47,19 @@ export const WarningExtraDetailsModal = ({
         <Table striped bordered hover>
           <tbody className="px-0 py-2">
             <tr>
-              <td style={header}>{local.daysSinceLastUnpaidInstallments}</td>
+              <td style={header}>
+                {local.daysLateSinceFirstUnpaidInstallment}
+              </td>
               <td style={cell}>
-                {extraWarningDetails.daysSinceLastUnpaidInstallments || 0}
+                {extraWarningDetails.daysLateSinceFirstUnpaidInstallment || 0}
               </td>
             </tr>
             <tr>
-              <td style={header}>{local.lastUnpaidInstallmentDate}</td>
+              <td style={header}>{local.firstUnpaidInstallmentDate}</td>
               <td style={cell}>
-                {extraWarningDetails.lastUnpaidInstallmentDate
+                {extraWarningDetails.firstUnpaidInstallmentDate
                   ? timeToArabicDate(
-                      extraWarningDetails.lastUnpaidInstallmentDate,
+                      extraWarningDetails.firstUnpaidInstallmentDate,
                       false
                     )
                   : '-'}

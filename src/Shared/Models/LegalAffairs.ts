@@ -78,8 +78,8 @@ export interface LegalWarningRequest {
 }
 
 export interface WarningExtraDetailsRespose {
-  lastUnpaidInstallmentDate?: number
-  daysSinceLastUnpaidInstallments?: number
+  firstUnpaidInstallmentDate?: number
+  daysLateSinceFirstUnpaidInstallment?: number
   unpaidInstallmentsCount?: number
 }
 
