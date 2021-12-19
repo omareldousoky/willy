@@ -18,9 +18,9 @@
     "jsx": "react",
     "baseUrl": "./src",
     "paths": {
-      "@Shared/*": ["../src/Shared/*"],
-      "@Mohassel/*": ["../src/Mohassel/*"],
-      "@CF/*": ["../src/CF/*"]
+      "Shared/*": ["../src/Shared/*"],
+      "Mohassel/*": ["../src/Mohassel/*"],
+      "CF/*": ["../src/CF/*"]
     }
   },
   "outDir": "./build/",

@@ -1,6 +1,6 @@
 import React from 'react'
 import Modal from 'react-bootstrap/esm/Modal'
-import local from '@Shared/Assets/ar.json'
+import local from 'Shared/Assets/ar.json'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import Form from 'react-bootstrap/esm/Form'
