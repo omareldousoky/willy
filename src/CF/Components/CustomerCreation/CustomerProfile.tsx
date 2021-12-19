@@ -2,36 +2,34 @@ import React, { useState, useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Container from 'react-bootstrap/Container'
+import { ListView } from 'Shared/Layouts'
 import {
   cfLimitStatusLocale,
+  getBranchFromCookie,
   getErrorMessage,
   iscoreDate,
-} from '../../../Shared/Services/utils'
-import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
-import * as local from '../../../Shared/Assets/ar.json'
-import ability from '../../../Shared/config/ability'
-import { Profile, InfoBox, ProfileActions } from '../../../Shared/Components'
-import { TabDataProps } from '../../../Shared/Components/Profile/types'
-import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo'
-import {
-  getIscoreCached,
-  getIscore,
-} from '../../../Shared/Services/APIs/iScore'
-import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
-import { blockCustomer } from '../../../Shared/Services/APIs/customer/blockCustomer'
-import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
+} from 'Shared/Services/utils'
+import { Tab } from 'Shared/Components/HeaderWithCards/cardNavbar'
+import * as local from 'Shared/Assets/ar.json'
+import ability from 'Shared/config/ability'
+import { Profile, InfoBox, ProfileActions } from 'Shared/Components'
+import { TabDataProps } from 'Shared/Components/Profile/types'
+import { getCustomerInfo } from 'Shared/Services/formatCustomersInfo'
+import { getIscoreCached, getIscore } from 'Shared/Services/APIs/iScore'
+import { getGeoAreasByBranch } from 'Shared/Services/APIs/geoAreas/getGeoAreas'
+import { blockCustomer } from 'Shared/Services/APIs/customer/blockCustomer'
+import { getCustomerByID } from 'Shared/Services/APIs/customer/getCustomer'
 
-import CFLimitModal from '../../../Shared/Components/CFLimitModal/CFLimitModal'
-import { getCFLimits } from '../../Services/APIs/config'
+import CFLimitModal from 'Shared/Components/CFLimitModal/CFLimitModal'
 import {
   GlobalCFLimits,
   globalCfLimitsInitialValues,
-} from '../../../Shared/Models/globalLimits'
+} from 'Shared/Models/globalLimits'
 import {
   Customer,
   Score,
   CFGuarantorDetailsProps,
-} from '../../../Shared/Models/Customer'
+} from 'Shared/Models/Customer'
 
 import {
   AcknowledgmentWasSignedInFront,
@@ -39,36 +37,14 @@ import {
   BondContract,
   PromissoryNote,
   ConsumerFinanceContract,
-} from '../../../Shared/Components/pdfTemplates/ConsumerContract'
-import { ConsumerFinanceContractData } from '../../../Shared/Models/consumerContract'
+} from 'Shared/Components/pdfTemplates/ConsumerContract'
+import { ConsumerFinanceContractData } from 'Shared/Models/consumerContract'
+import { useLoan } from 'Shared/hooks'
+import { getCFLimits } from '../../Services/APIs/config'
 
 interface LocationState {
   id: string
 }
-const tabs: Array<Tab> = [
-  {
-    header: local.workInfo,
-    stringKey: 'workInfo',
-  },
-  {
-    header: local.differentInfo,
-    stringKey: 'differentInfo',
-  },
-  {
-    header: local.documents,
-    stringKey: 'documents',
-  },
-  {
-    header: local.guarantorInfo,
-    stringKey: 'cfGuarantors',
-  },
-  {
-    header: local.deathCertificate,
-    stringKey: 'deathCertificate',
-    permission: 'deathCertificate',
-    permissionKey: 'customer',
-  },
-]
 
 export const CustomerProfile = () => {
   const [loading, setLoading] = useState(false)
@@ -78,7 +54,7 @@ export const CustomerProfile = () => {
     setCustomerCFContract,
   ] = useState<ConsumerFinanceContractData>()
   const [iScoreDetails, setIScoreDetails] = useState<Score[]>()
-  const [activeTab, setActiveTab] = useState('workInfo')
+  const [activeTab, setActiveTab] = useState<keyof TabDataProps>('workInfo')
   const [print, setPrint] = useState('')
   const [showCFLimitModal, setShowCFLimitModal] = useState(false)
   const [cfModalAction, setCFModalAction] = useState('')
@@ -89,6 +65,48 @@ export const CustomerProfile = () => {
 
   const location = useLocation<LocationState>()
   const history = useHistory()
+  const [from, setFrom] = useState(0)
+  const [size, setSize] = useState(10)
+
+  const [{ tableMappers, loans, totalCount }] = useLoan(
+    false,
+    getBranchFromCookie(),
+    from,
+    size,
+    'consumerFinance',
+    customerDetails?.key?.toString()
+  )
+
+  const tabs: Array<Tab> = [
+    {
+      header: local.workInfo,
+      stringKey: 'workInfo',
+    },
+    {
+      header: local.differentInfo,
+      stringKey: 'differentInfo',
+    },
+    {
+      header: local.documents,
+      stringKey: 'documents',
+    },
+    {
+      header: local.guarantorInfo,
+      stringKey: 'cfGuarantors',
+    },
+    {
+      header: local.deathCertificate,
+      stringKey: 'deathCertificate',
+      permission: 'deathCertificate',
+      permissionKey: 'customer',
+    },
+    {
+      header: local.issuedLoans + ` (${totalCount ?? 0})`,
+      stringKey: 'issuedLoans',
+      permission: 'getIssuedLoan',
+      permissionKey: 'application',
+    },
+  ]
 
   useEffect(() => {
     if (print.length > 0) {
@@ -522,6 +540,30 @@ export const CustomerProfile = () => {
         showFieldCondition: true,
       },
     ],
+    issuedLoans: [
+      {
+        fieldTitle: local.issuedLoans,
+        fieldData: (
+          <ListView<any>
+            isLoading={loading}
+            tableFrom={from}
+            tableSize={size}
+            tableTotalCount={totalCount}
+            tableUrl="loan"
+            tableMappers={tableMappers}
+            tableData={loans}
+            onChangeTableNumber={(key: string, number: number) => {
+              if (key === 'from') {
+                setFrom(number)
+              } else setSize(number)
+            }}
+          />
+        ),
+        showFieldCondition:
+          ability.can('getIssuedLoan', 'application') ||
+          ability.can('branchIssuedLoan', 'application'),
+      },
+    ],
   }
   const getProfileActions = () => {
     const isBlocked = customerDetails?.blocked?.isBlocked
@@ -636,6 +678,8 @@ export const CustomerProfile = () => {
                 </p>
               </span>
             </div>
+          </div>
+          <div className="d-flex">
             <ProfileActions actions={getProfileActions()} />
           </div>
           {mainInfo && <InfoBox info={mainInfo} />}
