@@ -22,7 +22,7 @@ export function ListView<TableDataType>({
   tableMappers,
   tableData,
   onChangeTableNumber,
-  isCf,
+  isCf = false,
   searchKeys,
   dropDownKeys,
   searchPlaceholder,
@@ -31,7 +31,7 @@ export function ListView<TableDataType>({
   hqBranchIdRequest,
   datePlaceholder,
 }: ListViewProps<TableDataType>) {
-  const renderSearch = searchKeys.length > 0 && (
+  const renderSearch = searchKeys && searchKeys.length > 0 && (
     <Search
       cf={isCf}
       searchKeys={searchKeys}
@@ -39,7 +39,7 @@ export function ListView<TableDataType>({
       searchPlaceholder={searchPlaceholder}
       setFrom={searchSetFrom}
       datePlaceholder={datePlaceholder}
-      url={searchUrl}
+      url={searchUrl || ''}
       from={tableFrom}
       size={tableSize}
       hqBranchIdRequest={hqBranchIdRequest}
