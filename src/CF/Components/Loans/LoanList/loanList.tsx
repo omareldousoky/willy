@@ -29,9 +29,10 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
   return (
     <ListView<any>
       headerTitle={local.issuedLoans}
-      headerTabs={manageLoansTabs}
+      // to remove tabs in case inside branch
+      headerTabs={fromBranch ? [] : manageLoansTabs}
+      activeTab={fromBranch ? '' : 'issued-loans'}
       isLoading={loading}
-      activeTab="issued-loans"
       viewTitle={local.issuedLoans}
       sideTitleText={local.noOfIssuedLoans + ` (${totalCount ?? 0})`}
       tableFrom={from}
