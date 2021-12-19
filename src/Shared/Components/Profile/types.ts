@@ -31,8 +31,7 @@ export interface TabProps {
 export interface ProfileProps {
   source: string
   tabs: TabProps[]
-  activeTab: string
-  setActiveTab(activeTab: string): void
+  setActiveTab(activeTab: keyof TabDataProps): void
   loading: boolean
   setLoading?(loading: boolean): void
   backButtonText?: string
@@ -40,4 +39,5 @@ export interface ProfileProps {
   editPermission?: boolean
   editOnClick?(): void
   tabsData: TabDataProps
+  activeTab: keyof TabDataProps
 }
