@@ -23,7 +23,7 @@ import {
   CompanyOtpCustomersProps,
 } from '../../Models/Customer'
 import { EntitledToSignDetails } from '../Customer/EntitledToSignDetails'
-import { CompanyOtpPhoneNumbers } from '../Customer/companyOtpPhoneNumbers'
+import { CompanyOtpPhoneNumbers } from '../Customer/companyOtpCustomers/companyOtpPhoneNumbers'
 
 export const Profile = ({
   source,
