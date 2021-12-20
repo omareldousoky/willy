@@ -1,4 +1,4 @@
-import { Customer } from './Customer'
+import { Customer, EntitledToSign } from './Customer'
 
 export interface BondContractProps {
   customerCreationDate: number
@@ -6,11 +6,16 @@ export interface BondContractProps {
   nationalId: string
   customerHomeAddress: string
   initialConsumerFinanceLimit: number
+  commercialRegisterNumber?: string
+  businessAddress?: string
+  branchName?: string
+  branchAddress?: string
   isCF?: boolean
 }
 export interface ConsumerFinanceContractData extends BondContractProps {
   mobilePhoneNumber: string
   customerGuarantors?: Customer[]
+  entitledToSignCustomers?: EntitledToSign[]
 }
 
 export interface AcknowledgmentWasSignedInFrontProps {

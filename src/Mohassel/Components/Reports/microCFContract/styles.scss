@@ -1,0 +1,40 @@
+@media screen, print {
+  .micro-cf-contract {
+    -webkit-print-color-adjust: exact;
+    page-break-after: always;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Arial;
+    .term-container {
+      margin: 1em;
+    }
+
+    p {
+      padding: 0 !important;
+    }
+
+    ul,
+    li {
+      padding: 0.5em;
+      margin-right: 0.5em;
+    }
+
+    .head-title {
+      text-align: center;
+      font-weight: bolder;
+      text-decoration: underline;
+    }
+
+    sub {
+      font-size: 18px;
+      font-weight: bolder;
+      margin: 2rem;
+    }
+  }
+}
+
+@media screen {
+  .micro-cf-contract {
+    display: none;
+  }
+}
