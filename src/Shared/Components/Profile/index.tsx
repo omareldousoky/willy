@@ -183,7 +183,7 @@ export const Profile = ({
                 )
               )
             })}
-          {activeTab === 'companyOtpCustomers' &&
+          {activeTab === 'otpCustomers' &&
             tabsData[activeTab].map((field, index) => {
               const fieldData = field.fieldData as CompanyOtpCustomersProps
               return (

@@ -29,7 +29,7 @@ export interface Company extends Customer {
   smeBankBranch: string
   smeBankAccountNumber: string
   smeIbanNumber: string
-  otpCustomers: OtpCustomer[]
+  otpCustomer: OtpCustomer[]
 }
 export interface Installment {
   id: number

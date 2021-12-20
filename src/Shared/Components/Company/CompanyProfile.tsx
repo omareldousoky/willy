@@ -207,7 +207,7 @@ export const CompanyProfile = () => {
         fieldTitle: 'otpCustomers',
         fieldData: {
           customerId: location.state.id,
-          otpCustomers: company?.otpCustomers ?? [],
+          otpCustomers: company?.otpCustomer ?? [],
         } as CompanyOtpCustomersProps,
         showFieldCondition: true,
       },
