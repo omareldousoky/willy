@@ -36,7 +36,7 @@ export const CompanyOtpPhoneNumbers = (
     <>
       <Loader type="fullscreen" open={loading} />
       <div className="d-flex flex-column align-items-start justify-content-center">
-        {ability.can('addCustomerGuarantors', 'customer') && (
+        {ability.can('addOTPCustomer', 'customer') && (
           <div className="mt-5 mb-5">
             <Button variant="primary" onClick={() => setOpenModal(true)}>
               {local.add} {local.otpCustomers}
