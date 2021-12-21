@@ -185,12 +185,15 @@ export const Profile = ({
             })}
           {activeTab === 'otpCustomers' &&
             tabsData[activeTab].map((field, index) => {
-              const fieldData = field.fieldData as CompanyOtpCustomersProps
+              const fieldData = field.fieldData as {
+                reload: () => void
+              } & CompanyOtpCustomersProps
               return (
                 <CompanyOtpPhoneNumbers
                   key={index}
                   customerId={fieldData.customerId}
                   otpCustomers={fieldData.otpCustomers}
+                  reload={fieldData.reload}
                 />
               )
             })}

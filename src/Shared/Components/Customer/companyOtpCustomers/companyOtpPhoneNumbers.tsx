@@ -1,31 +1,45 @@
 import React, { useState } from 'react'
-// import Swal from 'sweetalert2'
 import Button from 'react-bootstrap/Button'
 import Table from 'react-bootstrap/Table'
 import { CompanyOtpCustomersProps } from 'Shared/Models/Customer'
+import { Loader } from 'Shared/Components/Loader'
+import { addOtpCustomers } from 'Shared/Services/APIs/customer/addOtpCustomers'
+import Swal from 'sweetalert2'
 import local from '../../../Assets/ar.json'
 import { orderLocal } from '../../../Services/utils'
 import ability from '../../../config/ability'
-import { OtpCustomersFormModal } from './OtpCustomersFormModal'
+import { OtpCustomersFormModal } from './OtpCustomersModal'
 
-export const CompanyOtpPhoneNumbers = (props: CompanyOtpCustomersProps) => {
+export const CompanyOtpPhoneNumbers = (
+  props: { reload: () => void } & CompanyOtpCustomersProps
+) => {
   const [openModal, setOpenModal] = useState(false)
-  // const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  // function cancelModal() {
-  //   setOpenModal(false)
-  //   setLoading(false)
-  //   setSelectedEntitledToSignCustomer(undefined)
-  //   setSearchResults({ results: [], empty: false })
-  // }
-
+  async function setOtpCustomers(val) {
+    setLoading(true)
+    const result = await addOtpCustomers({
+      customerId: props.customerId,
+      otpCustomers: val,
+    })
+    if (result.status === 'success') {
+      Swal.fire('', local.success, 'success').then(() => {
+        setOpenModal(false)
+        props.reload()
+      })
+    } else {
+      Swal.fire('', local.searchError, 'error')
+    }
+    setLoading(false)
+  }
   return (
     <>
+      <Loader type="fullscreen" open={loading} />
       <div className="d-flex flex-column align-items-start justify-content-center">
         {ability.can('addCustomerGuarantors', 'customer') && (
           <div className="mt-5 mb-5">
             <Button variant="primary" onClick={() => setOpenModal(true)}>
-              {local.addEntitledToSign}
+              {local.add} {local.otpCustomers}
             </Button>
           </div>
         )}
@@ -37,7 +51,6 @@ export const CompanyOtpPhoneNumbers = (props: CompanyOtpCustomersProps) => {
                 <th>{local.name}</th>
                 <th>{local.nationalId}</th>
                 <th>{local.phoneNumber}</th>
-                {/* {!props.isBlocked && <th />} */}
               </tr>
             </thead>
             <tbody>
@@ -51,32 +64,22 @@ export const CompanyOtpPhoneNumbers = (props: CompanyOtpCustomersProps) => {
                       <td>{guar.name}</td>
                       <td>{guar.nationalId}</td>
                       <td>{guar.phoneNumber}</td>
-
-                      {/* {true && (
-                        <td style={{ padding: 10 }}>
-                          <Button
-                            variant="default"
-                            onClick={() => removeGuarantor(guar)}
-                            title={local.delete}
-                          >
-                            <LtsIcon name="trash" />
-                          </Button>
-                        </td>
-                      )} */}
                     </tr>
                   )
                 })}
             </tbody>
           </Table>
         ) : (
-          <p>{local.noEntitledToSign}</p>
+          <p>
+            {local.na} {local.otpCustomers}
+          </p>
         )}
       </div>
       {openModal && (
         <OtpCustomersFormModal
           openModal={openModal}
           setOpenModal={(bool) => setOpenModal(bool)}
-          save={(vals) => console.log('in save', vals)}
+          save={(vals) => setOtpCustomers(vals)}
           otpCustomers={props.otpCustomers}
         />
       )}

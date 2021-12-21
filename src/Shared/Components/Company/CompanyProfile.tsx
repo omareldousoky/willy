@@ -208,6 +208,7 @@ export const CompanyProfile = () => {
         fieldData: {
           customerId: location.state.id,
           otpCustomers: company?.otpCustomer ?? [],
+          reload: () => getCompanyDetails(),
         } as CompanyOtpCustomersProps,
         showFieldCondition: true,
       },
@@ -254,7 +255,7 @@ export const CompanyProfile = () => {
       stringKey: 'cfEntitledToSign',
     },
     {
-      header: local.phoneNumber,
+      header: local.otpCustomers,
       stringKey: 'otpCustomers',
     },
   ]
