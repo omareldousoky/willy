@@ -139,12 +139,7 @@ export const OtpCustomersForm = (props) => {
         )}
       />
       <div className="my-4 d-flex justify-content-around">
-        <Button
-          variant="secondary"
-          onClick={() => {
-            cancel()
-          }}
-        >
+        <Button variant="secondary" onClick={cancel}>
           {local.cancel}
         </Button>
         <Button variant="primary" type="submit">

@@ -4,7 +4,8 @@ import Modal from 'react-bootstrap/Modal'
 import { OtpCustomer } from 'Shared/Models/Customer'
 import local from '../../../Assets/ar.json'
 import { OtpCustomersForm } from './OtpCustomersForm'
-import { OtpCustomersFormModalProps, otpCustomersFormValidation } from './types'
+import { OtpCustomersFormModalProps } from './types'
+import { otpCustomersFormValidation } from './validations'
 
 export const OtpCustomersFormModal = (props: OtpCustomersFormModalProps) => {
   const [temp, setTemp] = useState<OtpCustomer[]>(props.otpCustomers)
