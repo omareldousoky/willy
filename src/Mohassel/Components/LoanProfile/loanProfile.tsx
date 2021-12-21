@@ -1535,7 +1535,7 @@ class LoanProfile extends Component<Props, State> {
               />
             </div>
             <Card className="mt-4 d-flex flex-row">
-              <div style={{ marginTop: 15, width: 'max-content' }}>
+              <div className="mt-4 w-max-content">
                 <CardNavBar
                   array={this.state.tabsArray}
                   active={this.state.activeTab}
@@ -1552,9 +1552,7 @@ class LoanProfile extends Component<Props, State> {
                 />
               </div>
               <div className="border mt-5 mb-5" />
-              <div style={{ padding: 20, marginTop: 15, width: '100%' }}>
-                {this.renderContent()}
-              </div>
+              <div className="p-3 w-100 mt-4">{this.renderContent()}</div>
             </Card>
             {this.state.returnItemModalOpen && (
               <ReturnItemModal
