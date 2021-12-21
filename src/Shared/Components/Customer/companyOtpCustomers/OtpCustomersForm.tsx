@@ -3,10 +3,10 @@ import React from 'react'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
-import { OtpCustomer } from 'Shared/Models/Customer'
-import * as local from 'Shared/Assets/ar.json'
-import Button from 'react-bootstrap/esm/Button'
-import { orderLocal } from 'Shared/Services/utils'
+import Button from 'react-bootstrap/Button'
+import { OtpCustomer } from '../../../Models/Customer'
+import * as local from '../../../Assets/ar.json'
+import { orderLocal } from '../../../Services/utils'
 
 export const OtpCustomersForm = (props) => {
   const {
