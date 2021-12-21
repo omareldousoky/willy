@@ -91,6 +91,11 @@ export interface Customer {
   consumerFinanceLimitStatus?: string
   hasLoan?: boolean
   guarantorMaxCustomers?: number
+  sourceId?: string
+  bankName?: string
+  bankBranch?: string
+  bankAccountNumber?: string
+  ibanNumber?: string
 }
 
 export interface Score {
@@ -173,6 +178,10 @@ export interface CustomerCreationStep3 {
     maxGroupIndividualPrincipal: number
     maxGroupPrincipal: number
   }
+  bankName?: string
+  bankBranch?: string
+  bankAccountNumber?: string
+  ibanNumber?: string
 }
 export enum LinkageStatusEnum {
   Pending = 'pending',

@@ -6,13 +6,10 @@ import { connect } from 'react-redux'
 import Swal from 'sweetalert2'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import Search from '../../../Shared/Components/Search/search'
-
 import { downloadTxtFile } from './textFiles'
 import { changeSourceFund } from '../../../Shared/Services/APIs/loanApplication/changeSourceFund'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
-import { manageLoansArray } from '../LoanList/manageLoansInitials'
-import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { CIBProps, CIBState } from './types'
 import { CibLoan } from '../../Models/CIB'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
@@ -29,7 +26,6 @@ class CIB extends Component<CIBProps, CIBState> {
       size: 25,
       from: 0,
       principalSelectedSum: 0,
-      manageLoansTabs: [],
     }
     this.mappers = [
       {
@@ -71,10 +67,6 @@ class CIB extends Component<CIBProps, CIBState> {
 
   componentDidMount() {
     this.props.search({ url: 'clearData' })
-    this.setState({
-      manageLoansTabs: manageLoansArray(),
-      selectedLoans: undefined,
-    })
   }
 
   handleSearch = async () => {
@@ -163,22 +155,13 @@ class CIB extends Component<CIBProps, CIBState> {
   render() {
     return (
       <>
-        <HeaderWithCards
-          header={local.cib}
-          array={this.state.manageLoansTabs}
-          active={this.state.manageLoansTabs
-            .map((item) => {
-              return item.icon
-            })
-            .indexOf('cib')}
-        />
         <Card className="main-card">
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body className="p-0">
             <div className="custom-card-header">
               <div className="d-flex align-items-center">
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                  {local.cib}
+                  {`${local.from} ${local.tasaheel} ${local.to} ${local.cib}`}
                 </Card.Title>
                 <span className="font-weight-bold" style={{ marginLeft: 10 }}>
                   {local.noOfSelectedLoans}

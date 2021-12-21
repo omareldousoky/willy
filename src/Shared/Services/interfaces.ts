@@ -24,11 +24,6 @@ export interface Company extends Customer {
   cbeCode: string
   paidCapital: number
   establishmentDate: number
-  smeSourceId?: string
-  smeBankName: string
-  smeBankBranch: string
-  smeBankAccountNumber: string
-  smeIbanNumber: string
   otpCustomer: OtpCustomer[]
 }
 export interface Installment {

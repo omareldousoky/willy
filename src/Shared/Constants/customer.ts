@@ -75,4 +75,8 @@ export const step3: CustomerCreationStep3 = {
     maxGroupPrincipal: 0,
   },
   allowGuarantorLoan: false,
+  bankName: '',
+  bankBranch: '',
+  bankAccountNumber: '',
+  ibanNumber: '',
 }

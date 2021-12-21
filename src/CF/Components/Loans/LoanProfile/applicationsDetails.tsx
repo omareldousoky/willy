@@ -47,19 +47,19 @@ export const LoanDetailsTableView = ({
         </tr>
         <tr>
           <td>{local.vendor}</td>
-          <td>{application.vendorName}</td>
+          <td>{application.vendorName || local.na}</td>
         </tr>
         <tr>
           <td>{local.cfBrand}</td>
-          <td>{application.brandName}</td>
+          <td>{application.brandName || local.na}</td>
         </tr>
         <tr>
           <td>{local.cfCategory}</td>
-          <td>{application.categoryName}</td>
+          <td>{application.categoryName || local.na}</td>
         </tr>
         <tr>
           <td>{local.cfSubcategory}</td>
-          <td>{application.subCategoryName}</td>
+          <td>{application.subCategoryName || local.na}</td>
         </tr>
         <tr>
           <td>{local.transactionKey}</td>
