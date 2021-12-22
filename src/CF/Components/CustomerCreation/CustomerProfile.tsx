@@ -83,7 +83,7 @@ export const CustomerProfile = () => {
   )
   useEffect(() => {
     if (customerDetails?.key && canViewIssuedLoans) getLoans()
-  }, [customerDetails?.key, canViewIssuedLoans])
+  }, [customerDetails?.key, canViewIssuedLoans, from, size])
 
   const tabs: Array<Tab> = [
     {
