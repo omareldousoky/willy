@@ -7,9 +7,13 @@ export const otpCustomersFormValidation = Yup.object().shape({
       .shape({
         nationalId: Yup.string()
           .min(14, local.nationalIdLengthShouldBe14)
+          .max(14, local.nationalIdLengthShouldBe14)
+          .matches(/^[0-9_]+$/, local.onlyEnglishNumbers)
           .required(local.required),
         phoneNumber: Yup.string()
           .min(11, local.minLength11)
+          .max(11, local.maxLength11)
+          .matches(/^[0-9_]+$/, local.onlyEnglishNumbers)
           .required(local.required),
         name: Yup.string().required(local.required),
       })

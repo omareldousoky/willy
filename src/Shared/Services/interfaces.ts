@@ -1,5 +1,5 @@
 import { Signature } from '../Models/common'
-import { Customer, OtpCustomer } from '../Models/Customer'
+import { Customer } from '../Models/Customer'
 
 export interface Branch {
   longitude?: number
@@ -24,7 +24,6 @@ export interface Company extends Customer {
   cbeCode: string
   paidCapital: number
   establishmentDate: number
-  otpCustomer: OtpCustomer[]
 }
 export interface Installment {
   id: number

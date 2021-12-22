@@ -25,7 +25,18 @@ export const OtpCustomersFormModal = (props: OtpCustomersFormModalProps) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
-          initialValues={{ otpCustomers: temp }}
+          initialValues={{
+            otpCustomers:
+              temp.length > 0
+                ? temp
+                : [
+                    {
+                      name: '',
+                      phoneNumber: '',
+                      nationalId: '',
+                    },
+                  ],
+          }}
           onSubmit={(va) => props.save(va.otpCustomers)}
           validationSchema={otpCustomersFormValidation}
           validateOnBlur

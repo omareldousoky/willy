@@ -22,7 +22,7 @@ import { blockCustomer } from '../../Services/APIs/customer/blockCustomer'
 import {
   CFEntitledToSignDetailsProps,
   CFGuarantorDetailsProps,
-  CompanyOtpCustomersProps,
+  OtpCustomersProps,
   Customer,
   EntitledToSign,
   Score,
@@ -209,7 +209,7 @@ export const CompanyProfile = () => {
           customerId: location.state.id,
           otpCustomers: company?.otpCustomer ?? [],
           reload: () => getCompanyDetails(),
-        } as CompanyOtpCustomersProps,
+        } as OtpCustomersProps,
         showFieldCondition: true,
       },
     ],

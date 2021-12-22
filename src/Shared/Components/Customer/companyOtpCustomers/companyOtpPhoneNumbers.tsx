@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Table from 'react-bootstrap/Table'
-import { CompanyOtpCustomersProps } from 'Shared/Models/Customer'
+import { OtpCustomersProps } from 'Shared/Models/Customer'
 import Swal from 'sweetalert2'
 import { addOtpCustomers } from '../../../Services/APIs/customer/addOtpCustomers'
 import { Loader } from '../../Loader'
@@ -11,7 +11,7 @@ import ability from '../../../config/ability'
 import { OtpCustomersFormModal } from './OtpCustomersModal'
 
 export const CompanyOtpPhoneNumbers = (
-  props: { reload: () => void } & CompanyOtpCustomersProps
+  props: { reload: () => void } & OtpCustomersProps
 ) => {
   const [openModal, setOpenModal] = useState(false)
   const [loading, setLoading] = useState(false)

@@ -96,6 +96,7 @@ export interface Customer {
   bankBranch?: string
   bankAccountNumber?: string
   ibanNumber?: string
+  otpCustomer?: OtpCustomer[]
 }
 
 export interface Score {
@@ -224,7 +225,7 @@ export interface OtpCustomer {
   phoneNumber: string
   name: string
 }
-export interface CompanyOtpCustomersProps {
+export interface OtpCustomersProps {
   customerId: string
   otpCustomers: OtpCustomer[]
 }

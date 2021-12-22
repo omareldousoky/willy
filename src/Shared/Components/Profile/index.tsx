@@ -20,7 +20,7 @@ import {
 import {
   CFEntitledToSignDetailsProps,
   CFGuarantorDetailsProps,
-  CompanyOtpCustomersProps,
+  OtpCustomersProps,
 } from '../../Models/Customer'
 import { EntitledToSignDetails } from '../Customer/EntitledToSignDetails'
 import { CompanyOtpPhoneNumbers } from '../Customer/companyOtpCustomers/companyOtpPhoneNumbers'
@@ -187,7 +187,7 @@ export const Profile = ({
             tabsData[activeTab].map((field, index) => {
               const fieldData = field.fieldData as {
                 reload: () => void
-              } & CompanyOtpCustomersProps
+              } & OtpCustomersProps
               return (
                 <CompanyOtpPhoneNumbers
                   key={index}

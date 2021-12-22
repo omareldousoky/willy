@@ -26,6 +26,7 @@ import {
   Score,
   Customer,
   CFGuarantorDetailsProps,
+  OtpCustomersProps,
 } from '../../../Shared/Models/Customer'
 import CFLimitModal from '../../../Shared/Components/CFLimitModal/CFLimitModal'
 import { ConsumerFinanceContractData } from '../../../Shared/Models/consumerContract'
@@ -72,6 +73,10 @@ const tabs: Array<Tab> = [
     stringKey: 'reports',
     permission: 'guaranteed',
     permissionKey: 'report',
+  },
+  {
+    header: local.otpCustomers,
+    stringKey: 'otpCustomers',
   },
 ]
 
@@ -530,6 +535,17 @@ export const CustomerProfile = () => {
           iscores: iScoreDetails,
           limitStatus: customerDetails?.consumerFinanceLimitStatus,
         } as CFGuarantorDetailsProps,
+        showFieldCondition: true,
+      },
+    ],
+    otpCustomers: [
+      {
+        fieldTitle: 'otpCustomers',
+        fieldData: {
+          customerId: location.state.id,
+          otpCustomers: customerDetails?.otpCustomer ?? [],
+          reload: () => getCustomerDetails(),
+        } as OtpCustomersProps,
         showFieldCondition: true,
       },
     ],

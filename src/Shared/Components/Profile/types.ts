@@ -1,7 +1,7 @@
 import {
   CFEntitledToSignDetailsProps,
   CFGuarantorDetailsProps,
-  CompanyOtpCustomersProps,
+  OtpCustomersProps,
 } from '../../Models/Customer'
 import { CustomerScore } from '../../Services/APIs/customer/customerCategorization'
 
@@ -14,7 +14,7 @@ export interface FieldProps {
     | React.ReactElement
     | CFGuarantorDetailsProps
     | CFEntitledToSignDetailsProps
-    | CompanyOtpCustomersProps
+    | OtpCustomersProps
   showFieldCondition: boolean
   fieldDataStyle?: React.CSSProperties
   fieldTitleStyle?: React.CSSProperties
