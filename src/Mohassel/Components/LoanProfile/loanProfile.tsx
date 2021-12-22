@@ -1552,7 +1552,9 @@ class LoanProfile extends Component<Props, State> {
                 />
               </div>
               <div className="border mt-5 mb-5" />
-              <div className="p-3 w-100 mt-4">{this.renderContent()}</div>
+              <div className="p-3 w-100 mt-4 overflow-auto">
+                {this.renderContent()}
+              </div>
             </Card>
             {this.state.returnItemModalOpen && (
               <ReturnItemModal
