@@ -22,6 +22,7 @@ import { blockCustomer } from '../../Services/APIs/customer/blockCustomer'
 import {
   CFEntitledToSignDetailsProps,
   CFGuarantorDetailsProps,
+  OtpCustomersProps,
   Customer,
   EntitledToSign,
   Score,
@@ -201,6 +202,17 @@ export const CompanyProfile = () => {
         showFieldCondition: true,
       },
     ],
+    otpCustomers: [
+      {
+        fieldTitle: 'otpCustomers',
+        fieldData: {
+          customerId: location.state.id,
+          otpCustomers: company?.otpCustomer ?? [],
+          reload: () => getCompanyDetails(),
+        } as OtpCustomersProps,
+        showFieldCondition: true,
+      },
+    ],
   }
   function setModalData(type) {
     setCFModalAction(type)
@@ -241,6 +253,10 @@ export const CompanyProfile = () => {
     {
       header: local.entitledToSign,
       stringKey: 'cfEntitledToSign',
+    },
+    {
+      header: local.otpCustomers,
+      stringKey: 'otpCustomers',
     },
   ]
   const handleActivationClick = async ({ id, blocked }) => {

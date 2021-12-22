@@ -20,8 +20,10 @@ import {
 import {
   CFEntitledToSignDetailsProps,
   CFGuarantorDetailsProps,
+  OtpCustomersProps,
 } from '../../Models/Customer'
 import { EntitledToSignDetails } from '../Customer/EntitledToSignDetails'
+import { CompanyOtpPhoneNumbers } from '../Customer/companyOtpCustomers/companyOtpPhoneNumbers'
 
 export const Profile = ({
   source,
@@ -179,6 +181,20 @@ export const Profile = ({
                     limitStatus={fieldData.limitStatus}
                   />
                 )
+              )
+            })}
+          {activeTab === 'otpCustomers' &&
+            tabsData[activeTab].map((field, index) => {
+              const fieldData = field.fieldData as {
+                reload: () => void
+              } & OtpCustomersProps
+              return (
+                <CompanyOtpPhoneNumbers
+                  key={index}
+                  customerId={fieldData.customerId}
+                  otpCustomers={fieldData.otpCustomers}
+                  reload={fieldData.reload}
+                />
               )
             })}
         </Card.Body>
