@@ -743,7 +743,10 @@ class LoanProfile extends Component<Props, State> {
       this.state.application.product?.beneficiaryType === 'individual' &&
       this.state.application.customer
     ) {
-      if (this.state.application.product?.type === 'sme') {
+      if (
+        this.state.application.product?.type === 'sme' ||
+        this.state.application.product?.type === 'consumerFinance'
+      ) {
         const smeScore = this.state.iscores.filter(
           (score) => score.id === this.state.application.customer.cbeCode
         )[0]
