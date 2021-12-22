@@ -81,10 +81,6 @@ export default function useLoan(
     search(query)
   }
 
-  useEffect(() => {
-    getLoans()
-  }, [from, size, incomingCustomerKey])
-
   // loan table actions
   const loansRenderActions = (incomingData) => [
     {

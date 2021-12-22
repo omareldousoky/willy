@@ -1,5 +1,6 @@
-import React, { FunctionComponent, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import { ListView } from 'Shared/Layouts'
+import { Application } from 'Shared/Services/interfaces'
 import local from '../../../../Shared/Assets/ar.json'
 import { manageLoansArray } from './manageLoansInitials'
 import { LoanListProps } from './types'
@@ -24,10 +25,14 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
     },
   ] = useLoan(fromBranch, branchId, from, size, 'consumerFinance')
 
+  useEffect(() => {
+    getLoans()
+  }, [from, size])
+
   const manageLoansTabs = manageLoansArray()
 
   return (
-    <ListView<any>
+    <ListView<Application>
       headerTitle={local.issuedLoans}
       // to remove tabs in case inside branch
       headerTabs={fromBranch ? [] : manageLoansTabs}
@@ -41,11 +46,9 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
       tableUrl="loan"
       tableMappers={tableMappers}
       tableData={loans}
-      onChangeTableNumber={(key: string, number: number) => {
-        if (key === 'from') {
-          if (!number) getLoans()
-          else setFrom(number)
-        } else setSize(number)
+      onChangeTableNumber={(key: 'from' | 'size', number: number) => {
+        if (key === 'from') setFrom(number)
+        else setSize(number)
       }}
       isCf
       searchKeys={loanSearchKeys}

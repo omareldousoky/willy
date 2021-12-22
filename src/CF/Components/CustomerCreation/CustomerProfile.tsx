@@ -40,6 +40,7 @@ import {
 } from 'Shared/Components/pdfTemplates/ConsumerContract'
 import { ConsumerFinanceContractData } from 'Shared/Models/consumerContract'
 import { useLoan } from 'Shared/hooks'
+import { Application } from 'Shared/Services/interfaces'
 import { getCFLimits } from '../../Services/APIs/config'
 
 interface LocationState {
@@ -68,7 +69,11 @@ export const CustomerProfile = () => {
   const [from, setFrom] = useState(0)
   const [size, setSize] = useState(10)
 
-  const [{ tableMappers, loans, totalCount }] = useLoan(
+  const canViewIssuedLoans =
+    ability.can('getIssuedLoan', 'application') ||
+    ability.can('branchIssuedLoan', 'application')
+
+  const [{ tableMappers, loans, totalCount, getLoans }] = useLoan(
     false,
     getBranchFromCookie(),
     from,
@@ -76,6 +81,9 @@ export const CustomerProfile = () => {
     'consumerFinance',
     customerDetails?.key?.toString()
   )
+  useEffect(() => {
+    if (customerDetails?.key && canViewIssuedLoans) getLoans()
+  }, [customerDetails?.key, canViewIssuedLoans])
 
   const tabs: Array<Tab> = [
     {
@@ -103,7 +111,7 @@ export const CustomerProfile = () => {
     {
       header: local.issuedLoans + ` (${totalCount ?? 0})`,
       stringKey: 'issuedLoans',
-      permission: 'getIssuedLoan',
+      permission: ['getIssuedLoan', 'branchIssuedLoan'],
       permissionKey: 'application',
     },
   ]
@@ -544,7 +552,7 @@ export const CustomerProfile = () => {
       {
         fieldTitle: local.issuedLoans,
         fieldData: (
-          <ListView<any>
+          <ListView<Application>
             isLoading={loading}
             tableFrom={from}
             tableSize={size}
@@ -559,9 +567,7 @@ export const CustomerProfile = () => {
             }}
           />
         ),
-        showFieldCondition:
-          ability.can('getIssuedLoan', 'application') ||
-          ability.can('branchIssuedLoan', 'application'),
+        showFieldCondition: canViewIssuedLoans,
       },
     ],
   }
