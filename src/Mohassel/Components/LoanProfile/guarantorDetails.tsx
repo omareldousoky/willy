@@ -303,7 +303,7 @@ export const GuarantorTableView = (props: Props) => {
             <h3>{local.individuals}</h3>
           )}
         {individualGuarantors.length > 0 ? (
-          <Table style={{ textAlign: 'right' }}>
+          <Table className="text-left text-break">
             <thead>
               <tr>
                 <th />
