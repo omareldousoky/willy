@@ -181,10 +181,12 @@ export const LoanDetailsTableView = ({
             </td>
           </tr>
         )}
-        <tr>
-          <td>{local.visitationDate}</td>
-          <td>{extractGMTDate(application.visitationDate)}</td>
-        </tr>
+        {application.product.type !== 'consumerFinance' && (
+          <tr>
+            <td>{local.visitationDate}</td>
+            <td>{extractGMTDate(application.visitationDate)}</td>
+          </tr>
+        )}
         {application.branchManagerName.length > 0 && (
           <tr>
             <td>{local.branchManager}</td>
