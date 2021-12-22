@@ -20,8 +20,10 @@ import {
 import {
   CFEntitledToSignDetailsProps,
   CFGuarantorDetailsProps,
+  OtpCustomersProps,
 } from '../../Models/Customer'
 import { EntitledToSignDetails } from '../Customer/EntitledToSignDetails'
+import { CompanyOtpPhoneNumbers } from '../Customer/companyOtpCustomers/companyOtpPhoneNumbers'
 
 export const Profile = ({
   source,
@@ -142,6 +144,13 @@ export const Profile = ({
               <EntitledToSignDetails key={index} {...fieldData} />
             )
           )
+        })
+      case 'otpCustomers':
+        return tabsData[activeTab].map((field, index) => {
+          const fieldData = field.fieldData as {
+            reload: () => void
+          } & OtpCustomersProps
+          return <CompanyOtpPhoneNumbers key={index} {...fieldData} />
         })
       default:
         return tabsData[activeTab].map((field, index) => {
