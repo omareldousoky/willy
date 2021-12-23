@@ -39,7 +39,7 @@ export interface CompanyProfileProps {
 }
 export const CompanyProfile = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [activeTab, changeActiveTab] = useState('documents')
+  const [activeTab, changeActiveTab] = useState<keyof TabDataProps>('documents')
   const [company, setCompany] = useState<Company>()
   const [
     customerCFContract,

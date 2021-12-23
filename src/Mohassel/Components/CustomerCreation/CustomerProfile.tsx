@@ -96,7 +96,7 @@ export const CustomerProfile = () => {
   const [loading, setLoading] = useState(false)
   const [customerDetails, setCustomerDetails] = useState<Customer>()
   const [iScoreDetails, setIScoreDetails] = useState<Score[]>()
-  const [activeTab, setActiveTab] = useState('workInfo')
+  const [activeTab, setActiveTab] = useState<keyof TabDataProps>('workInfo')
   const [print, setPrint] = useState('')
   // const [ratings, setRatings] = useState<Array<CustomerScore>>([])
   const [showHalanLinkageModal, setShowHalanLinkageModal] = useState<boolean>(
@@ -682,6 +682,8 @@ export const CustomerProfile = () => {
                 </span>
               )}
             </div>
+          </div>
+          <div className="d-flex">
             <ProfileActions actions={getProfileActions()} />
           </div>
           {mainInfo && <InfoBox info={mainInfo} />}
