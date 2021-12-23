@@ -85,6 +85,12 @@ export const CustomerProfile = () => {
     if (customerDetails?.key && canViewIssuedLoans) getLoans()
   }, [customerDetails?.key, canViewIssuedLoans, from, size])
 
+  // reset size and form on changing tabs
+  useEffect(() => {
+    setSize(10)
+    setFrom(0)
+  }, [activeTab])
+
   const tabs: Array<Tab> = [
     {
       header: local.workInfo,
