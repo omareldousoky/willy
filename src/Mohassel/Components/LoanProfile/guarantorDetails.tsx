@@ -303,7 +303,7 @@ export const GuarantorTableView = (props: Props) => {
             <h3>{local.individuals}</h3>
           )}
         {individualGuarantors.length > 0 ? (
-          <Table className="text-left text-break">
+          <Table className="text-left">
             <thead>
               <tr>
                 <th />
@@ -355,7 +355,9 @@ export const GuarantorTableView = (props: Props) => {
                             ]}
                       </td>
                       <td>{guar.guarantor.key}</td>
-                      <td>{guar.guarantor.customerName}</td>
+                      <td className="text-break">
+                        {guar.guarantor.customerName}
+                      </td>
                       <td>{guar.guarantor.nationalId}</td>
                       <td
                         style={{
