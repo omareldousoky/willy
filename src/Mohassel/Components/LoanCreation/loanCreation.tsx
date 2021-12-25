@@ -278,7 +278,7 @@ class LoanCreation extends Component<
                       : this.state.beneficiaryType
                   )}
                 </td>
-                <td>
+                <td className="text-break">
                   {this.state.beneficiaryType === 'group'
                     ? this.state.application.group.individualsInGroup.find(
                         (customer) => customer.type === 'leader'
