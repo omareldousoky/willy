@@ -303,7 +303,7 @@ export const GuarantorTableView = (props: Props) => {
             <h3>{local.individuals}</h3>
           )}
         {individualGuarantors.length > 0 ? (
-          <Table className="text-right">
+          <Table className="text-left">
             <thead>
               <tr>
                 <th />
