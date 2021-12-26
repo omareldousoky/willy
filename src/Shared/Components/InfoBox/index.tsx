@@ -69,7 +69,7 @@ export const InfoBox = ({ info, title, boxColor }: InfoBoxProps) => {
                     key={fieldIndex}
                     as={Col}
                     md="4"
-                    className="d-flex flex-column"
+                    className="d-flex flex-column text-break"
                   >
                     <Form.Label style={{ color: '#6e6e6e' }}>
                       {fieldTitle}

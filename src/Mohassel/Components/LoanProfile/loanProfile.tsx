@@ -1534,21 +1534,25 @@ class LoanProfile extends Component<Props, State> {
                 }
               />
             </div>
-            <Card style={{ marginTop: 15 }}>
-              <CardNavBar
-                array={this.state.tabsArray}
-                active={this.state.activeTab}
-                selectTab={(index: string) =>
-                  this.setState(
-                    { activeTab: index, manualPaymentEditId: '' },
-                    () => {
-                      if (index === 'customerCard') this.calculatePenalties()
-                      this.props.changePaymentState(0)
-                    }
-                  )
-                }
-              />
-              <div style={{ padding: 20, marginTop: 15 }}>
+            <Card className="mt-4 d-flex flex-row">
+              <div className="mt-4 w-max-content">
+                <CardNavBar
+                  array={this.state.tabsArray}
+                  active={this.state.activeTab}
+                  isVertical
+                  selectTab={(index: string) =>
+                    this.setState(
+                      { activeTab: index, manualPaymentEditId: '' },
+                      () => {
+                        if (index === 'customerCard') this.calculatePenalties()
+                        this.props.changePaymentState(0)
+                      }
+                    )
+                  }
+                />
+              </div>
+              <div className="border mt-5 mb-5" />
+              <div className="p-3 w-100 mt-4 overflow-auto">
                 {this.renderContent()}
               </div>
             </Card>
