@@ -41,4 +41,5 @@ export interface ProfileProps {
   editOnClick?(): void
   tabsData: TabDataProps
   profileId?: string
+  isCF?: boolean
 }

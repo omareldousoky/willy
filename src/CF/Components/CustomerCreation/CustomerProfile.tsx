@@ -654,6 +654,7 @@ export const CustomerProfile = () => {
           setActiveTab={(stringKey) => setActiveTab(stringKey)}
           tabsData={tabsData}
           profileId={customerDetails?._id}
+          isCF
         />
         {showCFLimitModal && customerDetails && (
           <CFLimitModal

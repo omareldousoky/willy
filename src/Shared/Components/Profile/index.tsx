@@ -35,6 +35,7 @@ export const Profile = ({
   setActiveTab,
   tabsData,
   profileId,
+  isCF,
 }: ProfileProps) => {
   return (
     <>
@@ -128,6 +129,7 @@ export const Profile = ({
                     customerKey={fieldData as string}
                     key={index}
                     customerId={profileId}
+                    isCF={isCF}
                   />
                 )
               )
