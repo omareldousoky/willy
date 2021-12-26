@@ -22,6 +22,7 @@ import { blockCustomer } from '../../Services/APIs/customer/blockCustomer'
 import {
   CFEntitledToSignDetailsProps,
   CFGuarantorDetailsProps,
+  OtpCustomersProps,
   Customer,
   EntitledToSign,
   Score,
@@ -38,7 +39,7 @@ export interface CompanyProfileProps {
 }
 export const CompanyProfile = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [activeTab, changeActiveTab] = useState('documents')
+  const [activeTab, changeActiveTab] = useState<keyof TabDataProps>('documents')
   const [company, setCompany] = useState<Company>()
   const [
     customerCFContract,
@@ -201,6 +202,17 @@ export const CompanyProfile = () => {
         showFieldCondition: true,
       },
     ],
+    otpCustomers: [
+      {
+        fieldTitle: 'otpCustomers',
+        fieldData: {
+          customerId: location.state.id,
+          otpCustomers: company?.otpCustomer ?? [],
+          reload: () => getCompanyDetails(),
+        } as OtpCustomersProps,
+        showFieldCondition: true,
+      },
+    ],
     reports: [
       {
         fieldTitle: 'reports',
@@ -248,6 +260,10 @@ export const CompanyProfile = () => {
     {
       header: local.entitledToSign,
       stringKey: 'cfEntitledToSign',
+    },
+    {
+      header: local.otpCustomers,
+      stringKey: 'otpCustomers',
     },
     {
       header: local.reports,

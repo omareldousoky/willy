@@ -96,6 +96,7 @@ export interface Customer {
   bankBranch?: string
   bankAccountNumber?: string
   ibanNumber?: string
+  otpCustomer?: OtpCustomer[]
 }
 
 export interface Score {
@@ -217,4 +218,14 @@ export interface CFEntitledToSignDetailsProps {
   getIscore?: (data) => Promise<void>
   iscores?: Score[]
   limitStatus: string
+}
+
+export interface OtpCustomer {
+  nationalId: string
+  phoneNumber: string
+  name: string
+}
+export interface OtpCustomersProps {
+  customerId: string
+  otpCustomers: OtpCustomer[]
 }

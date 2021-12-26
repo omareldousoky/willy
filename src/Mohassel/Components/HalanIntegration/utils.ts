@@ -1,5 +1,5 @@
-import { Tab } from '@Shared/Components/HeaderWithCards/headerWithCards'
-import local from '@Shared/Assets/ar.json'
+import { Tab } from 'Shared/Components/HeaderWithCards/headerWithCards'
+import local from 'Shared/Assets/ar.json'
 
 export const leadsTabs: Tab[] = [
   {

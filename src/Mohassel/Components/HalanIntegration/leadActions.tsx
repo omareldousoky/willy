@@ -1,5 +1,5 @@
 import React from 'react'
-import local from '@Shared/Assets/ar.json'
+import local from 'Shared/Assets/ar.json'
 import ability from 'Shared/config/ability'
 import { Action } from 'Shared/Models/common'
 import { useHistory } from 'react-router-dom'
