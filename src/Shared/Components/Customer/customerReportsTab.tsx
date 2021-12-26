@@ -22,28 +22,10 @@ import ClientGuaranteedLoans from '../pdfTemplates/Financial/ClientGuaranteedLoa
 import { CustomerStatusDetails } from '../pdfTemplates/Financial/customerStatusDetails'
 import { LoanApplicationDetails } from '../pdfTemplates/Financial/loanApplicationDetails'
 
-const PDF_LIST = [
-  {
-    key: 'guaranteed',
-    local: local.ClientGuaranteedLoans,
-  },
-  {
-    key: 'customerDetails',
-    local: 'حالة العميل التفصيلية',
-  },
-  {
-    key: 'loanDetails',
-    local: 'تفاصيل طلب القرض',
-  },
-  {
-    key: 'getGuarantors',
-    local: local.customerGuaranteed,
-  },
-]
-
 interface CustomerReportsTabProps {
   customerKey?: string
   customerId?: string
+  isCF?: boolean
 }
 
 type PdfKey = 'customerDetails' | 'guaranteed' | 'loanDetails'
@@ -52,11 +34,33 @@ type ExcelKey = 'getGuarantors'
 export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
   customerKey,
   customerId,
+  isCF,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [printPdfKey, setPrintPdfKey] = useState<PdfKey>()
   const [pdfData, setPdfData] = useState()
-
+  const PDF_LIST = [
+    {
+      key: 'guaranteed',
+      local: local.ClientGuaranteedLoans,
+      hide: isCF,
+    },
+    {
+      key: 'customerDetails',
+      local: 'حالة العميل التفصيلية',
+      hide: isCF,
+    },
+    {
+      key: 'loanDetails',
+      local: 'تفاصيل طلب القرض',
+      hide: isCF,
+    },
+    {
+      key: 'getGuarantors',
+      local: local.customerGuaranteed,
+      hide: false,
+    },
+  ]
   // TODO: Redesign with generics
   const apiHandler = (res: any, successHandler?: () => void) => {
     if (res.status === 'success') {
@@ -195,28 +199,34 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
           </div>
           {PDF_LIST.map((pdf, index) => {
             return (
-              <Can I={pdf.key} a="report" key={pdf.key}>
-                <Card key={pdf.key}>
-                  <Card.Body>
-                    <div className="d-flex justify-content-between font-weight-bold align-items-center">
-                      <div className="d-flex">
-                        <span className="mr-5 text-secondary">
-                          #{index + 1}
-                        </span>
-                        <span>{pdf.local}</span>
+              !pdf.hide && (
+                <Can I={pdf.key} a="report" key={pdf.key}>
+                  <Card key={pdf.key}>
+                    <Card.Body>
+                      <div className="d-flex justify-content-between font-weight-bold align-items-center">
+                        <div className="d-flex">
+                          <span className="mr-5 text-secondary">
+                            {isCF ? `#1` : `#${index + 1}`}
+                          </span>
+                          <span>{pdf.local}</span>
+                        </div>
+                        <Button
+                          variant="default"
+                          onClick={() =>
+                            downloadClickHandler(pdf.key as PdfKey | ExcelKey)
+                          }
+                        >
+                          <LtsIcon
+                            name="download"
+                            size="35px"
+                            color="#7dc356"
+                          />
+                        </Button>
                       </div>
-                      <Button
-                        variant="default"
-                        onClick={() =>
-                          downloadClickHandler(pdf.key as PdfKey | ExcelKey)
-                        }
-                      >
-                        <LtsIcon name="download" size="35px" color="#7dc356" />
-                      </Button>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Can>
+                    </Card.Body>
+                  </Card>
+                </Can>
+              )
             )
           })}
         </Card.Body>
