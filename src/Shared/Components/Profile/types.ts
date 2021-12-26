@@ -1,6 +1,7 @@
 import {
   CFEntitledToSignDetailsProps,
   CFGuarantorDetailsProps,
+  OtpCustomersProps,
 } from '../../Models/Customer'
 import { CustomerScore } from '../../Services/APIs/customer/customerCategorization'
 
@@ -13,6 +14,7 @@ export interface FieldProps {
     | React.ReactElement
     | CFGuarantorDetailsProps
     | CFEntitledToSignDetailsProps
+    | OtpCustomersProps
   showFieldCondition: boolean
   fieldDataStyle?: React.CSSProperties
   fieldTitleStyle?: React.CSSProperties
@@ -31,8 +33,7 @@ export interface TabProps {
 export interface ProfileProps {
   source: string
   tabs: TabProps[]
-  activeTab: string
-  setActiveTab(activeTab: string): void
+  setActiveTab(activeTab: keyof TabDataProps): void
   loading: boolean
   setLoading?(loading: boolean): void
   backButtonText?: string
@@ -40,4 +41,5 @@ export interface ProfileProps {
   editPermission?: boolean
   editOnClick?(): void
   tabsData: TabDataProps
+  activeTab: keyof TabDataProps
 }
