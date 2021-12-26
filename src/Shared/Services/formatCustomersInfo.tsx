@@ -210,8 +210,8 @@ export const getCompanyInfo = ({
     },
     {
       fieldTitle: local.smeSourceId,
-      fieldData: company.smeSourceId ? (
-        <UserName id={company.smeSourceId} />
+      fieldData: company.sourceId ? (
+        <UserName id={company.sourceId} />
       ) : (
         local.na
       ),
@@ -219,27 +219,27 @@ export const getCompanyInfo = ({
     },
     {
       fieldTitle: local.smeBankName,
-      fieldData: company.smeBankName || '',
+      fieldData: company.bankName || local.na,
       showFieldCondition: true,
     },
     {
       fieldTitle: local.smeBankBranch,
-      fieldData: company.smeBankBranch || '',
+      fieldData: company.bankBranch || local.na,
       showFieldCondition: true,
     },
     {
       fieldTitle: local.smeBankAccountNumber,
-      fieldData: company.smeBankAccountNumber || '',
+      fieldData: company.bankAccountNumber || local.na,
       showFieldCondition: true,
     },
     {
-      fieldTitle: local.smeIbanNumber,
-      fieldData: company.smeIbanNumber || '',
+      fieldTitle: local.ibanNumber,
+      fieldData: company.ibanNumber || local.na,
       showFieldCondition: true,
     },
     {
       fieldTitle: local.cbeCode,
-      fieldData: company.cbeCode || '',
+      fieldData: company.cbeCode || local.na,
       showFieldCondition: true,
     },
     {
@@ -258,7 +258,7 @@ export const getCustomerInfo = ({
   customerDetails,
   score,
   isLeader,
-  isCF,
+  isCF = false,
   getIscore,
   applicationStatus,
   productType,
@@ -286,6 +286,10 @@ export const getCustomerInfo = ({
     monthlyIncome,
     initialConsumerFinanceLimit,
     guarantorMaxCustomers,
+    bankName,
+    bankBranch,
+    bankAccountNumber,
+    ibanNumber,
   } = customerDetails
   const info: FieldProps[] = [
     {
@@ -406,25 +410,32 @@ export const getCustomerInfo = ({
       fieldData: numbersToArabic(initialConsumerFinanceLimit || 0),
       showFieldCondition: true,
     },
-  ]
-
-  // monthlyIncome && initialConsumerFinanceLimit
-  const cfFields: FieldProps[] = [
-    // hidden field to display both fields in a new row
-    // TODO: make a better way
-    {
-      fieldTitle: 'empty dummy field',
-      fieldData: 0,
-      showFieldCondition: false,
-    },
     {
       fieldTitle: local.monthlyIncome,
       fieldData: numbersToArabic(monthlyIncome || 0),
-      showFieldCondition: true,
+      showFieldCondition: isCF,
+    },
+    {
+      fieldTitle: local.bankName,
+      fieldData: bankName || local.na,
+      showFieldCondition: !isCF,
+    },
+    {
+      fieldTitle: local.bankBranch,
+      fieldData: bankBranch || local.na,
+      showFieldCondition: !isCF,
+    },
+    {
+      fieldTitle: local.bankAccountNumber,
+      fieldData: bankAccountNumber || local.na,
+      showFieldCondition: !isCF,
+    },
+    {
+      fieldTitle: local.ibanNumber,
+      fieldData: ibanNumber || local.na,
+      showFieldCondition: !isCF,
     },
   ]
-
-  if (isCF) return [...info, ...cfFields]
 
   return info
 }

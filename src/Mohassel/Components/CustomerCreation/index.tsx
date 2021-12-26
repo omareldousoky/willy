@@ -181,6 +181,10 @@ class CustomerCreation extends Component<Props, State> {
         guarantorMaxCustomers: res.body.customer.guarantorMaxCustomers
           ? Number(res.body.customer.guarantorMaxCustomers)
           : 1,
+        bankName: res.body.customer.bankName,
+        bankBranch: res.body.customer.bankBranch,
+        bankAccountNumber: res.body.customer.bankAccountNumber,
+        ibanNumber: res.body.customer.ibanNumber,
       }
       this.formikStep1 = {
         values: { ...this.state.step1, ...customerInfo },
