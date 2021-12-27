@@ -1262,5 +1262,6 @@
   "cibPortfolioSecuritization": "حوالة حق CIB",
   "otpCustomers": "عملاء مخازن",
   "duplicatePhoneNumberMessage": "رقم التليفون موجود بالفعل لعميل اخر",
-  "onlyEnglishNumbers": "ارقام انجليزيه فقط"
+  "onlyEnglishNumbers": "ارقام انجليزيه فقط",
+  "customerGuaranteed": "عملاء ضمنهم العميل"
 }
