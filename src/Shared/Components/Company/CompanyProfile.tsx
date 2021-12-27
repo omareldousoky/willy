@@ -230,6 +230,7 @@ export const CompanyProfile = () => {
       commercialRegisterNumber: customer.commercialRegisterNumber || '',
       businessAddress: customer.businessAddress || '',
       customerGuarantors: customerGuarantors || [],
+      otpCustomers: company?.otpCustomer || [],
       entitledToSignCustomers: entitledToSignCustomers || [],
     })
   }

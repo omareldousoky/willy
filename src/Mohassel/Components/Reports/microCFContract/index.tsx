@@ -32,7 +32,7 @@ export const MicroCFContract = ({
   const entitledToSignCustomer = contractData.entitledToSignCustomers?.length
     ? contractData.entitledToSignCustomers[0]
     : {}
-
+  const noOfOtpCustomers = contractData.otpCustomers?.length as number
   const guarantorsOrder = (guarantorsLength: number) => {
     switch (guarantorsLength) {
       case 0:
@@ -45,6 +45,17 @@ export const MicroCFContract = ({
           guarantorsLength
         )}`
     }
+  }
+  const term9Condition = (otpCustomersLength: number): string => {
+    if (otpCustomersLength) {
+      const otpPhones: string[] =
+        contractData.otpCustomers?.map(
+          (otpCustomer) => otpCustomer.phoneNumber
+        ) || []
+      const phonNumbersString = [contractData.mobilePhoneNumber, ...otpPhones]
+      return phonNumbersString.join(' و ')
+    }
+    return contractData.mobilePhoneNumber
   }
   return (
     <table className="micro-cf-contract" dir="rtl" lang="ar">
@@ -416,12 +427,10 @@ export const MicroCFContract = ({
             وفقا لاحكام القانون
           </li>
           <li>
-            يقر العميل بأن رقم المحمول الذي يرغب في التعامل عليه هو
-            .................................. و
-            ........................................
-            و...................................و........................................و.......................................و.......................................على
-            أن يقوم بابلاغ الشركة كتابة حال تغييره دون أدنى مسئولية على الشركة
-            مع التزامه الكامل بكافة المعاملات التي تمت من خلال هذا الرقم.{' '}
+            يقر العميل بأن رقم المحمول الذي يرغب في التعامل عليه هو &nbsp;
+            {term9Condition(noOfOtpCustomers)} على أن يقوم بابلاغ الشركة كتابة
+            حال تغييره دون أدنى مسئولية على الشركة مع التزامه الكامل بكافة
+            المعاملات التي تمت من خلال هذا الرقم.{' '}
           </li>
           <li>
             {' '}
