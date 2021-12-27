@@ -1,74 +1,77 @@
 .header-cards-parent {
-    text-align: right;
-    margin: 0px 30px;
+  text-align: right;
+  margin: 0px 30px;
 }
 .cards-container {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-//    justify-content: space-around;
-    margin-top: 20px;
-    overflow: scroll;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  //    justify-content: space-around;
+  margin-top: 20px;
 }
-.cards-container > .nav{
-    overflow: auto;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    width: 100%;
+.cards-container > .nav {
+  overflow: auto;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  width: 100%;
 }
 .card-item {
-    width:  100%;
-    display: flex;
-    border: solid 1px #e5e5e5;
-    border-radius: 6px;
-    padding:  15px 20px;
-    cursor: pointer;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    margin: 0; 
+  width: 100%;
+  display: flex;
+  border: solid 1px #e5e5e5;
+  border-radius: 6px;
+  padding: 15px 20px;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
 }
 .navBar-item {
-    display: flex;
-    justify-content: center;
-    padding: 15px 15px;
-    cursor: pointer;
+  display: flex;
+  // justify-content: center;
+  padding: 15px 15px;
+  cursor: pointer;
 }
 
-.card-item img{
-    margin-left: 20px;
-    height: 30px;
+.card-item img {
+  margin-left: 20px;
+  height: 30px;
 }
-.card-item,.navBar-item h5,h6{
-    margin-bottom: 0px;
-    white-space: nowrap;
+.card-item,
+.navBar-item h5,
+h6 {
+  margin-bottom: 0px;
+  white-space: nowrap;
 }
-.card-item p{
-    font-weight: normal;
-    font-size: 14px;
-    color: #6e6e6e;
-    margin-bottom: 0px;
-    margin-top: 5px;
+.card-item p {
+  font-weight: normal;
+  font-size: 14px;
+  color: #6e6e6e;
+  margin-bottom: 0px;
+  margin-top: 5px;
 }
 
 .card-item.active {
-    border-color: #7dc356;
+  border-color: #7dc356;
+  color: #7dc356;
+  background-color: #f7fff2;
+  p {
     color: #7dc356;
-    background-color: #f7fff2;
-    p {
-        color: #7dc356;  
-    }
+  }
 }
 .navBar-item.active {
-    border-bottom: 1px solid #7dc356;
-    color: #7dc356;
+  border-bottom: 1px solid #7dc356;
+  color: #7dc356;
 }
-.card__wrapper, .navBar-item:not(:last-of-type) {
-    margin-left: 10px;
+.card__wrapper,
+.navBar-item:not(:last-of-type) {
+  margin-left: 10px;
 }
-.card__wrapper{
-    width: 100%;
+.card__wrapper {
+  width: 100%;
 }
-h6, .h6 {
-    font-size: 0.7rem;
+h6,
+.h6 {
+  font-size: 0.7rem;
 }
