@@ -1259,5 +1259,9 @@
   "cfCategory": "التصنيف الرئيسي",
   "cfSubcategory": "التصنيف الفرعي",
   "cfBrand": "العلامه التجاريه",
-  "cibPortfolioSecuritization": "حوالة حق CIB"
+  "cibPortfolioSecuritization": "حوالة حق CIB",
+  "otpCustomers": "عملاء مخازن",
+  "duplicatePhoneNumberMessage": "رقم التليفون موجود بالفعل لعميل اخر",
+  "onlyEnglishNumbers": "ارقام انجليزيه فقط",
+  "customerGuaranteed": "عملاء ضمنهم العميل"
 }

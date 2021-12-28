@@ -91,7 +91,7 @@ module.exports = {
     'import/resolver': {
       typescript: {},
       alias: {
-        map: [['@Shared', './src/Shared/*']],
+        map: [['Shared', './src/Shared/*']],
       },
     },
   },

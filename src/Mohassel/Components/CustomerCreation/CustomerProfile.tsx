@@ -26,6 +26,7 @@ import {
   Score,
   Customer,
   CFGuarantorDetailsProps,
+  OtpCustomersProps,
 } from '../../../Shared/Models/Customer'
 import CFLimitModal from '../../../Shared/Components/CFLimitModal/CFLimitModal'
 import { ConsumerFinanceContractData } from '../../../Shared/Models/consumerContract'
@@ -73,6 +74,10 @@ const tabs: Array<Tab> = [
     permission: 'guaranteed',
     permissionKey: 'report',
   },
+  {
+    header: local.otpCustomers,
+    stringKey: 'otpCustomers',
+  },
 ]
 
 // const getCustomerCategorizationRating = async (
@@ -91,7 +96,7 @@ export const CustomerProfile = () => {
   const [loading, setLoading] = useState(false)
   const [customerDetails, setCustomerDetails] = useState<Customer>()
   const [iScoreDetails, setIScoreDetails] = useState<Score[]>()
-  const [activeTab, setActiveTab] = useState('workInfo')
+  const [activeTab, setActiveTab] = useState<keyof TabDataProps>('workInfo')
   const [print, setPrint] = useState('')
   // const [ratings, setRatings] = useState<Array<CustomerScore>>([])
   const [showHalanLinkageModal, setShowHalanLinkageModal] = useState<boolean>(
@@ -533,6 +538,17 @@ export const CustomerProfile = () => {
         showFieldCondition: true,
       },
     ],
+    otpCustomers: [
+      {
+        fieldTitle: 'otpCustomers',
+        fieldData: {
+          customerId: location.state.id,
+          otpCustomers: customerDetails?.otpCustomer ?? [],
+          reload: () => getCustomerDetails(),
+        } as OtpCustomersProps,
+        showFieldCondition: true,
+      },
+    ],
   }
   const getProfileActions = () => {
     const isBlocked = customerDetails?.blocked?.isBlocked
@@ -666,6 +682,8 @@ export const CustomerProfile = () => {
                 </span>
               )}
             </div>
+          </div>
+          <div className="d-flex">
             <ProfileActions actions={getProfileActions()} />
           </div>
           {mainInfo && <InfoBox info={mainInfo} />}
