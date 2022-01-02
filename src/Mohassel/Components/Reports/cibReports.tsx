@@ -2,6 +2,9 @@ import React, { useState, useEffect, FC } from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
+import HeaderWithCards, {
+  Tab,
+} from 'Shared/Components/HeaderWithCards/headerWithCards'
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'
 import errorMessages from '../../../Shared/Assets/errorMessages.json'
@@ -9,16 +12,17 @@ import {
   getCibPortoReports,
   cibPaymentReport,
   getTpayFiles,
+  getCibPortoFile,
 } from '../../Services/APIs/Reports/cibPaymentReport'
 import {
   downloadFile,
   getIscoreReportStatus,
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
-import Can from '../../config/Can'
 import { cibTpayURL } from '../../Services/APIs/Reports/cibURL'
 import { LtsIcon } from '../../../Shared/Components'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
+import ability from '../../config/ability'
 
 interface TPAYFile {
   created: {
@@ -33,10 +37,31 @@ interface TPAYFile {
   url?: string
 }
 
+const tabs = [
+  {
+    header: `${local.cibReports}`,
+    stringKey: 'cibReports',
+    permission: 'cibScreen',
+    permissionKey: 'report',
+  },
+  {
+    header: `${local.cibPortfolioSecuritization}`,
+    stringKey: 'cibPortofolioSecuritizationReports',
+    permission: 'cibPortfolioSecuritization',
+    permissionKey: 'application',
+  },
+]
+
 const CIBReports: FC = () => {
   const [data, setData] = useState<TPAYFile[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [showModal, setShowModal] = useState<boolean>(false)
+  const [activeTab, setActiveTab] = useState<string>('cibReports')
+  const [headerTabs] = useState<Tab[]>(() =>
+    tabs
+      .filter((t) => ability.can(t.permission, t.permissionKey))
+      .map((t) => ({ header: t.header, stringKey: t.stringKey }))
+  )
 
   const getCibReports = async () => {
     setLoading(true)
@@ -52,35 +77,65 @@ const CIBReports: FC = () => {
 
   useEffect(() => {
     getCibReports()
-    getCibPortoReports({
-      branches: ['5efa45c1b7a37f7666b8d35a'],
-      endDate: 1639087199999,
-      startDate: 1634508000000,
-    })
-  }, [])
+  }, [activeTab])
 
   const handleSubmit = async (values) => {
-    const date = new Date(values.date).setHours(23, 59, 59, 999).valueOf()
     setLoading(true)
     setShowModal(false)
-    const res = await cibPaymentReport({ endDate: date })
-    if (res.status === 'success') {
+    if (activeTab === 'cibPortofolioSecuritizationReports') {
+      const startDate = new Date(values.fromDate)
+        .setHours(23, 59, 59, 999)
+        .valueOf()
+      const endDate = new Date(values.toDate)
+        .setHours(23, 59, 59, 999)
+        .valueOf()
+      const res = await getCibPortoReports({
+        startDate,
+        endDate,
+        branches: [],
+      })
       setLoading(false)
-      if (res.body.status && res.body.status === 'processing') {
-        Swal.fire('', local.fileQueuedSuccess, 'success').then(() =>
-          getCibReports()
-        )
+      if (res.status === 'success') {
+        if (res.body.status && res.body.status === 'queued') {
+          Swal.fire('', local.fileQueuedSuccess, 'success').then(async () => {
+            const fileRes = await getCibPortoFile(res.body.fileId)
+            if (fileRes.body.status && fileRes.body.status === 'processing') {
+              // handle get files
+            } else {
+              const link = document.createElement('a')
+              link.href = res.body.url
+              document.body.appendChild(link)
+              link.click()
+              document.body.removeChild(link)
+              link.remove()
+            }
+          })
+        }
       } else {
-        const link = document.createElement('a')
-        link.href = res.body.url
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        link.remove()
+        setLoading(false)
+        Swal.fire('', local.fileQueuedError, 'error')
       }
     } else {
-      setLoading(false)
-      Swal.fire('', local.fileQueuedError, 'error')
+      const date = new Date(values.date).setHours(23, 59, 59, 999).valueOf()
+      const res = await cibPaymentReport({ endDate: date })
+      if (res.status === 'success') {
+        setLoading(false)
+        if (res.body.status && res.body.status === 'processing') {
+          Swal.fire('', local.fileQueuedSuccess, 'success').then(() =>
+            getCibReports()
+          )
+        } else {
+          const link = document.createElement('a')
+          link.href = res.body.url
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+          link.remove()
+        }
+      } else {
+        setLoading(false)
+        Swal.fire('', local.fileQueuedError, 'error')
+      }
     }
   }
 
@@ -98,22 +153,31 @@ const CIBReports: FC = () => {
 
   return (
     <>
+      <HeaderWithCards
+        array={headerTabs}
+        active={headerTabs.findIndex((t) => t.stringKey === activeTab)}
+        selectTab={(tab: string) => {
+          setActiveTab(tab)
+        }}
+      />
       <Card style={{ margin: '20px 50px' }} className="print-none">
         <Loader type="fullscreen" open={loading} />
         <Card.Body style={{ padding: 15 }}>
           <div className="custom-card-header">
             <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-              {local.cibReports}
+              {headerTabs.find((t) => t.stringKey === activeTab)?.header ||
+                local.cibReports}
             </Card.Title>
-            <Can I="cibScreen" a="report">
+            <div>
               <Button
+                className="mr-2"
                 type="button"
                 variant="primary"
                 onClick={() => setShowModal(true)}
               >
                 {local.newRequest}
               </Button>
-            </Can>
+            </div>
           </div>
           {data.length > 0 ? (
             data.map((pdf, index) => {
@@ -179,11 +243,15 @@ const CIBReports: FC = () => {
           pdf={{
             key: 'cibPaymentReport',
             local: 'سداد اقساط CIB',
-            inputs: ['date'],
-            permission: 'cibScreen',
+            inputs: [activeTab === 'cibReports' ? 'date' : 'dateFromTo'],
+            permission:
+              tabs.find((t) => t.stringKey === activeTab)?.permission ||
+              'cibScreen',
           }}
           show={showModal}
-          hideModal={() => setShowModal(false)}
+          hideModal={() => {
+            setShowModal(false)
+          }}
           submit={(values) => handleSubmit(values)}
         />
       )}
