@@ -42,8 +42,8 @@ export const CompanyProfile = () => {
   const [activeTab, changeActiveTab] = useState<keyof TabDataProps>('documents')
   const [company, setCompany] = useState<Company>()
   const [
-    customerCFContract,
-    setCustomerCFContract,
+    companyCFContract,
+    setCompanyCFContract,
   ] = useState<ConsumerFinanceContractData>()
   const [print, setPrint] = useState('')
   const [showCFLimitModal, setShowCFLimitModal] = useState(false)
@@ -218,17 +218,17 @@ export const CompanyProfile = () => {
     setCFModalAction(type)
     setShowCFLimitModal(true)
   }
-  function setCustomerContractData(customer: Customer) {
-    setCustomerCFContract({
-      customerCreationDate: customer.created?.at || 0,
-      customerName: customer.customerName || '',
-      nationalId: customer.nationalId || '',
-      customerHomeAddress: customer.customerHomeAddress || '',
-      mobilePhoneNumber: customer.mobilePhoneNumber || '',
-      initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
-      branchName: customer.branchName || '',
-      commercialRegisterNumber: customer.commercialRegisterNumber || '',
-      businessAddress: customer.businessAddress || '',
+  function setCompanyContractData() {
+    setCompanyCFContract({
+      customerCreationDate: company?.created?.at || 0,
+      customerName: company?.customerName || '',
+      nationalId: company?.nationalId || '',
+      customerHomeAddress: company?.customerHomeAddress || '',
+      mobilePhoneNumber: company?.mobilePhoneNumber || '',
+      initialConsumerFinanceLimit: company?.initialConsumerFinanceLimit || 0,
+      branchName: company?.branchName || '',
+      commercialRegisterNumber: company?.commercialRegisterNumber || '',
+      businessAddress: company?.businessAddress || '',
       customerGuarantors: customerGuarantors || [],
       otpCustomers: company?.otpCustomer || [],
       entitledToSignCustomers: entitledToSignCustomers || [],
@@ -329,7 +329,7 @@ export const CompanyProfile = () => {
           company?.consumerFinanceLimitStatus ?? ''
         ),
         onActionClick: () => {
-          setCustomerContractData(company as Customer)
+          setCompanyContractData()
           setPrint('all')
         },
       },
@@ -457,7 +457,7 @@ export const CompanyProfile = () => {
       </Container>
       {print === 'all' && (
         <MicroCFContract
-          contractData={customerCFContract as ConsumerFinanceContractData}
+          contractData={companyCFContract as ConsumerFinanceContractData}
           sme
         />
       )}
