@@ -15,10 +15,15 @@ interface Props {
   array: Array<Tab>
   active: number | string
   selectTab: (index) => void
+  isVertical?: boolean
 }
 export const CardNavBar = (props: Props) => {
   return (
-    <div className="cards-container">
+    <div
+      className={`cards-container ${
+        props.isVertical ? 'd-flex flex-column' : ''
+      }`}
+    >
       {props.array.map((item, index) => {
         if (
           item.permission &&
@@ -31,11 +36,13 @@ export const CardNavBar = (props: Props) => {
             <Can I={item.permission} a={item.permissionKey} key={index}>
               <div
                 key={index}
-                className={
-                  item.stringKey === props.active
-                    ? 'navBar-item active'
-                    : 'navBar-item'
-                }
+                className={`navBar-item ${
+                  item.stringKey === props.active ? 'active' : ''
+                } ${
+                  props.isVertical
+                    ? 'justify-content-start'
+                    : 'justify-content-center'
+                }`}
                 onClick={() => props.selectTab(item.stringKey)}
               >
                 <div style={{ margin: 'auto 0px' }}>
