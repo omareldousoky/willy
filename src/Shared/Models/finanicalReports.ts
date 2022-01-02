@@ -3,3 +3,6 @@ export interface PostponesReportRequest {
   endDate: string | number
   branches: string[]
 }
+export interface CustomerGuaranteedReportRequest {
+  guarantorId: string
+}
