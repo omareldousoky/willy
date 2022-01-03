@@ -11,4 +11,5 @@ export interface ReviewedLoansRequest {
   startDate: string | number
   endDate: string | number
   branches: string[]
+  loanType: string
 }
