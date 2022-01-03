@@ -27,12 +27,14 @@ import {
   installmentsDuePerOfficerCustomerCard,
   unpaidInstallmentsByOfficer,
   fetchDueInstallmentsReport,
+  postBlockedCustomers,
+  getBlockedCustomers,
 } from '../../../Shared/Services/APIs/Reports/Operations'
 import { PDFList } from '../../../Shared/Components/PdfList'
 import { PDF } from '../../../Shared/Components/PdfList/types'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
 import { ApiResponse } from '../../../Shared/Models/common'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import { getErrorMessage, downloadFile } from '../../../Shared/Services/utils'
 import LeakedCustomersPDF from '../../../Shared/Components/pdfTemplates/Operations/LeakedCustomers/leakedCustomers'
 import OfficerBranchPercentPayment from '../../../Shared/Components/pdfTemplates/Operations/officersPercentPayment/officersBranchPercentPayment'
 import UnpaidInst from '../../../Shared/Components/pdfTemplates/Operations/unpaidInst/unpaidInst'
@@ -71,6 +73,7 @@ enum Reports {
   MonthComparison = 'monthComparison',
   ActiveWalletIndividual = 'activeWalletIndividual',
   ActiveWalletGroup = 'activeWalletGroup',
+  BlockedCustomers = 'blockedCustomers',
 }
 
 class OperationsReports extends Component<{}, OperationsReportsState> {
@@ -153,6 +156,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           inputs: ['date', 'branches', 'representatives'],
           permission: 'groupActiveLoans',
         },
+        {
+          key: Reports.BlockedCustomers,
+          local: 'عملاء محظورين',
+          inputs: ['branches'],
+          permission: 'getBlockedCustomers',
+          hidePdf: true,
+        },
       ],
       selectedPdf: { permission: '' },
       data: undefined,
@@ -233,6 +243,83 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         getErrorMessage((res.error as Record<string, string>).error),
         'error'
       )
+    }
+  }
+
+  async getExcelPoll(func, id, pollStart) {
+    const pollInstant = new Date().valueOf()
+    if (pollInstant - pollStart < 300000) {
+      const file = await func(id)
+      if (file.status === 'success') {
+        if (['created', 'failed'].includes(file.body.status)) {
+          if (file.body.status === 'created')
+            downloadFile(file.body.presignedUrl)
+          if (file.body.status === 'failed') Swal.fire('error', local.failed)
+          this.setState({
+            showModal: false,
+            loading: false,
+          })
+        } else {
+          setTimeout(() => this.getExcelPoll(func, id, pollStart), 5000)
+        }
+      } else {
+        this.setState({ loading: false })
+        console.log(file)
+      }
+    } else {
+      this.setState({ loading: false })
+      Swal.fire('error', 'TimeOut')
+    }
+  }
+
+  async getExcelFile(func, pollFunc, values) {
+    const { branches, fromDate, toDate, loanType } = values
+    this.setState({
+      loading: true,
+      showModal: false,
+      fromDate,
+      toDate,
+    })
+    const obj = {
+      startdate: fromDate,
+      enddate: toDate,
+      branches: !branches
+        ? undefined
+        : branches.some((branch) => branch._id === '')
+        ? []
+        : branches.map((branch) => branch._id),
+      loanType,
+    }
+    const res = await func(obj)
+    if (res.status === 'success') {
+      if (!res.body) {
+        this.setState({ loading: false })
+        Swal.fire('error', local.noResults)
+      } else {
+        this.setState({ loading: true })
+        const pollStart = new Date().valueOf()
+        this.getExcelPoll(pollFunc, res.body.fileId, pollStart)
+      }
+    } else {
+      this.setState({ loading: false })
+      console.log(res)
+    }
+  }
+
+  getExcel(values) {
+    const from = new Date(values.fromDate).setHours(0, 0, 0, 0).valueOf()
+    const to = new Date(values.toDate).setHours(23, 59, 59, 999).valueOf()
+    values.fromDate = from
+    values.toDate = to
+    switch (this.state.selectedPdf.key) {
+      case Reports.BlockedCustomers:
+        return this.getExcelFile(
+          postBlockedCustomers,
+          getBlockedCustomers,
+          values
+        )
+      default:
+        return null
     }
   }
 
@@ -411,6 +498,10 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             show={this.state.showModal}
             hideModal={() => this.setState({ showModal: false })}
             submit={(values) => this.handleSubmit(values)}
+            getExcel={(values) => this.getExcel(values)}
+            disableExcel={
+              !['blockedCustomers'].includes(this.state.selectedPdf.key || '')
+            }
           />
         )}
         {this.state.print === Reports.InstallmentsDuePerOfficerCustomerCard &&
