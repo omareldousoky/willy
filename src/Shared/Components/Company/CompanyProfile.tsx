@@ -10,7 +10,7 @@ import { cfLimitStatusLocale, getErrorMessage } from '../../Services/utils'
 import {
   CustomerScore,
   getCustomerCategorization,
-} from 'Shared/Services/APIs/customer/customerCategorization'
+} from '../../Services/APIs/customer/customerCategorization'
 
 import { TabDataProps } from '../Profile/types'
 import { Tab } from '../HeaderWithCards/cardNavbar'

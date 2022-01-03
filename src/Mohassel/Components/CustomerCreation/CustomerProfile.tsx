@@ -3,6 +3,10 @@ import { useHistory, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Container from 'react-bootstrap/Container'
 import {
+  CustomerScore,
+  getCustomerCategorization,
+} from 'Shared/Services/APIs/customer/customerCategorization'
+import {
   getErrorMessage,
   iscoreDate,
   cfLimitStatusLocale,
@@ -37,7 +41,7 @@ import {
   AuthorizationToFillInfo,
   AcknowledgmentWasSignedInFront,
 } from '../../../Shared/Components/pdfTemplates/ConsumerContract'
-import { CustomerScore, getCustomerCategorization } from 'Shared/Services/APIs/customer/customerCategorization'
+
 interface LocationState {
   id: string
 }
