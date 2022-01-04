@@ -365,16 +365,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     this.handleFetchReport(res, Reports.ActiveWalletIndividual)
   }
 
-  // async fetchActiveWalletGroup(values) {
-  //   const { date, branches, loanOfficerIds } = values
-  //   const res = await fetchActiveWalletGroupReport({
-  //     date,
-  //     branches,
-  //     loanOfficerIds,
-  //   } as ActiveWalletRequest)
-  //   this.handleFetchReport(res, Reports.ActiveWalletGroup)
-  // }
-
   render() {
     return (
       <>
@@ -494,13 +484,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
               isCF
             />
           )}
-        {/* {this.state.print === Reports.ActiveWalletGroup && this.state.data && (
-          <ActiveWalletGroupPdf
-            date={this.state.date}
-            data={this.state.data}
-            isCF
-          />
-        )} */}
       </>
     )
   }
