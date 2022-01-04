@@ -138,7 +138,7 @@ export const customerCreationValidationStepTwo = Yup.object().shape({
     .required(local.required),
   businessAddress: Yup.string()
     .trim()
-    .max(500, "Can't be more than 500 characters")
+    .max(500, local.maxLength500)
     .required(local.required),
   governorate: Yup.string().trim(),
   district: Yup.string().trim(),
