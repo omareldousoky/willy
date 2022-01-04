@@ -3,15 +3,15 @@ import * as local from '../../../Shared/Assets/ar.json'
 
 export const reschedulingValidation = Yup.object().shape({
   noOfInstallments: Yup.number()
-    .integer('Must be int')
-    .min(1, 'Must be 1 or more')
+    .integer(local.onlyNumbers)
+    .min(1, local.mustBeOneOrMore)
     .required(local.required),
   withInterest: Yup.boolean().required(local.required),
   postponementInterest: Yup.number().when('withInterest', {
     is: (val) => val === true,
     then: Yup.number()
-      .moreThan(0, "Can't be 0 or less")
-      .max(100, "Can't be more than 100")
+      .moreThan(0, local.mustBeOneOrMore)
+      .max(100, local.maxLength100)
       .required(local.required),
     otherwise: Yup.number().notRequired(),
   }),
@@ -28,8 +28,8 @@ export const reschedulingValidation = Yup.object().shape({
 })
 export const traditionalReschedulingValidation = Yup.object().shape({
   noOfInstallments: Yup.number()
-    .integer('Must be int')
-    .min(1, 'Must be 1 or more')
+    .integer(local.onlyNumbers)
+    .min(1, local.mustBeOneOrMore)
     .required(local.required),
 })
 export const freeReschedulingValidation = Yup.object().shape({
