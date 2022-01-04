@@ -7,6 +7,10 @@ import Container from 'react-bootstrap/Container'
 import local from '../../Assets/ar.json'
 import ability from '../../../Mohassel/config/ability'
 import { cfLimitStatusLocale, getErrorMessage } from '../../Services/utils'
+import {
+  CustomerScore,
+  getCustomerCategorization,
+} from '../../Services/APIs/customer/customerCategorization'
 
 import { TabDataProps } from '../Profile/types'
 import { Tab } from '../HeaderWithCards/cardNavbar'
@@ -37,7 +41,19 @@ import { MicroCFContract } from '../../../Mohassel/Components/Reports/microCFCon
 export interface CompanyProfileProps {
   data: any
 }
+const getCustomerCategorizationRating = async (
+  id: string,
+  setRating: (rating: Array<CustomerScore>) => void
+) => {
+  const res = await getCustomerCategorization({ customerId: id })
+  if (res.status === 'success' && res.body?.customerScores !== undefined) {
+    setRating(res.body?.customerScores)
+  } else {
+    setRating([])
+  }
+}
 export const CompanyProfile = () => {
+  const [ratings, setRatings] = useState<Array<CustomerScore>>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [activeTab, changeActiveTab] = useState<keyof TabDataProps>('documents')
   const [company, setCompany] = useState<Company>()
@@ -161,6 +177,7 @@ export const CompanyProfile = () => {
   }
   useEffect(() => {
     getCompanyDetails()
+    getCustomerCategorizationRating(location.state.id, setRatings)
   }, [])
 
   const tabsData: TabDataProps = {
@@ -169,6 +186,15 @@ export const CompanyProfile = () => {
         fieldTitle: 'company id',
         fieldData: location.state.id,
         showFieldCondition: true,
+      },
+    ],
+    customerScore: [
+      {
+        fieldTitle: 'ratings',
+        fieldData: ratings,
+        showFieldCondition: Boolean(
+          ability.can('customerCategorization', 'customer')
+        ),
       },
     ],
     cfGuarantors: [
@@ -252,6 +278,10 @@ export const CompanyProfile = () => {
     {
       header: local.documents,
       stringKey: 'documents',
+    },
+    {
+      header: local.customerCategorization,
+      stringKey: 'customerScore',
     },
     {
       header: local.guarantorInfo,
