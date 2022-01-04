@@ -37,18 +37,28 @@ interface TPAYFile {
   url?: string
 }
 
-const tabs = [
+interface Tabs {
+  header: string
+  stringKey: string
+  permission: string
+  permissionKey: string
+  inputs: string[]
+}
+
+const tabs: Tabs[] = [
   {
     header: `${local.cibReports}`,
     stringKey: 'cibReports',
     permission: 'cibScreen',
     permissionKey: 'report',
+    inputs: ['date'],
   },
   {
     header: `${local.cibPortfolioSecuritization}`,
-    stringKey: 'cibPortofolioSecuritizationReports',
+    stringKey: 'cibPortofolioReports',
     permission: 'cibPortfolioSecuritization',
     permissionKey: 'application',
+    inputs: ['dateFromTo', 'branches'],
   },
 ]
 
@@ -60,7 +70,10 @@ const CIBReports: FC = () => {
   const [headerTabs] = useState<Tab[]>(() =>
     tabs
       .filter((t) => ability.can(t.permission, t.permissionKey))
-      .map((t) => ({ header: t.header, stringKey: t.stringKey }))
+      .map((t) => ({
+        header: t.header,
+        stringKey: t.stringKey,
+      }))
   )
 
   const getCibReports = async () => {
@@ -82,7 +95,7 @@ const CIBReports: FC = () => {
   const handleSubmit = async (values) => {
     setLoading(true)
     setShowModal(false)
-    if (activeTab === 'cibPortofolioSecuritizationReports') {
+    if (activeTab === 'cibPortofolioReports') {
       const startDate = new Date(values.fromDate)
         .setHours(23, 59, 59, 999)
         .valueOf()
@@ -243,7 +256,7 @@ const CIBReports: FC = () => {
           pdf={{
             key: 'cibPaymentReport',
             local: 'سداد اقساط CIB',
-            inputs: [activeTab === 'cibReports' ? 'date' : 'dateFromTo'],
+            inputs: tabs.find((f) => activeTab === f.stringKey)?.inputs,
             permission:
               tabs.find((t) => t.stringKey === activeTab)?.permission ||
               'cibScreen',
