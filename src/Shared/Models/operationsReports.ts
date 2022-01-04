@@ -27,6 +27,11 @@ export interface CustomersArrearsSingleResponse {
   branchCode?: number
   beneficiaryType?: 'group' | 'individual'
 }
+
+export interface BlockedCustomersRequest {
+  branches: string[]
+}
+
 export interface CustomersArrearsResponse {
   response?: CustomersArrearsSingleResponse[]
   raseedTotalAmount?: number

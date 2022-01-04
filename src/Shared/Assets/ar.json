@@ -1263,5 +1263,8 @@
   "otpCustomers": "عملاء مخازن",
   "duplicatePhoneNumberMessage": "رقم التليفون موجود بالفعل لعميل اخر",
   "onlyEnglishNumbers": "ارقام انجليزيه فقط",
-  "customerGuaranteed": "عملاء ضمنهم العميل"
+  "customerGuaranteed": "عملاء ضمنهم العميل",
+  "lowRisk":"قليل",
+  "medRisk":"متوسط",
+  "highRisk":"خطر"
 }

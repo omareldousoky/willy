@@ -64,6 +64,7 @@ interface Props {
   submit: (values) => void
   getExcel?: (values) => void
   submitButtonText?: string
+  disableExcel?: boolean
 }
 
 const ReportsModal = (props: Props) => {
@@ -890,7 +891,9 @@ const ReportsModal = (props: Props) => {
                   ].includes(props.pdf.key) &&
                   props.getExcel && (
                     <Button
-                      disabled={!!formikProps.errors.quarterYear}
+                      disabled={
+                        !!formikProps.errors.quarterYear || props.disableExcel
+                      }
                       variant="primary"
                       onClick={async () => {
                         // Manual revalidate formik: https://github.com/formium/formik/issues/2734
