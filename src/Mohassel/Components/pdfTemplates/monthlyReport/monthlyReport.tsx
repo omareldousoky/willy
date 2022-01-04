@@ -2,6 +2,40 @@ import React from 'react'
 import { MonthReport } from '../../../../Shared/Services/interfaces'
 import './monthlyReport.scss'
 
+const Instructions: React.FC = () => (
+  <div className="inputs-desc">
+    <h5>تعليمات الإدخال:</h5>
+    <h5>
+      عند الوقوف على أي خانة من خانات إدخال البيانات - سوف تظهر التعليمات الخاصة
+      بملئها في هذا المستطيل
+    </h5>
+  </div>
+)
+const PageHeader: React.FC<{ fromDate: string; toDate: string }> = ({
+  fromDate,
+  toDate,
+}) => {
+  return (
+    <>
+      <h4>
+        تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر للجمعية أو
+        المؤسسة الأهلية
+      </h4>
+      <table>
+        <tbody>
+          <tr>
+            <td className="td-head"> الفترة من :</td>
+            <td className="td-body">{fromDate}</td>
+            <td />
+            <td className="td-head pr-3">إلى:</td>
+            <td className="td-body">{toDate}</td>
+          </tr>
+        </tbody>
+      </table>
+      <Instructions />
+    </>
+  )
+}
 const MonthlyReport = (props: MonthReport) => {
   return (
     <div className="monthly-report" lang="ar" dir="rtl">
@@ -61,13 +95,7 @@ const MonthlyReport = (props: MonthReport) => {
               تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر
               للجمعية أو المؤسسة الأهلية
             </h4>
-            <div className="inputs-desc">
-              <h5>تعليمات الإدخال:</h5>
-              <h5>
-                عند الوقوف على أي خانة من خانات إدخال البيانات - سوف تظهر
-                التعليمات الخاصة بملئها في هذا المستطيل
-              </h5>
-            </div>
+            <Instructions />
             <h5 className="sub-title">
               بيانات الجمعية / المؤسسة الأهلية و بيانات معد التقرير
             </h5>
@@ -103,9 +131,7 @@ const MonthlyReport = (props: MonthReport) => {
                   <td className="td-head"> الفترة :</td>
                   <td className="label"> من</td>
                   <td className="td-body">{props.fromDate}</td>
-                  <td className="label" style={{ paddingRight: 10 }}>
-                    الي
-                  </td>
+                  <td className="label pr-3">الي</td>
                   <td className="td-body">{props.toDate}</td>
                 </tr>
                 <tr>
@@ -125,30 +151,7 @@ const MonthlyReport = (props: MonthReport) => {
       <div className="page-three-container-break">
         <div className="page-three-container">
           <div className="inner-container">
-            <h4>
-              تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر
-              للجمعية أو المؤسسة الأهلية لمؤسسة الأهلية
-            </h4>
-            <table>
-              <tbody>
-                <tr>
-                  <td className="td-head"> الفترة من :</td>
-                  <td className="td-body">{props.fromDate}</td>
-                  <td />
-                  <td className="td-head" style={{ paddingRight: 10 }}>
-                    إلى:
-                  </td>
-                  <td className="td-body">{props.toDate}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div className="inputs-desc">
-              <h5>تعليمات الإدخال:</h5>
-              <h5>
-                عند الوقوف على أي خانة من خانات إدخال البيانات - سوف تظهر
-                التعليمات الخاصة بملئها في هذا المستطيل
-              </h5>
-            </div>
+            <PageHeader fromDate={props.fromDate} toDate={props.toDate} />
             <table className="details">
               <thead>
                 <tr>
@@ -164,91 +167,91 @@ const MonthlyReport = (props: MonthReport) => {
               </thead>
               <tbody>
                 <tr>
-                  <td style={{ textAlign: 'center' }}>1.1</td>
+                  <td className="text-center">1.1</td>
                   <td>إجمالى عدد عملاء تمويل أفراد</td>
                   <td>{props.totalIndividualCount.onGoingCutomer}</td>
                   <td>{props.totalIndividualCount.newCustomer}</td>
                   <td>{props.totalIndividualCount.total}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center' }}>1.2</td>
+                  <td className="text-center">1.2</td>
                   <td>منهم عدد العملاء – ذكور</td>
                   <td>{props.maleIndividualCount.onGoingCutomer}</td>
                   <td>{props.maleIndividualCount.newCustomer}</td>
                   <td>{props.maleIndividualCount.total}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center' }}>1.3</td>
+                  <td className="text-center">1.3</td>
                   <td>منهم عدد العملاء - إناث</td>
                   <td>{props.femaleIndividualCount.onGoingCutomer}</td>
                   <td>{props.femaleIndividualCount.newCustomer}</td>
                   <td>{props.femaleIndividualCount.total}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center' }}>1.4</td>
+                  <td className="text-center">1.4</td>
                   <td>إجمالى قيمة أرصدة تمويل أفراد</td>
                   <td>{props.totalIndividualCredit.onGoingCutomer}</td>
                   <td>{props.totalIndividualCredit.newCustomer}</td>
                   <td>{props.totalIndividualCredit.total}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center' }}>1.5</td>
+                  <td className="text-center">1.5</td>
                   <td>منها أرصدة تمويل لعملاء – ذكور</td>
                   <td>{props.maleIndividualCredit.onGoingCutomer}</td>
                   <td>{props.maleIndividualCredit.newCustomer}</td>
                   <td>{props.maleIndividualCredit.total}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center' }}>1.6</td>
+                  <td className="text-center">1.6</td>
                   <td>منها أرصدة تمويل لعملاء - إناث</td>
                   <td>{props.femaleIndividualCredit.onGoingCutomer}</td>
                   <td>{props.femaleIndividualCredit.newCustomer}</td>
                   <td>{props.femaleIndividualCredit.total}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center' }}>1.7</td>
+                  <td className="text-center">1.7</td>
                   <td>إجمالى عدد عقود تمويل جماعى</td>
                   <td>{props.totalGroupLoansCount.onGoingCutomer}</td>
                   <td>{props.totalGroupLoansCount.newCustomer}</td>
                   <td>{props.totalGroupLoansCount.total}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center' }}>1.8</td>
+                  <td className="text-center">1.8</td>
                   <td>إجمالى عدد عملاء عقود تمويل جماعى</td>
                   <td>{props.totalGroupCount.onGoingCutomer}</td>
                   <td>{props.totalGroupCount.newCustomer}</td>
                   <td>{props.totalGroupCount.total}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center' }}>1.9</td>
+                  <td className="text-center">1.9</td>
                   <td>منهم عدد العملاء – ذكور</td>
                   <td>{props.maleGroupCount.onGoingCutomer}</td>
                   <td>{props.maleGroupCount.newCustomer}</td>
                   <td>{props.maleGroupCount.total}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center' }}>1.10</td>
+                  <td className="text-center">1.10</td>
                   <td>منهم عدد العملاء - إناث</td>
                   <td>{props.femaleGroupCount.onGoingCutomer}</td>
                   <td>{props.femaleGroupCount.newCustomer}</td>
                   <td>{props.femaleGroupCount.total}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center' }}>1.11</td>
+                  <td className="text-center">1.11</td>
                   <td>إجمالى قيمة أرصدة تمويل جماعى</td>
                   <td>{props.totalGroupCredit.onGoingCutomer}</td>
                   <td>{props.totalGroupCredit.newCustomer}</td>
                   <td>{props.totalGroupCredit.total}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center' }}>1.12</td>
+                  <td className="text-center">1.12</td>
                   <td>منها أرصدة تمويل لعملاء – ذكور</td>
                   <td>{props.maleGroupCredit.onGoingCutomer}</td>
                   <td>{props.maleGroupCredit.newCustomer}</td>
                   <td>{props.maleGroupCredit.total}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center' }}>1.13</td>
+                  <td className="text-center">1.13</td>
                   <td>منها أرصدة تمويل لعملاء - إناث</td>
                   <td>{props.femaleGroupCredit.onGoingCutomer}</td>
                   <td>{props.femaleGroupCredit.newCustomer}</td>
@@ -258,8 +261,8 @@ const MonthlyReport = (props: MonthReport) => {
             </table>
           </div>
           <div className="inner-container">
-            <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>
-              بناء على البيانات التي تم إدخالها في الجدول أعلاه
+            <p className="font-weight-bold">
+              <u>بناء على البيانات التي تم إدخالها في الجدول أعلاه</u>
             </p>
             <div className="totals">
               <div className="lines">
@@ -291,30 +294,7 @@ const MonthlyReport = (props: MonthReport) => {
       <div className="page-three-container-break">
         <div className="page-three-container">
           <div className="inner-container">
-            <h4>
-              تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر
-              للجمعية أو المؤسسة الأهلية
-            </h4>
-            <table>
-              <tbody>
-                <tr>
-                  <td className="td-head"> الفترة من :</td>
-                  <td className="td-body">{props.fromDate}</td>
-                  <td />
-                  <td className="td-head" style={{ paddingRight: 10 }}>
-                    إلى:
-                  </td>
-                  <td className="td-body">{props.toDate}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div className="inputs-desc">
-              <h5>تعليمات الإدخال:</h5>
-              <h5>
-                عند الوقوف على أي خانة من خانات إدخال البيانات - سوف تظهر
-                التعليمات الخاصة بملئها في هذا المستطيل
-              </h5>
-            </div>
+            <PageHeader fromDate={props.fromDate} toDate={props.toDate} />
             <table className="details">
               <thead>
                 <tr>
@@ -332,7 +312,7 @@ const MonthlyReport = (props: MonthReport) => {
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ textAlign: 'center' }}>
+                <tr className="text-center">
                   <td> قرض</td>
                   <td>{props.commercialCredit}</td>
                   <td>{props.productionCredit}</td>
@@ -343,8 +323,8 @@ const MonthlyReport = (props: MonthReport) => {
             </table>
           </div>
           <div className="inner-container">
-            <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>
-              بناء على البيانات التي تم إدخالها في الجدول أعلاه
+            <p className="font-weight-bold">
+              <u> بناء على البيانات التي تم إدخالها في الجدول أعلاه</u>
             </p>
             <div className="totals">
               <div className="lines">
@@ -391,14 +371,14 @@ const MonthlyReport = (props: MonthReport) => {
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ textAlign: 'center' }}>
+                <tr className="text-center">
                   <td> قرض</td>
                   <td>{props.commercialCount}</td>
                   <td>{props.productionCount}</td>
                   <td>{props.serviceCount}</td>
                   <td>{props.agriculturalCount}</td>
                 </tr>
-                <tr style={{ textAlign: 'center' }}>
+                <tr className="text-center">
                   <td> إجمالى</td>
                   <td>{props.commercialCount}</td>
                   <td>{props.productionCount}</td>
@@ -409,8 +389,8 @@ const MonthlyReport = (props: MonthReport) => {
             </table>
           </div>
           <div className="inner-container">
-            <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>
-              بناء على البيانات التي تم إدخالها في الجدول أعلاه
+            <p className="font-weight-bold">
+              <u> بناء على البيانات التي تم إدخالها في الجدول أعلاه</u>
             </p>
             <div className="totals">
               <div className="lines">
@@ -451,30 +431,7 @@ const MonthlyReport = (props: MonthReport) => {
       <div className="page-three-container-break">
         <div className="page-three-container">
           <div className="inner-container">
-            <h4>
-              تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر
-              للجمعية أو المؤسسة الأهلية
-            </h4>
-            <table>
-              <tbody>
-                <tr>
-                  <td className="td-head"> الفترة من :</td>
-                  <td className="td-body"> {props.fromDate}</td>
-                  <td />
-                  <td className="td-head" style={{ paddingRight: 10 }}>
-                    إلى:
-                  </td>
-                  <td className="td-body">{props.toDate}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div className="inputs-desc">
-              <h5>تعليمات الإدخال:</h5>
-              <h5>
-                عند الوقوف على أي خانة من خانات إدخال البيانات - سوف تظهر
-                التعليمات الخاصة بملئها في هذا المستطيل
-              </h5>
-            </div>
+            <PageHeader fromDate={props.fromDate} toDate={props.toDate} />
             <table className="details">
               <thead>
                 <tr>
@@ -493,7 +450,7 @@ const MonthlyReport = (props: MonthReport) => {
               <tbody>
                 {props.arrears.map((arrear, index) => {
                   return (
-                    <tr key={index} style={{ textAlign: 'center' }}>
+                    <tr key={index} className="text-center">
                       {arrear.tier === '0-7' && (
                         <>
                           <td>3.1</td>
@@ -578,7 +535,7 @@ const MonthlyReport = (props: MonthReport) => {
                     </tr>
                   )
                 })}
-                <tr style={{ textAlign: 'center' }}>
+                <tr className="text-center">
                   <td>3.8</td>
                   <td>أرصدة تمويل معاد جدولتها</td>
                   <td />
@@ -587,7 +544,7 @@ const MonthlyReport = (props: MonthReport) => {
                   <td>50%</td>
                   <td />
                 </tr>
-                <tr style={{ textAlign: 'center' }}>
+                <tr className="text-center">
                   <td>3.9</td>
                   <td>إجمالى أرصدة التمويل</td>
                   <td>{props.totalCustomers}</td>
@@ -600,8 +557,8 @@ const MonthlyReport = (props: MonthReport) => {
             </table>
           </div>
           <div className="inner-container">
-            <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>
-              بناء على البيانات التي تم إدخالها في الجدول أعلاه
+            <p className="font-weight-bold">
+              <u>x بناء على البيانات التي تم إدخالها في الجدول أعلاه</u>
             </p>
             <div className="totals">
               <div className="lines">
@@ -635,8 +592,8 @@ const MonthlyReport = (props: MonthReport) => {
             </div>
           </div>
           <div className="inner-container">
-            <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>
-              بناء على البيانات التي تم إدخالها في الجدول أعلاه
+            <p className="font-weight-bold">
+              <u>بناء على البيانات التي تم إدخالها في الجدول أعلاه</u>
             </p>
             <div className="totals">
               <div className="lines">
@@ -678,30 +635,7 @@ const MonthlyReport = (props: MonthReport) => {
       <div className="page-three-container-break">
         <div className="page-three-container">
           <div className="inner-container">
-            <h4>
-              تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر
-              للجمعية أو المؤسسة الأهلية
-            </h4>
-            <table>
-              <tbody>
-                <tr>
-                  <td className="td-head"> الفترة من :</td>
-                  <td className="td-body">{props.fromDate}</td>
-                  <td />
-                  <td className="td-head" style={{ paddingRight: 10 }}>
-                    إلى:
-                  </td>
-                  <td className="td-body">{props.toDate}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div className="inputs-desc">
-              <h5>تعليمات الإدخال:</h5>
-              <h5>
-                عند الوقوف على أي خانة من خانات إدخال البيانات - سوف تظهر
-                التعليمات الخاصة بملئها في هذا المستطيل
-              </h5>
-            </div>
+            <PageHeader fromDate={props.fromDate} toDate={props.toDate} />
             <table className="details">
               <thead>
                 <tr>
@@ -715,37 +649,37 @@ const MonthlyReport = (props: MonthReport) => {
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ textAlign: 'center' }}>
+                <tr className="text-center">
                   <td>4.1</td>
                   <td>إجمالى عدد أرصدة معدومة عملاء تمويل أفراد</td>
                   <td>{props.individualWrittenOffLoansCount.month}</td>
                   <td>{props.individualWrittenOffLoansCount.year}</td>
                 </tr>
-                <tr style={{ textAlign: 'center' }}>
+                <tr className="text-center">
                   <td>4.2</td>
                   <td>إجمالى قيمة أرصدة تمويل معدومة لعملاء أفراد</td>
                   <td>{props.individualWrittenOffLoansCredit.month}</td>
                   <td>{props.individualWrittenOffLoansCredit.year}</td>
                 </tr>
-                <tr style={{ textAlign: 'center' }}>
+                <tr className="text-center">
                   <td>4.3</td>
                   <td>إجمالى عدد أرصدة معدومة تمويل جماعى</td>
                   <td>{props.groupWrittenOffLoansCount.month}</td>
                   <td>{props.groupWrittenOffLoansCount.year}</td>
                 </tr>
-                <tr style={{ textAlign: 'center' }}>
+                <tr className="text-center">
                   <td>4.4</td>
                   <td>إجمالى قيمة أرصدة معدومة تمويل جماعى</td>
                   <td>{props.groupWrittenOffLoansCredit.month}</td>
                   <td>{props.groupWrittenOffLoansCredit.year}</td>
                 </tr>
-                <tr style={{ textAlign: 'center' }}>
+                <tr className="text-center">
                   <td>4.5</td>
                   <td>إجمالى عدد أرصدة معدومة لكافة أنواع العملاء</td>
                   <td>{props.writtenOffLoansCount.month}</td>
                   <td>{props.writtenOffLoansCount.year}</td>
                 </tr>
-                <tr style={{ textAlign: 'center' }}>
+                <tr className="text-center">
                   <td>4.6</td>
                   <td>إجمالى قيمة أرصدة معدومة لكافة أنواع العملاء</td>
                   <td>{props.writtenOffLoansCredit.month}</td>
@@ -762,30 +696,7 @@ const MonthlyReport = (props: MonthReport) => {
       <div className="page-three-container-break">
         <div className="page-three-container">
           <div className="inner-container">
-            <h4>
-              تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر
-              للجمعية أو المؤسسة الأهلية
-            </h4>
-            <table>
-              <tbody>
-                <tr>
-                  <td className="td-head"> الفترة من :</td>
-                  <td className="td-body">{props.fromDate}</td>
-                  <td />
-                  <td className="td-head" style={{ paddingRight: 10 }}>
-                    إلى:
-                  </td>
-                  <td className="td-body">{props.toDate}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div className="inputs-desc">
-              <h5>5.1/ شهر</h5>
-              <h5>
-                إجمالى عدد أرصدة تمويل لكافة أنواع العملاء (فردي + جماعي) انتظمت
-                في السداد بعد إعدامها خلال الشهر .
-              </h5>
-            </div>
+            <PageHeader fromDate={props.fromDate} toDate={props.toDate} />
             <table className="details">
               <thead>
                 <tr>
@@ -799,13 +710,13 @@ const MonthlyReport = (props: MonthReport) => {
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ textAlign: 'center' }}>
+                <tr className="text-center">
                   <td>5.1</td>
                   <td>إجمالى عدد أرصدة تمويل لكافة أنواع العملاء </td>
                   <td>{props.collectedWrittenOffLoansCount.month}</td>
                   <td>{props.collectedWrittenOffLoansCount.year}</td>
                 </tr>
-                <tr style={{ textAlign: 'center' }}>
+                <tr className="text-center">
                   <td>5.2</td>
                   <td>إجمالى قيمة أرصدة تمويل لكافة أنواع العملاء </td>
                   <td>{props.collectedWrittenOffLoansCredit.month}</td>
