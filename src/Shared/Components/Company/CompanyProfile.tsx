@@ -213,6 +213,13 @@ export const CompanyProfile = () => {
         showFieldCondition: true,
       },
     ],
+    reports: [
+      {
+        fieldTitle: 'reports',
+        fieldData: company?.key?.toString() || '',
+        showFieldCondition: ability.can('guaranteed', 'report'),
+      },
+    ],
   }
   function setModalData(type) {
     setCFModalAction(type)
@@ -258,6 +265,12 @@ export const CompanyProfile = () => {
     {
       header: local.otpCustomers,
       stringKey: 'otpCustomers',
+    },
+    {
+      header: local.reports,
+      stringKey: 'reports',
+      permission: 'guaranteed',
+      permissionKey: 'report',
     },
   ]
   const handleActivationClick = async ({ id, blocked }) => {

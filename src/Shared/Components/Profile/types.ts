@@ -42,4 +42,6 @@ export interface ProfileProps {
   editOnClick?(): void
   tabsData: TabDataProps
   activeTab: keyof TabDataProps
+  profileId?: string
+  isCF?: boolean
 }

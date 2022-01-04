@@ -120,6 +120,12 @@ export const CustomerProfile = () => {
       permission: ['getIssuedLoan', 'branchIssuedLoan'],
       permissionKey: 'application',
     },
+    {
+      header: local.reports,
+      stringKey: 'reports',
+      permission: 'guaranteed',
+      permissionKey: 'report',
+    },
   ]
 
   useEffect(() => {
@@ -703,6 +709,8 @@ export const CustomerProfile = () => {
           activeTab={activeTab}
           setActiveTab={(stringKey) => setActiveTab(stringKey)}
           tabsData={tabsData}
+          profileId={customerDetails?._id}
+          isCF
         />
         {showCFLimitModal && customerDetails && (
           <CFLimitModal

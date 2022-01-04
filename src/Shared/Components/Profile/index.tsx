@@ -36,6 +36,8 @@ export const Profile = ({
   activeTab,
   setActiveTab,
   tabsData,
+  profileId,
+  isCF,
 }: ProfileProps) => {
   const renderTab = (currentTab: keyof TabDataProps) => {
     switch (currentTab) {
@@ -106,6 +108,8 @@ export const Profile = ({
                 <CustomerReportsTab
                   customerKey={fieldData as string}
                   key={index}
+                  customerId={profileId}
+                  isCF={isCF}
                 />
               )
             )
