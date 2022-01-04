@@ -493,9 +493,9 @@ const MonthlyReport = (props: MonthReport) => {
               <tbody>
                 {props.arrears.map((arrear, index) => {
                   return (
-                    <div key={index}>
+                    <tr key={index} style={{ textAlign: 'center' }}>
                       {arrear.tier === '0-7' && (
-                        <tr key={index} style={{ textAlign: 'center' }}>
+                        <>
                           <td>3.1</td>
                           <td>
                             أرصدة تمويل منتظمة (أو بتأخير لا يتجاوز أسبوع)
@@ -505,11 +505,11 @@ const MonthlyReport = (props: MonthReport) => {
                           <td>{arrear.wallet}</td>
                           <td>2%</td>
                           <td>{arrear.provision}</td>
-                        </tr>
+                        </>
                       )}
 
                       {arrear.tier === '8-30' && (
-                        <tr key={index} style={{ textAlign: 'center' }}>
+                        <>
                           <td>3.2</td>
                           <td>تأخير حتى 30 يوم</td>
                           <td>{arrear.customers}</td>
@@ -517,10 +517,10 @@ const MonthlyReport = (props: MonthReport) => {
                           <td>{arrear.wallet}</td>
                           <td>10%</td>
                           <td>{arrear.provision}</td>
-                        </tr>
+                        </>
                       )}
                       {arrear.tier === '31-60' && (
-                        <tr key={index} style={{ textAlign: 'center' }}>
+                        <>
                           <td>3.3</td>
                           <td>تأخير حتى 60 يوم</td>
                           <td>{arrear.customers}</td>
@@ -528,10 +528,10 @@ const MonthlyReport = (props: MonthReport) => {
                           <td>{arrear.wallet}</td>
                           <td>25%</td>
                           <td>{arrear.provision}</td>
-                        </tr>
+                        </>
                       )}
                       {arrear.tier === '61-90' && (
-                        <tr key={index} style={{ textAlign: 'center' }}>
+                        <>
                           <td>3.4</td>
                           <td>تأخير حتى 90 يوم</td>
                           <td>{arrear.customers}</td>
@@ -539,10 +539,10 @@ const MonthlyReport = (props: MonthReport) => {
                           <td>{arrear.wallet}</td>
                           <td>50%</td>
                           <td>{arrear.provision}</td>
-                        </tr>
+                        </>
                       )}
                       {arrear.tier === '91-120' && (
-                        <tr key={index} style={{ textAlign: 'center' }}>
+                        <>
                           <td>3.5</td>
                           <td>تأخير حتى 120 يوم</td>
                           <td>{arrear.customers}</td>
@@ -550,11 +550,11 @@ const MonthlyReport = (props: MonthReport) => {
                           <td>{arrear.wallet}</td>
                           <td>70%</td>
                           <td>{arrear.provision}</td>
-                        </tr>
+                        </>
                       )}
 
                       {arrear.tier === '120+' && (
-                        <tr key={index} style={{ textAlign: 'center' }}>
+                        <>
                           <td>3.6</td>
                           <td>تأخير يتجاوز 120 يوم</td>
                           <td>{arrear.customers}</td>
@@ -562,10 +562,10 @@ const MonthlyReport = (props: MonthReport) => {
                           <td>{arrear.wallet}</td>
                           <td>100%</td>
                           <td>{arrear.provision}</td>
-                        </tr>
+                        </>
                       )}
                       {arrear.tier === 'Rescheduled Loans' && (
-                        <tr key={index} style={{ textAlign: 'center' }}>
+                        <>
                           <td>3.7</td>
                           <td>أرصدة تمويل – أقساط مرحلة</td>
                           <td>{arrear.customers}</td>
@@ -573,9 +573,9 @@ const MonthlyReport = (props: MonthReport) => {
                           <td>{arrear.wallet}</td>
                           <td>2%</td>
                           <td>{arrear.provision}</td>
-                        </tr>
+                        </>
                       )}
-                    </div>
+                    </tr>
                   )
                 })}
                 <tr style={{ textAlign: 'center' }}>
