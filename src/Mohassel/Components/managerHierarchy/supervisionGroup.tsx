@@ -5,12 +5,12 @@ import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
-import * as local from '../../../Shared/Assets/ar.json'
-import { ManagerHierarchyUser } from '../../../Shared/Services/interfaces'
+import { UsersSearch } from 'Shared/Components/UsersSearch/UsersSearch'
+import * as local from 'Shared/Assets/ar.json'
+import { ManagerHierarchyUser } from 'Shared/Services/interfaces'
 import './managerHierarchy.scss'
+import { LtsIcon } from 'Shared/Components'
 import { SupervisionGroupProps } from './types'
-import { UsersSearch } from './usersSearch'
-import { LtsIcon } from '../../../Shared/Components'
 
 export const SupervisionGroup: FunctionComponent<SupervisionGroupProps> = ({
   seqNo,

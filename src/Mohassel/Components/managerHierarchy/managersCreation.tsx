@@ -6,15 +6,15 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
 import Swal from 'sweetalert2'
-import * as local from '../../../Shared/Assets/ar.json'
-import { UsersSearch } from './usersSearch'
+import { UsersSearch } from 'Shared/Components/UsersSearch/UsersSearch'
+import * as local from 'Shared/Assets/ar.json'
+import { Loader } from 'Shared/Components/Loader'
+import { getErrorMessage } from 'Shared/Services/utils'
+import { ManagerHierarchyUser } from 'Shared/Services/interfaces'
 import { getManagerHierarchy } from '../../Services/APIs/ManagerHierarchy/getManagerHierarchy'
 import { updateManagerHierarchy } from '../../Services/APIs/ManagerHierarchy/updateManagersHierarchy'
-import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../config/Can'
-import { getErrorMessage } from '../../../Shared/Services/utils'
 import { Managers, ManagersCreationProps } from './types'
-import { ManagerHierarchyUser } from '../../../Shared/Services/interfaces'
 
 const ManagersCreation: FunctionComponent<ManagersCreationProps> = ({
   branchId,
