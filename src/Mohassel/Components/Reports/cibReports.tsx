@@ -5,15 +5,17 @@ import Swal from 'sweetalert2'
 import HeaderWithCards, {
   Tab,
 } from 'Shared/Components/HeaderWithCards/headerWithCards'
+import { PDF } from 'Shared/Components/PdfList/types'
+
 import { Loader } from '../../../Shared/Components/Loader'
 import local from '../../../Shared/Assets/ar.json'
 import errorMessages from '../../../Shared/Assets/errorMessages.json'
 import {
-  getCibPortoReports,
+  postCibPortofolioReport,
   cibPaymentReport,
   getTpayFiles,
-  getCibPortoFile,
   getCibPortoFiles,
+  getCibPortoFile,
 } from '../../Services/APIs/Reports/cibPaymentReport'
 import {
   downloadFile,
@@ -23,7 +25,6 @@ import {
 import { cibTpayURL, cibPortoURL } from '../../Services/APIs/Reports/cibURL'
 import { LtsIcon } from '../../../Shared/Components'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
-import ability from '../../config/ability'
 
 interface TPAYFile {
   created: {
@@ -38,44 +39,37 @@ interface TPAYFile {
   url?: string
 }
 
-interface Tabs {
-  header: string
-  stringKey: string
-  permission: string
-  permissionKey: string
-  inputs: string[]
-}
-
-const tabs: Tabs[] = [
-  {
-    header: `${local.cibReports}`,
-    stringKey: 'cibReports',
-    permission: 'cibScreen',
-    permissionKey: 'report',
-    inputs: ['date'],
-  },
-  {
-    header: `${local.cibPortfolioSecuritization}`,
-    stringKey: 'cibPortofolioReports',
-    permission: 'cibPortfolioSecuritization',
-    permissionKey: 'application',
-    inputs: ['dateFromTo', 'branches'],
-  },
-]
-
 const CIBReports: FC = () => {
+  const PDFArray: PDF[] = [
+    {
+      key: 'cibPaymentReport',
+      local: 'سداد اقساط CIB',
+      inputs: ['date'],
+      permission: 'cibScreen',
+    },
+    {
+      key: 'cibPortofolioReports',
+      local: `سداد اقساط ${local.cibPortfolioSecuritization}`,
+      inputs: ['dateFromTo', 'branches'],
+      permission: 'cibPortfolioSecuritization',
+      hidePdf: true,
+    },
+  ]
   const [data, setData] = useState<TPAYFile[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [showModal, setShowModal] = useState<boolean>(false)
-  const [activeTab, setActiveTab] = useState<string>('cibReports')
-  const [headerTabs] = useState<Tab[]>(() =>
-    tabs
-      .filter((t) => ability.can(t.permission, t.permissionKey))
-      .map((t) => ({
-        header: t.header,
-        stringKey: t.stringKey,
-      }))
-  )
+  const [selectedPdf, setSelectedPdf] = useState<PDF>({ permission: '' })
+  const [activeTab, setActiveTab] = useState<string>('cibPaymentReport')
+  const [headerTabs] = useState<Tab[]>([
+    {
+      header: `${local.cibReports}`,
+      stringKey: 'cibPaymentReport',
+    },
+    {
+      header: `${local.cibPortfolioSecuritization}`,
+      stringKey: 'cibPortofolioReports',
+    },
+  ])
 
   const getCibReports = async () => {
     setLoading(true)
@@ -100,62 +94,100 @@ const CIBReports: FC = () => {
   }
 
   useEffect(() => {
+    setSelectedPdf(
+      PDFArray.find((f) => activeTab === f.key) || { permission: '' }
+    )
     getCibReports()
   }, [activeTab])
+
+  const getExcelPoll = async (func, id, pollStart) => {
+    const pollInstant = new Date().valueOf()
+    if (pollInstant - pollStart < 300000) {
+      const file = await func(id)
+      if (file.status === 'success') {
+        if (['created', 'failed'].includes(file.body.status)) {
+          if (file.body.status === 'created')
+            downloadFile(file.body.presignedUrl)
+          getCibReports()
+          if (file.body.status === 'failed') Swal.fire('error', local.failed)
+          setLoading(false)
+          setShowModal(false)
+        } else {
+          setTimeout(() => getExcelPoll(func, id, pollStart), 5000)
+        }
+      } else {
+        setLoading(false)
+      }
+    } else {
+      setLoading(false)
+      Swal.fire('error', 'TimeOut')
+    }
+  }
+
+  const getExcelFile = async (func, pollFunc, values) => {
+    const { branches, fromDate, toDate, loanType } = values
+    setLoading(true)
+    setShowModal(false)
+    const obj = {
+      startdate: fromDate,
+      enddate: toDate,
+      branches: !branches
+        ? undefined
+        : branches.some((branch) => branch._id === '')
+        ? []
+        : branches.map((branch) => branch._id),
+      loanType,
+    }
+    const res = await func(obj)
+    if (res.status === 'success') {
+      if (!res.body) {
+        setLoading(false)
+        Swal.fire('error', local.noResults)
+      } else {
+        setLoading(true)
+        const pollStart = new Date().valueOf()
+        getExcelPoll(pollFunc, res.body.fileId, pollStart)
+      }
+    } else {
+      setLoading(false)
+    }
+  }
+
+  const getExcel = (values) => {
+    const from = new Date(values.fromDate).setHours(0, 0, 0, 0).valueOf()
+    const to = new Date(values.toDate).setHours(23, 59, 59, 999).valueOf()
+    values.fromDate = from
+    values.toDate = to
+    switch (selectedPdf.key) {
+      case 'cibPortofolioReports':
+        return getExcelFile(postCibPortofolioReport, getCibPortoFile, values)
+      default:
+        return null
+    }
+  }
 
   const handleSubmit = async (values) => {
     setLoading(true)
     setShowModal(false)
-    if (activeTab === 'cibPortofolioReports') {
-      const startDate = new Date(values.fromDate)
-        .setHours(23, 59, 59, 999)
-        .valueOf()
-      const endDate = new Date(values.toDate)
-        .setHours(23, 59, 59, 999)
-        .valueOf()
-      const branches = values.branches.map((b) => b._id)
-      const res = await getCibPortoReports({
-        startDate,
-        endDate,
-        branches,
-      })
+    const date = new Date(values.date).setHours(23, 59, 59, 999).valueOf()
+    const res = await cibPaymentReport({ endDate: date })
+    if (res.status === 'success') {
       setLoading(false)
-      if (res.status === 'success') {
-        if (res.body.status && res.body.status === 'queued') {
-          Swal.fire('', local.fileQueuedSuccess, 'success').then(async () => {
-            const fileRes = await getCibPortoFile(res.body.fileId)
-            if (fileRes.body.status && fileRes.body.status === 'processing') {
-              // handle get files
-            } else {
-              console.log(res, 'test')
-            }
-          })
-        }
+      if (res.body.status && res.body.status === 'processing') {
+        Swal.fire('', local.fileQueuedSuccess, 'success').then(() =>
+          getCibReports()
+        )
       } else {
-        setLoading(false)
-        Swal.fire('', local.fileQueuedError, 'error')
+        const link = document.createElement('a')
+        link.href = res.body.url
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        link.remove()
       }
     } else {
-      const date = new Date(values.date).setHours(23, 59, 59, 999).valueOf()
-      const res = await cibPaymentReport({ endDate: date })
-      if (res.status === 'success') {
-        setLoading(false)
-        if (res.body.status && res.body.status === 'processing') {
-          Swal.fire('', local.fileQueuedSuccess, 'success').then(() =>
-            getCibReports()
-          )
-        } else {
-          const link = document.createElement('a')
-          link.href = res.body.url
-          document.body.appendChild(link)
-          link.click()
-          document.body.removeChild(link)
-          link.remove()
-        }
-      } else {
-        setLoading(false)
-        Swal.fire('', local.fileQueuedError, 'error')
-      }
+      setLoading(false)
+      Swal.fire('', local.fileQueuedError, 'error')
     }
   }
 
@@ -168,7 +200,7 @@ const CIBReports: FC = () => {
     const res = await reportDownload
     if (res.status === 'success') {
       setLoading(false)
-      // downloadFile(res.body.url)
+      downloadFile(res.body.url)
     } else {
       setLoading(false)
       Swal.fire('', errorMessages.doc_read_failed.ar, 'error')
@@ -264,19 +296,14 @@ const CIBReports: FC = () => {
       </Card>
       {showModal && (
         <ReportsModal
-          pdf={{
-            key: 'cibPaymentReport',
-            local: 'سداد اقساط CIB',
-            inputs: tabs.find((f) => activeTab === f.stringKey)?.inputs,
-            permission:
-              tabs.find((t) => t.stringKey === activeTab)?.permission ||
-              'cibScreen',
-          }}
+          pdf={selectedPdf}
           show={showModal}
           hideModal={() => {
             setShowModal(false)
           }}
+          getExcel={(values) => getExcel(values)}
           submit={(values) => handleSubmit(values)}
+          disableExcel={activeTab === 'cibPaymentReport'}
         />
       )}
     </>

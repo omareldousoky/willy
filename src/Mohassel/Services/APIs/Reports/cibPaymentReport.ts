@@ -31,7 +31,7 @@ export const getTpayFiles = async () => {
   }
 }
 
-export const getCibPortoReports = async (data: CibPortoReport) => {
+export const postCibPortofolioReport = async (data: CibPortoReport) => {
   const url = API_BASE_URL + `/report/excel/cib-portfolio-securitization`
   try {
     const res = await axios.post(url, data)
