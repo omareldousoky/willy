@@ -13,13 +13,14 @@ import {
   cibPaymentReport,
   getTpayFiles,
   getCibPortoFile,
+  getCibPortoFiles,
 } from '../../Services/APIs/Reports/cibPaymentReport'
 import {
   downloadFile,
   getIscoreReportStatus,
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
-import { cibTpayURL } from '../../Services/APIs/Reports/cibURL'
+import { cibTpayURL, cibPortoURL } from '../../Services/APIs/Reports/cibURL'
 import { LtsIcon } from '../../../Shared/Components'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
 import ability from '../../config/ability'
@@ -78,13 +79,23 @@ const CIBReports: FC = () => {
 
   const getCibReports = async () => {
     setLoading(true)
-    const res = await getTpayFiles()
-    if (res.status === 'success' && res.body) {
+    if (activeTab === 'cibPortofolioReports') {
+      const res = await getCibPortoFiles()
       setLoading(false)
-      setData(res.body.cibFile ? res.body.cibFile : [])
+      if (res.status === 'success' && res.body) {
+        setData(res.body.reportFiles ? res.body.reportFiles : [])
+      } else {
+        Swal.fire('error', local.searchError, 'error')
+      }
+      setLoading(false)
     } else {
+      const res = await getTpayFiles()
       setLoading(false)
-      Swal.fire('error', local.searchError, 'error')
+      if (res.status === 'success' && res.body) {
+        setData(res.body.cibFile ? res.body.cibFile : [])
+      } else {
+        Swal.fire('error', local.searchError, 'error')
+      }
     }
   }
 
@@ -102,10 +113,11 @@ const CIBReports: FC = () => {
       const endDate = new Date(values.toDate)
         .setHours(23, 59, 59, 999)
         .valueOf()
+      const branches = values.branches.map((b) => b._id)
       const res = await getCibPortoReports({
         startDate,
         endDate,
-        branches: [],
+        branches,
       })
       setLoading(false)
       if (res.status === 'success') {
@@ -115,12 +127,7 @@ const CIBReports: FC = () => {
             if (fileRes.body.status && fileRes.body.status === 'processing') {
               // handle get files
             } else {
-              const link = document.createElement('a')
-              link.href = res.body.url
-              document.body.appendChild(link)
-              link.click()
-              document.body.removeChild(link)
-              link.remove()
+              console.log(res, 'test')
             }
           })
         }
@@ -154,10 +161,14 @@ const CIBReports: FC = () => {
 
   const getFileUrl = async (fileKey: string) => {
     setLoading(true)
-    const res = await cibTpayURL(fileKey)
+    const reportDownload =
+      activeTab === 'cibPortofolioReports'
+        ? cibPortoURL(fileKey)
+        : cibTpayURL(fileKey)
+    const res = await reportDownload
     if (res.status === 'success') {
       setLoading(false)
-      downloadFile(res.body.url)
+      // downloadFile(res.body.url)
     } else {
       setLoading(false)
       Swal.fire('', errorMessages.doc_read_failed.ar, 'error')
