@@ -25,8 +25,9 @@ import {
 import { cibTpayURL, cibPortoURL } from '../../Services/APIs/Reports/cibURL'
 import { LtsIcon } from '../../../Shared/Components'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
+import ability from '../../config/ability'
 
-interface TPAYFile {
+interface CibReportFile {
   created: {
     at: number
     by: string
@@ -37,6 +38,15 @@ interface TPAYFile {
   _id: string
   status: string
   url?: string
+  fileGeneratedAt?: number
+  fileName?: string
+  fromDate?: number
+  toDate?: number
+}
+
+interface CibReportTab extends Tab {
+  permission: string
+  permissionKey: string
 }
 
 const CIBReports: FC = () => {
@@ -55,21 +65,28 @@ const CIBReports: FC = () => {
       hidePdf: true,
     },
   ]
-  const [data, setData] = useState<TPAYFile[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
-  const [showModal, setShowModal] = useState<boolean>(false)
-  const [selectedPdf, setSelectedPdf] = useState<PDF>({ permission: '' })
-  const [activeTab, setActiveTab] = useState<string>('cibPaymentReport')
-  const [headerTabs] = useState<Tab[]>([
+  const Tabs: CibReportTab[] = [
     {
       header: `${local.cibReports}`,
       stringKey: 'cibPaymentReport',
+      permission: 'cibScreen',
+      permissionKey: 'report',
     },
     {
       header: `${local.cibPortfolioSecuritization}`,
       stringKey: 'cibPortofolioReports',
+      permission: 'cibPortfolioSecuritization',
+      permissionKey: 'application',
     },
-  ])
+  ]
+  const [data, setData] = useState<CibReportFile[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [showModal, setShowModal] = useState<boolean>(false)
+  const [selectedPdf, setSelectedPdf] = useState<PDF>({ permission: '' })
+  const [activeTab, setActiveTab] = useState<string>('cibPaymentReport')
+  const headerTabs: CibReportTab[] = Tabs.filter((f) =>
+    ability.can(f.permission, f.permissionKey)
+  )
 
   const getCibReports = async () => {
     setLoading(true)
@@ -106,9 +123,10 @@ const CIBReports: FC = () => {
       const file = await func(id)
       if (file.status === 'success') {
         if (['created', 'failed'].includes(file.body.status)) {
+          getCibReports()
           if (file.body.status === 'created')
             downloadFile(file.body.presignedUrl)
-          getCibReports()
+
           if (file.body.status === 'failed') Swal.fire('error', local.failed)
           setLoading(false)
           setShowModal(false)
@@ -247,7 +265,12 @@ const CIBReports: FC = () => {
                         </span>
                         <span className="mr-5 d-flex flex-start flex-column">
                           <span>{local.loanAppCreationDate}</span>
-                          {timeToArabicDate(pdf.created.at, true)}
+                          {timeToArabicDate(
+                            !pdf.fileGeneratedAt
+                              ? pdf.created.at
+                              : pdf.fileGeneratedAt,
+                            true
+                          )}
                         </span>
                         <span className="mr-5">{pdf.key.split('/')[1]}</span>
                         <span
