@@ -22,7 +22,8 @@ const FormManagersCreation: FC<{
   values: Managers
   setValues: (val: Managers) => void
   intialValue?: []
-}> = ({ label, values, intialValue = [], setValues, objectKeyId }) => {
+  value: ManagerHierarchyUser | undefined
+}> = ({ label, values, intialValue = [], setValues, objectKeyId, value }) => {
   return (
     <Form.Group className="managers-form-group" as={Col} id={objectKeyId}>
       <Form.Label className="managers-label">{label}</Form.Label>
@@ -30,11 +31,11 @@ const FormManagersCreation: FC<{
         <UsersSearch
           usersInitial={intialValue}
           objectKey={objectKeyId}
-          item={values[objectKeyId]}
-          updateItem={(value?: ManagerHierarchyUser) =>
+          item={value}
+          updateItem={(val?: ManagerHierarchyUser) =>
             setValues({
               ...values,
-              [objectKeyId]: value,
+              [objectKeyId]: val,
             })
           }
           isClearable
@@ -112,30 +113,35 @@ const ManagersCreation: FC<ManagersCreationProps> = ({ branchId }) => {
           objectKeyId="operationsManager"
           setValues={setValues}
           values={values}
+          value={values.operationsManager}
         />
         <FormManagersCreation
           label={local.districtManager}
-          objectKeyId="districtManager"
+          objectKeyId="areaManager"
           setValues={setValues}
           values={values}
+          value={values?.areaManager}
         />
         <FormManagersCreation
           label={local.districtSupervisor}
-          objectKeyId="districtSupervisor"
+          objectKeyId="areaSupervisor"
           setValues={setValues}
           values={values}
+          value={values?.areaSupervisor}
         />
         <FormManagersCreation
           label={local.centerManager}
           objectKeyId="centerManager"
           setValues={setValues}
           values={values}
+          value={values?.centerManager}
         />
         <FormManagersCreation
           label={local.branchManager}
           objectKeyId="branchManager"
           setValues={setValues}
           values={values}
+          value={values?.branchManager}
         />
       </Form>
       <Can I="updateBranchManagersHierarchy" a="branch">
