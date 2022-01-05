@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import local from '@Shared/Assets/ar.json'
+import local from 'Shared/Assets/ar.json'
 import Modal from 'react-bootstrap/esm/Modal'
 import Row from 'react-bootstrap/esm/Row'
 import Form from 'react-bootstrap/esm/Form'

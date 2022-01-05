@@ -151,10 +151,12 @@ export const LoanDetailsTableView = ({
           <td>{local.adminFees}</td>
           <td>{application.product.adminFees}</td>
         </tr>
-        <tr>
-          <td>{local.usage}</td>
-          <td>{loanUse}</td>
-        </tr>
+        {application.product.type !== 'consumerFinance' && (
+          <tr>
+            <td>{local.usage}</td>
+            <td>{loanUse}</td>
+          </tr>
+        )}
         <tr>
           <td>{local.representative}</td>
           <td>
@@ -165,22 +167,26 @@ export const LoanDetailsTableView = ({
               : application.customer.representativeName}
           </td>
         </tr>
-        <tr>
-          <td>
-            {application.product.type === 'sme'
-              ? local.researcher
-              : local.enquiror}
-          </td>
-          <td>
-            {application.product.type === 'sme'
-              ? application.researcherName
-              : application.enquirerName}
-          </td>
-        </tr>
-        <tr>
-          <td>{local.visitationDate}</td>
-          <td>{extractGMTDate(application.visitationDate)}</td>
-        </tr>
+        {application.product.type !== 'consumerFinance' && (
+          <tr>
+            <td>
+              {application.product.type === 'sme'
+                ? local.researcher
+                : local.enquiror}
+            </td>
+            <td>
+              {application.product.type === 'sme'
+                ? application.researcherName
+                : application.enquirerName}
+            </td>
+          </tr>
+        )}
+        {application.product.type !== 'consumerFinance' && (
+          <tr>
+            <td>{local.visitationDate}</td>
+            <td>{extractGMTDate(application.visitationDate)}</td>
+          </tr>
+        )}
         {application.branchManagerName.length > 0 && (
           <tr>
             <td>{local.branchManager}</td>

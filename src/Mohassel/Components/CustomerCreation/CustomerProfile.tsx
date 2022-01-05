@@ -3,6 +3,10 @@ import { useHistory, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Container from 'react-bootstrap/Container'
 import {
+  CustomerScore,
+  getCustomerCategorization,
+} from 'Shared/Services/APIs/customer/customerCategorization'
+import {
   getErrorMessage,
   iscoreDate,
   cfLimitStatusLocale,
@@ -26,6 +30,7 @@ import {
   Score,
   Customer,
   CFGuarantorDetailsProps,
+  OtpCustomersProps,
 } from '../../../Shared/Models/Customer'
 import CFLimitModal from '../../../Shared/Components/CFLimitModal/CFLimitModal'
 import { ConsumerFinanceContractData } from '../../../Shared/Models/consumerContract'
@@ -49,10 +54,10 @@ const tabs: Array<Tab> = [
     header: local.differentInfo,
     stringKey: 'differentInfo',
   },
-  // {
-  //   header: local.customerCategorization,
-  //   stringKey: 'customerScore',
-  // },
+  {
+    header: local.customerCategorization,
+    stringKey: 'customerScore',
+  },
   {
     header: local.documents,
     stringKey: 'documents',
@@ -73,27 +78,31 @@ const tabs: Array<Tab> = [
     permission: 'guaranteed',
     permissionKey: 'report',
   },
+  {
+    header: local.otpCustomers,
+    stringKey: 'otpCustomers',
+  },
 ]
 
-// const getCustomerCategorizationRating = async (
-//   id: string,
-//   setRating: (rating: Array<CustomerScore>) => void
-// ) => {
-//   const res = await getCustomerCategorization({ customerId: id })
-//   if (res.status === 'success' && res.body?.customerScores !== undefined) {
-//     setRating(res.body?.customerScores)
-//   } else {
-//     setRating([])
-//   }
-// }
+const getCustomerCategorizationRating = async (
+  id: string,
+  setRating: (rating: Array<CustomerScore>) => void
+) => {
+  const res = await getCustomerCategorization({ customerId: id })
+  if (res.status === 'success' && res.body?.customerScores !== undefined) {
+    setRating(res.body?.customerScores)
+  } else {
+    setRating([])
+  }
+}
 
 export const CustomerProfile = () => {
   const [loading, setLoading] = useState(false)
   const [customerDetails, setCustomerDetails] = useState<Customer>()
   const [iScoreDetails, setIScoreDetails] = useState<Score[]>()
-  const [activeTab, setActiveTab] = useState('workInfo')
+  const [activeTab, setActiveTab] = useState<keyof TabDataProps>('workInfo')
   const [print, setPrint] = useState('')
-  // const [ratings, setRatings] = useState<Array<CustomerScore>>([])
+  const [ratings, setRatings] = useState<Array<CustomerScore>>([])
   const [showHalanLinkageModal, setShowHalanLinkageModal] = useState<boolean>(
     false
   )
@@ -175,7 +184,7 @@ export const CustomerProfile = () => {
 
   useEffect(() => {
     getCustomerDetails()
-    // getCustomerCategorizationRating(location.state.id, setRatings)
+    getCustomerCategorizationRating(location.state.id, setRatings)
   }, [])
   function getArRuralUrban(ruralUrban: string | undefined) {
     if (ruralUrban === 'rural') return local.rural
@@ -487,15 +496,15 @@ export const CustomerProfile = () => {
         showFieldCondition: true,
       },
     ],
-    // customerScore: [
-    //   {
-    //     fieldTitle: 'ratings',
-    //     fieldData: ratings,
-    //     showFieldCondition: Boolean(
-    //       ability.can('customerCategorization', 'customer')
-    //     ),
-    //   },
-    // ],
+    customerScore: [
+      {
+        fieldTitle: 'ratings',
+        fieldData: ratings,
+        showFieldCondition: Boolean(
+          ability.can('customerCategorization', 'customer')
+        ),
+      },
+    ],
     documents: [
       {
         fieldTitle: 'customer id',
@@ -530,6 +539,17 @@ export const CustomerProfile = () => {
           iscores: iScoreDetails,
           limitStatus: customerDetails?.consumerFinanceLimitStatus,
         } as CFGuarantorDetailsProps,
+        showFieldCondition: true,
+      },
+    ],
+    otpCustomers: [
+      {
+        fieldTitle: 'otpCustomers',
+        fieldData: {
+          customerId: location.state.id,
+          otpCustomers: customerDetails?.otpCustomer ?? [],
+          reload: () => getCustomerDetails(),
+        } as OtpCustomersProps,
         showFieldCondition: true,
       },
     ],
@@ -666,6 +686,8 @@ export const CustomerProfile = () => {
                 </span>
               )}
             </div>
+          </div>
+          <div className="d-flex">
             <ProfileActions actions={getProfileActions()} />
           </div>
           {mainInfo && <InfoBox info={mainInfo} />}

@@ -7,19 +7,19 @@ import Button from 'react-bootstrap/esm/Button'
 import Card from 'react-bootstrap/esm/Card'
 import HeaderWithCards, {
   Tab,
-} from '@Shared/Components/HeaderWithCards/headerWithCards'
-import { Loader } from '@Shared/Components/Loader'
-import Search from '@Shared/Components/Search/search'
-import DynamicTable from '@Shared/Components/DynamicTable/dynamicTable'
+} from 'Shared/Components/HeaderWithCards/headerWithCards'
+import { Loader } from 'Shared/Components/Loader'
+import Search from 'Shared/Components/Search/search'
+import DynamicTable from 'Shared/Components/DynamicTable/dynamicTable'
 
 import {
   getBranchFromCookie,
   getDateAndTime,
   getErrorMessage,
-} from '@Shared/Services/utils'
-import { search } from '@Shared/redux/search/actions'
-import Can from '@Shared/config/Can'
-import local from '@Shared/Assets/ar.json'
+} from 'Shared/Services/utils'
+import { search } from 'Shared/redux/search/actions'
+import Can from 'Shared/config/Can'
+import local from 'Shared/Assets/ar.json'
 import {
   changeInReviewLeadState,
   changeLeadState,
