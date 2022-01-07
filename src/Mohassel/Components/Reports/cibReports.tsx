@@ -90,24 +90,19 @@ const CIBReports: FC = () => {
 
   const getCibReports = async () => {
     setLoading(true)
-    if (activeTab === 'cibPortofolioReports') {
-      const res = await getCibPortoFiles()
-      setLoading(false)
-      if (res.status === 'success' && res.body) {
-        setData(res.body.reportFiles ? res.body.reportFiles : [])
-      } else {
-        Swal.fire('error', local.searchError, 'error')
-      }
-      setLoading(false)
-    } else {
-      const res = await getTpayFiles()
-      setLoading(false)
-      if (res.status === 'success' && res.body) {
-        setData(res.body.cibFile ? res.body.cibFile : [])
-      } else {
-        Swal.fire('error', local.searchError, 'error')
-      }
+    const cibReportFiles = {
+      cibPortofolioReports: { fun: getCibPortoFiles, key: 'reportFiles' },
+      cibPaymentReport: { fun: getTpayFiles, key: 'cibFile' },
     }
+    const getReport = cibReportFiles[activeTab]
+    const res = await getReport.fun()
+    setLoading(false)
+    if (res.status === 'success' && res.body) {
+      setData(res.body[getReport.key] || [])
+    } else {
+      Swal.fire('error', local.searchError, 'error')
+    }
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -211,11 +206,12 @@ const CIBReports: FC = () => {
 
   const getFileUrl = async (fileKey: string) => {
     setLoading(true)
-    const reportDownload =
-      activeTab === 'cibPortofolioReports'
-        ? cibPortoURL(fileKey)
-        : cibTpayURL(fileKey)
-    const res = await reportDownload
+    const cibUrlDownload = {
+      cibPortofolioReports: cibPortoURL,
+      cibPaymentReport: cibTpayURL,
+    }
+    const reportDownload = cibUrlDownload[activeTab]
+    const res = await reportDownload(fileKey)
     if (res.status === 'success') {
       setLoading(false)
       downloadFile(res.body.url)
