@@ -117,14 +117,14 @@ const ManagersCreation: FC<ManagersCreationProps> = ({ branchId }) => {
         />
         <FormManagersCreation
           label={local.districtManager}
-          objectKeyId="areaManager"
+          objectKeyId="districtManager"
           setValues={setValues}
           values={values}
           value={values?.areaManager}
         />
         <FormManagersCreation
           label={local.districtSupervisor}
-          objectKeyId="areaSupervisor"
+          objectKeyId="districtSupervisor"
           setValues={setValues}
           values={values}
           value={values?.areaSupervisor}
