@@ -15,7 +15,6 @@ import {
   cibPaymentReport,
   getTpayFiles,
   getCibPortoFiles,
-  getCibPortoFile,
 } from '../../Services/APIs/Reports/cibPaymentReport'
 import {
   downloadFile,
@@ -112,38 +111,13 @@ const CIBReports: FC = () => {
     getCibReports()
   }, [activeTab])
 
-  const getExcelPoll = async (func, id, pollStart) => {
-    const pollInstant = new Date().valueOf()
-    if (pollInstant - pollStart < 300000) {
-      const file = await func(id)
-      if (file.status === 'success') {
-        if (['created', 'failed'].includes(file.body.status)) {
-          getCibReports()
-          if (file.body.status === 'created')
-            downloadFile(file.body.presignedUrl)
-
-          if (file.body.status === 'failed') Swal.fire('error', local.failed)
-          setLoading(false)
-          setShowModal(false)
-        } else {
-          setTimeout(() => getExcelPoll(func, id, pollStart), 5000)
-        }
-      } else {
-        setLoading(false)
-      }
-    } else {
-      setLoading(false)
-      Swal.fire('error', 'TimeOut')
-    }
-  }
-
-  const getExcelFile = async (func, pollFunc, values) => {
+  const getExcelFile = async (func, values) => {
     const { branches, fromDate, toDate, loanType } = values
     setLoading(true)
     setShowModal(false)
     const obj = {
-      startdate: fromDate,
-      enddate: toDate,
+      startDate: fromDate,
+      endDate: toDate,
       branches: !branches
         ? undefined
         : branches.some((branch) => branch._id === '')
@@ -156,10 +130,11 @@ const CIBReports: FC = () => {
       if (!res.body) {
         setLoading(false)
         Swal.fire('error', local.noResults)
-      } else {
-        setLoading(true)
-        const pollStart = new Date().valueOf()
-        getExcelPoll(pollFunc, res.body.fileId, pollStart)
+      } else if (res.body.status === 'queued') {
+        setLoading(false)
+        Swal.fire('', local.fileQueuedSuccess, 'success').then(() =>
+          getCibReports()
+        )
       }
     } else {
       setLoading(false)
@@ -173,7 +148,7 @@ const CIBReports: FC = () => {
     values.toDate = to
     switch (selectedPdf.key) {
       case 'cibPortofolioReports':
-        return getExcelFile(postCibPortofolioReport, getCibPortoFile, values)
+        return getExcelFile(postCibPortofolioReport, values)
       default:
         return null
     }

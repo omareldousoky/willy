@@ -41,16 +41,6 @@ export const postCibPortofolioReport = async (data: CibPortoReport) => {
   }
 }
 
-export const getCibPortoFile = async (id: string) => {
-  const url = API_BASE_URL + `/report/excel/cib-portfolio-securitization/${id}`
-  try {
-    const res = await axios.get(url)
-    return { status: 'success', body: res.data }
-  } catch (error) {
-    return { status: 'error', error: error.response.data }
-  }
-}
-
 export const getCibPortoFiles = async () => {
   const url = API_BASE_URL + `/report/cib-portfolio-report-files/`
   try {
