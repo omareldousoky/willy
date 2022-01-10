@@ -12,6 +12,8 @@ interface RaseedyTransactionsModel {
   installmentNumber: string
   nationalId: string
   transactionAmount: string
+  customerPhone: string
+  raseedyCustomerPhone: string
 }
 
 const RaseedyTransactionsReport = ({
@@ -57,8 +59,12 @@ const RaseedyTransactionsReport = ({
       label: 'اسم الاخصائي',
     },
     {
+      key: 'raseedyCustomerPhone',
+      label: 'رقم رصيدي',
+    },
+    {
       key: 'customerPhone',
-      label: 'رقم تليفون القائم بالسداد',
+      label: 'رقم هاتف العميل',
     },
     {
       key: 'transactionDate',
