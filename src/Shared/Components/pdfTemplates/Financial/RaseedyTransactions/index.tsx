@@ -1,6 +1,4 @@
 import React from 'react'
-import Table from 'react-bootstrap/Table'
-
 import local from '../../../../Assets/ar.json'
 import { Header } from '../../pdfTemplateCommon/header'
 import { numbersToArabic, timeToArabicDate } from '../../../../Services/utils'
@@ -82,11 +80,14 @@ const RaseedyTransactionsReport = ({
         cf={isCF}
       />
 
-      <Table striped bordered>
+      <table className="w-100 text-left border">
         <thead>
           <tr>
             {tableColumns.map((item, index) => (
-              <th key={index} className="text-left">
+              <th
+                key={index}
+                className="text-left p-2 border-left border-bottom"
+              >
                 {item.label}
               </th>
             ))}
@@ -96,7 +97,7 @@ const RaseedyTransactionsReport = ({
           {data.result.map((transaction, i) => (
             <tr key={i}>
               {tableColumns.map((item, j) => (
-                <td key={j}>
+                <td key={j} className="p-2 m-2 border-left border-bottom">
                   {item.type === 'number'
                     ? numbersToArabic(transaction[item.key])
                     : item.type === 'date'
@@ -107,7 +108,7 @@ const RaseedyTransactionsReport = ({
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
 
       <div className="mt-4">
         <span className="font-weight-bold h4">{local.transactionsSum}: </span>
