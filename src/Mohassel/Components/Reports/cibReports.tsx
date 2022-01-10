@@ -74,7 +74,7 @@ const CIBReports: FC = () => {
     {
       header: `${local.cibPortfolioSecuritization}`,
       stringKey: 'cibPortofolioReports',
-      permission: 'cibPortfolioSecuritization',
+      permission: 'getCibPortfolioSecuritization',
       permissionKey: 'report',
     },
   ]
