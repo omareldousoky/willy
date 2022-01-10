@@ -75,7 +75,7 @@ const CIBReports: FC = () => {
       header: `${local.cibPortfolioSecuritization}`,
       stringKey: 'cibPortofolioReports',
       permission: 'cibPortfolioSecuritization',
-      permissionKey: 'report',
+      permissionKey: 'application',
     },
   ]
   const [data, setData] = useState<CibReportFile[]>([])
@@ -244,7 +244,9 @@ const CIBReports: FC = () => {
                             true
                           )}
                         </span>
-                        <span className="mr-5">{pdf.key.split('/')[1]}</span>
+                        {pdf.key && (
+                          <span className="mr-5">{pdf.key.split('/')[1]}</span>
+                        )}
                         <span
                           className={`mr-5  text-${
                             pdf.status === 'created'
