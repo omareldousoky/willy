@@ -19,11 +19,14 @@ import { Image } from 'Shared/redux/document/types'
 import { downloadAsZip, getErrorMessage } from 'Shared/Services/utils'
 import { getDocumentsTypes } from 'Shared/Services/APIs/encodingFiles/documentType'
 import ability from '../../config/ability'
-import { Props, State } from './types'
+import { UploadDocumentProps, UploadDocumentState } from './types'
 import './uploadDocument.scss'
 
-class UploadDocuments extends Component<Props, State> {
-  constructor(props: Props) {
+class UploadDocuments extends Component<
+  UploadDocumentProps,
+  UploadDocumentState
+> {
+  constructor(props: UploadDocumentProps) {
     super(props)
     this.state = {
       loading: false,

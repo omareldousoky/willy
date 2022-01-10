@@ -5,7 +5,7 @@ import {
   clearSelectionArray,
 } from 'Shared/redux/document/actions'
 
-export interface Props {
+export interface UploadDocumentProps {
   application: any
   getDocuments: typeof getDocuments
   addAllToSelectionArray: typeof addAllToSelectionArray
@@ -14,7 +14,7 @@ export interface Props {
   documents: any[]
   selectionArray: Image[]
 }
-export interface State {
+export interface UploadDocumentState {
   loading: boolean
   documentTypes: any[]
   selectAll: boolean
