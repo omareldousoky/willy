@@ -75,7 +75,7 @@ const CIBReports: FC = () => {
       header: `${local.cibPortfolioSecuritization}`,
       stringKey: 'cibPortofolioReports',
       permission: 'cibPortfolioSecuritization',
-      permissionKey: 'application',
+      permissionKey: 'report',
     },
   ]
   const [data, setData] = useState<CibReportFile[]>([])
