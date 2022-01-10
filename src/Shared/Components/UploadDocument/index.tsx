@@ -1,2 +1,2 @@
-export { default as UploadDocuments } from './UploadDocumet'
+export { default as UploadDocuments } from './UploadDocument'
 export * as UploadDocumetsTypes from './types'
