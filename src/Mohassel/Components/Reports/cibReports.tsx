@@ -75,7 +75,7 @@ const CIBReports: FC = () => {
       header: `${local.cibPortfolioSecuritization}`,
       stringKey: 'cibPortofolioReports',
       permission: 'cibPortfolioSecuritization',
-      permissionKey: 'application',
+      permissionKey: 'report',
     },
   ]
   const [data, setData] = useState<CibReportFile[]>([])
@@ -197,13 +197,15 @@ const CIBReports: FC = () => {
 
   return (
     <>
-      <HeaderWithCards
-        array={headerTabs}
-        active={headerTabs.findIndex((t) => t.stringKey === activeTab)}
-        selectTab={(tab: string) => {
-          setActiveTab(tab)
-        }}
-      />
+      {headerTabs && headerTabs.length > 1 && (
+        <HeaderWithCards
+          array={headerTabs}
+          active={headerTabs.findIndex((t) => t.stringKey === activeTab)}
+          selectTab={(tab: string) => {
+            setActiveTab(tab)
+          }}
+        />
+      )}
       <Card style={{ margin: '20px 50px' }} className="print-none">
         <Loader type="fullscreen" open={loading} />
         <Card.Body style={{ padding: 15 }}>
