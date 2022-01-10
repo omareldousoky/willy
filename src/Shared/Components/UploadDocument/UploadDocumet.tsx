@@ -1,40 +1,27 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
-import DocumentUploader from '../../../../Shared/Components/documentUploader/documentUploader'
-import { getApplicationDocuments } from '../../../../Shared/Services/APIs/loanApplication/getDocuments'
-import * as local from '../../../../Shared/Assets/ar.json'
-import { Loader } from '../../../../Shared/Components/Loader'
-import ability from '../../../../Shared/config/ability'
+import print from 'Shared/Utils/printIframe'
+import DocumentUploader from 'Shared/Components/documentUploader/documentUploader'
+import { getApplicationDocuments } from 'Shared/Services/APIs/loanApplication/getDocuments'
+import * as local from 'Shared/Assets/ar.json'
+import { Loader } from 'Shared/Components/Loader'
 import {
   getDocuments,
   addAllToSelectionArray,
   clearSelectionArray,
-} from '../../../../Shared/redux/document/actions'
-import { Image } from '../../../../Shared/redux/document/types'
-import {
-  downloadAsZip,
-  getErrorMessage,
-} from '../../../../Shared/Services/utils'
-import { getDocumentsTypes } from '../../../../Shared/Services/APIs/encodingFiles/documentType'
+} from 'Shared/redux/document/actions'
+import { Image } from 'Shared/redux/document/types'
+import { downloadAsZip, getErrorMessage } from 'Shared/Services/utils'
+import { getDocumentsTypes } from 'Shared/Services/APIs/encodingFiles/documentType'
+import ability from '../../config/ability'
+import { Props, State } from './types'
+import './uploadDocument.scss'
 
-interface Props {
-  application: any
-  getDocuments: typeof getDocuments
-  addAllToSelectionArray: typeof addAllToSelectionArray
-  clearSelectionArray: typeof clearSelectionArray
-  loading: boolean
-  documents: any[]
-  selectionArray: Image[]
-}
-interface State {
-  loading: boolean
-  documentTypes: any[]
-  selectAll: boolean
-}
 class UploadDocuments extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
@@ -118,14 +105,8 @@ class UploadDocuments extends Component<Props, State> {
           type="fullscreen"
           open={this.state.loading || this.props.loading}
         />
-        <Row style={{ justifyContent: 'space-between' }}>
-          <div
-            style={{
-              textAlign: 'right',
-              padding: '0.75rem 1.25rem',
-              marginRight: '1rem',
-            }}
-          >
+        <Row className="justify-content-between">
+          <div className="spacingDocument">
             <Form.Check
               type="checkbox"
               id="check-all"
@@ -134,27 +115,35 @@ class UploadDocuments extends Component<Props, State> {
               onChange={() => this.selectAllOptions()}
             />
           </div>
-          <div
-            style={{
-              textAlign: 'right',
-              padding: '0.75rem 1.25rem',
-              marginRight: '1rem',
-            }}
-          >
-            <Button
-              style={{ width: '150px' }}
-              variant="primary"
-              disabled={this.props.selectionArray.length <= 0}
-              onClick={async () => {
-                this.setState({ loading: true })
-                await downloadAsZip(
-                  this.props.selectionArray,
-                  `loan-${this.props.application._id}-${new Date().valueOf()}`
-                )
-                this.setState({ loading: false })
-              }}
-            >{`${local.download}(${this.props.selectionArray.length})`}</Button>
-          </div>
+          <Row className="flex-grow-1 justify-content-end spacingDocument">
+            <Col md={4}>
+              <Button
+                className="w-100"
+                variant="secondary"
+                disabled={this.props.selectionArray.length <= 0}
+                onClick={async () => {
+                  this.setState({ loading: true })
+                  print(this.props.selectionArray)
+                  this.setState({ loading: false })
+                }}
+              >{`${local.print}(${this.props.selectionArray.length})`}</Button>
+            </Col>
+            <Col md={{ span: 4, offset: 1 }}>
+              <Button
+                className="w-100"
+                variant="primary"
+                disabled={this.props.selectionArray.length <= 0}
+                onClick={async () => {
+                  this.setState({ loading: true })
+                  await downloadAsZip(
+                    this.props.selectionArray,
+                    `loan-${this.props.application._id}-${new Date().valueOf()}`
+                  )
+                  this.setState({ loading: false })
+                }}
+              >{`${local.download}(${this.props.selectionArray.length})`}</Button>
+            </Col>
+          </Row>
         </Row>
         {this.state.documentTypes.map((documentType, index) => {
           return (

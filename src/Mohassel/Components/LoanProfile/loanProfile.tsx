@@ -12,21 +12,56 @@ import { getRollableActionsById } from 'Shared/Services/APIs/loanApplication/rol
 import ReturnItemModal from 'Shared/Components/LoanApplication/ReturnItemModal'
 import { doneSuccessfully } from 'Shared/localUtils'
 import { returnItem } from 'Shared/Services/APIs/loanApplication/returnItemCF'
-import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
-import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions'
-import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment'
+import { UploadDocuments } from 'Shared/Components/UploadDocument'
+import { getApplication } from 'Shared/Services/APIs/loanApplication/getApplication'
 import {
   BranchDetails,
   BranchDetailsResponse,
   getBranch,
-} from '../../../Shared/Services/APIs/Branch/getBranch'
-import Payment from '../Payment/payment'
-import local from '../../../Shared/Assets/ar.json'
-import { Loader } from '../../../Shared/Components/Loader'
+} from 'Shared/Services/APIs/Branch/getBranch'
+import local from 'Shared/Assets/ar.json'
+import { Loader } from 'Shared/Components/Loader'
+import { CardNavBar, Tab } from 'Shared/Components/HeaderWithCards/cardNavbar'
+import EarlyPaymentPDF from 'Shared/Components/pdfTemplates/Financial/earlyPayment/earlyPayment'
+import { PendingActions } from 'Shared/Services/interfaces'
 import {
-  CardNavBar,
-  Tab,
-} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
+  iscoreDate,
+  getErrorMessage,
+  statusLocale,
+  timeToDateyyymmdd,
+} from 'Shared/Services/utils'
+import { payment } from 'Shared/redux/payment/actions'
+import { cancelApplication } from 'Shared/Services/APIs/loanApplication/stateHandler'
+import store from 'Shared/redux/store'
+import PaymentReceipt from 'Shared/Components/pdfTemplates/Financial/paymentReceipt'
+import RandomPaymentReceipt from 'Shared/Components/pdfTemplates/Financial/randomPaymentReceipt/randomPaymentReceipt'
+import { calculatePenalties } from 'Shared/Services/APIs/clearance/calculatePenalties'
+import { remainingLoan } from 'Shared/Services/APIs/Loan/remainingLoan'
+import { InfoBox, LtsIcon, ProfileActions } from 'Shared/Components'
+import {
+  getCompanyInfo,
+  getCustomerInfo,
+} from 'Shared/Services/formatCustomersInfo'
+import { FieldProps } from 'Shared/Components/Profile/types'
+import {
+  CalculateEarlyPaymentResponse,
+  RemainingLoanResponse,
+} from 'Shared/Models/Payment'
+import {
+  getIscore,
+  getIscoreCached,
+  getSMECachedIscore,
+  getSMEIscore,
+} from 'Shared/Services/APIs/iScore'
+import { getGeoAreasByBranch } from 'Shared/Services/APIs/geoAreas/getGeoAreas'
+import { getWriteOffReasons } from 'Shared/Services/APIs/config'
+import { getLoanUsage } from 'Shared/Services/APIs/LoanUsage/getLoanUsage'
+import { getEarlyPaymentPdfData } from 'Shared/Utils/payment'
+import EarlyPaymentReceipt from 'Shared/Components/pdfTemplates/Financial/earlyPaymentReceipt/earlyPaymentReceipt'
+import { Score, Customer } from 'Shared/Models/Customer'
+import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions'
+import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment'
+import Payment from '../Payment/payment'
 import Logs from './applicationLogs'
 import { LoanDetailsTableView } from './applicationsDetails'
 import { GuarantorTableView } from './guarantorDetails'
@@ -40,39 +75,17 @@ import FollowUpStatementPDF from '../pdfTemplates/followUpStatment/followUpState
 import LoanContract from '../pdfTemplates/loanContract/loanContract'
 import LoanContractForGroup from '../pdfTemplates/loanContractForGroup/loanContractForGroup'
 import Can from '../../config/Can'
-import EarlyPaymentPDF from '../../../Shared/Components/pdfTemplates/Financial/earlyPayment/earlyPayment'
-import { PendingActions } from '../../../Shared/Services/interfaces'
-import {
-  iscoreDate,
-  getErrorMessage,
-  statusLocale,
-  timeToDateyyymmdd,
-} from '../../../Shared/Services/utils'
-import { payment } from '../../../Shared/redux/payment/actions'
-import { cancelApplication } from '../../../Shared/Services/APIs/loanApplication/stateHandler'
 import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment'
-import store from '../../../Shared/redux/store'
-import UploadDocuments from './uploadDocuments'
 import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan'
 import { doubtLoan } from '../../Services/APIs/Loan/doubtLoan'
-import PaymentReceipt from '../../../Shared/Components/pdfTemplates/Financial/paymentReceipt'
-import RandomPaymentReceipt from '../../../Shared/Components/pdfTemplates/Financial/randomPaymentReceipt/randomPaymentReceipt'
-import { calculatePenalties } from '../../../Shared/Services/APIs/clearance/calculatePenalties'
 import ManualRandomPaymentsActions from './manualRandomPaymentsActions'
 import { getManualOtherPayments } from '../../Services/APIs/Payment/getManualOtherPayments'
 import { rejectManualOtherPayment } from '../../Services/APIs/Payment/rejectManualOtherPayment'
 import { approveManualOtherPayment } from '../../Services/APIs/Payment/approveManualOtherPayment'
 import { numTo2Decimal } from '../CIB/textFiles'
 import { FollowUpStatementView } from './followupStatementView'
-import { remainingLoan } from '../../../Shared/Services/APIs/Loan/remainingLoan'
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares'
-import { InfoBox, LtsIcon, ProfileActions } from '../../../Shared/Components'
 
-import {
-  getCompanyInfo,
-  getCustomerInfo,
-} from '../../../Shared/Services/formatCustomersInfo'
-import { FieldProps } from '../../../Shared/Components/Profile/types'
 import {
   AcknowledgmentAndPledge,
   AcknowledgmentOfCommitment,
@@ -84,24 +97,8 @@ import {
   SmeLoanContract,
   SolidarityGuarantee,
 } from '../pdfTemplates/smeLoanContract'
-import {
-  CalculateEarlyPaymentResponse,
-  RemainingLoanResponse,
-} from '../../../Shared/Models/Payment'
 import NanoLoanContract from '../pdfTemplates/nanoLoanContract/nanoLoanContract'
 import { PromissoryNoteMicro } from '../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
-import {
-  getIscore,
-  getIscoreCached,
-  getSMECachedIscore,
-  getSMEIscore,
-} from '../../../Shared/Services/APIs/iScore'
-import { getGeoAreasByBranch } from '../../../Shared/Services/APIs/geoAreas/getGeoAreas'
-import { getWriteOffReasons } from '../../../Shared/Services/APIs/config'
-import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
-import { getEarlyPaymentPdfData } from '../../../Shared/Utils/payment'
-import EarlyPaymentReceipt from '../../../Shared/Components/pdfTemplates/Financial/earlyPaymentReceipt/earlyPaymentReceipt'
-import { Score, Customer } from '../../../Shared/Models/Customer'
 import LoanProfileComments from './loanProfileComments'
 
 export interface IndividualWithInstallments {
