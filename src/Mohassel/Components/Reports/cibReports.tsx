@@ -132,9 +132,8 @@ const CIBReports: FC = () => {
         Swal.fire('error', local.noResults)
       } else if (res.body.status === 'queued') {
         setLoading(false)
-        Swal.fire('', local.fileQueuedSuccess, 'success').then(() =>
-          getCibReports()
-        )
+        await Swal.fire('', local.fileQueuedSuccess, 'success')
+        getCibReports()
       }
     } else {
       setLoading(false)
