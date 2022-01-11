@@ -8,8 +8,6 @@ import Select from 'react-select'
 import { theme } from '../../theme'
 import * as local from '../../Assets/ar.json'
 import { UsersSearchProps } from './types'
-// import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
-// import { searchUsers } from '../../Services/APIs/Users/searchUsers'
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction'
 import { LoanOfficer, ManagerHierarchyUser } from '../../Services/interfaces'
 import { LtsIcon } from '..'
@@ -22,8 +20,6 @@ export const UsersSearch: FC<UsersSearchProps> = ({
   updateItem,
   usersInitial,
   isClearable,
-  // isLoanOfficer,
-  // branchId,
 }) => {
   const [dropDownValue, setDropDownValue] = useState('name')
   const [options, setOptions] = useState<LoanOfficer[]>(usersInitial)
@@ -54,34 +50,6 @@ export const UsersSearch: FC<UsersSearchProps> = ({
     }
   }
 
-  // const getUsers = async (keyword: string) => {
-  //   const query = {
-  //     from: 0,
-  //     size: 500,
-  //     hrCode: '',
-  //     name: '',
-  //     nationalId: '',
-  //     branchId: objectKey === 'leader' ? branchId : '',
-  //   }
-  //   query[dropDownValue] = keyword
-
-  //   if (isLoanOfficer) {
-  //     const officerQuery = { ...query, branchId }
-  //     const res = await searchLoanOfficer(officerQuery)
-  //     if (res.status === 'success' && res.body.data) {
-  //       setOptions(res.body.data)
-  //     } else {
-  //       setOptions([])
-  //     }
-  //   } else {
-  //     const res = await searchUsers({ ...query, status: 'active' })
-  //     if (res.status === 'success' && res.body.data) {
-  //       setOptions(res.body.data)
-  //     } else {
-  //       setOptions([])
-  //     }
-  //   }
-  // }
   const getUsersByAction = async (input: string, actionKey: string) => {
     const obj = {
       size: 100,
