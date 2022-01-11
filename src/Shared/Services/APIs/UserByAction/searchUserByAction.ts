@@ -1,4 +1,3 @@
-/// search/user-by-action?size=1000&from=0&serviceKey=halan.com/branch&action=getBranch&branchId=5e79ee0ba92c135c57399330
 import { API_BASE_URL } from '../../../envConfig'
 import axios from '../../axiosInstance'
 
