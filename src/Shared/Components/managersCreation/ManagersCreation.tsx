@@ -44,14 +44,13 @@ const FormManagersCreation: FC<{
     </Form.Group>
   )
 }
-
 const ManagersCreation: FC<ManagersCreationProps> = ({ branchId }) => {
   const [loading, setLoading] = useState(false)
   const [values, setValues] = useState<Managers>({
     branchManager: { id: '', name: '' },
     operationsManager: { id: '', name: '' },
-    areaManager: { id: '', name: '' },
-    areaSupervisor: { id: '', name: '' },
+    districtManager: { id: '', name: '' },
+    districtSupervisor: { id: '', name: '' },
     centerManager: { id: '', name: '' },
   })
 
@@ -67,8 +66,8 @@ const ManagersCreation: FC<ManagersCreationProps> = ({ branchId }) => {
       } = res.body.data
       const newValues = {
         operationsManager,
-        areaManager,
-        areaSupervisor,
+        districtManager: areaManager,
+        districtSupervisor: areaSupervisor,
         centerManager,
         branchManager,
       }
@@ -85,8 +84,8 @@ const ManagersCreation: FC<ManagersCreationProps> = ({ branchId }) => {
   const prepareManagers = () => {
     return {
       operationsManager: values?.operationsManager?.id || undefined,
-      areaManager: values?.areaManager?.id || undefined,
-      areaSupervisor: values?.areaSupervisor?.id || undefined,
+      areaManager: values?.districtManager?.id || undefined,
+      areaSupervisor: values?.districtSupervisor?.id || undefined,
       centerManager: values?.centerManager?.id || undefined,
       branchManager: values?.branchManager?.id || undefined,
     }
@@ -120,14 +119,14 @@ const ManagersCreation: FC<ManagersCreationProps> = ({ branchId }) => {
           objectKeyId="districtManager"
           setValues={setValues}
           values={values}
-          value={values?.areaManager}
+          value={values?.districtManager}
         />
         <FormManagersCreation
           label={local.districtSupervisor}
           objectKeyId="districtSupervisor"
           setValues={setValues}
           values={values}
-          value={values?.areaSupervisor}
+          value={values?.districtSupervisor}
         />
         <FormManagersCreation
           label={local.centerManager}

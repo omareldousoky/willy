@@ -7,8 +7,8 @@ export interface ManagersCreationProps {
 export interface Managers {
   branchId?: string
   operationsManager?: ManagerHierarchyUser
-  areaManager?: ManagerHierarchyUser
-  areaSupervisor?: ManagerHierarchyUser
+  districtManager?: ManagerHierarchyUser
+  districtSupervisor?: ManagerHierarchyUser
   centerManager?: ManagerHierarchyUser
   branchManager?: ManagerHierarchyUser
 }
