@@ -58,7 +58,7 @@ class EarlyPayment extends Component<Props, State> {
   getInstallmentsRemaining() {
     const installmentsRemaining: Array<number> = []
     this.props.installments.forEach((installment) => {
-      if (installment.status !== 'paid')
+      if (!['paid', 'rescheduled'].includes(installment.status))
         installmentsRemaining.push(installment.id)
     })
     return installmentsRemaining.toString()

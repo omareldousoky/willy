@@ -8,6 +8,7 @@ import {
   getBranchFromCookie,
   getErrorMessage,
   iscoreDate,
+  timeToArabicDate,
 } from 'Shared/Services/utils'
 import { Tab } from 'Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from 'Shared/Assets/ar.json'
@@ -428,7 +429,10 @@ export const CustomerProfile = () => {
       },
       {
         fieldTitle: local.applicationDate,
-        fieldData: customerDetails?.applicationDate || '',
+        fieldData: `${timeToArabicDate(
+          customerDetails?.applicationDate || 0,
+          false
+        )}`,
         showFieldCondition: true,
       },
       {
