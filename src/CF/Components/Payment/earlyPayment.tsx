@@ -33,7 +33,7 @@ export const EarlyPayment = ({
   const getInstallmentsRemaining = () => {
     const installmentsRemaining: Array<number> = []
     installments.forEach((installment) => {
-      if (installment.status !== 'paid')
+      if (!['paid', 'rescheduled'].includes(installment.status))
         installmentsRemaining.push(installment.id)
     })
     return installmentsRemaining.toString()

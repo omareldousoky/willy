@@ -388,6 +388,7 @@ export const CompanyProfile = () => {
           }),
       },
       {
+        icon: 'applications',
         title: local.createClearance,
         permission: ability.can('newClearance', 'application'),
         onActionClick: () =>
