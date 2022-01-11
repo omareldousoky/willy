@@ -5,40 +5,20 @@
     page-break-after: always;
     font-family: Arial;
     font-weight: 600;
-    & tbody,
-    .title {
-      text-align: center;
-    }
 
     & table {
+      text-align: center;
       width: 100%;
       /* border-collapse: collapse; */
     }
 
-    & .title2 {
-      font-size: 16px;
-    }
-
-    & .titleborder {
-      border: 1.5px solid black;
-    }
-
-    & .margin {
-      margin: 10px;
-    }
-    & .table-content {
-      margin: 10px;
-      & th,
-      td {
-        border: 1px solid black;
-        direction: ltr;
-      }
+    & .gray {
+      background-color: rgb(221, 219, 219);
+      -webkit-print-color-adjust: exact;
     }
 
     & .frame {
       border: 0.5px solid black;
-      padding: 2px;
-      display: inline-block;
     }
   }
 }

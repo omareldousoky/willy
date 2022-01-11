@@ -1750,7 +1750,9 @@ class LoanProfile extends Component<Props, State> {
             data={this.state.application}
           />
         )}
-        {this.state.print === 'commentsReport' && <CommentsReport />}
+        {this.state.print === 'commentsReport' && (
+          <CommentsReport branchName={this.state.branchDetails?.name || ''} />
+        )}
         {this.state.print === 'randomPayment' ||
         this.state.print === 'penalty' ? (
           <RandomPaymentReceipt receiptData={this.state.receiptData} />

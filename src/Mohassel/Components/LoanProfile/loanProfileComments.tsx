@@ -109,7 +109,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
           )}
           <div className="mt-5 mb-5">
             <Button variant="primary" onClick={() => getNotesReport()}>
-              {local.add} {local.comments}
+              {local.commentsReport}
             </Button>
           </div>
         </div>

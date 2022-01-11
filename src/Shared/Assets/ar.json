@@ -1266,5 +1266,6 @@
   "customerGuaranteed": "عملاء ضمنهم العميل",
   "lowRisk":"قليل",
   "medRisk":"متوسط",
-  "highRisk":"خطر"
+  "highRisk":"خطر",
+  "commentsReport": "تقرير ملاحظات الفرع"
 }
