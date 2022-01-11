@@ -886,7 +886,6 @@ const ReportsModal = (props: Props) => {
                   ![
                     'customerDetails',
                     'loanDetails',
-                    'cibPaymentReport',
                     'customerTransactionReport',
                   ].includes(props.pdf.key) &&
                   props.getExcel && (
