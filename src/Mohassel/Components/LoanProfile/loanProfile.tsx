@@ -103,6 +103,7 @@ import { getEarlyPaymentPdfData } from '../../../Shared/Utils/payment'
 import EarlyPaymentReceipt from '../../../Shared/Components/pdfTemplates/Financial/earlyPaymentReceipt/earlyPaymentReceipt'
 import { Score, Customer } from '../../../Shared/Models/Customer'
 import LoanProfileComments from './loanProfileComments'
+import CommentsReport from './commentsReport'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -1191,6 +1192,10 @@ class LoanProfile extends Component<Props, State> {
     })
   }
 
+  getCommentsReport = () => {
+    this.setState({ print: 'commentsReport' }, () => window.print())
+  }
+
   renderContent() {
     switch (this.state.activeTab) {
       case 'loanDetails':
@@ -1357,6 +1362,7 @@ class LoanProfile extends Component<Props, State> {
             applicationStatus={this.state.application.status}
             comments={this.state.application.inReviewNotes ?? []}
             recallAPI={() => this.getAppByID(this.props.location.state.id)}
+            printCommentsReport={() => this.getCommentsReport()}
           />
         )
       default:
@@ -1744,6 +1750,7 @@ class LoanProfile extends Component<Props, State> {
             data={this.state.application}
           />
         )}
+        {this.state.print === 'commentsReport' && <CommentsReport />}
         {this.state.print === 'randomPayment' ||
         this.state.print === 'penalty' ? (
           <RandomPaymentReceipt receiptData={this.state.receiptData} />

@@ -23,6 +23,7 @@ interface LoanProfileCommentsProps {
   applicationId: string
   recallAPI: () => void
   applicationStatus: string
+  printCommentsReport: () => void
 }
 const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
   props: LoanProfileCommentsProps
@@ -83,23 +84,35 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
     !['pending', 'paid', 'canceled', 'issued', 'rejected', 'created'].includes(
       props.applicationStatus
     )
+
+  const getNotesReport = () => {
+    props.printCommentsReport()
+  }
+
   return (
     <>
       <Loader type="fullscreen" open={loading} />
       <div className="d-flex flex-column align-items-start justify-content-center">
-        {canChangeComments && (
+        <div className="d-flex">
+          {canChangeComments && (
+            <div className="mt-5 mb-5 mr-5">
+              <Button
+                variant="primary"
+                onClick={async () => {
+                  await getComments()
+                  setOpenModal(true)
+                }}
+              >
+                {local.add} {local.comments}
+              </Button>
+            </div>
+          )}
           <div className="mt-5 mb-5">
-            <Button
-              variant="primary"
-              onClick={async () => {
-                await getComments()
-                setOpenModal(true)
-              }}
-            >
+            <Button variant="primary" onClick={() => getNotesReport()}>
               {local.add} {local.comments}
             </Button>
           </div>
-        )}
+        </div>
         {props.comments.length ? (
           <Table className="text-left">
             <thead>
