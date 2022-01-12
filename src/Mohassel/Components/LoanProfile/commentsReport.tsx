@@ -1,5 +1,9 @@
 import React, { FC } from 'react'
-import { numbersToArabic, timeToArabicDateNow } from 'Shared/Services/utils'
+import {
+  numbersToArabic,
+  timeToArabicDateNow,
+  getIndexOfGuarantorInAr,
+} from 'Shared/Services/utils'
 import * as local from 'Shared/Assets/ar.json'
 import './commentsReport.scss'
 
@@ -9,44 +13,33 @@ interface Props {
 
 const CommentsReport: FC<Props> = (props) => {
   const comments = [
-    [
-      'توقيع العميل و الضامنين علي الاقرار',
-      'الاستعلام الجيد و معاينه مشرف المنطقه و مدير المنطقه',
-    ],
-    [
-      'كتابه العنوان تفصيليا علي ايصال المرافق الخاص بنشاط العميل من قبل مدير الفرع و التوقيع عليه بالاطلاع',
-      'اثبات سكن الضامن الاول بايصال مرافق حديث',
-    ],
+    'توقيع العميل و الضامنين علي الاقرار',
+    'الاستعلام الجيد و معاينه مشرف المنطقه و مدير المنطقه',
+    'كتابه العنوان تفصيليا علي ايصال المرافق الخاص بنشاط العميل من قبل مدير الفرع و التوقيع عليه بالاطلاع',
+    'اثبات سكن الضامن الاول بايصال مرافق حديث',
   ]
 
-  const data = [
-    {
-      customerCode: '123376457344',
-      customerName: 'fjajsdfjadsf feetr',
-      loanUsage: 'fjkajsdfjasdj jewjjrjngf jfg',
-      previousLoan: '0',
-      currentLoan: '50,000',
-      loanTime: '12',
-      allowance: '0',
-      fees: '500',
-      nationalId: '234727482147871',
-      officerName: 'fjjasdfj jadfjeurtjfg dfgg',
-      branchManger: 'jasdjfad jerjeurnf',
-    },
-    {
-      customerCode: '123376457344',
-      customerName: 'fjajsdfjadsf feetr',
-      loanUsage: 'fjkajsdfjasdj jewjjrjngf jfg',
-      previousLoan: '0',
-      currentLoan: '50,000',
-      loanTime: '12',
-      allowance: '0',
-      fees: '500',
-      nationalId: '234727482147871',
-      officerName: 'fjjasdfj jadfjeurtjfg dfgg',
-      branchManger: 'jasdjfad jerjeurnf',
-    },
-  ]
+  const data = {
+    customerCode: '123376457344',
+    customerName: 'fjajsdfjadsf feetr',
+    loanUsage: 'fjkajsdfjasdj jewjjrjngf jfg',
+    previousLoan: ['10000/12', '7500/14', '100000/24'],
+    currentLoan: '50,000',
+    loanTime: '12',
+    allowance: '0',
+    fees: '500',
+    nationalId: '234727482147871',
+    officerName: 'fjjasdfj jadfjeurtjfg dfgg',
+    branchManger: 'jasdjfad jerjeurnf',
+    guarantors: [
+      {
+        name: 'asdfasdsafasdfasdf',
+        nationalId: 299483756829182,
+      },
+      { name: 'adfjaweuriewur', nationalId: 29445673847568 },
+      { name: 'adfjaweuriewur', nationalId: 29445673847568 },
+    ],
+  }
 
   const tableArray = [
     {
@@ -119,19 +112,27 @@ const CommentsReport: FC<Props> = (props) => {
                 </th>
               ))}
             </tr>
-            {data.map((d, di) => (
-              <tr key={di} className="border">
-                {tableArray.map((t, ti) => (
-                  <td key={ti} className="border-left border-bottom px-1">
-                    {d[t.key]}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            <tr>
+              {tableArray.map((t, ti) => (
+                <td key={ti} className="border-left border-bottom px-1">
+                  {t.key === 'previousLoan'
+                    ? data[t.key].map((v, i) => (
+                        <div
+                          className={
+                            i + 1 < data[t.key].length ? 'border-bottom' : ''
+                          }
+                        >
+                          {v}
+                        </div>
+                      ))
+                    : data[t.key]}
+                </td>
+              ))}
+            </tr>
           </tr>
           <tr>
             <div className="d-flex w-100 border">
-              <div className="gray frame px-4">test</div>
+              <div className="gray frame px-4">اجمالي</div>
               <div className="border-left px-3">1</div>
               <div className="border-left px-3">50,000</div>
               <div className="border-left px-3">50,000</div>
@@ -139,9 +140,15 @@ const CommentsReport: FC<Props> = (props) => {
             </div>
           </tr>
           <tr>
-            <div className="d-flex justify-content-between w-100 mt-2">
-              <div>test</div>
-              <div>test</div>
+            <div className="d-flex justify-content-between flex-wrap mt-4">
+              {data.guarantors.map((g, i) => (
+                <div className="d-flex">
+                  <div>الضامن {getIndexOfGuarantorInAr(i - 2)}:</div>
+                  <div className="border px-2">834838434</div>
+                  <div className="border px-2">{g.name}</div>
+                  <div className="border px-2">{g.nationalId}</div>
+                </div>
+              ))}
             </div>
           </tr>
           <tr>
@@ -149,15 +156,8 @@ const CommentsReport: FC<Props> = (props) => {
               <div className="font-weight-bold mr-2">ملاحظات:</div>
               <div className="mr-3">
                 {comments.map((c, i) => (
-                  <div key={i} className="d-flex flex-row">
-                    {c.map((d, t) => (
-                      <div
-                        key={t}
-                        className="justify-content-evenly mr-3 flex-wrap"
-                      >
-                        {numbersToArabic(i + 1 + (t + i))}- {d}
-                      </div>
-                    ))}
+                  <div key={i} className="d-flex mr-3 flex-wrap">
+                    {numbersToArabic(i + 1)}- {c}
                   </div>
                 ))}
               </div>
