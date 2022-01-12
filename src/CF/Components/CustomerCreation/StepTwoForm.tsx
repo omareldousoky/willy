@@ -117,7 +117,7 @@ export const StepTwoForm = (props: any) => {
         <Col sm={12}>
           <Form.Group controlId="businessName">
             <Form.Label className="customer-form-label">
-              {local.businessName}
+              {local.businessName}*
             </Form.Label>
             <Form.Control
               type="text"
@@ -138,7 +138,7 @@ export const StepTwoForm = (props: any) => {
         <Col sm={12}>
           <Form.Group controlId="businessAddress">
             <Form.Label className="customer-form-label">
-              {local.businessAddress}
+              {local.businessAddress}*
             </Form.Label>
             <Form.Control
               type="text"
