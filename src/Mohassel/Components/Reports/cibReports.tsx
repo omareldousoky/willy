@@ -82,18 +82,22 @@ const CIBReports: FC = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [showModal, setShowModal] = useState<boolean>(false)
   const [selectedPdf, setSelectedPdf] = useState<PDF>({ permission: '' })
-  const [activeTab, setActiveTab] = useState<string>('cibPaymentReport')
+  const [activeTab, setActiveTab] = useState<string>('')
   const headerTabs: CibReportTab[] = Tabs.filter((f) =>
     ability.can(f.permission, f.permissionKey)
   )
 
+  useEffect(() => {
+    setActiveTab(headerTabs[0]?.stringKey || '')
+  }, [])
+
   const getCibReports = async () => {
-    setLoading(true)
     const cibReportFiles = {
       cibPortofolioReports: { fun: getCibPortoFiles, key: 'reportFiles' },
       cibPaymentReport: { fun: getTpayFiles, key: 'cibFile' },
     }
     const getReport = cibReportFiles[activeTab]
+    setLoading(true)
     const res = await getReport.fun()
     setLoading(false)
     if (res.status === 'success' && res.body) {
@@ -105,6 +109,7 @@ const CIBReports: FC = () => {
   }
 
   useEffect(() => {
+    if (!activeTab) return
     setSelectedPdf(
       PDFArray.find((f) => activeTab === f.key) || { permission: '' }
     )
