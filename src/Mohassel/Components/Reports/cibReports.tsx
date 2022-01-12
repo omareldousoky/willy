@@ -87,13 +87,17 @@ const CIBReports: FC = () => {
     ability.can(f.permission, f.permissionKey)
   )
 
+  useEffect(() => {
+    setActiveTab(headerTabs[0]?.stringKey || '')
+  }, [])
+
   const getCibReports = async () => {
-    setLoading(true)
     const cibReportFiles = {
       cibPortofolioReports: { fun: getCibPortoFiles, key: 'reportFiles' },
       cibPaymentReport: { fun: getTpayFiles, key: 'cibFile' },
     }
     const getReport = cibReportFiles[activeTab]
+    setLoading(true)
     const res = await getReport.fun()
     setLoading(false)
     if (res.status === 'success' && res.body) {
@@ -105,10 +109,7 @@ const CIBReports: FC = () => {
   }
 
   useEffect(() => {
-    setActiveTab(headerTabs[0]?.stringKey || '')
-  }, [])
-
-  useEffect(() => {
+    if (!activeTab) return
     setSelectedPdf(
       PDFArray.find((f) => activeTab === f.key) || { permission: '' }
     )
