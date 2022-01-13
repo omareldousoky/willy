@@ -4,7 +4,7 @@ import React from 'react'
 import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 
-import * as local from 'Shared/Assets/ar.json'
+import * as local from '../../Assets/ar.json'
 import { Loader } from '../Loader'
 import BackButton from '../BackButton/back-button'
 import { CardNavBar } from '../HeaderWithCards/cardNavbar'
