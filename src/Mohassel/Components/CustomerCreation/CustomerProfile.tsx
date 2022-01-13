@@ -367,7 +367,10 @@ export const CustomerProfile = () => {
       },
       {
         fieldTitle: local.businessLicenseIssueDate,
-        fieldData: customerDetails?.businessLicenseIssueDate || '',
+        fieldData: `${timeToArabicDate(
+          customerDetails?.businessLicenseIssueDate || 0,
+          false
+        )}`,
         showFieldCondition: true,
       },
       {
