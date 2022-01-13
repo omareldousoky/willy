@@ -18,7 +18,8 @@ const print = (selectionArray: Image[]) => {
   })
   const externalDoc = new Blob(
     [
-      `<html><body>
+      `<html>
+      <body>
       <style>
         @media print{
           *{

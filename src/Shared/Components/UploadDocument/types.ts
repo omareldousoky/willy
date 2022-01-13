@@ -3,6 +3,7 @@ import {
   getDocuments,
   addAllToSelectionArray,
   clearSelectionArray,
+  clearDocuments,
 } from 'Shared/redux/document/actions'
 
 export interface UploadDocumentProps {
@@ -10,6 +11,7 @@ export interface UploadDocumentProps {
   getDocuments: typeof getDocuments
   addAllToSelectionArray: typeof addAllToSelectionArray
   clearSelectionArray: typeof clearSelectionArray
+  clearDocuments: typeof clearDocuments
   loading: boolean
   documents: any[]
   selectionArray: Image[]

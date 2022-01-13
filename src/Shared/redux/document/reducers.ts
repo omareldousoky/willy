@@ -14,6 +14,7 @@ import {
   ADD_ALL_TO_SELECTION_ARRAY,
   REMOVE_FROM_SELECTION_ARRAY,
   CLEAR_SELECTION_ARRAY,
+  CLEAR_DOCUMENTS,
 } from './types'
 
 const initialDocState: DocumentState = {
@@ -105,6 +106,9 @@ export const DocumentsReducer = produce(
           }
         })
         break
+      }
+      case CLEAR_DOCUMENTS: {
+        return []
       }
       default:
         return draft

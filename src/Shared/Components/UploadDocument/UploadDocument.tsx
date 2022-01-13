@@ -14,6 +14,7 @@ import {
   getDocuments,
   addAllToSelectionArray,
   clearSelectionArray,
+  clearDocuments,
 } from 'Shared/redux/document/actions'
 import { Image } from 'Shared/redux/document/types'
 import { downloadAsZip, getErrorMessage } from 'Shared/Services/utils'
@@ -50,6 +51,7 @@ class UploadDocuments extends Component<
 
   componentWillUnmount() {
     this.props.clearSelectionArray()
+    this.props.clearDocuments()
   }
 
   async getApplicationDocuments() {
@@ -109,7 +111,7 @@ class UploadDocuments extends Component<
           open={this.state.loading || this.props.loading}
         />
         <Row className="justify-content-between">
-          <div className="spacingDocument">
+          <div className="spacing-document">
             <Form.Check
               type="checkbox"
               id="check-all"
@@ -118,10 +120,9 @@ class UploadDocuments extends Component<
               onChange={() => this.selectAllOptions()}
             />
           </div>
-          <Row className="flex-grow-1 justify-content-end spacingDocument">
-            <Col md={4}>
+          <Row className="flex-grow-1 justify-content-end spacing-document text-right">
+            <Col xs={4}>
               <Button
-                className="w-100"
                 variant="secondary"
                 disabled={this.props.selectionArray.length <= 0}
                 onClick={async () => {
@@ -131,9 +132,8 @@ class UploadDocuments extends Component<
                 }}
               >{`${local.print}(${this.props.selectionArray.length})`}</Button>
             </Col>
-            <Col md={{ span: 4, offset: 1 }}>
+            <Col xs={4}>
               <Button
-                className="w-100"
                 variant="primary"
                 disabled={this.props.selectionArray.length <= 0}
                 onClick={async () => {
@@ -174,6 +174,7 @@ const addDocumentToProps = (dispatch) => {
     addAllToSelectionArray: (images) =>
       dispatch(addAllToSelectionArray(images)),
     clearSelectionArray: () => dispatch(clearSelectionArray()),
+    clearDocuments: () => dispatch(clearDocuments()),
   }
 }
 const mapStateToProps = (state) => {
