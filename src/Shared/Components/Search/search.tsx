@@ -216,14 +216,14 @@ const Search: FunctionComponent<SearchProps> = ({
         case 'phoneNumber':
           initialState.phoneNumber = ''
           break
+        case 'consumerFinanceLimitStatus':
+          initialState.consumerFinanceLimitStatus = ''
+          break
         case 'productType':
           initialState.type = isProductUrl ? type : ''
           break
         case 'beneficiaryType':
           initialState.type = isProductUrl ? beneficiaryType : ''
-          break
-        case 'consumerFinanceLimitStatus':
-          initialState.consumerFinanceLimitStatus = ''
           break
         default:
           break
@@ -746,7 +746,7 @@ const Search: FunctionComponent<SearchProps> = ({
                       <p className="dropdown-label">{local.transaction}</p>
                       <AsyncSelect
                         className="w-100"
-                        name="dropdown-select"
+                        name="actions"
                         data-qc="actions"
                         styles={theme.selectStyleWithBorder}
                         theme={theme.selectTheme}

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 
-import * as local from 'Shared/Assets/ar.json'
+import * as local from '../../Assets/ar.json'
 import { CardNavBar } from '../HeaderWithCards/cardNavbar'
 
 import { FieldProps } from '../Profile/types'
