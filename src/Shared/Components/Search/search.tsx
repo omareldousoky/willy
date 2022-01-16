@@ -11,7 +11,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import Col from 'react-bootstrap/Col'
 import dayjs from 'dayjs'
 import AsyncSelect from 'react-select/async'
-import { theme } from 'Shared/theme'
+import { theme } from '../../theme'
 import * as local from '../../Assets/ar.json'
 import {
   search as searchAction,
@@ -34,6 +34,11 @@ import { WarningTypeDropDown } from '../dropDowns/WarningTypeDropDown'
 import { getGovernorates } from '../../Services/APIs/config'
 import Can from '../../config/Can'
 import { Governorate } from '../../Models/Governorate'
+
+interface LogAction {
+  _id: string
+  name: string
+}
 
 const Search: FunctionComponent<SearchProps> = ({
   url,
@@ -64,9 +69,7 @@ const Search: FunctionComponent<SearchProps> = ({
   const isCibUrl = url === 'cib'
 
   const [governorates, setGovernorates] = useState<Governorate[]>([])
-  const [actionsList, setActionsList] = useState<
-    { _id: string; name: string }[]
-  >([])
+  const [actionsList, setActionsList] = useState<LogAction[]>([])
 
   const dispatch = useDispatch()
   const {
@@ -120,17 +123,16 @@ const Search: FunctionComponent<SearchProps> = ({
   const getActionsList = async (value?: string) => {
     const res = await getActionsListService()
     if (res.status === 'success') {
-      setActionsList(res.body.data)
-      const options = res.body.data
-        .map((a) => {
-          return {
-            _id: a,
-            name: a,
-          }
-        })
-        .filter((f) => f.name.includes(value))
+      const options = res.body.data.map((a) => {
+        return {
+          _id: a,
+          name: a,
+        }
+      })
+      setActionsList(options)
 
-      return options
+      const filtered = options.filter((f) => f.name.includes(value))
+      return [{ _id: '', name: local.all }, ...filtered]
     }
     console.log('Error getting actionsLogs list') // log for purpose
 
@@ -751,11 +753,11 @@ const Search: FunctionComponent<SearchProps> = ({
                         styles={theme.selectStyleWithBorder}
                         theme={theme.selectTheme}
                         value={actionsList.find(
-                          (a) => a._id === formikProps.values.action
+                          (action) => action._id === formikProps.values.action
                         )}
                         onBlur={formikProps.handleBlur}
                         onChange={(e: any) => {
-                          formikProps.setFieldValue('action', [e.name])
+                          formikProps.setFieldValue('action', [e._id])
                         }}
                         getOptionLabel={(option) => option.name}
                         getOptionValue={(option) => option._id}
