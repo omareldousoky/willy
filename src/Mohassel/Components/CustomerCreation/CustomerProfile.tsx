@@ -87,13 +87,15 @@ const tabs: Array<Tab> = [
 
 const getCustomerCategorizationRating = async (
   id: string,
-  setRating: (rating: Array<CustomerScore>) => void
+  setRating: (rating: CustomerScore[]) => void,
+  setLoading: (loading: boolean) => void
 ) => {
+  setLoading(true)
   const res = await getCustomerCategorization({ customerId: id })
-  if (res.status === 'success' && res.body?.customerScores !== undefined) {
+  setLoading(false)
+
+  if (res.status === 'success' && res.body?.customerScores) {
     setRating(res.body?.customerScores)
-  } else {
-    setRating([])
   }
 }
 
@@ -185,8 +187,8 @@ export const CustomerProfile = () => {
 
   useEffect(() => {
     getCustomerDetails()
-    getCustomerCategorizationRating(location.state.id, setRatings)
   }, [])
+
   function getArRuralUrban(ruralUrban: string | undefined) {
     if (ruralUrban === 'rural') return local.rural
     return local.urban
@@ -701,7 +703,16 @@ export const CustomerProfile = () => {
           loading={loading}
           tabs={tabs}
           activeTab={activeTab}
-          setActiveTab={(stringKey) => setActiveTab(stringKey)}
+          setActiveTab={(stringKey) => {
+            if (stringKey === 'customerScore') {
+              getCustomerCategorizationRating(
+                location.state.id,
+                setRatings,
+                setLoading
+              )
+            }
+            setActiveTab(stringKey)
+          }}
           tabsData={tabsData}
         />
         {showCFLimitModal && customerDetails && (
