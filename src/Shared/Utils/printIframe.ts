@@ -1,7 +1,16 @@
 import { Image } from 'Shared/redux/document/types'
 
+const clearIframe = () => {
+  setTimeout(() => {
+    if (document.getElementById('print-imgs'))
+      document.getElementById('print-imgs')?.remove()
+  }, 0)
+}
 const print = (selectionArray: Image[]) => {
+  const iframe = document.getElementById('print-imgs')
+  if (iframe) iframe.parentNode?.removeChild(iframe)
   const frame = document.createElement('iframe')
+  frame.id = 'print-imgs'
   frame.style.height = '0'
   frame.style.width = '0'
   frame.style.visibility = 'hidden'
@@ -27,7 +36,7 @@ const print = (selectionArray: Image[]) => {
             width: 210mm;
             height: 297mm;
           }
-          *{
+          div{
             page-break-after: always;
           }
           img{ 
@@ -45,8 +54,9 @@ const print = (selectionArray: Image[]) => {
   frame.onload = () => {
     try {
       frame.contentWindow && frame.contentWindow.print()
+      clearIframe()
     } catch (e) {
-      console.log(e)
+      if (iframe) iframe.parentNode?.removeChild(iframe)
     }
   }
   frame.src = URL.createObjectURL(externalDoc)
@@ -55,4 +65,5 @@ const print = (selectionArray: Image[]) => {
     frame.parentNode?.removeChild(frame)
   })
 }
+
 export default print
