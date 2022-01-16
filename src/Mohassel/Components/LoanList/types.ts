@@ -1,6 +1,7 @@
 export interface LoanListProps {
   branchId: string
   fromBranch?: boolean
+  hideTabs?: boolean
 }
 
 export interface LoanListLocationState {
