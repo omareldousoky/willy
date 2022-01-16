@@ -9,7 +9,6 @@ import isEqual from 'date-fns/isEqual'
 import startOfDay from 'date-fns/startOfDay'
 
 import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
 
 import HeaderWithCards from '../../../Shared/Components/HeaderWithCards/headerWithCards'
 import { Calendar } from './Calendar'
@@ -136,9 +135,6 @@ export const LegalCalendar = () => {
                 handleNext={nextWeek}
               />
             </div>
-            <Button size="lg" variant="outline-secondary" disabled>
-              {local.downloadPDF}
-            </Button>
           </div>
           <Calendar
             daysOfWeek={DAYS_OF_WEEK}
