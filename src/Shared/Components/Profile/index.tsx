@@ -4,10 +4,10 @@ import React from 'react'
 import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 
+import * as local from '../../Assets/ar.json'
 import { Loader } from '../Loader'
 import BackButton from '../BackButton/back-button'
 import { CardNavBar } from '../HeaderWithCards/cardNavbar'
-
 import { CustomerCategorization } from '../Customer/customerCategorization'
 import { ProfileActions } from '../ProfileActions'
 import { ProfileProps, TabDataProps } from './types'
@@ -63,7 +63,7 @@ export const Profile = ({
                         {fieldTitle}
                       </td>
                       <td style={field.fieldDataStyle ?? field.fieldDataStyle}>
-                        {fieldData}
+                        {fieldData || local.na}
                       </td>
                     </tr>
                   )

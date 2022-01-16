@@ -36,7 +36,7 @@ export const ClearanceCreationForm = (
       <Row className="px-2 py-3">
         <Form.Group as={Col} controlId="application">
           <Form.Label className="clearance-label">
-            {local.financeCode}
+            {local.financeCode}*
           </Form.Label>
           <Select<PaidLoan>
             name="application"
@@ -78,7 +78,7 @@ export const ClearanceCreationForm = (
       <Row className="px-2 py-3">
         <Form.Group as={Col} controlId="registrationDate">
           <Form.Label className="clearance-label">
-            {local.registrationDate}
+            {local.registrationDate}*
           </Form.Label>
           <Form.Control
             type="date"
@@ -98,7 +98,7 @@ export const ClearanceCreationForm = (
         </Form.Group>
         <Form.Group as={Col} controlId="receiptDate">
           <Form.Label className="clearance-label">
-            {local.receiptDate}
+            {local.receiptDate}*
           </Form.Label>
           <Form.Control
             type="date"
@@ -164,7 +164,7 @@ export const ClearanceCreationForm = (
       <Row className="px-2 py-3">
         <Form.Group as={Col} controlId="clearanceReason">
           <Form.Label className="clearance-label">
-            {local.clearanceReason}
+            {local.clearanceReason}*
           </Form.Label>
           <Form.Control
             type="text"
@@ -183,7 +183,7 @@ export const ClearanceCreationForm = (
           </Form.Control.Feedback>
         </Form.Group>
         <Form.Group as={Col} controlId="bankName">
-          <Form.Label className="clearance-label">{local.bankName}</Form.Label>
+          <Form.Label className="clearance-label">{local.bankName}*</Form.Label>
           <Form.Control
             type="text"
             name="bankName"
