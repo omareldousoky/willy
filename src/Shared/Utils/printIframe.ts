@@ -11,8 +11,6 @@ const print = (selectionArray: Image[]) => {
     imgcontainer.style.width = '100%'
     const imageurl = document.createElement('img')
     imageurl.src = img.url
-    imageurl.style.width = '100%'
-    imageurl.style.height = 'auto'
     imgcontainer.appendChild(imageurl)
     container.appendChild(imgcontainer)
   })
@@ -21,10 +19,21 @@ const print = (selectionArray: Image[]) => {
       `<html>
       <body>
       <style>
+        @page {
+          size: A4;
+        }
         @media print{
+          html, body {
+            width: 210mm;
+            height: 297mm;
+          }
           *{
             page-break-after: always;
-            }
+          }
+          img{ 
+            max-width: 210mm;
+            max-height: 297mm;
+          }
          }
       </style>
       ${container.innerHTML}</body></html>`,
