@@ -134,9 +134,13 @@ class UsersList extends Component<Props, State> {
     const res = await setUserActivation(req)
     if (res.status === 'success') {
       this.props.setLoading(false)
-      Swal.fire('', `${data.username}  ${req.status} `, 'success').then(() =>
-        this.getUsers()
-      )
+      Swal.fire(
+        '',
+        `${
+          req.status === 'active' ? local.activateUser : local.deActivateUser
+        } ${data.username}`,
+        'success'
+      ).then(() => this.getUsers())
     } else {
       this.props.setLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
@@ -216,7 +220,7 @@ class UsersList extends Component<Props, State> {
               .map((item) => {
                 return item.icon
               })
-              .indexOf('users')}
+              .indexOf('user')}
           />
         )}
         <Card className="main-card">
