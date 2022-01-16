@@ -10,6 +10,8 @@ import FormControl from 'react-bootstrap/FormControl'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Col from 'react-bootstrap/Col'
 import dayjs from 'dayjs'
+import AsyncSelect from 'react-select/async'
+import { theme } from 'Shared/theme'
 import * as local from '../../Assets/ar.json'
 import {
   search as searchAction,
@@ -62,7 +64,9 @@ const Search: FunctionComponent<SearchProps> = ({
   const isCibUrl = url === 'cib'
 
   const [governorates, setGovernorates] = useState<Governorate[]>([])
-  const [actionsList, setActionsList] = useState([])
+  const [actionsList, setActionsList] = useState<
+    { _id: string; name: string }[]
+  >([])
 
   const dispatch = useDispatch()
   const {
@@ -113,16 +117,24 @@ const Search: FunctionComponent<SearchProps> = ({
     }
   }
 
-  const getActionsList = async () => {
-    setLoading(true)
+  const getActionsList = async (value?: string) => {
     const res = await getActionsListService()
     if (res.status === 'success') {
       setActionsList(res.body.data)
-      setLoading(false)
-    } else {
-      setLoading(false)
-      console.log('Error getting actionsLogs list') // log for purpose
+      const options = res.body.data
+        .map((a) => {
+          return {
+            _id: a,
+            name: a,
+          }
+        })
+        .filter((f) => f.name.includes(value))
+
+      return options
     }
+    console.log('Error getting actionsLogs list') // log for purpose
+
+    return []
   }
 
   useEffect(() => {
@@ -732,28 +744,25 @@ const Search: FunctionComponent<SearchProps> = ({
                   <Col key={index} sm={6} style={{ marginTop: 20 }}>
                     <div className="dropdown-container">
                       <p className="dropdown-label">{local.transaction}</p>
-                      <Form.Control
-                        as="select"
-                        className="dropdown-select"
+                      <AsyncSelect
+                        className="w-100"
+                        name="dropdown-select"
                         data-qc="actions"
-                        value={formikProps.values.action}
-                        onChange={(e) => {
-                          formikProps.setFieldValue('action', [
-                            e.currentTarget.value,
-                          ])
+                        styles={theme.selectStyleWithBorder}
+                        theme={theme.selectTheme}
+                        value={actionsList.find(
+                          (a) => a._id === formikProps.values.action
+                        )}
+                        onBlur={formikProps.handleBlur}
+                        onChange={(e: any) => {
+                          formikProps.setFieldValue('action', [e.name])
                         }}
-                      >
-                        <option value="" data-qc="all">
-                          {local.all}
-                        </option>
-                        {actionsList.map((action, i) => {
-                          return (
-                            <option key={i} value={action} data-qc={action}>
-                              {action}
-                            </option>
-                          )
-                        })}
-                      </Form.Control>
+                        getOptionLabel={(option) => option.name}
+                        getOptionValue={(option) => option._id}
+                        loadOptions={(value) => getActionsList(value)}
+                        cacheOptions
+                        defaultOptions
+                      />
                     </div>
                   </Col>
                 )
