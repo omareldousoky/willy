@@ -1,11 +1,17 @@
 @media screen, print {
   .random-payment-receipt {
-    font-size: 12px;
+    font-size: 40px !important;
     font-weight: 600;
     page-break-after: always;
     color: #000;
+    .title,
+    .info,
+    span,
+    h5 {
+      font-size: 40px !important;
+    }
     & .receipt-container {
-      width: 105mm;
+      width: 100%;
       padding: 20px;
       border: 1px solid black;
       & .receipt-header {

@@ -21,7 +21,6 @@ const EarlyPaymentReceipt = (props) => {
       <table className="title">
         <table
           style={{
-            fontSize: '12px',
             margin: '10px 0px',
             textAlign: 'center',
             width: '100%',
@@ -84,7 +83,7 @@ const EarlyPaymentReceipt = (props) => {
             <th className="frame"> السداد الحالي </th>
             <td className="frame" style={{ direction: 'ltr' }}>
               {numbersToArabic(props.receiptData[0].paidNow)}
-              <div>
+              <div className="frame">
                 {new Tafgeet(props.receiptData[0].paidNow, 'EGP').parse()}
               </div>
             </td>

@@ -29,12 +29,7 @@ const PaymentReceipt = (props: PaymentReceiptProps) => {
         return (
           <div key={index} className="payment-receipt" lang="ar">
             <div className="receipt-container">
-              <table
-                className="w-100 text-center"
-                style={{
-                  margin: '10px 0px',
-                }}
-              >
+              <table>
                 <tbody>
                   <tr style={{ height: '10px' }} />
                   <tr className="w-100 d-flex flex-row justify-content-between">
@@ -51,19 +46,19 @@ const PaymentReceipt = (props: PaymentReceiptProps) => {
                 <h5>{local.paymentReceipt}</h5>
               </div>
               <div className="receipt-data">
-                <div>
+                <div className="d-flex my-4 mx-0 w-100">
                   <span className="title">{local.date}</span>
                   <span className="info">
                     {extractGMTDate(receiptData.date)}
                   </span>
                 </div>
-                <div>
+                <div className="d-flex my-4 mx-0 w-100">
                   <span className="title">{local.receiptNumber}</span>
                   <span className="info">
                     {numbersToArabic(receiptData.receiptNumber)}
                   </span>
                 </div>
-                <div>
+                <div className="d-flex my-4 mx-0 w-100">
                   <span className="title">
                     {props.companyReceipt
                       ? local.companyName
@@ -71,7 +66,7 @@ const PaymentReceipt = (props: PaymentReceiptProps) => {
                   </span>
                   <span className="info">{receiptData.customerName}</span>
                 </div>
-                <div>
+                <div className="d-flex my-4 mx-0 w-100">
                   <span className="title">
                     {props.fromLoanIssuance
                       ? local.value
@@ -84,7 +79,7 @@ const PaymentReceipt = (props: PaymentReceiptProps) => {
                   </span>
                 </div>
                 {props.fromLoanIssuance ? null : (
-                  <div>
+                  <div className="d-flex my-4 mx-0 w-100">
                     <span className="title">{local.paidFrom}</span>
                     <span className="info">
                       {numbersToArabic(receiptData.previouslyPaid)}
@@ -92,7 +87,7 @@ const PaymentReceipt = (props: PaymentReceiptProps) => {
                   </div>
                 )}
                 {props.fromLoanIssuance ? null : (
-                  <div>
+                  <div className="d-flex my-4 mx-0 w-100">
                     <span className="title">{local.currentPayment}</span>
                     <span className="info">
                       <span style={{ direction: 'ltr' }}>
@@ -107,7 +102,7 @@ const PaymentReceipt = (props: PaymentReceiptProps) => {
                     </span>
                   </div>
                 )}
-                <div>
+                <div className="d-flex my-4 mx-0 w-100">
                   <span className="title">{local.purpose}</span>
                   {props.fromLoanIssuance ? (
                     <span className="info">
@@ -123,20 +118,20 @@ const PaymentReceipt = (props: PaymentReceiptProps) => {
                   )}
                 </div>
                 {props.fromLoanIssuance ? null : (
-                  <div>
+                  <div className="d-flex my-4 mx-0 w-100">
                     <span className="title">{local.remaining}</span>
                     <span className="info">
                       {numbersToArabic(receiptData.remaining)}
                     </span>
                   </div>
                 )}
-                <div>
+                <div className="d-flex my-4 mx-0 w-100">
                   <span className="title">{local.recipientSignature}</span>
                   <span className="dots">
                     ........................................................
                   </span>
                 </div>
-                <div>
+                <div className="d-flex my-4 mx-0 w-100">
                   <span className="title">{local.revisedAndIssued}</span>
                   <span className="dots">
                     ........................................................
