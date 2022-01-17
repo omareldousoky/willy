@@ -116,7 +116,6 @@ const Search: FunctionComponent<SearchProps> = ({
       setLoading(false)
     } else {
       setLoading(false)
-      console.log('Error getting governorates')
     }
   }
 
@@ -134,7 +133,6 @@ const Search: FunctionComponent<SearchProps> = ({
       const filtered = options.filter((f) => f.name.includes(value))
       return [{ _id: '', name: local.all }, ...filtered]
     }
-    console.log('Error getting actionsLogs list') // log for purpose
 
     return []
   }

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 
-import * as local from '../../Assets/ar.json'
 import { CardNavBar } from '../HeaderWithCards/cardNavbar'
 
 import { FieldProps } from '../Profile/types'
@@ -75,7 +74,7 @@ export const InfoBox = ({ info, title, boxColor }: InfoBoxProps) => {
                     <Form.Label style={{ color: '#6e6e6e' }}>
                       {fieldTitle}
                     </Form.Label>
-                    <Form.Label>{fieldData || local.na} </Form.Label>
+                    <Form.Label>{fieldData} </Form.Label>
                   </Form.Group>
                 )
               )
