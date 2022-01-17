@@ -18,40 +18,56 @@ export const CustomerCategorization = (props: Props) => {
   return (
     <>
       {ratings.length > 0 ? (
-        <Table
-          striped
-          bordered
-          style={{ textAlign: 'right' }}
-          className="horizontal-table"
-        >
-          <thead>
-            <tr>
-              <th>{local.loanCode}</th>
-              <th>{local.customerCategorization}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ratings.map((rating, index) => {
-              return (
-                <tr key={index}>
-                  <td>{rating.loanApplicationKey}</td>
-                  <td>
-                    <span
-                      style={{
-                        background: getColor(rating.customerScore),
-                        padding: '0px 20px',
-                        color: '#fff',
-                        borderRadius: 20,
-                      }}
-                    >
-                      {rating.customerScore}
-                    </span>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </Table>
+        <>
+          <div className="d-flex flex-row-reverse">
+            <div className="d-flex align-items-center">
+              <span className="risk-indicator risk-indicator_low" />
+              {local.lowRisk}
+            </div>
+            <div className="d-flex align-items-center">
+              <span className="risk-indicator risk-indicator_med" />{' '}
+              {local.medRisk}
+            </div>
+            <div className="d-flex align-items-center">
+              <span className="risk-indicator risk-indicator_high" />{' '}
+              {local.highRisk}
+            </div>
+          </div>
+          <Table
+            striped
+            bordered
+            style={{ textAlign: 'right' }}
+            className="horizontal-table"
+          >
+            <thead>
+              <tr>
+                <th>{local.loanCode}</th>
+                <th>{local.customerCategorization}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ratings.map((rating, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{rating.loanApplicationKey}</td>
+                    <td>
+                      <span
+                        style={{
+                          background: getColor(rating.customerScore),
+                          padding: '0px 20px',
+                          color: '#fff',
+                          borderRadius: 20,
+                        }}
+                      >
+                        {rating.customerScore}
+                      </span>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </Table>
+        </>
       ) : (
         <p>{local.noDataAvaliable}</p>
       )}

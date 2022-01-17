@@ -7,6 +7,10 @@ import Container from 'react-bootstrap/Container'
 import local from '../../Assets/ar.json'
 import ability from '../../../Mohassel/config/ability'
 import { cfLimitStatusLocale, getErrorMessage } from '../../Services/utils'
+import {
+  CustomerScore,
+  getCustomerCategorization,
+} from '../../Services/APIs/customer/customerCategorization'
 
 import { TabDataProps } from '../Profile/types'
 import { Tab } from '../HeaderWithCards/cardNavbar'
@@ -37,13 +41,25 @@ import { MicroCFContract } from '../../../Mohassel/Components/Reports/microCFCon
 export interface CompanyProfileProps {
   data: any
 }
+const getCustomerCategorizationRating = async (
+  id: string,
+  setRating: (rating: Array<CustomerScore>) => void
+) => {
+  const res = await getCustomerCategorization({ customerId: id })
+  if (res.status === 'success' && res.body?.customerScores !== undefined) {
+    setRating(res.body?.customerScores)
+  } else {
+    setRating([])
+  }
+}
 export const CompanyProfile = () => {
+  const [ratings, setRatings] = useState<Array<CustomerScore>>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [activeTab, changeActiveTab] = useState<keyof TabDataProps>('documents')
   const [company, setCompany] = useState<Company>()
   const [
-    customerCFContract,
-    setCustomerCFContract,
+    companyCFContract,
+    setCompanyCFContract,
   ] = useState<ConsumerFinanceContractData>()
   const [print, setPrint] = useState('')
   const [showCFLimitModal, setShowCFLimitModal] = useState(false)
@@ -161,6 +177,7 @@ export const CompanyProfile = () => {
   }
   useEffect(() => {
     getCompanyDetails()
+    getCustomerCategorizationRating(location.state.id, setRatings)
   }, [])
 
   const tabsData: TabDataProps = {
@@ -169,6 +186,15 @@ export const CompanyProfile = () => {
         fieldTitle: 'company id',
         fieldData: location.state.id,
         showFieldCondition: true,
+      },
+    ],
+    customerScore: [
+      {
+        fieldTitle: 'ratings',
+        fieldData: ratings,
+        showFieldCondition: Boolean(
+          ability.can('customerCategorization', 'customer')
+        ),
       },
     ],
     cfGuarantors: [
@@ -225,18 +251,19 @@ export const CompanyProfile = () => {
     setCFModalAction(type)
     setShowCFLimitModal(true)
   }
-  function setCustomerContractData(customer: Customer) {
-    setCustomerCFContract({
-      customerCreationDate: customer.created?.at || 0,
-      customerName: customer.customerName || '',
-      nationalId: customer.nationalId || '',
-      customerHomeAddress: customer.customerHomeAddress || '',
-      mobilePhoneNumber: customer.mobilePhoneNumber || '',
-      initialConsumerFinanceLimit: customer.initialConsumerFinanceLimit || 0,
-      branchName: customer.branchName || '',
-      commercialRegisterNumber: customer.commercialRegisterNumber || '',
-      businessAddress: customer.businessAddress || '',
+  function setCompanyContractData() {
+    setCompanyCFContract({
+      customerCreationDate: company?.created?.at || 0,
+      customerName: company?.customerName || '',
+      nationalId: company?.nationalId || '',
+      customerHomeAddress: company?.customerHomeAddress || '',
+      mobilePhoneNumber: company?.mobilePhoneNumber || '',
+      initialConsumerFinanceLimit: company?.initialConsumerFinanceLimit || 0,
+      branchName: company?.branchName || '',
+      commercialRegisterNumber: company?.commercialRegisterNumber || '',
+      businessAddress: company?.businessAddress || '',
       customerGuarantors: customerGuarantors || [],
+      otpCustomers: company?.otpCustomer || [],
       entitledToSignCustomers: entitledToSignCustomers || [],
     })
   }
@@ -252,6 +279,10 @@ export const CompanyProfile = () => {
     {
       header: local.documents,
       stringKey: 'documents',
+    },
+    {
+      header: local.customerCategorization,
+      stringKey: 'customerScore',
     },
     {
       header: local.guarantorInfo,
@@ -341,7 +372,7 @@ export const CompanyProfile = () => {
           company?.consumerFinanceLimitStatus ?? ''
         ),
         onActionClick: () => {
-          setCustomerContractData(company as Customer)
+          setCompanyContractData()
           setPrint('all')
         },
       },
@@ -357,6 +388,7 @@ export const CompanyProfile = () => {
           }),
       },
       {
+        icon: 'applications',
         title: local.createClearance,
         permission: ability.can('newClearance', 'application'),
         onActionClick: () =>
@@ -469,7 +501,7 @@ export const CompanyProfile = () => {
       </Container>
       {print === 'all' && (
         <MicroCFContract
-          contractData={customerCFContract as ConsumerFinanceContractData}
+          contractData={companyCFContract as ConsumerFinanceContractData}
           sme
         />
       )}

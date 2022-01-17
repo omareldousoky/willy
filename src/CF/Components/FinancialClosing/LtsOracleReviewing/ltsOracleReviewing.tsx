@@ -95,12 +95,12 @@ class LtsOracleReviewing extends Component<{}, State> {
                           className={`mx-5  text-${
                             file.status === 'created'
                               ? 'success'
-                              : file.status === 'queued'
+                              : file.status.toLowerCase() === 'processing'
                               ? 'warning'
                               : 'danger'
                           } `}
                         >
-                          {local[file.status]}
+                          {local[file.status.toLowerCase()]}
                         </span>
                         {file.status === 'created' && (
                           <span className="file-date-container mx-5">

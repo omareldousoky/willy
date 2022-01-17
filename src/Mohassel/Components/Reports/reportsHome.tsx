@@ -41,7 +41,7 @@ class ReportsHome extends Component<{}, State> {
         {
           header: local.cib,
           stringKey: 'cibTPAYReport',
-          permission: 'cibScreen',
+          permission: ['cibScreen', 'getCibPortfolioSecuritization'],
           permissionKey: 'report',
         },
         {
