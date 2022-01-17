@@ -11,7 +11,7 @@ export const ADD_TO_SELECTION_ARRAY = 'ADD_TO_SELECTION_ARRAY'
 export const REMOVE_FROM_SELECTION_ARRAY = 'REMOVE_FROM_SELECTION_ARRAY'
 export const CLEAR_SELECTION_ARRAY = 'CLEAR_SELECTION_ARRAY'
 export const ADD_ALL_TO_SELECTION_ARRAY = 'ADD_ALL_TO_SELECTION_ARRAY'
-
+export const CLEAR_DOCUMENTS = 'CLEAR_DOCUMENTS'
 export interface DocumentState {
   document: Document
 }
@@ -71,6 +71,9 @@ interface RemoveFromSelectionArrayAction {
 interface ClearSelectionArrayAction {
   type: typeof CLEAR_SELECTION_ARRAY
 }
+interface CLEARDOCUMENTS {
+  type: typeof CLEAR_DOCUMENTS
+}
 interface AddAllToSelectionArrayAction {
   type: typeof ADD_ALL_TO_SELECTION_ARRAY
   payload: Image[]
@@ -87,3 +90,4 @@ export type DocumentActionType =
   | RemoveFromSelectionArrayAction
   | ClearSelectionArrayAction
   | AddAllToSelectionArrayAction
+  | CLEARDOCUMENTS
