@@ -12,6 +12,8 @@ import { getRollableActionsById } from 'Shared/Services/APIs/loanApplication/rol
 import ReturnItemModal from 'Shared/Components/LoanApplication/ReturnItemModal'
 import { doneSuccessfully } from 'Shared/localUtils'
 import { returnItem } from 'Shared/Services/APIs/loanApplication/returnItemCF'
+import { postCommentsReport } from 'Shared/Services/APIs/Reports/Operations/commentsReport'
+import { CommentsReportOBJ } from 'Shared/Models/operationsReports'
 import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
 import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions'
 import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment'
@@ -141,6 +143,7 @@ interface State {
   loanUsage: string
   canReturnItem?: boolean
   returnItemModalOpen: boolean
+  commentsReport: CommentsReportOBJ
 }
 
 interface LoanProfileRouteState {
@@ -181,6 +184,7 @@ class LoanProfile extends Component<Props, State> {
         _id: '',
         status: '',
       },
+      commentsReport: {},
       returnItemModalOpen: false,
     }
   }
@@ -876,6 +880,20 @@ class LoanProfile extends Component<Props, State> {
     return {}
   }
 
+  getCommentsReport = async (key: string) => {
+    this.setState({ loading: true })
+    const res = await postCommentsReport(key)
+    this.setState({ loading: false })
+    console.log(res, 'RESSSSSSSSss')
+    if (res.status === 'success') {
+      this.setState({ commentsReport: res.body, print: 'commentsReport' }, () =>
+        window.print()
+      )
+    } else {
+      Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
+    }
+  }
+
   mapEntitledToSignToCustomer({
     customer,
     position,
@@ -1192,10 +1210,6 @@ class LoanProfile extends Component<Props, State> {
     })
   }
 
-  getCommentsReport = () => {
-    this.setState({ print: 'commentsReport' }, () => window.print())
-  }
-
   renderContent() {
     switch (this.state.activeTab) {
       case 'loanDetails':
@@ -1362,7 +1376,8 @@ class LoanProfile extends Component<Props, State> {
             applicationStatus={this.state.application.status}
             comments={this.state.application.inReviewNotes ?? []}
             recallAPI={() => this.getAppByID(this.props.location.state.id)}
-            printCommentsReport={() => this.getCommentsReport()}
+            getCommentsReport={this.getCommentsReport}
+            applicationKey={this.state.application.applicationKey}
           />
         )
       default:
@@ -1751,7 +1766,12 @@ class LoanProfile extends Component<Props, State> {
           />
         )}
         {this.state.print === 'commentsReport' && (
-          <CommentsReport branchName={this.state.branchDetails?.name || ''} />
+          <CommentsReport
+            branchName={this.state.branchDetails?.name || ''}
+            data={this.state.commentsReport}
+            subType={this.state.application.product.beneficiaryType}
+            type={this.props.location.state?.sme ? 'sme' : 'lts'}
+          />
         )}
         {this.state.print === 'randomPayment' ||
         this.state.print === 'penalty' ? (

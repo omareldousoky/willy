@@ -1,7 +1,6 @@
 @media screen, print {
   .comments-report {
     font-size: 9px;
-    font-weight: bold;
     page-break-after: always;
     font-family: Arial;
     font-weight: 600;
@@ -24,7 +23,6 @@
 }
 @media screen {
   .comments-report {
-    max-width: 700px;
     display: none;
   }
 }

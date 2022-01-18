@@ -23,8 +23,10 @@ interface LoanProfileCommentsProps {
   applicationId: string
   recallAPI: () => void
   applicationStatus: string
-  printCommentsReport: () => void
+  getCommentsReport: (key: string) => void
+  applicationKey: string
 }
+
 const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
   props: LoanProfileCommentsProps
 ) => {
@@ -85,8 +87,8 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
       props.applicationStatus
     )
 
-  const getNotesReport = () => {
-    props.printCommentsReport()
+  const handleCommentsReport = () => {
+    props.getCommentsReport(props.applicationKey.toString())
   }
 
   return (
@@ -108,7 +110,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
             </div>
           )}
           <div className="mt-5 mb-5">
-            <Button variant="primary" onClick={() => getNotesReport()}>
+            <Button variant="primary" onClick={() => handleCommentsReport()}>
               {local.commentsReport}
             </Button>
           </div>

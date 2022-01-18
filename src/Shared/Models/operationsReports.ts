@@ -28,6 +28,26 @@ export interface CustomersArrearsSingleResponse {
   beneficiaryType?: 'group' | 'individual'
 }
 
+export interface CommentsReportOBJ {
+  applicationFees?: string
+  branchMangerName?: string
+  businessActivity?: string
+  businessSector?: string
+  customerKey?: string
+  customerName?: string
+  customerNid?: string
+  gracePeriod?: string
+  loanKey?: string
+  loanStatus?: string
+  noInstallments?: string
+  principal?: string
+  representative?: string
+}
+export interface CommentsReportResponse {
+  data: {
+    applications: CommentsReportOBJ[]
+  }
+}
 export interface BlockedCustomersRequest {
   branches: string[]
 }

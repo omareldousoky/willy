@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, CSSProperties } from 'react'
 import {
   numbersToArabic,
   timeToArabicDateNow,
@@ -6,12 +6,26 @@ import {
 } from 'Shared/Services/utils'
 import * as local from 'Shared/Assets/ar.json'
 import './commentsReport.scss'
+import { CommentsReportOBJ } from 'Shared/Models/operationsReports'
+import Tafgeet from 'tafgeetjs'
 
 interface Props {
   branchName: string
+  data: CommentsReportOBJ
+  type: string
+  subType: string
+}
+
+interface CommentsReportTable {
+  title: string
+  key: string
+  style?: CSSProperties
+  hide?: boolean
 }
 
 const CommentsReport: FC<Props> = (props) => {
+  const { data, type, subType } = props
+
   const comments = [
     'توقيع العميل و الضامنين علي الاقرار',
     'الاستعلام الجيد و معاينه مشرف المنطقه و مدير المنطقه',
@@ -19,32 +33,16 @@ const CommentsReport: FC<Props> = (props) => {
     'اثبات سكن الضامن الاول بايصال مرافق حديث',
   ]
 
-  const data = {
-    customerCode: '123376457344',
-    customerName: 'fjajsdfjadsf feetr',
-    loanUsage: 'fjkajsdfjasdj jewjjrjngf jfg',
-    previousLoan: ['10000/12', '7500/14', '100000/24'],
-    currentLoan: '50,000',
-    loanTime: '12',
-    allowance: '0',
-    fees: '500',
-    nationalId: '234727482147871',
-    officerName: 'fjjasdfj jadfjeurtjfg dfgg',
-    branchManger: 'jasdjfad jerjeurnf',
-    guarantors: [
-      {
-        name: 'asdfasdsafasdfasdf',
-        nationalId: 299483756829182,
-      },
-      { name: 'adfjaweuriewur', nationalId: 29445673847568 },
-      { name: 'adfjaweuriewur', nationalId: 29445673847568 },
-    ],
+  const subTypeLocal = {
+    individual: local.individual,
+    group: 'الجماعي',
   }
 
-  const tableArray = [
+  const tableArray: CommentsReportTable[] = [
     {
       title: local.code,
-      key: 'customerCode',
+      key: 'customerKey',
+      style: { minWidth: 120 },
     },
     {
       title: local.customerName,
@@ -52,39 +50,43 @@ const CommentsReport: FC<Props> = (props) => {
     },
     {
       title: 'المشروع',
-      key: 'loanUsage',
+      key: 'businessActivity',
     },
     {
       title: 'تمويل سابق',
       key: 'previousLoan',
+      style: { minWidth: 70 },
     },
     {
       title: 'تمويل حالي',
-      key: 'currentLoan',
+      key: 'principal',
+      style: { minWidth: 70 },
     },
     {
       title: 'المده',
-      key: 'loanTime',
+      key: 'noInstallments',
     },
     {
       title: 'سماح',
-      key: 'allowance',
+      key: 'gracePeriod',
     },
     {
       title: 'الرسوم',
-      key: 'fees',
+      key: 'applicationFees',
     },
     {
       title: local.nationalId,
-      key: 'nationalId',
+      key: 'customerNid',
+      style: { minWidth: 150 },
+      hide: type === 'sme',
     },
     {
       title: 'اسم الاخصائي',
-      key: 'officerName',
+      key: 'representative',
     },
     {
       title: local.branchManager,
-      key: 'branchManger',
+      key: 'branchManagerName',
     },
   ]
 
@@ -100,71 +102,84 @@ const CommentsReport: FC<Props> = (props) => {
         <div className="px-5 mb-3">{props.branchName}</div>
       </div>
       <div className="d-flex m-3 justify-content-center">
-        <div className="px-5">ملاحظات علي حالة التمويل الفردي</div>
+        {type === 'lts' ? (
+          <div className="px-5">
+            ملاحظات علي حالة التمويل {subTypeLocal[subType]}
+          </div>
+        ) : (
+          <div className="px-5">ملاحظات علي حالة تمويل الشركات</div>
+        )}
       </div>
       <table className="d-flex justify-content-center">
         <tbody>
           <tr>
-            <tr>
-              {tableArray.map((t, index) => (
-                <th key={index} className="gray frame px-1">
-                  {t.title}
-                </th>
-              ))}
-            </tr>
-            <tr>
-              {tableArray.map((t, ti) => (
-                <td key={ti} className="border-left border-bottom px-1">
-                  {t.key === 'previousLoan'
-                    ? data[t.key].map((v, i) => (
-                        <div
-                          className={
-                            i + 1 < data[t.key].length ? 'border-bottom' : ''
-                          }
-                        >
-                          {v}
-                        </div>
-                      ))
-                    : data[t.key]}
-                </td>
-              ))}
-            </tr>
+            {tableArray.map(
+              (t, index) =>
+                !t.hide && (
+                  <th key={`${t.title}-${index}`} className="gray frame px-2">
+                    {t.title}
+                  </th>
+                )
+            )}
           </tr>
           <tr>
-            <div className="d-flex w-100 border">
-              <div className="gray frame px-4">اجمالي</div>
-              <div className="border-left px-3">1</div>
-              <div className="border-left px-3">50,000</div>
-              <div className="border-left px-3">50,000</div>
-              <div className="px-2">50,000</div>
-            </div>
+            {tableArray.map(
+              (t, ti) =>
+                !t.hide && (
+                  <td
+                    key={ti}
+                    className="border px-1 py-1 text-break"
+                    style={t.style ? t.style : {}}
+                  >
+                    {t.key === 'previousLoan' &&
+                    Array.isArray(t.key) &&
+                    t.key.length
+                      ? data[t.key].map((v, i) => (
+                          <p
+                            className={
+                              i + 1 < data[t.key].length ? 'border-bottom' : ''
+                            }
+                          >
+                            {v}
+                          </p>
+                        ))
+                      : data[t.key] || local.na}
+                  </td>
+                )
+            )}
           </tr>
-          <tr>
-            <div className="d-flex justify-content-between flex-wrap mt-4">
-              {data.guarantors.map((g, i) => (
+        </tbody>
+      </table>
+
+      <div className="d-flex mt-2">
+        <div className="gray frame px-3">اجمالي</div>
+        <div className="border px-3">{numbersToArabic(data.principal)}</div>
+        <div className="border px-3">
+          {new Tafgeet(data.principal, 'EGP').parse()}
+        </div>
+      </div>
+
+      <div className="d-flex justify-content-between flex-wrap mt-4">
+        {/* {data.guarantors?.map((g, i) => (
                 <div className="d-flex">
                   <div>الضامن {getIndexOfGuarantorInAr(i - 2)}:</div>
                   <div className="border px-2">834838434</div>
                   <div className="border px-2">{g.name}</div>
                   <div className="border px-2">{g.nationalId}</div>
                 </div>
-              ))}
+              ))} */}
+      </div>
+
+      <div className="d-flex mt-4">
+        <div className="font-weight-bold mr-2">ملاحظات:</div>
+        <div className="mr-3">
+          {comments.map((c, i) => (
+            <div key={i} className="d-flex mr-3 flex-wrap">
+              {numbersToArabic(i + 1)}- {c}
             </div>
-          </tr>
-          <tr>
-            <div className="d-flex mt-4">
-              <div className="font-weight-bold mr-2">ملاحظات:</div>
-              <div className="mr-3">
-                {comments.map((c, i) => (
-                  <div key={i} className="d-flex mr-3 flex-wrap">
-                    {numbersToArabic(i + 1)}- {c}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </tr>
-        </tbody>
-      </table>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
