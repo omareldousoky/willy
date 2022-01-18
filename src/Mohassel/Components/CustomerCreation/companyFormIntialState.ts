@@ -59,7 +59,7 @@ endOfDay.setHours(23, 59, 59, 59)
 export const companyCreationValidationStepOne = Yup.object().shape({
   businessName: Yup.string()
     .trim()
-    .max(100, local.maxLength100)
+    .max(200, maxValue(200))
     .required(local.required),
   businessAddress: Yup.string()
     .trim()
