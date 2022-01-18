@@ -1266,5 +1266,7 @@
   "customerGuaranteed": "عملاء ضمنهم العميل",
   "lowRisk":"قليل",
   "medRisk":"متوسط",
-  "highRisk":"خطر"
+  "highRisk":"خطر",
+  "activateUser": "تم تفعيل المستخدم",
+  "deActivateUser": "تم تعطيل المستخدم"
 }

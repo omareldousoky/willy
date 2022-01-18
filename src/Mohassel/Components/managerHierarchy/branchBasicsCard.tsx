@@ -19,8 +19,7 @@ export const BranchBasicsCard: FunctionComponent<BranchBasicsCardProps> = ({
       <div className="row-nowrap">
         <span className="basic-info">
           <LtsIcon name="branches" color="#7dc255" />
-
-          <Form.Label>{local.basicInfo}</Form.Label>
+          <Form.Label className="ml-2">{local.basicInfo}</Form.Label>
         </span>
       </div>
       <div className="branch-basics-container">
