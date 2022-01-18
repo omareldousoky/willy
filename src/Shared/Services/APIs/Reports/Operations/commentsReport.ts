@@ -12,7 +12,7 @@ export const postCommentsReport = async (applicationKey: string) => {
       url,
       data: { applicationKey },
     })
-    return { status: 'success', body: res.data.applications[0] }
+    return { status: 'success', body: res.data }
   } catch (error) {
     return { status: 'error', error: error.response.data }
   }

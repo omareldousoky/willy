@@ -28,11 +28,12 @@ export interface CustomersArrearsSingleResponse {
   beneficiaryType?: 'group' | 'individual'
 }
 
-export interface CommentsReportOBJ {
+interface CommentsReportApplication {
   applicationFees?: string
   branchMangerName?: string
   businessActivity?: string
   businessSector?: string
+  businessSpeciality?: string
   customerKey?: string
   customerName?: string
   customerNid?: string
@@ -42,6 +43,24 @@ export interface CommentsReportOBJ {
   noInstallments?: string
   principal?: string
   representative?: string
+}
+
+interface CommentsReportGuarantor {
+  guarantorKey: string
+  guarantorName: string
+  guarantorNid: string
+}
+
+interface CommentsReportEntitledToSign {
+  entitledToSignKey: string
+  entitledToSignName: string
+  entitledToSignNid: string
+}
+export interface CommentsReportOBJ {
+  applications?: CommentsReportApplication[]
+  guarantors?: CommentsReportGuarantor[]
+  entitledToSign?: CommentsReportEntitledToSign[]
+  inReviewNotes?: string[]
 }
 export interface CommentsReportResponse {
   data: {

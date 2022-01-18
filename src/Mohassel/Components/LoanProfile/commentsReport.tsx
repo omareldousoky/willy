@@ -26,13 +26,6 @@ interface CommentsReportTable {
 const CommentsReport: FC<Props> = (props) => {
   const { data, type, subType } = props
 
-  const comments = [
-    'توقيع العميل و الضامنين علي الاقرار',
-    'الاستعلام الجيد و معاينه مشرف المنطقه و مدير المنطقه',
-    'كتابه العنوان تفصيليا علي ايصال المرافق الخاص بنشاط العميل من قبل مدير الفرع و التوقيع عليه بالاطلاع',
-    'اثبات سكن الضامن الاول بايصال مرافق حديث',
-  ]
-
   const subTypeLocal = {
     individual: local.individual,
     group: 'الجماعي',
@@ -89,6 +82,11 @@ const CommentsReport: FC<Props> = (props) => {
       key: 'branchManagerName',
     },
   ]
+
+  const isEntitled = data.entitledToSign ? 'entitledToSign' : 'guarantors'
+  const isEntitledKeys = data.entitledToSign
+    ? ['entitledToSignKey', 'entitledToSignName', 'entitledToSignNid']
+    : ['guarantorKey', 'guarantorName', 'guarantorNid']
 
   return (
     <div className="comments-report m-5 border p-3" dir="rtl" lang="ar">
@@ -151,29 +149,34 @@ const CommentsReport: FC<Props> = (props) => {
         </tbody>
       </table>
 
-      <div className="d-flex mt-2">
+      {/* <div className="d-flex mt-2">
         <div className="gray frame px-3">اجمالي</div>
         <div className="border px-3">{numbersToArabic(data.principal)}</div>
         <div className="border px-3">
           {new Tafgeet(data.principal, 'EGP').parse()}
         </div>
-      </div>
+      </div> */}
 
       <div className="d-flex justify-content-between flex-wrap mt-4">
-        {/* {data.guarantors?.map((g, i) => (
-                <div className="d-flex">
-                  <div>الضامن {getIndexOfGuarantorInAr(i - 2)}:</div>
-                  <div className="border px-2">834838434</div>
-                  <div className="border px-2">{g.name}</div>
-                  <div className="border px-2">{g.nationalId}</div>
-                </div>
-              ))} */}
+        {data[isEntitled]?.map((g, i) => (
+          <div className="d-flex">
+            <div>
+              {isEntitled === 'guarantors'
+                ? local.guarantor
+                : local.entitledToSign}{' '}
+              {getIndexOfGuarantorInAr(i - 2)}:
+            </div>
+            {isEntitledKeys.map((key) => (
+              <div className="border px-2">{g[key]}</div>
+            ))}
+          </div>
+        ))}
       </div>
 
       <div className="d-flex mt-4">
         <div className="font-weight-bold mr-2">ملاحظات:</div>
         <div className="mr-3">
-          {comments.map((c, i) => (
+          {data.inReviewNotes?.map((c, i) => (
             <div key={i} className="d-flex mr-3 flex-wrap">
               {numbersToArabic(i + 1)}- {c}
             </div>
