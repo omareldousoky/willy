@@ -300,7 +300,7 @@ export const CompanyProfile = () => {
       header: local.reports,
       stringKey: 'reports',
       permission: 'guaranteed',
-      permissionKey: 'report',
+      permissionKey: 'report-2',
     },
   ]
   const handleActivationClick = async ({ id, blocked }) => {
