@@ -81,6 +81,7 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
       from,
       url: 'loan',
       sort: 'issueDate',
+      branchId: props.branchId,
       type: currentLoanType,
       customerType: 'individual',
     }
