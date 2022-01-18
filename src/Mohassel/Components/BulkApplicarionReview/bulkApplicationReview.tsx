@@ -163,14 +163,12 @@ class BulkApplicationReview extends Component<Props, State> {
         key: 'age',
         render: (data) =>
           data.application?.customer?.birthDate
-            ? this.calculateAge(data.application.customer.birthDate)
-            : data.application?.group?.individualsInGroup
-            ? this.calculateAge(
+            ? this.calculateAge(data.application.customer.birthDate || 1)
+            : this.calculateAge(
                 data.application?.group?.individualsInGroup?.find(
                   (member) => member.type === 'leader'
-                ).customer.birthDate
-              ) || 0
-            : 0,
+                ).customer.birthDate || 1
+              ),
       },
       {
         title: local.nationalId,
