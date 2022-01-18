@@ -28,7 +28,8 @@ export interface CustomersArrearsSingleResponse {
   beneficiaryType?: 'group' | 'individual'
 }
 
-interface CommentsReportApplication {
+export interface CommentsReportApplication {
+  active?: boolean
   applicationFees?: string
   branchMangerName?: string
   businessActivity?: string

@@ -6,7 +6,10 @@ import {
 } from 'Shared/Services/utils'
 import * as local from 'Shared/Assets/ar.json'
 import './commentsReport.scss'
-import { CommentsReportOBJ } from 'Shared/Models/operationsReports'
+import {
+  CommentsReportOBJ,
+  CommentsReportApplication,
+} from 'Shared/Models/operationsReports'
 import Tafgeet from 'tafgeetjs'
 
 interface Props {
@@ -21,10 +24,13 @@ interface CommentsReportTable {
   key: string
   style?: CSSProperties
   hide?: boolean
+  render?: (data: CommentsReportApplication[]) => JSX.Element[] | string
 }
 
 const CommentsReport: FC<Props> = (props) => {
   const { data, type, subType } = props
+
+  const activeLoan = data.applications?.find((app) => app.active === true)
 
   const subTypeLocal = {
     individual: local.individual,
@@ -44,11 +50,34 @@ const CommentsReport: FC<Props> = (props) => {
     {
       title: 'المشروع',
       key: 'businessActivity',
+      render: () =>
+        `${
+          activeLoan?.businessSector ? `${activeLoan?.businessSector} ` : ''
+        } ${
+          activeLoan?.businessActivity
+            ? `- ${activeLoan?.businessActivity}`
+            : ''
+        } ${
+          activeLoan?.businessSpeciality
+            ? `- ${activeLoan?.businessSpeciality}`
+            : ''
+        }`,
     },
     {
       title: 'تمويل سابق',
       key: 'previousLoan',
-      style: { minWidth: 70 },
+      style: { minWidth: 100 },
+      render: (applications) => {
+        const previous = applications.filter((app) => !app.active)
+        return previous.length
+          ? previous.map((app, index) => (
+              <div
+                key={index}
+                className={`${index > 0 && 'border-top'}`}
+              >{`${app.principal}/${app.noInstallments}`}</div>
+            ))
+          : local.na
+      },
     },
     {
       title: 'تمويل حالي',
@@ -82,11 +111,6 @@ const CommentsReport: FC<Props> = (props) => {
       key: 'branchManagerName',
     },
   ]
-
-  const isEntitled = data.entitledToSign ? 'entitledToSign' : 'guarantors'
-  const isEntitledKeys = data.entitledToSign
-    ? ['entitledToSignKey', 'entitledToSignName', 'entitledToSignNid']
-    : ['guarantorKey', 'guarantorName', 'guarantorNid']
 
   return (
     <div className="comments-report m-5 border p-3" dir="rtl" lang="ar">
@@ -129,19 +153,9 @@ const CommentsReport: FC<Props> = (props) => {
                     className="border px-1 py-1 text-break"
                     style={t.style ? t.style : {}}
                   >
-                    {t.key === 'previousLoan' &&
-                    Array.isArray(t.key) &&
-                    t.key.length
-                      ? data[t.key].map((v, i) => (
-                          <p
-                            className={
-                              i + 1 < data[t.key].length ? 'border-bottom' : ''
-                            }
-                          >
-                            {v}
-                          </p>
-                        ))
-                      : data[t.key] || local.na}
+                    {t.render
+                      ? t.render(data.applications || [])
+                      : activeLoan?.[t.key]}
                   </td>
                 )
             )}
@@ -149,28 +163,40 @@ const CommentsReport: FC<Props> = (props) => {
         </tbody>
       </table>
 
-      {/* <div className="d-flex mt-2">
+      <div className="d-flex mt-2">
         <div className="gray frame px-3">اجمالي</div>
-        <div className="border px-3">{numbersToArabic(data.principal)}</div>
         <div className="border px-3">
-          {new Tafgeet(data.principal, 'EGP').parse()}
+          {numbersToArabic(activeLoan?.principal)}
         </div>
-      </div> */}
+        <div className="border px-3">
+          {new Tafgeet(activeLoan?.principal, 'EGP').parse()}
+        </div>
+      </div>
 
       <div className="d-flex justify-content-between flex-wrap mt-4">
-        {data[isEntitled]?.map((g, i) => (
-          <div className="d-flex">
-            <div>
-              {isEntitled === 'guarantors'
-                ? local.guarantor
-                : local.entitledToSign}{' '}
-              {getIndexOfGuarantorInAr(i - 2)}:
-            </div>
-            {isEntitledKeys.map((key) => (
-              <div className="border px-2">{g[key]}</div>
-            ))}
-          </div>
-        ))}
+        {data.entitledToSign
+          ? data.entitledToSign.map((key, i) => (
+              <div key={`${i}-${key.entitledToSignKey}`} className="d-flex">
+                <div>
+                  {local.entitledToSign} {getIndexOfGuarantorInAr(i - 2)}:
+                </div>
+                <div className="border px-2">{key.entitledToSignKey}</div>
+                <div className="border px-2">{key.entitledToSignName}</div>
+                <div className="border px-2">{key.entitledToSignNid}</div>
+              </div>
+            ))
+          : data.guarantors
+          ? data.guarantors.map((key, i) => (
+              <div key={`${i}-${key.guarantorKey}`} className="d-flex">
+                <div>
+                  {local.guarantor} {getIndexOfGuarantorInAr(i - 2)}:
+                </div>
+                <div className="border px-2">{key.guarantorKey}</div>
+                <div className="border px-2">{key.guarantorName}</div>
+                <div className="border px-2">{key.guarantorNid}</div>
+              </div>
+            ))
+          : null}
       </div>
 
       <div className="d-flex mt-4">
