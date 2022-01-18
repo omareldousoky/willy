@@ -325,7 +325,7 @@ export const getCustomerInfo = ({
     },
     {
       fieldTitle: local.birthDate,
-      fieldData: (birthDate && timeToArabicDate(birthDate, false)) || '',
+      fieldData: timeToArabicDate(birthDate || 0, false),
       showFieldCondition: true,
     },
     {
