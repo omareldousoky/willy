@@ -14,7 +14,11 @@ export const PDFList = ({ list, onClickDownload }: PDFListProps) => {
     <>
       {list?.length > 0 ? (
         list.map((listItem, index) => (
-          <Can I={listItem.permission} a="report" key={index}>
+          <Can
+            I={listItem.permission}
+            a={listItem.serviceKey ?? 'report'}
+            key={index}
+          >
             <Card key={index} className="mx-0">
               <Card.Body>
                 <div className="d-flex justify-content-between align-items-center font-weight-bold">

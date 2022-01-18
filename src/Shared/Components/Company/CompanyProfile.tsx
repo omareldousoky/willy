@@ -243,7 +243,7 @@ export const CompanyProfile = () => {
       {
         fieldTitle: 'reports',
         fieldData: company?.key?.toString() || '',
-        showFieldCondition: ability.can('guaranteed', 'report'),
+        showFieldCondition: ability.can('guaranteed', 'report-2'),
       },
     ],
   }

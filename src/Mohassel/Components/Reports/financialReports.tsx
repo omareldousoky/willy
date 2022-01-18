@@ -202,6 +202,7 @@ class FinancialReports extends Component<{}, State> {
           local: 'الترحيلات',
           inputs: ['dateFromTo', 'branches'],
           permission: 'getPostpones',
+          serviceKey: 'report-2',
           hidePdf: true,
         },
         {
@@ -209,6 +210,7 @@ class FinancialReports extends Component<{}, State> {
           local: 'قروض تمت مراجعتها',
           inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'getLoansReviewedByReviewDate',
+          serviceKey: 'report-2',
           hidePdf: true,
         },
       ],
