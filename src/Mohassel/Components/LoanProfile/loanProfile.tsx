@@ -143,7 +143,7 @@ interface State {
   loanUsage: string
   canReturnItem?: boolean
   returnItemModalOpen: boolean
-  commentsReport: CommentsReportOBJ
+  commentsReport?: CommentsReportOBJ
 }
 
 interface LoanProfileRouteState {
@@ -884,10 +884,10 @@ class LoanProfile extends Component<Props, State> {
     this.setState({ loading: true })
     const res = await postCommentsReport(key)
     this.setState({ loading: false })
-    console.log(res, 'RESSSSSSSSss')
     if (res.status === 'success') {
-      this.setState({ commentsReport: res.body, print: 'commentsReport' }, () =>
-        window.print()
+      this.setState(
+        { commentsReport: res.body || {}, print: 'commentsReport' },
+        () => window.print()
       )
     } else {
       Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
@@ -1768,7 +1768,7 @@ class LoanProfile extends Component<Props, State> {
         {this.state.print === 'commentsReport' && (
           <CommentsReport
             branchName={this.state.branchDetails?.name || ''}
-            data={this.state.commentsReport}
+            data={this.state.commentsReport || {}}
             subType={this.state.application.product.beneficiaryType}
             type={this.props.location.state?.sme ? 'sme' : 'lts'}
           />

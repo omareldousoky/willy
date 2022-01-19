@@ -63,11 +63,6 @@ export interface CommentsReportOBJ {
   entitledToSign?: CommentsReportEntitledToSign[]
   inReviewNotes?: string[]
 }
-export interface CommentsReportResponse {
-  data: {
-    applications: CommentsReportOBJ[]
-  }
-}
 export interface BlockedCustomersRequest {
   branches: string[]
 }

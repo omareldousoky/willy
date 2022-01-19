@@ -51,9 +51,7 @@ const CommentsReport: FC<Props> = (props) => {
       title: 'المشروع',
       key: 'businessActivity',
       render: () =>
-        `${
-          activeLoan?.businessSector ? `${activeLoan?.businessSector} ` : ''
-        } ${
+        `${activeLoan?.businessSector || ''} ${
           activeLoan?.businessActivity
             ? `- ${activeLoan?.businessActivity}`
             : ''
@@ -136,26 +134,26 @@ const CommentsReport: FC<Props> = (props) => {
         <tbody>
           <tr>
             {tableArray.map(
-              (t, index) =>
-                !t.hide && (
-                  <th key={`${t.title}-${index}`} className="gray frame px-2">
-                    {t.title}
+              (row, index) =>
+                !row.hide && (
+                  <th key={`${row.title}-${index}`} className="gray frame px-2">
+                    {row.title}
                   </th>
                 )
             )}
           </tr>
           <tr>
             {tableArray.map(
-              (t, ti) =>
-                !t.hide && (
+              (row, index) =>
+                !row.hide && (
                   <td
-                    key={ti}
+                    key={`${row.key}-${index}`}
                     className="border px-1 py-1 text-break"
-                    style={t.style ? t.style : {}}
+                    style={row.style || {}}
                   >
-                    {t.render
-                      ? t.render(data.applications || [])
-                      : activeLoan?.[t.key]}
+                    {row.render
+                      ? row.render(data.applications || [])
+                      : activeLoan?.[row.key]}
                   </td>
                 )
             )}
@@ -164,7 +162,7 @@ const CommentsReport: FC<Props> = (props) => {
       </table>
 
       <div className="d-flex mt-2">
-        <div className="gray frame px-3">اجمالي</div>
+        <div className="gray frame px-3">{local.totalGeneral}</div>
         <div className="border px-3">
           {numbersToArabic(activeLoan?.principal)}
         </div>
@@ -199,16 +197,18 @@ const CommentsReport: FC<Props> = (props) => {
           : null}
       </div>
 
-      <div className="d-flex mt-4">
-        <div className="font-weight-bold mr-2">ملاحظات:</div>
-        <div className="mr-3">
-          {data.inReviewNotes?.map((c, i) => (
-            <div key={i} className="d-flex mr-3 flex-wrap">
-              {numbersToArabic(i + 1)}- {c}
-            </div>
-          ))}
+      {data.inReviewNotes?.length && (
+        <div className="d-flex mt-4">
+          <div className="font-weight-bold mr-2">{local.comments}:</div>
+          <div className="mr-3">
+            {data.inReviewNotes?.map((note, i) => (
+              <div key={i} className="d-flex mr-3 flex-wrap">
+                {numbersToArabic(i + 1)}- {note}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
