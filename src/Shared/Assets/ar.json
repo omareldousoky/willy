@@ -1264,7 +1264,8 @@
   "duplicatePhoneNumberMessage": "رقم التليفون موجود بالفعل لعميل اخر",
   "onlyEnglishNumbers": "ارقام انجليزيه فقط",
   "customerGuaranteed": "عملاء ضمنهم العميل",
-  "lowRisk":"قليل",
-  "medRisk":"متوسط",
-  "highRisk":"خطر"
+  "lowRisk": "قليل",
+  "medRisk": "متوسط",
+  "highRisk": "خطر",
+  "financialLeasing": "تأجير تمويلي"
 }

@@ -338,7 +338,7 @@ class BulkApplicationCreation extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['dateFromTo']}
+              searchKeys={['dateFromTo', 'financialLeasingCheck']}
               datePlaceholder={local.entryDate}
               url="application"
               from={this.state.from}

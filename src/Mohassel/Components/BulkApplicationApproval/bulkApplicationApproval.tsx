@@ -263,7 +263,12 @@ class BulkApplicationApproval extends Component<Props, State> {
   }
 
   render() {
-    const searchKey = ['keyword', 'dateFromTo', 'branch']
+    const searchKey = [
+      'keyword',
+      'dateFromTo',
+      'branch',
+      'financialLeasingCheck',
+    ]
     const dropDownKeys = [
       'name',
       'key',

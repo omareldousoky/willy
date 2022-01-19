@@ -158,4 +158,5 @@ export const LoanProductValidation = Yup.object().shape({
       .required(local.required)
   ),
   type: Yup.string().required(local.required),
+  financialLeasing: Yup.boolean().required(local.required),
 })

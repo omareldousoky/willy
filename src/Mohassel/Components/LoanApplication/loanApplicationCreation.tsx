@@ -1549,6 +1549,32 @@ class LoanApplicationCreation extends Component<Props, State> {
     }
   }
 
+  filterProducts() {
+    const prods = this.state.products.filter((product) => {
+      return this.state.customerType === 'individual'
+        ? product.beneficiaryType === 'individual' &&
+            !product.financialLeasing &&
+            product.type !== 'sme'
+        : this.state.customerType === 'finantialLeasing'
+        ? product.beneficiaryType === 'individual' && product.financialLeasing
+        : this.state.customerType === 'group'
+        ? product.beneficiaryType === 'group'
+        : this.state.customerType === 'nano'
+        ? product.type === 'nano'
+        : this.state.customerType === 'company'
+        ? product.beneficiaryType === 'individual' &&
+          !product.financialLeasing &&
+          product.type === 'sme'
+        : product.beneficiaryType === 'individual' &&
+          product.financialLeasing &&
+          product.type === 'sme'
+      // group
+      // sme
+    })
+    console.log(prods)
+    return prods
+  }
+
   renderStepOne() {
     return (
       <div
@@ -1709,11 +1735,7 @@ class LoanApplicationCreation extends Component<Props, State> {
             {...formikProps}
             formulas={this.state.formulas}
             loanUsage={this.state.loanUsage}
-            products={this.state.products.filter((product) =>
-              ['individual', 'sme'].includes(this.state.customerType)
-                ? product.beneficiaryType === 'individual'
-                : product.beneficiaryType === 'group'
-            )}
+            products={this.filterProducts}
             loanOfficers={this.state.loanOfficers}
             step={(key) => this.step(key)}
             getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}

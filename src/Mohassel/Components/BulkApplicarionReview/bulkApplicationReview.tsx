@@ -409,7 +409,12 @@ class BulkApplicationReview extends Component<Props, State> {
   }
 
   render() {
-    const searchKey = ['keyword', 'dateFromTo', 'review-application']
+    const searchKey = [
+      'keyword',
+      'dateFromTo',
+      'review-application',
+      'financialLeasingCheck',
+    ]
     const smePermission =
       (this.props.location.state && this.props.location.state.sme) || false
     const filteredMappers = smePermission

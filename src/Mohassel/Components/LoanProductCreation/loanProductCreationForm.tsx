@@ -55,6 +55,7 @@ export const LoanProductCreationForm = (props: any) => {
                 if (val === 'group') {
                   setFieldValue('type', 'micro')
                   setFieldValue('contractType', 'standard')
+                  setFieldValue('financialLeasing', false)
                 }
                 setFieldValue('beneficiaryType', val)
               }}
@@ -149,6 +150,8 @@ export const LoanProductCreationForm = (props: any) => {
                     setFieldValue('allowAdminFeesAdjustment', false)
                     setFieldValue('allowApplicationFeeAdjustment', false)
                   }
+                  !['micro', 'sme'].includes(val) &&
+                    setFieldValue('financialLeasing', false)
                   handleChange(e)
                 }}
                 isInvalid={errors.type && touched.type}
@@ -169,6 +172,35 @@ export const LoanProductCreationForm = (props: any) => {
           </Col>
         )}
       </Row>
+      {values.beneficiaryType === 'individual' &&
+        ['micro', 'sme'].includes(values.type) && (
+          <Row>
+            <Col />
+            <Col>
+              <Form.Group className="row-nowrap" controlId="financialLeasing">
+                <Form.Check
+                  type="checkbox"
+                  name="financialLeasing"
+                  data-qc="financialLeasing"
+                  value={values.financialLeasing}
+                  checked={values.financialLeasing}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  isInvalid={
+                    errors.financialLeasing && touched.financialLeasing
+                  }
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.financialLeasing}
+                </Form.Control.Feedback>
+                <Form.Label className="data-check-label">
+                  {/* {local.allowInterestAdjustment} */}
+                  financial leasing
+                </Form.Label>
+              </Form.Group>
+            </Col>
+          </Row>
+        )}
       <Row>
         <Col>
           <Form.Group controlId="currency">
