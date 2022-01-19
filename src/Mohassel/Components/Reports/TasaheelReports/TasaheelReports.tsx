@@ -5,17 +5,17 @@ import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
-import Can from '../../../config/Can'
-import ability from '../../../config/ability'
-import * as local from '../../../../Shared/Assets/ar.json'
 import {
   downloadFile,
   getIscoreReportStatus,
   timeToArabicDate,
-} from '../../../../Shared/Services/utils'
+} from 'Shared/Services/utils'
+import HeaderWithCards from 'Shared/Components/HeaderWithCards/headerWithCards'
+import { Loader } from 'Shared/Components/Loader'
+import * as local from 'Shared/Assets/ar.json'
+import Can from '../../../config/Can'
+import ability from '../../../config/ability'
 
-import HeaderWithCards from '../../../../Shared/Components/HeaderWithCards/headerWithCards'
-import { Loader } from '../../../../Shared/Components/Loader'
 import { RisksReport } from './RisksReport'
 import { DebtsAgingReport } from './DebtsAgingReport'
 import MonthlyReport from '../../pdfTemplates/monthlyReport/monthlyReport'

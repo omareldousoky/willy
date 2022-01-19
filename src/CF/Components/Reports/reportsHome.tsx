@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
-import * as local from '../../../Shared/Assets/ar.json'
-import {
-  CardNavBar,
-  Tab,
-} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
+import LaundryReports from 'Shared/Components/Reports/laundryReports'
+import * as local from 'Shared/Assets/ar.json'
+import { CardNavBar, Tab } from 'Shared/Components/HeaderWithCards/cardNavbar'
+import OfficersProductivityReports from 'Shared/Components/Reports/officersProductivityReports'
 import FinancialReports from './financialReports'
 import OperationsReports from './operationsReports'
 
@@ -52,15 +51,15 @@ class ReportsHome extends Component<{}, State> {
         //   header: local.tasaheelReports,
         //   stringKey: 'tasaheelReports',
         // },
-        // {
-        //   header: local.laundryReports,
-        //   stringKey: 'laundryReports',
-        // },
-        // {
-        //   header: local.officersProductivityReport,
-        //   stringKey: 'officersProductivityReports',
-        //   permission: 'officersProductivityReport',
-        // },
+        {
+          header: local.laundryReports,
+          stringKey: 'laundryReports',
+        },
+        {
+          header: local.officersProductivityReport,
+          stringKey: 'officersProductivityReports',
+          permission: 'officersProductivityReport',
+        },
       ],
     }
   }
@@ -85,10 +84,10 @@ class ReportsHome extends Component<{}, State> {
         return <OperationsReports />
       // case 'tasaheelReports':
       //   return <TasaheelReports />
-      // case 'laundryReports':
-      //   return <LaundryReports />
-      // case 'officersProductivityReports':
-      //   return <OfficersProductivityReports />
+      case 'laundryReports':
+        return <LaundryReports />
+      case 'officersProductivityReports':
+        return <OfficersProductivityReports />
       default:
         return null
     }

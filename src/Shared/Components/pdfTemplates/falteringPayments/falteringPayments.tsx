@@ -3,10 +3,10 @@ import {
   FalteringPaymentsResponse,
   FalteringPaymentsSingleResponse,
 } from '../../../Models/LaundryReports'
-import Orientation from '../../../../Shared/Components/Common/orientation'
-import '../../../../Shared/Components/pdfTemplates/Operations/customersArrears/customersArrears.scss'
-import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
-import DataRow from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/dataRow'
+import Orientation from '../../Common/orientation'
+import '../Operations/customersArrears/customersArrears.scss'
+import { Header } from '../pdfTemplateCommon/header'
+import DataRow from '../pdfTemplateCommon/dataRow'
 
 interface FalteringPaymentsProps {
   toDate: string

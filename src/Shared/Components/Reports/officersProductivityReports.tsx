@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
-import { Loader } from '../../../Shared/Components/Loader'
-import * as local from '../../../Shared/Assets/ar.json'
+import { Loader } from '../Loader'
+import * as local from '../../Assets/ar.json'
 import {
   fetchOfficersProductivityReport,
   getOfficersProductivityReportById,
@@ -12,11 +12,11 @@ import {
 import {
   OfficersProductivityRequest,
   OfficersProductivityResponse,
-} from '../../../Shared/Models/OfficerProductivity/OfficersProductivityReport'
-import OfficersProductivity from '../../../Shared/Components/pdfTemplates/Operations/officersPercentPayment/officersProductivity/officersProductivity'
-import { ReportsList } from '../../../Shared/Components/ReportsList'
-import { CurrentHierarchiesSingleResponse } from '../../../Shared/Models/OfficerProductivity/OfficerProductivityReport'
-import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
+} from '../../Models/OfficerProductivity/OfficersProductivityReport'
+import OfficersProductivity from '../pdfTemplates/Operations/officersPercentPayment/officersProductivity/officersProductivity'
+import { ReportsList } from '../ReportsList'
+import { CurrentHierarchiesSingleResponse } from '../../Models/OfficerProductivity/OfficerProductivityReport'
+import ReportsModal from '../ReportsModal/reportsModal'
 
 interface State {
   data: any

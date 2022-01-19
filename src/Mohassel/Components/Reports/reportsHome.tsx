@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
+import LaundryReports from 'Shared/Components/Reports/laundryReports'
+import OfficersProductivityReports from 'Shared/Components/Reports/officersProductivityReports'
 import CIBReports from './cibReports'
-import * as local from '../../../Shared/Assets/ar.json'
+import * as local from 'Shared/Assets/ar.json'
 import {
   CardNavBar,
   Tab,
-} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
+} from 'Shared/Components/HeaderWithCards/cardNavbar'
 import FinancialReports from './financialReports'
 import IscoreReports from './IscoreReports'
 import OracleIntegration from './oracleIntegration'
 import OperationsReports from './operationsReports'
 import { TasaheelReports } from './TasaheelReports/TasaheelReports'
-import LaundryReports from './laundryReports'
-import OfficersProductivityReports from './officersProductivityReports'
 
 interface State {
   activeTab: string
