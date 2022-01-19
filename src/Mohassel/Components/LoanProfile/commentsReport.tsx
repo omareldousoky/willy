@@ -202,7 +202,7 @@ const CommentsReport: FC<Props> = (props) => {
           <div className="font-weight-bold mr-2">{local.comments}:</div>
           <div className="mr-3">
             {data.inReviewNotes?.map((note, i) => (
-              <div key={i} className="d-flex mr-3 flex-wrap">
+              <div key={i} className="mr-3 text-break w-50">
                 {numbersToArabic(i + 1)}- {note}
               </div>
             ))}
