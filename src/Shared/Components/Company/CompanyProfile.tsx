@@ -243,7 +243,7 @@ export const CompanyProfile = () => {
       {
         fieldTitle: 'reports',
         fieldData: company?.key?.toString() || '',
-        showFieldCondition: ability.can('guaranteed', 'report-2'),
+        showFieldCondition: ability.can('guaranteed', 'report'),
       },
     ],
   }
@@ -300,7 +300,7 @@ export const CompanyProfile = () => {
       header: local.reports,
       stringKey: 'reports',
       permission: 'guaranteed',
-      permissionKey: 'report-2',
+      permissionKey: 'report',
     },
   ]
   const handleActivationClick = async ({ id, blocked }) => {
