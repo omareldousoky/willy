@@ -380,12 +380,8 @@ class LoanApplicationCreation extends Component<Props, State> {
 
   setCustomerType(type) {
     const isNano = type === 'nano'
-    const filteredroducts = this.state.products.filter((product) =>
-      isNano ? product.type === 'nano' : product.type !== 'nano'
-    )
     this.setState(
       produce<State>((draftState) => {
-        draftState.products = filteredroducts
         draftState.customerType = isNano ? 'individual' : type
         draftState.application.beneficiaryType = isNano ? 'individual' : type
         draftState.isNano = isNano
@@ -1145,6 +1141,41 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ application, loading: false })
   }
 
+  filterProducts = (product) => {
+    switch (this.state.customerType) {
+      case 'individual':
+        return (
+          product.beneficiaryType === 'individual' &&
+          !product.financialLeasing &&
+          product.type === 'micro'
+        )
+      case 'group':
+        return product.beneficiaryType === 'group'
+      case 'nano':
+        return product.type === 'nano'
+      case 'financialLeasing':
+        return (
+          product.beneficiaryType === 'individual' &&
+          product.financialLeasing &&
+          product.type === 'micro'
+        )
+      case 'company':
+        return (
+          product.beneficiaryType === 'individual' &&
+          !product.financialLeasing &&
+          product.type === 'sme'
+        )
+      case 'companyFinancialLeasing':
+        return (
+          product.beneficiaryType === 'individual' &&
+          product.financialLeasing &&
+          product.type === 'sme'
+        )
+      default:
+        return true
+    }
+  }
+
   async viewCustomer(id) {
     this.setState({ loading: true })
     const selectedCustomer = await getCustomerByID(id)
@@ -1549,32 +1580,6 @@ class LoanApplicationCreation extends Component<Props, State> {
     }
   }
 
-  filterProducts() {
-    const prods = this.state.products.filter((product) => {
-      return this.state.customerType === 'individual'
-        ? product.beneficiaryType === 'individual' &&
-            !product.financialLeasing &&
-            product.type !== 'sme'
-        : this.state.customerType === 'finantialLeasing'
-        ? product.beneficiaryType === 'individual' && product.financialLeasing
-        : this.state.customerType === 'group'
-        ? product.beneficiaryType === 'group'
-        : this.state.customerType === 'nano'
-        ? product.type === 'nano'
-        : this.state.customerType === 'company'
-        ? product.beneficiaryType === 'individual' &&
-          !product.financialLeasing &&
-          product.type === 'sme'
-        : product.beneficiaryType === 'individual' &&
-          product.financialLeasing &&
-          product.type === 'sme'
-      // group
-      // sme
-    })
-    console.log(prods)
-    return prods
-  }
-
   renderStepOne() {
     return (
       <div
@@ -1717,6 +1722,9 @@ class LoanApplicationCreation extends Component<Props, State> {
   }
 
   renderStepTwo() {
+    const filteredProducts = this.state.products.filter((product) => {
+      return this.filterProducts(product)
+    })
     return (
       <Formik
         initialValues={this.state.application}
@@ -1735,7 +1743,7 @@ class LoanApplicationCreation extends Component<Props, State> {
             {...formikProps}
             formulas={this.state.formulas}
             loanUsage={this.state.loanUsage}
-            products={this.filterProducts}
+            products={filteredProducts}
             loanOfficers={this.state.loanOfficers}
             step={(key) => this.step(key)}
             getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}

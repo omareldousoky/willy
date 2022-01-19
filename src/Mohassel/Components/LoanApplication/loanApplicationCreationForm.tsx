@@ -138,12 +138,11 @@ export const LoanApplicationCreationForm = (props: any) => {
                     isInvalid={errors.productID && touched.productID}
                   >
                     <option value="" disabled />
-                    {console.log(props)}
-                    {/* {props.products.map((product, i) => (
+                    {props.products.map((product, i) => (
                       <option key={i} value={product._id}>
                         {product.productName}
                       </option>
-                    ))} */}
+                    ))}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
                     {errors.productID}
