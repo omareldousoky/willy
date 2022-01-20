@@ -885,10 +885,16 @@ class LoanProfile extends Component<Props, State> {
     const res = await postCommentsReport(key)
     this.setState({ loading: false })
     if (res.status === 'success') {
-      this.setState(
-        { commentsReport: res.body || {}, print: 'commentsReport' },
-        () => window.print()
-      )
+      if (res.body?.applications?.length) {
+        const getActive = res.body.applications.find((app) => app.active)
+        if (!getActive)
+          return Swal.fire(local.error, getErrorMessage('no-data'), 'error')
+
+        this.setState(
+          { commentsReport: res.body, print: 'commentsReport' },
+          () => window.print()
+        )
+      }
     } else {
       Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
     }

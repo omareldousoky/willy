@@ -8,6 +8,7 @@ import * as local from 'Shared/Assets/ar.json'
 import HeaderWithCards from 'Shared/Components/HeaderWithCards/headerWithCards'
 import { getErrorMessage } from 'Shared/Services/utils'
 import { CRUDList, CrudOption } from 'Shared/Components/CRUDList/crudList'
+import { maxValue } from 'Shared/localUtils'
 import { manageLoanDetailsArray } from './manageLoanDetailsInitials'
 
 const LoanComments: FunctionComponent = () => {
@@ -47,6 +48,7 @@ const LoanComments: FunctionComponent = () => {
   }
 
   const newLoanComment = async (name, activated) => {
+    if (name.length > 2000) return Swal.fire('Error !', maxValue(2000), 'error')
     setLoading(true)
     const res = await addLoanComment({ name, activated })
     if (res.status === 'success') {

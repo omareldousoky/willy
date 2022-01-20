@@ -25,7 +25,7 @@ interface LoanProfileCommentsProps {
   recallAPI: () => void
   applicationStatus: string
   getCommentsReport: (key: string) => void
-  applicationKey: string
+  applicationKey: number
 }
 
 const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
@@ -203,7 +203,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
             <Button
               variant="primary"
               onClick={() => addComments()}
-              disabled={!selectedLoanComments.length}
+              disabled={!selectedLoanComments?.length}
             >
               {local.submit}
             </Button>

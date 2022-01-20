@@ -172,37 +172,45 @@ const CommentsReport: FC<Props> = (props) => {
       </div>
 
       <div className="d-flex justify-content-between flex-wrap mt-4">
-        {data.entitledToSign
-          ? data.entitledToSign.map((key, i) => (
-              <div key={`${i}-${key.entitledToSignKey}`} className="d-flex">
-                <div>
-                  {local.entitledToSign} {getIndexOfGuarantorInAr(i - 2)}:
-                </div>
-                <div className="border px-2">{key.entitledToSignKey}</div>
-                <div className="border px-2">{key.entitledToSignName}</div>
-                <div className="border px-2">{key.entitledToSignNid}</div>
+        {data.entitledToSign &&
+          data.entitledToSign.map((key, i) => (
+            <div key={`${i}-${key.entitledToSignKey}`} className="d-flex">
+              <div>
+                {local.entitledToSign} {getIndexOfGuarantorInAr(i - 2)}:
               </div>
-            ))
-          : data.guarantors
-          ? data.guarantors.map((key, i) => (
-              <div key={`${i}-${key.guarantorKey}`} className="d-flex">
-                <div>
-                  {local.guarantor} {getIndexOfGuarantorInAr(i - 2)}:
-                </div>
-                <div className="border px-2">{key.guarantorKey}</div>
-                <div className="border px-2">{key.guarantorName}</div>
-                <div className="border px-2">{key.guarantorNid}</div>
+              <div className="border px-2">
+                {key.entitledToSignKey || local.na}
               </div>
-            ))
-          : null}
+              <div className="border px-2">
+                {key.entitledToSignName || local.na}
+              </div>
+              <div className="border px-2">
+                {key.entitledToSignNid || local.na}
+              </div>
+            </div>
+          ))}
+      </div>
+
+      <div className="d-flex justify-content-between flex-wrap mt-4">
+        {data.guarantors &&
+          data.guarantors.map((key, i) => (
+            <div key={`${i}-${key.guarantorKey}`} className="d-flex">
+              <div>
+                {local.guarantor} {getIndexOfGuarantorInAr(i - 2)}:
+              </div>
+              <div className="border px-2">{key.guarantorKey || local.na}</div>
+              <div className="border px-2">{key.guarantorName || local.na}</div>
+              <div className="border px-2">{key.guarantorNid || local.na}</div>
+            </div>
+          ))}
       </div>
 
       {data.inReviewNotes?.length && (
         <div className="d-flex mt-4">
           <div className="font-weight-bold mr-2">{local.comments}:</div>
-          <div className="mr-3">
+          <div className="mr-3 w-50">
             {data.inReviewNotes?.map((note, i) => (
-              <div key={i} className="mr-3 text-break w-50">
+              <div key={i} className="mr-3 text-break">
                 {numbersToArabic(i + 1)}- {note}
               </div>
             ))}
