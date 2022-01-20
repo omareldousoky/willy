@@ -32,6 +32,7 @@ class OfficersProductivityReports extends Component<{}, State> {
       loading: false,
       showModal: false,
       data: [],
+      disable: false,
     }
   }
 

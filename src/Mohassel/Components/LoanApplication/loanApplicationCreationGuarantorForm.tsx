@@ -277,7 +277,6 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                             <Button
                               type="button"
                               className="mb-2"
-                              // onClick={() => arrayHelpers.remove(index)}
                               onClick={() =>
                                 props.removeViceCustomer(
                                   customer,
@@ -296,7 +295,6 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                 type="button"
                                 onClick={() => props.addViceCustomer(index)}
                               >
-                                {/* // arrayHelpers.push({ name: '', phoneNumber: '' }) */}
                                 +
                               </Button>
                             )}

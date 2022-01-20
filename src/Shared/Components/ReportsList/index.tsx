@@ -64,7 +64,7 @@ export const ReportsList = ({
                 </div>
                 {onClickDownload && listItem.status === 'created' && (
                   <Button
-                    disabled={false || disabledProp}
+                    disabled={disabledProp}
                     type="button"
                     variant="default"
                     onClick={() => onClickDownload(listItem._id)}
