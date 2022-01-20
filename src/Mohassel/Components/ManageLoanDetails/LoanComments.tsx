@@ -27,7 +27,7 @@ const LoanComments: FunctionComponent = () => {
       setLoanComments(responseLoanComments.reverse())
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
     }
   }
 
@@ -43,12 +43,13 @@ const LoanComments: FunctionComponent = () => {
       getComments()
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
     }
   }
 
   const newLoanComment = async (name, activated) => {
-    if (name.length > 2000) return Swal.fire('Error !', maxValue(2000), 'error')
+    if (name.length > 2000)
+      return Swal.fire(local.error, maxValue(2000), 'error')
     setLoading(true)
     const res = await addLoanComment({ name, activated })
     if (res.status === 'success') {
@@ -56,7 +57,7 @@ const LoanComments: FunctionComponent = () => {
       getComments()
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
     }
   }
 
