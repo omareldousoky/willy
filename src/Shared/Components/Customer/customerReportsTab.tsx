@@ -57,6 +57,7 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
     },
     {
       key: 'getGuarantors',
+      serviceKey: 'report-2',
       local: local.customerGuaranteed,
       hide: false,
     },
@@ -200,7 +201,7 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
           {PDF_LIST.map((pdf, index) => {
             return (
               !pdf.hide && (
-                <Can I={pdf.key} a="report" key={pdf.key}>
+                <Can I={pdf.key} a={pdf.serviceKey ?? 'report'} key={pdf.key}>
                   <Card key={pdf.key}>
                     <Card.Body>
                       <div className="d-flex justify-content-between font-weight-bold align-items-center">

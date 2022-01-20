@@ -163,6 +163,7 @@ class FinancialReports extends Component<{}, State> {
           local: 'الترحيلات',
           inputs: ['dateFromTo', 'branches'],
           permission: 'getPostpones',
+          serviceKey: 'report-2',
           hidePdf: true,
         },
       ],
