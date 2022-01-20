@@ -138,7 +138,12 @@ class CustomersList extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error) {
-          Swal.fire('error', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+          })
         }
       })
     this.setState({ manageCustomersTabs: manageCustomersArray() })
@@ -166,7 +171,12 @@ class CustomersList extends Component<Props, State> {
       })
       .then(() => {
         if (error) {
-          Swal.fire('error', getErrorMessage(error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(error),
+            icon: 'error',
+          })
         }
       })
   }

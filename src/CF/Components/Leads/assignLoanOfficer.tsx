@@ -173,7 +173,12 @@ class AssignLoanOfficer extends Component<Props, State> {
       .search({ size: this.state.size, from: this.state.from, url: 'lead' })
       .then(() => {
         if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       })
   }
 
@@ -187,7 +192,12 @@ class AssignLoanOfficer extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       })
   }
 
@@ -200,7 +210,12 @@ class AssignLoanOfficer extends Component<Props, State> {
       )
     }
     this.setState({ loanOfficers: [] }, () =>
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     )
     return []
   }
@@ -239,16 +254,21 @@ class AssignLoanOfficer extends Component<Props, State> {
     if (res.status === 'success') {
       this.props.setLoading(false)
       this.setState({ openModal: false })
-      Swal.fire(
-        '',
-        `${local.doneMoving} ${
+      Swal.fire({
+        text: `${local.doneMoving} ${
           this.state.selectedCustomers.length + ' ' + local.customerSuccess
         }`,
-        'success'
-      )
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      })
     } else {
       this.props.setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

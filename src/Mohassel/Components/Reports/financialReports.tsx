@@ -949,7 +949,13 @@ class FinancialReports extends Component<{}, State> {
         if (['created', 'failed'].includes(file.body.status)) {
           if (file.body.status === 'created')
             downloadFile(file.body.presignedUrl)
-          if (file.body.status === 'failed') Swal.fire('error', local.failed)
+          if (file.body.status === 'failed')
+            Swal.fire({
+              title: local.errorTitle,
+              text: local.failed,
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           this.setState({
             showModal: false,
             loading: false,
@@ -963,7 +969,12 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      Swal.fire('error', 'TimeOut')
+      Swal.fire({
+        title: local.errorTitle,
+        text: local.timeOut,
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

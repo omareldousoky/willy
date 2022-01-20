@@ -112,7 +112,12 @@ class SearchBlocking extends Component<Props, State> {
         })
         .then(() => {
           if (this.props.error)
-            Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+            Swal.fire({
+              title: local.errorTitle,
+              text: getErrorMessage(this.props.error),
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           else this.props.onSubmit()
         })
     }

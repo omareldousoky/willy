@@ -119,7 +119,11 @@ class LoanProducts extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+          })
       })
     this.setState({ manageLoansTabs: manageLoansArray() })
   }
@@ -130,7 +134,12 @@ class LoanProducts extends Component<Props, State> {
     if (res.status === 'success' && res.body) {
       downloadFile(res.body.presignedUr)
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     this.setState({ loading: false })
   }
@@ -145,7 +154,11 @@ class LoanProducts extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+          })
       })
   }
 

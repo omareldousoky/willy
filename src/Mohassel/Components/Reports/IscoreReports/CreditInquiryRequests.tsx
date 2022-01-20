@@ -63,14 +63,25 @@ const CreditInquiryRequests = () => {
         if (['created', 'failed'].includes(file.body.status)) {
           if (file.body.status === 'created')
             downloadFile(file.body.presignedUrl)
-          if (file.body.status === 'failed') Swal.fire('error', local.failed)
+          if (file.body.status === 'failed')
+            Swal.fire({
+              title: local.errorTitle,
+              text: local.failed,
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           setSelectedReport(null)
         } else {
           setTimeout(() => getExcelPoll(id, pollStart), 10000)
         }
       }
     } else {
-      Swal.fire('error', 'TimeOut')
+      Swal.fire({
+        title: local.errorTitle,
+        text: local.timeOut,
+        confirmButtonText: local.confirmationText,
+        icon: 'error',
+      })
     }
 
     setLoading(false)

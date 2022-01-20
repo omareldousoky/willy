@@ -90,7 +90,12 @@ class ManagerProfile extends Component<
         data: res.body.data,
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     this.setState({ loading: false })
   }

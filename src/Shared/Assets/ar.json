@@ -1268,5 +1268,18 @@
   "medRisk":"متوسط",
   "highRisk":"خطر",
   "activateUser": "تم تفعيل المستخدم",
-  "deActivateUser": "تم تعطيل المستخدم"
+  "deActivateUser": "تم تعطيل المستخدم",
+  "commentsReport": "تقرير ملاحظات الفرع",
+  "postponeTested": "تم تجربة الترحيل بنجاح",
+  "confirmationText": "حسنًا",
+  "donePostponing":"تم الترحيل بنجاح",
+  "errorTitle": "خطأ!",
+  "warningTitle": "تحذير",
+  "nationalIdTypeError": "يجب أن يكون الرقم القومي أرقام فقط",
+  "mustBeInt": "يجب إدخال أرقام صحيحة فقط",
+  "maxGreaterThanMin": "عدد الاقساط إلى يجب أن يكون أكبر من عدد الاقساط من",
+  "select": "اختر",
+  "loading": "جاري التحميل",
+  "noFileChosen": "لم يتم اختيار ملف بعد",
+  "timeOut":"Time Out"
 }

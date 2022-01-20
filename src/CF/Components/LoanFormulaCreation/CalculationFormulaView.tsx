@@ -46,7 +46,12 @@ class FormulaView extends Component<
         loading: false,
       })
     } else {
-      Swal.fire('error', getErrorMessage(formula.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(formula.error.error),
+        icon: 'error',
+      })
       this.setState({ loading: false })
     }
   }
