@@ -218,7 +218,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
               <h5>{local.viceCustomersInfo}</h5>
               <FieldArray
                 name="viceCustomers"
-                render={(arrayHelpers) => (
+                render={() => (
                   <div>
                     {values.viceCustomers.length > 0 &&
                       values.viceCustomers.map((customer, index) => (
@@ -277,25 +277,31 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                             <Button
                               type="button"
                               className="mb-2"
-                              onClick={() => arrayHelpers.remove(index)}
+                              // onClick={() => arrayHelpers.remove(index)}
+                              onClick={() =>
+                                props.removeViceCustomer(
+                                  customer,
+                                  index,
+                                  values
+                                )
+                              }
                             >
                               -
                             </Button>
                           )}
+                          {values.viceCustomers.length < 3 &&
+                            (values.state === 'edit' ||
+                              values.state === 'under_review') && (
+                              <Button
+                                type="button"
+                                onClick={() => props.addViceCustomer(index)}
+                              >
+                                {/* // arrayHelpers.push({ name: '', phoneNumber: '' }) */}
+                                +
+                              </Button>
+                            )}
                         </div>
                       ))}
-                    {values.viceCustomers.length < 3 &&
-                      (values.state === 'edit' ||
-                        values.state === 'under_review') && (
-                        <Button
-                          type="button"
-                          onClick={() =>
-                            arrayHelpers.push({ name: '', phoneNumber: '' })
-                          }
-                        >
-                          +
-                        </Button>
-                      )}
                   </div>
                 )}
               />
