@@ -23,6 +23,7 @@ import { theme } from '../../../Shared/theme'
 import { OptionType } from '../../../Shared/Components/dropDowns/types'
 import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 
+let id = 1
 export const LoanApplicationCreationGuarantorForm = (props: any) => {
   const {
     values,
@@ -288,18 +289,21 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                               -
                             </Button>
                           )}
-                          {values.viceCustomers.length < 3 &&
-                            (values.state === 'edit' ||
-                              values.state === 'under_review') && (
-                              <Button
-                                type="button"
-                                onClick={() => props.addViceCustomer(index)}
-                              >
-                                +
-                              </Button>
-                            )}
                         </div>
                       ))}
+                    {values.viceCustomers.length < 3 &&
+                      (values.state === 'edit' ||
+                        values.state === 'under_review') && (
+                        <Button
+                          type="button"
+                          onClick={() => {
+                            id += 1
+                            props.addViceCustomer(id)
+                          }}
+                        >
+                          +
+                        </Button>
+                      )}
                   </div>
                 )}
               />
