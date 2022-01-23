@@ -120,9 +120,10 @@ class UploadDocuments extends Component<
               onChange={() => this.selectAllOptions()}
             />
           </div>
-          <Row className="flex-grow-1 justify-content-end spacing-document text-right">
-            <Col xs={4}>
+          <Row className="d-flex justify-content-end flex-grow-1 spacing-document text-right">
+            <Col xs={12} lg={10}>
               <Button
+                className="mr-2"
                 variant="secondary"
                 disabled={this.props.selectionArray.length <= 0}
                 onClick={async () => {
@@ -131,8 +132,6 @@ class UploadDocuments extends Component<
                   this.setState({ loading: false })
                 }}
               >{`${local.print}(${this.props.selectionArray.length})`}</Button>
-            </Col>
-            <Col xs={4}>
               <Button
                 variant="primary"
                 disabled={this.props.selectionArray.length <= 0}
@@ -140,7 +139,7 @@ class UploadDocuments extends Component<
                   this.setState({ loading: true })
                   await downloadAsZip(
                     this.props.selectionArray,
-                    `loan-${this.props.application._id}-${new Date().valueOf()}`
+                    `Loan-${this.props.application._id}-${new Date().valueOf()}`
                   )
                   this.setState({ loading: false })
                 }}

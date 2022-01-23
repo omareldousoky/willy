@@ -222,6 +222,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           local: 'عملاء محظورين',
           inputs: ['branches'],
           permission: 'getBlockedCustomers',
+          serviceKey: 'report-2',
           hidePdf: true,
         },
       ],
