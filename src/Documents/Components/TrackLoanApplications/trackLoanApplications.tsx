@@ -167,7 +167,11 @@ class TrackLoanApplications extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+          })
       })
   }
 
@@ -195,7 +199,11 @@ class TrackLoanApplications extends Component<Props, State> {
         })
         .then(() => {
           if (this.props.error)
-            Swal.fire('', getErrorMessage(this.props.error), 'error')
+            Swal.fire({
+              confirmButtonText: local.confirmationText,
+              text: getErrorMessage(this.props.error),
+              icon: 'error',
+            })
         })
     }
   }
@@ -219,7 +227,12 @@ class TrackLoanApplications extends Component<Props, State> {
       url: 'application',
       branchId: branchId || searchFilters.branchId,
     }).then(() => {
-      if (error) Swal.fire('', getErrorMessage(error), 'error')
+      if (error)
+        Swal.fire({
+          confirmButtonText: local.confirmationText,
+          text: getErrorMessage(error),
+          icon: 'error',
+        })
     })
   }
 

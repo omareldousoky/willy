@@ -88,7 +88,13 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
   }, [location.state?.sme])
 
   useEffect(() => {
-    if (error) Swal.fire('Error !', getErrorMessage(error), 'error')
+    if (error)
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
   }, [error])
 
   const getLoans = async () => {

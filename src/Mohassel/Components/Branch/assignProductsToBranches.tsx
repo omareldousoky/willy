@@ -101,7 +101,12 @@ class AssignProductsToBranches extends Component<Props, State> {
       })
     } else {
       this.setState({ loading: false }, () => {
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       })
     }
   }
@@ -125,7 +130,12 @@ class AssignProductsToBranches extends Component<Props, State> {
           selectedBranches: haveBranches,
         })
       } else {
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       }
     }
     this.setState({ loading: false })
@@ -166,13 +176,23 @@ class AssignProductsToBranches extends Component<Props, State> {
       this.setState({
         loading: false,
       })
-      Swal.fire('success', local.assignProductsToBranchesSuccess)
+      Swal.fire({
+        title: local.success,
+        text: local.assignProductsToBranchesSuccess,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      })
     } else {
       this.setState({
         loading: false,
         noErrors: false,
       })
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -184,14 +204,24 @@ class AssignProductsToBranches extends Component<Props, State> {
     })
     if (res.status === 'success') {
       this.setState({ loading: false })
-      Swal.fire('success', local.unassignProductsToBranchesSuccess)
+      Swal.fire({
+        title: local.success,
+        text: local.unassignProductsToBranchesSuccess,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      })
     } else {
       this.setState({
         loading: false,
         noErrors: false,
       })
 
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

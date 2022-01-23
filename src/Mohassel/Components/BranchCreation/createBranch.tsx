@@ -63,11 +63,12 @@ class CreateBranch extends Component<Props, State> {
         step1: branch,
       })
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(this.props.branch.error.error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(this.props.branch.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -102,15 +103,19 @@ class CreateBranch extends Component<Props, State> {
     const branch = this.prepareBranch(values)
     await this.props.createNewBranch(branch)
     if (this.props.branch.status === 'success') {
-      Swal.fire('success', local.branchCreated).then(() =>
-        this.props.history.goBack()
-      )
+      Swal.fire({
+        title: local.success,
+        text: local.branchCreated,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      }).then(() => this.props.history.goBack())
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(this.props.branch.error.error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(this.props.branch.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -119,14 +124,20 @@ class CreateBranch extends Component<Props, State> {
     const branch = this.prepareBranch(values)
     await this.props.editBranchById(branch, _id)
     if (this.props.branch.status === 'success') {
-      Swal.fire('success', local.branchUpdated)
+      Swal.fire({
+        title: local.success,
+        text: local.branchUpdated,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      })
       this.props.history.goBack()
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(this.props.branch.error.error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(this.props.branch.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

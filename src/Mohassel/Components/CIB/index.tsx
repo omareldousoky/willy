@@ -130,12 +130,21 @@ class CIB extends Component<CIBProps, CIBState> {
         principalSelectedSum: 0,
         from: 0,
       })
-      Swal.fire('', local.changeSourceFundSuccess, 'success').then(() => {
+      Swal.fire({
+        text: local.changeSourceFundSuccess,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => {
         downloadTxtFile(res.body.loans, false, 0)
         this.handleSearch()
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
