@@ -110,13 +110,10 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
               </Button>
             </div>
           )}
-          {!['canceled'].includes(props.applicationStatus) && (
+          {!['canceled', 'rejected'].includes(props.applicationStatus) && (
             <Can I="getLoanApplicationsNotes" a="report-2">
               <div className="mt-5 mb-5">
-                <Button
-                  variant="primary"
-                  onClick={() => handleCommentsReport()}
-                >
+                <Button variant="primary" onClick={handleCommentsReport}>
                   {local.commentsReport}
                 </Button>
               </div>
