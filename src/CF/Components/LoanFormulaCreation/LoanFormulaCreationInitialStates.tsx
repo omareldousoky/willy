@@ -53,39 +53,37 @@ export const loanFormulaCreationValidation = Yup.object().shape({
   gracePeriodFees: Yup.boolean(),
   rounding: Yup.boolean(),
   roundDirection: Yup.string(),
-  roundTo: Yup.number()
-    .moreThan(0, moreThanValue('صفر'))
-    .required(local.required),
+  roundTo: Yup.number().moreThan(0, moreThanValue(0)).required(local.required),
   roundWhat: Yup.string().required(local.required),
   equalInstallments: Yup.boolean(),
   roundLastInstallment: Yup.boolean(),
 })
 export const loanFormulaTestValidation = Yup.object().shape({
   calculationFormulaId: Yup.string().required(local.required),
-  principal: Yup.number().min(1, minValue('واحد')).required(local.required),
+  principal: Yup.number().min(1, minValue(1)).required(local.required),
   pushPayment: Yup.number()
     .integer(local.mustBeInt)
-    .min(0, minValue('صفر'))
+    .min(0, minValue(0))
     .required(local.required),
   noOfInstallments: Yup.number()
     .integer(local.mustBeInt)
-    .min(1, minValue('واحد'))
+    .min(1, minValue(1))
     .required(local.required),
   gracePeriod: Yup.number()
     .integer(local.mustBeInt)
-    .min(0, minValue('صفر'))
+    .min(0, minValue(0))
     .required(local.required),
   periodLength: Yup.number()
     .integer(local.mustBeInt)
-    .min(1, minValue('واحد'))
+    .min(1, minValue(1))
     .required(local.required),
   periodType: Yup.string().required(local.required),
   interest: Yup.number()
-    .min(0, minValue('صفر'))
+    .min(0, minValue(0))
     .max(100, maxValue(100))
     .required(local.required),
   interestPeriod: Yup.string().required(local.required),
-  adminFees: Yup.number().min(0, minValue('صفر')).required(local.required),
+  adminFees: Yup.number().min(0, minValue(0)).required(local.required),
   loanStartDate: Yup.date()
     .test('Min Date', 'Select a future date', (value: any) => {
       return value
@@ -95,7 +93,7 @@ export const loanFormulaTestValidation = Yup.object().shape({
     .required(local.required),
   pushHolidays: Yup.string().required(local.required),
   inAdvanceFees: Yup.number()
-    .min(0, minValue('صفر'))
+    .min(0, minValue(0))
     .max(100, maxValue(100))
     .required(local.required),
   inAdvanceFrom: Yup.string().required(local.required),
