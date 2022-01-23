@@ -194,8 +194,7 @@ export const LoanProductCreationForm = (props: any) => {
                   {errors.financialLeasing}
                 </Form.Control.Feedback>
                 <Form.Label className="data-check-label">
-                  {/* {local.allowInterestAdjustment} */}
-                  financial leasing
+                  {local.financialLeasing}
                 </Form.Label>
               </Form.Group>
             </Col>

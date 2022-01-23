@@ -1027,42 +1027,34 @@ const Search: FunctionComponent<SearchProps> = ({
               if (searchKey === 'productType') {
                 return (
                   <>
-                    <Col
-                      key={index}
-                      sm={6}
-                      style={{ marginTop: index < 2 ? 0 : 20 }}
-                    >
-                      <div className="dropdown-container">
-                        <p className="dropdown-label">{local.actionType}</p>
-                        <Form.Control
-                          as="select"
-                          className="dropdown-select"
-                          data-qc="loanType"
-                          value={formikProps.values.type}
-                          onChange={(e) => {
-                            formikProps.setFieldValue(
-                              'type',
-                              e.currentTarget.value
-                            )
-                          }}
-                        >
-                          {[
-                            { value: '', text: local.all },
-                            { value: 'micro', text: local.micro },
-                            { value: 'nano', text: local.nano },
-                            { value: 'sme', text: local.sme },
-                            {
-                              value: 'consumerFinance',
-                              text: local.cfLoan,
-                            },
-                          ].map(({ value, text }) => (
-                            <option key={value} value={value} data-qc={value}>
-                              {text}
-                            </option>
-                          ))}
-                        </Form.Control>
-                      </div>
-                    </Col>
+                    {statusDropdown(
+                      formikProps,
+                      index,
+                      [
+                        {
+                          value: '',
+                          text: local.all,
+                        },
+                        {
+                          value: 'micro',
+                          text: local.micro,
+                        },
+                        {
+                          value: 'nano',
+                          text: local.nano,
+                        },
+                        {
+                          value: 'sme',
+                          text: local.sme,
+                        },
+                        {
+                          value: 'consumerFinance',
+                          text: local.cfLoan,
+                        },
+                      ],
+                      'type',
+                      local.productName
+                    )}
                     {['micro', 'sme'].includes(formikProps.values.type ?? '') &&
                       financialLeasingCheck(formikProps, index)}
                   </>

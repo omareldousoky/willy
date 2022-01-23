@@ -220,8 +220,11 @@ class LoanApplicationCreation extends Component<Props, State> {
       from: 0,
       size: 1000,
       [key]: query,
-      customerType:
-        this.state.customerType === 'sme' ? 'company' : 'individual',
+      customerType: ['sme', 'smeFinancialLeasing'].includes(
+        this.state.customerType
+      )
+        ? 'company'
+        : 'individual',
     }
     const results = await searchCustomer(body)
     if (results.status === 'success') {
@@ -609,8 +612,17 @@ class LoanApplicationCreation extends Component<Props, State> {
           draftState.selectedCustomer = application.body.customer
           draftState.customerType =
             product.beneficiaryType === 'individual' && product.type === 'sme'
-              ? 'sme'
-              : product.beneficiaryType
+              ? !product.financialLeasing
+                ? 'sme'
+                : 'smeFinancialLeasing'
+              : product.beneficiaryType === 'individual' &&
+                product.type === 'micro'
+              ? !product.financialLeasing
+                ? 'individual'
+                : 'financialLeasing'
+              : product.beneficiaryType === 'group' && product.type === 'micro'
+              ? 'group'
+              : 'nano'
           draftState.loading = false
         })
       )
@@ -999,7 +1011,9 @@ class LoanApplicationCreation extends Component<Props, State> {
   submit = async (values: Application) => {
     if (
       this.state.step === 2 &&
-      ['individual', 'sme'].includes(this.state.customerType)
+      ['individual', 'financialLeasing', 'sme', 'smeFinancialLeasing'].includes(
+        this.state.customerType
+      )
     ) {
       this.setState({ application: { ...values } }, () => this.step('forward'))
     } else {
@@ -1098,7 +1112,9 @@ class LoanApplicationCreation extends Component<Props, State> {
               res.body.applicationKey
           ).then(() => {
             this.props.history.push('/track-loan-applications', {
-              sme: this.state.customerType === 'sme',
+              sme: ['sme', 'smeFinancialLeasing'].includes(
+                this.state.customerType
+              ),
             })
           })
         } else {
@@ -1112,7 +1128,9 @@ class LoanApplicationCreation extends Component<Props, State> {
           this.setState({ loading: false })
           Swal.fire('success', local.loanApplicationEdited).then(() => {
             this.props.history.push('/track-loan-applications', {
-              sme: this.state.customerType === 'sme',
+              sme: ['sme', 'smeFinancialLeasing'].includes(
+                this.state.customerType
+              ),
             })
           })
         } else {
@@ -1159,13 +1177,13 @@ class LoanApplicationCreation extends Component<Props, State> {
           product.financialLeasing &&
           product.type === 'micro'
         )
-      case 'company':
+      case 'sme':
         return (
           product.beneficiaryType === 'individual' &&
           !product.financialLeasing &&
           product.type === 'sme'
         )
-      case 'companyFinancialLeasing':
+      case 'smeFinancialLeasing':
         return (
           product.beneficiaryType === 'individual' &&
           product.financialLeasing &&
@@ -1595,7 +1613,9 @@ class LoanApplicationCreation extends Component<Props, State> {
               selectedCustomer={this.state.selectedCustomer}
               searchResults={this.state.searchResults}
               selectCustomer={(customer) => this.selectCustomer(customer)}
-              sme={this.state.customerType === 'sme'}
+              sme={['sme', 'smeFinancialLeasing'].includes(
+                this.state.customerType
+              )}
             />
           </div>
         ) : (
@@ -1695,7 +1715,9 @@ class LoanApplicationCreation extends Component<Props, State> {
             className="w-25"
             onClick={() => {
               this.props.history.push('/track-loan-applications', {
-                sme: this.state.customerType === 'sme',
+                sme: ['sme', 'smeFinancialLeasing'].includes(
+                  this.state.customerType
+                ),
               })
             }}
           >
@@ -1709,7 +1731,9 @@ class LoanApplicationCreation extends Component<Props, State> {
               (this.state.customerType === 'group' &&
                 (this.state.selectedGroupLeader.length === 0 ||
                   this.state.selectedCustomers.length < 3)) ||
-              (['individual', 'sme'].includes(this.state.customerType) &&
+              (['individual', 'sme', 'smeFinancialLeasing'].includes(
+                this.state.customerType
+              ) &&
                 Object.keys(this.state.selectedCustomer).length === 0)
             }
             onClick={() => this.step('forward')}
@@ -1730,7 +1754,7 @@ class LoanApplicationCreation extends Component<Props, State> {
         initialValues={this.state.application}
         onSubmit={this.submit}
         validationSchema={
-          this.state.customerType === 'sme'
+          ['sme', 'smeFinancialLeasing'].includes(this.state.customerType)
             ? SMELoanApplicationValidation
             : LoanApplicationValidation
         }
@@ -1764,7 +1788,7 @@ class LoanApplicationCreation extends Component<Props, State> {
         initialValues={this.state.application}
         onSubmit={this.submit}
         validationSchema={
-          this.state.customerType === 'sme'
+          ['sme', 'smeFinancialLeasing'].includes(this.state.customerType)
             ? SMELoanApplicationStep2Validation
             : LoanApplicationValidation
         }
@@ -1870,21 +1894,47 @@ class LoanApplicationCreation extends Component<Props, State> {
                       {local.nano}
                     </Button>
                   </div>
-                </>
-              )}
-              {this.props.location.state.sme && (
-                <Can I="getSMEApplication" a="application">
                   <div className="d-flex flex-column m-5">
-                    <LtsIcon name="buildings" size="100px" color="#7dc356" />
+                    <LtsIcon name="user" size="100px" color="#7dc356" />
 
                     <Button
                       className="my-4"
-                      onClick={() => this.setCustomerType('sme')}
+                      onClick={() => this.setCustomerType('financialLeasing')}
                     >
-                      {local.company}
+                      {local.financialLeasing}
                     </Button>
                   </div>
-                </Can>
+                </>
+              )}
+              {this.props.location.state.sme && (
+                <>
+                  <Can I="getSMEApplication" a="application">
+                    <div className="d-flex flex-column m-5">
+                      <LtsIcon name="buildings" size="100px" color="#7dc356" />
+
+                      <Button
+                        className="my-4"
+                        onClick={() => this.setCustomerType('sme')}
+                      >
+                        {local.company}
+                      </Button>
+                    </div>
+                  </Can>
+                  <Can I="getSMEApplication" a="application">
+                    <div className="d-flex flex-column m-5">
+                      <LtsIcon name="buildings" size="100px" color="#7dc356" />
+
+                      <Button
+                        className="my-4"
+                        onClick={() =>
+                          this.setCustomerType('smeFinancialLeasing')
+                        }
+                      >
+                        {local.financialLeasing}
+                      </Button>
+                    </div>
+                  </Can>
+                </>
               )}
             </div>
           ) : (
@@ -1892,13 +1942,17 @@ class LoanApplicationCreation extends Component<Props, State> {
               <Wizard
                 currentStepNumber={this.state.step - 1}
                 stepsDescription={
-                  this.state.customerType === 'individual'
+                  ['individual', 'financialLeasing'].includes(
+                    this.state.customerType
+                  )
                     ? [
                         local.customersDetails,
                         local.loanInfo,
                         local.guarantorInfo,
                       ]
-                    : this.state.customerType === 'sme'
+                    : ['sme', 'smeFinancialLeasing'].includes(
+                        this.state.customerType
+                      )
                     ? [local.viewCompany, local.loanInfo, local.guarantorInfo]
                     : [local.customersDetails, local.loanInfo]
                 }
