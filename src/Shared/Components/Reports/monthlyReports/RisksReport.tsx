@@ -1,8 +1,8 @@
 import React from 'react'
 import './styles.scss'
 
-import { timeToArabicDateNow } from '../../../../Shared/Services/utils'
-import * as local from '../../../../Shared/Assets/ar.json'
+import { timeToArabicDateNow } from '../../../Services/utils'
+import * as local from '../../../Assets/ar.json'
 
 export const RisksReport = (report) => {
   const formatTier = (tier) => {

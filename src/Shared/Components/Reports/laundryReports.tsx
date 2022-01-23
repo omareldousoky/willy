@@ -4,7 +4,7 @@ import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import * as local from '../../Assets/ar.json'
-import { getErrorMessage } from '../../Services/utils'
+import { getErrorMessage, isCF } from '../../Services/utils'
 import { LaundryReportRequest } from '../../Models/LaundryReports'
 import { fetchFalteringPaymentsReport } from '../../Services/APIs/Reports/falteringPayments'
 import { Loader } from '../Loader'
@@ -29,6 +29,7 @@ const laundryPdfs = [
     local: 'تقرير سداد المتعثرين',
     inputs: ['dateFromTo', 'branches'],
     permission: ReportEnum.FalteringPayments,
+    hide: isCF,
   },
   {
     key: ReportEnum.EarlyPayments,
@@ -152,8 +153,9 @@ const LaundryReports: FunctionComponent = () => {
               </Card.Title>
             </div>
           </div>
-          {laundryPdfs.map((pdf, index) => {
-            return (
+          {laundryPdfs
+            .filter((pdf) => !pdf.hide)
+            .map((pdf, index) => (
               <Can I={pdf.permission} a="report" key={index}>
                 <Card key={index}>
                   <Card.Body>
@@ -174,8 +176,7 @@ const LaundryReports: FunctionComponent = () => {
                   </Card.Body>
                 </Card>
               </Can>
-            )
-          })}
+            ))}
         </Card.Body>
       </Card>
       {showModal && selectedPdf && (

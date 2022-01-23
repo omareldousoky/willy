@@ -4,12 +4,12 @@ import LaundryReports from 'Shared/Components/Reports/laundryReports'
 import OfficersProductivityReports from 'Shared/Components/Reports/officersProductivityReports'
 import * as local from 'Shared/Assets/ar.json'
 import { CardNavBar, Tab } from 'Shared/Components/HeaderWithCards/cardNavbar'
+import { MonthlyReports } from 'Shared/Components/Reports/monthlyReports/monthlyReports'
 import CIBReports from './cibReports'
 import FinancialReports from './financialReports'
 import IscoreReports from './IscoreReports'
 import OracleIntegration from './oracleIntegration'
 import OperationsReports from './operationsReports'
-import { TasaheelReports } from './TasaheelReports/TasaheelReports'
 
 interface State {
   activeTab: string
@@ -52,8 +52,8 @@ class ReportsHome extends Component<{}, State> {
         //     permissionKey: 'oracleIntegration'
         // },
         {
-          header: local.tasaheelReports,
-          stringKey: 'tasaheelReports',
+          header: local.monthlyReports,
+          stringKey: 'monthlyReports',
         },
         {
           header: local.laundryReports,
@@ -86,8 +86,8 @@ class ReportsHome extends Component<{}, State> {
         return <OracleIntegration />
       case 'operationsReports':
         return <OperationsReports />
-      case 'tasaheelReports':
-        return <TasaheelReports />
+      case 'monthlyReports':
+        return <MonthlyReports />
       case 'laundryReports':
         return <LaundryReports />
       case 'officersProductivityReports':

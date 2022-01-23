@@ -4,6 +4,7 @@ import LaundryReports from 'Shared/Components/Reports/laundryReports'
 import * as local from 'Shared/Assets/ar.json'
 import { CardNavBar, Tab } from 'Shared/Components/HeaderWithCards/cardNavbar'
 import OfficersProductivityReports from 'Shared/Components/Reports/officersProductivityReports'
+import { MonthlyReports } from 'Shared/Components/Reports/monthlyReports/monthlyReports'
 import FinancialReports from './financialReports'
 import OperationsReports from './operationsReports'
 
@@ -47,10 +48,10 @@ class ReportsHome extends Component<{}, State> {
         //     permission: 'summarizeTransactions',
         //     permissionKey: 'oracleIntegration' --> TODO keep this commented
         // },
-        // {
-        //   header: local.tasaheelReports,
-        //   stringKey: 'tasaheelReports',
-        // },
+        {
+          header: local.monthlyReports,
+          stringKey: 'monthlyReports',
+        },
         {
           header: local.laundryReports,
           stringKey: 'laundryReports',
@@ -82,8 +83,8 @@ class ReportsHome extends Component<{}, State> {
       //   return <OracleIntegration />
       case 'operationsReports':
         return <OperationsReports />
-      // case 'tasaheelReports':
-      //   return <TasaheelReports />
+      case 'monthlyReports':
+        return <MonthlyReports />
       case 'laundryReports':
         return <LaundryReports />
       case 'officersProductivityReports':
