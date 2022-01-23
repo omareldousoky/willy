@@ -308,7 +308,7 @@ export const MonthlyReports = () => {
                           className={`mr-5  text-${
                             report.status === 'created'
                               ? 'success'
-                              : report.status === 'queued'
+                              : ['queued', 'processing'].includes(report.status)
                               ? 'warning'
                               : 'danger'
                           } `}
