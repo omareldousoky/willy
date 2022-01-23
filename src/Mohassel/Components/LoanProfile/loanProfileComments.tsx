@@ -110,13 +110,18 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
               </Button>
             </div>
           )}
-          <Can I="getLoanApplicationsNotes" a="report-2">
-            <div className="mt-5 mb-5">
-              <Button variant="primary" onClick={() => handleCommentsReport()}>
-                {local.commentsReport}
-              </Button>
-            </div>
-          </Can>
+          {!['canceled'].includes(props.applicationStatus) && (
+            <Can I="getLoanApplicationsNotes" a="report-2">
+              <div className="mt-5 mb-5">
+                <Button
+                  variant="primary"
+                  onClick={() => handleCommentsReport()}
+                >
+                  {local.commentsReport}
+                </Button>
+              </div>
+            </Can>
+          )}
         </div>
         {props.comments.length ? (
           <Table className="text-left">

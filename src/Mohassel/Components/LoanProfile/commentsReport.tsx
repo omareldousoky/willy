@@ -153,7 +153,7 @@ const CommentsReport: FC<Props> = (props) => {
                   >
                     {row.render
                       ? row.render(data.applications || [])
-                      : activeLoan?.[row.key]}
+                      : activeLoan?.[row.key] || local.na}
                   </td>
                 )
             )}
