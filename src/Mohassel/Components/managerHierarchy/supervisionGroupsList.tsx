@@ -179,20 +179,18 @@ class SupervisionGroupsList extends Component<
   }
 
   getSupervisionsGroups() {
-    this.props
-      .search({
-        ...this.props.searchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'supervisionsGroups',
-        status: this.state.chosenStatus,
-        branchId: this.state.branchId !== 'hq' ? this.state.branchId : '',
-      })
-      .then(() => {
-        if (this.props.error) {
-          Swal.fire('error', getErrorMessage(this.props.error), 'error')
-        }
-      })
+    const searchObj = {
+      ...this.props.searchFilters,
+      size: this.state.size,
+      from: this.state.from,
+      url: 'supervisionsGroups',
+      status: this.state.chosenStatus,
+    }
+    this.props.search(searchObj).then(() => {
+      if (this.props.error) {
+        Swal.fire('error', getErrorMessage(this.props.error), 'error')
+      }
+    })
   }
 
   selectState = (event) => {

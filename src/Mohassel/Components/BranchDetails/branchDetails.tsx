@@ -192,7 +192,13 @@ class BranchDetails extends Component<Props, State> {
       case 'issuedLoan':
         return (
           <Can I="getIssuedLoan" a="application">
-            <LoanList {...{ branchId: this.state._id, fromBranch: true }} />
+            <LoanList
+              {...{
+                branchId: this.state._id,
+                fromBranch: true,
+                hideTabs: true,
+              }}
+            />
           </Can>
         )
       case 'managers':

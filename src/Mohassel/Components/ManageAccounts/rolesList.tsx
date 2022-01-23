@@ -65,7 +65,7 @@ class RolesList extends Component<RouteComponentProps, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('roles')}
+            .indexOf('role')}
         />
         <Card className="main-card">
           <Loader type="fullsection" open={this.state.loading} />
