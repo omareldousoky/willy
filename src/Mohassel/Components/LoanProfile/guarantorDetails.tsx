@@ -70,7 +70,12 @@ export const GuarantorTableView = (props: Props) => {
       }
       changeLoading(false)
     } else {
-      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(results.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       changeLoading(false)
     }
   }
@@ -150,7 +155,12 @@ export const GuarantorTableView = (props: Props) => {
       return { flag: true, customers: merged }
     }
     changeLoading(false)
-    Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    Swal.fire({
+      title: local.errorTitle,
+      text: getErrorMessage(res.error.error),
+      icon: 'error',
+      confirmButtonText: local.confirmationText,
+    })
     return { flag: false }
   }
   async function selectGuarantor(guarantor) {
@@ -182,19 +192,21 @@ export const GuarantorTableView = (props: Props) => {
         errorMessage2 = local.customerInvolvedInAnotherLoan
       }
       if (errorMessage1 || errorMessage2)
-        Swal.fire(
-          'error',
-          `<span>${errorMessage1}  ${
+        Swal.fire({
+          title: local.errorTitle,
+          html: `<span>${errorMessage1}  ${
             errorMessage1 ? `<br/>` : ''
           } ${errorMessage2}</span>`,
-          'error'
-        )
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(targetGuarantor.error.error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(targetGuarantor.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     changeLoading(false)
   }
@@ -206,11 +218,20 @@ export const GuarantorTableView = (props: Props) => {
       guarantorIds: guarIds,
     })
     if (guarantorToAdd.status === 'success') {
-      Swal.fire(local.guarantorAddedSuccessfully, '', 'success').then(() => {
+      Swal.fire({
+        title: local.guarantorAddedSuccessfully,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => {
         window.location.reload()
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(guarantorToAdd.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(guarantorToAdd.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     changeLoading(false)
   }
@@ -237,17 +258,20 @@ export const GuarantorTableView = (props: Props) => {
           guarantorIds: ids,
         })
         if (guarantorToRemove.status === 'success') {
-          Swal.fire(local.guarantorRemovedSuccessfully, '', 'success').then(
-            () => {
-              window.location.reload()
-            }
-          )
+          Swal.fire({
+            title: local.guarantorRemovedSuccessfully,
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          }).then(() => {
+            window.location.reload()
+          })
         } else {
-          Swal.fire(
-            'Error !',
-            getErrorMessage(guarantorToRemove.error.error),
-            'error'
-          )
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(guarantorToRemove.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         }
         changeLoading(false)
       }
@@ -597,11 +621,11 @@ export const GuarantorTableView = (props: Props) => {
                                       variant="default"
                                       onClick={() =>
                                         !guar.guarantor.cbeCode
-                                          ? Swal.fire(
-                                              local.error,
-                                              missingKey('cbeCode'),
-                                              'error'
-                                            )
+                                          ? Swal.fire({
+                                              title: local.errorTitle,
+                                              text: missingKey('cbeCode'),
+                                              icon: 'error',
+                                            })
                                           : getIscore(guar.guarantor)
                                       }
                                     >

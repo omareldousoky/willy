@@ -110,7 +110,12 @@ const CreditInquiryRequests = () => {
     if (res.status === 'success') {
       if (Object.keys(res.body).length === 0) {
         setLoading(false)
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         const pollStart = new Date().valueOf()
 
@@ -119,7 +124,12 @@ const CreditInquiryRequests = () => {
     } else {
       setLoading(false)
 
-      Swal.fire('Error !', getErrorMessage(res?.error?.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res?.error?.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

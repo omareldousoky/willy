@@ -43,7 +43,12 @@ export const LoanDetailsTableView = ({
       const value = uses.find((use) => use.id === application.usage).name
       changeUse(value)
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       return ''
     }
   }
@@ -266,7 +271,12 @@ export const LoanDetailsBoxView = ({ application }: Props) => {
       const value = uses.find((use) => use.id === application.usage).name
       changeUse(value)
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       return ''
     }
   }
@@ -409,7 +419,12 @@ export const CustomerLoanDetailsBoxView = ({
       const { name } = res.body
       changeOfficerName(name)
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       return ''
     }
   }

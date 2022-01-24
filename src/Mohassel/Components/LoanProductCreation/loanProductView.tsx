@@ -49,7 +49,12 @@ class ViewProduct extends Component<
         loading: false,
       })
     } else {
-      Swal.fire('error', getErrorMessage(product.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(product.error.error),
+        icon: 'error',
+      })
       this.setState({ loading: false })
     }
   }

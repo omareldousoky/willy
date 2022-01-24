@@ -1281,5 +1281,7 @@
   "select": "اختر",
   "loading": "جاري التحميل",
   "noFileChosen": "لم يتم اختيار ملف بعد",
-  "timeOut":"Time Out"
+  "timeOut":"Time Out",
+  "fetchError": "fetch Error",
+  "invalidNanoLimitError": "برجاء تحديد الحد الائتماني"
 }

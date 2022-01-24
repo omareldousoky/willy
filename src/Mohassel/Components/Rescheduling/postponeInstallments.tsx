@@ -128,10 +128,19 @@ class PostponeInstallments extends Component<Props, State> {
         installmentsAfterRescheduling: res.body.output,
       })
       // TODO:lint: remove??
-      Swal.fire('', 'Test Success', 'success')
+      Swal.fire({
+        text: local.postponeTested,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -149,6 +158,7 @@ class PostponeInstallments extends Component<Props, State> {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: local.postponeInstallments,
+      cancelButtonText: local.cancel,
     }).then((result) => {
       if (result.value) {
         this.pushInstallments()
@@ -169,12 +179,19 @@ class PostponeInstallments extends Component<Props, State> {
     const res = await postponeInstallment(this.props.application._id, obj)
     if (res.status === 'success') {
       this.setState({ loading: false })
-      Swal.fire('', 'Installment has been pushed.', 'success').then(() =>
-        window.location.reload()
-      )
+      Swal.fire({
+        text: local.donePostponing,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => window.location.reload())
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }

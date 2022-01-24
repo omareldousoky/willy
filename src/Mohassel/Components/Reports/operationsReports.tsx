@@ -287,7 +287,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     if (res.status === 'success') {
       if (!res.body || !Object.keys(res.body).length) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         this.setState(
           {
@@ -301,11 +306,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       }
     } else {
       this.setState({ loading: false })
-      Swal.fire(
-        'Error !',
-        getErrorMessage((res.error as Record<string, string>).error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage((res.error as Record<string, string>).error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -368,7 +374,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         this.setState({ loading: true })
         const pollStart = new Date().valueOf()

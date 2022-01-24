@@ -211,8 +211,8 @@ class CustomersForUser extends Component<Props, State> {
           icon: 'warning',
           showCancelButton: true,
           focusConfirm: false,
-          confirmButtonText: 'تأكيد',
-          cancelButtonText: 'إلغاء',
+          confirmButtonText: local.submit,
+          cancelButtonText: local.cancel,
         }).then((value) => {
           if (value.value) {
             this.setState({ loading: false, moveMissing: true }, () =>
