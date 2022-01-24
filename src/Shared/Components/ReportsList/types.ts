@@ -14,4 +14,5 @@ export interface ReportsListProps {
   list: List[]
   onClickDownload?: (itemId: string) => void
   iscoreType?: boolean
+  disabledProp?: boolean
 }

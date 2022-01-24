@@ -23,6 +23,7 @@ interface State {
   loading: boolean
   showModal: boolean
   dataToPrint?: OfficersProductivityResponse
+  disable?: boolean
 }
 class OfficersProductivityReports extends Component<{}, State> {
   constructor(props) {
@@ -31,6 +32,7 @@ class OfficersProductivityReports extends Component<{}, State> {
       loading: false,
       showModal: false,
       data: [],
+      disable: false,
     }
   }
 
@@ -82,12 +84,17 @@ class OfficersProductivityReports extends Component<{}, State> {
   }
 
   async getFile(fileRequestId) {
+    this.setState({
+      disable: true,
+      loading: true,
+    })
     const res = await getOfficersProductivityReportById(fileRequestId)
     if (res.status === 'success') {
       this.setState(
         {
           loading: false,
           dataToPrint: res.body,
+          disable: false,
         },
         () => window.print()
       )
@@ -118,6 +125,7 @@ class OfficersProductivityReports extends Component<{}, State> {
             <ReportsList
               list={this.state.data}
               onClickDownload={(itemId) => this.getFile(itemId)}
+              disabledProp={this.state.disable}
             />
           </Card.Body>
         </Card>

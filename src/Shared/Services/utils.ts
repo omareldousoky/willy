@@ -435,7 +435,8 @@ export const iscoreDate = (date: any) => {
 
 export const getDateString = (date: any) => {
   return new Date(
-    new Date(date).getTime() - new Date(date).getTimezoneOffset() * 60000
+    new Date(date || 0).getTime() -
+      new Date(date || 0).getTimezoneOffset() * 60000
   )
     .toISOString()
     .split('T')[0]

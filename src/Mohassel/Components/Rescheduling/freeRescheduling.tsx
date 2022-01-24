@@ -64,16 +64,6 @@ class FreeRescheduling extends Component<Props, State> {
         key: 'installmentResponse',
         render: (data) => data.installmentResponse,
       },
-      // {
-      //     title: local.principalPaid,
-      //     key: "principalPaid",
-      //     render: data => data.principalPaid
-      // },
-      // {
-      //     title: local.feesPaid,
-      //     key: "feesPaid",
-      //     render: data => data.feesPaid
-      // },
       {
         title: local.dateOfPayment,
         key: 'dateOfPayment',

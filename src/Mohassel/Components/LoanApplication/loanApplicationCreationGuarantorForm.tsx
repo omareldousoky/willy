@@ -23,6 +23,7 @@ import { theme } from '../../../Shared/theme'
 import { OptionType } from '../../../Shared/Components/dropDowns/types'
 import CustomerSearch from '../../../Shared/Components/CustomerSearch'
 
+let id = 1
 export const LoanApplicationCreationGuarantorForm = (props: any) => {
   const {
     values,
@@ -218,7 +219,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
               <h5>{local.viceCustomersInfo}</h5>
               <FieldArray
                 name="viceCustomers"
-                render={(arrayHelpers) => (
+                render={() => (
                   <div>
                     {values.viceCustomers.length > 0 &&
                       values.viceCustomers.map((customer, index) => (
@@ -277,7 +278,13 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                             <Button
                               type="button"
                               className="mb-2"
-                              onClick={() => arrayHelpers.remove(index)}
+                              onClick={() =>
+                                props.removeViceCustomer(
+                                  customer,
+                                  index,
+                                  values
+                                )
+                              }
                             >
                               -
                             </Button>
@@ -289,9 +296,10 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                         values.state === 'under_review') && (
                         <Button
                           type="button"
-                          onClick={() =>
-                            arrayHelpers.push({ name: '', phoneNumber: '' })
-                          }
+                          onClick={() => {
+                            id += 1
+                            props.addViceCustomer(id)
+                          }}
                         >
                           +
                         </Button>

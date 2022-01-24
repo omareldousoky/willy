@@ -1145,6 +1145,30 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ application, loading: false })
   }
 
+  removeViceCustomer = (index) => {
+    this.setState(
+      produce<State>((draftState) => {
+        draftState.application.viceCustomers = draftState.application.viceCustomers.filter(
+          (customer) => customer.id !== index.id
+        )
+      })
+    )
+  }
+
+  addViceCustomer(i: string) {
+    const element: { name: string; phoneNumber: string; id: string } = {
+      name: '',
+      phoneNumber: '',
+      id: i,
+    }
+
+    this.setState(
+      produce<State>((draftState) => {
+        draftState.application.viceCustomers.push(element)
+      })
+    )
+  }
+
   async viewCustomer(id) {
     this.setState({ loading: true })
     const selectedCustomer = await getCustomerByID(id)
@@ -1774,6 +1798,8 @@ class LoanApplicationCreation extends Component<Props, State> {
             removeEntitledToSign={(query, guarantor, values) => {
               this.removeEntitledToSign(query, guarantor, values)
             }}
+            addViceCustomer={(i) => this.addViceCustomer(i)}
+            removeViceCustomer={(i) => this.removeViceCustomer(i)}
             customer={
               this.state.customerType === 'group'
                 ? this.state.selectedCustomers

@@ -7,6 +7,7 @@ import * as Barcode from 'react-barcode'
 
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
+import { getCookie } from 'Shared/Services/getCookie'
 
 import { getRollableActionsById } from 'Shared/Services/APIs/loanApplication/rollBack'
 import ReturnItemModal from 'Shared/Components/LoanApplication/ReturnItemModal'
@@ -596,6 +597,7 @@ class LoanProfile extends Component<Props, State> {
         title: local.editLoan,
         permission:
           this.state.application.status === 'underReview' &&
+          JSON.parse(getCookie('ltsbranch'))._id !== 'hq' &&
           ability.can('assignProductToCustomer', 'application'),
         onActionClick: () =>
           this.props.history.push(
@@ -1368,14 +1370,12 @@ class LoanProfile extends Component<Props, State> {
         {Object.keys(this.state.application).length > 0 && (
           <div className="print-none">
             <div className="d-flex justify-content-between">
-              <div
-                className="d-flex justify-content-start"
-                style={{ width: '35%' }}
-              >
+              <div className="d-flex justify-content-start flex-grow-1">
                 <h3>{local.loanDetails}</h3>
                 <span
                   style={{
                     display: 'flex',
+                    alignItems: 'center',
                     padding: 10,
                     marginRight: 10,
                     borderRadius: 30,

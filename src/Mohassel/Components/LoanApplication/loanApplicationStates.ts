@@ -6,6 +6,7 @@ import { Customer } from '../../../Shared/Models/Customer'
 export interface Vice {
   name: string
   phoneNumber: string
+  id?: string
   nationalId?: string
   nationalIdIssueDate?: string | any
   jobTitle?: string

@@ -70,6 +70,7 @@ interface State {
   iScoreModal: boolean
   iScoreCustomers: any
   loading: boolean
+  selectedBranch: string
 }
 interface Props
   extends RouteComponentProps<
@@ -101,6 +102,9 @@ class TrackLoanApplications extends Component<Props, State> {
       iScoreModal: false,
       iScoreCustomers: [],
       loading: false,
+      selectedBranch: getCookie('ltsbranch')
+        ? JSON.parse(getCookie('ltsbranch'))._id
+        : '',
     }
     this.mappers = [
       {
@@ -535,18 +539,24 @@ class TrackLoanApplications extends Component<Props, State> {
                   </span>
                 </div>
                 <div>
-                  <Can I="assignProductToCustomer" a="application">
-                    <Button
-                      onClick={() =>
-                        this.props.history.push(
-                          '/track-loan-applications/new-loan-application',
-                          { id: '', action: 'under_review', sme: smePermission }
-                        )
-                      }
-                    >
-                      {local.createLoanApplication}
-                    </Button>
-                  </Can>
+                  {this.state.selectedBranch !== 'hq' && (
+                    <Can I="assignProductToCustomer" a="application">
+                      <Button
+                        onClick={() =>
+                          this.props.history.push(
+                            '/track-loan-applications/new-loan-application',
+                            {
+                              id: '',
+                              action: 'under_review',
+                              sme: smePermission,
+                            }
+                          )
+                        }
+                      >
+                        {local.createLoanApplication}
+                      </Button>
+                    </Can>
+                  )}
                   <Can I="loansReviewed" a="report">
                     <Button
                       style={{ marginRight: 10 }}
