@@ -141,7 +141,12 @@ class SupervisionGroupsList extends Component<
       })
       .then(() => {
         if (this.props.error) {
-          Swal.fire('error', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+          })
         }
         if (this.state.branchId === 'hq') {
           this.setState({ searchKey: ['branch'] })
@@ -188,7 +193,12 @@ class SupervisionGroupsList extends Component<
     }
     this.props.search(searchObj).then(() => {
       if (this.props.error) {
-        Swal.fire('error', getErrorMessage(this.props.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          confirmButtonText: local.confirmationText,
+          text: getErrorMessage(this.props.error),
+          icon: 'error',
+        })
       }
     })
   }
@@ -288,10 +298,19 @@ class SupervisionGroupsList extends Component<
     const res = await approveOfficersGroups({ branchesGroupIds })
     if (res.status === 'success') {
       this.props.setLoading(false)
-      Swal.fire('Success', '', 'success').then(() => window.location.reload())
+      Swal.fire({
+        title: local.success,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => window.location.reload())
     } else {
       this.props.setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -300,10 +319,19 @@ class SupervisionGroupsList extends Component<
     const res = await unApproveOfficersGroups({ branchesGroupIds })
     if (res.status === 'success') {
       this.props.setLoading(false)
-      Swal.fire('Success', '', 'success').then(() => window.location.reload())
+      Swal.fire({
+        title: local.success,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => window.location.reload())
     } else {
       this.props.setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

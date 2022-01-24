@@ -66,7 +66,12 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
     if (res.status === 'success') {
       if (!res.body) {
         setIsLoading(false)
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
         setPrintPdfKey(undefined)
       } else {
         if (successHandler) successHandler()
@@ -110,7 +115,12 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
     if (!printPdfKey) return
 
     if (!customerKey) {
-      Swal.fire('error', missingKey('customerCode'))
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: missingKey('customerCode'),
+        icon: 'error',
+      })
       return
     }
     setIsLoading(true)
@@ -179,7 +189,12 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
     if (res.status === 'success') {
       if (!res.body) {
         setIsLoading(false)
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         setIsLoading(true)
         const pollStart = new Date().valueOf()

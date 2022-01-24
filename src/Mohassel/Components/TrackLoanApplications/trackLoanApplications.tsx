@@ -209,7 +209,11 @@ class TrackLoanApplications extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+          })
       })
   }
 
@@ -237,7 +241,11 @@ class TrackLoanApplications extends Component<Props, State> {
         })
         .then(() => {
           if (this.props.error)
-            Swal.fire('', getErrorMessage(this.props.error), 'error')
+            Swal.fire({
+              confirmButtonText: local.confirmationText,
+              text: getErrorMessage(this.props.error),
+              icon: 'error',
+            })
         })
     }
   }
@@ -315,7 +323,11 @@ class TrackLoanApplications extends Component<Props, State> {
       this.setState({ iScoreCustomers: customers, loading: false })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('', getErrorMessage(iScores.error.error), 'error')
+        Swal.fire({
+          confirmButtonText: local.confirmationText,
+          text: getErrorMessage(iScores.error.error),
+          icon: 'error',
+        })
       )
     }
   }
@@ -335,7 +347,12 @@ class TrackLoanApplications extends Component<Props, State> {
       url: 'application',
       branchId: branchId || searchFilters.branchId,
     }).then(() => {
-      if (error) Swal.fire('', getErrorMessage(error), 'error')
+      if (error)
+        Swal.fire({
+          confirmButtonText: local.confirmationText,
+          text: getErrorMessage(error),
+          icon: 'error',
+        })
     })
   }
 
@@ -415,7 +432,12 @@ class TrackLoanApplications extends Component<Props, State> {
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('Error', local.noResults, 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          confirmButtonText: local.confirmationText,
+          text: local.noResults,
+          icon: 'error',
+        })
       } else {
         this.setState(
           { reviewedResults: res.body.result, loading: false },

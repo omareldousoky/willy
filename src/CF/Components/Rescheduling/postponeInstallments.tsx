@@ -129,7 +129,7 @@ class PostponeInstallments extends Component<Props, State> {
       })
       // TODO:lint: remove??
       Swal.fire({
-        text: local.donePostponing,
+        text: local.postponeTested,
         icon: 'success',
         confirmButtonText: local.confirmationText,
       })
