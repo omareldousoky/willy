@@ -96,22 +96,26 @@ class LoanProducts extends Component<Props, State> {
         actionTitle: local.editLoanProduct,
         actionIcon: 'edit',
         actionPermission: ability.can('updateLoanProduct', 'product'),
-        actionOnClick: (id) =>
+        actionOnClick: (id) => {
+          this.props.setSearchFilters({})
           this.props.history.push(
             '/manage-loans/loan-products/edit-loan-product',
             {
               id,
             }
-          ),
+          )
+        },
       },
       {
         actionTitle: local.viewLoanProduct,
         actionIcon: 'view',
         actionPermission: ability.can('updateLoanProduct', 'product'),
-        actionOnClick: (id) =>
+        actionOnClick: (id) => {
+          this.props.setSearchFilters({})
           this.props.history.push('/manage-loans/loan-products/view-product', {
             id,
-          }),
+          })
+        },
       },
       {
         actionTitle: local.productApplicationsReport,

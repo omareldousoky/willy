@@ -33,6 +33,15 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
         )}`
     }
   }
+
+  const tafgeetTenK = () => {
+    let string = ''
+    const limit = props.contractData.initialConsumerFinanceLimit
+    string = new Tafgeet(limit, 'EGP').parse()
+    if (limit >= 10000 && limit <= 10999) string = string.replace('ألف', 'الاف')
+    return string
+  }
+
   return (
     <table className="cf-contract-container">
       <Header
@@ -201,11 +210,7 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
           <p>
             4/1 الحد الاقصى لمبلغ التمويل :&nbsp;
             {numbersToArabic(props.contractData.initialConsumerFinanceLimit)} حم
-            (
-            {new Tafgeet(
-              props.contractData.initialConsumerFinanceLimit,
-              'EGP'
-            ).parse()}
+            ({tafgeetTenK()}
             &nbsp; )
           </p>
           <p>4/2 متوسط سعر العائد: 23% (ثابت/سنويا)</p>

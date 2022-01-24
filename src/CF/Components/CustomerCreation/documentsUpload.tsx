@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import print from 'Shared/Utils/printIframe'
 import Form from 'react-bootstrap/Form'
 import { connect } from 'react-redux'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -12,6 +14,7 @@ import {
   getDocuments,
   addAllToSelectionArray,
   clearSelectionArray,
+  clearDocuments,
 } from '../../../Shared/redux/document/actions'
 import { Image } from '../../../Shared/redux/document/types'
 import { downloadAsZip, getErrorMessage } from '../../../Shared/Services/utils'
@@ -28,6 +31,7 @@ interface Props {
   getDocuments: typeof getDocuments
   addAllToSelectionArray: typeof addAllToSelectionArray
   clearSelectionArray: typeof clearSelectionArray
+  clearDocuments: typeof clearDocuments
   edit: boolean
   view?: boolean
   loading: boolean
@@ -68,6 +72,7 @@ class DocumentsUpload extends Component<Props, State> {
 
   componentWillUnmount() {
     this.props.clearSelectionArray()
+    this.props.clearDocuments()
   }
 
   selectAllOptions() {
@@ -111,26 +116,32 @@ class DocumentsUpload extends Component<Props, State> {
               onChange={() => this.selectAllOptions()}
             />
           </div>
-          <div
-            style={{
-              padding: '0.75rem 1.25rem',
-              marginRight: '1rem',
-            }}
-          >
-            <Button
-              style={{ width: '150px' }}
-              variant="primary"
-              disabled={!this.props.selectionArray.length}
-              onClick={async () => {
-                this.setState({ loading: true })
-                await downloadAsZip(
-                  this.props.selectionArray,
-                  `customer-${this.props.customerId}-${new Date().valueOf()}`
-                )
-                this.setState({ loading: false })
-              }}
-            >{`${local.download}(${this.props.selectionArray.length})`}</Button>
-          </div>
+          <Row className="d-flex justify-content-end flex-grow-1 spacing-document text-right">
+            <Col xs={12} lg={10}>
+              <Button
+                className="mr-2"
+                variant="secondary"
+                disabled={this.props.selectionArray.length <= 0}
+                onClick={async () => {
+                  this.setState({ loading: true })
+                  print(this.props.selectionArray)
+                  this.setState({ loading: false })
+                }}
+              >{`${local.print}(${this.props.selectionArray.length})`}</Button>
+              <Button
+                variant="primary"
+                disabled={this.props.selectionArray.length <= 0}
+                onClick={async () => {
+                  this.setState({ loading: true })
+                  await downloadAsZip(
+                    this.props.selectionArray,
+                    `Customer-${this.props.customerId}-${new Date().valueOf()}`
+                  )
+                  this.setState({ loading: false })
+                }}
+              >{`${local.download}(${this.props.selectionArray.length})`}</Button>
+            </Col>
+          </Row>
         </Row>
         {this.state.documentTypes.map((documentType: DocumentType, index) => {
           return (
@@ -155,6 +166,7 @@ const addDocumentToProps = (dispatch) => {
     addAllToSelectionArray: (images) =>
       dispatch(addAllToSelectionArray(images)),
     clearSelectionArray: () => dispatch(clearSelectionArray()),
+    clearDocuments: () => dispatch(clearDocuments()),
   }
 }
 const mapStateToProps = (state) => {

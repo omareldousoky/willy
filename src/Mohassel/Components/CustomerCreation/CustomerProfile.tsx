@@ -3,9 +3,14 @@ import { useHistory, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Container from 'react-bootstrap/Container'
 import {
+  CustomerScore,
+  getCustomerCategorization,
+} from 'Shared/Services/APIs/customer/customerCategorization'
+import {
   getErrorMessage,
   iscoreDate,
   cfLimitStatusLocale,
+  timeToArabicDate,
 } from '../../../Shared/Services/utils'
 import { Tab } from '../../../Shared/Components/HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -50,10 +55,10 @@ const tabs: Array<Tab> = [
     header: local.differentInfo,
     stringKey: 'differentInfo',
   },
-  // {
-  //   header: local.customerCategorization,
-  //   stringKey: 'customerScore',
-  // },
+  {
+    header: local.customerCategorization,
+    stringKey: 'customerScore',
+  },
   {
     header: local.documents,
     stringKey: 'documents',
@@ -80,17 +85,19 @@ const tabs: Array<Tab> = [
   },
 ]
 
-// const getCustomerCategorizationRating = async (
-//   id: string,
-//   setRating: (rating: Array<CustomerScore>) => void
-// ) => {
-//   const res = await getCustomerCategorization({ customerId: id })
-//   if (res.status === 'success' && res.body?.customerScores !== undefined) {
-//     setRating(res.body?.customerScores)
-//   } else {
-//     setRating([])
-//   }
-// }
+const getCustomerCategorizationRating = async (
+  id: string,
+  setRating: (rating: CustomerScore[]) => void,
+  setLoading: (loading: boolean) => void
+) => {
+  setLoading(true)
+  const res = await getCustomerCategorization({ customerId: id })
+  setLoading(false)
+
+  if (res.status === 'success' && res.body?.customerScores) {
+    setRating(res.body?.customerScores)
+  }
+}
 
 export const CustomerProfile = () => {
   const [loading, setLoading] = useState(false)
@@ -98,7 +105,7 @@ export const CustomerProfile = () => {
   const [iScoreDetails, setIScoreDetails] = useState<Score[]>()
   const [activeTab, setActiveTab] = useState<keyof TabDataProps>('workInfo')
   const [print, setPrint] = useState('')
-  // const [ratings, setRatings] = useState<Array<CustomerScore>>([])
+  const [ratings, setRatings] = useState<Array<CustomerScore>>([])
   const [showHalanLinkageModal, setShowHalanLinkageModal] = useState<boolean>(
     false
   )
@@ -180,8 +187,8 @@ export const CustomerProfile = () => {
 
   useEffect(() => {
     getCustomerDetails()
-    // getCustomerCategorizationRating(location.state.id, setRatings)
   }, [])
+
   function getArRuralUrban(ruralUrban: string | undefined) {
     if (ruralUrban === 'rural') return local.rural
     return local.urban
@@ -362,7 +369,10 @@ export const CustomerProfile = () => {
       },
       {
         fieldTitle: local.businessLicenseIssueDate,
-        fieldData: customerDetails?.businessLicenseIssueDate || '',
+        fieldData: `${timeToArabicDate(
+          customerDetails?.businessLicenseIssueDate || 0,
+          false
+        )}`,
         showFieldCondition: true,
       },
       {
@@ -397,7 +407,10 @@ export const CustomerProfile = () => {
       },
       {
         fieldTitle: local.applicationDate,
-        fieldData: customerDetails?.applicationDate || '',
+        fieldData: `${timeToArabicDate(
+          customerDetails?.applicationDate || 0,
+          false
+        )}`,
         showFieldCondition: true,
       },
       {
@@ -492,15 +505,15 @@ export const CustomerProfile = () => {
         showFieldCondition: true,
       },
     ],
-    // customerScore: [
-    //   {
-    //     fieldTitle: 'ratings',
-    //     fieldData: ratings,
-    //     showFieldCondition: Boolean(
-    //       ability.can('customerCategorization', 'customer')
-    //     ),
-    //   },
-    // ],
+    customerScore: [
+      {
+        fieldTitle: 'ratings',
+        fieldData: ratings,
+        showFieldCondition: Boolean(
+          ability.can('customerCategorization', 'customer')
+        ),
+      },
+    ],
     documents: [
       {
         fieldTitle: 'customer id',
@@ -693,7 +706,16 @@ export const CustomerProfile = () => {
           loading={loading}
           tabs={tabs}
           activeTab={activeTab}
-          setActiveTab={(stringKey) => setActiveTab(stringKey)}
+          setActiveTab={(stringKey) => {
+            if (stringKey === 'customerScore') {
+              getCustomerCategorizationRating(
+                location.state.id,
+                setRatings,
+                setLoading
+              )
+            }
+            setActiveTab(stringKey)
+          }}
           tabsData={tabsData}
         />
         {showCFLimitModal && customerDetails && (

@@ -78,6 +78,8 @@ import {
   getLoanDetails,
   getPostponesExcel,
   postPostponesExcel,
+  postReviewedLoansExcel,
+  getReviewedLoansExcel,
 } from '../../../Shared/Services/APIs/Reports/Financial'
 
 interface State {
@@ -200,6 +202,15 @@ class FinancialReports extends Component<{}, State> {
           local: 'الترحيلات',
           inputs: ['dateFromTo', 'branches'],
           permission: 'getPostpones',
+          serviceKey: 'report-2',
+          hidePdf: true,
+        },
+        {
+          key: 'reviewedLoans',
+          local: 'قروض تمت مراجعتها',
+          inputs: ['dateFromTo', 'branches', 'loanType'],
+          permission: 'getLoansReviewedByReviewDate',
+          serviceKey: 'report-2',
           hidePdf: true,
         },
       ],
@@ -340,6 +351,12 @@ class FinancialReports extends Component<{}, State> {
         )
       case 'getPostpones':
         return this.getExcelFile(postPostponesExcel, getPostponesExcel, values)
+      case 'reviewedLoans':
+        return this.getExcelFile(
+          postReviewedLoansExcel,
+          getReviewedLoansExcel,
+          values
+        )
       default:
         return null
     }

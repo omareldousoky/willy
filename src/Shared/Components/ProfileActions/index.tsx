@@ -11,7 +11,7 @@ export const ProfileActions = ({ actions }: ProfileActionsProps) => {
       {actions.map((action, index) => {
         const { title, permission, onActionClick, isLoading } = action
         return isLoading ? (
-          <Loader type="inline" open />
+          <Loader key={index} type="inline" open />
         ) : (
           permission && (
             <Button
