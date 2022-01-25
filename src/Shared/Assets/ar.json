@@ -1267,5 +1267,8 @@
   "lowRisk": "قليل",
   "medRisk": "متوسط",
   "highRisk": "خطر",
-  "financialLeasing": "تأجير تمويلي"
+  "financialLeasing": "تأجير تمويلي",
+  "vendorName": "اسم المورد",
+  "itemDescription": "تفاصيل المنتج",
+  "categoryName": "نوع الاصل المؤجر"
 }

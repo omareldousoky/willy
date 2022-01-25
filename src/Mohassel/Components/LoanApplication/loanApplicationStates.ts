@@ -1,5 +1,4 @@
 import * as Yup from 'yup'
-import { Results } from './loanApplicationCreation'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Customer } from '../../../Shared/Models/Customer'
 
@@ -112,6 +111,14 @@ export interface Application {
   customerType: string
   productType: string
   nanoLoansLimit: number
+  financialLeasing?: boolean
+  vendorName?: string
+  itemDescription?: string
+  categoryName?: string
+}
+export interface Results {
+  results: Array<object>
+  empty: boolean
 }
 export const LoanApplicationValidation = Yup.object().shape({
   productID: Yup.string().required(local.required),

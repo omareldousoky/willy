@@ -36,6 +36,7 @@ export const LoanApplicationCreationForm = (props: any) => {
   const [employees, setEmployees] = useState<Array<any>>([])
   const [researcherOptions, setResearcherOptions] = useState<Array<any>>([])
   const branchId = JSON.parse(getCookie('ltsbranch'))._id
+  const categories = ['مال مادي', 'معنوي', 'حق انتفاع']
   const getOptions = async (inputValue: string) => {
     const res = await searchLoanOfficerAndManager({
       from: 0,
@@ -506,6 +507,72 @@ export const LoanApplicationCreationForm = (props: any) => {
                   </Form.Group>
                 </Col>
               </Row>
+            )}
+            {values.financialLeasing && (
+              <>
+                <Row>
+                  <Col sm={6}>
+                    <Form.Group controlId="vendorName">
+                      <Form.Label>{local.vendorName}</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="vendorName"
+                        data-qc="vendorName"
+                        value={values.vendorName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={errors.vendorName && touched.vendorName}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.vendorName}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Col>
+                  <Col sm={6}>
+                    <Form.Group controlId="itemDescription">
+                      <Form.Label>{local.itemDescription}</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="itemDescription"
+                        data-qc="itemDescription"
+                        value={values.itemDescription}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={
+                          errors.itemDescription && touched.itemDescription
+                        }
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.itemDescription}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm={6}>
+                    <Form.Group controlId="categoryName">
+                      <Form.Label>{local.categoryName}</Form.Label>
+                      <Form.Control
+                        as="select"
+                        name="categoryName"
+                        data-qc="categoryName"
+                        value={values.categoryName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={errors.categoryName && touched.categoryName}
+                      >
+                        <option value="" disabled />
+                        {categories.map((category) => (
+                          <option value={category}>{category}</option>
+                        ))}
+                      </Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.categoryName}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Col>
+                </Row>
+              </>
             )}
             <Row>
               <Col sm={6}>
