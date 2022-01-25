@@ -6,6 +6,7 @@ import '../officersPercentPayment.scss'
 import OfficersPercentPaymentFooter from '../officersPercentPaymentFooter'
 import ManagerTotalRow from './managerTotalRow'
 import { Header } from '../../../pdfTemplateCommon/header'
+import { isCF } from '../../../../../Services/utils'
 
 interface OfficersProductivityProps {
   data: OfficersProductivityResponse
@@ -19,6 +20,7 @@ const OfficersProductivity = (props: OfficersProductivityProps) => {
       <Orientation size="portrait" />
       <div className="officers-payment officers-productivity" lang="ar">
         <Header
+          cf={isCF}
           toDate={endDate}
           fromDate={startDate}
           title="تقرير نسب السداد و الانتاجيه للمندوبين"

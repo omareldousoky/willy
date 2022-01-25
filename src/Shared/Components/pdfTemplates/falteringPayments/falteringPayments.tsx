@@ -7,6 +7,7 @@ import Orientation from '../../Common/orientation'
 import '../Operations/customersArrears/customersArrears.scss'
 import { Header } from '../pdfTemplateCommon/header'
 import DataRow from '../pdfTemplateCommon/dataRow'
+import { isCF } from '../../../Services/utils'
 
 interface FalteringPaymentsProps {
   toDate: string
@@ -25,6 +26,7 @@ export const FalteringPayments = ({
       <Orientation size="landscape" />
       <div className="customers-arrears">
         <Header
+          cf={isCF}
           toDate={toDate}
           fromDate={fromDate}
           title="تقرير سداد المتعثرين"

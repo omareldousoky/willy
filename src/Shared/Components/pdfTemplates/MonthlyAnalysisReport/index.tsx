@@ -3,6 +3,7 @@ import { Header } from '../pdfTemplateCommon/header'
 
 import './index.scss'
 import { MonthlyAnalysisReportProps } from './types'
+import { isCF } from '../../../Services/utils'
 
 const MonthlyAnalysisReport = ({
   monthlyAnalysis1,
@@ -15,6 +16,7 @@ const MonthlyAnalysisReport = ({
     <div id="monthlyAnalysisReport">
       <table>
         <Header
+          cf={isCF}
           title="تقرير التحليل الشهرى"
           showCurrentUser={false}
           showCurrentTime={false}

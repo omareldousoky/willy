@@ -7,6 +7,7 @@ import Orientation from '../../Common/orientation'
 import '../Operations/customersArrears/customersArrears.scss'
 import { Header } from '../pdfTemplateCommon/header'
 import DataRow from '../pdfTemplateCommon/dataRow'
+import { isCF } from '../../../Services/utils'
 
 interface EarlyPaymentsProps {
   toDate: string
@@ -27,6 +28,7 @@ export const EarlyPayments = ({
       <Orientation size="landscape" />
       <div className="customers-arrears">
         <Header
+          cf={isCF}
           toDate={toDate}
           fromDate={fromDate}
           title={`تقرير السداد المعجل ${is4Months ? ' خلال ٤ أشهر' : ''}`}

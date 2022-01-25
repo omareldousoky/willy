@@ -1,86 +1,87 @@
-@media screen,
-print {
-	.customers-arrears {
-		font-family: Arial, Helvetica, sans-serif;
-		font-weight: bold;
-		text-align: center;
-		padding: 0.3rem;
-		direction: rtl;
-		-webkit-print-color-adjust: exact;
-		font-size: 11px;
-		width: 100%;
+@media screen, print {
+  .customers-arrears {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.3rem;
+    direction: rtl;
+    -webkit-print-color-adjust: exact;
+    font-size: 11px;
+    width: 100%;
 
-		& .header-wrapper {
-			display: flex;
-			margin: 10px;
-			justify-content: space-between;
+    & .header-wrapper {
+      display: flex;
+      margin: 10px;
+      justify-content: space-between;
 
-			p {
-				font-size: .9rem !important;
-			}
-		}
+      p {
+        font-size: 0.9rem !important;
+      }
+    }
 
-		& .branch-data-container {
-			display: flex;
-			flex-direction: column;
-		}
+    & .branch-data-container {
+      display: flex;
+      flex-direction: column;
+    }
 
-		& .report-title {
-			font-size: 1.2rem !important;
-			margin: auto;
-		}
+    & .report-title {
+      font-size: 1.2rem !important;
+      margin: auto;
+    }
 
-		& table.customers-arrears-table {
-			width: 100vw;
-			margin: 10px auto;
-			border-collapse: collapse;
+    & table.customers-arrears-table {
+      width: 100vw;
+      margin: 10px auto;
+      border-collapse: collapse;
+      page-break-before: avoid;
+      page-break-inside: auto;
 
-			& tbody {
-				page-break-inside: avoid;
-				line-height: 1.5em;
-			}
+      & tbody {
+        page-break-inside: avoid;
+        line-height: 1.5em;
+      }
 
-			& thead {
-				display: table-row-group;
-				margin: 10px auto;
-			}
+      & thead {
+        display: table-row-group;
+        margin: 10px auto;
+      }
 
-			& thead,
-			& tbody tr {
-				page-break-inside: avoid;
-			}
+      & thead,
+      & tbody tr {
+        page-break-inside: avoid;
+      }
 
-			& tbody tr td {
-				font-size: 0.8rem;
-				border: 0.5px solid black;
-				page-break-inside: avoid;
-				text-align: center;
-				white-space: nowrap;
-			}
+      & tbody tr td {
+        font-size: 0.8rem;
+        border: 0.5px solid black;
+        page-break-inside: avoid;
+        text-align: center;
+        white-space: nowrap;
+      }
 
-			& thead tr th {
-				background-color: lightgrey;
-				-webkit-print-color-adjust: exact;
-				border: 0.5px solid black;
-				page-break-inside: avoid;
-			}
-		}
+      & thead tr th {
+        background-color: lightgrey;
+        -webkit-print-color-adjust: exact;
+        border: 0.5px solid black;
+        page-break-inside: avoid;
+      }
+    }
 
-		.baby-blue {
-			background-color: #bcecee;
-			-webkit-print-color-adjust: exact;
-		}
+    .baby-blue {
+      background-color: #bcecee;
+      -webkit-print-color-adjust: exact;
+    }
 
-		& .horizontal-line {
-			border-bottom: 1px solid black;
-			margin: .5rem auto;
-			width: 50%;
-		}
-	}
+    & .horizontal-line {
+      border-bottom: 1px solid black;
+      margin: 0.5rem auto;
+      width: 50%;
+    }
+  }
 }
 
 @media screen {
-	.customers-arrears {
-		display: none;
-	}
+  .customers-arrears {
+    display: none;
+  }
 }
