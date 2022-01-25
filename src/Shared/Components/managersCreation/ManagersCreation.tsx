@@ -96,9 +96,19 @@ const ManagersCreation: FC<ManagersCreationProps> = ({ branchId }) => {
     const updateManagersData = prepareManagers()
     const res = await updateManagerHierarchy(updateManagersData, branchId)
     if (res.status === 'success') {
-      Swal.fire('Success !', local.updateSuccess, 'success')
+      Swal.fire({
+        title: local.success,
+        text: local.updateSuccess,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      })
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     setLoading(false)
   }

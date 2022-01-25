@@ -54,7 +54,12 @@ class OfficersProductivityReports extends Component<{}, State> {
     this.setState({ loading: true })
     const res = await fetchOfficersProductivityReport(obj)
     if (res.status === 'success') {
-      Swal.fire('success', local.fileQueuedSuccess, 'success')
+      Swal.fire({
+        title: local.success,
+        text: local.fileQueuedSuccess,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      })
       this.setState(
         {
           loading: false,
@@ -66,7 +71,12 @@ class OfficersProductivityReports extends Component<{}, State> {
       )
     } else {
       this.setState({ loading: false })
-      Swal.fire('error', local.fileQueuedError, 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: local.fileQueuedError,
+        icon: 'error',
+      })
     }
   }
 
@@ -100,7 +110,12 @@ class OfficersProductivityReports extends Component<{}, State> {
       )
     } else {
       this.setState({ loading: false })
-      Swal.fire('error', local.searchError, 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: local.searchError,
+        icon: 'error',
+      })
     }
   }
 

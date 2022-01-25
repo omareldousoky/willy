@@ -65,7 +65,12 @@ class ActionLogs extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('error', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+          })
       })
   }
 

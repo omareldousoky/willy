@@ -51,7 +51,12 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
       setAllLoanComments(labeldComments)
     } else {
       setLoading(false)
-      Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+      })
     }
   }
 
@@ -63,7 +68,12 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
       props.recallAPI()
     } else {
       setLoading(false)
-      Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+      })
     }
   }
   const removeLoanApplicationComments = (commentToRemove) => {

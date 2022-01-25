@@ -77,7 +77,12 @@ const LaundryReports: FunctionComponent = () => {
     if (res.status === 'success') {
       if (!res.body || !Object.keys(res.body).length) {
         setLoading(false)
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         setData(res.body)
         setShowModal(false)
@@ -89,11 +94,12 @@ const LaundryReports: FunctionComponent = () => {
       }
     } else {
       setLoading(false)
-      Swal.fire(
-        'Error !',
-        getErrorMessage((res.error as Record<string, string>).error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage((res.error as Record<string, string>).error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

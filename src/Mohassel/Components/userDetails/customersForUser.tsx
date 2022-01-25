@@ -100,7 +100,12 @@ class CustomersForUser extends Component<Props, State> {
       )
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(branches.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(branches.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -112,7 +117,12 @@ class CustomersForUser extends Component<Props, State> {
       !this.props.user.branchesObjects[0]._id &&
       !this.state.currentOfficerBranch
     )
-      return Swal.fire('Error !', local.chooseBranch, 'error')
+      return Swal.fire({
+        title: local.errorTitle,
+        text: local.chooseBranch,
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     const res = await searchCustomer({
       name,
       size: this.state.size,
@@ -130,7 +140,12 @@ class CustomersForUser extends Component<Props, State> {
       })
     } else
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
   }
 
@@ -156,7 +171,13 @@ class CustomersForUser extends Component<Props, State> {
       } else {
         this.setState(
           { loanOfficerSelectLoader: false, loanOfficerSelectOptions: [] },
-          () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          () =>
+            Swal.fire({
+              title: local.errorTitle,
+              text: getErrorMessage(res.error.error),
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
         )
       }
     }
@@ -184,15 +205,15 @@ class CustomersForUser extends Component<Props, State> {
     const res = await moveCustomerToOfficer(data)
     if (res.status === 'success') {
       this.setState({ loading: false })
-      Swal.fire(
-        '',
-        `${local.doneMoving} ${
+      Swal.fire({
+        text: `${local.doneMoving} ${
           this.state.moveMissing
             ? local.customersSuccess
             : this.state.selectedCustomers.length + ' ' + local.customerSuccess
         }`,
-        'success'
-      ).then(() => {
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => {
         this.setState(
           {
             openModal: false,
@@ -211,8 +232,8 @@ class CustomersForUser extends Component<Props, State> {
           icon: 'warning',
           showCancelButton: true,
           focusConfirm: false,
-          confirmButtonText: 'تأكيد',
-          cancelButtonText: 'إلغاء',
+          confirmButtonText: local.submit,
+          cancelButtonText: local.cancel,
         }).then((value) => {
           if (value.value) {
             this.setState({ loading: false, moveMissing: true }, () =>
@@ -227,7 +248,12 @@ class CustomersForUser extends Component<Props, State> {
         selectedCustomers: [],
         checkAll: false,
       })
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

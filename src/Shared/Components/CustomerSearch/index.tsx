@@ -99,7 +99,11 @@ class CustomerSearch extends Component<Props, State> {
         isCode) &&
       Number.isNaN(Number(searchKey))
     ) {
-      Swal.fire('', local.SearchOnlyNumbers, 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: local.SearchOnlyNumbers,
+        icon: 'error',
+      })
     } else {
       const isCustomerShortenedCode = dropDownValue === 'customerShortenedCode'
       const modifiedSearchKey = isCustomerShortenedCode

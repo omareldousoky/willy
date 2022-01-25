@@ -32,7 +32,12 @@ const LimitsThreshold: FunctionComponent = () => {
       setLoading(false)
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(limits.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(limits.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -56,12 +61,19 @@ const LimitsThreshold: FunctionComponent = () => {
         const res = await setCFLimits(values)
         if (res.status === 'success') {
           setLoading(false)
-          Swal.fire('', local.principalMaxChangeSuccess, 'success').then(() =>
-            window.location.reload()
-          )
+          Swal.fire({
+            text: local.principalMaxChangeSuccess,
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          }).then(() => window.location.reload())
         } else {
           setLoading(false)
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         }
       }
     })

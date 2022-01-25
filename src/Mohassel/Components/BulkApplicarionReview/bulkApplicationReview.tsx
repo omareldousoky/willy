@@ -236,7 +236,12 @@ class BulkApplicationReview extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       })
     this.props.setSearchFilters({
       size: this.state.size,
@@ -294,7 +299,12 @@ class BulkApplicationReview extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       })
   }
 
@@ -310,16 +320,22 @@ class BulkApplicationReview extends Component<Props, State> {
     if (res.status === 'success') {
       this.props.setLoading(false)
       this.setState({ selectedReviewedLoans: [], checkAll: false })
-      Swal.fire(
-        '',
-        obj.action === 'secondReview'
-          ? local.secondReviewSuccess
-          : local.thirdReviewSuccess,
-        'success'
-      ).then(() => this.getApplications())
+      Swal.fire({
+        text:
+          obj.action === 'secondReview'
+            ? local.secondReviewSuccess
+            : local.thirdReviewSuccess,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => this.getApplications())
     } else {
       this.props.setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

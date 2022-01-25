@@ -180,7 +180,12 @@ class LoanProfile extends Component<Props, State> {
         })
       } else {
         this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         )
       }
     }
@@ -447,7 +452,12 @@ class LoanProfile extends Component<Props, State> {
       })
     } else {
       const err = res.error as Record<string, string>
-      Swal.fire('Error !', getErrorMessage(err.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(err.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -740,14 +750,21 @@ class LoanProfile extends Component<Props, State> {
 
   successHandler(successMsg: string, callback?: () => void) {
     this.setState({ loading: false })
-    Swal.fire('', successMsg, 'success').then(() =>
-      callback ? callback() : undefined
-    )
+    Swal.fire({
+      text: successMsg,
+      icon: 'success',
+      confirmButtonText: local.confirmationText,
+    }).then(() => (callback ? callback() : undefined))
   }
 
   failureHandler(res: any) {
     this.setState({ loading: false }, () =>
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     )
   }
 
@@ -942,12 +959,19 @@ class LoanProfile extends Component<Props, State> {
             : await approveManualPayment(this.props.location.state.id)
         if (res.status === 'success') {
           this.setState({ loading: false })
-          Swal.fire('', local.manualPaymentApproveSuccess, 'success').then(() =>
-            this.getAppByID(this.props.location.state.id)
-          )
+          Swal.fire({
+            text: local.manualPaymentApproveSuccess,
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          }).then(() => this.getAppByID(this.props.location.state.id))
         } else {
           this.setState({ loading: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+            Swal.fire({
+              title: local.errorTitle,
+              text: getErrorMessage(res.error.error),
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           )
         }
       }
@@ -976,23 +1000,37 @@ class LoanProfile extends Component<Props, State> {
             (el) => el._id !== randomPendingActionId
           ),
         }))
-        Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() =>
-          this.getManualOtherPayments(this.props.location.state.id)
-        )
+        Swal.fire({
+          text: local.rejectManualPaymentSuccess,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => this.getManualOtherPayments(this.props.location.state.id))
       } else
         this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         )
     } else {
       const res = await rejectManualPayment(this.props.location.state.id)
       if (res.status === 'success') {
         this.setState({ loading: false, pendingActions: {} })
-        Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() =>
-          this.getAppByID(this.props.location.state.id)
-        )
+        Swal.fire({
+          text: local.rejectManualPaymentSuccess,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => this.getAppByID(this.props.location.state.id))
       } else
         this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         )
     }
   }

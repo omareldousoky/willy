@@ -82,7 +82,12 @@ export const StepTwoCompanyForm = (props: any) => {
       return res.body.data
     }
     setLoanOfficers([])
-    Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    Swal.fire({
+      title: local.errorTitle,
+      text: getErrorMessage(res.error.error),
+      icon: 'error',
+      confirmButtonText: local.confirmationText,
+    })
     return []
   }
 
@@ -106,7 +111,12 @@ export const StepTwoCompanyForm = (props: any) => {
       setSystemUsers(res.body.data)
       return res.body.data
     }
-    Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    Swal.fire({
+      title: local.errorTitle,
+      text: getErrorMessage(res.error.error),
+      icon: 'error',
+      confirmButtonText: local.confirmationText,
+    })
     return []
   }
   async function getConfig(branch) {
@@ -119,7 +129,12 @@ export const StepTwoCompanyForm = (props: any) => {
       )
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(resGeo.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(resGeo.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   const getCbeCode = async (name) => {
@@ -135,7 +150,12 @@ export const StepTwoCompanyForm = (props: any) => {
         res.body.data.length === 1 &&
           setFieldValue('cbeCode', res.body.data[0].cbeCode)
       } else {
-        Swal.fire('Error !', getErrorMessage(res.error?.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error?.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
         setCbeCode([])
       }
     }
@@ -171,7 +191,12 @@ export const StepTwoCompanyForm = (props: any) => {
           setFieldValue('cbeCodeDupKey', res.body.CustomerKey)
         } else {
           setLoading(false)
-          Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.error,
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+          })
         }
       } else {
         setLoading(false)

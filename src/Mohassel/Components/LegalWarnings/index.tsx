@@ -121,7 +121,12 @@ export const LegalWarnings = () => {
       setWarningExtraDetails(res.body)
       setExtraDetailsModalView(true)
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     setLoading(false)
   }

@@ -2,6 +2,7 @@ import * as Yup from 'yup'
 import local from '../../../Shared/Assets/ar.json'
 import { endOfDayValue } from '../../../Shared/Services/utils'
 import { LeadStepOne, LeadStepTwo } from './editLead'
+import { maxValue } from '../../../Shared/localUtils'
 
 export const leadStepOne: LeadStepOne = {
   customerName: '',
@@ -39,6 +40,7 @@ export const leadValidationStepOne = Yup.object().shape({
       () => false
     ),
     otherwise: Yup.number()
+      .typeError(local.nationalIdTypeError)
       .min(10000000000000, local.nationalIdLengthShouldBe14)
       .max(99999999999999, local.nationalIdLengthShouldBe14),
   }),
@@ -52,9 +54,7 @@ export const leadValidationStepOne = Yup.object().shape({
 })
 
 export const leadValidationStepTwo = Yup.object().shape({
-  businessStreet: Yup.string()
-    .trim()
-    .max(500, "Can't be more than 500 characters"),
+  businessStreet: Yup.string().trim().max(500, maxValue(500)),
   businessGovernate: Yup.string().trim().required(local.required),
   businessCity: Yup.string().trim().required(local.required),
   businessArea: Yup.string().trim().required(local.required),

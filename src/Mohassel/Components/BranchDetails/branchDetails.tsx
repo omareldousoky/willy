@@ -137,11 +137,12 @@ class BranchDetails extends Component<Props, State> {
         _id,
       })
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(this.props.branch.error.error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(this.props.branch.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -158,11 +159,12 @@ class BranchDetails extends Component<Props, State> {
       return products
     }
     this.setState({ productsLoading: false }, () =>
-      Swal.fire(
-        'Error !',
-        getErrorMessage(this.props.branch.error.error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(this.props.branch.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     )
     return []
   }

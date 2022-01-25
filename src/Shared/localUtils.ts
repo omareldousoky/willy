@@ -15,3 +15,9 @@ export const doneSuccessfully = (entity?: string) =>
   `تم ${entity ? local[entity] : ''} بنجاح`
 export const ageRangeError = (minAge: number, maxAge: number) =>
   `يجب ان يكون عمر العميل من ${minAge} الى ${maxAge} عاما`
+
+export const moreThanValue = (value: number | string) =>
+  ` يجب أن يكون أكبر من ${numbersToArabic(value)}`
+
+export const moreThanCharacters = (value: number | string) =>
+  ` لا يمكن أن يكون أكثر من ${numbersToArabic(value)} حرف`

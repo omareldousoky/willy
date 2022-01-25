@@ -72,10 +72,19 @@ class LtsBlockingModal extends Component<Props, State> {
     const res = await financialBlocking(data)
     if (res.status === 'success') {
       this.setState({ loading: false })
-      Swal.fire('Success', '', 'success').then(() => window.location.reload())
+      Swal.fire({
+        title: local.success,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => window.location.reload())
     } else {
       this.setState({ loading: false })
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
