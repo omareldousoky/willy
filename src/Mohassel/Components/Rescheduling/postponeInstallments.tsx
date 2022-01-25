@@ -317,7 +317,8 @@ class PostponeInstallments extends Component<Props, State> {
                         Boolean(formikProps.touched.installmentNumber)
                       }
                       disabled={
-                        !(formikProps.values.payWhere === 'installment')
+                        !(formikProps.values.payWhere === 'installment') ||
+                        !formikProps.values.withInterest
                       }
                     >
                       <option value="" />
