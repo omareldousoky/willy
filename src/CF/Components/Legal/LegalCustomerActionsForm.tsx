@@ -79,7 +79,12 @@ const LegalActionsForm: FunctionComponent = () => {
     if (response.status === 'success') {
       handleUpdateSuccess(() => history.push('/legal-affairs/legal-actions'))
     } else {
-      Swal.fire('error', getErrorMessage(response.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(response.error.error),
+        icon: 'error',
+      })
     }
   }
 

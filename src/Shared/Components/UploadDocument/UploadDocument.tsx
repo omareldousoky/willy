@@ -59,7 +59,12 @@ class UploadDocuments extends Component<
       this.props.application._id as string
     )
     if (res.status !== 'success') {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -76,7 +81,12 @@ class UploadDocuments extends Component<
         documentTypes: response.body.documentTypes,
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(response.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(response.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

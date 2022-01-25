@@ -102,7 +102,12 @@ class EditLead extends Component<
       this.setState({ governorates: res.body.governorates, loading: false })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -122,12 +127,19 @@ class EditLead extends Component<
       const res = await editLead(obj)
       if (res.status === 'success') {
         this.setState({ loading: false })
-        Swal.fire('', local.leadEditSuccess, 'success').then(() =>
-          this.props.history.push('/halan-integration/leads')
-        )
+        Swal.fire({
+          text: local.leadEditSuccess,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => this.props.history.push('/halan-integration/leads'))
       } else {
         this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         )
       }
     }

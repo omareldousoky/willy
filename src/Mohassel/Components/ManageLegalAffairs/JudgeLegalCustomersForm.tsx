@@ -39,7 +39,12 @@ const JudgeLegalCustomersForm = ({
       if (response.status === 'success') {
         setGovernorates(response.body.governorates)
       } else {
-        Swal.fire(local.error, getErrorMessage(response.error.error), 'error')
+        Swal.fire({
+          title: local.error,
+          confirmButtonText: local.confirmationText,
+          text: getErrorMessage(response.error.error),
+          icon: 'error',
+        })
       }
     }
 

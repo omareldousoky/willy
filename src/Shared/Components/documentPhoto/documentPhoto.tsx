@@ -101,7 +101,12 @@ class DocumentPhoto extends Component<Props, State> {
   async readFiles(files: Array<File> | FileList) {
     const imagesLimit = 1
     const flag: boolean = this.checkFileType(files)
-    if (flag) Swal.fire('', local.invalidFileType, 'error')
+    if (flag)
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: local.invalidFileType,
+        icon: 'error',
+      })
     else if (files.length <= imagesLimit) {
       for (let index = 0; index < files.length; index += 1) {
         const reader = new FileReader()

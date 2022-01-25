@@ -159,7 +159,12 @@ export const TasaheelReports = () => {
       )
     } else {
       setIsLoading(false)
-      Swal.fire('error', local.searchError, 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: local.searchError,
+        icon: 'error',
+      })
     }
   }
   const formatValues = (values) => {
@@ -206,11 +211,21 @@ export const TasaheelReports = () => {
         return
       }
 
-      Swal.fire('success', local.fileQueuedSuccess, 'success')
+      Swal.fire({
+        title: local.success,
+        text: local.fileQueuedSuccess,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      })
       getAllReports()
     } else {
       setIsLoading(false)
-      Swal.fire('error', local.fileQueuedError, 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: local.fileQueuedError,
+        icon: 'error',
+      })
     }
   }
   const downloadGeneratedReport = async (id: string) => {
@@ -232,7 +247,12 @@ export const TasaheelReports = () => {
       setIsLoading(false)
     } else {
       setIsLoading(false)
-      Swal.fire('error', local.searchError, 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: local.searchError,
+        icon: 'error',
+      })
     }
   }
 

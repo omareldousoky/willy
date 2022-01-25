@@ -164,7 +164,12 @@ const LegalCustomersList: FunctionComponent = () => {
       if (response.status === 'success') {
         setBranchForPrint(response.body?.data as Branch)
       } else {
-        Swal.fire('error', getErrorMessage(response.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          confirmButtonText: local.confirmationText,
+          text: getErrorMessage(response.error.error),
+          icon: 'error',
+        })
       }
     }
 
@@ -206,7 +211,12 @@ const LegalCustomersList: FunctionComponent = () => {
           decreePhotoCopyURL: response.body?.decreePhotoCopyURL,
         })
       } else {
-        Swal.fire('error', getErrorMessage(response.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          confirmButtonText: local.confirmationText,
+          text: getErrorMessage(response.error.error),
+          icon: 'error',
+        })
       }
 
       setIsSettlementLoading(false)
@@ -221,7 +231,12 @@ const LegalCustomersList: FunctionComponent = () => {
 
   useEffect(() => {
     if (error) {
-      Swal.fire('error', getErrorMessage(error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(error),
+        icon: 'error',
+      })
     }
   }, [error])
 
@@ -313,7 +328,12 @@ const LegalCustomersList: FunctionComponent = () => {
     if (response.status === 'success') {
       handleUpdateCustomerSuccess(local.review)
     } else {
-      Swal.fire('error', getErrorMessage(response.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(response.error.error),
+        icon: 'error',
+      })
     }
 
     setCustomersForReview(null)
@@ -330,11 +350,12 @@ const LegalCustomersList: FunctionComponent = () => {
         Swal.fire('', local.noLogsFound, 'info')
       }
     } else {
-      Swal.fire(
-        'error',
-        getErrorMessage((response.error as Record<string, string>).error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage((response.error as Record<string, string>).error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     setIsSettlementLoading(false)
   }
@@ -364,7 +385,12 @@ const LegalCustomersList: FunctionComponent = () => {
       setIsJudgeModalOpen(false)
       setCustomersForConvictedReport(response.body?.result ?? [])
     } else {
-      Swal.fire('error', getErrorMessage(response.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(response.error.error),
+        icon: 'error',
+      })
     }
   }
 

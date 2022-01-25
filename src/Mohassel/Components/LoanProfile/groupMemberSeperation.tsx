@@ -71,7 +71,12 @@ class GroupMemberSeperation extends Component<
         loading: false,
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(application.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(application.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       this.setState({ loading: false })
     }
   }
@@ -85,7 +90,12 @@ class GroupMemberSeperation extends Component<
         loading: false,
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(application.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(application.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       this.setState({ loading: false })
     }
   }
@@ -108,6 +118,7 @@ class GroupMemberSeperation extends Component<
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: local.goToSeperatedMemberApplication,
+        cancelButtonText: local.cancel,
       }).then((result) => {
         if (result.value) {
           this.props.history.push('/track-loan-applications/loan-profile', {
@@ -121,7 +132,12 @@ class GroupMemberSeperation extends Component<
       })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }

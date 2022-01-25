@@ -110,7 +110,12 @@ export const WarningCreationModal = ({
       })
     } else {
       setIsLoading(false)
-      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(results.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -133,23 +138,33 @@ export const WarningCreationModal = ({
       )
     } else {
       setIsLoading(false)
-      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(results.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
   const addWarning = async (warningRequest: LegalWarningRequest) => {
     const createWarningResponse = await createWarning(warningRequest)
     if (createWarningResponse.status === 'success') {
-      Swal.fire('', addeddSuccessfully('customer'), 'success')
+      Swal.fire({
+        text: addeddSuccessfully('customer'),
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      })
       getLegalWarnings(true)
     } else
-      Swal.fire(
-        'Error !',
-        getErrorMessage(
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(
           (createWarningResponse.error as Record<string, string>).error
         ),
-        'error'
-      )
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
   }
 
   const getWarningDetails = async () => {
@@ -190,13 +205,14 @@ export const WarningCreationModal = ({
           addWarning(warningRequest)
         }
       } else
-        Swal.fire(
-          'Error !',
-          getErrorMessage(
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(
             (fetchWarningResponse.error as Record<string, string>).error
           ),
-          'error'
-        )
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
     }
   }
 

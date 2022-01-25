@@ -60,7 +60,12 @@ class DocumentsUploadComponent extends Component<Props, State> {
         documentTypes: response.body.documentTypes,
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(response.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(response.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     if (this.props.edit || this.props.view) {
       await this.props.getDocuments({

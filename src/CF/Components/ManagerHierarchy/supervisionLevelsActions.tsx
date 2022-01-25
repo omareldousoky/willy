@@ -75,7 +75,12 @@ class SupervisionLevelsActions extends Component<
         }
       } else {
         this.setState({ loading: false })
-        Swal.fire('Error!', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          confirmButtonText: local.confirmationText,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+        })
       }
     }
   }
@@ -137,9 +142,18 @@ class SupervisionLevelsActions extends Component<
   async deleteOfficers(obj) {
     const res = await deleteOfficersGroups(obj, this.props.branchId)
     if (res.status === 'success') {
-      Swal.fire('Success', '', 'success').then(() => window.location.reload())
+      Swal.fire({
+        title: local.success,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => window.location.reload())
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -147,9 +161,18 @@ class SupervisionLevelsActions extends Component<
   async approveOfficers(obj) {
     const res = await approveOfficersGroups({ branchesGroupIds: [obj] })
     if (res.status === 'success') {
-      Swal.fire('Success', '', 'success').then(() => window.location.reload())
+      Swal.fire({
+        title: local.success,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => window.location.reload())
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -157,9 +180,18 @@ class SupervisionLevelsActions extends Component<
   async unApproveOfficers(obj) {
     const res = await unApproveOfficersGroups({ branchesGroupIds: [obj] })
     if (res.status === 'success') {
-      Swal.fire('Success', '', 'success').then(() => window.location.reload())
+      Swal.fire({
+        title: local.success,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => window.location.reload())
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

@@ -101,18 +101,27 @@ class TraditionalLoanRescheduling extends Component<Props, State> {
           noOfInstallments: values.noOfInstallments,
           installmentsAfterRescheduling: res.body.installments,
         })
-        Swal.fire('', 'Test Success', 'success')
+        Swal.fire({
+          text: local.loanFreeReschedulingTestSuccess,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        })
       } else {
         this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         )
       }
     } else {
-      Swal.fire(
-        '',
-        local.partiallyPaidInstallmentsExistRescheduleFirst,
-        'warning'
-      )
+      Swal.fire({
+        text: local.partiallyPaidInstallmentsExistRescheduleFirst,
+        icon: 'warning',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -129,6 +138,7 @@ class TraditionalLoanRescheduling extends Component<Props, State> {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: local.postponeInstallments,
+      cancelButtonText: local.cancel,
     }).then((result) => {
       if (result.value) {
         this.pushInstallments()
@@ -144,12 +154,19 @@ class TraditionalLoanRescheduling extends Component<Props, State> {
     const res = await traditionalRescheduling(this.props.application._id, obj)
     if (res.status === 'success') {
       this.setState({ loading: false })
-      Swal.fire('', 'Installment has been pushed.', 'success').then(() =>
-        window.location.reload()
-      )
+      Swal.fire({
+        icon: 'success',
+        text: local.loanFreeReschedulingSuccess,
+        confirmButtonText: local.confirmationText,
+      }).then(() => window.location.reload())
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }

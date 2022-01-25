@@ -64,20 +64,40 @@ class DocumentTypeCreation extends Component<Props, State> {
   async createDocument(values) {
     const res = await createDocumentsType(values)
     if (res.status === 'success') {
-      Swal.fire('success', local.documentTypeCreationSuccessMessage)
+      Swal.fire({
+        title: local.success,
+        text: local.documentTypeCreationSuccessMessage,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      })
       this.props.history.goBack()
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
   async updateDocument(values) {
     const res = await editDocumentsType(values)
     if (res.status === 'success') {
-      Swal.fire('success', local.documentTypeEditSuccessMessage)
+      Swal.fire({
+        title: local.success,
+        text: local.documentTypeEditSuccessMessage,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      })
       this.props.history.goBack()
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

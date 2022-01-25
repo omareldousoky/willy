@@ -72,7 +72,12 @@ class LoanRollBack extends Component<
       })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(application.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(application.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -105,6 +110,7 @@ class LoanRollBack extends Component<
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: local.rollBackAction,
+      cancelButtonText: local.cancel,
     }).then((result) => {
       if (result.value) {
         this.rollbackAction(
@@ -123,12 +129,19 @@ class LoanRollBack extends Component<
     )
     if (application.status === 'success') {
       this.setState({ loading: false })
-      Swal.fire('', local.rollbackSuccess, 'success').then(() =>
-        this.props.history.goBack()
-      )
+      Swal.fire({
+        text: local.rollbackSuccess,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => this.props.history.goBack())
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(application.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(application.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }

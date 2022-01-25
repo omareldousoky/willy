@@ -210,7 +210,12 @@ class Payment extends Component<Props, State> {
       })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -267,7 +272,12 @@ class Payment extends Component<Props, State> {
             )
           } else {
             this.setState({ loadingFullScreen: false }, () =>
-              Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+              Swal.fire({
+                title: local.errorTitle,
+                text: getErrorMessage(res.error.error),
+                icon: 'error',
+                confirmButtonText: local.confirmationText,
+              })
             )
           }
         } else {
@@ -289,7 +299,12 @@ class Payment extends Component<Props, State> {
             )
           } else {
             this.setState({ loadingFullScreen: false }, () =>
-              Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+              Swal.fire({
+                title: local.errorTitle,
+                text: getErrorMessage(res.error.error),
+                icon: 'error',
+                confirmButtonText: local.confirmationText,
+              })
             )
           }
         }
@@ -315,7 +330,11 @@ class Payment extends Component<Props, State> {
           )
         } else {
           this.setState({ loadingFullScreen: false }, () =>
-            Swal.fire('', getErrorMessage(res.error.error), 'error')
+            Swal.fire({
+              confirmButtonText: local.confirmationText,
+              text: getErrorMessage(res.error.error),
+              icon: 'error',
+            })
           )
         }
       } else if (this.props.paymentType === 'penalties') {
@@ -339,7 +358,12 @@ class Payment extends Component<Props, State> {
             this.calculatePenalties()
           } else {
             this.setState({ loadingFullScreen: false }, () =>
-              Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+              Swal.fire({
+                title: local.errorTitle,
+                text: getErrorMessage(res.error.error),
+                icon: 'error',
+                confirmButtonText: local.confirmationText,
+              })
             )
           }
         } else if (this.state.penaltyAction === 'cancel') {
@@ -352,11 +376,20 @@ class Payment extends Component<Props, State> {
           })
           if (res.status === 'success') {
             this.setState({ loadingFullScreen: false })
-            Swal.fire('', local.penaltyCancelledSuccessfully, 'success')
+            Swal.fire({
+              text: local.penaltyCancelledSuccessfully,
+              icon: 'success',
+              confirmButtonText: local.confirmationText,
+            })
             this.calculatePenalties()
           } else {
             this.setState({ loadingFullScreen: false }, () =>
-              Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+              Swal.fire({
+                title: local.errorTitle,
+                text: getErrorMessage(res.error.error),
+                icon: 'error',
+                confirmButtonText: local.confirmationText,
+              })
             )
           }
         }
@@ -381,7 +414,12 @@ class Payment extends Component<Props, State> {
         )
       } else {
         this.setState({ loadingFullScreen: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         )
       }
     } else if (this.props.paymentType === 'normal') {
@@ -404,12 +442,19 @@ class Payment extends Component<Props, State> {
         const res = await manualPayment(obj)
         if (res.status === 'success') {
           this.setState({ loadingFullScreen: false })
-          Swal.fire('', local.manualPaymentSuccess, 'success').then(() =>
-            this.props.refreshPayment()
-          )
+          Swal.fire({
+            text: local.manualPaymentSuccess,
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          }).then(() => this.props.refreshPayment())
         } else {
           this.setState({ loadingFullScreen: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+            Swal.fire({
+              title: local.errorTitle,
+              text: getErrorMessage(res.error.error),
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           )
         }
       } else {
@@ -431,12 +476,19 @@ class Payment extends Component<Props, State> {
         const res = await editManualPayment(obj)
         if (res.status === 'success') {
           this.setState({ loadingFullScreen: false })
-          Swal.fire('', local.editManualPaymentSuccess, 'success').then(() =>
-            this.props.refreshPayment()
-          )
+          Swal.fire({
+            text: local.editManualPaymentSuccess,
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          }).then(() => this.props.refreshPayment())
         } else {
           this.setState({ loadingFullScreen: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+            Swal.fire({
+              title: local.errorTitle,
+              text: getErrorMessage(res.error.error),
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           )
         }
       }
@@ -464,24 +516,37 @@ class Payment extends Component<Props, State> {
         const res = await randomManualPayment(obj)
         if (res.status === 'success') {
           this.setState({ loadingFullScreen: false })
-          Swal.fire('', local.manualPaymentSuccess, 'success').then(() =>
-            this.props.refreshPayment()
-          )
+          Swal.fire({
+            text: local.manualPaymentSuccess,
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          }).then(() => this.props.refreshPayment())
         } else {
           this.setState({ loadingFullScreen: false }, () =>
-            Swal.fire('', getErrorMessage(res.error.error), 'error')
+            Swal.fire({
+              confirmButtonText: local.confirmationText,
+              text: getErrorMessage(res.error.error),
+              icon: 'error',
+            })
           )
         }
       } else {
         const res = await editManualOtherPayment(obj)
         if (res.status === 'success') {
           this.setState({ loadingFullScreen: false })
-          Swal.fire('', local.editManualPaymentSuccess, 'success').then(() =>
-            this.props.refreshPayment()
-          )
+          Swal.fire({
+            text: local.editManualPaymentSuccess,
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          }).then(() => this.props.refreshPayment())
         } else {
           this.setState({ loadingFullScreen: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+            Swal.fire({
+              title: local.errorTitle,
+              text: getErrorMessage(res.error.error),
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           )
         }
       }
@@ -544,7 +609,12 @@ class Payment extends Component<Props, State> {
       this.setState({ penalty: res.body.penalty, loadingFullScreen: false })
     } else
       this.setState({ loadingFullScreen: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
   }
 
