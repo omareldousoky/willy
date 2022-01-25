@@ -5,6 +5,10 @@
     font-family: Arial;
     font-weight: 600;
 
+    .note {
+      word-break: break-all;
+    }
+
     & table {
       text-align: center;
       width: 100%;
