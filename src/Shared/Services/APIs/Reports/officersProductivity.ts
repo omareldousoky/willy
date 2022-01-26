@@ -2,11 +2,11 @@ import { AxiosResponse } from 'axios'
 import {
   OfficersProductivityRequest,
   OfficersProductivityResponse,
-} from '../../../../Shared/Models/OfficerProductivity/OfficersProductivityReport'
-import axios from '../../../../Shared/Services/axiosInstance'
-import { API_BASE_URL } from '../../../../Shared/envConfig'
-import { ApiResponse } from '../../../../Shared/Models/common'
-import { CurrentHierarchiesResponse } from '../../../../Shared/Models/OfficerProductivity/OfficerProductivityReport'
+} from '../../../Models/OfficerProductivity/OfficersProductivityReport'
+import axios from '../../axiosInstance'
+import { API_BASE_URL } from '../../../envConfig'
+import { ApiResponse } from '../../../Models/common'
+import { CurrentHierarchiesResponse } from '../../../Models/OfficerProductivity/OfficerProductivityReport'
 
 const fetchOfficersProductivityUrl = `${API_BASE_URL}/report/officer-productivity`
 // for officers productivity input preparation

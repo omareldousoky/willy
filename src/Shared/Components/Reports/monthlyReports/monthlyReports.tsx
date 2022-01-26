@@ -5,17 +5,17 @@ import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
-import Can from '../../../config/Can'
-import ability from '../../../config/ability'
-import * as local from '../../../../Shared/Assets/ar.json'
 import {
   downloadFile,
   getIscoreReportStatus,
   timeToArabicDate,
-} from '../../../../Shared/Services/utils'
+} from 'Shared/Services/utils'
+import HeaderWithCards from 'Shared/Components/HeaderWithCards/headerWithCards'
+import { Loader } from 'Shared/Components/Loader'
+import * as local from 'Shared/Assets/ar.json'
+import Can from '../../../config/Can'
+import ability from '../../../config/ability'
 
-import HeaderWithCards from '../../../../Shared/Components/HeaderWithCards/headerWithCards'
-import { Loader } from '../../../../Shared/Components/Loader'
 import { RisksReport } from './RisksReport'
 import { DebtsAgingReport } from './DebtsAgingReport'
 import MonthlyReport from '../../pdfTemplates/monthlyReport/monthlyReport'
@@ -23,37 +23,34 @@ import QuarterlyReport from '../../pdfTemplates/quarterlyReport/quarterlyReport'
 
 import {
   getAllLoanAge,
-  getAllTasaheelRisks,
+  getAllRisks,
   getAllMonthlyReport,
   getAllQuarterlyReport,
-  generateTasaheelRisksReport,
+  generateRisksReport,
   generateLoanAgeReport,
   generateMonthlyReport,
   generateQuarterlyReport,
-  getTasaheelRisksReport,
+  getRisksReport,
   getLoanAgeReport,
   getMonthlyReport,
   getQuarterlyReport,
   generateMonthlyAnalysisReport,
-} from '../../../Services/APIs/Reports/tasaheelRisksReports'
+} from '../../../Services/APIs/Reports/risksReports'
 
 import { Report, ReportDetails } from './types'
-import { Tab } from '../../../../Shared/Components/HeaderWithCards/cardNavbar'
-import { LtsIcon } from '../../../../Shared/Components'
-import {
-  MonthReport,
-  QuarterReport,
-} from '../../../../Shared/Services/interfaces'
+import { Tab } from '../../HeaderWithCards/cardNavbar'
+import { LtsIcon } from '../..'
+import { MonthReport, QuarterReport } from '../../../Services/interfaces'
 import MonthlyAnalysisReport from '../../pdfTemplates/MonthlyAnalysisReport'
-import { PdfPortal } from '../../../../Shared/Components/Common/PdfPortal'
-import ReportsModal from '../../../../Shared/Components/ReportsModal/reportsModal'
+import { PdfPortal } from '../../Common/PdfPortal'
+import ReportsModal from '../../ReportsModal/reportsModal'
 
-export const TasaheelReports = () => {
+export const MonthlyReports = () => {
   const reportsRequests = {
-    tasaheelRisks: {
-      getAll: getAllTasaheelRisks,
-      requestReport: generateTasaheelRisksReport,
-      getReportDetails: getTasaheelRisksReport,
+    risks: {
+      getAll: getAllRisks,
+      requestReport: generateRisksReport,
+      getReportDetails: getRisksReport,
       printComponent: RisksReport,
     },
     loanAge: {
@@ -87,8 +84,8 @@ export const TasaheelReports = () => {
     const allowedTabs: Tab[] = []
     ability.can('tasaheelRisks', 'report') &&
       allowedTabs.push({
-        header: local.tasaheelRisks,
-        stringKey: 'tasaheelRisks',
+        header: local.risks,
+        stringKey: 'risks',
         permission: 'tasaheelRisks',
         permissionKey: 'report',
       })
@@ -300,24 +297,12 @@ export const TasaheelReports = () => {
                     type="button"
                     variant="primary"
                     onClick={() => {
-                      switch (tabs[activeTabIndex()].stringKey) {
-                        case 'tasaheelRisks':
-                          setModalIsOpen(true)
-                          break
-                        case 'loanAge':
-                          setModalIsOpen(true)
-                          break
-                        case 'monthlyReport':
-                          requestReport('')
-                          break
-                        case 'quarterlyReport':
-                          setModalIsOpen(true)
-                          break
-                        case 'monthlyAnalysis':
-                          setModalIsOpen(true)
-                          break
-                        default:
-                          break
+                      if (
+                        tabs[activeTabIndex()].stringKey === 'monthlyReport'
+                      ) {
+                        requestReport('')
+                      } else {
+                        setModalIsOpen(true)
                       }
                     }}
                   >
@@ -343,7 +328,7 @@ export const TasaheelReports = () => {
                           className={`mr-5  text-${
                             report.status === 'created'
                               ? 'success'
-                              : report.status === 'queued'
+                              : ['queued', 'processing'].includes(report.status)
                               ? 'warning'
                               : 'danger'
                           } `}
