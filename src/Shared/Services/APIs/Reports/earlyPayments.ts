@@ -1,11 +1,11 @@
 import { AxiosResponse } from 'axios'
-import axios from '../../../../Shared/Services/axiosInstance'
+import axios from '../../axiosInstance'
 import {
   FalteringPaymentsResponse,
   LaundryReportRequest,
 } from '../../../Models/LaundryReports'
-import { API_BASE_URL } from '../../../../Shared/envConfig'
-import { ApiResponse } from '../../../../Shared/Models/common'
+import { API_BASE_URL } from '../../../envConfig'
+import { ApiResponse } from '../../../Models/common'
 
 const fetchEarlyPaymentsUrl = `${API_BASE_URL}/report/early-payments`
 const fetchEarlyPayments4MonthsUrl = `${API_BASE_URL}/report/early-payments-4-months`
