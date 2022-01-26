@@ -28,6 +28,41 @@ export interface CustomersArrearsSingleResponse {
   beneficiaryType?: 'group' | 'individual'
 }
 
+export interface CommentsReportApplication {
+  active?: boolean
+  applicationFees?: string
+  branchMangerName?: string
+  businessActivity?: string
+  businessSector?: string
+  businessSpeciality?: string
+  customerKey?: string
+  customerName?: string
+  customerNid?: string
+  gracePeriod?: string
+  loanKey?: string
+  loanStatus?: string
+  noInstallments?: string
+  principal?: string
+  representative?: string
+}
+
+interface CommentsReportGuarantor {
+  guarantorKey: string
+  guarantorName: string
+  guarantorNid: string
+}
+
+interface CommentsReportEntitledToSign {
+  entitledToSignKey: string
+  entitledToSignName: string
+  entitledToSignNid: string
+}
+export interface CommentsReportOBJ {
+  applications?: CommentsReportApplication[]
+  guarantors?: CommentsReportGuarantor[]
+  entitledToSign?: CommentsReportEntitledToSign[]
+  inReviewNotes?: string[]
+}
 export interface BlockedCustomersRequest {
   branches: string[]
 }
