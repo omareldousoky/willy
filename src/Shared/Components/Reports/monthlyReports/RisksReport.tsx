@@ -1,8 +1,9 @@
 import React from 'react'
 import './styles.scss'
 
-import { timeToArabicDateNow } from '../../../../Shared/Services/utils'
-import * as local from '../../../../Shared/Assets/ar.json'
+import * as local from '../../../Assets/ar.json'
+import { Header } from '../../pdfTemplates/pdfTemplateCommon/header'
+import { isCF, timeToArabicDate } from '../../../Services/utils'
 
 export const RisksReport = (report) => {
   const formatTier = (tier) => {
@@ -27,32 +28,17 @@ export const RisksReport = (report) => {
   }
   return (
     <div lang="ar" className="report text-center font-weight-bold">
-      <table className="my-4 mx-2" style={{ fontSize: '12px' }}>
-        <thead>
-          <tr className="bg-white text-left">
-            <td colSpan={6} className="font-weight-bold">
-              <div>
-                ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-              </div>
-              <div>شركة تساهيل للتمويل متناهي الصغر</div>
-              <div>المركز الرئيسي</div>
-              <div>{timeToArabicDateNow(true)}</div>
-            </td>
-            <td colSpan={6}>
-              <div className="logo-print-tb" />
-            </td>
-          </tr>
-        </thead>
-      </table>
+      <Header
+        cf={isCF}
+        showCurrentUser={false}
+        showCurrentTime={false}
+        showCurrentDate
+        title={`${local.risksReportTitle} ${timeToArabicDate(
+          report.date,
+          false
+        )}`}
+      />
       <table>
-        <thead className="report-header">
-          <tr className="font-weight-bold" style={{ fontSize: '14px' }}>
-            <th className="text-center">{local.risksReportTitle}</th>
-          </tr>
-          <tr className="font-weight-bold text-center">
-            <th>{report.date}</th>
-          </tr>
-        </thead>
         <tbody>
           <tr>
             <th>
