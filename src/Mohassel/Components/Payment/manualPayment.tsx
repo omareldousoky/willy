@@ -314,7 +314,7 @@ class ManualPayment extends Component<Props, State> {
                     {local.bankName}
                   </option>
                   {this.state.banks.map((bank) => (
-                    <option value={bank.id}>{bank.name}</option>
+                    <option value={bank.id}>{bank.nameAr}</option>
                   ))}
                 </Form.Control>
                 <Form.Control.Feedback type="invalid">
