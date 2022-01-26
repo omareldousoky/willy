@@ -17,13 +17,17 @@ import Modal from 'react-bootstrap/esm/Modal'
 import Select from 'react-select'
 import { theme } from 'Shared/theme'
 import { OptionType } from 'Shared/Components/dropDowns/types'
+import Can from '../../config/Can'
 
 interface LoanProfileCommentsProps {
   comments: string[]
   applicationId: string
   recallAPI: () => void
   applicationStatus: string
+  getCommentsReport: (key: string) => void
+  applicationKey: number
 }
+
 const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
   props: LoanProfileCommentsProps
 ) => {
@@ -93,23 +97,39 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
     !['pending', 'paid', 'canceled', 'issued', 'rejected', 'created'].includes(
       props.applicationStatus
     )
+
+  const handleCommentsReport = () => {
+    props.getCommentsReport(props.applicationKey.toString())
+  }
+
   return (
     <>
       <Loader type="fullscreen" open={loading} />
       <div className="d-flex flex-column align-items-start justify-content-center">
-        {canChangeComments && (
-          <div className="mt-5 mb-5">
-            <Button
-              variant="primary"
-              onClick={async () => {
-                await getComments()
-                setOpenModal(true)
-              }}
-            >
-              {local.add} {local.comments}
-            </Button>
-          </div>
-        )}
+        <div className="d-flex">
+          {canChangeComments && (
+            <div className="mt-5 mb-5 mr-5">
+              <Button
+                variant="primary"
+                onClick={async () => {
+                  await getComments()
+                  setOpenModal(true)
+                }}
+              >
+                {local.add} {local.comments}
+              </Button>
+            </div>
+          )}
+          {!['canceled', 'rejected'].includes(props.applicationStatus) && (
+            <Can I="getLoanApplicationsNotes" a="report-2">
+              <div className="mt-5 mb-5">
+                <Button variant="primary" onClick={handleCommentsReport}>
+                  {local.commentsReport}
+                </Button>
+              </div>
+            </Can>
+          )}
+        </div>
         {props.comments.length ? (
           <Table className="text-left">
             <thead>
@@ -195,7 +215,7 @@ const LoanProfileComments: FunctionComponent<LoanProfileCommentsProps> = (
             <Button
               variant="primary"
               onClick={() => addComments()}
-              disabled={!selectedLoanComments.length}
+              disabled={!selectedLoanComments?.length}
             >
               {local.submit}
             </Button>

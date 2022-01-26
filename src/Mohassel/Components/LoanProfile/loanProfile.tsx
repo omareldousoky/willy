@@ -14,6 +14,8 @@ import ReturnItemModal from 'Shared/Components/LoanApplication/ReturnItemModal'
 import { doneSuccessfully } from 'Shared/localUtils'
 import { returnItem } from 'Shared/Services/APIs/loanApplication/returnItemCF'
 import { UploadDocuments } from 'Shared/Components/UploadDocument'
+import { postCommentsReport } from 'Shared/Services/APIs/Reports/Operations/commentsReport'
+import { CommentsReportOBJ } from 'Shared/Models/operationsReports'
 import { getApplication } from 'Shared/Services/APIs/loanApplication/getApplication'
 import {
   BranchDetails,
@@ -60,8 +62,8 @@ import { getLoanUsage } from 'Shared/Services/APIs/LoanUsage/getLoanUsage'
 import { getEarlyPaymentPdfData } from 'Shared/Utils/payment'
 import EarlyPaymentReceipt from 'Shared/Components/pdfTemplates/Financial/earlyPaymentReceipt/earlyPaymentReceipt'
 import { Score, Customer } from 'Shared/Models/Customer'
-import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions'
 import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment'
+import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions'
 import Payment from '../Payment/payment'
 import Logs from './applicationLogs'
 import { LoanDetailsTableView } from './applicationsDetails'
@@ -101,6 +103,7 @@ import {
 import NanoLoanContract from '../pdfTemplates/nanoLoanContract/nanoLoanContract'
 import { PromissoryNoteMicro } from '../pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
 import LoanProfileComments from './loanProfileComments'
+import CommentsReport from './commentsReport'
 
 export interface IndividualWithInstallments {
   installmentTable: {
@@ -138,6 +141,7 @@ interface State {
   loanUsage: string
   canReturnItem?: boolean
   returnItemModalOpen: boolean
+  commentsReport?: CommentsReportOBJ
 }
 
 interface LoanProfileRouteState {
@@ -178,6 +182,7 @@ class LoanProfile extends Component<Props, State> {
         _id: '',
         status: '',
       },
+      commentsReport: {},
       returnItemModalOpen: false,
     }
   }
@@ -929,6 +934,26 @@ class LoanProfile extends Component<Props, State> {
     return {}
   }
 
+  getCommentsReport = async (key: string) => {
+    this.setState({ loading: true })
+    const res = await postCommentsReport(key)
+    this.setState({ loading: false })
+    if (res.status === 'success') {
+      if (res.body?.applications?.length) {
+        const getActive = res.body.applications.find((app) => app.active)
+        if (!getActive)
+          return Swal.fire(local.error, getErrorMessage('no-data'), 'error')
+
+        this.setState(
+          { commentsReport: res.body, print: 'commentsReport' },
+          () => window.print()
+        )
+      }
+    } else {
+      Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
+    }
+  }
+
   mapEntitledToSignToCustomer({
     customer,
     position,
@@ -1465,6 +1490,8 @@ class LoanProfile extends Component<Props, State> {
             applicationStatus={this.state.application.status}
             comments={this.state.application.inReviewNotes ?? []}
             recallAPI={() => this.getAppByID(this.props.location.state.id)}
+            getCommentsReport={this.getCommentsReport}
+            applicationKey={this.state.application.applicationKey}
           />
         )
       default:
@@ -1848,6 +1875,14 @@ class LoanProfile extends Component<Props, State> {
             branchDetails={this.state.branchDetails}
             earlyPaymentData={this.state.earlyPaymentData}
             data={this.state.application}
+          />
+        )}
+        {this.state.print === 'commentsReport' && (
+          <CommentsReport
+            branchName={this.state.branchDetails?.name || ''}
+            data={this.state.commentsReport || {}}
+            subType={this.state.application.product.beneficiaryType}
+            type={this.props.location.state?.sme ? 'sme' : 'lts'}
           />
         )}
         {this.state.print === 'randomPayment' ||
