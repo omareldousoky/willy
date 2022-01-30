@@ -103,7 +103,7 @@ export const customerCreationValidationStepOne = (
           }
         )
         .required(local.required),
-      otherwise: Yup.number().min(0).max(200000, maxValue(200000)),
+      otherwise: Yup.number().min(0, minValue(0)).max(200000, maxValue(200000)),
     }),
     customerHomeAddress: Yup.string()
       .trim()

@@ -1,17 +1,18 @@
 import * as Yup from 'yup'
 import * as local from '../../../Shared/Assets/ar.json'
+import { maxValue, minValue } from '../../../Shared/localUtils'
 
 export const LoanProductValidation = Yup.object().shape({
   productName: Yup.string().required(local.required),
   beneficiaryType: Yup.string().required(local.required),
   calculationFormulaId: Yup.string().required(local.required),
   periodLength: Yup.number()
-    .integer('Must be int')
-    .min(1, "Can't be less than 1")
+    .integer(local.mustBeInt)
+    .min(1, minValue(1))
     .required(local.required),
   noOfInstallments: Yup.number()
-    .integer('Must be int')
-    .min(0, "Can't be less than 0")
+    .integer(local.mustBeInt)
+    .min(0, minValue(0))
     .test('noOfInstallments', `outOfRange`, function (this: any, value: any) {
       const { minInstallment, maxInstallment } = this.parent
       if (minInstallment === 0 && maxInstallment === 0) {
@@ -21,41 +22,35 @@ export const LoanProductValidation = Yup.object().shape({
     })
     .required(local.required),
   lateDays: Yup.number()
-    .integer('Must be int')
-    .min(0, "Can't be less than 0")
+    .integer(local.mustBeInt)
+    .min(0, minValue(0))
     .required(local.required),
   gracePeriod: Yup.number()
-    .integer('Must be int')
-    .min(0, "Can't be less than 0")
+    .integer(local.mustBeInt)
+    .min(0, minValue(0))
     .required(local.required),
   interest: Yup.number()
-    .min(0, "Can't be less than zero")
-    .max(100, "Can't be more than 100")
+    .min(0, minValue(0))
+    .max(100, maxValue(100))
     .required(local.required),
   inAdvanceFees: Yup.number()
-    .min(0, "Can't be less than 0")
-    .max(100, "Can't be more than 100")
+    .min(0, minValue(0))
+    .max(100, maxValue(100))
     .required(local.required),
-  stamps: Yup.number().min(0, "Can't be less than 0").required(local.required),
-  representativeFees: Yup.number()
-    .min(0, "Can't be less than 0")
-    .required(local.required),
-  adminFees: Yup.number()
-    .min(0, "Can't be less than 0")
-    .required(local.required),
+  stamps: Yup.number().min(0, minValue(0)).required(local.required),
+  representativeFees: Yup.number().min(0, minValue(0)).required(local.required),
+  adminFees: Yup.number().min(0, minValue(0)).required(local.required),
   earlyPaymentFees: Yup.number()
-    .min(0, "Can't be less than 0")
-    .max(100, "Can't be more than 100")
+    .min(0, minValue(0))
+    .max(100, maxValue(100))
     .required(local.required),
   maxNoOfRestructuring: Yup.number()
-    .integer('Must be int')
-    .min(0, "Can't be less than 0")
+    .integer(local.mustBeInt)
+    .min(0, minValue(0))
     .required(local.required),
-  minPrincipal: Yup.number()
-    .min(0, "Can't be less than 0")
-    .required(local.required),
+  minPrincipal: Yup.number().min(0, minValue(0)).required(local.required),
   maxPrincipal: Yup.number()
-    .min(Yup.ref('minPrincipal'), `Max should be greater than min`)
+    .min(Yup.ref('minPrincipal'), local.maxGreaterThanMin)
     .test(
       'maxPrincipal',
       local.maxGlobalLimitReachedError,
@@ -69,25 +64,21 @@ export const LoanProductValidation = Yup.object().shape({
       }
     )
     .required(local.required),
-  minInstallment: Yup.number()
-    .min(0, "Can't be less than 0")
-    .required(local.required),
+  minInstallment: Yup.number().min(0, minValue(0)).required(local.required),
   maxInstallment: Yup.number()
-    .min(Yup.ref('minInstallment'), 'Max should be greater than min')
+    .min(Yup.ref('minInstallment'), local.maxGreaterThanMin)
     .required(local.required),
-  applicationFee: Yup.number()
-    .min(0, "Can't be less than 0")
-    .required(local.required),
+  applicationFee: Yup.number().min(0, minValue(0)).required(local.required),
   individualApplicationFee: Yup.number()
-    .min(0, "Can't be less than 0")
+    .min(0, minValue(0))
     .required(local.required),
   applicationFeePercent: Yup.number()
-    .min(0, "Can't be less than 0")
-    .max(100, "Can't be more than 100")
+    .min(0, minValue(0))
+    .max(100, maxValue(100))
     .required(local.required),
   applicationFeePercentPerPerson: Yup.number()
-    .min(0, "Can't be less than 0")
-    .max(100, "Can't be more than 100")
+    .min(0, minValue(0))
+    .max(100, maxValue(100))
     .required(local.required),
   loanNature: Yup.string().required(local.required),
   currency: Yup.string().required(local.required),
@@ -108,18 +99,18 @@ export const LoanProductValidation = Yup.object().shape({
   mustEnterGuarantor: Yup.boolean().required(local.required),
   noOfGuarantors: Yup.number()
     .integer()
-    .min(0, "Can't be less than 0")
+    .min(0, minValue(0))
     .required(local.required),
   allocatedDebtForGoodLoans: Yup.number()
     .integer()
-    .min(0, "Can't be less than 0")
-    .max(100, "Can't be more than 100")
+    .min(0, minValue(0))
+    .max(100, maxValue(100))
     .required(local.required),
   aging: Yup.array().of(
     Yup.object().shape({
       to: Yup.number()
-        .integer('Must be int')
-        .min(0, "Can't be less than 0")
+        .integer(local.mustBeInt)
+        .min(0, minValue(0))
         .test(
           'mustbegreater',
           'cant be less than or equal to',
@@ -133,28 +124,28 @@ export const LoanProductValidation = Yup.object().shape({
         )
         .required(local.required),
       fee: Yup.number()
-        .integer('Must be int')
-        .min(0, "Can't be less than 0")
-        .max(100, "Can't be more than 100")
+        .integer(local.mustBeInt)
+        .min(0, minValue(0))
+        .max(100, maxValue(100))
         .required(local.required),
     })
   ),
   mergeUndoubtedLoansFees: Yup.number()
-    .min(0, "Can't be less than 0")
-    .max(100, "Can't be more than 100")
+    .min(0, minValue(0))
+    .max(100, maxValue(100))
     .required(local.required),
   mergeDoubtedLoansFees: Yup.number()
-    .min(0, "Can't be less than 0")
-    .max(100, "Can't be more than 100")
+    .min(0, minValue(0))
+    .max(100, maxValue(100))
     .required(local.required),
   pushPayment: Yup.number()
     .integer()
-    .min(0, "Can't be less than 0")
+    .min(0, minValue(0))
     .required(local.required),
   pushDays: Yup.array().of(
     Yup.number()
-      .integer('Must be int')
-      .min(0, "Can't be less than 0")
+      .integer(local.mustBeInt)
+      .min(0, minValue(0))
       .required(local.required)
   ),
   type: Yup.string().required(local.required),

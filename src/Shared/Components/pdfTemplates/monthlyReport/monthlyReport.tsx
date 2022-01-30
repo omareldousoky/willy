@@ -1,5 +1,5 @@
 import React from 'react'
-import { MonthReport } from '../../../../Shared/Services/interfaces'
+import { MonthReport } from '../../../Services/interfaces'
 import './monthlyReport.scss'
 
 const Instructions: React.FC = () => (

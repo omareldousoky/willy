@@ -355,7 +355,12 @@ class FinancialReports extends Component<{}, State> {
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         this.setState(
           {
@@ -391,7 +396,12 @@ class FinancialReports extends Component<{}, State> {
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         this.setState(
           {
@@ -422,7 +432,12 @@ class FinancialReports extends Component<{}, State> {
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         this.setState(
           {
@@ -453,7 +468,12 @@ class FinancialReports extends Component<{}, State> {
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         this.setState(
           {
@@ -484,7 +504,12 @@ class FinancialReports extends Component<{}, State> {
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         const data = {
           startDate: values.fromDate,
@@ -519,7 +544,12 @@ class FinancialReports extends Component<{}, State> {
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         const data = {
           days: res.body.days,
@@ -559,7 +589,12 @@ class FinancialReports extends Component<{}, State> {
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         const data = {
           req: { startDate: values.fromDate, endDate: values.toDate },
@@ -594,7 +629,12 @@ class FinancialReports extends Component<{}, State> {
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         const data = {
           req: { startDate: values.fromDate, endDate: values.toDate },
@@ -634,7 +674,12 @@ class FinancialReports extends Component<{}, State> {
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         this.setState(
           {
@@ -662,7 +707,12 @@ class FinancialReports extends Component<{}, State> {
     if (res.status === 'success') {
       if (!res.body || !Object.keys(res.body).length) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         this.setState(
           {
@@ -692,7 +742,12 @@ class FinancialReports extends Component<{}, State> {
     if (res.status === 'success') {
       if (!res.body || !Object.keys(res.body).length) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         this.setState(
           {
@@ -731,7 +786,12 @@ class FinancialReports extends Component<{}, State> {
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         this.setState({ loading: true })
         const pollStart = new Date().valueOf()
@@ -751,7 +811,13 @@ class FinancialReports extends Component<{}, State> {
         if (['created', 'failed'].includes(file.body.status)) {
           if (file.body.status === 'created')
             downloadFile(file.body.presignedUrl)
-          if (file.body.status === 'failed') Swal.fire('error', local.failed)
+          if (file.body.status === 'failed')
+            Swal.fire({
+              title: local.errorTitle,
+              text: local.failed,
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           this.setState({
             showModal: false,
             loading: false,
@@ -765,7 +831,12 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      Swal.fire('error', 'TimeOut')
+      Swal.fire({
+        title: local.errorTitle,
+        text: local.timeOut,
+        confirmButtonText: local.confirmationText,
+        icon: 'error',
+      })
     }
   }
 

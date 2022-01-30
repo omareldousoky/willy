@@ -12,7 +12,12 @@ export const getAuthData = () => {
       const error = res?.error?.error
         ? getErrorMessage(res.error.error)
         : local.noRoleOrBranchError
-      Swal.fire(local.error, error, 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: error,
+        icon: 'error',
+      })
     }
   }
 }

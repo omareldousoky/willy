@@ -1,33 +1,37 @@
 import React from 'react'
 import {
-  FalteringPaymentsResponse,
-  FalteringPaymentsSingleResponse,
+  EarlyPaymentsResponse,
+  EarlyPaymentsSingleResponse,
 } from '../../../Models/LaundryReports'
-import Orientation from '../../../../Shared/Components/Common/orientation'
-import '../../../../Shared/Components/pdfTemplates/Operations/customersArrears/customersArrears.scss'
-import { Header } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/header'
-import DataRow from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/dataRow'
+import Orientation from '../../Common/orientation'
+import '../Operations/customersArrears/customersArrears.scss'
+import { Header } from '../pdfTemplateCommon/header'
+import DataRow from '../pdfTemplateCommon/dataRow'
+import { isCF } from '../../../Services/utils'
 
-interface FalteringPaymentsProps {
+interface EarlyPaymentsProps {
   toDate: string
   fromDate: string
-  data: FalteringPaymentsResponse
+  data: EarlyPaymentsResponse
+  is4Months?: boolean
 }
 
-export const FalteringPayments = ({
+export const EarlyPayments = ({
   data,
   toDate,
   fromDate,
-}: FalteringPaymentsProps) => {
+  is4Months,
+}: EarlyPaymentsProps) => {
   const { response } = data
   return (
     <>
       <Orientation size="landscape" />
       <div className="customers-arrears">
         <Header
+          cf={isCF}
           toDate={toDate}
           fromDate={fromDate}
-          title="تقرير سداد المتعثرين"
+          title={`تقرير السداد المعجل ${is4Months ? ' خلال ٤ أشهر' : ''}`}
         />
         <hr className="horizontal-line" />
         <table
@@ -59,18 +63,18 @@ export const FalteringPayments = ({
               <th rowSpan={2}>المدة</th>
               <th rowSpan={2}>تاريخ القرض</th>
               <th rowSpan={2}>نشاط العميل</th>
-              <th rowSpan={2}>تاريخ التوقف</th>
-              <th rowSpan={2}>تاريخ السداد</th>
+              <th rowSpan={2}>قيمة التكييش</th>
+              <th rowSpan={2}>تاريخ التكييش</th>
               <th rowSpan={2}>
                 عدد أقساط التي
-                <br /> تم سددادها
+                <br /> تم تكييشها
               </th>
-              <th rowSpan={2}>اسم القائم بالسداد</th>
+              <th rowSpan={2}>اسم القائم بالتكييش</th>
             </tr>
           </thead>
           <tbody>
             {response.length &&
-              response.map((row: FalteringPaymentsSingleResponse) => {
+              response.map((row: EarlyPaymentsSingleResponse) => {
                 return (
                   <tr key={row.index ?? Math.random().toString(36).substr(7)}>
                     <DataRow value={row.index} type="number" />
@@ -95,10 +99,10 @@ export const FalteringPayments = ({
                     />
                     <DataRow value={row.loanDate} type="date" />
                     <DataRow value={row.customerActivity} type="string" />
-                    <DataRow value={row.stoppingDate} type="date" />
-                    <DataRow value={row.paymentDate} type="date" />
-                    <DataRow value={row.paidInstallments} type="number" />
-                    <DataRow value={row.payingCustomerName} type="string" />
+                    <DataRow value={row.cashoutAmount} type="number" />
+                    <DataRow value={row.cashoutDate} type="date" />
+                    <DataRow value={row.cashedoutInstallments} type="number" />
+                    <DataRow value={row.cashingoutCustomerName} type="string" />
                   </tr>
                 )
               })}

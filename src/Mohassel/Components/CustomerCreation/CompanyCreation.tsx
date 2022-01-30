@@ -218,7 +218,12 @@ class CompanyCreation extends Component<Props, State> {
       )
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -241,7 +246,12 @@ class CompanyCreation extends Component<Props, State> {
       )
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(principles.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(principles.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -332,32 +342,47 @@ class CompanyCreation extends Component<Props, State> {
       )
       if (res.status === 'success') {
         this.setState({ loading: false })
-        Swal.fire('', local.companyEdited, 'success').then(() => {
+        Swal.fire({
+          text: local.companyEdited,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => {
           this.setState({ step: 3, customerId: res.body.customerId })
         })
       } else {
         this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         )
       }
     } else {
       const res = await createCustomer(objToSubmit)
       if (res.status === 'success') {
         this.setState({ loading: false })
-        Swal.fire(
-          '',
-          local.companyCreated +
+        Swal.fire({
+          text:
+            local.companyCreated +
             ' ' +
             local.withCode +
             ' ' +
             res.body.customerKey,
-          'success'
-        ).then(() => {
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => {
           this.setState({ step: 3, customerId: res.body.customerId })
         })
       } else {
         this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         )
       }
     }
@@ -394,12 +419,19 @@ class CompanyCreation extends Component<Props, State> {
         )
         if (res.status === 'success') {
           this.setState({ loading: false, editMobileNumber: false })
-          Swal.fire('', doneSuccessfully(), 'success').then(() =>
-            this.getCustomerById(this.props.location.state.id)
-          )
+          Swal.fire({
+            text: doneSuccessfully(),
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          }).then(() => this.getCustomerById(this.props.location.state.id))
         } else {
           this.setState({ loading: false })
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         }
       }
     })

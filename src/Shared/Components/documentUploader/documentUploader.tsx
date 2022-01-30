@@ -118,11 +118,11 @@ class DocumentUploader extends Component<Props, State> {
     ) {
       this.readFiles(event.target.files, this.props.documentType.name)
     } else {
-      Swal.fire(
-        '',
-        local.numberOfDocumentsError + this.props.documentType.pages,
-        'error'
-      )
+      Swal.fire({
+        text: local.numberOfDocumentsError + this.props.documentType.pages,
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -168,11 +168,12 @@ class DocumentUploader extends Component<Props, State> {
     ) {
       this.props.invalidDocument(data.key, name)
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(this.props.document.error?.error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(this.props.document.error?.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -180,7 +181,12 @@ class DocumentUploader extends Component<Props, State> {
     const imagesLimit =
       this.props.documentType.pages + this.calculateNumOfValidDocuments(name)
     const flag: boolean = this.checkFileType(files)
-    if (flag) Swal.fire('', local.invalidFileType, 'error')
+    if (flag)
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: local.invalidFileType,
+        icon: 'error',
+      })
     else if (
       files.length <= imagesLimit &&
       this.getImageFilesLength() < imagesLimit
@@ -224,11 +230,12 @@ class DocumentUploader extends Component<Props, State> {
           }
           reader.readAsDataURL(file)
         } else {
-          Swal.fire(
-            'Error !',
-            getErrorMessage(this.props.document.error?.error),
-            'error'
-          )
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(this.props.document.error?.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         }
       }
     }

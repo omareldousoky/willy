@@ -67,17 +67,21 @@ export const LeadActionModal = ({
     if (res.status === 'success') {
       setIsLoading(false)
       setActiveModal('')
-      Swal.fire(
-        '',
-        `${local.doneMoving} ${local.customerSuccess}`,
-        'success'
-      ).then(() => {
+      Swal.fire({
+        text: `${local.doneMoving} ${local.customerSuccess}`,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => {
         setSelectedLoanOfficer(null)
         setSelectedLead({})
       })
     } else {
       setIsLoading(false)
-      Swal.fire('', local.errorOnMovingCustomers, 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: local.errorOnMovingCustomers,
+        icon: 'error',
+      })
     }
   }
   const submitBranchChange = async () => {
@@ -90,17 +94,21 @@ export const LeadActionModal = ({
     if (res.status === 'success') {
       setIsLoading(false)
       setActiveModal('')
-      Swal.fire(
-        '',
-        `${local.doneMoving} ${local.customerSuccess}`,
-        'success'
-      ).then(() => {
+      Swal.fire({
+        text: `${local.doneMoving} ${local.customerSuccess}`,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => {
         setSelectedBranch(null)
         setSelectedLead({})
       })
     } else {
       setIsLoading(false)
-      Swal.fire('', local.errorOnMovingCustomers, 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: local.errorOnMovingCustomers,
+        icon: 'error',
+      })
     }
   }
   // TODO add types

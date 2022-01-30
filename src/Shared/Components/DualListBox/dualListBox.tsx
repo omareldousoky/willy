@@ -101,7 +101,12 @@ const DualBox = (props: Props) => {
       ['code', 'key', 'nationalId'].includes(dropDownValue) &&
       Number.isNaN(Number(e))
     ) {
-      Swal.fire('warning', local.onlyNumbers, 'warning')
+      Swal.fire({
+        title: local.warningTitle,
+        text: local.onlyNumbers,
+        icon: 'warning',
+        confirmButtonText: local.confirmationText,
+      })
     } else {
       setSearchKeyword(e)
       if (props.search && props.dropDownKeys && props.dropDownKeys.length > 0) {

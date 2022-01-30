@@ -313,7 +313,12 @@ class DefaultingCustomersList extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       })
     this.setState({
       manageLegalAffairsTabs: manageLegalAffairsArray(),
@@ -346,7 +351,12 @@ class DefaultingCustomersList extends Component<Props, State> {
       }
     } else {
       this.setState({ modalLoader: false })
-      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(results.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -383,7 +393,12 @@ class DefaultingCustomersList extends Component<Props, State> {
       this.setState({
         loading: false,
       })
-      Swal.fire('Error !', getErrorMessage(printReportRes.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(printReportRes.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -408,7 +423,12 @@ class DefaultingCustomersList extends Component<Props, State> {
           checkAll: false,
         })
         if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       })
   }
 
@@ -455,7 +475,12 @@ class DefaultingCustomersList extends Component<Props, State> {
       })
     } else {
       this.setState({ modalLoader: false })
-      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(results.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -480,10 +505,19 @@ class DefaultingCustomersList extends Component<Props, State> {
             this.getDefaultingCustomers()
           }
         )
-        Swal.fire('', local.customerAddedToDefaultiingListSuccess, 'success')
+        Swal.fire({
+          text: local.customerAddedToDefaultiingListSuccess,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        })
       } else {
         this.setState({ modalLoader: false })
-        Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(results.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       }
     }
   }
@@ -529,13 +563,22 @@ class DefaultingCustomersList extends Component<Props, State> {
           })
           if (res.status === 'success') {
             this.setState({ loading: false })
-            Swal.fire('', local.defaultingReviewSuccess, 'success').then(() => {
+            Swal.fire({
+              text: local.defaultingReviewSuccess,
+              icon: 'success',
+              confirmButtonText: local.confirmationText,
+            }).then(() => {
               this.wait(2000)
               this.getDefaultingCustomers()
             })
           } else {
             this.setState({ loading: false }, () =>
-              Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+              Swal.fire({
+                title: local.errorTitle,
+                text: getErrorMessage(res.error.error),
+                icon: 'error',
+                confirmButtonText: local.confirmationText,
+              })
             )
           }
         }
@@ -566,15 +609,22 @@ class DefaultingCustomersList extends Component<Props, State> {
         const res = await deleteCustomerDefaultedLoan({ ids })
         if (res.status === 'success') {
           this.setState({ loading: false })
-          Swal.fire('', local.defaultedLoanDeleteSuccess, 'success').then(
-            () => {
-              this.wait(2000)
-              this.getDefaultingCustomers()
-            }
-          )
+          Swal.fire({
+            text: local.defaultedLoanDeleteSuccess,
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          }).then(() => {
+            this.wait(2000)
+            this.getDefaultingCustomers()
+          })
         } else {
           this.setState({ loading: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+            Swal.fire({
+              title: local.errorTitle,
+              text: getErrorMessage(res.error.error),
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           )
         }
       }

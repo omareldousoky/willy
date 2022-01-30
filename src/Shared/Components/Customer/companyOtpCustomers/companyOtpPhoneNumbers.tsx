@@ -23,12 +23,20 @@ export const CompanyOtpPhoneNumbers = (
       otpCustomers: val,
     })
     if (result.status === 'success') {
-      Swal.fire('', local.success, 'success').then(() => {
+      Swal.fire({
+        text: local.success,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => {
         setOpenModal(false)
         props.reload()
       })
     } else {
-      Swal.fire('', local.searchError, 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: local.searchError,
+        icon: 'error',
+      })
     }
     setLoading(false)
   }

@@ -54,7 +54,12 @@ export const EarlyPayment = ({
       return res.body.data
     }
     setEmployees(undefined)
-    Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    Swal.fire({
+      title: local.errorTitle,
+      text: getErrorMessage(res.error.error),
+      icon: 'error',
+      confirmButtonText: local.confirmationText,
+    })
     return []
   }
 

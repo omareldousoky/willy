@@ -1,7 +1,7 @@
-import { API_BASE_URL } from '../../../../Shared/envConfig'
-import axios from '../../../../Shared/Services/axiosInstance'
+import { API_BASE_URL } from '../../../envConfig'
+import axios from '../../axiosInstance'
 
-export const getAllTasaheelRisks = async () => {
+export const getAllRisks = async () => {
   const url = API_BASE_URL + `/report/tasaheel-risks`
   try {
     const res = await axios.get(url)
@@ -38,7 +38,7 @@ export const getAllQuarterlyReport = async () => {
   }
 }
 
-export const generateTasaheelRisksReport = async (date: { date: string }) => {
+export const generateRisksReport = async (date: { date: string }) => {
   const url = API_BASE_URL + `/report/tasaheel-risks`
   try {
     const res = await axios.post(url, date)
@@ -75,7 +75,7 @@ export const generateQuarterlyReport = async (quarter: { quarter: string }) => {
   }
 }
 
-export const getTasaheelRisksReport = async (id: string) => {
+export const getRisksReport = async (id: string) => {
   const url = API_BASE_URL + `/report/tasaheel-risks/${id}`
   try {
     const res = await axios.get(url)

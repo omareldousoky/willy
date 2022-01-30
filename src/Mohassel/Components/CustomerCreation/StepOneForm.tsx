@@ -54,7 +54,12 @@ export const StepOneForm = (props: any) => {
     if (resGov.status === 'success') {
       setGovernorates(resGov.body.governorates)
     } else {
-      Swal.fire('Error !', getErrorMessage(resGov.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(resGov.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -163,11 +168,12 @@ export const StepOneForm = (props: any) => {
                         setFieldValue('gender', getGenderFromNationalId(value))
                       } else {
                         setLoading(false)
-                        Swal.fire(
-                          'Error !',
-                          getErrorMessage(res.error.error),
-                          'error'
-                        )
+                        Swal.fire({
+                          title: local.errorTitle,
+                          text: getErrorMessage(res.error.error),
+                          icon: 'error',
+                          confirmButtonText: local.confirmationText,
+                        })
                       }
                     }
                   }}

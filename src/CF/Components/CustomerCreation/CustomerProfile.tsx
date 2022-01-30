@@ -148,7 +148,12 @@ export const CustomerProfile = () => {
       setLoading(false)
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(iScores.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   const [geoArea, setGeoArea] = useState<any>()
@@ -165,7 +170,12 @@ export const CustomerProfile = () => {
       } else setGeoArea({ name: '-', active: false })
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(resGeo.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(resGeo.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   function setCustomerContractData(customer: Customer) {
@@ -189,7 +199,12 @@ export const CustomerProfile = () => {
       return
     }
     setLoading(false)
-    Swal.fire('Error !', getErrorMessage(limitsRes.error.error), 'error')
+    Swal.fire({
+      title: local.errorTitle,
+      text: getErrorMessage(limitsRes.error.error),
+      icon: 'error',
+      confirmButtonText: local.confirmationText,
+    })
   }
   async function getCustomerDetails() {
     setLoading(true)
@@ -204,7 +219,12 @@ export const CustomerProfile = () => {
       await getGeoArea(res.body.customer.geoAreaId, res.body.customer.branchId)
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   useEffect(() => {
@@ -238,7 +258,12 @@ export const CustomerProfile = () => {
       setLoading(false)
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(iScore.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(iScore.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   const handleActivationClick = async ({ id, blocked }) => {
@@ -286,16 +311,21 @@ export const CustomerProfile = () => {
           })
           if (res.status === 'success') {
             setLoading(false)
-            Swal.fire(
-              '',
-              blocked?.isBlocked === true
-                ? local.customerUnblockedSuccessfully
-                : local.customerBlockedSuccessfully,
-              'success'
-            ).then(() => window.location.reload())
+            Swal.fire({
+              text:
+                blocked?.isBlocked === true
+                  ? local.customerUnblockedSuccessfully
+                  : local.customerBlockedSuccessfully,
+              icon: 'success',
+              confirmButtonText: local.confirmationText,
+            }).then(() => window.location.reload())
           } else {
             setLoading(false)
-            Swal.fire('', local.searchError, 'error')
+            Swal.fire({
+              text: local.searchError,
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           }
         }
       })

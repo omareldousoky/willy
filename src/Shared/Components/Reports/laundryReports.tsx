@@ -3,19 +3,19 @@ import Swal from 'sweetalert2'
 
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
-import * as local from '../../../Shared/Assets/ar.json'
-import { getErrorMessage } from '../../../Shared/Services/utils'
+import * as local from '../../Assets/ar.json'
+import { getErrorMessage, isCF } from '../../Services/utils'
 import { LaundryReportRequest } from '../../Models/LaundryReports'
 import { fetchFalteringPaymentsReport } from '../../Services/APIs/Reports/falteringPayments'
-import { Loader } from '../../../Shared/Components/Loader'
+import { Loader } from '../Loader'
 import Can from '../../config/Can'
 import { FalteringPayments as FalteringPaymentsPdf } from '../pdfTemplates/falteringPayments/falteringPayments'
 import { fetchEarlyPaymentsReport } from '../../Services/APIs/Reports/earlyPayments'
 import { EarlyPayments as EarlyPaymentsPdf } from '../pdfTemplates/earlyPayments/earlyPayments'
-import { LtsIcon } from '../../../Shared/Components'
-import { ApiResponse } from '../../../Shared/Models/common'
-import { PDF } from '../../../Shared/Components/PdfList/types'
-import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
+import { LtsIcon } from '../index'
+import { ApiResponse } from '../../Models/common'
+import { PDF } from '../PdfList/types'
+import ReportsModal from '../ReportsModal/reportsModal'
 
 enum ReportEnum {
   FalteringPayments = 'falteringPayments',
@@ -29,6 +29,7 @@ const laundryPdfs = [
     local: 'تقرير سداد المتعثرين',
     inputs: ['dateFromTo', 'branches'],
     permission: ReportEnum.FalteringPayments,
+    hide: isCF,
   },
   {
     key: ReportEnum.EarlyPayments,
@@ -77,7 +78,12 @@ const LaundryReports: FunctionComponent = () => {
     if (res.status === 'success') {
       if (!res.body || !Object.keys(res.body).length) {
         setLoading(false)
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         setData(res.body)
         setShowModal(false)
@@ -89,11 +95,12 @@ const LaundryReports: FunctionComponent = () => {
       }
     } else {
       setLoading(false)
-      Swal.fire(
-        'Error !',
-        getErrorMessage((res.error as Record<string, string>).error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage((res.error as Record<string, string>).error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -152,8 +159,9 @@ const LaundryReports: FunctionComponent = () => {
               </Card.Title>
             </div>
           </div>
-          {laundryPdfs.map((pdf, index) => {
-            return (
+          {laundryPdfs
+            .filter((pdf) => !pdf.hide)
+            .map((pdf, index) => (
               <Can I={pdf.permission} a="report" key={index}>
                 <Card key={index}>
                   <Card.Body>
@@ -174,8 +182,7 @@ const LaundryReports: FunctionComponent = () => {
                   </Card.Body>
                 </Card>
               </Can>
-            )
-          })}
+            ))}
         </Card.Body>
       </Card>
       {showModal && selectedPdf && (

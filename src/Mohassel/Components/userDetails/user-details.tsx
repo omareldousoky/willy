@@ -98,10 +98,20 @@ class UserDetails extends Component<
     const res = await setUserActivation(req)
     if (res.status === 'success') {
       await this.getUserDetails()
-      Swal.fire('success', `${this.state.data.username} is ${req.status} now`)
+      Swal.fire({
+        title: local.success,
+        text: `${this.state.data.username} is ${req.status} now`,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      })
     } else {
       this.setState({ isLoading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -127,7 +137,12 @@ class UserDetails extends Component<
       })
     } else {
       this.setState({ isLoading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }

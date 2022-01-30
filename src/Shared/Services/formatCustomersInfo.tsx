@@ -88,7 +88,12 @@ const iscoreField = ({
                 style={{ cursor: 'pointer', padding: 10 }}
                 onClick={() =>
                   error
-                    ? Swal.fire(local.error, error, 'error')
+                    ? Swal.fire({
+                        title: local.errorTitle,
+                        confirmButtonText: local.confirmationText,
+                        text: error,
+                        icon: 'error',
+                      })
                     : getIscore(customerDetails)
                 }
               >

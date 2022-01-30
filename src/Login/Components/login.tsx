@@ -50,7 +50,11 @@ class Login extends React.PureComponent<Props, State> {
         window.location.href = process.env.REACT_APP_URL || ''
       },
       () => {
-        swal.fire('', local.loginError, 'error')
+        swal.fire({
+          confirmButtonText: local.confirmationText,
+          text: local.loginError,
+          icon: 'error',
+        })
       }
     )
   }

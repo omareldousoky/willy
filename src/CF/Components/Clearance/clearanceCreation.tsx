@@ -152,11 +152,21 @@ class ClearanceCreation extends Component<Props, State> {
         if (paidLoans.status === 'success') {
           this.setState({ paidLoans: paidLoans.body.data })
         } else {
-          Swal.fire('Error !', getErrorMessage(paidLoans.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(paidLoans.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         }
       }
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     this.setState({ loading: false })
   }
@@ -174,7 +184,12 @@ class ClearanceCreation extends Component<Props, State> {
         },
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     this.setState({ loading: false })
   }
@@ -239,11 +254,18 @@ class ClearanceCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const res = await createClearance(clearance)
     if (res.status === 'success') {
-      Swal.fire('Success', '', 'success').then(() =>
-        this.props.history.goBack()
-      )
+      Swal.fire({
+        title: local.success,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => this.props.history.goBack())
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     this.setState({ loading: false })
   }
@@ -256,11 +278,18 @@ class ClearanceCreation extends Component<Props, State> {
         clearance
       )
       if (res.status === 'success') {
-        Swal.fire('Success', '', 'success').then(() =>
-          this.props.history.goBack()
-        )
+        Swal.fire({
+          title: local.success,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => this.props.history.goBack())
       } else {
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       }
     }
     this.setState({ loading: false })
@@ -275,7 +304,13 @@ class ClearanceCreation extends Component<Props, State> {
     if (res.status === 'success') {
       if (res.body && res.body.penalty)
         this.setState({ loading: false, penalty: res.body.penalty })
-    } else Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    } else
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
   }
 
   renderStepOne() {

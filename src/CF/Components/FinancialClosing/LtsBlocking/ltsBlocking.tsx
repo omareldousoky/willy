@@ -215,9 +215,18 @@ class LtsBlocking extends Component<Props, State> {
       branchesIds: this.state.selectedBranches.map((branch) => branch.id),
     })
     if (res.status === 'success') {
-      Swal.fire('Success', '', 'success').then(() => window.location.reload())
+      Swal.fire({
+        title: local.success,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => window.location.reload())
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     this.props.setLoading(false)
   }

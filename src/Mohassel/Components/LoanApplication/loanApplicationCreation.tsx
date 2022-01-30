@@ -194,17 +194,18 @@ class LoanApplicationCreation extends Component<Props, State> {
               ? (names += check.validationObject[id].customerName)
               : (names = names + ', ' + check.validationObject[id].customerName)
         })
-        Swal.fire(
-          'error',
-          `${names.length > 0 ? names : ''} ${
+        Swal.fire({
+          title: local.errorTitle,
+          text: `${names.length > 0 ? names : ''} ${
             names.length > 0 ? local.memberInvolvedInAnotherLoan : ''
           } ${
             financeNames.length > 0
               ? `\n ${financeNames} ${local.customersMaxLoanPrincipalError}`
               : ''
           }`,
-          'error'
-        )
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       }
     } else {
       // remove all
@@ -233,7 +234,12 @@ class LoanApplicationCreation extends Component<Props, State> {
         },
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(results.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       this.setState({ loading: false })
     }
   }
@@ -271,7 +277,12 @@ class LoanApplicationCreation extends Component<Props, State> {
         () => this.setState({ loading: false })
       )
     } else {
-      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(results.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       this.setState({ loading: false })
     }
   }
@@ -306,7 +317,12 @@ class LoanApplicationCreation extends Component<Props, State> {
         () => this.setState({ loading: false })
       )
     } else {
-      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(results.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       this.setState({ loading: false })
     }
   }
@@ -329,7 +345,12 @@ class LoanApplicationCreation extends Component<Props, State> {
         application,
       })
     } else {
-      Swal.fire('Error!', getErrorMessage(princples.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(princples.error.error),
+        icon: 'error',
+      })
       this.setState({ loading: false })
     }
   }
@@ -373,7 +394,12 @@ class LoanApplicationCreation extends Component<Props, State> {
       }
       return merged
     }
-    Swal.fire('error', getErrorMessage(res.error.error), 'error')
+    Swal.fire({
+      title: local.errorTitle,
+      confirmButtonText: local.confirmationText,
+      text: getErrorMessage(res.error.error),
+      icon: 'error',
+    })
     this.setState({ loading: false })
     return []
   }
@@ -419,7 +445,12 @@ class LoanApplicationCreation extends Component<Props, State> {
         loading: false,
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       this.setState({ loading: false })
     }
   }
@@ -436,11 +467,20 @@ class LoanApplicationCreation extends Component<Props, State> {
           loading: false,
         })
       } else {
-        Swal.fire('Error !', getErrorMessage(products.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(products.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
         this.setState({ loading: false })
       }
     } else {
-      Swal.fire('', local.selectBranch, 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: local.selectBranch,
+        icon: 'error',
+      })
     }
   }
 
@@ -453,7 +493,12 @@ class LoanApplicationCreation extends Component<Props, State> {
         loading: false,
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(usage.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(usage.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       this.setState({ loading: false })
     }
   }
@@ -467,7 +512,12 @@ class LoanApplicationCreation extends Component<Props, State> {
         loading: false,
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(formulas.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(formulas.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       this.setState({ loading: false })
     }
   }
@@ -619,7 +669,12 @@ class LoanApplicationCreation extends Component<Props, State> {
         })
       )
     } else {
-      Swal.fire('Error!', getErrorMessage(application.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(application.error.error),
+        icon: 'error',
+      })
       this.setState({ loading: false })
     }
   }
@@ -836,7 +891,12 @@ class LoanApplicationCreation extends Component<Props, State> {
         })
       )
     } else {
-      Swal.fire('error', getErrorMessage(selectedProduct.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(selectedProduct.error.error),
+        icon: 'error',
+      })
       this.setState({ loading: false })
     }
   }
@@ -848,7 +908,12 @@ class LoanApplicationCreation extends Component<Props, State> {
     const invalidNanoLimit = this.state.isNano && !customer.nanoLoansLimit
 
     if (invalidNanoLimit) {
-      Swal.fire(local.error, 'برجاء تحديد الحد الائتماني', 'error')
+      Swal.fire({
+        title: local.error,
+        text: local.invalidNanoLimitError,
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       return
     }
 
@@ -899,19 +964,21 @@ class LoanApplicationCreation extends Component<Props, State> {
         customerLoanOrAgeError = local.individualAgeError
       }
       if (customerIsBlockerError || customerLoanOrAgeError)
-        Swal.fire(
-          'error',
-          `<span>${customerIsBlockerError}  ${
+        Swal.fire({
+          title: local.errorTitle,
+          html: `<span>${customerIsBlockerError}  ${
             customerIsBlockerError ? `<br/>` : ''
           } ${customerLoanOrAgeError}</span>`,
-          'error'
-        )
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(selectedCustomer.error.error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(selectedCustomer.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
 
     this.setState({ loading: false })
@@ -954,19 +1021,21 @@ class LoanApplicationCreation extends Component<Props, State> {
         customerInvolvedInAnotherLoanError = local.customerInvolvedInAnotherLoan
       }
       if (customerIsBlockedError || customerInvolvedInAnotherLoanError)
-        Swal.fire(
-          'error',
-          `<span>${customerIsBlockedError} ${
+        Swal.fire({
+          title: local.errorTitle,
+          html: `<span>${customerIsBlockedError} ${
             customerIsBlockedError ? `<br/>` : ''
           } ${customerInvolvedInAnotherLoanError}</span>`,
-          'error'
-        )
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(selectedGuarantor.error.error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(selectedGuarantor.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     this.setState({ loading: false })
   }
@@ -988,14 +1057,20 @@ class LoanApplicationCreation extends Component<Props, State> {
         })
         this.setState({ application, loading: false })
       } else {
-        Swal.fire('error', local.theCustomerIsBlocked, 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          confirmButtonText: local.confirmationText,
+          text: local.theCustomerIsBlocked,
+          icon: 'error',
+        })
       }
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(selectedGuarantor.error.error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(selectedGuarantor.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     this.setState({ loading: false })
   }
@@ -1085,7 +1160,12 @@ class LoanApplicationCreation extends Component<Props, State> {
           this.state.application.noOfGuarantors &&
         this.state.customerType === 'individual'
       ) {
-        Swal.fire('error', local.selectTwoGuarantors, 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          confirmButtonText: local.confirmationText,
+          text: local.selectTwoGuarantors,
+          icon: 'error',
+        })
       } else if (!this.props.edit) {
         this.setState({ loading: true })
 
@@ -1095,18 +1175,26 @@ class LoanApplicationCreation extends Component<Props, State> {
 
         if (res.status === 'success') {
           this.setState({ loading: false })
-          Swal.fire(
-            'success',
-            local.loanApplicationCreated +
+          Swal.fire({
+            title: local.success,
+            text:
+              local.loanApplicationCreated +
               ` ${local.withCode} ` +
-              res.body.applicationKey
-          ).then(() => {
+              res.body.applicationKey,
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          }).then(() => {
             this.props.history.push('/track-loan-applications', {
               sme: this.state.customerType === 'sme',
             })
           })
         } else {
-          Swal.fire('error', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+          })
           this.setState({ loading: false })
         }
       } else if (this.props.edit) {
@@ -1114,13 +1202,23 @@ class LoanApplicationCreation extends Component<Props, State> {
         const res = await editApplication(objToSubmit, this.state.prevId)
         if (res.status === 'success') {
           this.setState({ loading: false })
-          Swal.fire('success', local.loanApplicationEdited).then(() => {
+          Swal.fire({
+            title: local.success,
+            text: local.loanApplicationEdited,
+            confirmButtonText: local.confirmationText,
+            icon: 'success',
+          }).then(() => {
             this.props.history.push('/track-loan-applications', {
               sme: this.state.customerType === 'sme',
             })
           })
         } else {
-          Swal.fire('error', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+          })
           this.setState({ loading: false })
         }
       }
@@ -1145,6 +1243,30 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ application, loading: false })
   }
 
+  removeViceCustomer = (index) => {
+    this.setState(
+      produce<State>((draftState) => {
+        draftState.application.viceCustomers = draftState.application.viceCustomers.filter(
+          (customer) => customer.id !== index.id
+        )
+      })
+    )
+  }
+
+  addViceCustomer(i: string) {
+    const element: { name: string; phoneNumber: string; id: string } = {
+      name: '',
+      phoneNumber: '',
+      id: i,
+    }
+
+    this.setState(
+      produce<State>((draftState) => {
+        draftState.application.viceCustomers.push(element)
+      })
+    )
+  }
+
   async viewCustomer(id) {
     this.setState({ loading: true })
     const selectedCustomer = await getCustomerByID(id)
@@ -1155,7 +1277,12 @@ class LoanApplicationCreation extends Component<Props, State> {
         showModal: true,
       })
     } else {
-      Swal.fire('error', local.searchError, 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: local.searchError,
+        icon: 'error',
+      })
       this.setState({ loading: false })
     }
   }
@@ -1350,7 +1477,12 @@ class LoanApplicationCreation extends Component<Props, State> {
     if (results.status === 'success') {
       this.setState({ loading: false, branchCustomers: results.body.data })
     } else {
-      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(results.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       this.setState({ loading: false })
     }
   }
@@ -1528,7 +1660,12 @@ class LoanApplicationCreation extends Component<Props, State> {
       }
       return { flag: true, customers: merged }
     }
-    Swal.fire('error', getErrorMessage(res.error.error), 'error')
+    Swal.fire({
+      title: local.errorTitle,
+      confirmButtonText: local.confirmationText,
+      text: getErrorMessage(res.error.error),
+      icon: 'error',
+    })
     this.setState({ loading: false })
     return { flag: false }
   }
@@ -1774,6 +1911,8 @@ class LoanApplicationCreation extends Component<Props, State> {
             removeEntitledToSign={(query, guarantor, values) => {
               this.removeEntitledToSign(query, guarantor, values)
             }}
+            addViceCustomer={(i) => this.addViceCustomer(i)}
+            removeViceCustomer={(i) => this.removeViceCustomer(i)}
             customer={
               this.state.customerType === 'group'
                 ? this.state.selectedCustomers
