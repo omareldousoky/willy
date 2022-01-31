@@ -18,8 +18,13 @@ export const PromissoryNote = ({
   customerGuarantors,
   nationalId,
   isCF,
+  CFUserContract,
 }: PromissoryNoteProps) => (
-  <div className="promissory-note" dir="rtl" lang="ar">
+  <div
+    className={`promissory-note ${CFUserContract && 'reposition'}`}
+    dir="rtl"
+    lang="ar"
+  >
     <table>
       <Header
         title=""

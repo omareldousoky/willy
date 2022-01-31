@@ -24,9 +24,11 @@ export interface AcknowledgmentWasSignedInFrontProps {
   customerCreationDate: number
   customerGuarantors?: Customer[]
   isCF?: boolean
+  CFUserContract?: boolean
 }
 export interface PromissoryNoteProps extends BondContractProps {
   customerGuarantors?: Customer[]
+  CFUserContract?: boolean
 }
 
 export interface AuthorizationToFillInfoProps {
@@ -35,4 +37,5 @@ export interface AuthorizationToFillInfoProps {
   customerHomeAddress: string
   customerGuarantors?: Customer[]
   isCF?: boolean
+  CFUserContract?: boolean
 }
