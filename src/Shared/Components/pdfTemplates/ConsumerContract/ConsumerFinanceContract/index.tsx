@@ -35,7 +35,7 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
     }
   }
   return (
-    <table
+    <div
       className={`cf-contract-container ${
         props.CFUserContract && 'reposition'
       }`}
@@ -871,6 +871,6 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
           )}
         </section>
       </div>
-    </table>
+    </div>
   )
 }
