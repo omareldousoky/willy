@@ -731,6 +731,7 @@ export const CustomerProfile = () => {
           <Pagesize />
           <ConsumerFinanceContract
             contractData={customerCFContract as ConsumerFinanceContractData}
+            CFUserContract
           />
           <BondContract
             customerCreationDate={customerDetails?.created?.at || 0}

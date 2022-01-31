@@ -15,6 +15,7 @@ import './styles.scss'
 
 interface ConsumerFinanceContractProps {
   contractData: ConsumerFinanceContractData
+  CFUserContract: boolean
 }
 export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
   props
@@ -34,7 +35,11 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
     }
   }
   return (
-    <table className="cf-contract-container">
+    <table
+      className={`cf-contract-container ${
+        props.CFUserContract && 'reposition'
+      }`}
+    >
       <Header
         title=""
         showCurrentUser={false}
