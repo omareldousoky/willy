@@ -124,7 +124,12 @@ class LoanProducts extends Component<Props, State> {
         actionOnClick: (id) => this.getProductApplicationsReport(id as string),
       },
     ]
-    this.searchKeys = ['keyword', 'beneficiaryType', 'productType']
+    this.searchKeys = [
+      'keyword',
+      'beneficiaryType',
+      'productType',
+      'financialLeasingCheck',
+    ]
     this.dropDownKeys = ['name', 'code']
   }
 

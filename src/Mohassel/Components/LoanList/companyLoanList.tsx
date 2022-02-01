@@ -212,6 +212,7 @@ const CompanyLoanList: FunctionComponent<LoanListProps> = (
     'companyLoanType',
     'doubtful',
     'writtenOff',
+    'financialLeasingCheck',
   ]
 
   const dropDownKeys = [

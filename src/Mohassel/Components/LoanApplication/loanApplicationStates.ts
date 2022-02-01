@@ -115,6 +115,9 @@ export interface Application {
   vendorName?: string
   itemDescription?: string
   categoryName?: string
+  itemType?: string
+  itemSerialNumber?: string
+  downPayment?: number
 }
 export interface Results {
   results: Array<object>

@@ -505,7 +505,7 @@ class TrackLoanApplications extends Component<Props, State> {
       searchKeys.push('financialLeasingCheck')
     } else {
       dropDownKeys.push('nationalId')
-      searchKeys.push('loanType')
+      searchKeys.push('loanType', 'financialLeasingCheck')
     }
     return (
       <>

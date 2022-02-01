@@ -4,7 +4,6 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Select from 'react-select'
 import produce from 'immer'
-
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
@@ -22,13 +21,8 @@ import {
   newNanoApplication,
 } from 'Shared/Services/APIs/loanApplication/newApplication'
 import { getApplication } from 'Shared/Services/APIs/loanApplication/getApplication'
-import { getCookie } from 'Shared/Services/getCookie'
+import { getLoanOfficer } from 'Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import {
-  getLoanOfficer,
-  searchLoanOfficer,
-} from 'Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
-import {
-  parseJwt,
   getAge,
   getFullCustomerKey,
   getErrorMessage,
@@ -36,7 +30,6 @@ import {
 } from 'Shared/Services/utils'
 import DualBox from 'Shared/Components/DualListBox/dualListBox'
 import Wizard from 'Shared/Components/wizard/Wizard'
-
 import { theme } from 'Shared/theme'
 import { Customer } from 'Shared/Models/Customer'
 import { searchCustomer } from 'Shared/Services/APIs/customer/searchCustomer'
@@ -63,9 +56,11 @@ import {
   chooseCustomerType,
   filterProducts,
   getCustomerLimits,
+  getCustomerType,
   getGroupErrorMessage,
   setInitState,
 } from './Helpers'
+import { FinancialLeasingDetailsForm } from './FinancialLeasingDetailsForm'
 
 interface LoanApplicationCreationRouteState {
   id?: string
@@ -107,16 +102,13 @@ interface State {
   showModal: boolean
   customerToView: Customer
   isNano: boolean
+  branchId: string
 }
 
 class LoanApplicationCreation extends Component<Props, State> {
-  tokenData: any
-
   constructor(props: Props) {
     super(props)
     this.state = setInitState()
-    const token = getCookie('token')
-    this.tokenData = parseJwt(token)
   }
 
   static getDerivedStateFromProps(props: Props, state: State) {
@@ -369,31 +361,10 @@ class LoanApplicationCreation extends Component<Props, State> {
     )
   }
 
-  async getLoanOfficers() {
-    this.setState({ loanOfficers: [], loading: true })
-    const res = await searchLoanOfficer({
-      from: 0,
-      size: 1000,
-      branchId: this.tokenData.branch,
-      status: 'active',
-    })
-    if (res.status === 'success') {
-      this.setState({
-        loanOfficers: res.body.data.filter(
-          (officer) => officer.status === 'active'
-        ),
-        loading: false,
-      })
-    } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      this.setState({ loading: false })
-    }
-  }
-
   async getProducts() {
     this.setState({ products: [], loading: true })
-    if (this.tokenData.branch.length > 0) {
-      const products = await getProductsByBranch(this.tokenData.branch)
+    if (this.state.branchId.length > 0) {
+      const products = await getProductsByBranch(this.state.branchId)
       if (products.status === 'success') {
         this.setState({
           products: products.body.data.productIds
@@ -493,6 +464,10 @@ class LoanApplicationCreation extends Component<Props, State> {
             app.vendorName = application.body.vendorName
             app.itemDescription = application.body.itemDescription
             app.categoryName = application.body.categoryName
+            app.itemType = application.body.itemType
+            app.categoryName = application.body.categoryName
+            app.itemSerialNumber = application.body.itemSerialNumber
+            app.downPayment = application.body.downPayment
             draftState.loading = false
           })
         )
@@ -586,19 +561,8 @@ class LoanApplicationCreation extends Component<Props, State> {
           app.researcherId = researcherId
           app.entitledToSign = entitledArr
           draftState.selectedCustomer = application.body.customer
-          draftState.customerType =
-            product.beneficiaryType === 'individual' && product.type === 'sme'
-              ? !product.financialLeasing
-                ? 'sme'
-                : 'smeFinancialLeasing'
-              : product.beneficiaryType === 'individual' &&
-                product.type === 'micro'
-              ? !product.financialLeasing
-                ? 'individual'
-                : 'financialLeasing'
-              : product.beneficiaryType === 'group' && product.type === 'micro'
-              ? 'group'
-              : 'nano'
+          draftState.customerType = getCustomerType(product)
+          draftState.isNano = product.type === 'nano'
           draftState.loading = false
         })
       )
@@ -613,7 +577,6 @@ class LoanApplicationCreation extends Component<Props, State> {
       await this.getProducts()
       await this.getFormulas()
       await this.getLoanUsage()
-      await this.getLoanOfficers()
       await this.getGlobalPrinciple()
       this.getAppByID(this.state.prevId)
     } else {
@@ -621,7 +584,6 @@ class LoanApplicationCreation extends Component<Props, State> {
       await this.getProducts()
       await this.getFormulas()
       await this.getLoanUsage()
-      await this.getLoanOfficers()
       await this.getGlobalPrinciple()
     }
   }
@@ -849,10 +811,12 @@ class LoanApplicationCreation extends Component<Props, State> {
 
   submit = async (values: Application) => {
     if (
-      this.state.step === 2 &&
-      ['individual', 'financialLeasing', 'sme', 'smeFinancialLeasing'].includes(
-        this.state.customerType
-      )
+      (this.state.step === 2 &&
+        ['individual', 'sme'].includes(this.state.customerType)) ||
+      ([2, 3].includes(this.state.step) &&
+        ['financialLeasing', 'smeFinancialLeasing'].includes(
+          this.state.customerType
+        ))
     ) {
       this.setState({ application: { ...values } }, () => this.step('forward'))
     } else {
@@ -931,6 +895,9 @@ class LoanApplicationCreation extends Component<Props, State> {
         vendorName: obj.vendorName,
         itemDescription: obj.itemDescription,
         categoryName: obj.categoryName,
+        itemType: obj.itemType,
+        itemSerialNumber: obj.itemSerialNumber,
+        downPayment: obj.downPayment,
       }
       if (
         this.state.application.guarantorIds.length <
@@ -1184,14 +1151,14 @@ class LoanApplicationCreation extends Component<Props, State> {
         ? {
             from: 0,
             size: 2000,
-            branchId: this.tokenData.branch,
+            branchId: this.state.branchId,
             representativeId: this.state.selectedLoanOfficer._id,
             customerType: 'individual',
           }
         : {
             from: 0,
             size: 2000,
-            branchId: this.tokenData.branch,
+            branchId: this.state.branchId,
             representativeId: this.state.selectedLoanOfficer._id,
             [key]: ['code', 'key'].includes(key) ? Number(keyword) : keyword,
             key: ['customerShortenedCode'].includes(key)
@@ -1381,7 +1348,25 @@ class LoanApplicationCreation extends Component<Props, State> {
   }
 
   step(key) {
-    if (this.state.step < 3 && key === 'forward') {
+    if (
+      this.state.step < 3 &&
+      key === 'forward' &&
+      !['financialLeasing', 'smeFinancialLeasing'].includes(
+        this.state.customerType
+      )
+    ) {
+      this.setState(
+        produce<State>((draftState) => {
+          draftState.step += 1
+        })
+      )
+    } else if (
+      this.state.step <= 3 &&
+      key === 'forward' &&
+      ['financialLeasing', 'smeFinancialLeasing'].includes(
+        this.state.customerType
+      )
+    ) {
       this.setState(
         produce<State>((draftState) => {
           draftState.step += 1
@@ -1564,7 +1549,6 @@ class LoanApplicationCreation extends Component<Props, State> {
             formulas={this.state.formulas}
             loanUsage={this.state.loanUsage}
             products={filteredProducts}
-            loanOfficers={this.state.loanOfficers}
             step={(key) => this.step(key)}
             getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}
             customer={
@@ -1635,6 +1619,28 @@ class LoanApplicationCreation extends Component<Props, State> {
     )
   }
 
+  renderStepFour = () => (
+    <Formik
+      initialValues={this.state.application}
+      onSubmit={this.submit}
+      validationSchema={
+        ['sme', 'smeFinancialLeasing'].includes(this.state.customerType)
+          ? SMELoanApplicationStep2Validation
+          : LoanApplicationValidation
+      }
+      validateOnBlur
+      validateOnChange
+      enableReinitialize
+    >
+      {(formikProps) => (
+        <FinancialLeasingDetailsForm
+          {...formikProps}
+          step={(key) => this.step(key)}
+        />
+      )}
+    </Formik>
+  )
+
   renderSteps() {
     switch (this.state.step) {
       case 1:
@@ -1643,6 +1649,8 @@ class LoanApplicationCreation extends Component<Props, State> {
         return this.renderStepTwo()
       case 3:
         return this.renderStepThree()
+      case 4:
+        return this.renderStepFour()
       default:
         return null
     }
@@ -1670,11 +1678,17 @@ class LoanApplicationCreation extends Component<Props, State> {
                         local.customersDetails,
                         local.loanInfo,
                         local.guarantorInfo,
+                        local.loanInfo,
                       ]
                     : ['sme', 'smeFinancialLeasing'].includes(
                         this.state.customerType
                       )
-                    ? [local.viewCompany, local.loanInfo, local.guarantorInfo]
+                    ? [
+                        local.viewCompany,
+                        local.loanInfo,
+                        local.guarantorInfo,
+                        local.loanInfo,
+                      ]
                     : [local.customersDetails, local.loanInfo]
                 }
               />

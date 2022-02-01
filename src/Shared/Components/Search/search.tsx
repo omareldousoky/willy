@@ -923,8 +923,6 @@ const Search: FunctionComponent<SearchProps> = ({
                       'type',
                       local.productName
                     )}
-                    {formikProps.values.type === 'micro' &&
-                      financialLeasingCheck(formikProps, index)}
                   </>
                 )
               }
@@ -947,8 +945,6 @@ const Search: FunctionComponent<SearchProps> = ({
                       'type',
                       local.productName
                     )}
-                    {formikProps.values.type === 'sme' &&
-                      financialLeasingCheck(formikProps, index)}
                   </>
                 )
               }
@@ -1055,12 +1051,15 @@ const Search: FunctionComponent<SearchProps> = ({
                       'type',
                       local.productName
                     )}
-                    {['micro', 'sme'].includes(formikProps.values.type ?? '') &&
-                      financialLeasingCheck(formikProps, index)}
+                    {/* {['micro', 'sme'].includes(formikProps.values.type ?? '') &&
+                      financialLeasingCheck(formikProps, index)} */}
                   </>
                 )
               }
-              if (searchKey === 'financialLeasingCheck') {
+              if (
+                searchKey === 'financialLeasingCheck' &&
+                ['micro', 'sme'].includes(formikProps.values.type ?? '')
+              ) {
                 return financialLeasingCheck(formikProps, index)
               }
             })}

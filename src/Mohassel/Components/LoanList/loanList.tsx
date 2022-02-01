@@ -263,6 +263,7 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
     'branch',
     'doubtful',
     'writtenOff',
+    'financialLeasingCheck',
   ]
 
   const dropDownKeys = [

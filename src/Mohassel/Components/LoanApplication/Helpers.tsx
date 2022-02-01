@@ -1,16 +1,19 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
 import { getCustomersBalances } from 'Shared/Services/APIs/customer/customerLoans'
-import { getAge, getErrorMessage } from 'Shared/Services/utils'
+import { getAge, getErrorMessage, parseJwt } from 'Shared/Services/utils'
 import Swal from 'sweetalert2'
 import local from 'Shared/Assets/ar.json'
 import { Product } from 'Shared/Services/interfaces'
 import { LtsIcon } from 'Shared/Components'
 import Can from 'Shared/config/Can'
+import { getCookie } from 'Shared/Services/getCookie'
 
 const date = new Date()
 
 export const setInitState = () => {
+  const token = getCookie('token')
+  const branchId = parseJwt(token).branch
   return {
     step: 1,
     application: {
@@ -104,6 +107,9 @@ export const setInitState = () => {
       vendorName: '',
       itemDescription: '',
       categoryName: '',
+      itemType: '',
+      itemSerialNumber: '',
+      downPayment: 0,
     },
     customerType: '',
     loading: false,
@@ -129,6 +135,7 @@ export const setInitState = () => {
     showModal: false,
     customerToView: {},
     isNano: false,
+    branchId,
   }
 }
 
@@ -292,3 +299,16 @@ export const checkGroupValidation = (customer) => {
   }
   return true
 }
+
+export const getCustomerType = (product) =>
+  product.beneficiaryType === 'individual' && product.type === 'sme'
+    ? !product.financialLeasing
+      ? 'sme'
+      : 'smeFinancialLeasing'
+    : product.beneficiaryType === 'individual' && product.type === 'micro'
+    ? !product.financialLeasing
+      ? 'individual'
+      : 'financialLeasing'
+    : product.beneficiaryType === 'group' && product.type === 'micro'
+    ? 'group'
+    : product.beneficiaryType

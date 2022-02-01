@@ -1270,5 +1270,7 @@
   "financialLeasing": "تأجير تمويلي",
   "vendorName": "اسم المورد",
   "itemDescription": "تفاصيل المنتج",
-  "categoryName": "نوع الاصل المؤجر"
+  "categoryName": "نوع الاصل المؤجر",
+  "itemType": "نوع المنتج",
+  "itemSerialNumber": "الرقم التسلسلي للمنتج"
 }

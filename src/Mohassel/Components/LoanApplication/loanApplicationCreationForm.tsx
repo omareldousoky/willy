@@ -31,12 +31,12 @@ export const LoanApplicationCreationForm = (props: any) => {
     errors,
     touched,
     setFieldValue,
+    calculationFormulaName,
   } = props
   const [enquirerOptions, setEnquirerOptions] = useState<Array<any>>([])
   const [employees, setEmployees] = useState<Array<any>>([])
   const [researcherOptions, setResearcherOptions] = useState<Array<any>>([])
   const branchId = JSON.parse(getCookie('ltsbranch'))._id
-  const categories = ['مال مادي', 'معنوي', 'حق انتفاع']
   const getOptions = async (inputValue: string) => {
     const res = await searchLoanOfficerAndManager({
       from: 0,
@@ -177,7 +177,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                 <Form.Group controlId="calculationFormulaId">
                   <Form.Label>{local.calculationFormulaId}</Form.Label>
                   <Form.Control
-                    as="select"
+                    type="text"
                     name="calculationFormulaId"
                     data-qc="calculationFormulaId"
                     value={values.calculationFormulaId}
@@ -189,12 +189,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                     }
                     disabled
                   >
-                    <option value="" disabled />
-                    {props.formulas.map((formula, i) => (
-                      <option key={i} value={formula._id}>
-                        {formula.name}
-                      </option>
-                    ))}
+                    {calculationFormulaName}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
                     {errors.calculationFormulaId}
@@ -486,7 +481,7 @@ export const LoanApplicationCreationForm = (props: any) => {
             )}
             {values.beneficiaryType === 'individual' && (
               <Row>
-                <Col sm={12}>
+                <Col sm={values.financialLeasing ? 6 : 12}>
                   <Form.Group controlId="principal">
                     <Form.Label>{local.principal}</Form.Label>
                     <Form.Control
@@ -506,73 +501,26 @@ export const LoanApplicationCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
+                {values.financialLeasing && (
+                  <Col sm={6}>
+                    <Form.Group controlId="downPayment">
+                      <Form.Label>{local.downPayment}</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="downPayment"
+                        data-qc="downPayment"
+                        value={values.downPayment}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={errors.downPayment && touched.downPayment}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.downPayment}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Col>
+                )}
               </Row>
-            )}
-            {values.financialLeasing && (
-              <>
-                <Row>
-                  <Col sm={6}>
-                    <Form.Group controlId="vendorName">
-                      <Form.Label>{local.vendorName}</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="vendorName"
-                        data-qc="vendorName"
-                        value={values.vendorName}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        isInvalid={errors.vendorName && touched.vendorName}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.vendorName}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  <Col sm={6}>
-                    <Form.Group controlId="itemDescription">
-                      <Form.Label>{local.itemDescription}</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="itemDescription"
-                        data-qc="itemDescription"
-                        value={values.itemDescription}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        isInvalid={
-                          errors.itemDescription && touched.itemDescription
-                        }
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.itemDescription}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col sm={6}>
-                    <Form.Group controlId="categoryName">
-                      <Form.Label>{local.categoryName}</Form.Label>
-                      <Form.Control
-                        as="select"
-                        name="categoryName"
-                        data-qc="categoryName"
-                        value={values.categoryName}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        isInvalid={errors.categoryName && touched.categoryName}
-                      >
-                        <option value="" disabled />
-                        {categories.map((category) => (
-                          <option value={category}>{category}</option>
-                        ))}
-                      </Form.Control>
-                      <Form.Control.Feedback type="invalid">
-                        {errors.categoryName}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                </Row>
-              </>
             )}
             <Row>
               <Col sm={6}>
