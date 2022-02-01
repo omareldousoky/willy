@@ -132,6 +132,34 @@ export const LoanDetailsTableView = ({
             </tr>
           ))
         )}
+        {application.product.financialLeasing && (
+          <>
+            <tr>
+              <td>{local.downPayment}</td>
+              <td>{application.downPayment}</td>
+            </tr>
+            <tr>
+              <td>{local.vendorName}</td>
+              <td>{application.vendorName}</td>
+            </tr>
+            <tr>
+              <td>{local.categoryName}</td>
+              <td>{application.categoryName}</td>
+            </tr>
+            <tr>
+              <td>{local.itemType}</td>
+              <td>{application.itemType}</td>
+            </tr>
+            <tr>
+              <td>{local.itemDescription}</td>
+              <td>{application.itemDescription}</td>
+            </tr>
+            <tr>
+              <td>{local.itemSerialNumber}</td>
+              <td>{application.itemSerialNumber}</td>
+            </tr>
+          </>
+        )}
         <tr>
           <td>{local.applicationFee}</td>
           <td>{application.product.applicationFee}</td>

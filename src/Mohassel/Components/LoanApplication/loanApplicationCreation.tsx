@@ -505,7 +505,6 @@ class LoanApplicationCreation extends Component<Props, State> {
             app.itemDescription = application.body.itemDescription
             app.categoryName = application.body.categoryName
             app.itemType = application.body.itemType
-            app.categoryName = application.body.categoryName
             app.itemSerialNumber = application.body.itemSerialNumber
             app.downPayment = application.body.downPayment
             draftState.loading = false
