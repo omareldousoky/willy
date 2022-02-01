@@ -11,9 +11,10 @@ export const AuthorizationToFillInfo = ({
   customerName,
   customerGuarantors,
   isCF,
+  CFUserContract,
 }: AuthorizationToFillInfoProps) => (
   <>
-    <div className="contract-container" dir="rtl" lang="ar">
+    <div className={`contract-container ${CFUserContract && 'reposition'}`}>
       <table>
         <Header
           title=""
