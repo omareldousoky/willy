@@ -100,10 +100,9 @@ class UserDetails extends Component<
       await this.getUserDetails()
       Swal.fire({
         title: local.success,
-        text:
-          req.status === 'active'
-            ? `${local.activateUser} ${this.state.data.username}`
-            : `${local.deActivateUser} ${this.state.data.username}`,
+        text: `${
+          req.status === 'active' ? local.activateUser : local.deActivateUser
+        }  ${this.state.data.username}`,
         confirmButtonText: local.confirmationText,
         icon: 'success',
       })
