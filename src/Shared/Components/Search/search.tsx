@@ -1060,8 +1060,6 @@ const Search: FunctionComponent<SearchProps> = ({
                       'type',
                       local.productName
                     )}
-                    {/* {['micro', 'sme'].includes(formikProps.values.type ?? '') &&
-                      financialLeasingCheck(formikProps, index)} */}
                   </>
                 )
               }
