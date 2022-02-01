@@ -14,6 +14,7 @@ export const ReportsList = ({
   list,
   onClickDownload,
   iscoreType,
+  disabledProp,
 }: ReportsListProps) => {
   return (
     <>
@@ -63,6 +64,7 @@ export const ReportsList = ({
                 </div>
                 {onClickDownload && listItem.status === 'created' && (
                   <Button
+                    disabled={disabledProp}
                     type="button"
                     variant="default"
                     onClick={() => onClickDownload(listItem._id)}

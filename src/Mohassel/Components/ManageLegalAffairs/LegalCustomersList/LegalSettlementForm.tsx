@@ -72,7 +72,12 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
       })
       onSubmit()
     } else {
-      Swal.fire('error', getErrorMessage(response.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(response.error.error),
+        icon: 'error',
+      })
     }
 
     setIsSubmitting(false)
@@ -85,7 +90,12 @@ const LegalSettlementForm: FunctionComponent<LegalSettlementFormProps> = ({
     const response = await deleteSettlementDocument(customer._id, name)
 
     if (response.status !== 'success') {
-      Swal.fire('error', getErrorMessage(response.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(response.error),
+        icon: 'error',
+      })
     }
   }
 

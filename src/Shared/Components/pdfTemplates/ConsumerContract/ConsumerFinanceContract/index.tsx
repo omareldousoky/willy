@@ -15,6 +15,12 @@ import './styles.scss'
 
 interface ConsumerFinanceContractProps {
   contractData: ConsumerFinanceContractData
+  CFUserContract?: boolean
+}
+const numbersInWords = {
+  0: 'ثالثا',
+  1: 'رابعا',
+  2: 'خامسا',
 }
 export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
   props
@@ -33,8 +39,21 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
         )}`
     }
   }
+
+  const tafgeetTenK = () => {
+    let string = ''
+    const limit = props.contractData.initialConsumerFinanceLimit
+    string = new Tafgeet(limit, 'EGP').parse()
+    if (limit >= 10000 && limit <= 10999) string = string.replace('ألف', 'الاف')
+    return string
+  }
+
   return (
-    <table className="cf-contract-container">
+    <div
+      className={`cf-contract-container ${
+        props.CFUserContract && 'reposition'
+      }`}
+    >
       <Header
         title=""
         showCurrentUser={false}
@@ -88,9 +107,9 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
         return (
           <div key={index}>
             <p>
-              {index === 0 ? 'ثالثا' : 'رابعا'} : السيد/{' '}
-              {guarantor.customerName} الكائن في:{' '}
-              {guarantor.customerHomeAddress}&nbsp; يحمل بطاقة رقم قومي:{' '}
+              {numbersInWords[index]} : السيد/&nbsp;
+              {guarantor.customerName} الكائن في:&nbsp;
+              {guarantor.customerHomeAddress}&nbsp; يحمل بطاقة رقم قومي:&nbsp;
               {numbersToArabic(guarantor.nationalId)}
               <sub>
                 &quot;يشار إليه فيما بعد بالطرف {orderLocal[index + 2]} (
@@ -201,11 +220,7 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
           <p>
             4/1 الحد الاقصى لمبلغ التمويل :&nbsp;
             {numbersToArabic(props.contractData.initialConsumerFinanceLimit)} حم
-            (
-            {new Tafgeet(
-              props.contractData.initialConsumerFinanceLimit,
-              'EGP'
-            ).parse()}
+            ({tafgeetTenK()}
             &nbsp; )
           </p>
           <p>4/2 متوسط سعر العائد: 23% (ثابت/سنويا)</p>
@@ -866,6 +881,6 @@ export const ConsumerFinanceContract: React.FC<ConsumerFinanceContractProps> = (
           )}
         </section>
       </div>
-    </table>
+    </div>
   )
 }

@@ -216,7 +216,12 @@ class CustomerCreation extends Component<Props, State> {
       )
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -237,7 +242,12 @@ class CustomerCreation extends Component<Props, State> {
       }))
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(princples.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(princples.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -344,32 +354,48 @@ class CustomerCreation extends Component<Props, State> {
       )
       if (res.status === 'success') {
         this.setState({ loading: false })
-        Swal.fire('', local.customerEdited, 'success').then(() => {
+        Swal.fire({
+          text: local.customerEdited,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => {
           this.setState({ step: 4, customerId: res.body.customerId })
         })
       } else {
         this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         )
       }
     } else {
       const res = await createCustomer(objToSubmit)
       if (res.status === 'success') {
         this.setState({ loading: false })
-        Swal.fire(
-          '',
-          local.customerCreated +
+        Swal.fire({
+          title: local.success,
+          text:
+            local.customerCreated +
             ' ' +
             local.withCode +
             ' ' +
             res.body.customerKey,
-          'success'
-        ).then(() => {
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => {
           this.setState({ step: 4, customerId: res.body.customerId })
         })
       } else {
         this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         )
       }
     }
@@ -406,12 +432,19 @@ class CustomerCreation extends Component<Props, State> {
         )
         if (res.status === 'success') {
           this.setState({ loading: false, editMobileNumber: false })
-          Swal.fire('', doneSuccessfully(), 'success').then(() =>
-            this.getCustomerById()
-          )
+          Swal.fire({
+            text: doneSuccessfully(),
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          }).then(() => this.getCustomerById())
         } else {
           this.setState({ loading: false })
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         }
       }
     })

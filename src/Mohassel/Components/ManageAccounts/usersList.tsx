@@ -113,7 +113,12 @@ class UsersList extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       })
     this.setState({
       manageAccountTabs: manageAccountsArray(),
@@ -134,12 +139,21 @@ class UsersList extends Component<Props, State> {
     const res = await setUserActivation(req)
     if (res.status === 'success') {
       this.props.setLoading(false)
-      Swal.fire('', `${data.username}  ${req.status} `, 'success').then(() =>
-        this.getUsers()
-      )
+      Swal.fire({
+        text: `${
+          req.status === 'active' ? local.activateUser : local.deActivateUser
+        } ${data.username}`,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => this.getUsers())
     } else {
       this.props.setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -154,7 +168,12 @@ class UsersList extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       })
   }
 
@@ -216,7 +235,7 @@ class UsersList extends Component<Props, State> {
               .map((item) => {
                 return item.icon
               })
-              .indexOf('users')}
+              .indexOf('user')}
           />
         )}
         <Card className="main-card">

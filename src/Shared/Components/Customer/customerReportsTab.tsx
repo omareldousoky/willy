@@ -57,6 +57,7 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
     },
     {
       key: 'getGuarantors',
+      serviceKey: 'report-2',
       local: local.customerGuaranteed,
       hide: false,
     },
@@ -66,7 +67,12 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
     if (res.status === 'success') {
       if (!res.body) {
         setIsLoading(false)
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
         setPrintPdfKey(undefined)
       } else {
         if (successHandler) successHandler()
@@ -110,7 +116,12 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
     if (!printPdfKey) return
 
     if (!customerKey) {
-      Swal.fire('error', missingKey('customerCode'))
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: missingKey('customerCode'),
+        icon: 'error',
+      })
       return
     }
     setIsLoading(true)
@@ -145,7 +156,13 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
         if (['created', 'failed'].includes(file.body.status)) {
           if (file.body.status === 'created')
             downloadFile(file.body.presignedUrl)
-          if (file.body.status === 'failed') Swal.fire('error', local.failed)
+          if (file.body.status === 'failed')
+            Swal.fire({
+              title: local.errorTitle,
+              text: local.failed,
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           setIsLoading(false)
         } else {
           setTimeout(() => getExcelPoll(func, id, pollStart), 5000)
@@ -156,7 +173,12 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
       }
     } else {
       setIsLoading(false)
-      Swal.fire('error', 'TimeOut')
+      Swal.fire({
+        title: local.errorTitle,
+        text: local.timeOut,
+        confirmButtonText: local.confirmationText,
+        icon: 'error',
+      })
     }
   }
   const getExcelFile = async (func, pollFunc) => {
@@ -168,7 +190,12 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
     if (res.status === 'success') {
       if (!res.body) {
         setIsLoading(false)
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         setIsLoading(true)
         const pollStart = new Date().valueOf()
@@ -200,7 +227,7 @@ export const CustomerReportsTab: FunctionComponent<CustomerReportsTabProps> = ({
           {PDF_LIST.map((pdf, index) => {
             return (
               !pdf.hide && (
-                <Can I={pdf.key} a="report" key={pdf.key}>
+                <Can I={pdf.key} a={pdf.serviceKey ?? 'report'} key={pdf.key}>
                   <Card key={pdf.key}>
                     <Card.Body>
                       <div className="d-flex justify-content-between font-weight-bold align-items-center">

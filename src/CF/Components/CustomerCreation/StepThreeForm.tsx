@@ -65,7 +65,12 @@ export const StepThreeForm = (props: any) => {
       return res.body.data
     }
     setLoanOfficers([])
-    Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    Swal.fire({
+      title: local.errorTitle,
+      text: getErrorMessage(res.error.error),
+      icon: 'error',
+      confirmButtonText: local.confirmationText,
+    })
     return []
   }
   async function getConfig(branch) {
@@ -78,7 +83,12 @@ export const StepThreeForm = (props: any) => {
       )
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(resGeo.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(resGeo.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   useEffect(() => {

@@ -88,7 +88,12 @@ class SupervisionsProfile extends Component<
       }
     } else {
       this.setState({ loading: false })
-      Swal.fire('Error!', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+      })
     }
   }
 

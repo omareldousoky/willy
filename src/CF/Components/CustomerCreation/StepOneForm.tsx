@@ -59,7 +59,12 @@ export const StepOneForm = (props: any) => {
     if (resGov.status === 'success') {
       setGovernorates(resGov.body.governorates)
     } else {
-      Swal.fire('Error !', getErrorMessage(resGov.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(resGov.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   const editMobilePermission =
@@ -78,7 +83,12 @@ export const StepOneForm = (props: any) => {
       )
       setLoading(false)
     } else {
-      Swal.fire('Error !', getErrorMessage(limitRes.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(limitRes.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       setLoading(false)
     }
   }
@@ -183,11 +193,12 @@ export const StepOneForm = (props: any) => {
                         setFieldValue('gender', getGenderFromNationalId(value))
                       } else {
                         setLoading(false)
-                        Swal.fire(
-                          'Error !',
-                          getErrorMessage(res.error.error),
-                          'error'
-                        )
+                        Swal.fire({
+                          title: local.errorTitle,
+                          text: getErrorMessage(res.error.error),
+                          icon: 'error',
+                          confirmButtonText: local.confirmationText,
+                        })
                       }
                     }
                   }}

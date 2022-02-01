@@ -1,5 +1,6 @@
 import React from 'react'
 import './followUpStatment.scss'
+import * as local from 'Shared/Assets/ar.json'
 import {
   timeToArabicDate,
   numbersToArabic,
@@ -121,7 +122,8 @@ const FollowUpStatementPDF = (props: Props) => {
                       '-' +
                       individualInGroup.customer.businessActivity +
                       '-' +
-                      individualInGroup.customer.businessSpeciality}
+                      (individualInGroup.customer.businessSpeciality ||
+                        local.notApplicable)}
                   </td>
                   <td>{individualInGroup.customer.district}</td>
                 </tr>

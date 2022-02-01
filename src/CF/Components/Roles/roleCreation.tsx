@@ -90,7 +90,12 @@ class RoleCreation extends Component<Props, State> {
       })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -105,7 +110,12 @@ class RoleCreation extends Component<Props, State> {
       })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -153,7 +163,12 @@ class RoleCreation extends Component<Props, State> {
       })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -191,12 +206,22 @@ class RoleCreation extends Component<Props, State> {
         const res = await createRole(obj)
         if (res.status === 'success') {
           this.setState({ loading: false })
-          Swal.fire('success', local.userRoleCreated).then(() => {
+          Swal.fire({
+            title: local.success,
+            text: local.userRoleCreated,
+            confirmButtonText: local.confirmationText,
+            icon: 'success',
+          }).then(() => {
             this.props.history.push('/manage-accounts')
           })
         } else {
           this.setState({ loading: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+            Swal.fire({
+              title: local.errorTitle,
+              text: getErrorMessage(res.error.error),
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           )
         }
       } else {
@@ -211,17 +236,31 @@ class RoleCreation extends Component<Props, State> {
         const res = await editRole(obj)
         if (res.status === 'success') {
           this.setState({ loading: false })
-          Swal.fire('success', local.userRoleEdited).then(() => {
+          Swal.fire({
+            title: local.success,
+            text: local.userRoleEdited,
+            confirmButtonText: local.confirmationText,
+          }).then(() => {
             this.props.history.push('/manage-accounts')
           })
         } else {
           this.setState({ loading: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+            Swal.fire({
+              title: local.errorTitle,
+              text: getErrorMessage(res.error.error),
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           )
         }
       }
     } else {
-      Swal.fire('warning', local.mustSelectPermissions, 'warning')
+      Swal.fire({
+        title: local.warningTitle,
+        icon: 'warning',
+        text: local.mustSelectPermissions,
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

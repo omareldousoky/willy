@@ -1,5 +1,4 @@
-@media screen,
-print {
+@media screen, print {
   .cf-contract-container {
     -webkit-print-color-adjust: exact;
     page-break-after: always;
@@ -7,13 +6,14 @@ print {
     font-weight: bold;
     font-family: Arial;
     margin: 8px;
-
+    position: relative;
     .term-container {
       margin: 1em;
     }
 
     p {
       padding: 0 !important;
+      page-break-inside: avoid;
     }
 
     ul,
@@ -26,6 +26,7 @@ print {
       text-align: center;
       font-weight: bolder;
       text-decoration: underline;
+      page-break-inside: avoid;
     }
 
     sub {
@@ -33,6 +34,10 @@ print {
       font-weight: bolder;
       margin: 2rem;
     }
+  }
+  .reposition {
+    top: 6mm;
+    page-break-after: always;
   }
 }
 

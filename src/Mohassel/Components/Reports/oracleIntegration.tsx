@@ -27,12 +27,21 @@ class OracleIntegration extends Component<{}, State> {
           loading: false,
         },
         () => {
-          Swal.fire('', local.oracleIntegrationSuccess, 'success')
+          Swal.fire({
+            text: local.oracleIntegrationSuccess,
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          })
         }
       )
     } else {
       this.setState({ loading: false })
-      Swal.fire('error', local.oracleIntegrationFail, 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: local.oracleIntegrationFail,
+        confirmButtonText: local.confirmationText,
+        icon: 'error',
+      })
       // TODO:lint: remove ??
       console.log(res)
     }

@@ -48,7 +48,11 @@ export const HalanLinkageModal = (props: HalanLinkageModalProps) => {
   const checkHalanLinkage = useCallback(async () => {
     if (!customer?._id) {
       hideModal()
-      Swal.fire('Error !', getErrorMessage(''))
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(''),
+        confirmButtonText: local.confirmationText,
+      })
       return
     }
     const res = await checkLinkage(customer._id)
@@ -58,11 +62,12 @@ export const HalanLinkageModal = (props: HalanLinkageModalProps) => {
       setCheckResponse(response)
     } else {
       hideModal()
-      Swal.fire(
-        'Error !',
-        getErrorMessage((res.error as Record<string, string>).error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage((res.error as Record<string, string>).error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }, [customer, hideModal])
 
@@ -93,7 +98,12 @@ export const HalanLinkageModal = (props: HalanLinkageModalProps) => {
     })
     if (res.status === 'success') {
       hideModal()
-      Swal.fire('success', local.userLinkedSuccessfully)
+      Swal.fire({
+        title: local.success,
+        text: local.userLinkedSuccessfully,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      })
     } else {
       setGeneralError(
         getErrorMessage((res.error as Record<string, string>).error)
@@ -105,7 +115,12 @@ export const HalanLinkageModal = (props: HalanLinkageModalProps) => {
     const res = await removeLinkage(customer?._id || '')
     if (res.status === 'success') {
       hideModal()
-      Swal.fire('success', local.userUnlinkedSuccessfully)
+      Swal.fire({
+        title: local.success,
+        text: local.userUnlinkedSuccessfully,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      })
     } else {
       setGeneralError(
         getErrorMessage((res.error as Record<string, string>).error)

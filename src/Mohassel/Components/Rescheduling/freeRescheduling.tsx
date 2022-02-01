@@ -64,16 +64,6 @@ class FreeRescheduling extends Component<Props, State> {
         key: 'installmentResponse',
         render: (data) => data.installmentResponse,
       },
-      // {
-      //     title: local.principalPaid,
-      //     key: "principalPaid",
-      //     render: data => data.principalPaid
-      // },
-      // {
-      //     title: local.feesPaid,
-      //     key: "feesPaid",
-      //     render: data => data.feesPaid
-      // },
       {
         title: local.dateOfPayment,
         key: 'dateOfPayment',
@@ -115,10 +105,19 @@ class FreeRescheduling extends Component<Props, State> {
       this.setState({
         installmentsAfterRescheduling: res.body.installments,
       })
-      Swal.fire('', local.loanFreeReschedulingTestSuccess, 'success')
+      Swal.fire({
+        text: local.loanFreeReschedulingTestSuccess,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -165,12 +164,19 @@ class FreeRescheduling extends Component<Props, State> {
     const res = await freeRescheduling(this.props.application._id, obj)
     if (res.status === 'success') {
       this.setState({ loading: false })
-      Swal.fire('', local.loanFreeReschedulingSuccess, 'success').then(() =>
-        window.location.reload()
-      )
+      Swal.fire({
+        icon: 'success',
+        text: local.loanFreeReschedulingSuccess,
+        confirmButtonText: local.confirmationText,
+      }).then(() => window.location.reload())
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -183,6 +189,7 @@ class FreeRescheduling extends Component<Props, State> {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: local.freeRescheduling,
+      cancelButtonText: local.cancel,
     }).then((result) => {
       if (result.value) {
         this.pushInstallments()

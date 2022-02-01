@@ -159,7 +159,12 @@ class PayInstallment extends Component<Props, State> {
       return res.body.data
     }
     this.setState({ employees: [] }, () =>
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     )
     return []
   }
@@ -383,7 +388,8 @@ class PayInstallment extends Component<Props, State> {
                         {formikBag.errors.truthDate}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    {this.props.penaltyAction !== 'cancel' && (
+                    {(this.props.penaltyAction !== 'cancel' ||
+                      this.props.paymentType === 'random') && (
                       <Form.Group as={Col} md={6} controlId="whoPaid">
                         <Form.Label
                           className="pr-0"

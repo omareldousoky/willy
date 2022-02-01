@@ -143,10 +143,19 @@ const LoanLimitModal: FunctionComponent<LoanLimitModalProps> = ({
 
     if (result.status === 'success') {
       hideModal()
-      await Swal.fire('', local.success, 'success')
+      await Swal.fire({
+        text: local.success,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      })
       onSuccess()
     } else {
-      Swal.fire(local.error, getErrorMessage(result.error.error), 'error')
+      Swal.fire({
+        title: local.error,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(result.error.error),
+        icon: 'error',
+      })
     }
   }
 

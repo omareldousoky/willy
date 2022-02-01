@@ -55,7 +55,13 @@ const List = ({
         customerType: 'company',
       })
     )
-    if (error) Swal.fire('error', getErrorMessage(error), 'error')
+    if (error)
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(error),
+        confirmButtonText: local.confirmationText,
+        icon: 'error',
+      })
   }
 
   useEffect(() => {
@@ -73,7 +79,13 @@ const List = ({
         customerType: 'company',
       })
     )
-    if (error) Swal.fire('error', getErrorMessage(error), 'error')
+    if (error)
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(error),
+        confirmButtonText: local.confirmationText,
+        icon: 'error',
+      })
   }, [])
   const companyActions: ActionWithIcon[] = [
     ...(type === 'LTS'

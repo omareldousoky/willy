@@ -59,13 +59,23 @@ class LoanStatusChange extends Component<
       })
       if (res.status === 'success') {
         this.setState({ loading: false })
-        Swal.fire('success', local.reviewSuccess).then(() => {
+        Swal.fire({
+          title: local.success,
+          text: local.reviewSuccess,
+          confirmButtonText: local.confirmationText,
+          icon: 'success',
+        }).then(() => {
           this.props.history.push('/track-loan-applications', {
             sme: this.state.application.customer.customerType === 'company',
           })
         })
       } else {
-        Swal.fire('error', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          confirmButtonText: local.confirmationText,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+        })
         this.setState({ loading: false })
       }
     } else if (status === 'unreview') {
@@ -75,13 +85,23 @@ class LoanStatusChange extends Component<
       })
       if (res.status === 'success') {
         this.setState({ loading: false })
-        Swal.fire('success', local.unreviewSuccess).then(() => {
+        Swal.fire({
+          title: local.success,
+          text: local.unreviewSuccess,
+          confirmButtonText: local.confirmationText,
+          icon: 'success',
+        }).then(() => {
           this.props.history.push('/track-loan-applications', {
             sme: this.state.application.customer.customerType === 'company',
           })
         })
       } else {
-        Swal.fire('error', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          confirmButtonText: local.confirmationText,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+        })
         this.setState({ loading: false })
       }
     } else if (status === 'reject') {
@@ -92,13 +112,23 @@ class LoanStatusChange extends Component<
       })
       if (res.status === 'success') {
         this.setState({ loading: false })
-        Swal.fire('success', local.rejectSuccess).then(() => {
+        Swal.fire({
+          title: local.success,
+          text: local.rejectSuccess,
+          confirmButtonText: local.confirmationText,
+          icon: 'success',
+        }).then(() => {
           this.props.history.push('/track-loan-applications', {
             sme: this.state.application.customer.customerType === 'company',
           })
         })
       } else {
-        Swal.fire('error', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          confirmButtonText: local.confirmationText,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+        })
         this.setState({ loading: false })
       }
     }
@@ -112,7 +142,12 @@ class LoanStatusChange extends Component<
       })
     } else {
       const err = res.error as Record<string, string>
-      Swal.fire('Error !', getErrorMessage(err.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(err.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -146,7 +181,11 @@ class LoanStatusChange extends Component<
         loading: false,
       })
     } else {
-      Swal.fire('', 'fetch error', 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: local.fetchError,
+        icon: 'error',
+      })
       this.setState({ loading: false })
     }
   }

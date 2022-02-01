@@ -81,6 +81,7 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
       from,
       url: 'loan',
       sort: 'issueDate',
+      branchId: props.branchId,
       type: currentLoanType,
       customerType: 'individual',
     }
@@ -90,7 +91,13 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
   }, [location.state?.sme])
 
   useEffect(() => {
-    if (error) Swal.fire('Error !', getErrorMessage(error), 'error')
+    if (error)
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
   }, [error])
 
   const getLoans = async () => {
@@ -298,15 +305,17 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
 
   return (
     <>
-      <HeaderWithCards
-        header={local.issuedLoans}
-        array={manageLoansTabs}
-        active={manageLoansTabs
-          .map((item) => {
-            return item.icon
-          })
-          .indexOf('issued-loans')}
-      />
+      {!props.hideTabs && (
+        <HeaderWithCards
+          header={local.issuedLoans}
+          array={manageLoansTabs}
+          active={manageLoansTabs
+            .map((item) => {
+              return item.icon
+            })
+            .indexOf('issued-loans')}
+        />
+      )}
       <Card className="main-card">
         <Loader type="fullsection" open={loading} />
         <Card.Body style={{ padding: 0 }}>

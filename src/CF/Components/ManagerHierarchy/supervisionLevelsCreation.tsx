@@ -65,7 +65,12 @@ export const SupervisionLevelsCreation: FunctionComponent<SupervisionLevelsCreat
         setGroups(data)
       }
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     setLoading(false)
   }
@@ -143,9 +148,18 @@ export const SupervisionLevelsCreation: FunctionComponent<SupervisionLevelsCreat
       }
       const res = await createOfficersGroups(createOfficersGroupsData)
       if (res.status === 'success') {
-        Swal.fire('Success', '', 'success').then(() => window.location.reload())
+        Swal.fire({
+          title: local.success,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => window.location.reload())
       } else {
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       }
     } else if (mode === 'edit') {
       const updateOfficersGroupsData = {
@@ -154,9 +168,18 @@ export const SupervisionLevelsCreation: FunctionComponent<SupervisionLevelsCreat
       }
       const res = await updateOfficersGroups(updateOfficersGroupsData, branchId)
       if (res.status === 'success') {
-        Swal.fire('Success', '', 'success').then(() => window.location.reload())
+        Swal.fire({
+          title: local.success,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => window.location.reload())
       } else {
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       }
     }
   }

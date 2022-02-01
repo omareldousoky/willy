@@ -40,11 +40,12 @@ class LtsOracleReviewing extends Component<{}, State> {
     if (res.status === 'success' && res.body) {
       this.setState({ data: res.body })
     } else {
-      Swal.fire(
-        'Error!',
-        getErrorMessage((res.error as Record<string, string>).error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage((res.error as Record<string, string>).error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     this.setState({ loading: false })
   }
@@ -55,11 +56,12 @@ class LtsOracleReviewing extends Component<{}, State> {
     if (res.status === 'success') {
       if (res.body) downloadFile(res.body?.presignedUrl)
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage((res.error as Record<string, string>).error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage((res.error as Record<string, string>).error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     this.setState({ loading: false })
   }
@@ -95,12 +97,12 @@ class LtsOracleReviewing extends Component<{}, State> {
                           className={`mx-5  text-${
                             file.status === 'created'
                               ? 'success'
-                              : file.status === 'queued'
+                              : file.status.toLowerCase() === 'processing'
                               ? 'warning'
                               : 'danger'
                           } `}
                         >
-                          {local[file.status]}
+                          {local[file.status.toLowerCase()]}
                         </span>
                         {file.status === 'created' && (
                           <span className="file-date-container mx-5">

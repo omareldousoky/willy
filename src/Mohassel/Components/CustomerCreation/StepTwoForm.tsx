@@ -80,7 +80,13 @@ export const StepTwoForm = (props: any) => {
     const resGov = await getGovernorates()
     if (resGov.status === 'success') {
       setGovernorates(resGov.body.governorates)
-    } else Swal.fire('Error !', getErrorMessage(resGov.error.error), 'error')
+    } else
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(resGov.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
 
     const resBS = await getBusinessSectors()
     if (resBS.status === 'success') {
@@ -88,7 +94,12 @@ export const StepTwoForm = (props: any) => {
       setBusinessSectors(resBS.body.sectors)
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(resBS.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(resBS.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -117,7 +128,7 @@ export const StepTwoForm = (props: any) => {
         <Col sm={12}>
           <Form.Group controlId="businessName">
             <Form.Label className="customer-form-label">
-              {local.businessName}
+              {local.businessName}*
             </Form.Label>
             <Form.Control
               type="text"
@@ -138,7 +149,7 @@ export const StepTwoForm = (props: any) => {
         <Col sm={12}>
           <Form.Group controlId="businessAddress">
             <Form.Label className="customer-form-label">
-              {local.businessAddress}
+              {local.businessAddress}*
             </Form.Label>
             <Form.Control
               type="text"
@@ -692,11 +703,12 @@ export const StepTwoForm = (props: any) => {
                     }
                   } else {
                     setLoading(false)
-                    Swal.fire(
-                      'Error !',
-                      getErrorMessage(res.error.error),
-                      'error'
-                    )
+                    Swal.fire({
+                      title: local.errorTitle,
+                      text: getErrorMessage(res.error.error),
+                      icon: 'error',
+                      confirmButtonText: local.confirmationText,
+                    })
                   }
                 }
               }}

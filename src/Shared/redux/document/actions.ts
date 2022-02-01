@@ -13,6 +13,7 @@ import {
   CLEAR_SELECTION_ARRAY,
   ADD_TO_SELECTION_ARRAY,
   REMOVE_FROM_SELECTION_ARRAY,
+  CLEAR_DOCUMENTS,
 } from './types'
 import { uploadDocument as customerUploadDocument } from '../../Services/APIs/customer/uploadDocument'
 import { uploadDocument as applicationUploadDocument } from '../../Services/APIs/loanApplication/uploadDocument'
@@ -303,5 +304,10 @@ export const RemoveFromSelectionArray = (key: string) => {
   return {
     type: REMOVE_FROM_SELECTION_ARRAY,
     payload: key,
+  }
+}
+export const clearDocuments = () => {
+  return {
+    type: CLEAR_DOCUMENTS,
   }
 }

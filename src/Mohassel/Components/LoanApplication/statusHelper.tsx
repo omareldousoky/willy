@@ -113,7 +113,11 @@ class StatusHelper extends Component<Props, State> {
         rejectionReasonValues: rejectionReasons.body.data,
       })
     } else {
-      Swal.fire('', local.searchError, 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: local.searchError,
+        icon: 'error',
+      })
     }
   }
 

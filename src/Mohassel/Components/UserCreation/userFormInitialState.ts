@@ -102,6 +102,7 @@ export const userCreationValidationStepOne = Yup.object().shape({
         () => false
       ),
       otherwise: Yup.number()
+        .typeError(local.nationalIdTypeError)
         .min(10000000000000, local.nationalIdLengthShouldBe14)
         .max(99999999999999, local.nationalIdLengthShouldBe14)
         .required(local.required),
@@ -166,6 +167,7 @@ export const editUserValidationStepOne = Yup.object().shape({
         () => false
       ),
       otherwise: Yup.number()
+        .typeError(local.nationalIdTypeError)
         .min(10000000000000, local.nationalIdLengthShouldBe14)
         .max(99999999999999, local.nationalIdLengthShouldBe14),
       // .required(local.required),

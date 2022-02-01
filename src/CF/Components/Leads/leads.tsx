@@ -234,7 +234,12 @@ class Leads extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('error', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+          })
       })
   }
 
@@ -249,7 +254,12 @@ class Leads extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('error', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+          })
       })
   }
 
@@ -415,12 +425,18 @@ class Leads extends Component<Props, State> {
               )
               if (inReviewStatusRes.status === 'success') {
                 this.props.setLoading(false)
-                Swal.fire('', local.changeState, 'success').then(() =>
-                  this.getLeadsCustomers()
-                )
+                Swal.fire({
+                  text: local.changeState,
+                  icon: 'success',
+                  confirmButtonText: local.confirmationText,
+                }).then(() => this.getLeadsCustomers())
               } else {
                 this.props.setLoading(false)
-                Swal.fire('', local.userRoleEditError, 'error')
+                Swal.fire({
+                  text: local.userRoleEditError,
+                  icon: 'error',
+                  confirmButtonText: local.confirmationText,
+                })
               }
             }
           } else {
@@ -449,12 +465,18 @@ class Leads extends Component<Props, State> {
       this.props.setLoading(false)
       this.setState({ rejectLeadModal: false })
 
-      Swal.fire('', local.changeState, 'success').then(() =>
-        this.getLeadsCustomers()
-      )
+      Swal.fire({
+        text: local.changeState,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => this.getLeadsCustomers())
     } else {
       this.props.setLoading(false)
-      Swal.fire('', local.userRoleEditError, 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: local.userRoleEditError,
+        icon: 'error',
+      })
     }
   }
 
@@ -468,17 +490,21 @@ class Leads extends Component<Props, State> {
     if (res.status === 'success') {
       this.props.setLoading(false)
       this.setState({ openLOModal: false })
-      Swal.fire(
-        '',
-        `${local.doneMoving} ${local.customerSuccess}`,
-        'success'
-      ).then(() => {
+      Swal.fire({
+        text: `${local.doneMoving} ${local.customerSuccess}`,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => {
         this.setState({ selectedLO: {}, selectedLead: {} })
         this.getLeadsCustomers()
       })
     } else {
       this.props.setLoading(false)
-      Swal.fire('', local.errorOnMovingCustomers, 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: local.errorOnMovingCustomers,
+        icon: 'error',
+      })
     }
   }
 
@@ -492,17 +518,21 @@ class Leads extends Component<Props, State> {
     if (res.status === 'success') {
       this.props.setLoading(false)
       this.setState({ openBranchModal: false })
-      Swal.fire(
-        '',
-        `${local.doneMoving} ${local.customerSuccess}`,
-        'success'
-      ).then(() => {
+      Swal.fire({
+        text: `${local.doneMoving} ${local.customerSuccess}`,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => {
         this.setState({ selectedBranch: {}, selectedLead: {} })
         this.getLeadsCustomers()
       })
     } else {
       this.props.setLoading(false)
-      Swal.fire('', local.errorOnMovingCustomers, 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: local.errorOnMovingCustomers,
+        icon: 'error',
+      })
     }
   }
 

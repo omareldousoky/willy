@@ -95,7 +95,12 @@ class ManualPayment extends Component<Props, State> {
       return res.body.data
     }
     this.setState({ employees: [] }, () =>
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     )
     return []
   }

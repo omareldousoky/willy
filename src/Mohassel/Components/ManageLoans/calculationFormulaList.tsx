@@ -77,7 +77,12 @@ class FormulaList extends Component<Props, State> {
       })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(formulas.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(formulas.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }

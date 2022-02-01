@@ -8,6 +8,7 @@ import * as local from 'Shared/Assets/ar.json'
 import HeaderWithCards from 'Shared/Components/HeaderWithCards/headerWithCards'
 import { getErrorMessage } from 'Shared/Services/utils'
 import { CRUDList, CrudOption } from 'Shared/Components/CRUDList/crudList'
+import { maxValue } from 'Shared/localUtils'
 import { manageLoanDetailsArray } from './manageLoanDetailsInitials'
 
 const LoanComments: FunctionComponent = () => {
@@ -26,7 +27,12 @@ const LoanComments: FunctionComponent = () => {
       setLoanComments(responseLoanComments.reverse())
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -42,11 +48,18 @@ const LoanComments: FunctionComponent = () => {
       getComments()
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
   const newLoanComment = async (name, activated) => {
+    if (name.length > 2000)
+      return Swal.fire(local.error, maxValue(2000), 'error')
     setLoading(true)
     const res = await addLoanComment({ name, activated })
     if (res.status === 'success') {
@@ -54,7 +67,12 @@ const LoanComments: FunctionComponent = () => {
       getComments()
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
