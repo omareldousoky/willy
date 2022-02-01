@@ -360,6 +360,7 @@ const Search: FunctionComponent<SearchProps> = ({
       searchQuery.customerBranchId = values.branchId
       delete searchQuery.branchId
     }
+    if (isProductUrl && !obj.type) delete searchQuery.financialLeasing
     if (resetSelectedItems) resetSelectedItems()
     search(searchQuery)
   }
