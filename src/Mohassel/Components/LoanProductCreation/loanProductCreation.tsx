@@ -132,7 +132,12 @@ class LoanProductCreation extends Component<Props, State> {
         product,
       })
     } else {
-      Swal.fire('error', getErrorMessage(princples.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(princples.error.error),
+        icon: 'error',
+      })
       this.setState({ loading: false })
     }
   }
@@ -146,7 +151,12 @@ class LoanProductCreation extends Component<Props, State> {
         loading: false,
       })
     } else {
-      Swal.fire('error', getErrorMessage(formulas.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(formulas.error.error),
+        icon: 'error',
+      })
       this.setState({ loading: false })
     }
   }
@@ -164,7 +174,12 @@ class LoanProductCreation extends Component<Props, State> {
         loading: false,
       })
     } else {
-      Swal.fire('error', getErrorMessage(product.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(product.error.error),
+        icon: 'error',
+      })
       this.setState({ loading: false })
     }
   }
@@ -176,14 +191,22 @@ class LoanProductCreation extends Component<Props, State> {
       const res = await editProduct(id, values)
       if (res.status === 'success') {
         this.setState({ loading: false })
-        Swal.fire('success', local.updateLoanProductPrincipalsSuccess).then(
-          () => {
-            this.props.history.push('/manage-loans/loan-products')
-          }
-        )
+        Swal.fire({
+          title: local.success,
+          text: local.updateLoanProductPrincipalsSuccess,
+          confirmButtonText: local.confirmationText,
+          icon: 'success',
+        }).then(() => {
+          this.props.history.push('/manage-loans/loan-products')
+        })
       } else {
         this.setState({ loading: false })
-        Swal.fire('error', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          confirmButtonText: local.confirmationText,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+        })
       }
     } else {
       this.setState({ loading: true })
@@ -197,11 +220,21 @@ class LoanProductCreation extends Component<Props, State> {
       const res = await createProduct(obj)
       if (res.status === 'success') {
         this.setState({ loading: false })
-        Swal.fire('success', local.loanProductCreated).then(() => {
+        Swal.fire({
+          title: local.success,
+          text: local.loanProductCreated,
+          confirmButtonText: local.confirmationText,
+          icon: 'success',
+        }).then(() => {
           this.props.history.push('/manage-loans/loan-products')
         })
       } else {
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
         this.setState({ loading: false })
       }
     }

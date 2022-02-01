@@ -1,25 +1,12 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
-import { Loader } from '../../../../Shared/Components/Loader'
-import { getApplicationLogs } from '../../../../Shared/Services/APIs/loanApplication/applicationLogs'
-import DynamicTable from '../../../../Shared/Components/DynamicTable/dynamicTable'
-import * as local from '../../../../Shared/Assets/ar.json'
-import {
-  getErrorMessage,
-  getDateAndTime,
-} from '../../../../Shared/Services/utils'
+import { Loader } from 'Shared/Components/Loader'
+import { getApplicationLogs } from 'Shared/Services/APIs/loanApplication/applicationLogs'
+import DynamicTable from 'Shared/Components/DynamicTable/dynamicTable'
+import * as local from 'Shared/Assets/ar.json'
+import { getErrorMessage, getDateAndTime } from 'Shared/Services/utils'
+import { ActionLogProps, ActionLogState } from './types'
 
-interface Props {
-  id: string
-}
-
-interface State {
-  loading: boolean
-  data: any
-  from: number
-  size: number
-  totalCount: number
-}
 const mappers = [
   {
     title: local.action,
@@ -31,28 +18,14 @@ const mappers = [
     key: 'authorName',
     render: (data) => (data.trace?.userName ? data.trace.userName : ''),
   },
-  {
-    title: local.authorId,
-    key: 'authorId',
-    render: (data) => (data.trace?.by ? data.trace.by : ''),
-  },
+
   {
     title: local.createdAt,
     key: 'createdAt',
     render: (data) => (data.trace?.at ? getDateAndTime(data.trace.at) : ''),
   },
-  // {
-  //   title: local.customerId,
-  //   key: "customerId",
-  //   render: data => data.customerId
-  // },
-  // {
-  //     title: local.customerBranchId,
-  //     key: "customerBranchId",
-  //     render: data => data.customerBranchId
-  //   },
 ]
-class ActionLogs extends Component<Props, State> {
+class ActionsLogs extends Component<ActionLogProps, ActionLogState> {
   constructor(props) {
     super(props)
     this.state = {
@@ -79,7 +52,12 @@ class ActionLogs extends Component<Props, State> {
       })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -107,4 +85,4 @@ class ActionLogs extends Component<Props, State> {
     )
   }
 }
-export default ActionLogs
+export default ActionsLogs

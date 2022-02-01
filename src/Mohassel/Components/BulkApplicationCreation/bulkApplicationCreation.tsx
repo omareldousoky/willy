@@ -219,7 +219,12 @@ class BulkApplicationCreation extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       })
   }
 
@@ -233,7 +238,12 @@ class BulkApplicationCreation extends Component<Props, State> {
     }
     this.props.search(query).then(() => {
       if (this.props.error)
-        Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(this.props.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
     })
   }
 
@@ -250,12 +260,18 @@ class BulkApplicationCreation extends Component<Props, State> {
     if (res.status === 'success') {
       this.props.setLoading(false)
       this.setState({ selectedApplications: [], checkAll: false })
-      Swal.fire('', local.bulkLoanCreated, 'success').then(() =>
-        this.getApplications()
-      )
+      Swal.fire({
+        text: local.bulkLoanCreated,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => this.getApplications())
     } else {
       this.props.setLoading(false)
-      Swal.fire('', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+      })
     }
   }
 

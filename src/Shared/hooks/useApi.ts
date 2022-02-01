@@ -10,7 +10,12 @@ export default function useApi(apiCall, params) {
     if (res.status === 'success') {
       setData(res.body)
     } else {
-      Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.error,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+      })
     }
   }
 

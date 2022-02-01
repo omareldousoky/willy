@@ -88,7 +88,12 @@ const iscoreField = ({
                 style={{ cursor: 'pointer', padding: 10 }}
                 onClick={() =>
                   error
-                    ? Swal.fire(local.error, error, 'error')
+                    ? Swal.fire({
+                        title: local.errorTitle,
+                        confirmButtonText: local.confirmationText,
+                        text: error,
+                        icon: 'error',
+                      })
                     : getIscore(customerDetails)
                 }
               >
@@ -325,7 +330,7 @@ export const getCustomerInfo = ({
     },
     {
       fieldTitle: local.birthDate,
-      fieldData: (birthDate && timeToArabicDate(birthDate, false)) || '',
+      fieldData: timeToArabicDate(birthDate || 0, false),
       showFieldCondition: true,
     },
     {

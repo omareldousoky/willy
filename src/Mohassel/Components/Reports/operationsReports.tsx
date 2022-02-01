@@ -222,6 +222,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           local: 'عملاء محظورين',
           inputs: ['branches'],
           permission: 'getBlockedCustomers',
+          serviceKey: 'report-2',
           hidePdf: true,
         },
       ],
@@ -287,7 +288,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     if (res.status === 'success') {
       if (!res.body || !Object.keys(res.body).length) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         this.setState(
           {
@@ -301,11 +307,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       }
     } else {
       this.setState({ loading: false })
-      Swal.fire(
-        'Error !',
-        getErrorMessage((res.error as Record<string, string>).error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage((res.error as Record<string, string>).error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -317,7 +324,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         if (['created', 'failed'].includes(file.body.status)) {
           if (file.body.status === 'created')
             downloadFile(file.body.presignedUrl)
-          if (file.body.status === 'failed') Swal.fire('error', local.failed)
+          if (file.body.status === 'failed')
+            Swal.fire({
+              title: local.errorTitle,
+              text: local.failed,
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           this.setState({
             showModal: false,
             loading: false,
@@ -331,7 +344,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       }
     } else {
       this.setState({ loading: false })
-      Swal.fire('error', 'TimeOut')
+      Swal.fire({
+        title: local.errorTitle,
+        text: local.timeOut,
+        confirmButtonText: local.confirmationText,
+        icon: 'error',
+      })
     }
   }
 
@@ -357,7 +375,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     if (res.status === 'success') {
       if (!res.body) {
         this.setState({ loading: false })
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else {
         this.setState({ loading: true })
         const pollStart = new Date().valueOf()

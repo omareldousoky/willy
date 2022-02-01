@@ -5,6 +5,7 @@ import { theme } from '../../../Shared/theme'
 import { Loader } from '../../../Shared/Components/Loader'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { getGovernorates } from '../../../Shared/Services/APIs/config'
+import local from '../../../Shared/Assets/ar.json'
 
 interface State {
   governoratesOptions: any[]
@@ -56,7 +57,13 @@ export default class Governorates extends React.Component<Props, State> {
         {
           governorate: { label: this.props.values.governorate, value: 0 },
         },
-        () => Swal.fire('Error !', getErrorMessage(resGov.error.error), 'error')
+        () =>
+          Swal.fire({
+            title: local.errorTitle,
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(resGov.error.error),
+            icon: 'error',
+          })
       )
     }
     this.setState({ loading: false })

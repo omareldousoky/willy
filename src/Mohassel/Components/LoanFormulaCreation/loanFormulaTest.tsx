@@ -80,7 +80,12 @@ class FormulaTest extends Component<Props, State> {
         loading: false,
       })
     } else {
-      Swal.fire('error', getErrorMessage(formulas.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(formulas.error.error),
+        icon: 'error',
+      })
       this.setState({ loading: false })
     }
   }
@@ -113,9 +118,19 @@ class FormulaTest extends Component<Props, State> {
         loading: false,
         result: { result: res.body.data, formulaName },
       })
-      Swal.fire('success', local.formulaTested)
+      Swal.fire({
+        title: local.success,
+        text: local.formulaTested,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      })
     } else {
-      Swal.fire('error', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+      })
       this.setState({ loading: false })
     }
   }

@@ -435,7 +435,8 @@ export const iscoreDate = (date: any) => {
 
 export const getDateString = (date: any) => {
   return new Date(
-    new Date(date).getTime() - new Date(date).getTimezoneOffset() * 60000
+    new Date(date || 0).getTime() -
+      new Date(date || 0).getTimezoneOffset() * 60000
   )
     .toISOString()
     .split('T')[0]
@@ -505,7 +506,12 @@ export const downloadAsZip = async (
         await saveAs(content, folderName)
       })
   } catch (error) {
-    Swal.fire('error', "Can't Download you folder")
+    Swal.fire({
+      title: local.errorTitle,
+      text: local.downloadFolderError,
+      icon: 'error',
+      confirmButtonText: local.confirmationText,
+    })
     console.log(error) // this log is for purpose
   }
 }
@@ -780,7 +786,12 @@ export const DownloadAsCsv = async (name: string, data: string) => {
 }
 
 export const errorResponseHandler = (error: string) =>
-  Swal.fire('Error !', getErrorMessage(error), 'error')
+  Swal.fire({
+    title: local.errorTitle,
+    text: getErrorMessage(error),
+    icon: 'error',
+    confirmButtonText: local.confirmationText,
+  })
 
 export const formatMoney = (money: string | number) => {
   const moneyNumber = Number(money)

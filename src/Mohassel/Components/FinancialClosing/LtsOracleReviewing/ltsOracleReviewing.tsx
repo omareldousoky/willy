@@ -40,11 +40,12 @@ class LtsOracleReviewing extends Component<{}, State> {
     if (res.status === 'success' && res.body) {
       this.setState({ data: res.body })
     } else {
-      Swal.fire(
-        'Error!',
-        getErrorMessage((res.error as Record<string, string>).error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage((res.error as Record<string, string>).error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     this.setState({ loading: false })
   }
@@ -55,11 +56,12 @@ class LtsOracleReviewing extends Component<{}, State> {
     if (res.status === 'success') {
       if (res.body) downloadFile(res.body?.presignedUrl)
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage((res.error as Record<string, string>).error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage((res.error as Record<string, string>).error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     this.setState({ loading: false })
   }

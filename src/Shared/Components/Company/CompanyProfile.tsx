@@ -43,15 +43,17 @@ export interface CompanyProfileProps {
 }
 const getCustomerCategorizationRating = async (
   id: string,
-  setRating: (rating: Array<CustomerScore>) => void
+  setRating: (rating: Array<CustomerScore>) => void,
+  setLoading: (loading: boolean) => void
 ) => {
+  setLoading(true)
   const res = await getCustomerCategorization({ customerId: id })
-  if (res.status === 'success' && res.body?.customerScores !== undefined) {
+  setLoading(false)
+  if (res.status === 'success' && res.body?.customerScores) {
     setRating(res.body?.customerScores)
-  } else {
-    setRating([])
   }
 }
+
 export const CompanyProfile = () => {
   const [ratings, setRatings] = useState<Array<CustomerScore>>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -91,7 +93,12 @@ export const CompanyProfile = () => {
       setIsLoading(false)
     } else {
       setIsLoading(false)
-      Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(iScores.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   const getCachediScores = async (array: string[]) => {
@@ -104,7 +111,12 @@ export const CompanyProfile = () => {
       setIsLoading(false)
     } else {
       setIsLoading(false)
-      Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(iScores.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   const getCustomerIscore = async (data) => {
@@ -134,7 +146,12 @@ export const CompanyProfile = () => {
       setIsLoading(false)
     } else {
       setIsLoading(false)
-      Swal.fire('Error !', getErrorMessage(iScore.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(iScore.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   function mapEntitledToSignToCustomer({
@@ -172,12 +189,16 @@ export const CompanyProfile = () => {
       setIsLoading(false)
     } else {
       setIsLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   useEffect(() => {
     getCompanyDetails()
-    getCustomerCategorizationRating(location.state.id, setRatings)
   }, [])
 
   const tabsData: TabDataProps = {
@@ -348,16 +369,21 @@ export const CompanyProfile = () => {
           })
           if (res.status === 'success') {
             setIsLoading(false)
-            Swal.fire(
-              '',
-              blocked?.isBlocked === true
-                ? local.customerUnblockedSuccessfully
-                : local.customerBlockedSuccessfully,
-              'success'
-            ).then(() => window.location.reload())
+            Swal.fire({
+              text:
+                blocked?.isBlocked === true
+                  ? local.customerUnblockedSuccessfully
+                  : local.customerBlockedSuccessfully,
+              icon: 'success',
+              confirmButtonText: local.confirmationText,
+            }).then(() => window.location.reload())
           } else {
             setIsLoading(false)
-            Swal.fire('', local.searchError, 'error')
+            Swal.fire({
+              confirmButtonText: local.confirmationText,
+              text: local.searchError,
+              icon: 'error',
+            })
           }
         }
       })
@@ -483,7 +509,16 @@ export const CompanyProfile = () => {
           loading={isLoading}
           tabs={tabs}
           activeTab={activeTab}
-          setActiveTab={(stringKey) => changeActiveTab(stringKey)}
+          setActiveTab={(stringKey) => {
+            if (stringKey === 'customerScore') {
+              getCustomerCategorizationRating(
+                location.state.id,
+                setRatings,
+                setIsLoading
+              )
+            }
+            changeActiveTab(stringKey)
+          }}
           tabsData={tabsData}
         />
         {showCFLimitModal && company && (

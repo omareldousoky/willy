@@ -60,7 +60,12 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
       }
       setLoading(false)
     } else {
-      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(results.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       setLoading(false)
     }
   }
@@ -74,13 +79,14 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
       const errorMessage2 = ''
       if (targetGuarantor.body.customer.blocked.isBlocked === true) {
         errorMessage1 = local.theCustomerIsBlocked
-        Swal.fire(
-          'error',
-          `<span>${errorMessage1}  ${
+        Swal.fire({
+          title: local.errorTitle,
+          html: `<span>${errorMessage1}  ${
             errorMessage1 ? `<br/>` : ''
           } ${errorMessage2}</span>`,
-          'error'
-        )
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       } else {
         const newGuarantor = {
           ...targetGuarantor.body.customer,
@@ -89,11 +95,12 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
         setSelectedGuarantor(newGuarantor)
       }
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(targetGuarantor.error.error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(targetGuarantor.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     setLoading(false)
   }
@@ -111,12 +118,19 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
       const res = await addGuarantorsToCustomer(obj)
       if (res.status === 'success') {
         setLoading(false)
-        Swal.fire('', local.success, 'success').then(() =>
-          window.location.reload()
-        )
+        Swal.fire({
+          text: local.success,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => window.location.reload())
       } else {
         setLoading(false)
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       }
     }
   }
@@ -143,17 +157,20 @@ export const GuarantorDetails = (props: CFGuarantorDetailsProps) => {
           guarantorIds: ids,
         })
         if (guarantorToRemove.status === 'success') {
-          Swal.fire(local.guarantorRemovedSuccessfully, '', 'success').then(
-            () => {
-              window.location.reload()
-            }
-          )
+          Swal.fire({
+            text: local.guarantorRemovedSuccessfully,
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          }).then(() => {
+            window.location.reload()
+          })
         } else {
-          Swal.fire(
-            'Error !',
-            getErrorMessage(guarantorToRemove.error.error),
-            'error'
-          )
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(guarantorToRemove.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         }
         setLoading(false)
       }

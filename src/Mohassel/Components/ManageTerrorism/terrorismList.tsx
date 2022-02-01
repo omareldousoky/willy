@@ -130,7 +130,11 @@ class TerrorismList extends Component<Props, State> {
       url: 'terrorist',
     })
     if (this.props.error) {
-      Swal.fire('', getErrorMessage(this.props.error), 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(this.props.error),
+        icon: 'error',
+      })
     }
   }
 
@@ -141,11 +145,17 @@ class TerrorismList extends Component<Props, State> {
     formData.append('data', values.terrorismLListFile)
     const res = await uploadTerroristDocument(formData)
     if (res.status === 'success') {
-      Swal.fire('', local.uploadedSuccessfully, 'success').then(() =>
-        window.location.reload()
-      )
+      Swal.fire({
+        text: local.uploadedSuccessfully,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => window.location.reload())
     } else {
-      Swal.fire('', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+      })
     }
     this.props.setLoading(false)
   }

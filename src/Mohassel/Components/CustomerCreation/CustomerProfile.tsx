@@ -87,13 +87,15 @@ const tabs: Array<Tab> = [
 
 const getCustomerCategorizationRating = async (
   id: string,
-  setRating: (rating: Array<CustomerScore>) => void
+  setRating: (rating: CustomerScore[]) => void,
+  setLoading: (loading: boolean) => void
 ) => {
+  setLoading(true)
   const res = await getCustomerCategorization({ customerId: id })
-  if (res.status === 'success' && res.body?.customerScores !== undefined) {
+  setLoading(false)
+
+  if (res.status === 'success' && res.body?.customerScores) {
     setRating(res.body?.customerScores)
-  } else {
-    setRating([])
   }
 }
 
@@ -134,7 +136,12 @@ export const CustomerProfile = () => {
       setLoading(false)
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(iScores.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   const [geoArea, setGeoArea] = useState<any>()
@@ -151,7 +158,12 @@ export const CustomerProfile = () => {
       } else setGeoArea({ name: '-', active: false })
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(resGeo.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(resGeo.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   async function getCustomerDetails() {
@@ -167,7 +179,12 @@ export const CustomerProfile = () => {
       await getGeoArea(res.body.customer.geoAreaId, res.body.customer.branchId)
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   function setCustomerContractData(customer: Customer) {
@@ -185,8 +202,8 @@ export const CustomerProfile = () => {
 
   useEffect(() => {
     getCustomerDetails()
-    getCustomerCategorizationRating(location.state.id, setRatings)
   }, [])
+
   function getArRuralUrban(ruralUrban: string | undefined) {
     if (ruralUrban === 'rural') return local.rural
     return local.urban
@@ -236,16 +253,21 @@ export const CustomerProfile = () => {
           })
           if (res.status === 'success') {
             setLoading(false)
-            Swal.fire(
-              '',
-              blocked?.isBlocked === true
-                ? local.customerUnblockedSuccessfully
-                : local.customerBlockedSuccessfully,
-              'success'
-            ).then(() => window.location.reload())
+            Swal.fire({
+              text:
+                blocked?.isBlocked === true
+                  ? local.customerUnblockedSuccessfully
+                  : local.customerBlockedSuccessfully,
+              icon: 'success',
+              confirmButtonText: local.confirmationText,
+            }).then(() => window.location.reload())
           } else {
             setLoading(false)
-            Swal.fire('', local.searchError, 'error')
+            Swal.fire({
+              confirmButtonText: local.confirmationText,
+              text: local.searchError,
+              icon: 'error',
+            })
           }
         }
       })
@@ -274,7 +296,12 @@ export const CustomerProfile = () => {
       setLoading(false)
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(iScore.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(iScore.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   function setModalData(type) {
@@ -704,7 +731,16 @@ export const CustomerProfile = () => {
           loading={loading}
           tabs={tabs}
           activeTab={activeTab}
-          setActiveTab={(stringKey) => setActiveTab(stringKey)}
+          setActiveTab={(stringKey) => {
+            if (stringKey === 'customerScore') {
+              getCustomerCategorizationRating(
+                location.state.id,
+                setRatings,
+                setLoading
+              )
+            }
+            setActiveTab(stringKey)
+          }}
           tabsData={tabsData}
         />
         {showCFLimitModal && customerDetails && (

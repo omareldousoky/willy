@@ -93,10 +93,18 @@ export const Leads = () => {
       setIsLoading(false)
       setRejectLeadModal(false)
 
-      Swal.fire('', local.changeState, 'success').then(() => searchLeads())
+      Swal.fire({
+        text: local.changeState,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => searchLeads())
     } else {
       setIsLoading(false)
-      Swal.fire('', local.userRoleEditError, 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: local.userRoleEditError,
+        icon: 'error',
+      })
     }
   }
   const updateLeadState = (
@@ -129,12 +137,18 @@ export const Leads = () => {
               )
               if (inReviewStatusRes.status === 'success') {
                 setIsLoading(false)
-                Swal.fire('', local.changeState, 'success').then(() =>
-                  searchLeads()
-                )
+                Swal.fire({
+                  text: local.changeState,
+                  icon: 'success',
+                  confirmButtonText: local.confirmationText,
+                }).then(() => searchLeads())
               } else {
                 setIsLoading(false)
-                Swal.fire('', local.userRoleEditError, 'error')
+                Swal.fire({
+                  confirmButtonText: local.confirmationText,
+                  text: local.userRoleEditError,
+                  icon: 'error',
+                })
               }
             }
           } else {
@@ -249,7 +263,13 @@ export const Leads = () => {
   }, [activeTab, size, from, selectedLead])
 
   useEffect(() => {
-    error && Swal.fire(local.error, getErrorMessage(error), 'error')
+    error &&
+      Swal.fire({
+        title: local.error,
+        text: getErrorMessage(error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
   }, [error])
 
   const currentTab = leadsTabs.filter(

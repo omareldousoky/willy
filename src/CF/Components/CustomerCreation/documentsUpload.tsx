@@ -60,7 +60,12 @@ class DocumentsUpload extends Component<Props, State> {
         documentTypes: response.body.documentTypes,
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(response.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(response.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     if (this.props.edit || this.props.view) {
       await this.props.getDocuments({
@@ -116,9 +121,10 @@ class DocumentsUpload extends Component<Props, State> {
               onChange={() => this.selectAllOptions()}
             />
           </div>
-          <Row className="flex-grow-1 justify-content-end spacing-document text-right">
-            <Col xs={4}>
+          <Row className="d-flex justify-content-end flex-grow-1 spacing-document text-right">
+            <Col xs={12} lg={10}>
               <Button
+                className="mr-2"
                 variant="secondary"
                 disabled={this.props.selectionArray.length <= 0}
                 onClick={async () => {
@@ -127,8 +133,6 @@ class DocumentsUpload extends Component<Props, State> {
                   this.setState({ loading: false })
                 }}
               >{`${local.print}(${this.props.selectionArray.length})`}</Button>
-            </Col>
-            <Col xs={4}>
               <Button
                 variant="primary"
                 disabled={this.props.selectionArray.length <= 0}
@@ -136,7 +140,7 @@ class DocumentsUpload extends Component<Props, State> {
                   this.setState({ loading: true })
                   await downloadAsZip(
                     this.props.selectionArray,
-                    `customer-${this.props.customerId}-${new Date().valueOf()}`
+                    `Customer-${this.props.customerId}-${new Date().valueOf()}`
                   )
                   this.setState({ loading: false })
                 }}

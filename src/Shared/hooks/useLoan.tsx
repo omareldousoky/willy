@@ -50,7 +50,13 @@ export default function useLoan(
   }))
 
   useEffect(() => {
-    if (error) Swal.fire(local.error, getErrorMessage(error), 'error')
+    if (error)
+      Swal.fire({
+        title: local.error,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(error),
+        icon: 'error',
+      })
   }, [error])
 
   const getLoans = () => {

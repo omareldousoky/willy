@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
-import { Loader } from '../../../Shared/Components/Loader'
-import * as local from '../../../Shared/Assets/ar.json'
+import { Loader } from '../Loader'
+import * as local from '../../Assets/ar.json'
 import {
   fetchOfficersProductivityReport,
   getOfficersProductivityReportById,
@@ -12,17 +12,18 @@ import {
 import {
   OfficersProductivityRequest,
   OfficersProductivityResponse,
-} from '../../../Shared/Models/OfficerProductivity/OfficersProductivityReport'
-import OfficersProductivity from '../../../Shared/Components/pdfTemplates/Operations/officersPercentPayment/officersProductivity/officersProductivity'
-import { ReportsList } from '../../../Shared/Components/ReportsList'
-import { CurrentHierarchiesSingleResponse } from '../../../Shared/Models/OfficerProductivity/OfficerProductivityReport'
-import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
+} from '../../Models/OfficerProductivity/OfficersProductivityReport'
+import OfficersProductivity from '../pdfTemplates/Operations/officersPercentPayment/officersProductivity/officersProductivity'
+import { ReportsList } from '../ReportsList'
+import { CurrentHierarchiesSingleResponse } from '../../Models/OfficerProductivity/OfficerProductivityReport'
+import ReportsModal from '../ReportsModal/reportsModal'
 
 interface State {
   data: any
   loading: boolean
   showModal: boolean
   dataToPrint?: OfficersProductivityResponse
+  disable?: boolean
 }
 class OfficersProductivityReports extends Component<{}, State> {
   constructor(props) {
@@ -31,6 +32,7 @@ class OfficersProductivityReports extends Component<{}, State> {
       loading: false,
       showModal: false,
       data: [],
+      disable: false,
     }
   }
 
@@ -52,7 +54,12 @@ class OfficersProductivityReports extends Component<{}, State> {
     this.setState({ loading: true })
     const res = await fetchOfficersProductivityReport(obj)
     if (res.status === 'success') {
-      Swal.fire('success', local.fileQueuedSuccess, 'success')
+      Swal.fire({
+        title: local.success,
+        text: local.fileQueuedSuccess,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      })
       this.setState(
         {
           loading: false,
@@ -64,7 +71,12 @@ class OfficersProductivityReports extends Component<{}, State> {
       )
     } else {
       this.setState({ loading: false })
-      Swal.fire('error', local.fileQueuedError, 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: local.fileQueuedError,
+        icon: 'error',
+      })
     }
   }
 
@@ -82,18 +94,28 @@ class OfficersProductivityReports extends Component<{}, State> {
   }
 
   async getFile(fileRequestId) {
+    this.setState({
+      disable: true,
+      loading: true,
+    })
     const res = await getOfficersProductivityReportById(fileRequestId)
     if (res.status === 'success') {
       this.setState(
         {
           loading: false,
           dataToPrint: res.body,
+          disable: false,
         },
         () => window.print()
       )
     } else {
       this.setState({ loading: false })
-      Swal.fire('error', local.searchError, 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: local.searchError,
+        icon: 'error',
+      })
     }
   }
 
@@ -118,6 +140,7 @@ class OfficersProductivityReports extends Component<{}, State> {
             <ReportsList
               list={this.state.data}
               onClickDownload={(itemId) => this.getFile(itemId)}
+              disabledProp={this.state.disable}
             />
           </Card.Body>
         </Card>

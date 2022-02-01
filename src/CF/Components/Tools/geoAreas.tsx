@@ -61,7 +61,12 @@ class GeoAreas extends Component<{}, State> {
       })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(branches.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(branches.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -88,11 +93,12 @@ class GeoAreas extends Component<{}, State> {
           loading: false,
         },
         () =>
-          Swal.fire(
-            'Error !',
-            getErrorMessage(branchAreas.error.error),
-            'error'
-          )
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(branchAreas.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       )
     }
   }
@@ -113,7 +119,12 @@ class GeoAreas extends Component<{}, State> {
       )
     } else
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
   }
 
@@ -133,7 +144,12 @@ class GeoAreas extends Component<{}, State> {
       )
     } else
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
   }
 

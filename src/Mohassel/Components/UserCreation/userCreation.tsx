@@ -129,7 +129,12 @@ class UserCreation extends Component<Props, State> {
       }
       this.setState({ step1: step1Data, step2: step2data, step3: step3data })
     } else {
-      Swal.fire('Error', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+      })
     }
   }
 
@@ -151,11 +156,12 @@ class UserCreation extends Component<Props, State> {
         rolesLabeled: labeldRoles,
       })
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(RolesAndBranches[0].error.error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(RolesAndBranches[0].error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
       this.setState({
         loading: false,
       })
@@ -171,11 +177,12 @@ class UserCreation extends Component<Props, State> {
         branchesLabeled: labeldBranches,
       })
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(RolesAndBranches[1].error.error),
-        'error'
-      )
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(RolesAndBranches[1].error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -274,11 +281,21 @@ class UserCreation extends Component<Props, State> {
     const res = await createUser({ user })
     this.setState({ loading: false })
     if (res.status === 'success') {
-      Swal.fire('success', local.userCreated).then(() => {
+      Swal.fire({
+        title: local.success,
+        text: local.userCreated,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      }).then(() => {
         this.props.history.goBack()
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -288,12 +305,22 @@ class UserCreation extends Component<Props, State> {
     const res = await editUser(user, id)
     if (res.status === 'success') {
       this.setState({ loading: false })
-      Swal.fire('success', local.userEdited).then(() => {
+      Swal.fire({
+        title: local.success,
+        text: local.userEdited,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      }).then(() => {
         this.props.history.goBack()
       })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }

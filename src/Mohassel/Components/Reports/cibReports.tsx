@@ -103,7 +103,12 @@ const CIBReports: FC = () => {
     if (res.status === 'success' && res.body) {
       setData(res.body[getReport.key] || [])
     } else {
-      Swal.fire('error', local.searchError, 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: local.searchError,
+        icon: 'error',
+      })
     }
     setLoading(false)
   }
@@ -134,10 +139,19 @@ const CIBReports: FC = () => {
     if (res.status === 'success') {
       if (!res.body) {
         setLoading(false)
-        Swal.fire('error', local.noResults)
+        Swal.fire({
+          title: local.errorTitle,
+          text: local.noResults,
+          confirmButtonText: local.confirmationText,
+          icon: 'error',
+        })
       } else if (res.body.status === 'queued') {
         setLoading(false)
-        await Swal.fire('', local.fileQueuedSuccess, 'success')
+        await Swal.fire({
+          text: local.fileQueuedSuccess,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        })
         getCibReports()
       }
     } else {
@@ -166,9 +180,11 @@ const CIBReports: FC = () => {
     if (res.status === 'success') {
       setLoading(false)
       if (res.body.status && res.body.status === 'processing') {
-        Swal.fire('', local.fileQueuedSuccess, 'success').then(() =>
-          getCibReports()
-        )
+        Swal.fire({
+          text: local.fileQueuedSuccess,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => getCibReports())
       } else {
         const link = document.createElement('a')
         link.href = res.body.url
@@ -179,7 +195,11 @@ const CIBReports: FC = () => {
       }
     } else {
       setLoading(false)
-      Swal.fire('', local.fileQueuedError, 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: local.fileQueuedError,
+        icon: 'error',
+      })
     }
   }
 
@@ -196,7 +216,11 @@ const CIBReports: FC = () => {
       downloadFile(res.body.url)
     } else {
       setLoading(false)
-      Swal.fire('', errorMessages.doc_read_failed.ar, 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: errorMessages.doc_read_failed.ar,
+        icon: 'error',
+      })
     }
   }
 

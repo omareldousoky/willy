@@ -30,7 +30,12 @@ const VendorSettlementSearch: FunctionComponent<{
     if (res.status === 'success') {
       setVendors(res.body.data)
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   async function getLastSettlementDate(merchantId: string) {
@@ -40,7 +45,12 @@ const VendorSettlementSearch: FunctionComponent<{
     if (res.status === 'success') {
       setLatestSettledAt(res.body.latestSettlementDate ?? 0)
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
   useEffect(() => {

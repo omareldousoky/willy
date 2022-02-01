@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
 import local from '../../../Shared/Assets/ar.json'
-import { maxValue } from '../../../Shared/localUtils'
+import { maxValue, minValue } from '../../../Shared/localUtils'
 import {
   endOfDayValue,
   timeToDateyyymmdd,
@@ -59,7 +59,7 @@ endOfDay.setHours(23, 59, 59, 59)
 export const companyCreationValidationStepOne = Yup.object().shape({
   businessName: Yup.string()
     .trim()
-    .max(100, local.maxLength100)
+    .max(200, maxValue(200))
     .required(local.required),
   businessAddress: Yup.string()
     .trim()
@@ -103,7 +103,7 @@ export const companyCreationValidationStepOne = Yup.object().shape({
   }),
   governorate: Yup.string().required(local.required),
   initialConsumerFinanceLimit: Yup.number()
-    .min(0)
+    .min(0, minValue(0))
     .max(2000000, maxValue(2000000)),
   mobilePhoneNumber: Yup.string().when('initialConsumerFinanceLimit', {
     is: (initialConsumerFinanceLimit) => initialConsumerFinanceLimit > 0,

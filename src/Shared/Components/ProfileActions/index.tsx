@@ -16,7 +16,7 @@ export const ProfileActions = ({ actions }: ProfileActionsProps) => {
           permission && (
             <Button
               variant="default"
-              key={index}
+              key={`${title}-${index}`}
               className="profile-action-btn"
               onClick={onActionClick}
             >

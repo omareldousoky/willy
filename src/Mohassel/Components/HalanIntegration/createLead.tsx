@@ -24,12 +24,18 @@ export const CreateLead: React.FC = () => {
     const res = await createLead(values)
     if (res.status === 'success') {
       setLoading(false)
-      Swal.fire('', doneSuccessfully('createLead'), 'success').then(() =>
-        history.goBack()
-      )
+      Swal.fire({
+        text: doneSuccessfully('createLead'),
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => history.goBack())
     } else {
       setLoading(false)
-      Swal.fire('', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+      })
     }
   }
 
@@ -39,7 +45,11 @@ export const CreateLead: React.FC = () => {
     if (res.status === 'success') {
       setMaxLimit(res.body.maxIndividualPrincipal)
     } else {
-      Swal.fire('', res.error.error, 'error')
+      Swal.fire({
+        confirmButtonText: local.confirmationText,
+        text: res.error.error,
+        icon: 'error',
+      })
     }
     setLoading(false)
   }

@@ -69,7 +69,13 @@ export const LeadCreationForm: React.FC<LeadCreationFromProps> = ({
     const resGov = await getGovernorates()
     if (resGov.status === 'success') {
       setGovernorates(resGov.body.governorates)
-    } else Swal.fire('Error !', getErrorMessage(resGov.error.error), 'error')
+    } else
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(resGov.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
 
     const resBS = await getBusinessSectors()
     if (resBS.status === 'success') {
@@ -77,7 +83,12 @@ export const LeadCreationForm: React.FC<LeadCreationFromProps> = ({
       setBusinessSectors(resBS.body.sectors)
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(resBS.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(resBS.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
