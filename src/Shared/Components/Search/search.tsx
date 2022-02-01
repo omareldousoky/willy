@@ -438,7 +438,7 @@ const Search: FunctionComponent<SearchProps> = ({
   const financialLeasingCheck = (formikProps, index) => {
     return (
       <Col key={index} sm={6} style={{ marginTop: 20 }}>
-        <Form.Group className="row-nowrap" controlId="doubtful">
+        <Form.Group className="row-nowrap" controlId="financialLeasing">
           <Form.Check
             type="checkbox"
             name="financialLeasing"
