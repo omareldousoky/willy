@@ -11,12 +11,12 @@ export const ProfileActions = ({ actions }: ProfileActionsProps) => {
       {actions.map((action, index) => {
         const { title, permission, onActionClick, isLoading } = action
         return isLoading ? (
-          <Loader type="inline" open />
+          <Loader key={index} type="inline" open />
         ) : (
           permission && (
             <Button
               variant="default"
-              key={index}
+              key={`${title}-${index}`}
               className="profile-action-btn"
               onClick={onActionClick}
             >

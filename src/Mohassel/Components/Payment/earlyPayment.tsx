@@ -58,7 +58,7 @@ class EarlyPayment extends Component<Props, State> {
   getInstallmentsRemaining() {
     const installmentsRemaining: Array<number> = []
     this.props.installments.forEach((installment) => {
-      if (installment.status !== 'paid')
+      if (!['paid', 'rescheduled'].includes(installment.status))
         installmentsRemaining.push(installment.id)
     })
     return installmentsRemaining.toString()
@@ -79,7 +79,12 @@ class EarlyPayment extends Component<Props, State> {
       return res.body.data
     }
     this.setState({ employees: [] }, () =>
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     )
     return []
   }

@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 import { connect } from 'react-redux'
+import Col from 'react-bootstrap/Col'
+import print from '../../Utils/printIframe'
 import * as local from '../../Assets/ar.json'
 import DocumentUploader from '../documentUploader/documentUploader'
 import { Loader } from '../Loader'
@@ -12,6 +14,7 @@ import {
   getDocuments,
   addAllToSelectionArray,
   clearSelectionArray,
+  clearDocuments,
 } from '../../redux/document/actions'
 import { Image } from '../../redux/document/types'
 import { downloadAsZip, getErrorMessage } from '../../Services/utils'
@@ -28,6 +31,7 @@ interface Props {
   getDocuments: typeof getDocuments
   addAllToSelectionArray: typeof addAllToSelectionArray
   clearSelectionArray: typeof clearSelectionArray
+  clearDocuments: typeof clearDocuments
   edit: boolean
   view?: boolean
   loading: boolean
@@ -56,7 +60,12 @@ class DocumentsUploadComponent extends Component<Props, State> {
         documentTypes: response.body.documentTypes,
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(response.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(response.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     if (this.props.edit || this.props.view) {
       await this.props.getDocuments({
@@ -68,6 +77,7 @@ class DocumentsUploadComponent extends Component<Props, State> {
 
   componentWillUnmount() {
     this.props.clearSelectionArray()
+    this.props.clearDocuments()
   }
 
   selectAllOptions() {
@@ -97,12 +107,7 @@ class DocumentsUploadComponent extends Component<Props, State> {
           open={this.props.loading || this.state.loading}
         />
         <Row style={{ justifyContent: 'space-between' }}>
-          <div
-            style={{
-              padding: '0.75rem 1.25rem',
-              marginRight: '1rem',
-            }}
-          >
+          <div className="spacing-document">
             <Form.Check
               type="checkbox"
               id="check-all"
@@ -111,26 +116,32 @@ class DocumentsUploadComponent extends Component<Props, State> {
               onChange={() => this.selectAllOptions()}
             />
           </div>
-          <div
-            style={{
-              padding: '0.75rem 1.25rem',
-              marginRight: '1rem',
-            }}
-          >
-            <Button
-              style={{ width: '150px' }}
-              variant="primary"
-              disabled={!this.props.selectionArray.length}
-              onClick={async () => {
-                this.setState({ loading: true })
-                await downloadAsZip(
-                  this.props.selectionArray,
-                  `customer-${this.props.customerId}-${new Date().valueOf()}`
-                )
-                this.setState({ loading: false })
-              }}
-            >{`${local.download}(${this.props.selectionArray.length})`}</Button>
-          </div>
+          <Row className="d-flex justify-content-end flex-grow-1 spacing-document text-right">
+            <Col xs={12} lg={10}>
+              <Button
+                className="mr-2"
+                variant="secondary"
+                disabled={this.props.selectionArray.length <= 0}
+                onClick={async () => {
+                  this.setState({ loading: true })
+                  print(this.props.selectionArray)
+                  this.setState({ loading: false })
+                }}
+              >{`${local.print}(${this.props.selectionArray.length})`}</Button>
+              <Button
+                variant="primary"
+                disabled={this.props.selectionArray.length <= 0}
+                onClick={async () => {
+                  this.setState({ loading: true })
+                  await downloadAsZip(
+                    this.props.selectionArray,
+                    `Customer-${this.props.customerId}-${new Date().valueOf()}`
+                  )
+                  this.setState({ loading: false })
+                }}
+              >{`${local.download}(${this.props.selectionArray.length})`}</Button>
+            </Col>
+          </Row>
         </Row>
         {this.state.documentTypes.map((documentType: DocumentType, index) => {
           return (
@@ -156,6 +167,7 @@ const addDocumentToProps = (dispatch) => {
     addAllToSelectionArray: (images) =>
       dispatch(addAllToSelectionArray(images)),
     clearSelectionArray: () => dispatch(clearSelectionArray()),
+    clearDocuments: () => dispatch(clearDocuments()),
   }
 }
 const mapStateToProps = (state) => {

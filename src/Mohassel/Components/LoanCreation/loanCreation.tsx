@@ -119,7 +119,13 @@ class LoanCreation extends Component<
         )
         if (res.status === 'success') {
           this.setState({ installmentsData: res.body })
-        } else Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        } else
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       }
       const res = await getApplication(id)
       if (res.status === 'success') {
@@ -151,7 +157,12 @@ class LoanCreation extends Component<
         }
       } else {
         this.setState({ loading: false }, () => {
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         })
       }
     }
@@ -167,14 +178,23 @@ class LoanCreation extends Component<
       })
       if (res.status === 'success') {
         this.setState({ loading: false })
-        Swal.fire('', local.loanCreationSuccess, 'success').then(() =>
+        Swal.fire({
+          text: local.loanCreationSuccess,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() =>
           this.props.history.push('/track-loan-applications', {
             sme: this.state.customerData.customerType === 'company',
           })
         )
       } else {
         this.setState({ loading: false })
-        Swal.fire('error', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          confirmButtonText: local.confirmationText,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+        })
       }
     } else {
       const obj = {
@@ -187,20 +207,26 @@ class LoanCreation extends Component<
           { loading: false, print: true, receiptData: res.body.receipts },
           () => window.print()
         )
-        Swal.fire(
-          '',
-          local.loanIssuanceSuccess +
+        Swal.fire({
+          text:
+            local.loanIssuanceSuccess +
             `${local.withCode}` +
             res.body.loanApplicationKey,
-          'success'
-        ).then(() => {
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => {
           this.props.history.push('/track-loan-applications', {
             sme: this.state.customerData.customerType === 'company',
           })
         })
       } else {
         this.setState({ loading: false })
-        Swal.fire('error', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          confirmButtonText: local.confirmationText,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+        })
       }
     }
   }
@@ -217,7 +243,12 @@ class LoanCreation extends Component<
         this.setState({ installmentsData: res.body, loading: false })
       } else
         this.setState({ loading: false }, () => {
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         })
     }
   }

@@ -14,6 +14,14 @@ import {
 } from '../../../../Shared/Services/utils'
 import local from '../../../../Shared/Assets/ar.json'
 
+const formatMillionsTemp = (number: number) => {
+  const formatted = new Tafgeet(number, 'EGP').parse(' ')
+  const index = formatted.indexOf('مليون')
+  return formatted[index + 5] === ' '
+    ? formatted
+    : formatted.replace(/مليون/gi, 'مليون و ')
+}
+
 export const SmeLoanContract = ({ data, branchDetails }) => {
   return (
     <>
@@ -261,10 +269,7 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                         المقرض ) مبلغ وقدره
                         {`${numbersToArabic(
                           data.principal
-                        )} جنيه (${new Tafgeet(
-                          data.principal,
-                          'EGP'
-                        ).parse()})`}
+                        )} جنيه (${formatMillionsTemp(data.principal)})`}
                         نقدا او تحويل بنكي . ويعتبر توقيع الطرف الثانى على هذا
                         العقد بمثابه اقرارا نهائيا منه باستلام كامل مبلغ القرض.
                       </div>
@@ -277,10 +282,7 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                         بسداد اجمالي قيمة القرض البالغة
                         {`${numbersToArabic(
                           data.principal
-                        )} جنيه (${new Tafgeet(
-                          data.principal,
-                          'EGP'
-                        ).parse()})`}
+                        )} جنيه (${formatMillionsTemp(data.principal)})`}
                         وكافة المصروفات الادارية البالغه
                         {`${numbersToArabic(
                           data.applicationFeesRequired
@@ -302,14 +304,13 @@ export const SmeLoanContract = ({ data, branchDetails }) => {
                             (data.applicationFeesRequired
                               ? data.applicationFeesRequired
                               : 0)
-                        )} جنيه (${new Tafgeet(
+                        )} جنيه (${formatMillionsTemp(
                           data.installmentsObject.totalInstallments
                             .installmentSum +
                             (data.applicationFeesRequired
                               ? data.applicationFeesRequired
-                              : 0),
-                          'EGP'
-                        ).parse()})`}
+                              : 0)
+                        )})`}
                         ، يتم سداده علي عدد
                         {numbersToArabic(
                           data.installmentsObject.installments.length

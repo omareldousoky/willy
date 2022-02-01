@@ -1,0 +1,32 @@
+@media screen, print {
+  .comments-report {
+    font-size: 9px;
+    page-break-after: always;
+    font-family: Arial;
+    font-weight: 600;
+
+    .note {
+      word-break: break-all;
+    }
+
+    & table {
+      text-align: center;
+      width: 100%;
+      /* border-collapse: collapse; */
+    }
+
+    & .gray {
+      background-color: rgb(221, 219, 219);
+      -webkit-print-color-adjust: exact;
+    }
+
+    & .frame {
+      border: 0.5px solid black;
+    }
+  }
+}
+@media screen {
+  .comments-report {
+    display: none;
+  }
+}

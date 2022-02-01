@@ -45,7 +45,13 @@ export const LoanOfficersTransfers = () => {
     const res = await searchLoanOfficerLogs(newInput)
     if (res.status === 'success') {
       setLogsData({ ...res.body })
-    } else Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
+    } else
+      Swal.fire({
+        title: local.error,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+      })
     setIsLoading(false)
   }
 
@@ -62,7 +68,12 @@ export const LoanOfficersTransfers = () => {
       return res.body.data
     }
     setLoanOfficers([])
-    Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
+    Swal.fire({
+      title: local.error,
+      confirmButtonText: local.confirmationText,
+      text: getErrorMessage(res.error.error),
+      icon: 'error',
+    })
     return []
   }
   const getBranches = async (inputValue: string) => {
@@ -73,7 +84,12 @@ export const LoanOfficersTransfers = () => {
       return res.body.data
     }
     setBranches([])
-    Swal.fire(local.error, getErrorMessage(res.error.error), 'error')
+    Swal.fire({
+      title: local.error,
+      confirmButtonText: local.confirmationText,
+      text: getErrorMessage(res.error.error),
+      icon: 'error',
+    })
     return []
   }
 

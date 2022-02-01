@@ -119,7 +119,12 @@ class BranchesList extends Component<Props, State> {
         .search({ size: this.state.size, from: this.state.from, url: 'branch' })
         .then(() => {
           if (this.props.error)
-            Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+            Swal.fire({
+              title: local.errorTitle,
+              text: getErrorMessage(this.props.error),
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
         })
     } else {
       this.getBranchByID()
@@ -145,7 +150,12 @@ class BranchesList extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       })
   }
 

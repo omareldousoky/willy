@@ -105,11 +105,12 @@ export const UserDataForm = (props: Props) => {
                         )
                       } else {
                         setNationalIdLoading(false)
-                        Swal.fire(
-                          'Error !',
-                          getErrorMessage(res.error.error),
-                          'error'
-                        )
+                        Swal.fire({
+                          title: local.errorTitle,
+                          text: getErrorMessage(res.error.error),
+                          icon: 'error',
+                          confirmButtonText: local.confirmationText,
+                        })
                       }
                     }
                   }}
@@ -237,11 +238,12 @@ export const UserDataForm = (props: Props) => {
                   setDuplicateUserNameHR(res.body.data.userName)
                 } else {
                   setLoading(false)
-                  Swal.fire(
-                    'Error !',
-                    getErrorMessage(res.error.error),
-                    'error'
-                  )
+                  Swal.fire({
+                    title: local.errorTitle,
+                    text: getErrorMessage(res.error.error),
+                    icon: 'error',
+                    confirmButtonText: local.confirmationText,
+                  })
                 }
               }}
               onBlur={props.handleBlur}
@@ -331,11 +333,12 @@ export const UserDataForm = (props: Props) => {
                   props.setFieldValue('usernameChecker', res.body.data.exists)
                 } else {
                   setLoading(false)
-                  Swal.fire(
-                    'Error !',
-                    getErrorMessage(res.error.error),
-                    'error'
-                  )
+                  Swal.fire({
+                    title: local.errorTitle,
+                    text: getErrorMessage(res.error.error),
+                    icon: 'error',
+                    confirmButtonText: local.confirmationText,
+                  })
                 }
               }}
               onBlur={props.handleBlur}

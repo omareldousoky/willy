@@ -129,7 +129,12 @@ class LoanOfficersList extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       })
     this.setState({
       manageAccountTabs: manageAccountsArray(),
@@ -152,11 +157,19 @@ class LoanOfficersList extends Component<Props, State> {
     const res = await updateLoanOfficer(obj)
     if (res.status === 'success') {
       this.setState({ showModal: false })
-      Swal.fire('Success', local.updateLoanOfficerSuccess, 'success').then(() =>
-        window.location.reload()
-      )
+      Swal.fire({
+        title: local.success,
+        text: local.updateLoanOfficerSuccess,
+        confirmButtonText: local.confirmationText,
+        icon: 'success',
+      }).then(() => window.location.reload())
     } else {
-      Swal.fire('Error!', res.error.error, 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        confirmButtonText: local.confirmationText,
+        text: res.error.error,
+        icon: 'error',
+      })
     }
     this.props.setLoading(false)
   }
@@ -171,7 +184,12 @@ class LoanOfficersList extends Component<Props, State> {
       })
       .then(() => {
         if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(this.props.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       })
   }
 
@@ -341,11 +359,12 @@ class LoanOfficersList extends Component<Props, State> {
                                 )
                               } else {
                                 this.setState({ loadingInline: false })
-                                Swal.fire(
-                                  'Error !',
-                                  getErrorMessage(res.error.error),
-                                  'error'
-                                )
+                                Swal.fire({
+                                  title: local.errorTitle,
+                                  text: getErrorMessage(res.error.error),
+                                  icon: 'error',
+                                  confirmButtonText: local.confirmationText,
+                                })
                               }
                             }}
                             onBlur={formikProps.handleBlur}

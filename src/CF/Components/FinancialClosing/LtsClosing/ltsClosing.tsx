@@ -63,12 +63,19 @@ class LtsClosing extends Component<RouteComponentProps, State> {
     const res = await financialClosing({ closeDate })
     if (res.status === 'success') {
       this.setState({ loading: false })
-      Swal.fire('Success', '', 'success').then(() =>
-        this.props.history.push('/')
-      )
+      Swal.fire({
+        title: local.success,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => this.props.history.push('/'))
     } else {
       this.setState({ loading: false })
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

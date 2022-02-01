@@ -61,7 +61,7 @@
   },
   "internal_error": {
     "en": "Sorry, something went wrong. Please contact customer support.",
-    "ar": "عفوًا، حدث خطأ فني، برجاء التواصل مع خدمة العملاء."
+    "ar": "عفواً، حدث خطأ فني، برجاء التواصل مع خدمة العملاء."
   },
   "unauthorized": {
     "en": "You are not authorized to perform this action.",
@@ -505,7 +505,7 @@
   },
   "files_size_too_big": {
     "en": "Files uploaded are too big",
-    "ar": "عفوا الملفات المرفوعة اكبر من الحجم المسموح به"
+    "ar": "عفواً الملفات المرفوعة اكبر من الحجم المسموح به"
   },
   "cannot_early_pay_nano_loan": {
     "en": "Can't early pay nano loan",

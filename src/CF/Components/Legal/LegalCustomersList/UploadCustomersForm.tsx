@@ -73,7 +73,12 @@ const UploadLegalCustomers = ({
         onSubmit(true)
       }
     } else {
-      Swal.fire(local.error, getErrorMessage(response.error.error), 'error')
+      Swal.fire({
+        title: local.error,
+        confirmButtonText: local.confirmationText,
+        text: getErrorMessage(response.error.error),
+        icon: 'error',
+      })
     }
   }
 

@@ -18,7 +18,7 @@ export const customerCreationValidationStepOne = (
     CF: Yup.boolean().default(isCF),
     customerName: Yup.string()
       .trim()
-      .max(100, local.maxLength100)
+      .max(100, maxValue(100))
       .required(local.required)
       .matches(
         /^(?!.*?\s{2})([\u0621-\u064A\s]+){1,100}$/,
@@ -103,11 +103,11 @@ export const customerCreationValidationStepOne = (
           }
         )
         .required(local.required),
-      otherwise: Yup.number().min(0).max(200000, maxValue(200000)),
+      otherwise: Yup.number().min(0, minValue(0)).max(200000, maxValue(200000)),
     }),
     customerHomeAddress: Yup.string()
       .trim()
-      .max(500, "Can't be more than 500 characters")
+      .max(500, maxValue(500))
       .required(local.required),
     homePostalCode: Yup.string().min(5, local.minLength5),
     homePhoneNumber: Yup.string().min(10, local.minLength10),
@@ -134,11 +134,11 @@ export const customerCreationValidationStepOne = (
 export const customerCreationValidationStepTwo = Yup.object().shape({
   businessName: Yup.string()
     .trim()
-    .max(100, local.maxLength100)
+    .max(100, maxValue(100))
     .required(local.required),
   businessAddress: Yup.string()
     .trim()
-    .max(500, "Can't be more than 500 characters")
+    .max(500, maxValue(500))
     .required(local.required),
   governorate: Yup.string().trim(),
   district: Yup.string().trim(),

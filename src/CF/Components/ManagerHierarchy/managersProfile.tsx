@@ -2,20 +2,17 @@ import React, { Component, CSSProperties } from 'react'
 import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 import Swal from 'sweetalert2'
-import { Loader } from '../../../Shared/Components/Loader'
-import * as local from '../../../Shared/Assets/ar.json'
-import {
-  CardNavBar,
-  Tab,
-} from '../../../Shared/Components/HeaderWithCards/cardNavbar'
-import Can from '../../../Shared/config/Can'
-import { theme } from '../../../Shared/theme'
+import ManagersCreation from 'Shared/Components/managersCreation/ManagersCreation'
+import { Loader } from 'Shared/Components/Loader'
+import * as local from 'Shared/Assets/ar.json'
+import { CardNavBar, Tab } from 'Shared/Components/HeaderWithCards/cardNavbar'
+import Can from 'Shared/config/Can'
+import { theme } from 'Shared/theme'
 
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { getManagerHierarchy } from '../../../Mohassel/Services/APIs/ManagerHierarchy/getManagerHierarchy'
 
 import ability from '../../../Shared/config/ability'
-import ManagersCreation from './managersCreation'
 import { ManagerProfileProps, ManagerProfileState } from './types'
 import { BranchBasicsCard } from './branchBasicsCard'
 
@@ -93,7 +90,12 @@ class ManagerProfile extends Component<
         data: res.body.data,
       })
     } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
     this.setState({ loading: false })
   }

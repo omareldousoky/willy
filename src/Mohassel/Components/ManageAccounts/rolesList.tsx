@@ -50,7 +50,12 @@ class RolesList extends Component<RouteComponentProps, State> {
       })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -65,7 +70,7 @@ class RolesList extends Component<RouteComponentProps, State> {
             .map((item) => {
               return item.icon
             })
-            .indexOf('roles')}
+            .indexOf('role')}
         />
         <Card className="main-card">
           <Loader type="fullsection" open={this.state.loading} />

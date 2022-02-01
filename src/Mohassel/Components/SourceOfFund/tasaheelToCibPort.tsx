@@ -261,7 +261,12 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
       downloadTxtFile(res.body.loans, false, date)
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -278,12 +283,19 @@ const CibPortfolioSecuritization: FC<Props> = (props) => {
     const res = await changeSourceFundCibPortfolio(obj)
     if (res.status === 'success') {
       setLoading(false)
-      Swal.fire('', local.changeSourceFundSuccess, 'success').then(() =>
-        getLoans()
-      )
+      Swal.fire({
+        text: local.changeSourceFundSuccess,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => getLoans())
     } else {
       setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

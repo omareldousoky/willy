@@ -48,7 +48,12 @@ export const LoanApplicationCreationForm = (props: any) => {
       return res.body.data
     }
     setEnquirerOptions([])
-    Swal.fire('error', getErrorMessage(res.error.error), 'error')
+    Swal.fire({
+      title: local.errorTitle,
+      confirmButtonText: local.confirmationText,
+      text: getErrorMessage(res.error.error),
+      icon: 'error',
+    })
     return []
   }
 
@@ -67,7 +72,12 @@ export const LoanApplicationCreationForm = (props: any) => {
       return activeResearchers
     }
     setResearcherOptions([])
-    Swal.fire('error', getErrorMessage(res.error.error), 'error')
+    Swal.fire({
+      title: local.errorTitle,
+      confirmButtonText: local.confirmationText,
+      text: getErrorMessage(res.error.error),
+      icon: 'error',
+    })
     return []
   }
 
@@ -87,7 +97,12 @@ export const LoanApplicationCreationForm = (props: any) => {
       return res.body.data
     }
     setEmployees([])
-    Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    Swal.fire({
+      title: local.errorTitle,
+      text: getErrorMessage(res.error.error),
+      icon: 'error',
+      confirmButtonText: local.confirmationText,
+    })
     return []
   }
   useEffect(() => {

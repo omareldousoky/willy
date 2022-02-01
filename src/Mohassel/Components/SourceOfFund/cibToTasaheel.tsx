@@ -207,7 +207,12 @@ class CibToTasaheel extends Component<Props, State> {
       downloadTxtFile(res.body.loans, false, date)
     } else {
       this.props.setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -270,12 +275,19 @@ class CibToTasaheel extends Component<Props, State> {
     const res = await changeSourceFund(obj)
     if (res.status === 'success') {
       this.props.setLoading(false)
-      Swal.fire('', local.changeSourceFundSuccess, 'success').then(() =>
-        this.getLoans()
-      )
+      Swal.fire({
+        text: local.changeSourceFundSuccess,
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => this.getLoans())
     } else {
       this.props.setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 

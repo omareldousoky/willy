@@ -1,16 +1,16 @@
-@media screen,
-print {
+@media screen, print {
   .early-payment-receipt {
-    font-size: 12px;
+    font-size: 40px !important;
     font-weight: 600;
     color: #000;
     page-break-after: always;
-    width: 105mm;
+    width: 100%;
     padding: 20px;
 
     & tbody,
     .title {
       text-align: center;
+      font-size: 40px !important;
     }
 
     & table {
@@ -19,6 +19,7 @@ print {
 
     & .frame {
       border: 0.5px solid black;
+      font-size: 40px !important;
     }
   }
 }

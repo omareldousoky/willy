@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
+import { ActionsLog } from 'Shared/Components/ActionsLog'
 import * as local from '../../../../Shared/Assets/ar.json'
 import {
   CardNavBar,
   Tab,
 } from '../../../../Shared/Components/HeaderWithCards/cardNavbar'
 import Can from '../../../../Shared/config/Can'
-import ActionLogs from './actionLogs'
 import TransactionLogs from './transactionLogs'
 
 interface Props {
@@ -48,7 +48,7 @@ class Logs extends Component<Props, State> {
       case 'actionLogs':
         return (
           <Can I="viewActionLogs" a="user">
-            <ActionLogs id={this.props.id} />
+            <ActionsLog id={this.props.id} />
           </Can>
         )
       case 'transactionLogs':

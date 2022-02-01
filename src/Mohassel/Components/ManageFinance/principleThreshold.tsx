@@ -66,7 +66,12 @@ class PrincipleThreshold extends Component<RouteComponentProps, State> {
       })
     } else {
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(princples.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(princples.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
     }
   }
@@ -87,12 +92,19 @@ class PrincipleThreshold extends Component<RouteComponentProps, State> {
         const res = await setMaxPrinciples(values)
         if (res.status === 'success') {
           this.setState({ loading: false })
-          Swal.fire('', local.principalMaxChangeSuccess, 'success').then(() =>
-            window.location.reload()
-          )
+          Swal.fire({
+            text: local.principalMaxChangeSuccess,
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          }).then(() => window.location.reload())
         } else {
           this.setState({ loading: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+            Swal.fire({
+              title: local.errorTitle,
+              text: getErrorMessage(res.error.error),
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           )
         }
       }

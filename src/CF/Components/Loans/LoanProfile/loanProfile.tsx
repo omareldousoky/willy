@@ -9,85 +9,79 @@ import Container from 'react-bootstrap/Container'
 
 import { returnItem } from 'Shared/Services/APIs/loanApplication/returnItemCF'
 import ReturnItemModal from 'Shared/Components/LoanApplication/ReturnItemModal'
-import { getApplication } from '../../../../Shared/Services/APIs/loanApplication/getApplication'
-import { getPendingActions } from '../../../../Mohassel/Services/APIs/Loan/getPendingActions'
+import { getApplication } from 'Shared/Services/APIs/loanApplication/getApplication'
 import {
   BranchDetails,
   BranchDetailsResponse,
   getBranch,
-} from '../../../../Shared/Services/APIs/Branch/getBranch'
-import Payment from '../../Payment'
-import local from '../../../../Shared/Assets/ar.json'
-import { Loader } from '../../../../Shared/Components/Loader'
-import {
-  CardNavBar,
-  Tab,
-} from '../../../../Shared/Components/HeaderWithCards/cardNavbar'
-import Logs from './applicationLogs'
-import { LoanDetailsTableView } from './applicationsDetails'
-import { CustomerCardView } from './customerCard'
-import ability from '../../../../Shared/config/ability'
-import CustomerCardPDF from '../../../../Mohassel/Components/pdfTemplates/customerCard/customerCard'
-import CashReceiptPDF from '../../../../Mohassel/Components/pdfTemplates/cashReceipt/cashReceipt'
-import CustomerCardAttachments from '../../../../Mohassel/Components/pdfTemplates/customerCardAttachments/customerCardAttachments'
-import FollowUpStatementPDF from '../../../../Mohassel/Components/pdfTemplates/followUpStatment/followUpStatement'
-import LoanContract from '../../../../Mohassel/Components/pdfTemplates/loanContract/loanContract'
-import LoanContractForGroup from '../../../../Mohassel/Components/pdfTemplates/loanContractForGroup/loanContractForGroup'
-import Can from '../../../../Shared/config/Can'
-import { PendingActions } from '../../../../Shared/Services/interfaces'
+} from 'Shared/Services/APIs/Branch/getBranch'
+import local from 'Shared/Assets/ar.json'
+import { Loader } from 'Shared/Components/Loader'
+import { CardNavBar, Tab } from 'Shared/Components/HeaderWithCards/cardNavbar'
+import ability from 'Shared/config/ability'
+import Can from 'Shared/config/Can'
+import { PendingActions } from 'Shared/Services/interfaces'
 
 import {
   iscoreDate,
   getErrorMessage,
   statusLocale,
   timeToDateyyymmdd,
-} from '../../../../Shared/Services/utils'
-import { payment } from '../../../../Shared/redux/payment/actions'
-import { cancelApplication } from '../../../../Shared/Services/APIs/loanApplication/stateHandler'
-import store from '../../../../Shared/redux/store'
-import UploadDocuments from './uploadDocuments'
-import { writeOffLoan } from '../../../../Mohassel/Services/APIs/Loan/writeOffLoan'
-import { doubtLoan } from '../../../../Mohassel/Services/APIs/Loan/doubtLoan'
-import PaymentReceipt from '../../../../Shared/Components/pdfTemplates/Financial/paymentReceipt'
-import { calculatePenalties } from '../../../../Shared/Services/APIs/clearance/calculatePenalties'
-import { numTo2Decimal } from '../../../../Mohassel/Components/CIB/textFiles'
-import { FollowUpStatementView } from './followupStatementView'
-import { remainingLoan } from '../../../../Shared/Services/APIs/Loan/remainingLoan'
-import { getGroupMemberShares } from '../../../../Mohassel/Services/APIs/Loan/groupMemberShares'
-import { InfoBox, LtsIcon, ProfileActions } from '../../../../Shared/Components'
+} from 'Shared/Services/utils'
+import { payment } from 'Shared/redux/payment/actions'
+import { cancelApplication } from 'Shared/Services/APIs/loanApplication/stateHandler'
+import store from 'Shared/redux/store'
+import PaymentReceipt from 'Shared/Components/pdfTemplates/Financial/paymentReceipt'
+import { calculatePenalties } from 'Shared/Services/APIs/clearance/calculatePenalties'
+import { remainingLoan } from 'Shared/Services/APIs/Loan/remainingLoan'
+import { InfoBox, LtsIcon, ProfileActions } from 'Shared/Components'
 
 import {
   getCompanyInfo,
   getCustomerInfo,
-} from '../../../../Shared/Services/formatCustomersInfo'
-import { FieldProps } from '../../../../Shared/Components/Profile/types'
+} from 'Shared/Services/formatCustomersInfo'
+import { FieldProps } from 'Shared/Components/Profile/types'
 
 import {
   CalculateEarlyPaymentResponse,
   RemainingLoanResponse,
-} from '../../../../Shared/Models/Payment'
-import { PromissoryNoteMicro } from '../../../../Mohassel/Components/pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
-import {
-  getIscore,
-  getIscoreCached,
-} from '../../../../Shared/Services/APIs/iScore'
-import { getGeoAreasByBranch } from '../../../../Shared/Services/APIs/geoAreas/getGeoAreas'
-import { getWriteOffReasons } from '../../../../Shared/Services/APIs/config'
+} from 'Shared/Models/Payment'
+import { getIscore, getIscoreCached } from 'Shared/Services/APIs/iScore'
+import { getGeoAreasByBranch } from 'Shared/Services/APIs/geoAreas/getGeoAreas'
+import { getWriteOffReasons } from 'Shared/Services/APIs/config'
 import {
   approveManualOtherPayment,
   approveManualPayment,
   getManualOtherPayments,
   rejectManualOtherPayment,
   rejectManualPayment,
-} from '../../../../Shared/Services/APIs/payment'
-import { getRollableActionsById } from '../../../../Shared/Services/APIs/loanApplication/rollBack'
-import { doneSuccessfully } from '../../../../Shared/localUtils'
+} from 'Shared/Services/APIs/payment'
+import { getRollableActionsById } from 'Shared/Services/APIs/loanApplication/rollBack'
+import { doneSuccessfully } from 'Shared/localUtils'
+import RandomPaymentReceipt from 'Shared/Components/pdfTemplates/Financial/randomPaymentReceipt/randomPaymentReceipt'
+import EarlyPaymentPDF from 'Shared/Components/pdfTemplates/Financial/earlyPayment/earlyPayment'
+import EarlyPaymentReceipt from 'Shared/Components/pdfTemplates/Financial/earlyPaymentReceipt/earlyPaymentReceipt'
+import { getEarlyPaymentPdfData } from 'Shared/Utils/payment'
+import { Score, Customer } from 'Shared/Models/Customer'
+import { UploadDocuments } from 'Shared/Components/UploadDocument'
 import Rescheduling from '../../Rescheduling/rescheduling'
-import RandomPaymentReceipt from '../../../../Shared/Components/pdfTemplates/Financial/randomPaymentReceipt/randomPaymentReceipt'
-import EarlyPaymentPDF from '../../../../Shared/Components/pdfTemplates/Financial/earlyPayment/earlyPayment'
-import EarlyPaymentReceipt from '../../../../Shared/Components/pdfTemplates/Financial/earlyPaymentReceipt/earlyPaymentReceipt'
-import { getEarlyPaymentPdfData } from '../../../../Shared/Utils/payment'
-import { Score, Customer } from '../../../../Shared/Models/Customer'
+import { PromissoryNoteMicro } from '../../../../Mohassel/Components/pdfTemplates/PromissoryNoteMicro/promissoryNoteMicro'
+import { getGroupMemberShares } from '../../../../Mohassel/Services/APIs/Loan/groupMemberShares'
+import { FollowUpStatementView } from './followupStatementView'
+import { numTo2Decimal } from '../../../../Mohassel/Components/CIB/textFiles'
+import { doubtLoan } from '../../../../Mohassel/Services/APIs/Loan/doubtLoan'
+import { writeOffLoan } from '../../../../Mohassel/Services/APIs/Loan/writeOffLoan'
+import LoanContractForGroup from '../../../../Mohassel/Components/pdfTemplates/loanContractForGroup/loanContractForGroup'
+import LoanContract from '../../../../Mohassel/Components/pdfTemplates/loanContract/loanContract'
+import FollowUpStatementPDF from '../../../../Mohassel/Components/pdfTemplates/followUpStatment/followUpStatement'
+import CustomerCardAttachments from '../../../../Mohassel/Components/pdfTemplates/customerCardAttachments/customerCardAttachments'
+import CashReceiptPDF from '../../../../Mohassel/Components/pdfTemplates/cashReceipt/cashReceipt'
+import CustomerCardPDF from '../../../../Mohassel/Components/pdfTemplates/customerCard/customerCard'
+import { CustomerCardView } from './customerCard'
+import { LoanDetailsTableView } from './applicationsDetails'
+import Logs from './applicationLogs'
+import Payment from '../../Payment'
+import { getPendingActions } from '../../../../Mohassel/Services/APIs/Loan/getPendingActions'
 import ManualRandomPaymentsActions from './manualRandomPaymentsActions'
 
 export interface IndividualWithInstallments {
@@ -186,7 +180,12 @@ class LoanProfile extends Component<Props, State> {
         })
       } else {
         this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         )
       }
     }
@@ -453,7 +452,12 @@ class LoanProfile extends Component<Props, State> {
       })
     } else {
       const err = res.error as Record<string, string>
-      Swal.fire('Error !', getErrorMessage(err.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(err.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     }
   }
 
@@ -746,14 +750,21 @@ class LoanProfile extends Component<Props, State> {
 
   successHandler(successMsg: string, callback?: () => void) {
     this.setState({ loading: false })
-    Swal.fire('', successMsg, 'success').then(() =>
-      callback ? callback() : undefined
-    )
+    Swal.fire({
+      text: successMsg,
+      icon: 'success',
+      confirmButtonText: local.confirmationText,
+    }).then(() => (callback ? callback() : undefined))
   }
 
   failureHandler(res: any) {
     this.setState({ loading: false }, () =>
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
     )
   }
 
@@ -948,12 +959,19 @@ class LoanProfile extends Component<Props, State> {
             : await approveManualPayment(this.props.location.state.id)
         if (res.status === 'success') {
           this.setState({ loading: false })
-          Swal.fire('', local.manualPaymentApproveSuccess, 'success').then(() =>
-            this.getAppByID(this.props.location.state.id)
-          )
+          Swal.fire({
+            text: local.manualPaymentApproveSuccess,
+            icon: 'success',
+            confirmButtonText: local.confirmationText,
+          }).then(() => this.getAppByID(this.props.location.state.id))
         } else {
           this.setState({ loading: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+            Swal.fire({
+              title: local.errorTitle,
+              text: getErrorMessage(res.error.error),
+              icon: 'error',
+              confirmButtonText: local.confirmationText,
+            })
           )
         }
       }
@@ -982,23 +1000,37 @@ class LoanProfile extends Component<Props, State> {
             (el) => el._id !== randomPendingActionId
           ),
         }))
-        Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() =>
-          this.getManualOtherPayments(this.props.location.state.id)
-        )
+        Swal.fire({
+          text: local.rejectManualPaymentSuccess,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => this.getManualOtherPayments(this.props.location.state.id))
       } else
         this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         )
     } else {
       const res = await rejectManualPayment(this.props.location.state.id)
       if (res.status === 'success') {
         this.setState({ loading: false, pendingActions: {} })
-        Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() =>
-          this.getAppByID(this.props.location.state.id)
-        )
+        Swal.fire({
+          text: local.rejectManualPaymentSuccess,
+          icon: 'success',
+          confirmButtonText: local.confirmationText,
+        }).then(() => this.getAppByID(this.props.location.state.id))
       } else
         this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
         )
     }
   }

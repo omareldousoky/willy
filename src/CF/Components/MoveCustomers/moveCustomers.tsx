@@ -95,7 +95,13 @@ class MoveCustomers extends Component<{ isCompany?: false }, State> {
           LoanOfficerSelectLoader: false,
           LoanOfficerSelectOptions: [],
         },
-        () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        () =>
+          Swal.fire({
+            title: local.errorTitle,
+            confirmButtonText: local.confirmationText,
+            text: getErrorMessage(res.error.error),
+            icon: 'error',
+          })
       )
     }
     const activeRes = await searchLoanOfficer({
@@ -115,7 +121,12 @@ class MoveCustomers extends Component<{ isCompany?: false }, State> {
           activeLoanOfficerSelectOptions: [],
         },
         () =>
-          Swal.fire('Error !', getErrorMessage(activeRes.error.error), 'error')
+          Swal.fire({
+            title: local.errorTitle,
+            text: getErrorMessage(activeRes.error.error),
+            icon: 'error',
+            confirmButtonText: local.confirmationText,
+          })
       )
     }
   }
@@ -137,7 +148,12 @@ class MoveCustomers extends Component<{ isCompany?: false }, State> {
       })
     } else
       this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       )
   }
 
@@ -181,15 +197,15 @@ class MoveCustomers extends Component<{ isCompany?: false }, State> {
         newSelectedLO: undefined,
         filterCustomers: '',
       })
-      Swal.fire(
-        '',
-        `${local.doneMoving} ${
+      Swal.fire({
+        text: `${local.doneMoving} ${
           this.state.moveMissing
             ? local.customersSuccess
             : this.state.selectedCustomers.length + ' ' + local.customerSuccess
         }`,
-        'success'
-      ).then(() => {
+        icon: 'success',
+        confirmButtonText: local.confirmationText,
+      }).then(() => {
         this.setState(
           { openModal: false, moveMissing: false, selectedCustomers: [] },
           () => this.getCustomersForUser()
@@ -215,7 +231,12 @@ class MoveCustomers extends Component<{ isCompany?: false }, State> {
       })
     } else {
       this.setState({ loading: false }, () => {
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        Swal.fire({
+          title: local.errorTitle,
+          text: getErrorMessage(res.error.error),
+          icon: 'error',
+          confirmButtonText: local.confirmationText,
+        })
       })
     }
   }
