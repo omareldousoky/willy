@@ -110,7 +110,7 @@ interface State {
   payerId: string
   employees: Array<Employee>
   randomPaymentType: string
-  bankOfPayment: string
+  bankOfPaymentId: string
   bankOfPaymentBranch: string
   isPendingAction: boolean
 }
@@ -187,7 +187,7 @@ class Payment extends Component<Props, State> {
       payerId: '',
       employees: [],
       randomPaymentType: '',
-      bankOfPayment: '',
+      bankOfPaymentId: '',
       bankOfPaymentBranch: '',
       isPendingAction: false,
     }
@@ -488,7 +488,7 @@ class Payment extends Component<Props, State> {
     } else if (this.props.paymentState === 4) {
       const obj = {
         payAmount: values.payAmount,
-        bankOfPayment: values.bankOfPayment,
+        bankOfPaymentId: values.bankOfPaymentId,
         bankOfPaymentBranch: values.bankOfPaymentBranch,
         receiptNumber: values.receiptNumber,
         truthDate: truthDateTimestamp,
