@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 
+import { Bank, getBanks } from 'Shared/Services/APIs/Banks'
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction'
 import {
   getErrorMessage,
@@ -30,6 +31,7 @@ interface SelectObject {
 }
 interface State {
   employees: Array<Employee>
+  banks: Array<Bank>
 }
 interface Props {
   application: ApplicationResponse
@@ -50,7 +52,14 @@ class ManualPayment extends Component<Props, State> {
     super(props)
     this.state = {
       employees: [],
+      banks: [],
     }
+  }
+
+  async componentDidMount() {
+    await getBanks().then((data) => {
+      this.setState({ banks: data.body })
+    })
   }
 
   getRandomPaymentTypes = () => {
@@ -289,24 +298,32 @@ class ManualPayment extends Component<Props, State> {
           )}
           {this.props.bankPayment && (
             <>
-              <Form.Group as={Col} md={6} controlId="bankOfPayment">
+              <Form.Group as={Col} md={6} controlId="bankOfPaymentId">
                 <Form.Label
                   style={{ paddingRight: 0 }}
                   column
                 >{`${local.bankName}`}</Form.Label>
                 <Form.Control
-                  name="bankOfPayment"
-                  data-qc="bankOfPayment"
-                  value={this.props.formikProps.values.bankOfPayment}
+                  as="select"
+                  name="bankOfPaymentId"
+                  data-qc="bankOfPaymentId"
+                  value={this.props.formikProps.values.bankOfPaymentId}
                   onBlur={this.props.formikProps.handleBlur}
                   onChange={this.props.formikProps.handleChange}
                   isInvalid={
-                    Boolean(this.props.formikProps.errors.bankOfPayment) &&
-                    Boolean(this.props.formikProps.touched.bankOfPayment)
+                    Boolean(this.props.formikProps.errors.bankOfPaymentId) &&
+                    Boolean(this.props.formikProps.touched.bankOfPaymentId)
                   }
-                />
+                >
+                  <option selected value="" disabled>
+                    {local.bankName}
+                  </option>
+                  {this.state.banks.map((bank) => (
+                    <option value={bank.id}>{bank.nameAr}</option>
+                  ))}
+                </Form.Control>
                 <Form.Control.Feedback type="invalid">
-                  {this.props.formikProps.errors.bankOfPayment}
+                  {this.props.formikProps.errors.bankOfPaymentId}
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group as={Col} md={6} controlId="bankOfPaymentBranch">
@@ -531,7 +548,6 @@ class ManualPayment extends Component<Props, State> {
     )
   }
 }
-
 const addPaymentToProps = (dispatch) => {
   return {
     changePaymentState: (data) => dispatch(payment(data)),

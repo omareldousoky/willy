@@ -162,7 +162,7 @@ export const manualBankPaymentValidation = Yup.object().shape({
       }
     ),
   receiptNumber: Yup.string().required(local.required),
-  bankOfPayment: Yup.string().required(local.required),
+  bankOfPaymentId: Yup.string().required(local.required),
   bankOfPaymentBranch: Yup.string().required(local.required),
 })
 
