@@ -521,7 +521,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                     <Form.Group controlId="downPayment">
                       <Form.Label>{local.downPayment}</Form.Label>
                       <Form.Control
-                        type="text"
+                        type="number"
                         name="downPayment"
                         data-qc="downPayment"
                         value={values.downPayment}
