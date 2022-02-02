@@ -98,11 +98,11 @@ export const LoanProductValidation = Yup.object().shape({
   loanImpactPrincipal: Yup.boolean().required(local.required),
   mustEnterGuarantor: Yup.boolean().required(local.required),
   noOfGuarantors: Yup.number()
-    .integer()
+    .integer(local.mustBeInt)
     .min(0, minValue(0))
     .required(local.required),
   allocatedDebtForGoodLoans: Yup.number()
-    .integer()
+    .integer(local.mustBeInt)
     .min(0, minValue(0))
     .max(100, maxValue(100))
     .required(local.required),
@@ -139,7 +139,7 @@ export const LoanProductValidation = Yup.object().shape({
     .max(100, maxValue(100))
     .required(local.required),
   pushPayment: Yup.number()
-    .integer()
+    .integer(local.mustBeInt)
     .min(0, minValue(0))
     .required(local.required),
   pushDays: Yup.array().of(
