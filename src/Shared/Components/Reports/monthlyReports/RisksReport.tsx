@@ -57,16 +57,21 @@ export const RisksReport = (report) => {
                     <td>{local.value}</td>
                   </tr>
                   {report &&
-                    report.tasaheelRisksRow?.map((row, index) => (
-                      <tr key={index}>
-                        <td>{formatTier(row.tier)}</td>
-                        <td>{row.customersCount || 0}</td>
-                        <td>{Number(row.wallet).toLocaleString() || 0}</td>
-                        <td>{`${row.arrearsPercentage || 0}%`}</td>
-                        <td>{`${row.feesPercentage || 0}%`}</td>
-                        <td>{Number(row.provisions).toLocaleString() || 0}</td>
-                      </tr>
-                    ))}
+                    report.tasaheelRisksRow?.map(
+                      (row, index) =>
+                        Object.keys(row).length > 0 && (
+                          <tr key={index}>
+                            <td>{formatTier(row.tier)}</td>
+                            <td>{row.customersCount || 0}</td>
+                            <td>{Number(row.wallet || 0).toLocaleString()}</td>
+                            <td>{`${row.arrearsPercentage || 0}%`}</td>
+                            <td>{`${row.feesPercentage || 0}%`}</td>
+                            <td>
+                              {Number(row.provisions || 0).toLocaleString()}
+                            </td>
+                          </tr>
+                        )
+                    )}
                 </tbody>
               </table>
             </th>
