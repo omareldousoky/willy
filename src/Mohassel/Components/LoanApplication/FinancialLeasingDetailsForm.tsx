@@ -72,22 +72,21 @@ export const FinancialLeasingDetailsForm = (props: any) => {
                   </Form.Group>
                 </Col>
                 <Col sm={6}>
-                  <Form.Group controlId="itemDescription">
-                    <Form.Label>{local.itemDescription}</Form.Label>
+                  <Form.Group controlId="itemSerialNumber">
+                    <Form.Label>{local.itemSerialNumber}</Form.Label>
                     <Form.Control
-                      as="textarea"
                       type="text"
-                      name="itemDescription"
-                      data-qc="itemDescription"
-                      value={values.itemDescription}
+                      name="itemSerialNumber"
+                      data-qc="itemSerialNumber"
+                      value={values.itemSerialNumber}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       isInvalid={
-                        errors.itemDescription && touched.itemDescription
+                        errors.itemSerialNumber && touched.itemSerialNumber
                       }
                     />
                     <Form.Control.Feedback type="invalid">
-                      {errors.itemDescription}
+                      {errors.itemSerialNumber}
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
@@ -144,21 +143,22 @@ export const FinancialLeasingDetailsForm = (props: any) => {
               </Row>
               <Row>
                 <Col sm={12}>
-                  <Form.Group controlId="itemSerialNumber">
-                    <Form.Label>{local.itemSerialNumber}</Form.Label>
+                  <Form.Group controlId="itemDescription">
+                    <Form.Label>{local.itemDescription}</Form.Label>
                     <Form.Control
+                      as="textarea"
                       type="text"
-                      name="itemSerialNumber"
-                      data-qc="itemSerialNumber"
-                      value={values.itemSerialNumber}
+                      name="itemDescription"
+                      data-qc="itemDescription"
+                      value={values.itemDescription}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       isInvalid={
-                        errors.itemSerialNumber && touched.itemSerialNumber
+                        errors.itemDescription && touched.itemDescription
                       }
                     />
                     <Form.Control.Feedback type="invalid">
-                      {errors.itemSerialNumber}
+                      {errors.itemDescription}
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Col>

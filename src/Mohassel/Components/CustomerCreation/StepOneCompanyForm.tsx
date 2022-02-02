@@ -390,7 +390,7 @@ export const StepOneCompanyForm = (props: any) => {
       </Row>
 
       <Row>
-        <Col sm={12}>
+        <Col sm={6}>
           <Form.Group controlId="businessSector">
             <Form.Label className="customer-form-label">{`${local.businessSector}*`}</Form.Label>
             <Can I="updateCustomerHasLoan" a="customer" passThrough>
@@ -418,6 +418,49 @@ export const StepOneCompanyForm = (props: any) => {
                       </option>
                     )
                   })}
+                </Form.Control>
+              )}
+            </Can>
+          </Form.Group>
+        </Col>
+        <Col sm={6}>
+          <Form.Group controlId="businessActivity">
+            <Form.Label className="customer-form-label">{`${local.businessActivity}*`}</Form.Label>
+            <Can I="updateCustomerHasLoan" a="customer" passThrough>
+              {(allowed) => (
+                <Form.Control
+                  as="select"
+                  type="select"
+                  name="businessActivity"
+                  data-qc="businessActivity"
+                  value={values.businessActivity}
+                  onBlur={handleBlur}
+                  onChange={(e) => {
+                    setFieldValue('businessActivity', e.currentTarget.value)
+                    setFieldValue('businessSpeciality', '')
+                  }}
+                  isInvalid={
+                    errors.businessActivity && touched.businessActivity
+                  }
+                  disabled={
+                    !values.businessSector ||
+                    (!allowed && props.edit && props.hasLoan)
+                  }
+                >
+                  <option value="" />
+                  {businessSectors
+                    .find(
+                      (businessSector) =>
+                        businessSector.i18n.ar === values.businessSector
+                    )
+                    ?.activities.filter((activity) => activity.active)
+                    .map((activity, index) => {
+                      return (
+                        <option key={index} value={activity.i18n.ar}>
+                          {activity.i18n.ar}
+                        </option>
+                      )
+                    })}
                 </Form.Control>
               )}
             </Can>

@@ -34,7 +34,6 @@ import { theme } from 'Shared/theme'
 import { Customer } from 'Shared/Models/Customer'
 import { searchCustomer } from 'Shared/Services/APIs/customer/searchCustomer'
 import { getMaxPrinciples } from 'Shared/Services/APIs/config'
-import { getCustomersBalances } from 'Shared/Services/APIs/customer/customerLoans'
 import { getCustomerByID } from 'Shared/Services/APIs/customer/getCustomer'
 import { getLoanUsage } from 'Shared/Services/APIs/LoanUsage/getLoanUsage'
 import CustomerSearch from 'Shared/Components/CustomerSearch'
@@ -52,6 +51,8 @@ import {
   Results,
 } from './loanApplicationStates'
 import {
+  applicationStepsDesciption,
+  checkCustomersLimits,
   checkGroupValidation,
   chooseCustomerType,
   filterProducts,
@@ -150,7 +151,13 @@ class LoanApplicationCreation extends Component<Props, State> {
       type: string
     }[] = []
     if (customers.length > 0) {
-      const check = await this.checkCustomersLimits(customers, false)
+      const check = await checkCustomersLimits(
+        customers,
+        false,
+        this.state.isNano,
+        this.state.application.principals,
+        (value) => this.setState({ loading: value })
+      )
       if (check.flag === true && check.customers) {
         check.customers.forEach((customer) => {
           const obj = {
@@ -725,9 +732,12 @@ class LoanApplicationCreation extends Component<Props, State> {
         getAge(selectedCustomer.body.customer.birthDate) >= 21 &&
         getAge(selectedCustomer.body.customer.birthDate) <= 65
       ) {
-        const check = await this.checkCustomersLimits(
+        const check = await checkCustomersLimits(
           [selectedCustomer.body.customer],
-          false
+          false,
+          this.state.isNano,
+          this.state.application.principals,
+          (value) => this.setState({ loading: value })
         )
         if (
           check.flag === true &&
@@ -794,9 +804,12 @@ class LoanApplicationCreation extends Component<Props, State> {
             ? local.theCompanyIsBlocked
             : local.theCustomerIsBlocked
       }
-      const check = await this.checkCustomersLimits(
+      const check = await checkCustomersLimits(
         [selectedGuarantor.body.customer],
-        true
+        true,
+        this.state.isNano,
+        this.state.application.principals,
+        (value) => this.setState({ loading: value })
       )
       if (
         check.flag === true &&
@@ -1304,175 +1317,6 @@ class LoanApplicationCreation extends Component<Props, State> {
     })
   }
 
-  async checkCustomersLimits(customers, guarantor) {
-    const customerIds: Array<string> = []
-    customers.forEach((customer) => customerIds.push(customer._id))
-    this.setState({ loading: true })
-    const res = await getCustomersBalances({ ids: customerIds })
-    if (res.status === 'success') {
-      this.setState({ loading: false })
-      const merged: Array<any> = []
-      const validationObject: any = {}
-      for (let i = 0; i < customers.length; i += 1) {
-        const customer = { ...customers[i] }
-        delete customer.guarantorIds
-        const obj = {
-          ...customer,
-          ...(res.body.data
-            ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id)
-            : { id: customers[i]._id }),
-          ...this.state.application.principals,
-        }
-        delete obj.id
-        merged.push(obj)
-      }
-      if (res.body.data && res.body.data.length > 0) {
-        merged.forEach((customer) => {
-          if (!guarantor) {
-            if (
-              customer.nanoLoanIds?.length ||
-              customer.nanoApplicationIds?.length
-            ) {
-              validationObject[customer._id] = {
-                customerName: customer.customerName,
-                ...(customer.nanoLoanIds && {
-                  nanoLoanIds: customer.nanoLoanIds,
-                }),
-                ...(customer.nanoApplicationIds && {
-                  nanoApplicationIds: customer.nanoApplicationIds,
-                }),
-              }
-            }
-            if (
-              customer.applicationIds &&
-              !customer.loanIds &&
-              (this.state.isNano ||
-                customer.applicationIds.length >= customer.maxLoansAllowed)
-            ) {
-              validationObject[customer._id] = {
-                customerName: customer.customerName,
-                applicationIds: customer.applicationIds,
-              }
-            }
-            if (
-              customer.loanIds &&
-              !customer.applicationIds &&
-              (this.state.isNano ||
-                customer.loanIds.length >= customer.maxLoansAllowed)
-            ) {
-              if (Object.keys(validationObject).includes(customer._id)) {
-                validationObject[customer._id] = {
-                  ...validationObject[customer._id],
-                  ...{ loanIds: customer.loanIds },
-                }
-              } else {
-                validationObject[customer._id] = {
-                  customerName: customer.customerName,
-                  loanIds: customer.loanIds,
-                }
-              }
-            }
-            if (
-              customer.loanIds &&
-              customer.applicationIds &&
-              customer.loanIds.length + customer.applicationIds.length >=
-                customer.maxLoansAllowed
-            ) {
-              if (Object.keys(validationObject).includes(customer._id)) {
-                validationObject[customer._id] = {
-                  ...validationObject[customer._id],
-                  ...{
-                    loanIds: customer.loanIds,
-                    applicationIds: customer.applicationIds,
-                  },
-                }
-              } else {
-                validationObject[customer._id] = {
-                  customerName: customer.customerName,
-                  loanIds: customer.loanIds,
-                  applicationIds: customer.applicationIds,
-                }
-              }
-            }
-            if (
-              customer.guarantorIds &&
-              customer.guarantorIds.length >= 0 &&
-              !customer.allowGuarantorLoan
-            ) {
-              if (Object.keys(validationObject).includes(customer._id)) {
-                validationObject[customer._id] = {
-                  ...validationObject[customer._id],
-                  ...{ guarantorIds: customer.guarantorIds },
-                }
-              } else {
-                validationObject[customer._id] = {
-                  customerName: customer.customerName,
-                  guarantorIds: customer.guarantorIds,
-                }
-              }
-            }
-          } else {
-            if (
-              customer.applicationIds &&
-              customer.applicationIds.length > 0 &&
-              !customer.allowGuarantorLoan
-            ) {
-              validationObject[customer._id] = {
-                customerName: customer.customerName,
-                applicationIds: customer.applicationIds,
-              }
-            }
-            if (
-              customer.loanIds &&
-              customer.loanIds.length > 0 &&
-              !customer.allowGuarantorLoan
-            ) {
-              if (Object.keys(validationObject).includes(customer._id)) {
-                validationObject[customer._id] = {
-                  ...validationObject[customer._id],
-                  ...{ loanIds: customer.loanIds },
-                }
-              } else {
-                validationObject[customer._id] = {
-                  customerName: customer.customerName,
-                  loanIds: customer.loanIds,
-                }
-              }
-            }
-            if (
-              customer.guarantorIds &&
-              customer.guarantorIds.length >= customer.guarantorMaxLoans
-            ) {
-              if (Object.keys(validationObject).includes(customer._id)) {
-                validationObject[customer._id] = {
-                  ...validationObject[customer._id],
-                  ...{ guarantorIds: customer.guarantorIds },
-                }
-              } else {
-                validationObject[customer._id] = {
-                  customerName: customer.customerName,
-                  guarantorIds: customer.guarantorIds,
-                }
-              }
-            }
-          }
-        })
-      }
-      if (Object.keys(validationObject).length > 0) {
-        return { flag: false, validationObject }
-      }
-      return { flag: true, customers: merged }
-    }
-    Swal.fire({
-      title: local.errorTitle,
-      confirmButtonText: local.confirmationText,
-      text: getErrorMessage(res.error.error),
-      icon: 'error',
-    })
-    this.setState({ loading: false })
-    return { flag: false }
-  }
-
   step(key) {
     if (
       this.state.step < 3 &&
@@ -1798,27 +1642,9 @@ class LoanApplicationCreation extends Component<Props, State> {
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <Wizard
                 currentStepNumber={this.state.step - 1}
-                stepsDescription={
-                  ['individual', 'financialLeasing'].includes(
-                    this.state.customerType
-                  )
-                    ? [
-                        local.customersDetails,
-                        local.loanInfo,
-                        local.guarantorInfo,
-                        local.loanInfo,
-                      ]
-                    : ['sme', 'smeFinancialLeasing'].includes(
-                        this.state.customerType
-                      )
-                    ? [
-                        local.viewCompany,
-                        local.loanInfo,
-                        local.guarantorInfo,
-                        local.loanInfo,
-                      ]
-                    : [local.customersDetails, local.loanInfo]
-                }
+                stepsDescription={applicationStepsDesciption(
+                  this.state.customerType
+                )}
               />
               {this.renderSteps()}
             </div>

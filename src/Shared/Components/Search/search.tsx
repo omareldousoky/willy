@@ -232,7 +232,9 @@ const Search: FunctionComponent<SearchProps> = ({
           initialState.type = isProductUrl ? beneficiaryType : ''
           break
         case 'financialLeasingCheck':
-          initialState.financialLeasing = false
+          initialState.financialLeasing = isIssuedLoansSearch
+            ? issuedLoansSearchFilters.financialLeasing
+            : false
           break
         default:
           break
