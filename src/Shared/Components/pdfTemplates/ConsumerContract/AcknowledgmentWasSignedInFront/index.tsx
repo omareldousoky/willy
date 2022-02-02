@@ -15,10 +15,15 @@ export const AcknowledgmentWasSignedInFront = ({
   customerCreationDate,
   customerGuarantors,
   isCF,
+  CFUserContract,
 }: AcknowledgmentWasSignedInFrontProps) => {
   return (
     <>
-      <div className="contract-container" dir="rtl" lang="ar">
+      <div
+        className={`contract-container ${CFUserContract && 'reposition'}`}
+        dir="rtl"
+        lang="ar"
+      >
         <table>
           <Header
             title=""

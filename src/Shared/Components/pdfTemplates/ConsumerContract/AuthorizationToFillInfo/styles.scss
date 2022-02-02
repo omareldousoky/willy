@@ -4,6 +4,7 @@
     font-family: Arial;
     font-size: 14px;
     font-weight: 600;
+    position: relative;
     th,
     td {
       border: 1px solid black;
@@ -16,6 +17,10 @@
       font-weight: bolder;
       text-decoration: underline;
     }
+  }
+  .reposition {
+    top: 10mm;
+    page-break-after: always;
   }
 }
 

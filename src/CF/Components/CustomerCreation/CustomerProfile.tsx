@@ -42,6 +42,7 @@ import {
 import { ConsumerFinanceContractData } from 'Shared/Models/consumerContract'
 import { useLoan } from 'Shared/hooks'
 import { Application } from 'Shared/Services/interfaces'
+import Pagesize from 'Shared/Components/Common/Pagesize'
 import { getCFLimits } from '../../Services/APIs/config'
 
 interface LocationState {
@@ -764,8 +765,10 @@ export const CustomerProfile = () => {
       </Container>
       {print === 'all' && (
         <>
+          <Pagesize />
           <ConsumerFinanceContract
             contractData={customerCFContract as ConsumerFinanceContractData}
+            CFUserContract
           />
           <BondContract
             customerCreationDate={customerDetails?.created?.at || 0}
@@ -800,6 +803,7 @@ export const CustomerProfile = () => {
             }
             customerGuarantors={customerGuarantors}
             isCF
+            CFUserContract
           />
           <AuthorizationToFillInfo
             customerCreationDate={customerDetails?.created?.at || 0}
@@ -807,6 +811,7 @@ export const CustomerProfile = () => {
             customerHomeAddress={customerDetails?.customerHomeAddress || ''}
             customerGuarantors={customerGuarantors}
             isCF
+            CFUserContract
           />
           <AcknowledgmentWasSignedInFront
             customerCreationDate={customerDetails?.created?.at || 0}
@@ -814,6 +819,7 @@ export const CustomerProfile = () => {
             nationalId={customerDetails?.nationalId || ''}
             customerGuarantors={customerGuarantors}
             isCF
+            CFUserContract
           />
         </>
       )}
