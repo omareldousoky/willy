@@ -1284,5 +1284,6 @@
   "timeOut": "حدث خطأ",
   "fetchError": "حدث خطأ",
   "invalidNanoLimitError": "برجاء تحديد الحد الائتماني",
-  "downloadFolderError": "لا يمكن تحميل الملف"
+  "downloadFolderError": "لا يمكن تحميل الملف",
+  "financialLeasingContract": "عقد تأجير تمويلي"
 }

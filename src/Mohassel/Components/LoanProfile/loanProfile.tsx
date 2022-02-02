@@ -17,6 +17,7 @@ import { UploadDocuments } from 'Shared/Components/UploadDocument'
 import { postCommentsReport } from 'Shared/Services/APIs/Reports/Operations/commentsReport'
 import { CommentsReportOBJ } from 'Shared/Models/operationsReports'
 import { getApplication } from 'Shared/Services/APIs/loanApplication/getApplication'
+import FinancialLeasingContract from 'Shared/Components/pdfTemplates/FinancialLeasingContract'
 import {
   BranchDetails,
   BranchDetailsResponse,
@@ -122,6 +123,7 @@ export interface IndividualWithInstallments {
 
 interface State {
   application: any
+  financialLeaseContract: any
   activeTab: string
   tabsArray: Array<Tab>
   loading: boolean
@@ -161,6 +163,7 @@ class LoanProfile extends Component<Props, State> {
     super(props)
     this.state = {
       application: {},
+      financialLeaseContract: {},
       activeTab: 'loanDetails',
       tabsArray: [],
       loading: false,
@@ -601,6 +604,45 @@ class LoanProfile extends Component<Props, State> {
     }
   }
 
+  getFinancialLeaseContractData(application) {
+    this.setState({
+      financialLeaseContract: {
+        creationDate: application.creationDate,
+        customerType: application.customer.customerType,
+        customerName: application.customer.customerName,
+        guarantors: application.guarantors.map((g) => ({
+          name: g.customerName,
+          address: g.customerHomeAddress,
+          nationalId: g.nationalId,
+        })),
+        vendorName: application.vendorName,
+        principal: application.installmentsObject.totalInstallments.principal,
+        categoryName: application.categoryName,
+        itemDescription: application.itemDescription,
+        businessSector: application.businessSector,
+        downPayment: application.downPayment,
+        installmentResponse:
+          application.installmentsObject.installments[0].installmentResponse,
+        periodLength: application.product.periodLength,
+        firstInstallmentDate:
+          application.installmentsObject.installments[0].dateOfPayment,
+        lastInstallmentDate: application.installmentsObject.installments.reverse()[0]
+          .dateOfPayment,
+        feesSum: application.installmentsObject.totalInstallments.feesSum,
+      },
+    })
+  }
+
+  getContractType = (customerType: string): string => {
+    let type = 'all'
+    if (true) {
+      type = 'financialLeasingContract'
+    } else if (customerType === 'company') {
+      type = 'allSME'
+    }
+    return type
+  }
+
   getProfileActions = () => {
     return [
       {
@@ -622,16 +664,16 @@ class LoanProfile extends Component<Props, State> {
       {
         icon: 'download',
         title: local.downloadPDF,
-        permission:
-          this.state.application.status === 'created' &&
-          ability.can('createLoan', 'application'),
+        permission: this.state.application.status === 'created',
         onActionClick: () => {
+          const financialLeasing = true
+          if (financialLeasing)
+            this.getFinancialLeaseContractData(this.state.application)
           this.setState(
             (prevState) => ({
-              print:
-                prevState.application.customer.customerType === 'company'
-                  ? 'allSME'
-                  : 'all',
+              print: this.getContractType(
+                prevState.application.customer.customerType
+              ),
             }),
             () => window.print()
           )
@@ -1748,6 +1790,9 @@ class LoanProfile extends Component<Props, State> {
               />
             )}
           </>
+        )}
+        {this.state.print === 'financialLeasingContract' && (
+          <FinancialLeasingContract data={this.state.financialLeaseContract} />
         )}
         {this.state.print === 'allSME' && (
           <>
