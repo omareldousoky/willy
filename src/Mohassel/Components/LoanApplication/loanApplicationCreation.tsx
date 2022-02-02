@@ -21,7 +21,10 @@ import {
   newNanoApplication,
 } from 'Shared/Services/APIs/loanApplication/newApplication'
 import { getApplication } from 'Shared/Services/APIs/loanApplication/getApplication'
-import { getLoanOfficer } from 'Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
+import {
+  getLoanOfficer,
+  searchLoanOfficer,
+} from 'Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
 import {
   getAge,
   getFullCustomerKey,
@@ -49,6 +52,7 @@ import {
   EntitledToSign,
   EntitledToSignIds,
   Results,
+  LoanApplicationStep4Validation,
 } from './loanApplicationStates'
 import {
   applicationStepsDesciption,
@@ -389,6 +393,32 @@ class LoanApplicationCreation extends Component<Props, State> {
     )
   }
 
+  async getLoanOfficers() {
+    this.setState({ loanOfficers: [], loading: true })
+    const res = await searchLoanOfficer({
+      from: 0,
+      size: 1000,
+      branchId: this.state.branchId,
+      status: 'active',
+    })
+    if (res.status === 'success') {
+      this.setState({
+        loanOfficers: res.body.data.filter(
+          (officer) => officer.status === 'active'
+        ),
+        loading: false,
+      })
+    } else {
+      Swal.fire({
+        title: local.errorTitle,
+        text: getErrorMessage(res.error.error),
+        icon: 'error',
+        confirmButtonText: local.confirmationText,
+      })
+      this.setState({ loading: false })
+    }
+  }
+
   async getProducts() {
     this.setState({ products: [], loading: true })
     if (this.state.branchId.length > 0) {
@@ -628,6 +658,7 @@ class LoanApplicationCreation extends Component<Props, State> {
       await this.getProducts()
       await this.getFormulas()
       await this.getLoanUsage()
+      await this.getLoanOfficers()
       await this.getGlobalPrinciple()
       this.getAppByID(this.state.prevId)
     } else {
@@ -635,6 +666,7 @@ class LoanApplicationCreation extends Component<Props, State> {
       await this.getProducts()
       await this.getFormulas()
       await this.getLoanUsage()
+      await this.getLoanOfficers()
       await this.getGlobalPrinciple()
     }
   }
@@ -1595,11 +1627,7 @@ class LoanApplicationCreation extends Component<Props, State> {
     <Formik
       initialValues={this.state.application}
       onSubmit={this.submit}
-      validationSchema={
-        ['sme', 'smeFinancialLeasing'].includes(this.state.customerType)
-          ? SMELoanApplicationStep2Validation
-          : LoanApplicationValidation
-      }
+      validationSchema={LoanApplicationStep4Validation}
       validateOnBlur
       validateOnChange
       enableReinitialize

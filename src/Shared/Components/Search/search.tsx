@@ -1068,7 +1068,8 @@ const Search: FunctionComponent<SearchProps> = ({
               }
               if (
                 searchKey === 'financialLeasingCheck' &&
-                ['micro', 'sme'].includes(formikProps.values.type ?? '')
+                (!formikProps.values.type ||
+                  ['micro', 'sme'].includes(formikProps.values.type))
               ) {
                 return financialLeasingCheck(formikProps, index)
               }

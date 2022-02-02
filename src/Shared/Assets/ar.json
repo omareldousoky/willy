@@ -1290,5 +1290,7 @@
   "itemDescription": "تفاصيل المنتج",
   "categoryName": "نوع الاصل المؤجر",
   "itemType": "نوع المنتج",
-  "itemSerialNumber": "الرقم التسلسلي للمنتج"
+  "itemSerialNumber": "الرقم التسلسلي للمنتج",
+  "downpaymentCantBeEqualOrMoreThanPrincipal": "لا بمكن ان يتخطي او يساوي المقدم قيمه القرض",
+  "invalidSerialNumber": "لا يمكن أن تحتوي على أرقام و احرف عربيه"
 }

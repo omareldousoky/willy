@@ -326,7 +326,11 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
               className="w-25"
               onClick={handleSubmit}
             >
-              {values.state === 'under_review' ? local.submit : local.edit}
+              {values.financialLeasing
+                ? local.next
+                : values.state === 'under_review'
+                ? local.submit
+                : local.edit}
             </Button>
           )}
         </div>
