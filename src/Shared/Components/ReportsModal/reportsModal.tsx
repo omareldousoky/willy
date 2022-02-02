@@ -16,6 +16,7 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
+import FormCheck from 'react-bootstrap/FormCheck'
 import { reportsModalValidation } from './reportsModalValidation'
 import {
   AsyncBranchGeoAreasDropDown,
@@ -54,6 +55,7 @@ interface InitialFormikState {
   loanType?: 'sme' | 'micro' | 'all'
   year?: number
   creditInquiryStatus?: string
+  financialLeasing?: boolean
 }
 
 interface Props {
@@ -190,6 +192,9 @@ const ReportsModal = (props: Props) => {
           break
         case 'year':
           initValues.year = new Date().getFullYear()
+          break
+        case 'financialLeasing':
+          initValues.financialLeasing = false
           break
         default:
           break
@@ -865,6 +870,25 @@ const ReportsModal = (props: Props) => {
                                 </option>
                               ))}
                             </Form.Control>
+                          </div>
+                        </Col>
+                      )
+                    }
+                    if (input === 'financialLeasing') {
+                      return (
+                        <Col key={input} sm={12}>
+                          <div className="d-flex">
+                            <p className="mr-2">تأجير تمويلي</p>
+                            <FormCheck
+                              type="checkbox"
+                              onChange={() =>
+                                formikProps.setFieldValue(
+                                  'financialLeasing',
+                                  !formikProps.values.financialLeasing
+                                )
+                              }
+                              checked={formikProps.values.financialLeasing}
+                            />
                           </div>
                         </Col>
                       )
