@@ -105,7 +105,7 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
       </div>
       <div className="d-flex">
         <p className="mr-2">
-          2- {customerType === 'company' ? 'شركة' : 'السيد /'} {customerName}
+          2- {customerType === 'company' ? 'شركة' : 'السيد'} / {customerName}
         </p>
         {customerType !== 'company' && (
           <p>
