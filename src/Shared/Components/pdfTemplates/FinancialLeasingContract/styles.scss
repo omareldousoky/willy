@@ -8,9 +8,6 @@
     margin: 8px;
     line-height: 2.2rem;
     position: relative;
-    .term-container {
-      margin: 1em;
-    }
 
     .pagebreak {
       page-break-before: always;
@@ -22,10 +19,6 @@
       font-weight: bolder;
       page-break-inside: avoid;
       margin-bottom: 0.7rem;
-    }
-
-    .rules-container > div::before {
-      content: '• ';
     }
 
     .head-title {

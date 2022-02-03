@@ -10,6 +10,7 @@ import {
   periodLengthLocal,
   alphaIndexLocal,
 } from 'Shared/Services/utils'
+import Tafgeet from 'tafgeetjs'
 import { FLContractProps, TermStyle } from './types'
 import { terms } from './terms'
 
@@ -177,7 +178,10 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
       <div>وبيانها كالأتي:</div>
       <div>اسم المورد / البائع / المقاول : {vendorName || local.na}</div>
       <div>سند ملكيه المؤجر : ( مبايعه من الشركه المورده ) </div>
-      <div>الثمن المذكور بسند الملكيه : {numbersToArabic(principal)}</div>
+      <div>
+        الثمن المذكور بسند الملكيه : {numbersToArabic(principal)} (
+        {new Tafgeet(principal, 'EGP').parse()})
+      </div>
       <div>نوع الاصل المؤجر : {categoryName || local.na}</div>
       <div>وصف الأصل المؤجر : {itemDescription || local.na}</div>
       <div>
@@ -187,16 +191,23 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
         القـــــــــــــــــــيمة الأيــــــــجاريـه
       </div>
       <div>اتفق الأطراف علي أن تكون القيم الأيجارية علي النحو الأتي :</div>
+      {downPayment > 0 && (
+        <div>
+          الدفعة المقدمة : {downPayment} (
+          {new Tafgeet(downPayment, 'EGP').parse()})
+        </div>
+      )}
       <div>
-        الدفعة المقدمة : {downPayment} جم (فقط
-        ........................................ لاغير) اذا تم الاتفاق علي سداد
-        مقدمه
+        الدفعة الايجارية : {installmentResponse} (
+        {new Tafgeet(installmentResponse, 'EGP').parse()})
       </div>
       <div>
-        اجمالي القيمة الايجارية : {numbersToArabic(installmentResponse)} جم (فقط
-        ........................................ لاغير) المقدمه + اجمالي الاقساط
+        اجمالي القيمة الايجارية : {downPayment + installmentResponse} (
+        {new Tafgeet(downPayment + installmentResponse, 'EGP').parse()})
       </div>
-      <div>تسداد الأجرة بشكل {periodLengthLocal[periodLength] || local.na}</div>
+      <div>
+        تسداد الأجرة بشكل ({periodLengthLocal[periodLength] || local.na})
+      </div>
       <div>
         ويبدأ سداد الأجرة من تاريخ{' '}
         {timeToArabicDate(firstInstallmentDate, false)} وتنتهي في{' '}
@@ -214,7 +225,10 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
         يبدأ سريان العقد في : {timeToArabicDate(firstInstallmentDate, false)}{' '}
         وينتهي في : {timeToArabicDate(lastInstallmentDate, false)}
       </div>
-      <div>وأتفق الأطراف علي أن يكون ثمن شراء الأصل المؤجر: ا. جم </div>
+      <div>
+        وأتفق الأطراف علي أن يكون ثمن شراء الأصل المؤجر: ا. (
+        {new Tafgeet(1, 'EGP').parse()}){' '}
+      </div>
       <div>
         كما اتفق الأطراف على أن يكون تاريخ شراء الأصل المؤجر في موعد أقصاه :{' '}
         {timeToArabicDate(purchaseDate, false)}
