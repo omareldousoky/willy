@@ -30,6 +30,12 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
     firstInstallmentDate,
     lastInstallmentDate,
     feesSum,
+    customerHomeAddress,
+    nationalId,
+    commercialRegisterNumber,
+    businessAddress,
+    taxCardNumber,
+    entitledToSign,
   } = data
 
   const purchaseDate = add(creationDate, {
@@ -103,21 +109,29 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
         </p>
         <p className="ml-5"> ( الطرف الثاني المستأجر )</p>
       </div>
-      {customerType === 'company' && (
+      {customerType === 'company' ? (
         <>
           <div>
-            مقيده بسجل تجاري : ..................................... ومقرها :
-            .....................................................
+            مقيده بسجل تجاري : {commercialRegisterNumber} ومقرها :
+            {businessAddress}
           </div>
           <div>
             الشكل القانوني للطرف الثاني المستأجر( نوع الشركه) :
             ...................................
           </div>
-          <div>و النشاط : .........................................</div>
-          <div>بطاقة ضريبيه رقم : .................................</div>
+          <div>و النشاط : {businessSector}</div>
+          <div>بطاقة ضريبيه رقم : {taxCardNumber}</div>
           <div>
-            ويمثلها في التوقيع علي هذا العقد السيد/ ............................
-            بصفته/ .........................
+            ويمثلها في التوقيع علي هذا العقد السيد/ {entitledToSign.name} بصفته
+            / {entitledToSign.position}
+          </div>
+        </>
+      ) : (
+        <>
+          <div>
+            السيد/ {customerName} المقيم/
+            {customerHomeAddress} بطاقه رقم قومي/
+            {nationalId}{' '}
           </div>
         </>
       )}

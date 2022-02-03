@@ -15,7 +15,17 @@ export interface FLContractProps {
     firstInstallmentDate: number
     lastInstallmentDate: number
     feesSum: number
+    customerHomeAddress: string
+    nationalId: string
+    commercialRegisterNumber: string
+    businessAddress: string
+    taxCardNumber: string
+    entitledToSign: EntitledToSign
   }
+}
+interface EntitledToSign {
+  position: string
+  name: string
 }
 
 export type SubjectStyle = 'index' | 'dotted' | 'dashed' | 'alphaIndex'
