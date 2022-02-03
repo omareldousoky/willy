@@ -104,12 +104,17 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
         ....................................... بصفته/ رئيس مجلس الأدارة للشركة
       </div>
       <div className="d-flex">
-        <p>
-          2- {customerType === 'company' ? 'شركة' : 'السيد'} {customerName}
+        <p className="mr-2">
+          2- {customerType === 'company' ? 'شركة' : 'السيد /'} {customerName}
         </p>
+        {customerType !== 'company' && (
+          <p>
+            - المقيم / {customerHomeAddress} - بطاقه رقم قومي / {nationalId}{' '}
+          </p>
+        )}
         <p className="ml-5"> ( الطرف الثاني المستأجر )</p>
       </div>
-      {customerType === 'company' ? (
+      {customerType === 'company' && (
         <>
           <div>
             مقيده بسجل تجاري : {commercialRegisterNumber} ومقرها :
@@ -126,22 +131,13 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
             / {entitledToSign.position}
           </div>
         </>
-      ) : (
-        <>
-          <div>
-            السيد/ {customerName} المقيم/
-            {customerHomeAddress} بطاقه رقم قومي/
-            {nationalId}{' '}
-          </div>
-        </>
       )}
       {guarantors &&
         guarantors.map((g, index) => (
           <div className="d-flex" key={`${g.name}-${index}`}>
             <p>
-              {index + 3}- السيد/ {g.name} المقيم/
-              {g.address} بطاقه رقم قومي/
-              {numbersToArabic(g.nationalId)}
+              {index + 3}- السيد / {g.name} - المقيم / {g.address} - بطاقه رقم
+              قومي / {numbersToArabic(g.nationalId)}
             </p>
             <p className="ml-5">
               (طرف {FLindexLocal[index + 2]} - ضامن متضامن)
