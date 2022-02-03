@@ -63,6 +63,7 @@ import { getLoanUsage } from 'Shared/Services/APIs/LoanUsage/getLoanUsage'
 import { getEarlyPaymentPdfData } from 'Shared/Utils/payment'
 import EarlyPaymentReceipt from 'Shared/Components/pdfTemplates/Financial/earlyPaymentReceipt/earlyPaymentReceipt'
 import { Score, Customer } from 'Shared/Models/Customer'
+import { FinancialLeaseContract } from 'Shared/Components/pdfTemplates/FinancialLeasingContract/types'
 import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment'
 import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions'
 import Payment from '../Payment/payment'
@@ -123,7 +124,7 @@ export interface IndividualWithInstallments {
 
 interface State {
   application: any
-  financialLeaseContract: any
+  financialLeaseContract?: FinancialLeaseContract
   activeTab: string
   tabsArray: Array<Tab>
   loading: boolean
@@ -163,7 +164,6 @@ class LoanProfile extends Component<Props, State> {
     super(props)
     this.state = {
       application: {},
-      financialLeaseContract: {},
       activeTab: 'loanDetails',
       tabsArray: [],
       loading: false,
@@ -1804,7 +1804,9 @@ class LoanProfile extends Component<Props, State> {
           </>
         )}
         {this.state.print === 'financialLeasingContract' && (
-          <FinancialLeasingContract data={this.state.financialLeaseContract} />
+          <FinancialLeasingContract
+            data={this.state.financialLeaseContract as FinancialLeaseContract}
+          />
         )}
         {this.state.print === 'allSME' && (
           <>
