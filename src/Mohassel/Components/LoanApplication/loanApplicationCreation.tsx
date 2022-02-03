@@ -159,6 +159,9 @@ class LoanApplicationCreation extends Component<Props, State> {
         customers,
         false,
         this.state.isNano,
+        ['financialLeasing', 'smeFinancialLeasing'].includes(
+          this.state.customerType ?? ''
+        ),
         this.state.application.principals,
         (value) => this.setState({ loading: value })
       )
@@ -768,6 +771,9 @@ class LoanApplicationCreation extends Component<Props, State> {
           [selectedCustomer.body.customer],
           false,
           this.state.isNano,
+          ['financialLeasing', 'smeFinancialLeasing'].includes(
+            this.state.customerType ?? ''
+          ),
           this.state.application.principals,
           (value) => this.setState({ loading: value })
         )
@@ -840,6 +846,9 @@ class LoanApplicationCreation extends Component<Props, State> {
         [selectedGuarantor.body.customer],
         true,
         this.state.isNano,
+        ['financialLeasing', 'smeFinancialLeasing'].includes(
+          this.state.customerType ?? ''
+        ),
         this.state.application.principals,
         (value) => this.setState({ loading: value })
       )

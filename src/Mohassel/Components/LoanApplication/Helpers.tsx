@@ -342,6 +342,7 @@ export const checkCustomersLimits = async (
   customers,
   guarantor,
   isNano,
+  isFL,
   principals,
   setLoading
 ) => {
@@ -384,9 +385,26 @@ export const checkCustomersLimits = async (
             }
           }
           if (
+            (customer.financialLeasingLoanIds?.length ||
+              customer.financialLeasingApplicationIds?.length) &&
+            !isFL
+          ) {
+            validationObject[customer._id] = {
+              customerName: customer.customerName,
+              ...(customer.financialLeasingLoanIds && {
+                financialLeasingLoanIds: customer.financialLeasingLoanIds,
+              }),
+              ...(customer.financialLeasingApplicationIds && {
+                financialLeasingApplicationIds:
+                  customer.financialLeasingApplicationIds,
+              }),
+            }
+          }
+          if (
             customer.applicationIds &&
             !customer.loanIds &&
             (isNano ||
+              isFL ||
               customer.applicationIds.length >= customer.maxLoansAllowed)
           ) {
             validationObject[customer._id] = {
@@ -397,7 +415,9 @@ export const checkCustomersLimits = async (
           if (
             customer.loanIds &&
             !customer.applicationIds &&
-            (isNano || customer.loanIds.length >= customer.maxLoansAllowed)
+            (isNano ||
+              isFL ||
+              customer.loanIds.length >= customer.maxLoansAllowed)
           ) {
             if (Object.keys(validationObject).includes(customer._id)) {
               validationObject[customer._id] = {
