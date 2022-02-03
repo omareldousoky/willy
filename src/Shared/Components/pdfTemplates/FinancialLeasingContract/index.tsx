@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, Fragment } from 'react'
 import './styles.scss'
 import add from 'date-fns/add'
 import * as local from 'Shared/Assets/ar.json'
@@ -67,11 +67,11 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
         {row.title && <div className="element-title">{row.title}</div>}
         {row.data.map((subRow, sri) => {
           return (
-            <React.Fragment key={sri}>
+            <Fragment key={sri}>
               <div>{`${
                 row.style ? getRowStyle(row.style, sri) : ''
               } ${subRow}`}</div>
-            </React.Fragment>
+            </Fragment>
           )
         })}
       </div>
