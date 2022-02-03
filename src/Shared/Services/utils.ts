@@ -638,6 +638,25 @@ export const periodLengthLocal = {
   12: 'سنوي',
 }
 
+export const alphaIndex = {
+  0: 'أ',
+  1: 'ب',
+  2: 'ج',
+  3: 'د',
+  4: 'ه',
+  5: 'و',
+  6: 'ز',
+  7: 'ح',
+  8: 'ط',
+  9: 'ي',
+  10: 'ك',
+  11: 'ل',
+  12: 'م',
+  13: 'ن',
+  14: 'س',
+  15: 'ع',
+}
+
 export const convertToTimestamp = (date?: string | number): number => {
   const today = new Date().valueOf()
   return date ? new Date(date).valueOf() || today : today
