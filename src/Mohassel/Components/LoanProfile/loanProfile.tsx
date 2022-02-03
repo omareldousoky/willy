@@ -676,7 +676,9 @@ class LoanProfile extends Component<Props, State> {
       {
         icon: 'download',
         title: local.downloadPDF,
-        permission: this.state.application.status === 'created',
+        permission:
+          this.state.application.status === 'created' &&
+          ability.can('createLoan', 'application'),
         onActionClick: () => {
           this.setState(
             (prevState) => ({
