@@ -246,7 +246,7 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
           <div>الطرف الثاني</div>
           <div>المستاجر</div>
           <div>
-            {customerType === 'company' ? 'شركه' : ''} {customerName}
+            {customerType === 'company' ? 'شركه / ' : ''} {customerName}
           </div>
           <div>الاسم / </div>
           <div>التوقيع /</div>
