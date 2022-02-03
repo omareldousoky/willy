@@ -8,10 +8,10 @@ import {
   dayToArabic,
   FLindexLocal,
   periodLengthLocal,
-  alphaIndex,
+  alphaIndexLocal,
 } from 'Shared/Services/utils'
-import { FLContractProps, SubjectStyle } from './types'
-import { subjects } from './subjects'
+import { FLContractProps, TermStyle } from './types'
+import { terms } from './terms'
 
 const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
   const {
@@ -42,10 +42,10 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
     days: 7,
   }).valueOf()
 
-  const getRowStyle = (style: SubjectStyle, index: number): string => {
+  const getRowStyle = (style: TermStyle, index: number): string => {
     switch (style) {
       case 'alphaIndex': {
-        return `${alphaIndex[index]}- `
+        return `${alphaIndexLocal[index]} - `
       }
       case 'dashed': {
         return '-'
@@ -213,22 +213,26 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
         والضوابط الصادرة تنفيذاً لأحكامه. وبعد أن اقر الطرفان بصفتهما وأهليتهما
         لإبرام هذا العقد فقد اتفقا على مايلي{' '}
       </div>
-      {subjects.map((s, si) => (
-        <div key={si} className="article-container">
-          {s.id > 0 && <div className="law-title">المادة رقم ({s.id})</div>}
-          {s.title && <div className="element-title">{s.title}</div>}
-          {s.data.map((r, ri) => (
-            <div key={ri}>
+      {terms.map((term, t) => (
+        <div key={t} className="article-container">
+          {term.id > 0 && (
+            <div className="term-title">المادة رقم ({term.id})</div>
+          )}
+          {term.title && <div className="element-title">{term.title}</div>}
+          {term.data.map((row, r) => (
+            <div key={r}>
               {`${
-                typeof r !== 'object' && s.style ? getRowStyle(s.style, ri) : ''
+                typeof row !== 'object' && term.style
+                  ? getRowStyle(term.style, r)
+                  : ''
               }`}{' '}
-              {typeof r === 'object' ? getSubRow(r) : r}
+              {typeof row === 'object' ? getSubRow(row) : row}
             </div>
           ))}
-          {s.id === 9 && <div className="pagebreak" />}
+          {term.id === 9 && <div className="pagebreak" />}
         </div>
       ))}
-      <div className="law-title mb-5 mt-5">التوقيع </div>
+      <div className="term-title mb-5 mt-5">التوقيع </div>
 
       <div className="d-flex justify-content-between w-50">
         <div>

@@ -29,23 +29,23 @@ interface EntitledToSign {
   name: string
 }
 
-export type SubjectStyle = 'index' | 'dotted' | 'dashed' | 'alphaIndex'
+export type TermStyle = 'index' | 'dotted' | 'dashed' | 'alphaIndex'
 
-interface SubjectsData {
+interface TermData {
   id: number
-  style?: SubjectStyle
+  style?: TermStyle
   title?: string
 }
 
-export interface SubjectSubData {
+export interface TermSubData {
   id?: string
-  style?: SubjectStyle
+  style?: TermStyle
   title?: string
   data: string[]
 }
 
-export interface SubjectMapper extends SubjectsData {
-  data: (string | SubjectSubData)[]
+export interface TermMapper extends TermData {
+  data: (string | TermSubData)[]
 }
 
 interface Guarantor {

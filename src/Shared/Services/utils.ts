@@ -638,7 +638,7 @@ export const periodLengthLocal = {
   12: 'سنوي',
 }
 
-export const alphaIndex = {
+export const alphaIndexLocal = {
   0: 'أ',
   1: 'ب',
   2: 'ج',

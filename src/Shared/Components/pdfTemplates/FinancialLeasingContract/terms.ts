@@ -1,6 +1,6 @@
-import { SubjectMapper } from './types'
+import { TermMapper } from './types'
 
-export const subjects: SubjectMapper[] = [
+export const terms: TermMapper[] = [
   {
     id: 1,
     data: [
