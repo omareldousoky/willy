@@ -124,7 +124,6 @@ export interface IndividualWithInstallments {
 
 interface State {
   application: any
-  financialLeaseContract?: FinancialLeaseContract
   activeTab: string
   tabsArray: Array<Tab>
   loading: boolean
