@@ -604,51 +604,51 @@ class LoanProfile extends Component<Props, State> {
     }
   }
 
-  getFinancialLeaseContractData(application) {
-    this.setState({
-      financialLeaseContract: {
-        creationDate: application.creationDate,
-        customerType: application.customer.customerType,
-        customerName: application.customer.customerName,
-        guarantors: application.guarantors.map((g) => ({
-          name: g.customerName,
-          address: g.customerHomeAddress,
-          nationalId: g.nationalId,
-        })),
-        vendorName: application.vendorName,
-        principal: application.installmentsObject.totalInstallments.principal,
-        categoryName: application.categoryName,
-        itemDescription: application.itemDescription,
-        businessSector: application.businessSector,
-        downPayment: application.downPayment,
-        installmentResponse:
-          application.installmentsObject.installments[0].installmentResponse,
-        periodLength: application.product.periodLength,
-        firstInstallmentDate:
-          application.installmentsObject.installments[0].dateOfPayment,
-        lastInstallmentDate: application.installmentsObject.installments.reverse()[0]
-          .dateOfPayment,
-        feesSum: application.installmentsObject.totalInstallments.feesSum,
-        customerHomeAddress: application.customer.customerHomeAddress,
-        nationalId: application.customer.nationalId,
-        commercialRegisterNumber: application.customer.commercialRegisterNumber,
-        businessAddress: application.customer.businessAddress,
-        taxCardNumber: application.customer.taxCardNumber,
-        entitledToSign: {
-          position: application.entitledToSign
-            ? application.entitledToSign[0].position
-            : '',
-          name: application.entitledToSign
-            ? application.entitledToSign[0].customer.customerName
-            : '',
-        },
+  getFinancialLeaseContractData(): FinancialLeaseContract {
+    const { application } = this.state
+    const FLContractData = {
+      creationDate: application.creationDate,
+      customerType: application.customer.customerType,
+      customerName: application.customer.customerName,
+      guarantors: application.guarantors.map((g) => ({
+        name: g.customerName,
+        address: g.customerHomeAddress,
+        nationalId: g.nationalId,
+      })),
+      vendorName: application.vendorName,
+      principal: application.installmentsObject.totalInstallments.principal,
+      categoryName: application.categoryName,
+      itemDescription: application.itemDescription,
+      businessSector: application.customer.businessSector,
+      downPayment: application.downPayment,
+      installmentResponse:
+        application.installmentsObject.installments[0].installmentResponse,
+      periodLength: application.product.periodLength,
+      firstInstallmentDate:
+        application.installmentsObject.installments[0].dateOfPayment,
+      lastInstallmentDate: application.installmentsObject.installments.reverse()[0]
+        .dateOfPayment,
+      feesSum: application.installmentsObject.totalInstallments.feesSum,
+      customerHomeAddress: application.customer.customerHomeAddress,
+      nationalId: application.customer.nationalId,
+      commercialRegisterNumber: application.customer.commercialRegisterNumber,
+      businessAddress: application.customer.businessAddress,
+      taxCardNumber: application.customer.taxCardNumber,
+      entitledToSign: {
+        position: application.entitledToSign
+          ? application.entitledToSign[0].position
+          : '',
+        name: application.entitledToSign
+          ? application.entitledToSign[0].customer.customerName
+          : '',
       },
-    })
+    }
+    return FLContractData
   }
 
   getContractType = (customerType: string): string => {
     let type = 'all'
-    if (this.state.application.financialLeasing) {
+    if (this.state.application.product.financialLeasing) {
       type = 'financialLeasingContract'
     } else if (customerType === 'company') {
       type = 'allSME'
@@ -679,8 +679,6 @@ class LoanProfile extends Component<Props, State> {
         title: local.downloadPDF,
         permission: this.state.application.status === 'created',
         onActionClick: () => {
-          if (this.state.application.financialLeasing)
-            this.getFinancialLeaseContractData(this.state.application)
           this.setState(
             (prevState) => ({
               print: this.getContractType(
@@ -1805,7 +1803,7 @@ class LoanProfile extends Component<Props, State> {
         )}
         {this.state.print === 'financialLeasingContract' && (
           <FinancialLeasingContract
-            data={this.state.financialLeaseContract as FinancialLeaseContract}
+            data={this.getFinancialLeaseContractData()}
           />
         )}
         {this.state.print === 'allSME' && (
