@@ -11,7 +11,6 @@ phases:
       - chmod +x ./kubectl ./aws-iam-authenticator
       - export PATH=$PWD/:$PATH
       - cat /etc/issue
-      - yum update  -y
       - yum -y install  jq
   pre_build:
     commands:
