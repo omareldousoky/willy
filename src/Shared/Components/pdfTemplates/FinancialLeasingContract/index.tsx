@@ -71,7 +71,7 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
             <Fragment key={sri}>
               <div>{`${
                 row.style ? getRowStyle(row.style, sri) : ''
-              } ${subRow}`}</div>
+              } ${subRow}.`}</div>
             </Fragment>
           )
         })}
@@ -88,12 +88,10 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
         {term.title && <div className="element-title">{term.title}</div>}
         {term.data.map((row, r) => (
           <div key={r}>
-            {`${
-              typeof row !== 'object' && term.style
-                ? getRowStyle(term.style, r)
-                : ''
-            }`}{' '}
-            {typeof row === 'object' ? returnTermSubRow(row) : row}
+            {typeof row !== 'object' && term.style
+              ? getRowStyle(term.style, r)
+              : ''}{' '}
+            {typeof row === 'object' ? returnTermSubRow(row) : `${row}.`}
           </div>
         ))}
         {term.id === 9 && <div className="pagebreak" />}
