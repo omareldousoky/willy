@@ -217,7 +217,9 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
         كما اتفق الأطراف على أن تكون قيمة العوائد و العمولات والمصاريف (أن وجدت)
         علي النحو الأتي :
       </div>
-      <div>الفائده : {feesSum}</div>
+      <div>
+        الفائده : {feesSum} ({new Tafgeet(feesSum, 'EGP').parse()})
+      </div>
       <div>.المصاريف الاداريه : ................................</div>
 
       <div className="element-title">مــدة العقـــــد وثمن الشراء وتاريخة</div>
