@@ -61,7 +61,7 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
     }
   }
 
-  const getSubRow = (row) => {
+  const returnTermSubRow = (row) => {
     return (
       <div className="article-container">
         {row.title && <div className="element-title">{row.title}</div>}
@@ -76,6 +76,28 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
         })}
       </div>
     )
+  }
+
+  const returnTerms = () => {
+    return terms.map((term, t) => (
+      <div key={t} className="article-container">
+        {term.id > 0 && (
+          <div className="term-title">المادة رقم ({term.id})</div>
+        )}
+        {term.title && <div className="element-title">{term.title}</div>}
+        {term.data.map((row, r) => (
+          <div key={r}>
+            {`${
+              typeof row !== 'object' && term.style
+                ? getRowStyle(term.style, r)
+                : ''
+            }`}{' '}
+            {typeof row === 'object' ? returnTermSubRow(row) : row}
+          </div>
+        ))}
+        {term.id === 9 && <div className="pagebreak" />}
+      </div>
+    ))
   }
 
   return (
@@ -203,7 +225,7 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
         وفقا لأحكام قانون التأجير التمويلي والتخصيم رقم 176 لسنة 2018، وقيد بسجل
         قيد المؤجريين التمويليين بالهيئة الهامة للرقابة المالية برقم /301
       </div>
-      <div className="pagebreak" />
+      {customerType === 'company' && <div className="pagebreak" />}
       <div>
         ولما كان المستأجر ( الطرف الثانى ) يمارس نشاط {businessSector} مما يجعله
         يحتاج الى اموال لمزاولة انشطة اقتصادية ( انتاجية – خدمية – تجارية -
@@ -213,25 +235,9 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
         والضوابط الصادرة تنفيذاً لأحكامه. وبعد أن اقر الطرفان بصفتهما وأهليتهما
         لإبرام هذا العقد فقد اتفقا على مايلي{' '}
       </div>
-      {terms.map((term, t) => (
-        <div key={t} className="article-container">
-          {term.id > 0 && (
-            <div className="term-title">المادة رقم ({term.id})</div>
-          )}
-          {term.title && <div className="element-title">{term.title}</div>}
-          {term.data.map((row, r) => (
-            <div key={r}>
-              {`${
-                typeof row !== 'object' && term.style
-                  ? getRowStyle(term.style, r)
-                  : ''
-              }`}{' '}
-              {typeof row === 'object' ? getSubRow(row) : row}
-            </div>
-          ))}
-          {term.id === 9 && <div className="pagebreak" />}
-        </div>
-      ))}
+      {customerType !== 'company' && <div className="pagebreak" />}
+
+      {returnTerms()}
       <div className="term-title mb-5 mt-5">التوقيع </div>
 
       <div className="d-flex justify-content-between w-50">

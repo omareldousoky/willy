@@ -648,7 +648,7 @@ class LoanProfile extends Component<Props, State> {
 
   getContractType = (customerType: string): string => {
     let type = 'all'
-    if (this.state.application.financialLeasing) {
+    if (true) {
       type = 'financialLeasingContract'
     } else if (customerType === 'company') {
       type = 'allSME'
@@ -679,8 +679,7 @@ class LoanProfile extends Component<Props, State> {
         title: local.downloadPDF,
         permission: this.state.application.status === 'created',
         onActionClick: () => {
-          if (this.state.application.financialLeasing)
-            this.getFinancialLeaseContractData(this.state.application)
+          if (true) this.getFinancialLeaseContractData(this.state.application)
           this.setState(
             (prevState) => ({
               print: this.getContractType(
