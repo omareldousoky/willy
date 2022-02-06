@@ -12,7 +12,7 @@ import {
 } from 'Shared/Services/utils'
 import Tafgeet from 'tafgeetjs'
 import { FLContractProps, TermStyle } from './types'
-import { terms } from './terms'
+import { generateTerms } from './terms'
 import { Header } from '../pdfTemplateCommon/header'
 
 const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
@@ -81,7 +81,7 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
   }
 
   const returnTerms = () => {
-    return terms.map((term, t) => (
+    return generateTerms(periodLength).map((term, t) => (
       <Fragment key={t}>
         {term.id > 0 && (
           <div className="term-title">المادة رقم ({term.id})</div>
@@ -224,11 +224,11 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
               </div>
               <div>
                 اجمالي القيمة الايجارية : {downPayment + installmentResponse} (
-                {new Tafgeet(downPayment + installmentResponse, 'EGP').parse()})
+                {new Tafgeet(installmentResponse, 'EGP').parse()})
               </div>
               <div>
-                تسداد الأجرة بشكل ({periodLengthLocal[periodLength] || local.na}
-                )
+                تسداد الأجرة بشكل (
+                {periodLengthLocal[periodLength] || ': ..............'})
               </div>
               <div>
                 ويبدأ سداد الأجرة من تاريخ{' '}
@@ -240,7 +240,11 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
                 (أن وجدت) علي النحو الأتي :
               </div>
               <div>
-                الفائده : {feesSum} ({new Tafgeet(feesSum, 'EGP').parse()})
+                الفائده : {feesSum} (
+                {new Tafgeet(feesSum, 'EGP')
+                  .parse()
+                  .replace('undefined', 'صفر')}
+                )
               </div>
               <div>.المصاريف الاداريه : ................................</div>
 

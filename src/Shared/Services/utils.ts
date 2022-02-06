@@ -633,9 +633,17 @@ export const FLindexLocal = {
 }
 
 export const periodLengthLocal = {
+  1: 'شهري',
   3: 'ربع سنوي',
   6: 'نصف سنوي',
   12: 'سنوي',
+}
+
+export const periodLengthSingularLocal = {
+  1: 'شهر',
+  3: 'ربع سنة',
+  6: 'نصف سنة',
+  12: 'سنة',
 }
 
 export const alphaIndexLocal = {
