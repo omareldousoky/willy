@@ -16,6 +16,7 @@ interface HeaderProps {
   branchName?: string
   sme?: boolean
   cf?: boolean
+  fl?: boolean
 }
 
 export const Header = ({
@@ -28,6 +29,7 @@ export const Header = ({
   branchName,
   sme,
   cf,
+  fl,
 }: HeaderProps) => {
   return (
     <>
@@ -38,6 +40,8 @@ export const Header = ({
             ? 'ترخيص رقم 23 بتاريخ 31/05/2021'
             : sme
             ? 'ترخيص ممارسة نشاط تمويل المشروعات المتوسطة والصغيرة رقم ١ لسنه ٢٠٢١'
+            : fl
+            ? 'مرخصه بسجل المؤجرين التمويليين بالهيئه العامه للرقابه الماليه برقم ٣٠١ بتاريخ ٣١/ ٥/٢٠٢١'
             : 'ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
         </p>
       </div>

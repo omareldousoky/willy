@@ -13,6 +13,7 @@ import {
 import Tafgeet from 'tafgeetjs'
 import { FLContractProps, TermStyle } from './types'
 import { terms } from './terms'
+import { Header } from '../pdfTemplateCommon/header'
 
 const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
   const {
@@ -94,13 +95,16 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
             {typeof row === 'object' ? returnTermSubRow(row) : `${row}.`}
           </div>
         ))}
-        {term.id === 9 && <div className="pagebreak" />}
+        {term.id === 10 && customerType !== 'company' && (
+          <div className="pagebreak" />
+        )}
       </div>
     ))
   }
 
   return (
     <div className="financial-leasing-container">
+      <Header showCurrentUser={false} fl />
       <div className="head-title">{local.financialLeasingContract}</div>
       <div className="element-title">
         {' '}
@@ -229,6 +233,7 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
         وأتفق الأطراف علي أن يكون ثمن شراء الأصل المؤجر: ا. (
         {new Tafgeet(1, 'EGP').parse()}){' '}
       </div>
+      {customerType === 'company' && <div className="pagebreak" />}
       <div>
         كما اتفق الأطراف على أن يكون تاريخ شراء الأصل المؤجر في موعد أقصاه :{' '}
         {timeToArabicDate(purchaseDate, false)}
@@ -239,7 +244,6 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
         وفقا لأحكام قانون التأجير التمويلي والتخصيم رقم 176 لسنة 2018، وقيد بسجل
         قيد المؤجريين التمويليين بالهيئة الهامة للرقابة المالية برقم /301
       </div>
-      {customerType === 'company' && <div className="pagebreak" />}
       <div>
         ولما كان المستأجر ( الطرف الثانى ) يمارس نشاط {businessSector} مما يجعله
         يحتاج الى اموال لمزاولة انشطة اقتصادية ( انتاجية – خدمية – تجارية -
