@@ -1523,9 +1523,12 @@ class LoanApplicationCreation extends Component<Props, State> {
               (this.state.customerType === 'group' &&
                 (this.state.selectedGroupLeader.length === 0 ||
                   this.state.selectedCustomers.length < 3)) ||
-              (['individual', 'sme', 'smeFinancialLeasing'].includes(
-                this.state.customerType
-              ) &&
+              ([
+                'individual',
+                'financialLeasing',
+                'sme',
+                'smeFinancialLeasing',
+              ].includes(this.state.customerType) &&
                 Object.keys(this.state.selectedCustomer).length === 0)
             }
             onClick={() => this.step('forward')}

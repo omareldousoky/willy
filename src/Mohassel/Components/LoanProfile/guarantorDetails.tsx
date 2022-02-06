@@ -79,7 +79,7 @@ export const GuarantorTableView = (props: Props) => {
       changeLoading(false)
     }
   }
-  async function checkCustomersLimits(customers, guarantor) {
+  async function checkCustomersLimits(customers) {
     const customerIds: Array<string> = []
     customers.forEach((customer) => customerIds.push(customer._id))
     changeLoading(true)
@@ -102,48 +102,86 @@ export const GuarantorTableView = (props: Props) => {
       }
       if (res.body.data && res.body.data.length > 0) {
         merged.forEach((customer) => {
-          if (guarantor) {
-            if (
-              customer.applicationIds &&
-              customer.applicationIds.length > 0 &&
-              !customer.allowGuarantorLoan
-            ) {
+          if (
+            customer.applicationIds &&
+            customer.applicationIds.length > 0 &&
+            !customer.allowGuarantorLoan
+          ) {
+            validationObject[customer._id] = {
+              customerName: customer.customerName,
+              applicationIds: customer.applicationIds,
+            }
+          }
+          if (
+            customer.loanIds &&
+            customer.loanIds.length > 0 &&
+            !customer.allowGuarantorLoan
+          ) {
+            if (Object.keys(validationObject).includes(customer._id)) {
+              validationObject[customer._id] = {
+                ...validationObject[customer._id],
+                ...{ loanIds: customer.loanIds },
+              }
+            } else {
               validationObject[customer._id] = {
                 customerName: customer.customerName,
-                applicationIds: customer.applicationIds,
+                loanIds: customer.loanIds,
               }
             }
-            if (
-              customer.loanIds &&
-              customer.loanIds.length > 0 &&
-              !customer.allowGuarantorLoan
-            ) {
-              if (Object.keys(validationObject).includes(customer._id)) {
-                validationObject[customer._id] = {
-                  ...validationObject[customer._id],
-                  ...{ loanIds: customer.loanIds },
-                }
-              } else {
-                validationObject[customer._id] = {
-                  customerName: customer.customerName,
-                  loanIds: customer.loanIds,
-                }
+          }
+          if (
+            customer.financialLeasingLoanIds &&
+            customer.financialLeasingLoanIds.length > 0 &&
+            !customer.allowGuarantorLoan
+          ) {
+            if (Object.keys(validationObject).includes(customer._id)) {
+              validationObject[customer._id] = {
+                ...validationObject[customer._id],
+                ...{
+                  financialLeasingLoanIds: customer.financialLeasingLoanIds,
+                },
+              }
+            } else {
+              validationObject[customer._id] = {
+                customerName: customer.customerName,
+                financialLeasingLoanIds: customer.financialLeasingLoanIds,
               }
             }
-            if (
-              customer.guarantorIds &&
-              customer.guarantorIds.length >= customer.guarantorMaxLoans
-            ) {
-              if (Object.keys(validationObject).includes(customer._id)) {
-                validationObject[customer._id] = {
-                  ...validationObject[customer._id],
-                  ...{ guarantorIds: customer.guarantorIds },
-                }
-              } else {
-                validationObject[customer._id] = {
-                  customerName: customer.customerName,
-                  guarantorIds: customer.guarantorIds,
-                }
+          }
+          if (
+            customer.financialLeasingApplicationIds &&
+            customer.financialLeasingApplicationIds.length > 0 &&
+            !customer.allowGuarantorLoan
+          ) {
+            if (Object.keys(validationObject).includes(customer._id)) {
+              validationObject[customer._id] = {
+                ...validationObject[customer._id],
+                ...{
+                  financialLeasingApplicationIds:
+                    customer.financialLeasingApplicationIds,
+                },
+              }
+            } else {
+              validationObject[customer._id] = {
+                customerName: customer.customerName,
+                financialLeasingApplicationIds:
+                  customer.financialLeasingApplicationIds,
+              }
+            }
+          }
+          if (
+            customer.guarantorIds &&
+            customer.guarantorIds.length >= customer.guarantorMaxLoans
+          ) {
+            if (Object.keys(validationObject).includes(customer._id)) {
+              validationObject[customer._id] = {
+                ...validationObject[customer._id],
+                ...{ guarantorIds: customer.guarantorIds },
+              }
+            } else {
+              validationObject[customer._id] = {
+                customerName: customer.customerName,
+                guarantorIds: customer.guarantorIds,
               }
             }
           }
@@ -173,10 +211,7 @@ export const GuarantorTableView = (props: Props) => {
       if (targetGuarantor.body.customer.blocked.isBlocked === true) {
         errorMessage1 = local.theCustomerIsBlocked
       }
-      const check = await checkCustomersLimits(
-        [targetGuarantor.body.customer],
-        true
-      )
+      const check = await checkCustomersLimits([targetGuarantor.body.customer])
       if (
         check.flag === true &&
         check.customers &&

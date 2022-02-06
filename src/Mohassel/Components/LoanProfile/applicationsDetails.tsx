@@ -67,6 +67,8 @@ export const LoanDetailsTableView = ({
           <td>
             {beneficiaryType(application.product.beneficiaryType)} -
             {application.product.type || ''}
+            {application.product.financialLeasing &&
+              ` - ${local.financialLeasing}`}
           </td>
         </tr>
         <tr>

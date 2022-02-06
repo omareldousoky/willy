@@ -499,6 +499,46 @@ export const checkCustomersLimits = async (
             }
           }
           if (
+            customer.financialLeasingLoanIds &&
+            customer.financialLeasingLoanIds.length > 0 &&
+            !customer.allowGuarantorLoan
+          ) {
+            if (Object.keys(validationObject).includes(customer._id)) {
+              validationObject[customer._id] = {
+                ...validationObject[customer._id],
+                ...{
+                  financialLeasingLoanIds: customer.financialLeasingLoanIds,
+                },
+              }
+            } else {
+              validationObject[customer._id] = {
+                customerName: customer.customerName,
+                financialLeasingLoanIds: customer.financialLeasingLoanIds,
+              }
+            }
+          }
+          if (
+            customer.financialLeasingApplicationIds &&
+            customer.financialLeasingApplicationIds.length > 0 &&
+            !customer.allowGuarantorLoan
+          ) {
+            if (Object.keys(validationObject).includes(customer._id)) {
+              validationObject[customer._id] = {
+                ...validationObject[customer._id],
+                ...{
+                  financialLeasingApplicationIds:
+                    customer.financialLeasingApplicationIds,
+                },
+              }
+            } else {
+              validationObject[customer._id] = {
+                customerName: customer.customerName,
+                financialLeasingApplicationIds:
+                  customer.financialLeasingApplicationIds,
+              }
+            }
+          }
+          if (
             customer.guarantorIds &&
             customer.guarantorIds.length >= customer.guarantorMaxLoans
           ) {

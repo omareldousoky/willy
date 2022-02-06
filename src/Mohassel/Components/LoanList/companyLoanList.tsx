@@ -61,7 +61,7 @@ const CompanyLoanList: FunctionComponent<LoanListProps> = (
     )
       ? issuedLoansSearchFilters.type
       : 'sme'
-    setIssuedLoansSearchFilters({ type })
+    setIssuedLoansSearchFilters({ ...issuedLoansSearchFilters, ...{ type } })
     let query = {
       ...issuedLoansSearchFilters,
       keyword: undefined, // prevent sending key to BE
