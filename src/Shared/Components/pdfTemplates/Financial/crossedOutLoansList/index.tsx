@@ -3,10 +3,11 @@ import './crossedOutLoansList.scss'
 import * as local from '../../../../Assets/ar.json'
 import { timeToArabicDate } from '../../../../Services/utils'
 import Orientation from '../../../Common/orientation'
+import { Header } from '../../pdfTemplateCommon/header'
 
 export const CrossedOutLoansList = (props) => {
   const { isCF } = props
-  const { data } = props.data
+  const { data, financialLeasing } = props.data
   const { days } = data
   const totalNumberOfTransactions = Number(data.numTrx)
   const totalTransactionAmount = Number(data.transactionAmount)
@@ -164,31 +165,12 @@ export const CrossedOutLoansList = (props) => {
     )
   }
 
+  console.log(data, '??????')
   return (
     <>
       <Orientation size="portrait" />
       <div className="crossed-out-loans-list" lang="ar">
-        <table
-          className="w-100 text-center"
-          style={{
-            margin: '10px 0px',
-          }}
-        >
-          <tbody>
-            <tr style={{ height: '10px' }} />
-            <tr className="w-100 d-flex flex-row justify-content-between">
-              <th colSpan={6}>
-                <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
-              </th>
-              <th colSpan={6}>
-                {isCF
-                  ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
-                  : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
-              </th>
-            </tr>
-            <tr style={{ height: '10px' }} />
-          </tbody>
-        </table>
+        <Header cf={isCF} fl={financialLeasing} />
         <table className="report-container">
           <thead className="report-header">
             <tr className="headtitle">

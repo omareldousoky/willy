@@ -10,7 +10,7 @@ export const BranchesLoanList = ({
   fromDate,
   toDate,
 }: BranchesLoanListProps) => {
-  const { loanType } = data
+  const { loanType, financialLeasing } = data
   const isAll = loanType === 'all'
   const isMicro = loanType === 'micro' || isAll
   const isSme = !isMicro || isAll
@@ -30,7 +30,12 @@ export const BranchesLoanList = ({
   return (
     <div className="branches-loan-list" lang="ar">
       <Orientation size="portrait" />
-      <Header title="القروض والحالات" fromDate={fromDate} toDate={toDate} />
+      <Header
+        title="القروض والحالات"
+        fromDate={fromDate}
+        toDate={toDate}
+        fl={financialLeasing}
+      />
       <table className="body">
         {group && <LoanTypeSection data={group} loanTypeName="مجموعة" />}
         {individual && (

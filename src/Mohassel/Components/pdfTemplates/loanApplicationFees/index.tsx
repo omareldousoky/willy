@@ -1,12 +1,10 @@
 import React from 'react'
 import './loanApplicationFees.scss'
-import {
-  timeToArabicDate,
-  timeToArabicDateNow,
-} from '../../../../Shared/Services/utils'
+import { timeToArabicDate, timeToArabicDateNow } from 'Shared/Services/utils'
+import { stringPlaceholder } from 'Shared/Components/pdfTemplates/pdfTemplateCommon/reportLocal'
+import Orientation from 'Shared/Components/Common/orientation'
+import { Header } from 'Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 import { LoanApplicationFeesProps } from './types'
-import Orientation from '../../../../Shared/Components/Common/orientation'
-import { stringPlaceholder } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/reportLocal'
 
 const statusLocalization = (status: string) => {
   switch (status) {
@@ -26,25 +24,7 @@ export const LoanApplicationFees = (props: LoanApplicationFeesProps) => {
   return (
     <div className="loan-application-fees" lang="ar">
       <Orientation size="portrait" />
-      <table
-        className="w-100 text-center"
-        style={{
-          margin: '10px 0px',
-        }}
-      >
-        <tbody>
-          <tr style={{ height: '10px' }} />
-          <tr className="w-100 d-flex flex-row justify-content-between">
-            <th colSpan={6}>
-              <div className="logo-print-tb" />
-            </th>
-            <th colSpan={6}>
-              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-            </th>
-          </tr>
-          <tr style={{ height: '10px' }} />
-        </tbody>
-      </table>
+      <Header fl={props.financialLeasing} />
       <table className="report-container">
         <thead className="report-header">
           <tr className="headtitle">

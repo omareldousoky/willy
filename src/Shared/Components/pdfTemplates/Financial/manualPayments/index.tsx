@@ -6,6 +6,7 @@ import {
 } from '../../../../Services/utils'
 import Orientation from '../../../Common/orientation'
 import { ManualPaymentsProps } from './types'
+import { Header } from '../../pdfTemplateCommon/header'
 
 const statusLocalization = (status: string) => {
   switch (status) {
@@ -29,31 +30,12 @@ export const ManualPayments = ({
   toDate,
   result,
   isCF,
+  financialLeasing,
 }: ManualPaymentsProps) => (
   <>
     <Orientation size="portrait" />
     <div className="manual-payments" lang="ar">
-      <table
-        className="w-100 text-center"
-        style={{
-          margin: '10px 0px',
-        }}
-      >
-        <tbody>
-          <tr style={{ height: '10px' }} />
-          <tr className="w-100 d-flex flex-row justify-content-between">
-            <th colSpan={6}>
-              <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
-            </th>
-            <th colSpan={6}>
-              {isCF
-                ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
-                : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
-            </th>
-          </tr>
-          <tr style={{ height: '10px' }} />
-        </tbody>
-      </table>
+      <Header cf={isCF} fl={financialLeasing} />
       <table className="report-container">
         <thead className="report-header">
           <tr className="headtitle">

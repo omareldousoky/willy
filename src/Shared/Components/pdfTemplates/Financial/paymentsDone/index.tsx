@@ -7,9 +7,11 @@ import {
 } from '../../../../Services/utils'
 import * as local from '../../../../Assets/ar.json'
 import Orientation from '../../../Common/orientation'
+import { Header } from '../../pdfTemplateCommon/header'
 
 export const PaymentsDone = (props) => {
   const { isCF } = props
+  const { financialLeasing } = props.data
   const tempData = props.data.data
   const reportDate =
     props.data.from === props.data.to
@@ -22,27 +24,7 @@ export const PaymentsDone = (props) => {
     <>
       <Orientation size="portrait" />
       <div className="payments-done" lang="ar">
-        <table
-          className="w-100 text-center"
-          style={{
-            margin: '10px 0px',
-          }}
-        >
-          <tbody>
-            <tr style={{ height: '10px' }} />
-            <tr className="w-100 d-flex flex-row justify-content-between">
-              <th colSpan={6}>
-                <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
-              </th>
-              <th colSpan={6}>
-                {isCF
-                  ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
-                  : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
-              </th>
-            </tr>
-            <tr style={{ height: '10px' }} />
-          </tbody>
-        </table>
+        <Header cf={isCF} fl={financialLeasing} />
         <table className="report-container">
           <thead className="report-header">
             <tr className="headtitle">

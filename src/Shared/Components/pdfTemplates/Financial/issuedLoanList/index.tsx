@@ -6,8 +6,10 @@ import {
   timeToArabicDateNow,
   statusLocale,
 } from '../../../../Services/utils'
+import { Header } from '../../pdfTemplateCommon/header'
 
 export const IssuedLoanList = (props) => {
+  const { financialLeasing } = props.data
   const tempData = props.data.data
   const reportDate =
     props.data.from === props.data.to
@@ -18,35 +20,7 @@ export const IssuedLoanList = (props) => {
         )}`
   return (
     <div className="issued-loan-list" lang="ar">
-      <table
-        className="w-100 text-center"
-        style={{
-          margin: '10px 0px',
-        }}
-      >
-        <tbody>
-          <tr style={{ height: '10px' }} />
-          <tr className="w-100 d-flex flex-row justify-content-between">
-            <th
-              colSpan={6}
-              style={{ backgroundColor: 'white', listStyleType: 'none' }}
-              className="border-0"
-            >
-              <div className={`${props.isCF ? 'cf' : 'lts'}-logo-print-tb`} />
-            </th>
-            <th
-              colSpan={6}
-              style={{ backgroundColor: 'white' }}
-              className="border-0"
-            >
-              {props.isCF
-                ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
-                : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
-            </th>
-          </tr>
-          <tr style={{ height: '10px' }} />
-        </tbody>
-      </table>
+      <Header cf={props.isCf} fl={financialLeasing} />
       <table className="report-container">
         <thead className="report-header">
           <tr className="headtitle">

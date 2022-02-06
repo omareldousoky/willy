@@ -459,7 +459,11 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { ...res.body, loanType: request.loanType },
+            data: {
+              ...res.body,
+              loanType: request.loanType,
+              financialLeasing: values.financialLeasing,
+            },
             showModal: false,
             print: 'branchLoanList',
             loading: false,
@@ -496,7 +500,12 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { data: res.body, from: values.fromDate, to: values.toDate },
+            data: {
+              data: res.body,
+              from: values.fromDate,
+              to: values.toDate,
+              financialLeasing: values.financialLeasing,
+            },
             showModal: false,
             print: 'paymentsDoneList',
             loading: false,
@@ -538,7 +547,7 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: res.body,
+            data: { ...res.body, financialLeasing: values.financialLeasing },
             showModal: false,
             print: 'randomPayments',
             loading: false,
@@ -575,7 +584,12 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { data: res.body, from: values.fromDate, to: values.toDate },
+            data: {
+              data: res.body,
+              from: values.fromDate,
+              to: values.toDate,
+              financialLeasing: values.financialLeasing,
+            },
             showModal: false,
             print: 'issuedLoanList',
             loading: false,
@@ -612,7 +626,12 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { data: res.body, from: values.fromDate, to: values.toDate },
+            data: {
+              data: res.body,
+              from: values.fromDate,
+              to: values.toDate,
+              financialLeasing: values.financialLeasing,
+            },
             showModal: false,
             print: 'createdLoanList',
             loading: false,
@@ -649,7 +668,12 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { data: res.body, from: values.fromDate, to: values.toDate },
+            data: {
+              data: res.body,
+              from: values.fromDate,
+              to: values.toDate,
+              financialLeasing: values.financialLeasing,
+            },
             showModal: false,
             print: 'rescheduledLoanList',
             loading: false,
@@ -692,7 +716,7 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: res.body,
+            data: { ...res.body, financialLeasing: values.financialLeasing },
             showModal: false,
             print: 'loanApplicationFees',
             loading: false,
@@ -730,6 +754,7 @@ class FinancialReports extends Component<{}, State> {
         const data = {
           startDate: values.fromDate,
           endDate: values.toDate,
+          financialLeasing: values.financialLeasing,
           data: res.body,
         }
         this.setState(
@@ -776,6 +801,7 @@ class FinancialReports extends Component<{}, State> {
           totalPaidAmount: Number(res.body.netAmount),
           startDate: values.fromDate,
           endDate: values.toDate,
+          financialLeasing: values.financialLeasing,
         }
         this.setState(
           {
@@ -815,6 +841,7 @@ class FinancialReports extends Component<{}, State> {
         })
       } else {
         const data = {
+          financialLeasing: values.financialLeasing,
           req: { startDate: values.fromDate, endDate: values.toDate },
           data: { ...res.body },
         }
@@ -856,6 +883,7 @@ class FinancialReports extends Component<{}, State> {
         })
       } else {
         const data = {
+          financialLeasing: values.financialLeasing,
           req: { startDate: values.fromDate, endDate: values.toDate },
           data: { ...res.body },
         }
@@ -925,7 +953,10 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { result: res.body },
+            data: {
+              result: res.body,
+              financialLeasing: values.financialLeasing,
+            },
             fromDate: values.fromDate,
             toDate: values.toDate,
             showModal: false,
@@ -1153,6 +1184,7 @@ class FinancialReports extends Component<{}, State> {
         )}
         {this.state.print === 'randomPayments' && (
           <RandomPayment
+            financialLeasing={this.state.data.financialLeasing}
             branches={this.state.data.branches}
             startDate={this.state.fromDate}
             endDate={this.state.toDate}
@@ -1160,6 +1192,7 @@ class FinancialReports extends Component<{}, State> {
         )}
         {this.state.print === 'loanApplicationFees' && (
           <LoanApplicationFees
+            financialLeasing={this.state.data.financialLeasing}
             result={this.state.data.result}
             total={this.state.data.total}
             trx={this.state.data.trx}
@@ -1171,6 +1204,7 @@ class FinancialReports extends Component<{}, State> {
         )}
         {this.state.print === 'manualPayments' && (
           <ManualPayments
+            financialLeasing={this.state.data.financialLeasing}
             result={this.state.data.result}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}

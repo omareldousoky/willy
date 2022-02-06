@@ -14,7 +14,7 @@ export const CollectionStatement: React.FC<CollectionStatementProps> = ({
 }) => {
   const { branches } = data.data
   const { total } = data.data
-  const { startDate, endDate } = data
+  const { startDate, endDate, financialLeasing } = data
 
   const trimmedValue = (value: string) => {
     if (value.includes('.')) {
@@ -77,6 +77,7 @@ export const CollectionStatement: React.FC<CollectionStatementProps> = ({
           fromDate={startDate}
           toDate={endDate}
           cf={isCF}
+          fl={financialLeasing}
         />
         <Table className="w-100" striped bordered hover>
           <tbody>

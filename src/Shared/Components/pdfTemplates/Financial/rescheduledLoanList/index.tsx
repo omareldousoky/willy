@@ -7,9 +7,11 @@ import {
   statusLocale,
 } from '../../../../Services/utils'
 import Orientation from '../../../Common/orientation'
+import { Header } from '../../pdfTemplateCommon/header'
 
 export const RescheduledLoanList = (props) => {
   const { isCF } = props
+  const { financialLeasing } = props.data
   const tempData = props.data.data
   const reportDate =
     props.data.from === props.data.to
@@ -21,14 +23,7 @@ export const RescheduledLoanList = (props) => {
   return (
     <div className="rescheduled-loan-list" lang="ar">
       <Orientation size="portrait" />
-      <div className="d-flex justify-content-between m-2">
-        <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
-        <p className="m-0 ml-3 text-right text-sm">
-          {isCF
-            ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
-            : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
-        </p>
-      </div>
+      <Header cf={isCF} fl={financialLeasing} />
       <table className="report-container">
         <thead className="report-header">
           <tr className="headtitle">
