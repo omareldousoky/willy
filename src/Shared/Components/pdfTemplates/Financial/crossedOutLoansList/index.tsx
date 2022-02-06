@@ -5,16 +5,31 @@ import { timeToArabicDate } from '../../../../Services/utils'
 import Orientation from '../../../Common/orientation'
 import { Header } from '../../pdfTemplateCommon/header'
 
-export const CrossedOutLoansList = (props) => {
-  const { isCF } = props
-  const { data, financialLeasing } = props.data
-  const { days } = data
-  const totalNumberOfTransactions = Number(data.numTrx)
-  const totalTransactionAmount = Number(data.transactionAmount)
-  const totalTransactionInterest = Number(data.transactionInterest)
-  const totalTransactionPrincipal = Number(data.transactionPrincipal)
-  const startDate = timeToArabicDate(props.data.req.startDate, false)
-  const endDate = timeToArabicDate(props.data.req.endDate, false)
+export const CrossedOutLoansList = ({
+  isCF = false,
+  data: {
+    financialLeasing,
+    days,
+    numTrx,
+    transactionAmount,
+    transactionInterest,
+    transactionPrincipal,
+    startDate,
+    endDate,
+    rbPrincipal,
+    rbInt,
+    rbAmount,
+    netPrincipal,
+    netInt,
+    netAmount,
+  },
+}) => {
+  const totalNumberOfTransactions = Number(numTrx)
+  const totalTransactionAmount = Number(transactionAmount)
+  const totalTransactionInterest = Number(transactionInterest)
+  const totalTransactionPrincipal = Number(transactionPrincipal)
+  const startD = timeToArabicDate(startDate, false)
+  const endD = timeToArabicDate(endDate, false)
 
   const getStatus = (value) => {
     switch (value) {
@@ -165,7 +180,6 @@ export const CrossedOutLoansList = (props) => {
     )
   }
 
-  console.log(data, '??????')
   return (
     <>
       <Orientation size="portrait" />
@@ -184,7 +198,7 @@ export const CrossedOutLoansList = (props) => {
             <tr className="headtitle">
               <th colSpan={4}>المركز الرئيسي</th>
               <th colSpan={6}>
-                تاريخ الحركه من {startDate} الي {endDate}
+                تاريخ الحركه من {startD} الي {endD}
               </th>
             </tr>
             <tr className="headtitle">
@@ -247,16 +261,16 @@ export const CrossedOutLoansList = (props) => {
             <tr>
               <td colSpan={8} />
               <td className="frame">القيمة الملغاه</td>
-              <td className="frame">{data.rbPrincipal}</td>
-              <td className="frame">{data.rbInt}</td>
-              <td className="frame">{data.rbAmount}</td>
+              <td className="frame">{rbPrincipal}</td>
+              <td className="frame">{rbInt}</td>
+              <td className="frame">{rbAmount}</td>
             </tr>
             <tr>
               <td colSpan={8} />
               <td className="frame">صافي المبلغ</td>
-              <td className="frame">{data.netPrincipal}</td>
-              <td className="frame">{data.netInt}</td>
-              <td className="frame">{data.netAmount}</td>
+              <td className="frame">{netPrincipal}</td>
+              <td className="frame">{netInt}</td>
+              <td className="frame">{netAmount}</td>
             </tr>
           </tbody>
         </table>

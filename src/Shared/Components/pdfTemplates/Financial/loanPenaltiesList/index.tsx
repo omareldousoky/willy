@@ -5,11 +5,21 @@ import { timeToArabicDate } from '../../../../Services/utils'
 import Orientation from '../../../Common/orientation'
 import { Header } from '../../pdfTemplateCommon/header'
 
-export const LoanPenaltiesList = (props) => {
-  const { data, isCF } = props
-  const { days, financialLeasing } = data
-  const startDate = timeToArabicDate(props.data.startDate, false)
-  const endDate = timeToArabicDate(props.data.endDate, false)
+export const LoanPenaltiesList = ({
+  isCF = false,
+  data: {
+    days,
+    financialLeasing,
+    startDate,
+    endDate,
+    totalNumberOfTransactions,
+    totalTransactionAmount,
+    totalCancelledAmount,
+    totalPaidAmount,
+  },
+}) => {
+  const startD = timeToArabicDate(startDate, false)
+  const endD = timeToArabicDate(endDate, false)
   const getStatus = (value) => {
     switch (value) {
       case 'unpaid':
@@ -160,7 +170,7 @@ export const LoanPenaltiesList = (props) => {
             <tr className="headtitle">
               <th colSpan={4}>المركز الرئيسي</th>
               <th colSpan={6}>
-                تاريخ الحركه من {startDate} الي {endDate}
+                تاريخ الحركه من {startD} الي {endD}
               </th>
             </tr>
             {/* <tr className="headtitle">
@@ -204,23 +214,21 @@ export const LoanPenaltiesList = (props) => {
               <td className="gray horizontal-line">جنيه مصري</td>
               <td />
               <td className="horizontal-line">إجمالي عدد الحركات</td>
-              <td className="horizontal-line">
-                {data.totalNumberOfTransactions}
-              </td>
+              <td className="horizontal-line">{totalNumberOfTransactions}</td>
               <td />
               <td className="horizontal-line">إجمالي المبلغ</td>
-              <td className="horizontal-line">{data.totalTransactionAmount}</td>
+              <td className="horizontal-line">{totalTransactionAmount}</td>
             </tr>
 
             <tr>
               <td colSpan={8} />
               <td className="horizontal-line">القيمة الملغاه</td>
-              <td className="horizontal-line">{data.totalCancelledAmount}</td>
+              <td className="horizontal-line">{totalCancelledAmount}</td>
             </tr>
             <tr>
               <td colSpan={8} />
               <td className="horizontal-line">القيمة المسدده</td>
-              <td className="horizontal-line">{data.totalPaidAmount}</td>
+              <td className="horizontal-line">{totalPaidAmount}</td>
             </tr>
           </tbody>
         </table>

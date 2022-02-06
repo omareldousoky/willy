@@ -9,17 +9,14 @@ import {
 import Orientation from '../../../Common/orientation'
 import { Header } from '../../pdfTemplateCommon/header'
 
-export const RescheduledLoanList = (props) => {
-  const { isCF } = props
-  const { financialLeasing } = props.data
-  const tempData = props.data.data
+export const RescheduledLoanList = ({
+  isCF = false,
+  data: { financialLeasing, to, from, total, canceled, net, trx, result },
+}) => {
   const reportDate =
-    props.data.from === props.data.to
-      ? timeToArabicDate(props.data.from, false)
-      : `من ${timeToArabicDate(props.data.from, false)} الي ${timeToArabicDate(
-          props.data.to,
-          false
-        )}`
+    from === to
+      ? timeToArabicDate(from, false)
+      : `من ${timeToArabicDate(from, false)} الي ${timeToArabicDate(to, false)}`
   return (
     <div className="rescheduled-loan-list" lang="ar">
       <Orientation size="portrait" />
@@ -64,7 +61,7 @@ export const RescheduledLoanList = (props) => {
           </tr>
         </thead>
 
-        {tempData.result.map((day, x) => (
+        {result.map((day, x) => (
           <React.Fragment key={x}>
             <tbody>
               <tr>
@@ -188,27 +185,27 @@ export const RescheduledLoanList = (props) => {
             <th colSpan={2}>إجمالي بالعمله</th>
             <th>جنيه مصري</th>
             <td colSpan={2}>إجمالي عدد الحركات</td>
-            <td>{tempData.trx}</td>
+            <td>{trx}</td>
             <td colSpan={2} className="border-0" />
             <td>إجمالي المبلغ</td>
-            <td>{tempData.total[0]}</td>
-            <td>{tempData.total[1]}</td>
-            <td>{tempData.total[2]}</td>
+            <td>{total[0]}</td>
+            <td>{total[1]}</td>
+            <td>{total[2]}</td>
           </tr>
 
           <tr>
             <td colSpan={8} className="border-0" />
             <td>القيمة الملغاه</td>
-            <td>{tempData.canceled[0]}</td>
-            <td>{tempData.canceled[1]}</td>
-            <td>{tempData.canceled[2]}</td>
+            <td>{canceled[0]}</td>
+            <td>{canceled[1]}</td>
+            <td>{canceled[2]}</td>
           </tr>
           <tr>
             <td colSpan={8} className="border-0" />
             <td>صافي المبلغ</td>
-            <td>{tempData.net[0]}</td>
-            <td>{tempData.net[1]}</td>
-            <td>{tempData.net[2]}</td>
+            <td>{net[0]}</td>
+            <td>{net[1]}</td>
+            <td>{net[2]}</td>
           </tr>
           <tr style={{ height: '0.5em' }} />
         </tbody>

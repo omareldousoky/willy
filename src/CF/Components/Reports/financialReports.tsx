@@ -364,7 +364,7 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { data: res.body, from: values.fromDate, to: values.toDate },
+            data: { ...res.body, from: values.fromDate, to: values.toDate },
             showModal: false,
             print: 'paymentsDoneList',
             loading: false,
@@ -441,7 +441,7 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { data: res.body, from: values.fromDate, to: values.toDate },
+            data: { ...res.body, from: values.fromDate, to: values.toDate },
             showModal: false,
             print: 'issuedLoanList',
             loading: false,
@@ -477,7 +477,7 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { data: res.body, from: values.fromDate, to: values.toDate },
+            data: { ...res.body, from: values.fromDate, to: values.toDate },
             showModal: false,
             print: 'rescheduledLoanList',
             loading: false,
@@ -597,8 +597,9 @@ class FinancialReports extends Component<{}, State> {
         })
       } else {
         const data = {
-          req: { startDate: values.fromDate, endDate: values.toDate },
-          data: { ...res.body },
+          startDate: values.fromDate,
+          endDate: values.toDate,
+          ...res.body,
         }
         this.setState(
           {

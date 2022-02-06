@@ -10,17 +10,32 @@ import Orientation from '../../../Common/orientation'
 import { loanStatusLocal } from '../../pdfTemplateCommon/reportLocal'
 import { Header } from '../../pdfTemplateCommon/header'
 
-export const DoubtfulPayments = (props) => {
-  const { isCF } = props
-  const { financialLeasing } = props.data
-  const tempData = props.data.data
+export const DoubtfulPayments = ({
+  isCF = false,
+  data: {
+    financialLeasing,
+    startDate,
+    endDate,
+    days,
+    transactionPrincipal,
+    transactionInterest,
+    transactionAmount,
+    rbPrincipal,
+    rbInt,
+    rbAmount,
+    netPrincipal,
+    netInt,
+    netAmount,
+    trx,
+  },
+}) => {
   const reportDate =
-    props.data.req.startDate === props.data.req.endDate
-      ? timeToArabicDate(props.data.req.startDate, false)
-      : `من ${timeToArabicDate(
-          props.data.req.startDate,
+    startDate === endDate
+      ? timeToArabicDate(startDate, false)
+      : `من ${timeToArabicDate(startDate, false)} الي ${timeToArabicDate(
+          endDate,
           false
-        )} الي ${timeToArabicDate(props.data.req.endDate, false)}`
+        )}`
   return (
     <div className="doubtful-payments" lang="ar">
       <Orientation size="portrait" />
@@ -65,7 +80,7 @@ export const DoubtfulPayments = (props) => {
           </tr>
         </thead>
 
-        {tempData.days.map((day, x) => (
+        {days.map((day, x) => (
           <React.Fragment key={x}>
             <tbody>
               <tr>
@@ -208,28 +223,28 @@ export const DoubtfulPayments = (props) => {
             <td className="frame" colSpan={2}>
               إجمالي عدد الحركات
             </td>
-            <td className="frame">{tempData.trx}</td>
+            <td className="frame">{trx}</td>
             <td />
             <td />
             <td className="frame">إجمالي المبلغ</td>
-            <td className="frame">{tempData.transactionPrincipal}</td>
-            <td className="frame">{tempData.transactionInterest}</td>
-            <td className="frame">{tempData.transactionAmount}</td>
+            <td className="frame">{transactionPrincipal}</td>
+            <td className="frame">{transactionInterest}</td>
+            <td className="frame">{transactionAmount}</td>
           </tr>
 
           <tr>
             <td colSpan={8} />
             <td className="frame">القيمة الملغاه</td>
-            <td className="frame">{tempData.rbPrincipal}</td>
-            <td className="frame">{tempData.rbInt}</td>
-            <td className="frame">{tempData.rbAmount}</td>
+            <td className="frame">{rbPrincipal}</td>
+            <td className="frame">{rbInt}</td>
+            <td className="frame">{rbAmount}</td>
           </tr>
           <tr>
             <td colSpan={8} />
             <td className="frame">صافي المبلغ</td>
-            <td className="frame">{tempData.netPrincipal}</td>
-            <td className="frame">{tempData.netInt}</td>
-            <td className="frame">{tempData.netAmount}</td>
+            <td className="frame">{netPrincipal}</td>
+            <td className="frame">{netInt}</td>
+            <td className="frame">{netAmount}</td>
           </tr>
         </tbody>
       </table>

@@ -397,7 +397,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -426,7 +425,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -473,7 +471,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -515,7 +512,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -557,7 +553,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -585,7 +580,7 @@ class FinancialReports extends Component<{}, State> {
         this.setState(
           {
             data: {
-              data: res.body,
+              ...res.body,
               from: values.fromDate,
               to: values.toDate,
               financialLeasing: values.financialLeasing,
@@ -599,7 +594,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -641,7 +635,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -683,7 +676,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -726,7 +718,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -769,7 +760,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -815,7 +805,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -842,8 +831,9 @@ class FinancialReports extends Component<{}, State> {
       } else {
         const data = {
           financialLeasing: values.financialLeasing,
-          req: { startDate: values.fromDate, endDate: values.toDate },
-          data: { ...res.body },
+          startDate: values.fromDate,
+          endDate: values.toDate,
+          ...res.body,
         }
         this.setState(
           {
@@ -857,7 +847,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -884,8 +873,9 @@ class FinancialReports extends Component<{}, State> {
       } else {
         const data = {
           financialLeasing: values.financialLeasing,
-          req: { startDate: values.fromDate, endDate: values.toDate },
-          data: { ...res.body },
+          startDate: values.fromDate,
+          endDate: values.toDate,
+          ...res.body,
         }
         this.setState(
           {
@@ -899,7 +889,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -968,7 +957,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -999,7 +987,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -1073,7 +1060,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -1101,7 +1087,6 @@ class FinancialReports extends Component<{}, State> {
         }
       } else {
         this.setState({ loading: false })
-        console.log(file)
       }
     } else {
       this.setState({ loading: false })
