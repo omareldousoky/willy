@@ -586,5 +586,9 @@
   "customer_use_CF_credit_more_than_initial": {
     "en": "Customer has exceeded the limit",
     "ar": "تخطى العميل الحد الأقصى"
+  },
+  "guarantor_has_loan": {
+    "en": "Guarantor already has a loan",
+    "ar": "الضامن لديه قرض"
   }
 }
