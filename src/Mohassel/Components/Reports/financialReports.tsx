@@ -208,7 +208,7 @@ class FinancialReports extends Component<{}, State> {
         {
           key: 'reviewedLoans',
           local: 'قروض تمت مراجعتها',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'getLoansReviewedByReviewDate',
           serviceKey: 'report-2',
           hidePdf: true,

@@ -874,7 +874,10 @@ const ReportsModal = (props: Props) => {
                         </Col>
                       )
                     }
-                    if (input === 'financialLeasing') {
+                    if (
+                      input === 'financialLeasing' &&
+                      formikProps.values.loanType !== 'all'
+                    ) {
                       return (
                         <Col key={input} sm={12}>
                           <div className="d-flex">
