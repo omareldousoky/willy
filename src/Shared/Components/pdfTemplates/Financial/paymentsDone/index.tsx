@@ -9,17 +9,14 @@ import * as local from '../../../../Assets/ar.json'
 import Orientation from '../../../Common/orientation'
 import { Header } from '../../pdfTemplateCommon/header'
 
-export const PaymentsDone = (props) => {
-  const { isCF } = props
-  const { financialLeasing } = props.data
-  const tempData = props.data.data
+export const PaymentsDone = ({
+  isCF = false,
+  data: { financialLeasing, to, from, days },
+}) => {
   const reportDate =
-    props.data.from === props.data.to
-      ? timeToArabicDate(props.data.from, false)
-      : `من ${timeToArabicDate(props.data.from, false)} الي ${timeToArabicDate(
-          props.data.to,
-          false
-        )}`
+    from === to
+      ? timeToArabicDate(from, false)
+      : `من ${timeToArabicDate(from, false)} الي ${timeToArabicDate(to, false)}`
   return (
     <>
       <Orientation size="portrait" />
@@ -65,7 +62,7 @@ export const PaymentsDone = (props) => {
             </tr>
           </thead>
 
-          {tempData.days.map((day, x) => (
+          {days.map((day, x) => (
             <React.Fragment key={x}>
               <tbody>
                 <tr>

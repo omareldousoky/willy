@@ -498,7 +498,7 @@ class FinancialReports extends Component<{}, State> {
         this.setState(
           {
             data: {
-              data: res.body,
+              ...res.body,
               from: values.fromDate,
               to: values.toDate,
               financialLeasing: values.financialLeasing,
@@ -621,7 +621,7 @@ class FinancialReports extends Component<{}, State> {
         this.setState(
           {
             data: {
-              data: res.body,
+              ...res.body,
               from: values.fromDate,
               to: values.toDate,
               financialLeasing: values.financialLeasing,
@@ -662,7 +662,7 @@ class FinancialReports extends Component<{}, State> {
         this.setState(
           {
             data: {
-              data: res.body,
+              ...res.body,
               from: values.fromDate,
               to: values.toDate,
               financialLeasing: values.financialLeasing,
