@@ -9,13 +9,9 @@ interface CollectionStatementProps {
   isCF?: boolean
 }
 export const CollectionStatement: React.FC<CollectionStatementProps> = ({
-  data,
   isCF,
+  data: { branches, total, startDate, endDate, financialLeasing },
 }) => {
-  const { branches } = data.data
-  const { total } = data.data
-  const { startDate, endDate, financialLeasing } = data
-
   const trimmedValue = (value: string) => {
     if (value.includes('.')) {
       const splitted = value.split('.', 2)

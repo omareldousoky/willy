@@ -746,7 +746,7 @@ class FinancialReports extends Component<{}, State> {
           startDate: values.fromDate,
           endDate: values.toDate,
           financialLeasing: values.financialLeasing,
-          data: res.body,
+          ...res.body,
         }
         this.setState(
           {
