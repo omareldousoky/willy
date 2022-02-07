@@ -8,11 +8,10 @@ import {
   dayToArabic,
   FLindexLocal,
   periodLengthLocal,
-  alphaIndexLocal,
 } from 'Shared/Services/utils'
 import Tafgeet from 'tafgeetjs'
-import { FLContractProps, TermStyle } from './types'
-import { generateTerms } from './terms'
+import { FLContractProps } from './types'
+import { generateTerms, getRowStyle } from './terms'
 import { Header } from '../pdfTemplateCommon/header'
 
 const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
@@ -43,25 +42,6 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
   const purchaseDate = add(creationDate, {
     days: 7,
   }).valueOf()
-
-  const getRowStyle = (style: TermStyle, index: number): string => {
-    switch (style) {
-      case 'alphaIndex': {
-        return `${alphaIndexLocal[index]} - `
-      }
-      case 'dashed': {
-        return '-'
-      }
-      case 'dotted': {
-        return '•'
-      }
-      case 'index': {
-        return `${index + 1}- `
-      }
-      default:
-        return ''
-    }
-  }
 
   const returnTermSubRow = (row) => {
     return (

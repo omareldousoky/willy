@@ -1,5 +1,27 @@
-import { periodLengthSingularLocal } from 'Shared/Services/utils'
-import { TermMapper } from './types'
+import {
+  periodLengthSingularLocal,
+  alphaIndexLocal,
+} from 'Shared/Services/utils'
+import { TermMapper, TermStyle } from './types'
+
+export const getRowStyle = (style: TermStyle, index: number): string => {
+  switch (style) {
+    case 'alphaIndex': {
+      return `${alphaIndexLocal[index]} - `
+    }
+    case 'dashed': {
+      return '-'
+    }
+    case 'dotted': {
+      return '•'
+    }
+    case 'index': {
+      return `${index + 1}- `
+    }
+    default:
+      return ''
+  }
+}
 
 export const generateTerms = (periodLength: number): TermMapper[] => {
   const terms: TermMapper[] = [
