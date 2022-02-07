@@ -429,7 +429,7 @@ class BulkApplicationReview extends Component<Props, State> {
       'keyword',
       'dateFromTo',
       'review-application',
-      'financialLeasingCheck',
+      'financialLeasingCheckTypeless',
     ]
     const smePermission =
       (this.props.location.state && this.props.location.state.sme) || false

@@ -231,7 +231,7 @@ const Search: FunctionComponent<SearchProps> = ({
         case 'beneficiaryType':
           initialState.type = isProductUrl ? beneficiaryType : ''
           break
-        case 'financialLeasingCheck':
+        case 'financialLeasingCheck' || 'financialLeasingCheckTypeless':
           initialState.financialLeasing = isIssuedLoansSearch
             ? issuedLoansSearchFilters.financialLeasing
             : false
@@ -1067,8 +1067,9 @@ const Search: FunctionComponent<SearchProps> = ({
                 )
               }
               if (
-                searchKey === 'financialLeasingCheck' &&
-                ['micro', 'sme'].includes(formikProps.values.type ?? '')
+                (searchKey === 'financialLeasingCheck' &&
+                  ['micro', 'sme'].includes(formikProps.values.type ?? '')) ||
+                searchKey === 'financialLeasingCheckTypeless'
               ) {
                 return financialLeasingCheck(formikProps, index)
               }
