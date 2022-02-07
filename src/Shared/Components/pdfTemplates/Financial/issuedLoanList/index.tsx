@@ -12,26 +12,19 @@ export const IssuedLoanList = ({
   isCF = false,
   data: { financialLeasing, from, to, result, total, canceled, trx, net },
 }) => {
-  const reportDate =
-    from === to
-      ? timeToArabicDate(from, false)
-      : `من ${timeToArabicDate(from, false)} الي ${timeToArabicDate(to, false)}`
   return (
     <div className="issued-loan-list" lang="ar">
-      <Header cf={isCF} fl={financialLeasing} />
+      <Header
+        cf={isCF}
+        fl={financialLeasing}
+        title="قائمة حركات إصدار القروض المنفذه"
+        fromDate={from}
+        toDate={to}
+      />
       <table className="report-container">
         <thead className="report-header">
           <tr className="headtitle">
-            <th colSpan={4}>
-              {isCF
-                ? 'حالا للتمويل الاستهلاكي ش. م. م.'
-                : 'شركة تساهيل للتمويل متناهي الصغر'}
-            </th>
-            <th colSpan={6}>قائمة حركات إصدار القروض المنفذه</th>
-          </tr>
-          <tr className="headtitle">
             <th colSpan={4}>المركز الرئيسي</th>
-            <th colSpan={6}>{`تاريخ الحركه ${reportDate}`}</th>
           </tr>
           <tr className="headtitle">
             <th colSpan={4}>{timeToArabicDateNow(true)}</th>

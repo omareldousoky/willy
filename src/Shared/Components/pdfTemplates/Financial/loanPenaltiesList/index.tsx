@@ -1,7 +1,6 @@
 import React from 'react'
 import './loanPenaltiesList.scss'
 import * as local from '../../../../Assets/ar.json'
-import { timeToArabicDate } from '../../../../Services/utils'
 import Orientation from '../../../Common/orientation'
 import { Header } from '../../pdfTemplateCommon/header'
 
@@ -18,8 +17,6 @@ export const LoanPenaltiesList = ({
     totalPaidAmount,
   },
 }) => {
-  const startD = timeToArabicDate(startDate, false)
-  const endD = timeToArabicDate(endDate, false)
   const getStatus = (value) => {
     switch (value) {
       case 'unpaid':
@@ -156,27 +153,18 @@ export const LoanPenaltiesList = ({
     <>
       <Orientation size="portrait" />
       <div className="loan-penalties-list" dir="rtl" lang="ar">
-        <Header cf={isCF} fl={financialLeasing} />
+        <Header
+          cf={isCF}
+          fl={financialLeasing}
+          title="قائمة حركة غرامات القروض المنفذة"
+          fromDate={startDate}
+          toDate={endDate}
+        />
         <table className="report-container">
           <thead className="report-header">
             <tr className="headtitle">
-              <th colSpan={4}>
-                {isCF
-                  ? 'حالا للتمويل الاستهلاكي ش. م. م.'
-                  : 'شركة تساهيل للتمويل متناهي الصغر'}
-              </th>
-              <th colSpan={6}>قائمة حركة غرامات القروض المنفذة</th>
-            </tr>
-            <tr className="headtitle">
               <th colSpan={4}>المركز الرئيسي</th>
-              <th colSpan={6}>
-                تاريخ الحركه من {startD} الي {endD}
-              </th>
             </tr>
-            {/* <tr className="headtitle">
-            <th colSpan={4}>12:17:26 &emsp; 2020/07/05</th>
-            <th colSpan={6}>جنيه مصري</th>
-          </tr> */}
             <tr>
               <th colSpan={16} className="border-line" />
             </tr>

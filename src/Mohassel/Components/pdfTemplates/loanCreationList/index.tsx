@@ -12,24 +12,19 @@ import { Header } from 'Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 export const LoanCreationList = ({
   data: { financialLeasing, to, from, total, canceled, net, trx, result },
 }) => {
-  const reportDate =
-    from === to
-      ? timeToArabicDate(from, false)
-      : `من ${timeToArabicDate(from, false)} الي ${timeToArabicDate(to, false)}`
-
   return (
     <div className="loan-creation-list" lang="ar">
       <Orientation size="portrait" />
-      <Header fl={financialLeasing} />
+      <Header
+        fl={financialLeasing}
+        title="قائمة حركة انشاء القروض المنفذه"
+        fromDate={from}
+        toDate={to}
+      />
       <table className="report-container">
         <thead className="report-header">
           <tr className="headtitle">
-            <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
-            <th colSpan={6}>قائمة حركة انشاء القروض المنفذه</th>
-          </tr>
-          <tr className="headtitle">
             <th colSpan={4}>المركز الرئيسي</th>
-            <th colSpan={6}>{`تاريخ الحركه ${reportDate}`}</th>
           </tr>
           <tr className="headtitle">
             <th colSpan={4}>{timeToArabicDateNow(true)}</th>

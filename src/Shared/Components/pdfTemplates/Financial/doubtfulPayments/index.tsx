@@ -39,17 +39,13 @@ export const DoubtfulPayments = ({
   return (
     <div className="doubtful-payments" lang="ar">
       <Orientation size="portrait" />
-      <Header cf={isCF} fl={financialLeasing} />
+      <Header
+        cf={isCF}
+        fl={financialLeasing}
+        title="قائمة حركة القروض المشكوك في سدادها"
+      />
       <table className="report-container">
         <thead className="report-header">
-          <tr className="headtitle">
-            <th colSpan={4}>
-              {isCF
-                ? 'حالا للتمويل الاستهلاكي ش. م. م.'
-                : 'شركة تساهيل للتمويل متناهي الصغر'}
-            </th>
-            <th colSpan={6}>قائمة حركة القروض المشكوك في سدادها</th>
-          </tr>
           <tr className="headtitle">
             <th colSpan={4}>المركز الرئيسي</th>
             <th colSpan={6}>{`تاريخ الحركه ${reportDate}`}</th>

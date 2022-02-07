@@ -638,8 +638,9 @@ class FinancialReports extends Component<{}, State> {
         })
       } else {
         const data = {
-          req: { startDate: values.fromDate, endDate: values.toDate },
-          data: { ...res.body },
+          ...res.body,
+          startDate: values.fromDate,
+          endDate: values.toDate,
         }
         this.setState(
           {

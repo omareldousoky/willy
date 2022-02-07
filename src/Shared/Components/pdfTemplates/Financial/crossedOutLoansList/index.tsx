@@ -184,17 +184,13 @@ export const CrossedOutLoansList = ({
     <>
       <Orientation size="portrait" />
       <div className="crossed-out-loans-list" lang="ar">
-        <Header cf={isCF} fl={financialLeasing} />
+        <Header
+          cf={isCF}
+          fl={financialLeasing}
+          title="قائمة حركات إعدام ديون القروض المنفذة"
+        />
         <table className="report-container">
           <thead className="report-header">
-            <tr className="headtitle">
-              <th colSpan={4}>
-                {isCF
-                  ? 'حالا للتمويل الاستهلاكي ش. م. م.'
-                  : 'شركة تساهيل للتمويل متناهي الصغر'}
-              </th>
-              <th colSpan={6}>قائمة حركات إعدام ديون القروض المنفذة</th>
-            </tr>
             <tr className="headtitle">
               <th colSpan={4}>المركز الرئيسي</th>
               <th colSpan={6}>

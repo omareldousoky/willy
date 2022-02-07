@@ -1,9 +1,6 @@
 import React from 'react'
 import './manualPayments.scss'
-import {
-  timeToArabicDate,
-  timeToArabicDateNow,
-} from '../../../../Services/utils'
+import { timeToArabicDateNow } from '../../../../Services/utils'
 import Orientation from '../../../Common/orientation'
 import { ManualPaymentsProps } from './types'
 import { Header } from '../../pdfTemplateCommon/header'
@@ -35,25 +32,15 @@ export const ManualPayments = ({
   <>
     <Orientation size="portrait" />
     <div className="manual-payments" lang="ar">
-      <Header cf={isCF} fl={financialLeasing} />
+      <Header
+        cf={isCF}
+        fl={financialLeasing}
+        title="مراجعه حركات السداد اليدوي"
+        fromDate={fromDate}
+        toDate={toDate}
+      />
       <table className="report-container">
-        <thead className="report-header">
-          <tr className="headtitle">
-            <th colSpan={4}>
-              {isCF
-                ? 'حالا للتمويل الاستهلاكي ش. م. م.'
-                : 'شركة تساهيل للتمويل متناهي الصغر'}
-            </th>
-            <th colSpan={6}>مراجعه حركات السداد اليدوي</th>
-          </tr>
-        </thead>
         <tbody>
-          <tr className="headtitle">
-            <th colSpan={6}>
-              تاريخ الحركه من {timeToArabicDate(fromDate, false)} الي
-              {timeToArabicDate(toDate, false)}
-            </th>
-          </tr>
           <tr className="headtitle">
             <th colSpan={4}>{timeToArabicDateNow(true)}</th>
             <th colSpan={6}>جنيه مصري</th>
