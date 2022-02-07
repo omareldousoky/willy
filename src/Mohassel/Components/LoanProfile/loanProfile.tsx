@@ -1849,7 +1849,13 @@ class LoanProfile extends Component<Props, State> {
         )}
         {this.state.print === 'earlyPayment' && (
           <EarlyPaymentPDF
-            type={this.props.location.state?.sme ? 'sme' : 'lts'}
+            type={
+              this.state.application?.product?.financialLeasing
+                ? 'fl'
+                : this.props.location.state?.sme
+                ? 'sme'
+                : 'lts'
+            }
             application={this.state.application}
             earlyPaymentPdfData={getEarlyPaymentPdfData(
               this.state.application,

@@ -30,6 +30,7 @@ const EarlyPaymentPDF: FunctionComponent<EarlyPaymentPDFProps> = ({
     earlyPaymentTotal,
   } = earlyPaymentPdfData
 
+  console.log(type, 'type')
   return (
     <div className="early-payment-print" lang="ar">
       <table className="text-center my-3 mx-0 w-100">
