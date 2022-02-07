@@ -70,9 +70,9 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
         {row.data.map((subRow, i) => {
           return (
             <Fragment key={i}>
-              <div>{`${
-                row.style ? getRowStyle(row.style, i) : ''
-              } ${subRow}.`}</div>
+              <div>{`${row.style ? getRowStyle(row.style, i) : ''} ${subRow}${
+                !subRow.endsWith(':') ? '.' : ''
+              }`}</div>
             </Fragment>
           )
         })}
@@ -92,7 +92,9 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
             {typeof row !== 'object' && term.style
               ? getRowStyle(term.style, r)
               : ''}{' '}
-            {typeof row === 'object' ? returnTermSubRow(row) : `${row}.`}
+            {typeof row === 'object'
+              ? returnTermSubRow(row)
+              : `${row}${!row.endsWith(':') ? '.' : ''}`}
           </div>
         ))}
       </Fragment>
