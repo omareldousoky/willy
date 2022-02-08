@@ -652,7 +652,7 @@ class LoanProfile extends Component<Props, State> {
 
   getContractType = (customerType: string): string => {
     let type = 'all'
-    if (this.state.application.financialLeasing) {
+    if (this.state.application.product.financialLeasing) {
       type = 'financialLeasingContract'
     } else if (customerType === 'company') {
       type = 'allSME'
