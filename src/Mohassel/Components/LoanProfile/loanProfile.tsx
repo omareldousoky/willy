@@ -604,7 +604,7 @@ class LoanProfile extends Component<Props, State> {
   }
 
   getFinancialLeaseContractData(): FinancialLeaseContract {
-    const { application } = this.state
+    const { application, loanUsage } = this.state
     const FLContractData = {
       creationDate: application.creationDate,
       customerType: application.customer.customerType,
@@ -641,13 +641,18 @@ class LoanProfile extends Component<Props, State> {
           ? application.entitledToSign[0].customer.customerName
           : '',
       },
+      installmentSum:
+        application.installmentsObject.totalInstallments.installmentSum,
+      loanUsage,
+      applicationFeesRequired: application.applicationFeesRequired,
+      legalConstitution: application.customer.legalConstitution,
     }
     return FLContractData
   }
 
   getContractType = (customerType: string): string => {
     let type = 'all'
-    if (this.state.application.product.financialLeasing) {
+    if (this.state.application.financialLeasing) {
       type = 'financialLeasingContract'
     } else if (customerType === 'company') {
       type = 'allSME'

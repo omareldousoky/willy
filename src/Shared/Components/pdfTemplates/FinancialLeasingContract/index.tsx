@@ -1,7 +1,7 @@
 import React, { FC, Fragment } from 'react'
 import './styles.scss'
 import add from 'date-fns/add'
-import * as local from 'Shared/Assets/ar.json'
+import local from 'Shared/Assets/ar.json'
 import {
   numbersToArabic,
   timeToArabicDate,
@@ -37,6 +37,10 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
     businessAddress,
     taxCardNumber,
     entitledToSign,
+    installmentSum,
+    loanUsage,
+    applicationFeesRequired,
+    legalConstitution,
   } = data
 
   const purchaseDate = add(creationDate, {
@@ -143,7 +147,7 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
                   </div>
                   <div>
                     الشكل القانوني للطرف الثاني المستأجر( نوع الشركه) :
-                    ...................................
+                    {local[legalConstitution]}
                   </div>
                   <div>و النشاط : {businessSector}</div>
                   <div>بطاقة ضريبيه رقم : {taxCardNumber}</div>
@@ -185,8 +189,7 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
               <div>نوع الاصل المؤجر : {categoryName || local.na}</div>
               <div>وصف الأصل المؤجر : {itemDescription || local.na}</div>
               <div>
-                الغرض المخصص لاستخدام الأصل المؤجر :{' '}
-                {businessSector || local.na}
+                الغرض المخصص لاستخدام الأصل المؤجر : {loanUsage || local.na}
               </div>
               <div className="element-title">
                 القـــــــــــــــــــيمة الأيــــــــجاريـه
@@ -205,8 +208,8 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
                 {new Tafgeet(installmentResponse, 'EGP').parse()})
               </div>
               <div>
-                اجمالي القيمة الايجارية : {downPayment + installmentResponse} (
-                {new Tafgeet(installmentResponse, 'EGP').parse()})
+                اجمالي القيمة الايجارية : {installmentSum} (
+                {new Tafgeet(installmentSum, 'EGP').parse()})
               </div>
               <div>
                 تسداد الأجرة بشكل (
@@ -222,13 +225,19 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
                 (أن وجدت) علي النحو الأتي :
               </div>
               <div>
-                الفائده : {feesSum} (
+                تكاليف التمويل : {feesSum} (
                 {new Tafgeet(feesSum, 'EGP')
                   .parse()
                   .replace('undefined', 'صفر')}
                 )
               </div>
-              <div>.المصاريف الاداريه : ................................</div>
+              <div>
+                .المصاريف الاداريه : {applicationFeesRequired} (
+                {new Tafgeet(applicationFeesRequired, 'EGP')
+                  .parse()
+                  .replace('undefined', 'صفر')}
+                )
+              </div>
 
               <div className="element-title">
                 مــدة العقـــــد وثمن الشراء وتاريخة
@@ -277,7 +286,9 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
                   <div>الطرف الثاني</div>
                   <div>المستاجر</div>
                   <div>
-                    {customerType === 'company' ? 'شركه / ' : ''} {customerName}
+                    {customerType === 'company' ? 'شركه / ' : ''} {customerName}{' '}
+                    {customerType === 'company' &&
+                      `/ الاسم / ${entitledToSign.name}`}
                   </div>
                   <div>الاسم / </div>
                   <div>التوقيع /</div>

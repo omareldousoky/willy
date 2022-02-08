@@ -23,6 +23,10 @@ export interface FinancialLeaseContract {
   businessAddress: string
   taxCardNumber: string
   entitledToSign: EntitledToSign
+  installmentSum: number
+  loanUsage: string
+  applicationFeesRequired: number
+  legalConstitution: string
 }
 interface EntitledToSign {
   position: string
