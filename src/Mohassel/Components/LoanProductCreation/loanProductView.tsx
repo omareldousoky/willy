@@ -77,7 +77,9 @@ class ViewProduct extends Component<
                     <td>{local.customerType}</td>
                     <td>
                       {beneficiaryType(this.state.product.beneficiaryType)} -
-                      {this.state.product.type || ''}
+                      {this.state.product.type || ''}{' '}
+                      {this.state.product.financialLeasing &&
+                        ` - ${local.financialLeasing}`}
                     </td>
                   </tr>
                   <tr>
