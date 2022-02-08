@@ -17,7 +17,7 @@ import { IssuedLoanList } from '../../../Shared/Components/pdfTemplates/Financia
 import { PaymentsDone } from '../../../Shared/Components/pdfTemplates/Financial/paymentsDone'
 import { RandomPayment } from '../../../Shared/Components/pdfTemplates/Financial/randomPayment'
 import { CustomerTransactionReport } from '../../../Shared/Components/pdfTemplates/Financial/customerTransactionReport'
-import RaseedyTransactionsReport from '../../../Shared/Components/pdfTemplates/Financial/RaseedyTransactions'
+// import RaseedyTransactionsReport from '../../../Shared/Components/pdfTemplates/Financial/RaseedyTransactions'
 import { RescheduledLoanList } from '../../../Shared/Components/pdfTemplates/Financial/rescheduledLoanList'
 import {
   collectionReport,
@@ -45,8 +45,8 @@ import {
   postRandomPaymentsExcel,
   getRandomPayments,
   getCustomerTransactions,
-  getRaseedyTransactionsExcel,
-  postRaseedyTransactionsExcel,
+  // getRaseedyTransactionsExcel,
+  // postRaseedyTransactionsExcel,
   fetchRaseedyTransactions,
   getRescheduledLoanExcel,
   getRescheduledLoanList,
@@ -56,7 +56,7 @@ import {
 } from '../../../Shared/Services/APIs/Reports/Financial'
 
 import { downloadFile } from '../../../Shared/Services/utils'
-import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
+// import { PdfPortal } from '../../../Shared/Components/Common/PdfPortal'
 import { PDFList } from '../../../Shared/Components/PdfList'
 import { PDF } from '../../../Shared/Components/PdfList/types'
 import ReportsModal from '../../../Shared/Components/ReportsModal/reportsModal'
@@ -152,12 +152,12 @@ class FinancialReports extends Component<{}, State> {
           inputs: ['applicationKey', 'loanType'],
           permission: 'loanTransactionReport',
         },
-        {
-          key: 'raseedyTransactions',
-          local: 'مدفوعات رصيدي',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
-          permission: 'raseedyTransactions',
-        },
+        // {
+        //   key: 'raseedyTransactions',
+        //   local: 'مدفوعات رصيدي',
+        //   inputs: ['dateFromTo', 'branches', 'loanType'],
+        //   permission: 'raseedyTransactions',
+        // },
         {
           key: 'getPostpones',
           local: 'الترحيلات',
@@ -210,8 +210,8 @@ class FinancialReports extends Component<{}, State> {
         return this.getManualPayments(values)
       case 'customerTransactionReport':
         return this.getCustomerTransactions(values)
-      case 'raseedyTransactions':
-        return this.getRaseedyTransactions(values)
+      // case 'raseedyTransactions':
+      //   return this.getRaseedyTransactions(values)
       default:
         return null
     }
@@ -271,12 +271,12 @@ class FinancialReports extends Component<{}, State> {
           getManualPaymentsExcel,
           values
         )
-      case 'raseedyTransactions':
-        return this.getExcelFile(
-          postRaseedyTransactionsExcel,
-          getRaseedyTransactionsExcel,
-          values
-        )
+      // case 'raseedyTransactions':
+      //   return this.getExcelFile(
+      //     postRaseedyTransactionsExcel,
+      //     getRaseedyTransactionsExcel,
+      //     values
+      //   )
       case 'getPostpones':
         return this.getExcelFile(postPostponesExcel, getPostponesExcel, values)
       default:
@@ -514,7 +514,7 @@ class FinancialReports extends Component<{}, State> {
         const data = {
           startDate: values.fromDate,
           endDate: values.toDate,
-          data: res.body,
+          ...res.body,
         }
         this.setState(
           {
@@ -925,13 +925,13 @@ class FinancialReports extends Component<{}, State> {
           <CustomerTransactionReport result={this.state.data} isCF />
         )}
 
-        {this.state.print === 'raseedyTransactions' && (
+        {/* {this.state.print === 'raseedyTransactions' && (
           <PdfPortal
             component={
               <RaseedyTransactionsReport data={this.state.data} isCF />
             }
           />
-        )}
+        )} */}
       </>
     )
   }
