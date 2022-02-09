@@ -161,7 +161,7 @@ class FinancialReports extends Component<{}, State> {
         {
           key: 'getPostpones',
           local: 'الترحيلات',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType'],
           permission: 'getPostpones',
           serviceKey: 'report-2',
           hidePdf: true,
