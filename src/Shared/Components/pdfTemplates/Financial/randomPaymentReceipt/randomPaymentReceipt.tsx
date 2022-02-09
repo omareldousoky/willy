@@ -5,7 +5,7 @@ import { numbersToArabic, extractGMTDate } from '../../../../Services/utils'
 import local from '../../../../Assets/ar.json'
 import { RandomPaymentReceiptProps } from './types'
 
-const ReceiptHeader = (CF?: boolean) => {
+const ReceiptHeader = ({ CF, FL }: { CF?: boolean; FL?: boolean }) => {
   return (
     <>
       <table
@@ -23,6 +23,8 @@ const ReceiptHeader = (CF?: boolean) => {
             <th colSpan={6}>
               {CF
                 ? 'ترخيص رقم 23 بتاريخ 31/05/2021'
+                : FL
+                ? 'مرخصه بسجل المؤجرين التمويليين بالهيئه العامه للرقابه الماليه برقم ٣٠١ بتاريخ ٣١/ ٥ /٢٠٢١'
                 : 'ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
             </th>
           </tr>
@@ -40,10 +42,11 @@ const ReceiptHeader = (CF?: boolean) => {
 const RandomPaymentReceipt = ({
   receiptData,
   appType = 'LTS',
+  fl,
 }: RandomPaymentReceiptProps) => {
   const pdfHeaders = {
-    LTS: ReceiptHeader(),
-    CF: ReceiptHeader(true),
+    LTS: ReceiptHeader({ CF: false, FL: fl }),
+    CF: ReceiptHeader({ CF: true }),
   }
 
   return (

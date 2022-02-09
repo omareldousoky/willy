@@ -1912,7 +1912,13 @@ class LoanProfile extends Component<Props, State> {
         )}
         {this.state.print === 'earlyPayment' && (
           <EarlyPaymentPDF
-            type={this.props.location.state?.sme ? 'sme' : 'lts'}
+            type={
+              this.state.application?.product?.financialLeasing
+                ? 'fl'
+                : this.props.location.state?.sme
+                ? 'sme'
+                : 'lts'
+            }
             application={this.state.application}
             earlyPaymentPdfData={getEarlyPaymentPdfData(
               this.state.application,
@@ -1928,12 +1934,22 @@ class LoanProfile extends Component<Props, State> {
             companyReceipt={
               this.state.application.customer.customerType === 'company'
             }
-            type={this.state.application?.product?.type}
+            type={
+              this.state.application?.product?.financialLeasing
+                ? 'fl'
+                : this.state.application?.product?.type
+            }
           />
         )}
         {this.state.print === 'payEarly' && (
           <EarlyPaymentReceipt
-            type={this.props.location.state?.sme ? 'sme' : 'lts'}
+            type={
+              this.state.application?.product?.financialLeasing
+                ? 'fl'
+                : this.props.location.state?.sme
+                ? 'sme'
+                : 'lts'
+            }
             receiptData={this.state.receiptData}
             branchDetails={this.state.branchDetails}
             earlyPaymentData={this.state.earlyPaymentData}
@@ -1950,7 +1966,10 @@ class LoanProfile extends Component<Props, State> {
         )}
         {this.state.print === 'randomPayment' ||
         this.state.print === 'penalty' ? (
-          <RandomPaymentReceipt receiptData={this.state.receiptData} />
+          <RandomPaymentReceipt
+            receiptData={this.state.receiptData}
+            fl={this.state.application?.product?.financialLeasing}
+          />
         ) : null}
       </Container>
     )
