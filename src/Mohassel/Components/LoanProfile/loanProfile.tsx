@@ -1883,7 +1883,9 @@ class LoanProfile extends Component<Props, State> {
             type={
               this.state.application?.product?.financialLeasing
                 ? 'fl'
-                : this.state.application?.product?.type
+                : this.props.location.state?.sme
+                ? 'sme'
+                : 'lts'
             }
             receiptData={this.state.receiptData}
             branchDetails={this.state.branchDetails}
