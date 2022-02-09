@@ -184,7 +184,10 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
               <div>سند ملكيه المؤجر : ( مبايعه من الشركه المورده ) </div>
               <div>
                 الثمن المذكور بسند الملكيه : {numbersToArabic(principal)} (
-                {new Tafgeet(principal, 'EGP').parse()})
+                {new Tafgeet(principal, 'EGP')
+                  .parse()
+                  .replace('undefined', 'صفر')}
+                )
               </div>
               <div>نوع الاصل المؤجر : {categoryName || local.na}</div>
               <div>وصف الأصل المؤجر : {itemDescription || local.na}</div>
@@ -200,16 +203,25 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
               {downPayment > 0 && (
                 <div>
                   الدفعة المقدمة : {downPayment} (
-                  {new Tafgeet(downPayment, 'EGP').parse()})
+                  {new Tafgeet(downPayment, 'EGP')
+                    .parse()
+                    .replace('undefined', 'صفر')}
+                  )
                 </div>
               )}
               <div>
                 الدفعة الايجارية : {installmentResponse} (
-                {new Tafgeet(installmentResponse, 'EGP').parse()})
+                {new Tafgeet(installmentResponse, 'EGP')
+                  .parse()
+                  .replace('undefined', 'صفر')}
+                )
               </div>
               <div>
                 اجمالي القيمة الايجارية : {installmentSum} (
-                {new Tafgeet(installmentSum, 'EGP').parse()})
+                {new Tafgeet(installmentSum, 'EGP')
+                  .parse()
+                  .replace('undefined', 'صفر')}
+                )
               </div>
               <div>
                 تسداد الأجرة بشكل (
