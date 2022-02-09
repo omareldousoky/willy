@@ -17,6 +17,7 @@ import { UploadDocuments } from 'Shared/Components/UploadDocument'
 import { postCommentsReport } from 'Shared/Services/APIs/Reports/Operations/commentsReport'
 import { CommentsReportOBJ } from 'Shared/Models/operationsReports'
 import { getApplication } from 'Shared/Services/APIs/loanApplication/getApplication'
+import FinancialLeasingContract from 'Shared/Components/pdfTemplates/FinancialLeasingContract'
 import {
   BranchDetails,
   BranchDetailsResponse,
@@ -62,6 +63,7 @@ import { getLoanUsage } from 'Shared/Services/APIs/LoanUsage/getLoanUsage'
 import { getEarlyPaymentPdfData } from 'Shared/Utils/payment'
 import EarlyPaymentReceipt from 'Shared/Components/pdfTemplates/Financial/earlyPaymentReceipt/earlyPaymentReceipt'
 import { Score, Customer } from 'Shared/Models/Customer'
+import { FinancialLeaseContract } from 'Shared/Components/pdfTemplates/FinancialLeasingContract/types'
 import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment'
 import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions'
 import Payment from '../Payment/payment'
@@ -601,6 +603,63 @@ class LoanProfile extends Component<Props, State> {
     }
   }
 
+  getFinancialLeaseContractData(): FinancialLeaseContract {
+    const { application, loanUsage } = this.state
+    const FLContractData = {
+      creationDate: application.creationDate,
+      customerType: application.customer.customerType,
+      customerName: application.customer.customerName,
+      guarantors: application.guarantors.map((g) => ({
+        name: g.customerName,
+        address: g.customerHomeAddress,
+        nationalId: g.nationalId,
+      })),
+      vendorName: application.vendorName,
+      principal: application.installmentsObject.totalInstallments.principal,
+      categoryName: application.categoryName,
+      itemDescription: application.itemDescription,
+      businessSector: application.customer.businessSector,
+      downPayment: application.downPayment,
+      installmentResponse:
+        application.installmentsObject.installments[0].installmentResponse,
+      periodLength: application.product.periodLength,
+      firstInstallmentDate:
+        application.installmentsObject.installments[0].dateOfPayment,
+      lastInstallmentDate: application.installmentsObject.installments.reverse()[0]
+        .dateOfPayment,
+      feesSum: application.installmentsObject.totalInstallments.feesSum,
+      customerHomeAddress: application.customer.customerHomeAddress,
+      nationalId: application.customer.nationalId,
+      commercialRegisterNumber: application.customer.commercialRegisterNumber,
+      businessAddress: application.customer.businessAddress,
+      taxCardNumber: application.customer.taxCardNumber,
+      entitledToSign: {
+        position: application.entitledToSign
+          ? application.entitledToSign[0].position
+          : '',
+        name: application.entitledToSign
+          ? application.entitledToSign[0].customer.customerName
+          : '',
+      },
+      installmentSum:
+        application.installmentsObject.totalInstallments.installmentSum,
+      loanUsage,
+      applicationFeesRequired: application.applicationFeesRequired,
+      legalConstitution: application.customer.legalConstitution,
+    }
+    return FLContractData
+  }
+
+  getContractType = (customerType: string): string => {
+    let type = 'all'
+    if (this.state.application.product.financialLeasing) {
+      type = 'financialLeasingContract'
+    } else if (customerType === 'company') {
+      type = 'allSME'
+    }
+    return type
+  }
+
   getProfileActions = () => {
     return [
       {
@@ -628,10 +687,9 @@ class LoanProfile extends Component<Props, State> {
         onActionClick: () => {
           this.setState(
             (prevState) => ({
-              print:
-                prevState.application.customer.customerType === 'company'
-                  ? 'allSME'
-                  : 'all',
+              print: this.getContractType(
+                prevState.application.customer.customerType
+              ),
             }),
             () => window.print()
           )
@@ -1748,6 +1806,11 @@ class LoanProfile extends Component<Props, State> {
               />
             )}
           </>
+        )}
+        {this.state.print === 'financialLeasingContract' && (
+          <FinancialLeasingContract
+            data={this.getFinancialLeaseContractData()}
+          />
         )}
         {this.state.print === 'allSME' && (
           <>
