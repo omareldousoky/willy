@@ -140,6 +140,7 @@ export interface Product {
   stamps?: number
   type?: string
   viceFieldManagerAndDate?: boolean
+  financialLeasing?: boolean
   _id: string
 }
 export interface Application {

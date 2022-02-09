@@ -528,9 +528,10 @@ class TrackLoanApplications extends Component<Props, State> {
         render: (data) => data.application.customer.taxCardNumber,
       })
       dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
+      searchKeys.push('financialLeasingCheckTypeless')
     } else {
       dropDownKeys.push('nationalId')
-      searchKeys.push('loanType')
+      searchKeys.push('loanType', 'financialLeasingCheck')
     }
     return (
       <>

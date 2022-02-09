@@ -37,6 +37,7 @@ class LoanProductCreation extends Component<Props, State> {
         contractType: 'standard',
         calculationFormulaId: '',
         type: 'micro',
+        financialLeasing: false,
         loanNature: 'cash',
         currency: 'egp',
         periodLength: 1,
