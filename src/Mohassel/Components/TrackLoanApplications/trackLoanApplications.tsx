@@ -71,6 +71,7 @@ interface State {
   iScoreCustomers: any
   loading: boolean
   selectedBranch: string
+  financialLeasing: boolean
 }
 interface Props
   extends RouteComponentProps<
@@ -95,6 +96,7 @@ class TrackLoanApplications extends Component<Props, State> {
     super(props)
     this.state = {
       print: false,
+      financialLeasing: false,
       size: 10,
       from: 0,
       branchDetails: {},
@@ -444,7 +446,11 @@ class TrackLoanApplications extends Component<Props, State> {
         })
       } else {
         this.setState(
-          { reviewedResults: res.body.result, loading: false },
+          {
+            reviewedResults: res.body.result,
+            loading: false,
+            financialLeasing: filters.financialLeasing,
+          },
           () => {
             this.setState({ print: true }, () => window.print())
           }
@@ -693,6 +699,7 @@ class TrackLoanApplications extends Component<Props, State> {
         </div>
         {this.state.print && (
           <ReviewedApplicationsPDF
+            fl={this.state.financialLeasing}
             isSme={this.props.searchFilters.type === 'sme'}
             data={this.state.reviewedResults}
             branchDetails={this.state.branchDetails}

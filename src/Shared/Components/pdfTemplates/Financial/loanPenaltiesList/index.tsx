@@ -1,14 +1,22 @@
 import React from 'react'
 import './loanPenaltiesList.scss'
 import * as local from '../../../../Assets/ar.json'
-import { timeToArabicDate } from '../../../../Services/utils'
 import Orientation from '../../../Common/orientation'
+import { Header } from '../../pdfTemplateCommon/header'
 
-export const LoanPenaltiesList = (props) => {
-  const { data, isCF } = props
-  const { days } = data
-  const startDate = timeToArabicDate(props.data.startDate, false)
-  const endDate = timeToArabicDate(props.data.endDate, false)
+export const LoanPenaltiesList = ({
+  isCF = false,
+  data: {
+    days,
+    financialLeasing,
+    startDate,
+    endDate,
+    totalNumberOfTransactions,
+    totalTransactionAmount,
+    totalCancelledAmount,
+    totalPaidAmount,
+  },
+}) => {
   const getStatus = (value) => {
     switch (value) {
       case 'unpaid':
@@ -145,47 +153,18 @@ export const LoanPenaltiesList = (props) => {
     <>
       <Orientation size="portrait" />
       <div className="loan-penalties-list" dir="rtl" lang="ar">
-        <table
-          className="w-100 text-center"
-          style={{
-            margin: '10px 0px',
-          }}
-        >
-          <tbody>
-            <tr style={{ height: '10px' }} />
-            <tr className="w-100 d-flex flex-row justify-content-between">
-              <th colSpan={6}>
-                <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
-              </th>
-              <th colSpan={6}>
-                {isCF
-                  ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
-                  : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
-              </th>
-            </tr>
-            <tr style={{ height: '10px' }} />
-          </tbody>
-        </table>
+        <Header
+          cf={isCF}
+          fl={financialLeasing}
+          title="قائمة حركة غرامات القروض المنفذة"
+          fromDate={startDate}
+          toDate={endDate}
+        />
         <table className="report-container">
           <thead className="report-header">
             <tr className="headtitle">
-              <th colSpan={4}>
-                {isCF
-                  ? 'حالا للتمويل الاستهلاكي ش. م. م.'
-                  : 'شركة تساهيل للتمويل متناهي الصغر'}
-              </th>
-              <th colSpan={6}>قائمة حركة غرامات القروض المنفذة</th>
-            </tr>
-            <tr className="headtitle">
               <th colSpan={4}>المركز الرئيسي</th>
-              <th colSpan={6}>
-                تاريخ الحركه من {startDate} الي {endDate}
-              </th>
             </tr>
-            {/* <tr className="headtitle">
-            <th colSpan={4}>12:17:26 &emsp; 2020/07/05</th>
-            <th colSpan={6}>جنيه مصري</th>
-          </tr> */}
             <tr>
               <th colSpan={16} className="border-line" />
             </tr>
@@ -223,23 +202,21 @@ export const LoanPenaltiesList = (props) => {
               <td className="gray horizontal-line">جنيه مصري</td>
               <td />
               <td className="horizontal-line">إجمالي عدد الحركات</td>
-              <td className="horizontal-line">
-                {data.totalNumberOfTransactions}
-              </td>
+              <td className="horizontal-line">{totalNumberOfTransactions}</td>
               <td />
               <td className="horizontal-line">إجمالي المبلغ</td>
-              <td className="horizontal-line">{data.totalTransactionAmount}</td>
+              <td className="horizontal-line">{totalTransactionAmount}</td>
             </tr>
 
             <tr>
               <td colSpan={8} />
               <td className="horizontal-line">القيمة الملغاه</td>
-              <td className="horizontal-line">{data.totalCancelledAmount}</td>
+              <td className="horizontal-line">{totalCancelledAmount}</td>
             </tr>
             <tr>
               <td colSpan={8} />
               <td className="horizontal-line">القيمة المسدده</td>
-              <td className="horizontal-line">{data.totalPaidAmount}</td>
+              <td className="horizontal-line">{totalPaidAmount}</td>
             </tr>
           </tbody>
         </table>

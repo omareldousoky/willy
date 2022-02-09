@@ -116,73 +116,73 @@ class FinancialReports extends Component<{}, State> {
         {
           key: 'branchLoanList',
           local: 'ملخص الحالات والقروض',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'branchIssuedLoans',
         },
         {
           key: 'CollectionStatement',
           local: 'كشف التحصيل',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'collectionReport',
         },
         {
           key: 'Penalties',
           local: 'الغرامات',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'penalties',
         },
         {
           key: 'CrossedOutLoans',
           local: 'قائمة حركات إعدام ديون القروض المنفذة',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'writeOffs',
         },
         {
           key: 'DoubtfulLoans',
           local: 'قائمة حركة القروض المشكوك في سدادها',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'loanDoubts',
         },
         {
           key: 'issuedLoanList',
           local: 'القروض المصدرة',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'loansIssued',
         },
         {
           key: 'createdLoanList',
           local: 'انشاء القروض',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'loansCreated',
         },
         {
           key: 'rescheduledLoanList',
           local: 'قائمة حركات جدولة القروض المنفذه',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'loanRescheduling',
         },
         {
           key: 'paymentsDoneList',
           local: 'حركات الاقساط',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'installments',
         },
         {
           key: 'randomPayments',
           local: 'الحركات المالية',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'randomPayments',
         },
         {
           key: 'loanApplicationFees',
           local: 'حركات رسوم طلب القرض',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'loanFees',
         },
         {
           key: 'manualPayments',
           local: 'مراجعه حركات السداد اليدوي',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'manualPayments',
         },
         {
@@ -200,7 +200,7 @@ class FinancialReports extends Component<{}, State> {
         {
           key: 'getPostpones',
           local: 'الترحيلات',
-          inputs: ['dateFromTo', 'branches'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'getPostpones',
           serviceKey: 'report-2',
           hidePdf: true,
@@ -208,7 +208,7 @@ class FinancialReports extends Component<{}, State> {
         {
           key: 'reviewedLoans',
           local: 'قروض تمت مراجعتها',
-          inputs: ['dateFromTo', 'branches', 'loanType'],
+          inputs: ['dateFromTo', 'branches', 'loanType', 'financialLeasing'],
           permission: 'getLoansReviewedByReviewDate',
           serviceKey: 'report-2',
           hidePdf: true,
@@ -397,7 +397,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -426,7 +425,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -440,6 +438,7 @@ class FinancialReports extends Component<{}, State> {
     const request = {
       startdate: values.fromDate,
       enddate: values.toDate,
+      financialLeasing: values.financialLeasing,
       branches: values.branches.some((branch) => branch._id === '')
         ? []
         : values.branches.map((branch) => branch._id),
@@ -458,7 +457,11 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { ...res.body, loanType: request.loanType },
+            data: {
+              ...res.body,
+              loanType: request.loanType,
+              financialLeasing: values.financialLeasing,
+            },
             showModal: false,
             print: 'branchLoanList',
             loading: false,
@@ -468,7 +471,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -478,6 +480,7 @@ class FinancialReports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
+      financialLeasing: values.financialLeasing,
       branches: branches.includes('') ? [] : branches,
       loanType: values.loanType,
     }
@@ -494,7 +497,12 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { data: res.body, from: values.fromDate, to: values.toDate },
+            data: {
+              ...res.body,
+              from: values.fromDate,
+              to: values.toDate,
+              financialLeasing: values.financialLeasing,
+            },
             showModal: false,
             print: 'paymentsDoneList',
             loading: false,
@@ -504,7 +512,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -519,6 +526,7 @@ class FinancialReports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
+      financialLeasing: values.financialLeasing,
       branches: branches.includes('') ? [] : branches,
       loanType: values.loanType,
     }
@@ -535,7 +543,7 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: res.body,
+            data: { ...res.body, financialLeasing: values.financialLeasing },
             showModal: false,
             print: 'randomPayments',
             loading: false,
@@ -545,7 +553,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -555,6 +562,7 @@ class FinancialReports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
+      financialLeasing: values.financialLeasing,
       branches: branches.includes('') ? [] : branches,
       loanType: values.loanType,
     }
@@ -571,7 +579,12 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { data: res.body, from: values.fromDate, to: values.toDate },
+            data: {
+              ...res.body,
+              from: values.fromDate,
+              to: values.toDate,
+              financialLeasing: values.financialLeasing,
+            },
             showModal: false,
             print: 'issuedLoanList',
             loading: false,
@@ -581,7 +594,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -591,6 +603,7 @@ class FinancialReports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
+      financialLeasing: values.financialLeasing,
       branches: branches.includes('') ? [] : branches,
       loanType: values.loanType,
     }
@@ -607,7 +620,12 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { data: res.body, from: values.fromDate, to: values.toDate },
+            data: {
+              ...res.body,
+              from: values.fromDate,
+              to: values.toDate,
+              financialLeasing: values.financialLeasing,
+            },
             showModal: false,
             print: 'createdLoanList',
             loading: false,
@@ -617,7 +635,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -627,6 +644,7 @@ class FinancialReports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
+      financialLeasing: values.financialLeasing,
       branches: branches.includes('') ? [] : branches,
       loanType: values.loanType,
     }
@@ -643,7 +661,12 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { data: res.body, from: values.fromDate, to: values.toDate },
+            data: {
+              ...res.body,
+              from: values.fromDate,
+              to: values.toDate,
+              financialLeasing: values.financialLeasing,
+            },
             showModal: false,
             print: 'rescheduledLoanList',
             loading: false,
@@ -653,7 +676,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -667,6 +689,7 @@ class FinancialReports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
+      financialLeasing: values.financialLeasing,
       branches: values.branches
         .filter((branch) => branch._id !== '')
         .map((branch) => branch._id),
@@ -685,7 +708,7 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: res.body,
+            data: { ...res.body, financialLeasing: values.financialLeasing },
             showModal: false,
             print: 'loanApplicationFees',
             loading: false,
@@ -695,7 +718,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -703,6 +725,7 @@ class FinancialReports extends Component<{}, State> {
     this.setState({ loading: true, showModal: false })
     const res = await collectionReport({
       startDate: values.fromDate,
+      financialLeasing: values.financialLeasing,
       endDate: values.toDate,
       branches: values.branches.some((branch) => branch._id === '')
         ? []
@@ -722,7 +745,8 @@ class FinancialReports extends Component<{}, State> {
         const data = {
           startDate: values.fromDate,
           endDate: values.toDate,
-          data: res.body,
+          financialLeasing: values.financialLeasing,
+          ...res.body,
         }
         this.setState(
           {
@@ -736,7 +760,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -746,6 +769,7 @@ class FinancialReports extends Component<{}, State> {
     const res = await penalties({
       startDate: values.fromDate,
       endDate: values.toDate,
+      financialLeasing: values.financialLeasing,
       branches: branches.includes('') ? [] : branches,
       loanType: values.loanType,
     })
@@ -767,6 +791,7 @@ class FinancialReports extends Component<{}, State> {
           totalPaidAmount: Number(res.body.netAmount),
           startDate: values.fromDate,
           endDate: values.toDate,
+          financialLeasing: values.financialLeasing,
         }
         this.setState(
           {
@@ -780,7 +805,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -789,6 +813,7 @@ class FinancialReports extends Component<{}, State> {
     const res = await doubtfulLoans({
       startDate: values.fromDate,
       endDate: values.toDate,
+      financialLeasing: values.financialLeasing,
       branches: values.branches
         .filter((branch) => branch._id !== '')
         .map((branch) => branch._id),
@@ -805,8 +830,10 @@ class FinancialReports extends Component<{}, State> {
         })
       } else {
         const data = {
-          req: { startDate: values.fromDate, endDate: values.toDate },
-          data: { ...res.body },
+          financialLeasing: values.financialLeasing,
+          startDate: values.fromDate,
+          endDate: values.toDate,
+          ...res.body,
         }
         this.setState(
           {
@@ -820,7 +847,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -829,6 +855,7 @@ class FinancialReports extends Component<{}, State> {
     const res = await writeOffs({
       startDate: values.fromDate,
       endDate: values.toDate,
+      financialLeasing: values.financialLeasing,
       branches: values.branches
         .filter((branch) => branch._id !== '')
         .map((branch) => branch._id),
@@ -845,8 +872,10 @@ class FinancialReports extends Component<{}, State> {
         })
       } else {
         const data = {
-          req: { startDate: values.fromDate, endDate: values.toDate },
-          data: { ...res.body },
+          financialLeasing: values.financialLeasing,
+          startDate: values.fromDate,
+          endDate: values.toDate,
+          ...res.body,
         }
         this.setState(
           {
@@ -860,7 +889,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -897,6 +925,7 @@ class FinancialReports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
+      financialLeasing: values.financialLeasing,
       branches: branches.includes('') ? [] : branches,
       loanType: values.loanType,
     }
@@ -913,7 +942,10 @@ class FinancialReports extends Component<{}, State> {
       } else {
         this.setState(
           {
-            data: { result: res.body },
+            data: {
+              result: res.body,
+              financialLeasing: values.financialLeasing,
+            },
             fromDate: values.fromDate,
             toDate: values.toDate,
             showModal: false,
@@ -925,7 +957,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -956,7 +987,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -995,7 +1025,7 @@ class FinancialReports extends Component<{}, State> {
   }
 
   async getExcelFile(func, pollFunc, values) {
-    const { branches, fromDate, toDate, loanType } = values
+    const { branches, fromDate, toDate, loanType, financialLeasing } = values
     this.setState({
       loading: true,
       showModal: false,
@@ -1005,6 +1035,7 @@ class FinancialReports extends Component<{}, State> {
     const obj = {
       startdate: fromDate,
       enddate: toDate,
+      financialLeasing,
       branches: !branches
         ? undefined
         : branches.some((branch) => branch._id === '')
@@ -1029,7 +1060,6 @@ class FinancialReports extends Component<{}, State> {
       }
     } else {
       this.setState({ loading: false })
-      console.log(res)
     }
   }
 
@@ -1057,7 +1087,6 @@ class FinancialReports extends Component<{}, State> {
         }
       } else {
         this.setState({ loading: false })
-        console.log(file)
       }
     } else {
       this.setState({ loading: false })
@@ -1140,6 +1169,7 @@ class FinancialReports extends Component<{}, State> {
         )}
         {this.state.print === 'randomPayments' && (
           <RandomPayment
+            financialLeasing={this.state.data.financialLeasing}
             branches={this.state.data.branches}
             startDate={this.state.fromDate}
             endDate={this.state.toDate}
@@ -1147,6 +1177,7 @@ class FinancialReports extends Component<{}, State> {
         )}
         {this.state.print === 'loanApplicationFees' && (
           <LoanApplicationFees
+            financialLeasing={this.state.data.financialLeasing}
             result={this.state.data.result}
             total={this.state.data.total}
             trx={this.state.data.trx}
@@ -1158,6 +1189,7 @@ class FinancialReports extends Component<{}, State> {
         )}
         {this.state.print === 'manualPayments' && (
           <ManualPayments
+            financialLeasing={this.state.data.financialLeasing}
             result={this.state.data.result}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
