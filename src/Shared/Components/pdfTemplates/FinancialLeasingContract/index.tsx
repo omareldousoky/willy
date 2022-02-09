@@ -286,7 +286,7 @@ const FinancialLeasingContract: FC<FLContractProps> = ({ data }) => {
               </div>
               {returnTerms()}
               <div className="term-title mb-5 mt-5">التوقيع </div>
-              <div className="d-flex justify-content-between w-50">
+              <div className="d-flex justify-content-around w-100">
                 <div>
                   <div>الطرف الاول </div>
                   <div>الشركه المؤجره</div>
