@@ -464,7 +464,11 @@ class LoanCreation extends Component<
             receiptData={this.state.receiptData}
             fromLoanIssuance
             companyReceipt={this.state.customerData.customerType === 'company'}
-            type={this.state.application?.product?.type}
+            type={
+              this.state.application?.product?.financialLeasing
+                ? 'fl'
+                : this.state.application?.product?.type
+            }
           />
         )}
       </>

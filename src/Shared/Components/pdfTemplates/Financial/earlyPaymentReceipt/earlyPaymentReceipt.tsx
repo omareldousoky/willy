@@ -16,6 +16,7 @@ const EarlyPaymentReceipt = (props) => {
       (customer) => customer.type === 'leader'
     ).customer.key
   }
+
   return (
     <div className="early-payment-receipt" lang="ar">
       <table className="title">
@@ -37,7 +38,9 @@ const EarlyPaymentReceipt = (props) => {
           >
             <th style={{ backgroundColor: 'white' }} colSpan={6}>
               <div
-                className={`${type === 'sme' ? 'lts' : type}-logo-print-tb`}
+                className={`${
+                  ['sme', 'fl'].includes(type) ? 'lts' : type
+                }-logo-print-tb`}
               />
             </th>
             <th style={{ backgroundColor: 'white' }} colSpan={6}>
