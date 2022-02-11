@@ -594,9 +594,7 @@ export const CustomerProfile = () => {
       {
         icon: 'download',
         title: local.downloadPDF,
-        permission: ['initialization-reviewed', 'update-reviewed'].includes(
-          customerDetails?.consumerFinanceLimitStatus ?? ''
-        ),
+        permission: true,
         onActionClick: () => {
           setCustomerContractData(customerDetails as Customer)
           setPrint('all')
