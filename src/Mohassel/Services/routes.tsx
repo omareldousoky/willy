@@ -6,7 +6,7 @@ import { Leads } from 'Mohassel/Components/HalanIntegration/leads'
 import LoanComments from 'Mohassel/Components/ManageLoanDetails/LoanComments'
 import SourceOfFundHome from 'Mohassel/Components/SourceOfFund/sourceOfFundHome'
 import ability from 'Shared/config/ability'
-import { ActionsLog } from 'Shared/Components/ActionsLog'
+import ActionLogs from '../Components/ActionLogs/action-logs'
 import CustomerCreation from '../Components/CustomerCreation'
 import UserCreation from '../Components/UserCreation/userCreation'
 import FormulaCreation from '../Components/LoanFormulaCreation/loanFormulaCreation'
@@ -669,7 +669,7 @@ const appRoutes = [
         label: local.logs,
         render: (props) => (
           <Can I="viewActionLogs" a="user">
-            <ActionsLog {...props} />
+            <ActionLogs {...props} />
           </Can>
         ),
       },
