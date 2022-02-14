@@ -204,11 +204,17 @@ const Search: FunctionComponent<SearchProps> = ({
           initialState.type = isIssuedLoansSearch
             ? issuedLoansSearchFilters.type
             : 'micro'
+          initialState.financialLeasing = isIssuedLoansSearch
+            ? issuedLoansSearchFilters.financialLeasing
+            : false
           break
         case 'companyLoanType':
           initialState.type = isIssuedLoansSearch
             ? issuedLoansSearchFilters.type
             : 'sme'
+          initialState.financialLeasing = isIssuedLoansSearch
+            ? issuedLoansSearchFilters.financialLeasing
+            : false
           break
         case 'warningType':
           initialState.warningType = ''
@@ -224,6 +230,11 @@ const Search: FunctionComponent<SearchProps> = ({
           break
         case 'beneficiaryType':
           initialState.type = isProductUrl ? beneficiaryType : ''
+          break
+        case 'financialLeasingCheck' || 'financialLeasingCheckTypeless':
+          initialState.financialLeasing = isIssuedLoansSearch
+            ? issuedLoansSearchFilters.financialLeasing
+            : false
           break
         default:
           break
@@ -351,6 +362,7 @@ const Search: FunctionComponent<SearchProps> = ({
       searchQuery.customerBranchId = values.branchId
       delete searchQuery.branchId
     }
+    if (isProductUrl && !obj.type) delete searchQuery.financialLeasing
     if (resetSelectedItems) resetSelectedItems()
     search(searchQuery)
   }
@@ -389,6 +401,12 @@ const Search: FunctionComponent<SearchProps> = ({
                 field || 'status',
                 e.currentTarget.value
               )
+              if (
+                field === 'type' &&
+                !['sme', 'micro'].includes(e.currentTarget.value)
+              ) {
+                formikProps.setFieldValue('financialLeasing', false)
+              }
             }}
           >
             {array.map((option) => {
@@ -420,7 +438,27 @@ const Search: FunctionComponent<SearchProps> = ({
       </Col>
     )
   }
-
+  const financialLeasingCheck = (formikProps, index) => {
+    return (
+      <Col key={index} sm={6} style={{ marginTop: 20 }}>
+        <Form.Group className="row-nowrap" controlId="financialLeasing">
+          <Form.Check
+            type="checkbox"
+            name="financialLeasing"
+            data-qc="financialLeasingCheck"
+            checked={formikProps.values.financialLeasing}
+            onChange={(e) =>
+              formikProps.setFieldValue(
+                'financialLeasing',
+                e.currentTarget.checked
+              )
+            }
+            label={local.financialLeasing}
+          />
+        </Form.Group>
+      </Col>
+    )
+  }
   return (
     <Formik
       enableReinitialize
@@ -864,54 +902,62 @@ const Search: FunctionComponent<SearchProps> = ({
                 )
               }
               if (searchKey === 'loanType') {
-                return statusDropdown(
-                  formikProps,
-                  index,
-                  [
-                    {
-                      value: 'micro',
-                      text: local.micro,
-                    },
-                    ...((ability.can('getNanoLoan', 'application') &&
-                      isLoanUrl) ||
-                    (ability.can('getNanoApplication', 'application') &&
-                      isApplicationUrl)
-                      ? [
-                          {
-                            value: 'nano',
-                            text: local.nano,
-                          },
-                        ]
-                      : []),
-                    ...(isLoanUrl
-                      ? [
-                          {
-                            value: 'consumerFinance',
-                            text: local.cfLoan,
-                          },
-                        ]
-                      : []),
-                  ],
-                  'type',
-                  local.productName
+                return (
+                  <>
+                    {statusDropdown(
+                      formikProps,
+                      index,
+                      [
+                        {
+                          value: 'micro',
+                          text: local.micro,
+                        },
+                        ...((ability.can('getNanoLoan', 'application') &&
+                          isLoanUrl) ||
+                        (ability.can('getNanoApplication', 'application') &&
+                          isApplicationUrl)
+                          ? [
+                              {
+                                value: 'nano',
+                                text: local.nano,
+                              },
+                            ]
+                          : []),
+                        ...(isLoanUrl
+                          ? [
+                              {
+                                value: 'consumerFinance',
+                                text: local.cfLoan,
+                              },
+                            ]
+                          : []),
+                      ],
+                      'type',
+                      local.productName
+                    )}
+                  </>
                 )
               }
               if (searchKey === 'companyLoanType') {
-                return statusDropdown(
-                  formikProps,
-                  index,
-                  [
-                    {
-                      value: 'sme',
-                      text: local.sme,
-                    },
-                    {
-                      value: 'consumerFinance',
-                      text: local.cfLoan,
-                    },
-                  ],
-                  'type',
-                  local.productName
+                return (
+                  <>
+                    {statusDropdown(
+                      formikProps,
+                      index,
+                      [
+                        {
+                          value: 'sme',
+                          text: local.sme,
+                        },
+                        {
+                          value: 'consumerFinance',
+                          text: local.cfLoan,
+                        },
+                      ],
+                      'type',
+                      local.productName
+                    )}
+                  </>
                 )
               }
               if (searchKey === 'warningType') {
@@ -988,46 +1034,46 @@ const Search: FunctionComponent<SearchProps> = ({
               }
               if (searchKey === 'productType') {
                 return (
-                  <Col
-                    key={index}
-                    sm={6}
-                    style={{ marginTop: index < 2 ? 0 : 20 }}
-                  >
-                    <div className="dropdown-container">
-                      <p className="dropdown-label">{local.actionType}</p>
-                      <Form.Control
-                        as="select"
-                        className="dropdown-select"
-                        data-qc="loanType"
-                        value={formikProps.values.type}
-                        onChange={(e) => {
-                          formikProps.setFieldValue(
-                            'type',
-                            e.currentTarget.value
-                          )
-                        }}
-                      >
-                        {[
-                          { value: '', text: local.all },
-                          { value: 'micro', text: local.micro },
-                          { value: 'nano', text: local.nano },
-                          { value: 'sme', text: local.sme },
-                          {
-                            value: 'consumerFinance',
-                            text: local.cfLoan,
-                          },
-                        ].map(({ value, text }) => (
-                          <option key={value} value={value} data-qc={value}>
-                            {text}
-                          </option>
-                        ))}
-                      </Form.Control>
-                    </div>
-                  </Col>
+                  <>
+                    {statusDropdown(
+                      formikProps,
+                      index,
+                      [
+                        {
+                          value: '',
+                          text: local.all,
+                        },
+                        {
+                          value: 'micro',
+                          text: local.micro,
+                        },
+                        {
+                          value: 'nano',
+                          text: local.nano,
+                        },
+                        {
+                          value: 'sme',
+                          text: local.sme,
+                        },
+                        {
+                          value: 'consumerFinance',
+                          text: local.cfLoan,
+                        },
+                      ],
+                      'type',
+                      local.productName
+                    )}
+                  </>
                 )
               }
+              if (
+                (searchKey === 'financialLeasingCheck' &&
+                  ['micro', 'sme'].includes(formikProps.values.type ?? '')) ||
+                searchKey === 'financialLeasingCheckTypeless'
+              ) {
+                return financialLeasingCheck(formikProps, index)
+              }
             })}
-
             <Col className="d-flex">
               <Button
                 type="submit"

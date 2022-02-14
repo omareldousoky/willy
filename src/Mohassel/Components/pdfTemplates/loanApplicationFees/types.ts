@@ -33,4 +33,5 @@ export interface LoanApplicationFeesProps {
   trx: number
   startDate: number
   endDate: number
+  financialLeasing?: boolean
 }

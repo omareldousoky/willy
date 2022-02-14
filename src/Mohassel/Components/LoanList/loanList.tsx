@@ -298,9 +298,11 @@ const LoanList: FunctionComponent<LoanListProps> = (props: LoanListProps) => {
       render: (data) => data.application.customer.taxCardNumber,
     })
     dropDownKeys.push('taxCardNumber', 'commercialRegisterNumber')
+    searchKeys.push('financialLeasingCheckTypeless')
   } else {
     dropDownKeys.push('nationalId')
     searchKeys.splice(4, 0, 'loanType')
+    searchKeys.push('financialLeasingCheck')
   }
 
   return (

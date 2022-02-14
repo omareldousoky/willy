@@ -1,11 +1,9 @@
 import React from 'react'
 import './manualPayments.scss'
-import {
-  timeToArabicDate,
-  timeToArabicDateNow,
-} from '../../../../Services/utils'
+import { timeToArabicDateNow } from '../../../../Services/utils'
 import Orientation from '../../../Common/orientation'
 import { ManualPaymentsProps } from './types'
+import { Header } from '../../pdfTemplateCommon/header'
 
 const statusLocalization = (status: string) => {
   switch (status) {
@@ -29,49 +27,20 @@ export const ManualPayments = ({
   toDate,
   result,
   isCF,
+  financialLeasing,
 }: ManualPaymentsProps) => (
   <>
     <Orientation size="portrait" />
     <div className="manual-payments" lang="ar">
-      <table
-        className="w-100 text-center"
-        style={{
-          margin: '10px 0px',
-        }}
-      >
-        <tbody>
-          <tr style={{ height: '10px' }} />
-          <tr className="w-100 d-flex flex-row justify-content-between">
-            <th colSpan={6}>
-              <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
-            </th>
-            <th colSpan={6}>
-              {isCF
-                ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
-                : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
-            </th>
-          </tr>
-          <tr style={{ height: '10px' }} />
-        </tbody>
-      </table>
+      <Header
+        cf={isCF}
+        fl={financialLeasing}
+        title="مراجعه حركات السداد اليدوي"
+        fromDate={fromDate}
+        toDate={toDate}
+      />
       <table className="report-container">
-        <thead className="report-header">
-          <tr className="headtitle">
-            <th colSpan={4}>
-              {isCF
-                ? 'حالا للتمويل الاستهلاكي ش. م. م.'
-                : 'شركة تساهيل للتمويل متناهي الصغر'}
-            </th>
-            <th colSpan={6}>مراجعه حركات السداد اليدوي</th>
-          </tr>
-        </thead>
         <tbody>
-          <tr className="headtitle">
-            <th colSpan={6}>
-              تاريخ الحركه من {timeToArabicDate(fromDate, false)} الي
-              {timeToArabicDate(toDate, false)}
-            </th>
-          </tr>
           <tr className="headtitle">
             <th colSpan={4}>{timeToArabicDateNow(true)}</th>
             <th colSpan={6}>جنيه مصري</th>

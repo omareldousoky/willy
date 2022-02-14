@@ -5,50 +5,26 @@ import {
   getTimestamp,
   timeToArabicDateNow,
   statusLocale,
-} from '../../../../Shared/Services/utils'
-import Orientation from '../../../../Shared/Components/Common/orientation'
+} from 'Shared/Services/utils'
+import Orientation from 'Shared/Components/Common/orientation'
+import { Header } from 'Shared/Components/pdfTemplates/pdfTemplateCommon/header'
 
-export const LoanCreationList = (props) => {
-  const tempData = props.data.data
-  const reportDate =
-    props.data.from === props.data.to
-      ? timeToArabicDate(props.data.from, false)
-      : `من ${timeToArabicDate(props.data.from, false)} الي ${timeToArabicDate(
-          props.data.to,
-          false
-        )}`
-
+export const LoanCreationList = ({
+  data: { financialLeasing, to, from, total, canceled, net, trx, result },
+}) => {
   return (
     <div className="loan-creation-list" lang="ar">
       <Orientation size="portrait" />
-      <table
-        className="w-100 text-center"
-        style={{
-          margin: '10px 0px',
-        }}
-      >
-        <tbody>
-          <tr style={{ height: '10px' }} />
-          <tr className="w-100 d-flex flex-row justify-content-between">
-            <th colSpan={6}>
-              <div className="logo-print-tb" />
-            </th>
-            <th colSpan={6}>
-              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-            </th>
-          </tr>
-          <tr style={{ height: '10px' }} />
-        </tbody>
-      </table>
+      <Header
+        fl={financialLeasing}
+        title="قائمة حركة انشاء القروض المنفذه"
+        fromDate={from}
+        toDate={to}
+      />
       <table className="report-container">
         <thead className="report-header">
           <tr className="headtitle">
-            <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
-            <th colSpan={6}>قائمة حركة انشاء القروض المنفذه</th>
-          </tr>
-          <tr className="headtitle">
             <th colSpan={4}>المركز الرئيسي</th>
-            <th colSpan={6}>{`تاريخ الحركه ${reportDate}`}</th>
           </tr>
           <tr className="headtitle">
             <th colSpan={4}>{timeToArabicDateNow(true)}</th>
@@ -75,7 +51,7 @@ export const LoanCreationList = (props) => {
             <th colSpan={100} className="horizontal-line" />
           </tr>
         </thead>
-        {tempData.result.map((day, x) => (
+        {result.map((day, x) => (
           <React.Fragment key={x}>
             <tbody>
               <tr>
@@ -220,28 +196,28 @@ export const LoanCreationList = (props) => {
             <td className="frame" colSpan={2}>
               إجمالي عدد الحركات
             </td>
-            <td className="frame">{tempData.trx}</td>
+            <td className="frame">{trx}</td>
             <td />
             <td />
             <td className="frame">إجمالي المبلغ</td>
-            <td className="frame">{tempData.total[0]}</td>
-            <td className="frame">{tempData.total[1]}</td>
-            <td className="frame">{tempData.total[2]}</td>
+            <td className="frame">{total[0]}</td>
+            <td className="frame">{total[1]}</td>
+            <td className="frame">{total[2]}</td>
           </tr>
 
           <tr>
             <td colSpan={8} />
             <td className="frame">القيمة الملغاه</td>
-            <td className="frame">{tempData.canceled[0]}</td>
-            <td className="frame">{tempData.canceled[1]}</td>
-            <td className="frame">{tempData.canceled[2]}</td>
+            <td className="frame">{canceled[0]}</td>
+            <td className="frame">{canceled[1]}</td>
+            <td className="frame">{canceled[2]}</td>
           </tr>
           <tr>
             <td colSpan={8} />
             <td className="frame">صافي المبلغ</td>
-            <td className="frame">{tempData.net[0]}</td>
-            <td className="frame">{tempData.net[1]}</td>
-            <td className="frame">{tempData.net[2]}</td>
+            <td className="frame">{net[0]}</td>
+            <td className="frame">{net[1]}</td>
+            <td className="frame">{net[2]}</td>
           </tr>
           <tr style={{ height: '0.5em' }} />
         </tbody>

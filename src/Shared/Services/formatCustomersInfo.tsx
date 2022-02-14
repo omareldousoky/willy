@@ -176,6 +176,11 @@ export const getCompanyInfo = ({
       showFieldCondition: true,
     },
     {
+      fieldTitle: local.businessActivity,
+      fieldData: company.businessActivity || '',
+      showFieldCondition: true,
+    },
+    {
       fieldTitle: local.initialConsumerFinanceLimit,
       fieldData: numbersToArabic(company.initialConsumerFinanceLimit || 0),
       showFieldCondition: true,

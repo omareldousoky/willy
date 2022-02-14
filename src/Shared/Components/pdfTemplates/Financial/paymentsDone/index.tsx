@@ -7,55 +7,27 @@ import {
 } from '../../../../Services/utils'
 import * as local from '../../../../Assets/ar.json'
 import Orientation from '../../../Common/orientation'
+import { Header } from '../../pdfTemplateCommon/header'
 
-export const PaymentsDone = (props) => {
-  const { isCF } = props
-  const tempData = props.data.data
-  const reportDate =
-    props.data.from === props.data.to
-      ? timeToArabicDate(props.data.from, false)
-      : `من ${timeToArabicDate(props.data.from, false)} الي ${timeToArabicDate(
-          props.data.to,
-          false
-        )}`
+export const PaymentsDone = ({
+  isCF = false,
+  data: { financialLeasing, to, from, days },
+}) => {
   return (
     <>
       <Orientation size="portrait" />
       <div className="payments-done" lang="ar">
-        <table
-          className="w-100 text-center"
-          style={{
-            margin: '10px 0px',
-          }}
-        >
-          <tbody>
-            <tr style={{ height: '10px' }} />
-            <tr className="w-100 d-flex flex-row justify-content-between">
-              <th colSpan={6}>
-                <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
-              </th>
-              <th colSpan={6}>
-                {isCF
-                  ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
-                  : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
-              </th>
-            </tr>
-            <tr style={{ height: '10px' }} />
-          </tbody>
-        </table>
+        <Header
+          cf={isCF}
+          fl={financialLeasing}
+          title="قائمة حركات السداد المنفذه"
+          fromDate={from}
+          toDate={to}
+        />
         <table className="report-container">
           <thead className="report-header">
             <tr className="headtitle">
-              <th colSpan={4}>
-                {isCF
-                  ? 'حالا للتمويل الاستهلاكي ش. م. م.'
-                  : 'شركة تساهيل للتمويل متناهي الصغر'}
-              </th>
-              <th colSpan={6}>قائمة حركات السداد المنفذه</th>
-            </tr>
-            <tr className="headtitle">
               <th colSpan={4}>المركز الرئيسي</th>
-              <th colSpan={6}>{`تاريخ الحركه ${reportDate}`}</th>
             </tr>
             <tr className="headtitle">
               <th colSpan={4}>{timeToArabicDateNow(true)}</th>
@@ -83,7 +55,7 @@ export const PaymentsDone = (props) => {
             </tr>
           </thead>
 
-          {tempData.days.map((day, x) => (
+          {days.map((day, x) => (
             <React.Fragment key={x}>
               <tbody>
                 <tr>
