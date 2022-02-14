@@ -31,6 +31,7 @@ export const LoanApplicationCreationForm = (props: any) => {
     errors,
     touched,
     setFieldValue,
+    calculationFormulaName,
   } = props
   const [enquirerOptions, setEnquirerOptions] = useState<Array<any>>([])
   const [employees, setEmployees] = useState<Array<any>>([])
@@ -153,17 +154,11 @@ export const LoanApplicationCreationForm = (props: any) => {
                     isInvalid={errors.productID && touched.productID}
                   >
                     <option value="" disabled />
-                    {props.products
-                      .filter((product) =>
-                        props.customer.customerType === 'company'
-                          ? product.type === 'sme'
-                          : product.type !== 'sme'
-                      )
-                      .map((product, i) => (
-                        <option key={i} value={product._id}>
-                          {product.productName}
-                        </option>
-                      ))}
+                    {props.products.map((product, i) => (
+                      <option key={i} value={product._id}>
+                        {product.productName}
+                      </option>
+                    ))}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
                     {errors.productID}
@@ -197,7 +192,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                 <Form.Group controlId="calculationFormulaId">
                   <Form.Label>{local.calculationFormulaId}</Form.Label>
                   <Form.Control
-                    as="select"
+                    type="text"
                     name="calculationFormulaId"
                     data-qc="calculationFormulaId"
                     value={values.calculationFormulaId}
@@ -209,12 +204,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                     }
                     disabled
                   >
-                    <option value="" disabled />
-                    {props.formulas.map((formula, i) => (
-                      <option key={i} value={formula._id}>
-                        {formula.name}
-                      </option>
-                    ))}
+                    {calculationFormulaName}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
                     {errors.calculationFormulaId}
@@ -506,7 +496,7 @@ export const LoanApplicationCreationForm = (props: any) => {
             )}
             {values.beneficiaryType === 'individual' && (
               <Row>
-                <Col sm={12}>
+                <Col sm={values.financialLeasing ? 6 : 12}>
                   <Form.Group controlId="principal">
                     <Form.Label>{local.principal}</Form.Label>
                     <Form.Control
@@ -526,6 +516,25 @@ export const LoanApplicationCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
+                {values.financialLeasing && (
+                  <Col sm={6}>
+                    <Form.Group controlId="downPayment">
+                      <Form.Label>{local.downPayment}</Form.Label>
+                      <Form.Control
+                        type="number"
+                        name="downPayment"
+                        data-qc="downPayment"
+                        value={values.downPayment}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={errors.downPayment && touched.downPayment}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.downPayment}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Col>
+                )}
               </Row>
             )}
             <Row>

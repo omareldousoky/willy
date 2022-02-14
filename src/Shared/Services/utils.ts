@@ -619,6 +619,52 @@ export const orderLocal = {
   default: 'العميل',
 }
 
+export const FLindexLocal = {
+  0: 'اول',
+  1: 'ثاني',
+  2: 'ثالث',
+  3: 'رابع',
+  4: 'خامس',
+  5: 'سادس',
+  6: 'سابع',
+  7: 'ثامن',
+  8: 'تاسع',
+  9: 'عاشر',
+}
+
+export const periodLengthLocal = {
+  1: 'شهري',
+  3: 'ربع سنوي',
+  6: 'نصف سنوي',
+  12: 'سنوي',
+}
+
+export const periodLengthSingularLocal = {
+  1: 'شهر',
+  3: 'ربع سنة',
+  6: 'نصف سنة',
+  12: 'سنة',
+}
+
+export const alphaIndexLocal = {
+  0: 'أ',
+  1: 'ب',
+  2: 'ج',
+  3: 'د',
+  4: 'ه',
+  5: 'و',
+  6: 'ز',
+  7: 'ح',
+  8: 'ط',
+  9: 'ي',
+  10: 'ك',
+  11: 'ل',
+  12: 'م',
+  13: 'ن',
+  14: 'س',
+  15: 'ع',
+}
+
 export const convertToTimestamp = (date?: string | number): number => {
   const today = new Date().valueOf()
   return date ? new Date(date).valueOf() || today : today

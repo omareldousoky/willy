@@ -19,4 +19,5 @@ export interface RandomPaymentProps {
   startDate: number
   endDate: number
   isCF?: boolean
+  financialLeasing?: boolean
 }

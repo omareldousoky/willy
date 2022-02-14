@@ -18,6 +18,7 @@ export interface SearchInitialFormikState {
   phoneNumber?: string
   consumerFinanceLimitStatus?: string
   beneficiaryType?: 'individual' | 'group'
+  financialLeasing?: boolean
 }
 
 export interface SearchProps {

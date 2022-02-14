@@ -1,14 +1,12 @@
 import React from 'react'
 import './reviewedApplications.scss'
-import {
-  beneficiaryType,
-  timeToArabicDateNow,
-} from '../../../../Shared/Services/utils'
-import store from '../../../../Shared/redux/store'
-import { loanStatusLocal } from '../../../../Shared/Components/pdfTemplates/pdfTemplateCommon/reportLocal'
+import { Header } from 'Shared/Components/pdfTemplates/pdfTemplateCommon/header'
+import { beneficiaryType, timeToArabicDateNow } from 'Shared/Services/utils'
+import store from 'Shared/redux/store'
+import { loanStatusLocal } from 'Shared/Components/pdfTemplates/pdfTemplateCommon/reportLocal'
 
 const ReviewedApplicationsPDF = (props) => {
-  const { isSme, data, branchDetails } = props
+  const { isSme, data, branchDetails, fl } = props
   function getTotal() {
     let sum = 0
     data.forEach(
@@ -24,32 +22,7 @@ const ReviewedApplicationsPDF = (props) => {
       style={{ direction: 'rtl' }}
       lang="ar"
     >
-      <table
-        style={{
-          fontSize: '12px',
-          margin: '10px 0px',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
-        <tr style={{ height: '10px' }} />
-        <tr
-          style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <th colSpan={6} style={{ backgroundColor: 'white' }}>
-            <div className="logo-print-tb" />
-          </th>
-          <th style={{ backgroundColor: 'white' }} colSpan={6}>
-            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-          </th>
-        </tr>
-        <tr style={{ height: '10px' }} />
-      </table>
+      <Header showCurrentUser={false} showCurrentTime={false} fl={fl} />
       <table>
         <tbody>
           <tr>

@@ -16,6 +16,7 @@ interface HeaderProps {
   branchName?: string
   sme?: boolean
   cf?: boolean
+  fl?: boolean
 }
 
 export const Header = ({
@@ -28,18 +29,27 @@ export const Header = ({
   branchName,
   sme,
   cf,
+  fl,
 }: HeaderProps) => {
+  const getLicense = () => {
+    let license = 'ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'
+    if (cf) {
+      license = 'ترخيص رقم 23 بتاريخ 31/05/2021'
+    } else if (fl) {
+      license =
+        'مرخصه بسجل المؤجرين التمويليين بالهيئه العامه للرقابه الماليه برقم ٣٠١ بتاريخ ٣١/ ٥ /٢٠٢١'
+    } else if (sme) {
+      license =
+        'ترخيص ممارسة نشاط تمويل المشروعات المتوسطة والصغيرة رقم ١ لسنه ٢٠٢١'
+    }
+    return license
+  }
+
   return (
     <>
       <div className="d-flex justify-content-between m-2">
         <span className={`${cf ? 'cf-' : ''}logo-print`} role="img" />
-        <p className="m-0 ml-3 text-right text-sm">
-          {cf
-            ? 'ترخيص رقم 23 بتاريخ 31/05/2021'
-            : sme
-            ? 'ترخيص ممارسة نشاط تمويل المشروعات المتوسطة والصغيرة رقم ١ لسنه ٢٠٢١'
-            : 'ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
-        </p>
+        <p className="m-0 ml-3 text-right text-sm">{getLicense()}</p>
       </div>
       <div className="d-flex mb-3">
         <p className="ml-3 pt-1 text-left">

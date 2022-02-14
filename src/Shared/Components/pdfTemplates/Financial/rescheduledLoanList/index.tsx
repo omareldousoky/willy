@@ -7,41 +7,26 @@ import {
   statusLocale,
 } from '../../../../Services/utils'
 import Orientation from '../../../Common/orientation'
+import { Header } from '../../pdfTemplateCommon/header'
 
-export const RescheduledLoanList = (props) => {
-  const { isCF } = props
-  const tempData = props.data.data
-  const reportDate =
-    props.data.from === props.data.to
-      ? timeToArabicDate(props.data.from, false)
-      : `من ${timeToArabicDate(props.data.from, false)} الي ${timeToArabicDate(
-          props.data.to,
-          false
-        )}`
+export const RescheduledLoanList = ({
+  isCF = false,
+  data: { financialLeasing, to, from, total, canceled, net, trx, result },
+}) => {
   return (
     <div className="rescheduled-loan-list" lang="ar">
       <Orientation size="portrait" />
-      <div className="d-flex justify-content-between m-2">
-        <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
-        <p className="m-0 ml-3 text-right text-sm">
-          {isCF
-            ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
-            : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
-        </p>
-      </div>
+      <Header
+        cf={isCF}
+        fl={financialLeasing}
+        title="قائمة حركات جدولة القروض المنفذه"
+        fromDate={from}
+        toDate={to}
+      />
       <table className="report-container">
         <thead className="report-header">
           <tr className="headtitle">
-            <th colSpan={4}>
-              {isCF
-                ? 'حالا للتمويل الاستهلاكي ش. م. م.'
-                : 'شركة تساهيل للتمويل متناهي الصغر'}
-            </th>
-            <th colSpan={6}>قائمة حركات جدولة القروض المنفذه</th>
-          </tr>
-          <tr className="headtitle">
             <th colSpan={4}>المركز الرئيسي</th>
-            <th colSpan={6}>{`تاريخ الحركه ${reportDate}`}</th>
           </tr>
           <tr className="headtitle">
             <th colSpan={4}>{timeToArabicDateNow(true)}</th>
@@ -69,7 +54,7 @@ export const RescheduledLoanList = (props) => {
           </tr>
         </thead>
 
-        {tempData.result.map((day, x) => (
+        {result.map((day, x) => (
           <React.Fragment key={x}>
             <tbody>
               <tr>
@@ -193,27 +178,27 @@ export const RescheduledLoanList = (props) => {
             <th colSpan={2}>إجمالي بالعمله</th>
             <th>جنيه مصري</th>
             <td colSpan={2}>إجمالي عدد الحركات</td>
-            <td>{tempData.trx}</td>
+            <td>{trx}</td>
             <td colSpan={2} className="border-0" />
             <td>إجمالي المبلغ</td>
-            <td>{tempData.total[0]}</td>
-            <td>{tempData.total[1]}</td>
-            <td>{tempData.total[2]}</td>
+            <td>{total[0]}</td>
+            <td>{total[1]}</td>
+            <td>{total[2]}</td>
           </tr>
 
           <tr>
             <td colSpan={8} className="border-0" />
             <td>القيمة الملغاه</td>
-            <td>{tempData.canceled[0]}</td>
-            <td>{tempData.canceled[1]}</td>
-            <td>{tempData.canceled[2]}</td>
+            <td>{canceled[0]}</td>
+            <td>{canceled[1]}</td>
+            <td>{canceled[2]}</td>
           </tr>
           <tr>
             <td colSpan={8} className="border-0" />
             <td>صافي المبلغ</td>
-            <td>{tempData.net[0]}</td>
-            <td>{tempData.net[1]}</td>
-            <td>{tempData.net[2]}</td>
+            <td>{net[0]}</td>
+            <td>{net[1]}</td>
+            <td>{net[2]}</td>
           </tr>
           <tr style={{ height: '0.5em' }} />
         </tbody>

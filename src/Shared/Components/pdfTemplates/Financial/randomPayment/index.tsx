@@ -32,6 +32,7 @@ export const RandomPayment = ({
   branches,
   startDate,
   endDate,
+  financialLeasing,
   isCF,
 }: RandomPaymentProps) => {
   return (
@@ -42,6 +43,7 @@ export const RandomPayment = ({
         toDate={endDate}
         title="الحركات المالية (حركات السداد المنفذة)"
         cf={isCF}
+        fl={financialLeasing}
       />
       {branches?.map((branch, index) => {
         return (

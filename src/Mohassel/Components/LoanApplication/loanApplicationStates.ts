@@ -1,5 +1,4 @@
 import * as Yup from 'yup'
-import { Results } from './loanApplicationCreation'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Customer } from '../../../Shared/Models/Customer'
 import { maxValue, minValue, moreThanValue } from '../../../Shared/localUtils'
@@ -114,6 +113,17 @@ export interface Application {
   customerType: string
   productType: string
   nanoLoansLimit: number
+  financialLeasing?: boolean
+  vendorName?: string
+  itemDescription?: string
+  categoryName?: string
+  itemType?: string
+  itemSerialNumber?: string
+  downPayment?: number
+}
+export interface Results {
+  results: Array<object>
+  empty: boolean
 }
 export const LoanApplicationValidation = Yup.object().shape({
   productID: Yup.string().required(local.required),
@@ -202,6 +212,21 @@ export const LoanApplicationValidation = Yup.object().shape({
       }
     )
     .required('required!'),
+  downPayment: Yup.number().when('financialLeasing', {
+    is: (financialLeasing) => financialLeasing,
+    then: Yup.number()
+      .min(0, minValue(0))
+      .test(
+        'downPaymentToPrincipal',
+        local.downpaymentCantBeEqualOrMoreThanPrincipal,
+        function (this: any, value: number) {
+          if (value < this.parent.principal) return true
+          return false
+        }
+      )
+      .required(local.required),
+    otherwise: Yup.number(),
+  }),
   applicationFee: Yup.number().min(0, minValue(0)).required(local.required),
   individualApplicationFee: Yup.number()
     .min(0, minValue(0))
@@ -379,6 +404,21 @@ export const SMELoanApplicationValidation = Yup.object().shape({
       }
     )
     .required('required!'),
+  downPayment: Yup.number().when('financialLeasing', {
+    is: (financialLeasing) => financialLeasing,
+    then: Yup.number()
+      .min(0, minValue(0))
+      .test(
+        'downPaymentToPrincipal',
+        local.downpaymentCantBeEqualOrMoreThanPrincipal,
+        function (this: any, value: number) {
+          if (value < this.parent.principal) return true
+          return false
+        }
+      )
+      .required(local.required),
+    otherwise: Yup.number(),
+  }),
   applicationFee: Yup.number().min(0, minValue(0)).required(local.required),
   individualApplicationFee: Yup.number()
     .min(0, minValue(0))
@@ -422,6 +462,17 @@ export const SMELoanApplicationStep2Validation = Yup.object().shape({
       `${local.required} : ${local.position}`,
       (value) => !(value.filter((person) => !person.position)?.length > 0)
     )
+    .required(local.required),
+})
+export const LoanApplicationStep4Validation = Yup.object().shape({
+  vendorName: Yup.string().max(100, maxValue(100)).required(local.required),
+  itemSerialNumber: Yup.string()
+    .matches(/^[A-Za-z0-9]*$/, local.invalidSerialNumber)
+    .required(local.required),
+  categoryName: Yup.string().required(local.required),
+  itemType: Yup.string().required(local.required),
+  itemDescription: Yup.string()
+    .max(500, maxValue(500))
     .required(local.required),
 })
 export const ReviewLoanValidation = Yup.object().shape({

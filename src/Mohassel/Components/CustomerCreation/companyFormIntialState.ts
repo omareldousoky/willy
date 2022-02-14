@@ -11,6 +11,7 @@ export const step1Company = {
   businessAddress: '',
   businessCharacteristic: '',
   businessSector: '',
+  businessActivity: '',
   businessActivityDetails: '',
   businessLicenseNumber: '',
   // businessLicenseIssuePlace: '',
@@ -72,6 +73,9 @@ export const companyCreationValidationStepOne = Yup.object().shape({
     .max(20, local.maxLength20)
     .required(local.required),
   businessSector: Yup.string()
+    .max(50, local.maxLength50)
+    .required(local.required),
+  businessActivity: Yup.string()
     .max(50, local.maxLength50)
     .required(local.required),
   businessActivityDetails: Yup.string()

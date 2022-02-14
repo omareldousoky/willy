@@ -4,14 +4,46 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Select from 'react-select'
 import produce from 'immer'
-
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
-
-import local from '../../../Shared/Assets/ar.json'
+import local from 'Shared/Assets/ar.json'
+import { Loader } from 'Shared/Components/Loader'
+import { getFormulas } from 'Shared/Services/APIs/LoanFormula/getFormulas'
+import { getProduct } from 'Shared/Services/APIs/loanProduct/getProduct'
+import { getProductsByBranch } from 'Shared/Services/APIs/Branch/getBranches'
+import { getGenderFromNationalId } from 'Shared/Services/nationalIdValidation'
+import {
+  newApplication,
+  editApplication,
+  newNanoApplication,
+} from 'Shared/Services/APIs/loanApplication/newApplication'
+import { getApplication } from 'Shared/Services/APIs/loanApplication/getApplication'
+import {
+  getLoanOfficer,
+  searchLoanOfficer,
+} from 'Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
+import {
+  getAge,
+  getFullCustomerKey,
+  getErrorMessage,
+  getDateString,
+} from 'Shared/Services/utils'
+import DualBox from 'Shared/Components/DualListBox/dualListBox'
+import Wizard from 'Shared/Components/wizard/Wizard'
+import { theme } from 'Shared/theme'
+import { Customer } from 'Shared/Models/Customer'
+import { searchCustomer } from 'Shared/Services/APIs/customer/searchCustomer'
+import { getMaxPrinciples } from 'Shared/Services/APIs/config'
+import { getCustomerByID } from 'Shared/Services/APIs/customer/getCustomer'
+import { getLoanUsage } from 'Shared/Services/APIs/LoanUsage/getLoanUsage'
+import CustomerSearch from 'Shared/Components/CustomerSearch'
+import { Product } from 'Shared/Services/interfaces'
+import InfoBox from '../userInfoBox'
+import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationGuarantorForm'
+import { LoanApplicationCreationForm } from './loanApplicationCreationForm'
 import {
   Application,
   LoanApplicationValidation,
@@ -19,45 +51,21 @@ import {
   SMELoanApplicationStep2Validation,
   EntitledToSign,
   EntitledToSignIds,
+  Results,
+  LoanApplicationStep4Validation,
 } from './loanApplicationStates'
-import { LoanApplicationCreationForm } from './loanApplicationCreationForm'
-import { Loader } from '../../../Shared/Components/Loader'
-import { getFormulas } from '../../../Shared/Services/APIs/LoanFormula/getFormulas'
-import { getProduct } from '../../../Shared/Services/APIs/loanProduct/getProduct'
-import { getProductsByBranch } from '../../../Shared/Services/APIs/Branch/getBranches'
-import { getGenderFromNationalId } from '../../../Shared/Services/nationalIdValidation'
 import {
-  newApplication,
-  editApplication,
-  newNanoApplication,
-} from '../../../Shared/Services/APIs/loanApplication/newApplication'
-import { getApplication } from '../../../Shared/Services/APIs/loanApplication/getApplication'
-import { getCookie } from '../../../Shared/Services/getCookie'
-import {
-  getLoanOfficer,
-  searchLoanOfficer,
-} from '../../../Shared/Services/APIs/LoanOfficers/searchLoanOfficer'
-import {
-  parseJwt,
-  getAge,
-  getFullCustomerKey,
-  getErrorMessage,
-} from '../../../Shared/Services/utils'
-import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationGuarantorForm'
-import DualBox from '../../../Shared/Components/DualListBox/dualListBox'
-import InfoBox from '../userInfoBox'
-import Wizard from '../../../Shared/Components/wizard/Wizard'
-
-import { theme } from '../../../Shared/theme'
-import { Customer } from '../../../Shared/Models/Customer'
-import Can from '../../config/Can'
-import { LtsIcon } from '../../../Shared/Components'
-import { searchCustomer } from '../../../Shared/Services/APIs/customer/searchCustomer'
-import { getMaxPrinciples } from '../../../Shared/Services/APIs/config'
-import { getCustomersBalances } from '../../../Shared/Services/APIs/customer/customerLoans'
-import { getCustomerByID } from '../../../Shared/Services/APIs/customer/getCustomer'
-import { getLoanUsage } from '../../../Shared/Services/APIs/LoanUsage/getLoanUsage'
-import CustomerSearch from '../../../Shared/Components/CustomerSearch'
+  applicationStepsDesciption,
+  checkCustomersLimits,
+  checkGroupValidation,
+  chooseCustomerType,
+  filterProducts,
+  getCustomerLimits,
+  getCustomerType,
+  getGroupErrorMessage,
+  setInitState,
+} from './Helpers'
+import { FinancialLeasingDetailsForm } from './FinancialLeasingDetailsForm'
 
 interface LoanApplicationCreationRouteState {
   id?: string
@@ -79,10 +87,6 @@ interface LoanOfficer {
   username: string
   name: string
 }
-export interface Results {
-  results: Array<object>
-  empty: boolean
-}
 interface State {
   step: number
   application: Application
@@ -93,27 +97,23 @@ interface State {
   selectedLoanOfficer: LoanOfficer
   searchResults: Results
   formulas: Array<Formula>
-  products: Array<any>
+  products: Array<Product>
   loanUsage: Array<object>
   loanOfficers: Array<LoanOfficer>
-  branchCustomers: Array<object>
+  branchCustomers: Array<Customer>
   selectedCustomers: Array<Customer>
   prevId: string
   searchGroupCustomerKey: string
   showModal: boolean
   customerToView: Customer
   isNano: boolean
+  branchId: string
 }
-const date = new Date()
 
 class LoanApplicationCreation extends Component<Props, State> {
-  tokenData: any
-
   constructor(props: Props) {
     super(props)
-    this.state = this.setInitState()
-    const token = getCookie('token')
-    this.tokenData = parseJwt(token)
+    this.state = setInitState()
   }
 
   static getDerivedStateFromProps(props: Props, state: State) {
@@ -155,7 +155,16 @@ class LoanApplicationCreation extends Component<Props, State> {
       type: string
     }[] = []
     if (customers.length > 0) {
-      const check = await this.checkCustomersLimits(customers, false)
+      const check = await checkCustomersLimits(
+        customers,
+        false,
+        this.state.isNano,
+        ['financialLeasing', 'smeFinancialLeasing'].includes(
+          this.state.customerType ?? ''
+        ),
+        this.state.application.principals,
+        (value) => this.setState({ loading: value })
+      )
       if (check.flag === true && check.customers) {
         check.customers.forEach((customer) => {
           const obj = {
@@ -221,8 +230,11 @@ class LoanApplicationCreation extends Component<Props, State> {
       from: 0,
       size: 1000,
       [key]: query,
-      customerType:
-        this.state.customerType === 'sme' ? 'company' : 'individual',
+      customerType: ['sme', 'smeFinancialLeasing'].includes(
+        this.state.customerType
+      )
+        ? 'company'
+        : 'individual',
     }
     const results = await searchCustomer(body)
     if (results.status === 'success') {
@@ -373,45 +385,10 @@ class LoanApplicationCreation extends Component<Props, State> {
     }
   }
 
-  async getCustomerLimits(customers) {
-    const customerIds: Array<string> = []
-    customers.forEach((customer) => customerIds.push(customer._id))
-    this.setState({ loading: true })
-    const res = await getCustomersBalances({ ids: customerIds })
-    if (res.status === 'success') {
-      this.setState({ loading: false })
-      const merged: Array<any> = []
-      for (let i = 0; i < customers.length; i += 1) {
-        const obj = {
-          ...customers[i],
-          ...(res.body.data
-            ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id)
-            : { id: customers[i]._id }),
-          ...this.state.application.principals,
-        }
-        delete obj.id
-        merged.push(obj)
-      }
-      return merged
-    }
-    Swal.fire({
-      title: local.errorTitle,
-      confirmButtonText: local.confirmationText,
-      text: getErrorMessage(res.error.error),
-      icon: 'error',
-    })
-    this.setState({ loading: false })
-    return []
-  }
-
   setCustomerType(type) {
     const isNano = type === 'nano'
-    const filteredroducts = this.state.products.filter((product) =>
-      isNano ? product.type === 'nano' : product.type !== 'nano'
-    )
     this.setState(
       produce<State>((draftState) => {
-        draftState.products = filteredroducts
         draftState.customerType = isNano ? 'individual' : type
         draftState.application.beneficiaryType = isNano ? 'individual' : type
         draftState.isNano = isNano
@@ -419,22 +396,12 @@ class LoanApplicationCreation extends Component<Props, State> {
     )
   }
 
-  getDateString(targetDate?: string | number): string {
-    if (!targetDate) return ''
-    return new Date(
-      new Date(targetDate).getTime() -
-        new Date(targetDate).getTimezoneOffset() * 60000
-    )
-      .toISOString()
-      .split('T')[0]
-  }
-
   async getLoanOfficers() {
     this.setState({ loanOfficers: [], loading: true })
     const res = await searchLoanOfficer({
       from: 0,
       size: 1000,
-      branchId: this.tokenData.branch,
+      branchId: this.state.branchId,
       status: 'active',
     })
     if (res.status === 'success') {
@@ -457,8 +424,8 @@ class LoanApplicationCreation extends Component<Props, State> {
 
   async getProducts() {
     this.setState({ products: [], loading: true })
-    if (this.tokenData.branch.length > 0) {
-      const products = await getProductsByBranch(this.tokenData.branch)
+    if (this.state.branchId.length > 0) {
+      const products = await getProductsByBranch(this.state.branchId)
       if (products.status === 'success') {
         this.setState({
           products: products.body.data.productIds
@@ -530,7 +497,10 @@ class LoanApplicationCreation extends Component<Props, State> {
         const selectedCustomers: Customer[] = application.body.group.individualsInGroup.map(
           (item) => item.customer
         )
-        const customers = await this.getCustomerLimits(selectedCustomers)
+        const customers = await getCustomerLimits(
+          selectedCustomers,
+          this.state.application.principals
+        )
         application.body.group.individualsInGroup.forEach((customer) => {
           if (customer.type === 'leader') {
             this.setState(
@@ -556,11 +526,13 @@ class LoanApplicationCreation extends Component<Props, State> {
 
         this.setState({
           selectedCustomers,
+          loading: false,
         })
       } else {
-        const customers = await this.getCustomerLimits([
-          application.body.customer,
-        ])
+        const customers = await getCustomerLimits(
+          [application.body.customer],
+          this.state.application.principals
+        )
         this.populateCustomer(customers[0])
 
         this.setState(
@@ -569,6 +541,13 @@ class LoanApplicationCreation extends Component<Props, State> {
             app.customerTotalPrincipals = customers[0].totalPrincipals || 0
             app.customerMaxPrincipal = customers[0].maxPrincipal || 0
             app.individualDetails = application.body.group.individualsInGroup
+            app.vendorName = application.body.vendorName
+            app.itemDescription = application.body.itemDescription
+            app.categoryName = application.body.categoryName
+            app.itemType = application.body.itemType
+            app.itemSerialNumber = application.body.itemSerialNumber
+            app.downPayment = application.body.downPayment
+            draftState.loading = false
           })
         )
       }
@@ -644,8 +623,8 @@ class LoanApplicationCreation extends Component<Props, State> {
             branchManagerId,
             researcherId,
           } = application.body
-          app.entryDate = this.getDateString(entryDate)
-          app.visitationDate = this.getDateString(visitationDate)
+          app.entryDate = getDateString(entryDate)
+          app.visitationDate = getDateString(visitationDate)
           app.usage = usage || ''
           app.enquirorId = enquirorId || ''
           app.viceCustomers = viceCustomers || ''
@@ -656,15 +635,13 @@ class LoanApplicationCreation extends Component<Props, State> {
           app.undoReviewDate = undoReviewDate
           app.rejectionDate = reviewedDate
           app.guarantors = guarsArr
-          app.managerVisitDate = this.getDateString(managerVisitDate)
+          app.managerVisitDate = getDateString(managerVisitDate)
           app.branchManagerId = branchManagerId
           app.researcherId = researcherId
           app.entitledToSign = entitledArr
           draftState.selectedCustomer = application.body.customer
-          draftState.customerType =
-            product.beneficiaryType === 'individual' && product.type === 'sme'
-              ? 'sme'
-              : product.beneficiaryType
+          draftState.customerType = getCustomerType(product)
+          draftState.isNano = product.type === 'nano'
           draftState.loading = false
         })
       )
@@ -688,131 +665,12 @@ class LoanApplicationCreation extends Component<Props, State> {
       await this.getGlobalPrinciple()
       this.getAppByID(this.state.prevId)
     } else {
-      this.setState(this.setInitState())
+      this.setState(setInitState())
       await this.getProducts()
       await this.getFormulas()
       await this.getLoanUsage()
       await this.getLoanOfficers()
       await this.getGlobalPrinciple()
-    }
-  }
-
-  setInitState() {
-    return {
-      step: 1,
-      application: {
-        beneficiaryType: '',
-        individualDetails: [],
-        customerID: '',
-        customerName: '',
-        customerCode: '',
-        nationalId: '',
-        birthDate: '',
-        gender: '',
-        nationalIdIssueDate: '',
-        businessSector: '',
-        businessActivity: '',
-        businessSpeciality: '',
-        permanentEmployeeCount: '',
-        partTimeEmployeeCount: '',
-        productID: '',
-        calculationFormulaId: '',
-        currency: 'egp',
-        interest: 0,
-        interestPeriod: 'yearly',
-        minPrincipal: 0,
-        maxPrincipal: 0,
-        minInstallment: 0,
-        maxInstallment: 0,
-        allowInterestAdjustment: true,
-        inAdvanceFees: 0,
-        inAdvanceFrom: 'principal',
-        inAdvanceType: 'uncut',
-        periodLength: 1,
-        periodType: 'days',
-        gracePeriod: 0,
-        pushPayment: 0,
-        noOfInstallments: 1,
-        principal: 0,
-        applicationFee: 0,
-        individualApplicationFee: 0,
-        applicationFeePercent: 0,
-        applicationFeeType: 'principal',
-        applicationFeePercentPerPerson: 0,
-        applicationFeePercentPerPersonType: 'principal',
-        representativeFees: 0,
-        allowRepresentativeFeesAdjustment: true,
-        stamps: 0,
-        allowStampsAdjustment: true,
-        allowApplicationFeeAdjustment: true,
-        adminFees: 0,
-        allowAdminFeesAdjustment: true,
-        entryDate: new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-          .toISOString()
-          .split('T')[0],
-        usage: '',
-        representative: '',
-        representativeName: '',
-        enquirorId: '',
-        visitationDate: new Date(
-          date.getTime() - date.getTimezoneOffset() * 60000
-        )
-          .toISOString()
-          .split('T')[0],
-        guarantorIds: [],
-        viceCustomers: [
-          {
-            name: '',
-            phoneNumber: '',
-          },
-        ],
-        state: 'under_review',
-        reviewedDate: date,
-        undoReviewDate: date,
-        rejectionDate: date,
-        noOfGuarantors: 0,
-        guarantors: [],
-        principals: {
-          maxIndividualPrincipal: 0,
-          maxGroupIndividualPrincipal: 0,
-          maxGroupPrincipal: 0,
-          maxGroupReturningIndividualPrincipal: 0,
-        },
-        customerTotalPrincipals: 0,
-        customerMaxPrincipal: 0,
-        branchManagerAndDate: false,
-        branchManagerId: '',
-        managerVisitDate: '',
-        entitledToSignIds: [],
-        entitledToSign: [],
-        customerType: '',
-        productType: '',
-        nanoLoansLimit: 0,
-      },
-      customerType: '',
-      loading: false,
-      selectedCustomer: {},
-      selectedGroupLeader: '',
-      selectedLoanOfficer: {
-        _id: '',
-        username: '',
-        name: '',
-      },
-      searchResults: {
-        results: [],
-        empty: false,
-      },
-      formulas: [],
-      loanUsage: [],
-      loanOfficers: [],
-      products: [],
-      branchCustomers: [],
-      selectedCustomers: [],
-      searchGroupCustomerKey: '',
-      prevId: '',
-      showModal: false,
-      customerToView: {},
-      isNano: false,
     }
   }
 
@@ -827,24 +685,6 @@ class LoanApplicationCreation extends Component<Props, State> {
       application: app,
       selectedGroupLeader: id,
     })
-  }
-
-  getGroupErrorMessage(customer) {
-    let customerIsBlockerError = ''
-    let groupAgeError = ''
-    if (customer.blocked?.isBlocked === true) {
-      customerIsBlockerError = `${local.theCustomerIsBlocked}`
-    }
-    const age = getAge(customer.birthDate)
-    if (age > 67 || age < 18) {
-      groupAgeError = `${local.groupAgeError}`
-    }
-    return (
-      <span>
-        {customerIsBlockerError} {customerIsBlockerError ? <br /> : null}
-        {groupAgeError}
-      </span>
-    )
   }
 
   removeGuarantor = (obj, index, values) => {
@@ -927,9 +767,15 @@ class LoanApplicationCreation extends Component<Props, State> {
         getAge(selectedCustomer.body.customer.birthDate) >= 21 &&
         getAge(selectedCustomer.body.customer.birthDate) <= 65
       ) {
-        const check = await this.checkCustomersLimits(
+        const check = await checkCustomersLimits(
           [selectedCustomer.body.customer],
-          false
+          false,
+          this.state.isNano,
+          ['financialLeasing', 'smeFinancialLeasing'].includes(
+            this.state.customerType ?? ''
+          ),
+          this.state.application.principals,
+          (value) => this.setState({ loading: value })
         )
         if (
           check.flag === true &&
@@ -996,9 +842,15 @@ class LoanApplicationCreation extends Component<Props, State> {
             ? local.theCompanyIsBlocked
             : local.theCustomerIsBlocked
       }
-      const check = await this.checkCustomersLimits(
+      const check = await checkCustomersLimits(
         [selectedGuarantor.body.customer],
-        true
+        true,
+        this.state.isNano,
+        ['financialLeasing', 'smeFinancialLeasing'].includes(
+          this.state.customerType ?? ''
+        ),
+        this.state.application.principals,
+        (value) => this.setState({ loading: value })
       )
       if (
         check.flag === true &&
@@ -1077,8 +929,12 @@ class LoanApplicationCreation extends Component<Props, State> {
 
   submit = async (values: Application) => {
     if (
-      this.state.step === 2 &&
-      ['individual', 'sme'].includes(this.state.customerType)
+      (this.state.step === 2 &&
+        ['individual', 'sme'].includes(this.state.customerType)) ||
+      ([2, 3].includes(this.state.step) &&
+        ['financialLeasing', 'smeFinancialLeasing'].includes(
+          this.state.customerType
+        ))
     ) {
       this.setState({ application: { ...values } }, () => this.step('forward'))
     } else {
@@ -1154,6 +1010,12 @@ class LoanApplicationCreation extends Component<Props, State> {
           ? new Date(values.managerVisitDate).valueOf()
           : 0,
         entitledToSignIds,
+        vendorName: obj.vendorName,
+        itemDescription: obj.itemDescription,
+        categoryName: obj.categoryName,
+        itemType: obj.itemType,
+        itemSerialNumber: obj.itemSerialNumber,
+        downPayment: obj.downPayment,
       }
       if (
         this.state.application.guarantorIds.length <
@@ -1185,7 +1047,9 @@ class LoanApplicationCreation extends Component<Props, State> {
             confirmButtonText: local.confirmationText,
           }).then(() => {
             this.props.history.push('/track-loan-applications', {
-              sme: this.state.customerType === 'sme',
+              sme: ['sme', 'smeFinancialLeasing'].includes(
+                this.state.customerType
+              ),
             })
           })
         } else {
@@ -1209,7 +1073,9 @@ class LoanApplicationCreation extends Component<Props, State> {
             icon: 'success',
           }).then(() => {
             this.props.history.push('/track-loan-applications', {
-              sme: this.state.customerType === 'sme',
+              sme: ['sme', 'smeFinancialLeasing'].includes(
+                this.state.customerType
+              ),
             })
           })
         } else {
@@ -1324,7 +1190,7 @@ class LoanApplicationCreation extends Component<Props, State> {
   }
 
   populateLoanProduct(selectedProductDetails) {
-    const defaultValues = this.setInitState().application
+    const defaultValues = setInitState().application
     if (
       selectedProductDetails.beneficiaryType === 'group' &&
       this.state.step === 1
@@ -1397,6 +1263,7 @@ class LoanApplicationCreation extends Component<Props, State> {
         app.branchManagerId = ''
         app.managerVisitDate = ''
         app.productType = selectedProductDetails.type
+        app.financialLeasing = selectedProductDetails.financialLeasing
       })
     )
   }
@@ -1433,11 +1300,9 @@ class LoanApplicationCreation extends Component<Props, State> {
         app.customerName = response.customerName
         app.customerType = response.customerType
         app.nationalId = response.nationalId
-        app.birthDate = this.getDateString(response.birthDate)
+        app.birthDate = getDateString(response.birthDate)
         app.gender = getGenderFromNationalId(response.nationalId)
-        app.nationalIdIssueDate = this.getDateString(
-          response.nationalIdIssueDate
-        )
+        app.nationalIdIssueDate = getDateString(response.nationalIdIssueDate)
         app.businessSector = response.businessSector
         app.businessActivity = response.businessActivity
         app.businessSpeciality = response.businessSpeciality
@@ -1456,14 +1321,14 @@ class LoanApplicationCreation extends Component<Props, State> {
         ? {
             from: 0,
             size: 2000,
-            branchId: this.tokenData.branch,
+            branchId: this.state.branchId,
             representativeId: this.state.selectedLoanOfficer._id,
             customerType: 'individual',
           }
         : {
             from: 0,
             size: 2000,
-            branchId: this.tokenData.branch,
+            branchId: this.state.branchId,
             representativeId: this.state.selectedLoanOfficer._id,
             [key]: ['code', 'key'].includes(key) ? Number(keyword) : keyword,
             key: ['customerShortenedCode'].includes(key)
@@ -1493,185 +1358,26 @@ class LoanApplicationCreation extends Component<Props, State> {
     })
   }
 
-  checkGroupValidation(customer) {
-    const age = getAge(customer.birthDate)
-    if (age <= 67 && age >= 18 && customer.blocked?.isBlocked !== true) {
-      return false
-    }
-    return true
-  }
-
-  async checkCustomersLimits(customers, guarantor) {
-    const customerIds: Array<string> = []
-    customers.forEach((customer) => customerIds.push(customer._id))
-    this.setState({ loading: true })
-    const res = await getCustomersBalances({ ids: customerIds })
-    if (res.status === 'success') {
-      this.setState({ loading: false })
-      const merged: Array<any> = []
-      const validationObject: any = {}
-      for (let i = 0; i < customers.length; i += 1) {
-        const customer = { ...customers[i] }
-        delete customer.guarantorIds
-        const obj = {
-          ...customer,
-          ...(res.body.data
-            ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id)
-            : { id: customers[i]._id }),
-          ...this.state.application.principals,
-        }
-        delete obj.id
-        merged.push(obj)
-      }
-      if (res.body.data && res.body.data.length > 0) {
-        merged.forEach((customer) => {
-          if (!guarantor) {
-            if (
-              customer.nanoLoanIds?.length ||
-              customer.nanoApplicationIds?.length
-            ) {
-              validationObject[customer._id] = {
-                customerName: customer.customerName,
-                ...(customer.nanoLoanIds && {
-                  nanoLoanIds: customer.nanoLoanIds,
-                }),
-                ...(customer.nanoApplicationIds && {
-                  nanoApplicationIds: customer.nanoApplicationIds,
-                }),
-              }
-            }
-            if (
-              customer.applicationIds &&
-              !customer.loanIds &&
-              (this.state.isNano ||
-                customer.applicationIds.length >= customer.maxLoansAllowed)
-            ) {
-              validationObject[customer._id] = {
-                customerName: customer.customerName,
-                applicationIds: customer.applicationIds,
-              }
-            }
-            if (
-              customer.loanIds &&
-              !customer.applicationIds &&
-              (this.state.isNano ||
-                customer.loanIds.length >= customer.maxLoansAllowed)
-            ) {
-              if (Object.keys(validationObject).includes(customer._id)) {
-                validationObject[customer._id] = {
-                  ...validationObject[customer._id],
-                  ...{ loanIds: customer.loanIds },
-                }
-              } else {
-                validationObject[customer._id] = {
-                  customerName: customer.customerName,
-                  loanIds: customer.loanIds,
-                }
-              }
-            }
-            if (
-              customer.loanIds &&
-              customer.applicationIds &&
-              customer.loanIds.length + customer.applicationIds.length >=
-                customer.maxLoansAllowed
-            ) {
-              if (Object.keys(validationObject).includes(customer._id)) {
-                validationObject[customer._id] = {
-                  ...validationObject[customer._id],
-                  ...{
-                    loanIds: customer.loanIds,
-                    applicationIds: customer.applicationIds,
-                  },
-                }
-              } else {
-                validationObject[customer._id] = {
-                  customerName: customer.customerName,
-                  loanIds: customer.loanIds,
-                  applicationIds: customer.applicationIds,
-                }
-              }
-            }
-            if (
-              customer.guarantorIds &&
-              customer.guarantorIds.length >= 0 &&
-              !customer.allowGuarantorLoan
-            ) {
-              if (Object.keys(validationObject).includes(customer._id)) {
-                validationObject[customer._id] = {
-                  ...validationObject[customer._id],
-                  ...{ guarantorIds: customer.guarantorIds },
-                }
-              } else {
-                validationObject[customer._id] = {
-                  customerName: customer.customerName,
-                  guarantorIds: customer.guarantorIds,
-                }
-              }
-            }
-          } else {
-            if (
-              customer.applicationIds &&
-              customer.applicationIds.length > 0 &&
-              !customer.allowGuarantorLoan
-            ) {
-              validationObject[customer._id] = {
-                customerName: customer.customerName,
-                applicationIds: customer.applicationIds,
-              }
-            }
-            if (
-              customer.loanIds &&
-              customer.loanIds.length > 0 &&
-              !customer.allowGuarantorLoan
-            ) {
-              if (Object.keys(validationObject).includes(customer._id)) {
-                validationObject[customer._id] = {
-                  ...validationObject[customer._id],
-                  ...{ loanIds: customer.loanIds },
-                }
-              } else {
-                validationObject[customer._id] = {
-                  customerName: customer.customerName,
-                  loanIds: customer.loanIds,
-                }
-              }
-            }
-            if (
-              customer.guarantorIds &&
-              customer.guarantorIds.length >= customer.guarantorMaxLoans
-            ) {
-              if (Object.keys(validationObject).includes(customer._id)) {
-                validationObject[customer._id] = {
-                  ...validationObject[customer._id],
-                  ...{ guarantorIds: customer.guarantorIds },
-                }
-              } else {
-                validationObject[customer._id] = {
-                  customerName: customer.customerName,
-                  guarantorIds: customer.guarantorIds,
-                }
-              }
-            }
-          }
-        })
-      }
-      if (Object.keys(validationObject).length > 0) {
-        return { flag: false, validationObject }
-      }
-      return { flag: true, customers: merged }
-    }
-    Swal.fire({
-      title: local.errorTitle,
-      confirmButtonText: local.confirmationText,
-      text: getErrorMessage(res.error.error),
-      icon: 'error',
-    })
-    this.setState({ loading: false })
-    return { flag: false }
-  }
-
   step(key) {
-    if (this.state.step < 3 && key === 'forward') {
+    if (
+      this.state.step < 3 &&
+      key === 'forward' &&
+      !['financialLeasing', 'smeFinancialLeasing'].includes(
+        this.state.customerType
+      )
+    ) {
+      this.setState(
+        produce<State>((draftState) => {
+          draftState.step += 1
+        })
+      )
+    } else if (
+      this.state.step <= 3 &&
+      key === 'forward' &&
+      ['financialLeasing', 'smeFinancialLeasing'].includes(
+        this.state.customerType
+      )
+    ) {
       this.setState(
         produce<State>((draftState) => {
           draftState.step += 1
@@ -1701,7 +1407,9 @@ class LoanApplicationCreation extends Component<Props, State> {
               selectedCustomer={this.state.selectedCustomer}
               searchResults={this.state.searchResults}
               selectCustomer={(customer) => this.selectCustomer(customer)}
-              sme={this.state.customerType === 'sme'}
+              sme={['sme', 'smeFinancialLeasing'].includes(
+                this.state.customerType
+              )}
             />
           </div>
         ) : (
@@ -1759,10 +1467,8 @@ class LoanApplicationCreation extends Component<Props, State> {
                     'code',
                     'customerShortenedCode',
                   ]}
-                  disabled={(customer) => this.checkGroupValidation(customer)}
-                  disabledMessage={(customer) =>
-                    this.getGroupErrorMessage(customer)
-                  }
+                  disabled={(customer) => checkGroupValidation(customer)}
+                  disabledMessage={(customer) => getGroupErrorMessage(customer)}
                 />
                 {this.state.selectedCustomers.length <= 7 &&
                 this.state.selectedCustomers.length >= 3 ? (
@@ -1801,7 +1507,9 @@ class LoanApplicationCreation extends Component<Props, State> {
             className="w-25"
             onClick={() => {
               this.props.history.push('/track-loan-applications', {
-                sme: this.state.customerType === 'sme',
+                sme: ['sme', 'smeFinancialLeasing'].includes(
+                  this.state.customerType
+                ),
               })
             }}
           >
@@ -1815,7 +1523,12 @@ class LoanApplicationCreation extends Component<Props, State> {
               (this.state.customerType === 'group' &&
                 (this.state.selectedGroupLeader.length === 0 ||
                   this.state.selectedCustomers.length < 3)) ||
-              (['individual', 'sme'].includes(this.state.customerType) &&
+              ([
+                'individual',
+                'financialLeasing',
+                'sme',
+                'smeFinancialLeasing',
+              ].includes(this.state.customerType) &&
                 Object.keys(this.state.selectedCustomer).length === 0)
             }
             onClick={() => this.step('forward')}
@@ -1828,12 +1541,15 @@ class LoanApplicationCreation extends Component<Props, State> {
   }
 
   renderStepTwo() {
+    const filteredProducts = this.state.products.filter((product) => {
+      return filterProducts(product, this.state.customerType, this.state.isNano)
+    })
     return (
       <Formik
         initialValues={this.state.application}
         onSubmit={this.submit}
         validationSchema={
-          this.state.customerType === 'sme'
+          ['sme', 'smeFinancialLeasing'].includes(this.state.customerType)
             ? SMELoanApplicationValidation
             : LoanApplicationValidation
         }
@@ -1846,12 +1562,7 @@ class LoanApplicationCreation extends Component<Props, State> {
             {...formikProps}
             formulas={this.state.formulas}
             loanUsage={this.state.loanUsage}
-            products={this.state.products.filter((product) =>
-              ['individual', 'sme'].includes(this.state.customerType)
-                ? product.beneficiaryType === 'individual'
-                : product.beneficiaryType === 'group'
-            )}
-            loanOfficers={this.state.loanOfficers}
+            products={filteredProducts}
             step={(key) => this.step(key)}
             getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}
             customer={
@@ -1871,7 +1582,7 @@ class LoanApplicationCreation extends Component<Props, State> {
         initialValues={this.state.application}
         onSubmit={this.submit}
         validationSchema={
-          this.state.customerType === 'sme'
+          ['sme', 'smeFinancialLeasing'].includes(this.state.customerType)
             ? SMELoanApplicationStep2Validation
             : LoanApplicationValidation
         }
@@ -1924,6 +1635,24 @@ class LoanApplicationCreation extends Component<Props, State> {
     )
   }
 
+  renderStepFour = () => (
+    <Formik
+      initialValues={this.state.application}
+      onSubmit={this.submit}
+      validationSchema={LoanApplicationStep4Validation}
+      validateOnBlur
+      validateOnChange
+      enableReinitialize
+    >
+      {(formikProps) => (
+        <FinancialLeasingDetailsForm
+          {...formikProps}
+          step={(key) => this.step(key)}
+        />
+      )}
+    </Formik>
+  )
+
   renderSteps() {
     switch (this.state.step) {
       case 1:
@@ -1932,6 +1661,8 @@ class LoanApplicationCreation extends Component<Props, State> {
         return this.renderStepTwo()
       case 3:
         return this.renderStepThree()
+      case 4:
+        return this.renderStepFour()
       default:
         return null
     }
@@ -1943,74 +1674,17 @@ class LoanApplicationCreation extends Component<Props, State> {
         <Loader open={this.state.loading} type="fullscreen" />
         <Card>
           {this.state.customerType === '' ? (
-            <div className="d-flex justify-content-center">
-              {!this.props.location.state.sme && (
-                <>
-                  <div className="d-flex flex-column m-5">
-                    <LtsIcon name="user" size="100px" color="#7dc356" />
-
-                    <Button
-                      className="my-4"
-                      onClick={() => this.setCustomerType('individual')}
-                    >
-                      {local.individual}
-                    </Button>
-                  </div>
-                  <div className="d-flex flex-column m-5">
-                    <LtsIcon name="group" size="100px" color="#7dc356" />
-
-                    <Button
-                      className="my-4"
-                      onClick={() => this.setCustomerType('group')}
-                    >
-                      {local.group}
-                    </Button>
-                  </div>
-                  <div
-                    className="d-flex flex-column m-5"
-                    style={{ margin: '20px 60px' }}
-                  >
-                    <LtsIcon name="coins" size="100px" color="#7dc356" />
-
-                    <Button
-                      className="my-4"
-                      onClick={() => this.setCustomerType('nano')}
-                    >
-                      {local.nano}
-                    </Button>
-                  </div>
-                </>
-              )}
-              {this.props.location.state.sme && (
-                <Can I="getSMEApplication" a="application">
-                  <div className="d-flex flex-column m-5">
-                    <LtsIcon name="buildings" size="100px" color="#7dc356" />
-
-                    <Button
-                      className="my-4"
-                      onClick={() => this.setCustomerType('sme')}
-                    >
-                      {local.company}
-                    </Button>
-                  </div>
-                </Can>
-              )}
-            </div>
+            chooseCustomerType(
+              (customerType) => this.setCustomerType(customerType),
+              this.props.location.state.sme
+            )
           ) : (
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <Wizard
                 currentStepNumber={this.state.step - 1}
-                stepsDescription={
-                  this.state.customerType === 'individual'
-                    ? [
-                        local.customersDetails,
-                        local.loanInfo,
-                        local.guarantorInfo,
-                      ]
-                    : this.state.customerType === 'sme'
-                    ? [local.viewCompany, local.loanInfo, local.guarantorInfo]
-                    : [local.customersDetails, local.loanInfo]
-                }
+                stepsDescription={applicationStepsDesciption(
+                  this.state.customerType
+                )}
               />
               {this.renderSteps()}
             </div>

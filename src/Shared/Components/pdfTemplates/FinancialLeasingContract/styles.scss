@@ -1,0 +1,66 @@
+@media screen, print {
+  .financial-leasing-container {
+    table tbody tr td {
+      line-height: 2.2rem !important;
+    }
+
+    -webkit-print-color-adjust: exact;
+    page-break-after: always;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Arial;
+
+    .term-title {
+      font-size: 1.4rem;
+      text-align: center;
+      font-weight: bolder;
+      page-break-inside: avoid;
+      margin-bottom: 0.7rem;
+    }
+
+    .head-title {
+      font-size: 2rem;
+      text-align: center;
+      font-weight: bolder;
+      page-break-inside: avoid;
+      margin-bottom: 0.7rem;
+    }
+
+    .element-title {
+      margin: 1.5rem 0;
+      font-size: 18px;
+      text-decoration: underline;
+      font-weight: bolder;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+@media screen {
+  .financial-leasing-container {
+    display: none;
+  }
+}
+
+@media print {
+  .financial-leasing-container {
+    header,
+    .header-space,
+    footer,
+    .footer-space {
+      height: 100px;
+      margin-top: 0.5rem;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+    }
+    header {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+    }
+  }
+}

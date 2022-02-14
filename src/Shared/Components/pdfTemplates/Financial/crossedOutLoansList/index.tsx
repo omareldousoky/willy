@@ -3,17 +3,33 @@ import './crossedOutLoansList.scss'
 import * as local from '../../../../Assets/ar.json'
 import { timeToArabicDate } from '../../../../Services/utils'
 import Orientation from '../../../Common/orientation'
+import { Header } from '../../pdfTemplateCommon/header'
 
-export const CrossedOutLoansList = (props) => {
-  const { isCF } = props
-  const { data } = props.data
-  const { days } = data
-  const totalNumberOfTransactions = Number(data.numTrx)
-  const totalTransactionAmount = Number(data.transactionAmount)
-  const totalTransactionInterest = Number(data.transactionInterest)
-  const totalTransactionPrincipal = Number(data.transactionPrincipal)
-  const startDate = timeToArabicDate(props.data.req.startDate, false)
-  const endDate = timeToArabicDate(props.data.req.endDate, false)
+export const CrossedOutLoansList = ({
+  isCF = false,
+  data: {
+    financialLeasing,
+    days,
+    numTrx,
+    transactionAmount,
+    transactionInterest,
+    transactionPrincipal,
+    startDate,
+    endDate,
+    rbPrincipal,
+    rbInt,
+    rbAmount,
+    netPrincipal,
+    netInt,
+    netAmount,
+  },
+}) => {
+  const totalNumberOfTransactions = Number(numTrx)
+  const totalTransactionAmount = Number(transactionAmount)
+  const totalTransactionInterest = Number(transactionInterest)
+  const totalTransactionPrincipal = Number(transactionPrincipal)
+  const startD = timeToArabicDate(startDate, false)
+  const endD = timeToArabicDate(endDate, false)
 
   const getStatus = (value) => {
     switch (value) {
@@ -168,41 +184,17 @@ export const CrossedOutLoansList = (props) => {
     <>
       <Orientation size="portrait" />
       <div className="crossed-out-loans-list" lang="ar">
-        <table
-          className="w-100 text-center"
-          style={{
-            margin: '10px 0px',
-          }}
-        >
-          <tbody>
-            <tr style={{ height: '10px' }} />
-            <tr className="w-100 d-flex flex-row justify-content-between">
-              <th colSpan={6}>
-                <div className={`${isCF ? 'cf' : 'lts'}-logo-print-tb`} />
-              </th>
-              <th colSpan={6}>
-                {isCF
-                  ? 'ترخيص رقم (٢٣) بتاريخ ٢٠٢١/٥/٣١'
-                  : 'ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015'}
-              </th>
-            </tr>
-            <tr style={{ height: '10px' }} />
-          </tbody>
-        </table>
+        <Header
+          cf={isCF}
+          fl={financialLeasing}
+          title="قائمة حركات إعدام ديون القروض المنفذة"
+        />
         <table className="report-container">
           <thead className="report-header">
             <tr className="headtitle">
-              <th colSpan={4}>
-                {isCF
-                  ? 'حالا للتمويل الاستهلاكي ش. م. م.'
-                  : 'شركة تساهيل للتمويل متناهي الصغر'}
-              </th>
-              <th colSpan={6}>قائمة حركات إعدام ديون القروض المنفذة</th>
-            </tr>
-            <tr className="headtitle">
               <th colSpan={4}>المركز الرئيسي</th>
               <th colSpan={6}>
-                تاريخ الحركه من {startDate} الي {endDate}
+                تاريخ الحركه من {startD} الي {endD}
               </th>
             </tr>
             <tr className="headtitle">
@@ -265,16 +257,16 @@ export const CrossedOutLoansList = (props) => {
             <tr>
               <td colSpan={8} />
               <td className="frame">القيمة الملغاه</td>
-              <td className="frame">{data.rbPrincipal}</td>
-              <td className="frame">{data.rbInt}</td>
-              <td className="frame">{data.rbAmount}</td>
+              <td className="frame">{rbPrincipal}</td>
+              <td className="frame">{rbInt}</td>
+              <td className="frame">{rbAmount}</td>
             </tr>
             <tr>
               <td colSpan={8} />
               <td className="frame">صافي المبلغ</td>
-              <td className="frame">{data.netPrincipal}</td>
-              <td className="frame">{data.netInt}</td>
-              <td className="frame">{data.netAmount}</td>
+              <td className="frame">{netPrincipal}</td>
+              <td className="frame">{netInt}</td>
+              <td className="frame">{netAmount}</td>
             </tr>
           </tbody>
         </table>
