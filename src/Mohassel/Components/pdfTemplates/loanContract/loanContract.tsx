@@ -25,7 +25,11 @@ const LoanContract = (props) => {
   const installments = installmentsObject?.installments?.filter(
     (installment) => installment.id !== 0
   )
-
+  const guarantorsNumbersToWords = [
+    ' الضامن المدرج ',
+    ' الضامنين المدرجين ',
+    ' الضمان المدرجين ',
+  ]
   return (
     <>
       <div className="loan-contract" dir="rtl" lang="ar">
@@ -811,13 +815,21 @@ const LoanContract = (props) => {
                       {props.data.customer.governorate}
                     </div>
                     <div>بوظيفة</div>
+                    {/* equal to 0 for test case as it can be zero guarantors */}
+
                     <div>
-                      بأن توقيع كل من العميل والضامن المدرجين بالجدول تم امامي
-                      وان جميع بيانات ايصالات الامانه الخاصه بهم صحيحة وتحت
-                      مسئوليتي وانني قمت بمطابقة اصول بطاقات الرقم القومي لجميع
-                      اعضاء المجموعه مع الصور المرفقه بطلب التمويل (وش وضهر)
-                      وانني قمت بمطابقتها مع الاشخاص الحقيقيين والتأكد منهم
-                      واتحمل مسئولية ذلك.
+                      بأن توقيع كل من العميل و
+                      {props.data.guarantors === 0
+                        ? guarantorsNumbersToWords[0]
+                        : guarantorsNumbersToWords[
+                            props.data.guarantors.length
+                          ] || guarantorsNumbersToWords[2]}
+                      بالجدول ادناه تم أمامي وأن جميع بيانات السندات لأمر واذن
+                      وكافة المستندات عقد التمويل وأوراق القبض بكافة أنواعها
+                      الخاصة بهم صحيحة وتحت مسئوليتي وإنني قمت بمطابقة أصول
+                      بطاقات الرقم القومي لهم مع الصور المرفقة بطلب التمويل ( وش
+                      وظهر ) وإنني قمت بمطابقتها مع الاشخاص الحقيقيين والتأكد
+                      منهم وأتحمل كافة المسئوليات بهذا الشأن .
                     </div>
 
                     <table className="endorsement_table">
